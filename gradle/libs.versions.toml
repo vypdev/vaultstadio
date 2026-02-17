@@ -55,7 +55,7 @@ androidx-core = "1.13.1"
 androidx-lifecycle = "2.8.7"
 androidx-activity = "1.9.3"
 androidx-test-ext-junit = "1.2.1"
-androidx-test-espresso = "3.6.1"
+androidx-test-espresso = "3.7.0"
 
 # Image Loading
 coil = "3.0.3"
