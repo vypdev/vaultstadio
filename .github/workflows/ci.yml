@@ -160,12 +160,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download backend coverage reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: jacoco-coverage-backend
 
       - name: Download frontend coverage report
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: jacoco-coverage-frontend
 
