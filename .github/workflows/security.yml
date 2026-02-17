@@ -1,6 +1,7 @@
 # VaultStadio Security Scanning
 #
 # This workflow runs security scans on the codebase and Docker images.
+# Runner: self-hosted macOS X64 (labels: self-hosted, macOS, X64)
 
 name: Security
 
@@ -17,7 +18,7 @@ jobs:
   # ==================== Dependency Scan ====================
   dependency-scan:
     name: Dependency Vulnerability Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,7 +45,7 @@ jobs:
   # ==================== Code Security Scan ====================
   code-scan:
     name: Code Security Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     permissions:
       security-events: write
     steps:
@@ -71,7 +72,7 @@ jobs:
   # ==================== Container Scan ====================
   container-scan:
     name: Container Security Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     if: github.event_name == 'push'
     steps:
       - name: Checkout code
@@ -103,7 +104,7 @@ jobs:
   # ==================== Secret Scanning ====================
   secret-scan:
     name: Secret Detection
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -120,4 +121,6 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Required for org repos: get a free license at gitleaks.io and add as repo/org secret
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
         continue-on-error: true
