@@ -134,13 +134,13 @@ jobs:
         uses: gradle/gradle-build-action@v3
 
       - name: Build frontend (Desktop)
-        run: ./gradlew :compose-frontend:composeApp:compileKotlinDesktop
+        run: ./gradlew :compose-frontend:composeApp:compileKotlinDesktop --no-build-cache
 
       - name: Run frontend tests (desktop)
-        run: ./gradlew :compose-frontend:composeApp:desktopTest --continue
+        run: ./gradlew :compose-frontend:composeApp:desktopTest --continue --no-build-cache
 
       - name: Generate frontend coverage report
-        run: ./gradlew :compose-frontend:composeApp:jacocoTestReport --continue
+        run: ./gradlew :compose-frontend:composeApp:jacocoTestReport --continue --no-build-cache
 
       - name: Upload frontend coverage report
         uses: actions/upload-artifact@v4
