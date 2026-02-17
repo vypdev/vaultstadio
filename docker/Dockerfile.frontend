@@ -20,6 +20,9 @@ RUN gradle :compose-frontend:composeApp:wasmJsBrowserDistribution --no-daemon
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
+# Install curl for HEALTHCHECK (not included in nginx:alpine)
+RUN apk add --no-cache curl
+
 # Copy built web app
 COPY --from=builder /app/compose-frontend/composeApp/build/dist/wasmJs/productionExecutable /usr/share/nginx/html
 
