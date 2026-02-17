@@ -49,7 +49,6 @@ WORKDIR /app
 COPY settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY kotlin-backend ./kotlin-backend
-COPY shared ./shared
 RUN gradle :kotlin-backend:api:installDist --no-daemon
 
 # Stage 2: Runtime
@@ -95,7 +94,6 @@ WORKDIR /app
 COPY settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY compose-frontend ./compose-frontend
-COPY shared ./shared
 RUN gradle :compose-frontend:composeApp:wasmJsBrowserDistribution --no-daemon
 
 # Stage 2: Serve
@@ -169,7 +167,7 @@ docker-compose -f docker/docker-compose.yml down
 **Solutions**:
 1. Ensure JDK 21+ is being used
 2. Check Gradle memory settings
-3. Verify shared module compiles first
+3. Try building the frontend locally: `./gradlew :compose-frontend:composeApp:compileKotlinDesktop`
 
 ### Container Won't Start
 

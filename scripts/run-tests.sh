@@ -9,15 +9,11 @@ echo "Running backend tests..."
 ./gradlew :kotlin-backend:infrastructure:test
 ./gradlew :kotlin-backend:api:test
 
-# Shared module tests
-echo "Running shared module tests..."
-./gradlew :shared:test || echo "Shared tests skipped (may not exist)"
-
 echo "All tests complete!"
 
 # Generate coverage report
 if [ "$1" = "--coverage" ]; then
     echo "Generating coverage report..."
-    ./gradlew jacocoTestReport
-    echo "Coverage report available in build/reports/jacoco/"
+    make test-coverage
+    echo "Coverage reports: kotlin-backend/*/build/reports/jacoco/, compose-frontend/composeApp/build/reports/jacoco/"
 fi

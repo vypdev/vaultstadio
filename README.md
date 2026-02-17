@@ -82,7 +82,6 @@ See [QUICK_START.md](docs/getting-started/QUICK_START.md) for TrueNAS deployment
 ```
 vaultstadio/
 ├── kotlin-backend/     # Ktor backend (core, api, infrastructure, plugins)
-├── shared/             # KMP shared module (API client, DTOs)
 ├── compose-frontend/   # Compose Multiplatform UI
 ├── docker/             # Docker Compose, Dockerfiles
 ├── helm/               # Kubernetes/TrueNAS Helm charts

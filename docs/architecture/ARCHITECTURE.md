@@ -8,7 +8,7 @@ VaultStadio is a self-hosted, plugin-extensible storage platform built with:
 
 - **Backend**: Kotlin/Ktor with coroutines for high-performance async I/O
 - **Frontend**: Compose Multiplatform for Web, Android, iOS, and Desktop
-- **Shared**: Kotlin Multiplatform for shared business logic across all platforms
+- **Frontend**: Compose Multiplatform holds shared business logic and API client in `composeApp/commonMain`
 
 ## Architecture Diagram
 
@@ -192,17 +192,11 @@ class ImageMetadataPlugin : AbstractPlugin() {
 ### Compose Multiplatform Structure
 
 ```
-shared/                      # Kotlin Multiplatform shared module
-├── commonMain/
-│   ├── domain/model/       # Shared data models
-│   ├── network/            # API client (Ktor)
-│   ├── data/repository/    # Repositories with caching
-│   ├── utils/              # Shared utilities
-│   └── di/                 # Koin DI module
-
 compose-frontend/
 ├── composeApp/
-│   ├── commonMain/         # Shared Compose UI
+│   ├── commonMain/         # Shared logic + Compose UI (API client, models, ViewModels)
+│   │   ├── domain/model/   # Shared data models
+│   │   ├── network/        # API client (Ktor)
 │   │   ├── ui/
 │   │   │   ├── theme/      # Material 3 theme
 │   │   │   ├── components/ # Reusable components

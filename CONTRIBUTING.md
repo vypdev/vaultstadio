@@ -117,7 +117,6 @@ vaultstadio/
 │   ├── plugins-api/        # Plugin SDK
 │   ├── api/                # Ktor REST API
 │   └── infrastructure/     # DB, storage implementations
-├── shared/                  # KMP shared module
 ├── compose-frontend/        # Compose Multiplatform
 └── docker/                  # Docker configurations
 ```

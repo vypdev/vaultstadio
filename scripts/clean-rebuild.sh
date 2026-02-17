@@ -60,7 +60,6 @@ echo -e "${YELLOW}[3/6] Cleaning Gradle build...${NC}"
 rm -rf .gradle
 rm -rf kotlin-backend/*/build
 rm -rf compose-frontend/*/build
-rm -rf shared/build
 echo -e "${GREEN}✓ Gradle build cleaned${NC}"
 echo ""
 

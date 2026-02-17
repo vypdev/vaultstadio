@@ -53,8 +53,6 @@ compose-frontend/
 git clone https://github.com/your-org/vaultstadio.git
 cd vaultstadio
 
-# Build the shared module first
-./gradlew :shared:build
 ```
 
 ### 2. Running the Frontend

@@ -189,27 +189,6 @@ jobs:
             :kotlin-backend:plugins:ai-classification:build \
             -x test
 
-  # Build and test the shared module
-  shared:
-    name: Shared Module Build
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-      
-      - name: Build shared module
-        run: ./gradlew :shared:build -x test
-
   # Build Android app
   android:
     name: Android Build

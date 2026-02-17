@@ -466,9 +466,7 @@ Use thumbnails and progressive loading for images.
 ## Module Dependencies
 
 ```
-shared (domain models, API client)
-    ↑
-composeApp (UI, ViewModel)
+composeApp/commonMain (domain models, API client, UI, ViewModel)
     ↑
 androidApp / iosApp / desktopMain / wasmJsMain
 ```

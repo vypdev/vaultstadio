@@ -65,9 +65,6 @@ VaultStadio uses a comprehensive testing approach with **65+ test files** coveri
 
 # Frontend tests
 ./gradlew :compose-frontend:composeApp:desktopTest
-
-# Shared module tests
-./gradlew :shared:test
 ```
 
 ### Run with Coverage Report
@@ -229,23 +226,7 @@ Location: `compose-frontend/composeApp/src/commonTest/kotlin/`
 | `ScreensTest.kt` | Screen state logic |
 | `PlatformTest.kt` | Platform abstraction logic |
 
-### 9. Shared Module Tests (6 files)
-
-Location: `shared/src/commonTest/kotlin/`
-
-| Test File | Coverage |
-|-----------|----------|
-| `ModelsTest.kt` | Domain models |
-| `ApiModelsTest.kt` | Request/response models |
-| `FormattingTest.kt` | Utility functions |
-| `ApiClientTest.kt` | API client configuration |
-| `VaultStadioApiTest.kt` | API methods and results |
-| `AuthRepositoryTest.kt` | Auth state and token management |
-| `SharedModuleTest.kt` | DI configuration |
-
----
-
-### 10. Phase 6 Model Tests (4 files)
+### 9. Phase 6 Model Tests (4 files)
 
 Location: `kotlin-backend/core/src/test/kotlin/com/vaultstadio/core/domain/model/`
 
