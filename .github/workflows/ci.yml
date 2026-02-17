@@ -171,11 +171,31 @@ jobs:
           name: jacoco-coverage-frontend
           path: coverage-frontend
 
+      - name: List coverage files (debug)
+        run: |
+          echo "=== coverage-backend ==="
+          find coverage-backend -type f 2>/dev/null || true
+          echo "=== coverage-frontend ==="
+          find coverage-frontend -type f 2>/dev/null || true
+          echo "=== all jacocoTestReport.xml in workspace ==="
+          find . -name 'jacocoTestReport.xml' -type f 2>/dev/null || true
+
+      - name: Discover coverage files for Codecov
+        id: coverage-files
+        run: |
+          FILES=$(find . -name 'jacocoTestReport.xml' -type f 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+          echo "list=$FILES" >> "$GITHUB_OUTPUT"
+          if [ -z "$FILES" ]; then
+            echo "No jacocoTestReport.xml found"
+            exit 1
+          fi
+          echo "Found coverage files: $FILES"
+
       - name: Upload to Codecov
         uses: codecov/codecov-action@v5
         with:
           disable_search: true
-          files: coverage-backend/kotlin-backend/core/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/api/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml,coverage-backend/kotlin-backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml,coverage-frontend/compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          files: ${{ steps.coverage-files.outputs.list }}
           fail_ci_if_error: false
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
