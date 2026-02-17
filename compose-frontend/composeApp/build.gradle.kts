@@ -6,12 +6,11 @@
 
 @file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
 
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.gradle.testing.jacoco.tasks.JacocoReport
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -209,8 +208,11 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 
     val jacocoExt = desktopTest.extensions.findByType(JacocoTaskExtension::class.java)
     executionData.setFrom(
-        if (jacocoExt != null) files(jacocoExt.destinationFile)
-        else fileTree(layout.buildDirectory) { include("jacoco/desktopTest.exec") }
+        if (jacocoExt != null) {
+            files(jacocoExt.destinationFile)
+        } else {
+            fileTree(layout.buildDirectory) { include("jacoco/desktopTest.exec") }
+        },
     )
 
     val commonMainKotlin = kotlin.sourceSets.getByName("commonMain").kotlin.srcDirs
@@ -219,7 +221,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 
     val desktopClasses = layout.buildDirectory.dir("classes/kotlin/desktop/main")
     classDirectories.setFrom(
-        desktopClasses.map { dir -> fileTree(dir.asFile) { exclude("**/$$*") } }
+        desktopClasses.map { dir -> fileTree(dir.asFile) { exclude("**/$$*") } },
     )
 
     reports {
