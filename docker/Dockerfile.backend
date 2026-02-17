@@ -12,7 +12,6 @@ COPY gradle ./gradle
 
 # Copy source code
 COPY kotlin-backend ./kotlin-backend
-COPY shared ./shared
 
 # Build the application
 RUN gradle :kotlin-backend:api:installDist --no-daemon
