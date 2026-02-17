@@ -68,7 +68,7 @@ decompose = "3.2.2"
 essenty = "2.2.1"
 
 # JetBrains Lifecycle (KMP)
-jetbrains-lifecycle = "2.8.4"
+jetbrains-lifecycle = "2.10.0+dev3105"
 
 [libraries]
 # Kotlinx
