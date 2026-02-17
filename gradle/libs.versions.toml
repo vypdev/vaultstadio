@@ -61,7 +61,7 @@ androidx-test-espresso = "3.6.1"
 coil = "3.0.3"
 
 # Arrow (Functional Programming)
-arrow = "1.2.4"
+arrow = "2.2.1.1"
 
 # Decompose (Navigation)
 decompose = "3.2.2"
