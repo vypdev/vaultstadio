@@ -9,7 +9,7 @@ kotlinx-datetime = "0.6.1"
 ktor = "3.0.2"
 
 # Koin - Dependency Injection
-koin = "4.0.0"
+koin = "4.1.1"
 koin-annotations = "2.0.1-Beta1"
 
 # KSP (Kotlin Symbol Processing)
