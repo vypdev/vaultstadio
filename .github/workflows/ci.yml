@@ -68,7 +68,7 @@ jobs:
             --continue
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: backend-test-results
@@ -78,7 +78,7 @@ jobs:
           retention-days: 7
 
       - name: Upload backend coverage reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: jacoco-coverage-backend
           path: |
@@ -120,7 +120,7 @@ jobs:
         run: ./gradlew :compose-frontend:composeApp:jacocoTestReport --continue
 
       - name: Upload frontend coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: jacoco-coverage-frontend
           path: compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
@@ -256,7 +256,7 @@ jobs:
         run: ./gradlew detekt --continue
       
       - name: Upload Detekt report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: detekt-report

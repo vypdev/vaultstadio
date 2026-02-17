@@ -77,14 +77,14 @@ jobs:
           ./gradlew :compose-frontend:androidApp:bundle${{ steps.variant.outputs.flavor }}Release
       
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: android-apk-${{ steps.variant.outputs.flavor }}
           path: compose-frontend/androidApp/build/outputs/apk/**/release/*.apk
           retention-days: 30
       
       - name: Upload AAB
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: ${{ steps.variant.outputs.signed == 'true' }}
         with:
           name: android-aab-${{ steps.variant.outputs.flavor }}
