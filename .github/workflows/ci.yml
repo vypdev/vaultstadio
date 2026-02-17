@@ -170,18 +170,10 @@ jobs:
           name: jacoco-coverage-frontend
 
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          files: |
-            kotlin-backend/core/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/api/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml
-            kotlin-backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml
-            compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          disable_search: true
+          files: kotlin-backend/core/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/api/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml,kotlin-backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml,compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           fail_ci_if_error: false
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
