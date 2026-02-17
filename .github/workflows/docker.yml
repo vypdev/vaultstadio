@@ -1,5 +1,6 @@
 # VaultStadio Docker Build and Publish
 # Builds and pushes Docker images on releases and main/master branch
+# Runner: self-hosted macOS X64 (Docker must be installed on the runner)
 
 name: Docker Build
 
@@ -18,7 +19,7 @@ env:
 jobs:
   build-backend:
     name: Build Backend Image
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     permissions:
       contents: read
       packages: write
@@ -74,7 +75,7 @@ jobs:
 
   build-frontend:
     name: Build Frontend Image
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     permissions:
       contents: read
       packages: write
@@ -133,7 +134,7 @@ jobs:
   # Create release artifacts
   release:
     name: Create Release
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     needs: [build-backend, build-frontend]
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:

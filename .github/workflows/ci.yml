@@ -1,5 +1,6 @@
 # VaultStadio CI Pipeline
 # Runs on every push and pull request
+# Runner: self-hosted macOS X64 (labels: self-hosted, macOS, X64)
 
 name: CI
 
@@ -18,7 +19,7 @@ jobs:
   # Build and test the Kotlin backend
   backend:
     name: Backend Build & Test
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -95,7 +96,7 @@ jobs:
   # Build the frontend
   frontend:
     name: Frontend Build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
 
     steps:
       - name: Checkout code
@@ -129,7 +130,7 @@ jobs:
   # Upload coverage to Codecov
   coverage:
     name: Coverage (Codecov)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     needs: [backend, frontend]
 
     steps:
@@ -166,7 +167,7 @@ jobs:
   # Build plugins
   plugins:
     name: Plugins Build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -192,7 +193,7 @@ jobs:
   # Build Android app
   android:
     name: Android Build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -213,7 +214,7 @@ jobs:
   # Code quality checks
   lint:
     name: Lint & Code Quality
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -245,7 +246,7 @@ jobs:
   # Security scanning
   security:
     name: Security Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code

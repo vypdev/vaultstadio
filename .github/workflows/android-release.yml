@@ -1,5 +1,6 @@
 # VaultStadio Android Release Build
 # Builds signed Android APKs and AABs for release
+# Runner: self-hosted macOS X64
 
 name: Android Release
 
@@ -26,7 +27,7 @@ env:
 jobs:
   build-android:
     name: Build Android Release
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -101,7 +102,7 @@ jobs:
 
   notify:
     name: Notify Build Status
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, X64]
     needs: [build-android]
     if: always()
     
