@@ -1,0 +1,628 @@
+openapi: 3.1.0
+info:
+  title: VaultStadio API
+  description: |
+    VaultStadio is a cloud storage platform for managing files and folders.
+    
+    ## Authentication
+    
+    Most endpoints require authentication using Bearer token. Include the token in the Authorization header:
+    
+    ```
+    Authorization: Bearer <your-token>
+    ```
+    
+    Obtain a token by calling the `/api/v1/auth/login` endpoint.
+    
+    ## Rate Limiting
+    
+    API requests are rate-limited to prevent abuse. Rate limit headers are included in all responses:
+    - `X-RateLimit-Limit`: Maximum requests per window
+    - `X-RateLimit-Remaining`: Remaining requests in current window
+    - `X-RateLimit-Reset`: Time when the rate limit resets
+    
+  version: 1.0.0
+  contact:
+    name: VaultStadio Support
+    email: support@vaultstadio.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.vaultstadio.com
+    description: Production server
+
+tags:
+  - name: Auth
+    description: Authentication and session management
+  - name: Storage
+    description: File and folder operations
+  - name: Shares
+    description: File sharing and link management
+  - name: Users
+    description: User management
+  - name: Admin
+    description: Administrative operations
+  - name: Plugins
+    description: Plugin management
+
+paths:
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email or username already exists
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+
+  /api/v1/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout user
+      operationId: logoutUser
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+        '401':
+          description: Unauthorized
+
+  /api/v1/storage/folder:
+    get:
+      tags:
+        - Storage
+      summary: List folder contents
+      operationId: listFolder
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: folderId
+          in: query
+          description: Parent folder ID (null for root)
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum items to return
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          description: Number of items to skip
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Folder contents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedStorageItems'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Storage
+      summary: Create a new folder
+      operationId: createFolder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFolderRequest'
+      responses:
+        '201':
+          description: Folder created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageItem'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+
+  /api/v1/storage/upload:
+    post:
+      tags:
+        - Storage
+      summary: Upload a file
+      operationId: uploadFile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload
+                parentId:
+                  type: string
+                  description: Parent folder ID
+      responses:
+        '201':
+          description: File uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageItem'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '413':
+          description: File too large
+
+  /api/v1/storage/{itemId}:
+    get:
+      tags:
+        - Storage
+      summary: Get item details
+      operationId: getItem
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageItem'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Item not found
+    delete:
+      tags:
+        - Storage
+      summary: Delete item
+      operationId: deleteItem
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: permanent
+          in: query
+          description: Permanently delete (true) or move to trash (false)
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '204':
+          description: Item deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Item not found
+
+  /api/v1/storage/{itemId}/download:
+    get:
+      tags:
+        - Storage
+      summary: Download a file
+      operationId: downloadFile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+        '404':
+          description: File not found
+
+  /api/v1/storage/starred:
+    get:
+      tags:
+        - Storage
+      summary: List starred items
+      operationId: listStarred
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Starred items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageItem'
+        '401':
+          description: Unauthorized
+
+  /api/v1/storage/trash:
+    get:
+      tags:
+        - Storage
+      summary: List trashed items
+      operationId: listTrash
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Trashed items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageItem'
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Storage
+      summary: Empty trash
+      operationId: emptyTrash
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Trash emptied
+        '401':
+          description: Unauthorized
+
+  /api/v1/shares:
+    post:
+      tags:
+        - Shares
+      summary: Create a share link
+      operationId: createShare
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShareRequest'
+      responses:
+        '201':
+          description: Share created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShareLink'
+        '401':
+          description: Unauthorized
+    get:
+      tags:
+        - Shares
+      summary: List user's shares
+      operationId: listShares
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of shares
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShareLink'
+        '401':
+          description: Unauthorized
+
+  /api/v1/shares/{token}:
+    get:
+      tags:
+        - Shares
+      summary: Access a shared item
+      operationId: accessShare
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: Password for protected shares
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Shared item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShareAccessResponse'
+        '401':
+          description: Password required or invalid
+        '404':
+          description: Share not found
+
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token authentication
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - username
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+        password:
+          type: string
+          minLength: 8
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+          enum: [USER, ADMIN]
+        status:
+          type: string
+          enum: [ACTIVE, SUSPENDED, DELETED]
+        createdAt:
+          type: string
+          format: date-time
+
+    StorageItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        type:
+          type: string
+          enum: [FILE, FOLDER]
+        parentId:
+          type: string
+          nullable: true
+        size:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+          nullable: true
+        isStarred:
+          type: boolean
+        isTrashed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PagedStorageItems:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageItem'
+        total:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    CreateFolderRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        parentId:
+          type: string
+          nullable: true
+
+    CreateShareRequest:
+      type: object
+      required:
+        - itemId
+      properties:
+        itemId:
+          type: string
+        expirationDays:
+          type: integer
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        maxDownloads:
+          type: integer
+          nullable: true
+
+    ShareLink:
+      type: object
+      properties:
+        id:
+          type: string
+        itemId:
+          type: string
+        token:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+          nullable: true
+        hasPassword:
+          type: boolean
+        maxDownloads:
+          type: integer
+          nullable: true
+        downloadCount:
+          type: integer
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    ShareAccessResponse:
+      type: object
+      properties:
+        share:
+          $ref: '#/components/schemas/ShareLink'
+        item:
+          $ref: '#/components/schemas/StorageItem'
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [UP, DOWN]
+        version:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

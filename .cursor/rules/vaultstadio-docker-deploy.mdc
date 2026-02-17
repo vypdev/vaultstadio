@@ -1,0 +1,37 @@
+---
+description: VaultStadio – Docker, Helm, deployment, TrueNAS
+globs: ["docker/**","helm/**","**/Dockerfile*",".github/workflows/*.yml"]
+---
+
+# VaultStadio – Docker & Deployment
+
+Apply when working on Docker, Helm, or CI/deploy. See [docs/operations/DOCKER_BUILD.md](docs/operations/DOCKER_BUILD.md), [docs/operations/DEPLOYMENT.md](docs/operations/DEPLOYMENT.md).
+
+## Docker Compose (docker/)
+
+- **File**: `docker/docker-compose.yml`. Env: `docker/.env` (from `.env.example`).
+- **Minimum env**: `POSTGRES_PASSWORD`, `VAULTSTADIO_JWT_SECRET` (e.g. 32 chars).
+- **Commands**: `docker-compose -f docker/docker-compose.yml up -d`, `logs -f`, `down`, `up --build -d`.
+- **Make**: `make docker-up`, `make docker-logs`, `make docker-down`, `make docker-rebuild`.
+
+## Dockerfiles
+
+- **Backend**: `docker/Dockerfile.backend` (or project path).
+- **Frontend**: `docker/Dockerfile.frontend`.
+- **nginx**: `docker/nginx.conf` for reverse proxy if used.
+
+## Helm (helm/vaultstadio/)
+
+- Charts for **Kubernetes / TrueNAS Scale**.
+- **Make**: `make helm-install`, `make helm-upgrade`, `make helm-uninstall`, `make helm-template`.
+
+## Special considerations
+
+- **Large files**: Chunked upload supports up to ~60GB.
+- **TrueNAS**: Helm charts tuned for TrueNAS Scale.
+- **Security**: JWT auth; BCrypt for passwords; no secrets in images.
+
+## CI (reference)
+
+- Workflows under `.github/workflows/` (e.g. ci.yml, docker.yml, android-release.yml, security.yml).
+- Typical order: ktlintCheck → check-no-fqn → detekt → build → test.

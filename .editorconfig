@@ -1,0 +1,42 @@
+# EditorConfig for VaultStadio
+# https://editorconfig.org
+# Formatting is enforced by ktlint; detekt handles code quality. Run: ktlintFormat then detekt.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+indent_size = 4
+indent_style = space
+max_line_length = 120
+# Align with detekt: no wildcard imports (use explicit imports)
+ij_kotlin_packages_to_use_import_on_demand = unset
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_for_members = 999
+# ktlint code style (intellij_idea matches Kotlin conventions; ktlint_official is stricter)
+ktlint_code_style = intellij_idea
+# Enforce no consecutive blank lines and final newline at end of file
+ktlint_standard_no-consecutive-blank-lines = enabled
+ktlint_standard_final-newline = enabled
+# Optional: disable rules that overlap with detekt or project preferences
+ktlint_standard_function-expression-body = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_class-signature = disabled
+ktlint_function_naming_ignore_when_annotated_with=Composable
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[build/**/*.kt]
+disabled_rules=all
+
+[**/generated/**/*.kt]
+disabled_rules=all

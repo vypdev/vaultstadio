@@ -1,0 +1,135 @@
+---
+description: VaultStadio – development and quality commands (Gradle, Make, scripts)
+alwaysApply: true
+globs: ["*"]
+---
+
+# VaultStadio – Commands
+
+Use these commands for build, run, test, quality, and Docker. See also [Makefile](Makefile), [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md), [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md).
+
+## Build
+
+```bash
+# Full build (skip tests)
+./gradlew build -x test
+make build
+
+# Backend only
+./gradlew :kotlin-backend:api:build -x test
+make backend-build
+
+# Frontend – web (WASM)
+./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
+make frontend-web
+
+# Frontend – desktop
+./gradlew :compose-frontend:composeApp:compileKotlinWasmJs   # or compileKotlinIosArm64, etc.
+
+# Plugins
+./gradlew :kotlin-backend:plugins:image-metadata:pluginJar :kotlin-backend:plugins:video-metadata:pluginJar
+make plugins-build
+
+# Android APK
+./gradlew :compose-frontend:androidApp:assembleRelease
+make android-build
+```
+
+## Run (development)
+
+```bash
+# Backend (requires PostgreSQL; start with docker-compose first)
+./gradlew :kotlin-backend:api:run
+make backend-run
+
+# Frontend – desktop
+./gradlew :compose-frontend:composeApp:run
+make desktop-run
+
+# Frontend – web (WASM dev server)
+./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+make frontend-run
+
+# Dev: Postgres + backend + frontend (Makefile)
+make dev
+```
+
+## Tests
+
+```bash
+# All tests
+./gradlew test
+make test
+
+# Backend only
+./gradlew :kotlin-backend:core:test :kotlin-backend:api:test
+make backend-test
+
+# With coverage
+./gradlew test jacocoTestReport
+make test-coverage
+```
+
+## Code Quality (run before commit)
+
+```bash
+# 1. Format
+./gradlew ktlintFormat
+
+# 2. Check no FQN in type positions
+./scripts/check-no-fqn.sh
+
+# 3. Static analysis (runs ktlintCheck then detekt)
+./gradlew detekt
+```
+
+Quick: `./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt`
+
+## Docker
+
+```bash
+# Start all services (from repo root)
+docker-compose -f docker/docker-compose.yml up -d
+make docker-up
+
+# Start only Postgres (for local backend run)
+docker-compose -f docker/docker-compose.yml up -d postgres
+
+# Logs
+docker-compose -f docker/docker-compose.yml logs -f
+make docker-logs
+
+# Rebuild and start
+docker-compose -f docker/docker-compose.yml up --build -d
+make docker-rebuild
+
+# Stop
+docker-compose -f docker/docker-compose.yml down
+make docker-down
+```
+
+## Database
+
+```bash
+./gradlew :kotlin-backend:api:flywayMigrate   # migrate
+make db-migrate
+./gradlew :kotlin-backend:api:flywayClean     # clean (dev)
+make db-clean
+```
+
+## Release / Clean
+
+```bash
+make release      # shadowJar, WASM dist, Android, desktop package
+./gradlew clean
+make clean
+```
+
+## Helm (TrueNAS / Kubernetes)
+
+```bash
+helm install vaultstadio ./helm/vaultstadio
+make helm-install
+helm upgrade vaultstadio ./helm/vaultstadio
+make helm-upgrade
+```

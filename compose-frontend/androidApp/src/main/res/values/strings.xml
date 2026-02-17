@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VaultStadio</string>
+    <string name="app_description">Self-Hosted Cloud Storage</string>
+    
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="upload">Upload</string>
+    <string name="download">Download</string>
+    <string name="refresh">Refresh</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    
+    <!-- Navigation -->
+    <string name="nav_files">My Files</string>
+    <string name="nav_recent">Recent</string>
+    <string name="nav_starred">Starred</string>
+    <string name="nav_shared">Shared</string>
+    <string name="nav_trash">Trash</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Files -->
+    <string name="new_folder">New Folder</string>
+    <string name="folder_name">Folder Name</string>
+    <string name="rename">Rename</string>
+    <string name="move">Move</string>
+    <string name="copy">Copy</string>
+    <string name="empty_folder">This folder is empty</string>
+    <string name="empty_trash">Trash is empty</string>
+    <string name="no_starred">No starred items</string>
+    <string name="no_recent">No recent files</string>
+    
+    <!-- Settings -->
+    <string name="settings_server">Server Settings</string>
+    <string name="settings_server_url">Server URL</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
+</resources>

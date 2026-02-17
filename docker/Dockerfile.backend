@@ -1,0 +1,61 @@
+# VaultStadio Backend - Kotlin/Ktor
+# Multi-stage build for optimized Docker image
+
+# Stage 1: Build
+FROM gradle:8.10-jdk17 AS builder
+
+WORKDIR /app
+
+# Copy Gradle files first for caching
+COPY settings.gradle.kts build.gradle.kts gradle.properties ./
+COPY gradle ./gradle
+
+# Copy source code
+COPY kotlin-backend ./kotlin-backend
+COPY shared ./shared
+
+# Build the application
+RUN gradle :kotlin-backend:api:installDist --no-daemon
+
+# Stage 2: Runtime
+FROM eclipse-temurin:17-jre
+
+WORKDIR /app
+
+# Create non-root user
+RUN groupadd -r vaultstadio && useradd -r -g vaultstadio vaultstadio
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy built application
+COPY --from=builder /app/kotlin-backend/api/build/install/api /app
+
+# Create directories
+RUN mkdir -p /data/storage /data/plugins /data/temp \
+    && chown -R vaultstadio:vaultstadio /app /data
+
+# Switch to non-root user
+USER vaultstadio
+
+# Environment variables
+ENV DOCKER_CONTAINER=true
+ENV DATABASE_URL=jdbc:postgresql://postgres:5432/vaultstadio
+ENV DATABASE_USER=vaultstadio
+ENV DATABASE_PASSWORD=vaultstadio
+ENV STORAGE_LOCAL_PATH=/data/storage
+ENV STORAGE_TEMP_PATH=/data/temp
+ENV PLUGINS_DIRECTORY=/data/plugins
+ENV JAVA_OPTS="-Xms256m -Xmx1024m"
+
+# Expose port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Start the application
+CMD ["./bin/api"]

@@ -1,0 +1,81 @@
+---
+description: VaultStadio core – language, overview, structure, AI guidelines, known issues
+alwaysApply: true
+globs: ["*"]
+---
+
+# VaultStadio – Core Rules
+
+## Language
+
+**CRITICAL**: All code, documentation, comments, docstrings, commit messages, and project files MUST be written in **English**.
+
+## Project Overview
+
+VaultStadio is a **self-hosted storage platform** with plugin architecture:
+
+- **Backend**: Kotlin/Ktor with coroutines, PostgreSQL (Exposed ORM), Arrow Either
+- **Frontend**: Compose Multiplatform (Web WASM, Android, iOS, Desktop)
+- **Shared**: Kotlin Multiplatform for API client and DTOs
+- **Storage**: Local filesystem (S3 planned but not implemented)
+- **Deploy**: Docker, Helm, TrueNAS Scale
+
+## Project Structure
+
+```
+vaultstadio/
+├── kotlin-backend/
+│   ├── core/           # Domain: models, services, repositories (interfaces), events
+│   ├── plugins-api/    # Plugin SDK: Plugin interface, PluginContext, hooks
+│   ├── api/            # Ktor: routes, DTOs, config, middleware
+│   ├── infrastructure/ # Implementations: Exposed repos, LocalStorageBackend
+│   └── plugins/        # Built-in: image-metadata, video-metadata, fulltext-search, ai-classification
+├── shared/             # KMP: API client (VaultStadioApi), DTOs, repositories
+├── compose-frontend/
+│   ├── composeApp/     # Shared UI: screens, components, ViewModel, platform expect/actual
+│   ├── androidApp/     # Android wrapper
+│   └── iosApp/         # iOS wrapper
+├── docker/             # Docker Compose, Dockerfiles, nginx
+├── helm/vaultstadio/   # Kubernetes/TrueNAS Helm chart
+├── docs/               # Documentation (see docs/INDEX.md; layout in docs/DOCS_STRUCTURE.md)
+└── scripts/            # check-no-fqn.sh, build, deploy scripts
+```
+
+## AI Coding Guidelines (Senior-Level)
+
+- **Prioritise**: clarity, maintainability, clean architecture, separation of concerns.
+- **Avoid**: quick fixes, hacks, magic strings/numbers, opaque solutions.
+- **Prefer**: explicit, well-typed code; use imports, not FQN in types.
+- **Always**: unit tests for non-trivial logic; KDoc for public APIs.
+- **Respect**: ktlint, detekt, `./scripts/check-no-fqn.sh`; no wildcard imports.
+- **Compatibility**: Docker and self-hosted (TrueNAS). **Extensibility**: design for plugins.
+
+For structural changes: explain reason, state risks, propose tests/validations.
+Full guidelines: [docs/development/AI_CODING_GUIDELINES.md](docs/development/AI_CODING_GUIDELINES.md).
+
+## Coding Standards (All Kotlin)
+
+- Kotlin conventions; max line length 120; coroutines for async.
+- **Explicit imports only** – NEVER wildcard (`import x.y.*`).
+- **No FQN in type positions** – use short names and imports (run `./scripts/check-no-fqn.sh`).
+- Backend: Koin for DI; Arrow `Either` for type-safe errors.
+- Frontend: Compose best practices; Material 3; ViewModel for state.
+
+## Key Decisions
+
+| Area | Decision | Details |
+|------|----------|---------|
+| **Navigation** | Decompose | Stack-based, type-safe, multiplatform |
+| **ViewModels** | Per-screen | 17 ViewModels (one per screen) |
+| **Backend Storage** | S3 available | S3StorageBackend with AWS SDK |
+| **Distributed** | Redis | For multi-instance production |
+
+Past architectural issues (resolved) and any new ones are documented in [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md). Roadmap and Phase 7 items are in [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md).
+
+## Documentation
+
+- **Index**: [docs/INDEX.md](docs/INDEX.md) – central navigation
+- **Overview**: [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) – what we offer
+- **Architecture**: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
+- **API**: [docs/api/API.md](docs/api/API.md)
+- **Known Issues**: [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md)

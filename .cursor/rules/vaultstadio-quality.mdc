@@ -1,0 +1,48 @@
+---
+description: VaultStadio – code quality, formatting, FQN, file size, testing
+alwaysApply: true
+globs: ["*"]
+---
+
+# VaultStadio – Code Quality
+
+See [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md) for full workflow. Summary for AI and contributors.
+
+## Formatting – ktlint
+
+- **Config**: [.editorconfig](.editorconfig). Max line length 120, indent 4, no trailing whitespace, final newline.
+- **Fix**: `./gradlew ktlintFormat`
+- **Check**: `./gradlew ktlintCheck` (CI runs this before detekt).
+- **No wildcard imports** – explicit imports only (enforced by project rules and detekt).
+
+## No FQN in type positions
+
+- Do **not** use fully qualified type names in signatures or bodies when an import would suffice.
+- **Check**: `./scripts/check-no-fqn.sh` (CI runs this before detekt).
+- Use short type names and add the corresponding `import` at the top of the file.
+
+## Static analysis – detekt
+
+- **Config**: [config/detekt/detekt.yml](config/detekt/detekt.yml).
+- **Run**: `./gradlew detekt` (after ktlintCheck). Use `detektMain` for main source only; `detektBaseline` to generate baseline.
+- **Make**: `make lint`, `make lint-report`, `make lint-baseline`.
+
+## File size guidelines
+
+- **Components**: max 200–300 lines.
+- **Pages / Routes**: max 300–400 lines.
+- **Services**: max 400–500 lines.
+- Refactor if exceeding; split into smaller units.
+
+## Testing
+
+- **Stack**: JUnit 5, MockK, Testcontainers for integration tests.
+- **Run**: `./gradlew test`, `make backend-test`, `make test-coverage`.
+- Add unit tests for non-trivial logic; document in structural changes.
+
+## Pre-commit / CI order
+
+1. `./gradlew ktlintFormat`
+2. `./scripts/check-no-fqn.sh`
+3. `./gradlew detekt`
+4. `./gradlew test`

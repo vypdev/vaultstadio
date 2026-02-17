@@ -1,0 +1,43 @@
+{{- $fullName := include "vaultstadio.fullname" . -}}
+
+{{- if and .Values.backend.persistence.enabled (not .Values.backend.persistence.hostPath.enabled) (not .Values.backend.persistence.existingClaim) }}
+---
+# Storage PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-storage
+  labels:
+    {{- include "vaultstadio.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.backend.persistence.accessMode | default "ReadWriteOnce" }}
+  {{- if .Values.backend.persistence.storageClassName }}
+  storageClassName: {{ .Values.backend.persistence.storageClassName }}
+  {{- else if .Values.global.storageClass }}
+  storageClassName: {{ .Values.global.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.backend.persistence.size }}
+{{- end }}
+
+{{- if .Values.backend.pluginStorage.enabled }}
+---
+# Plugin Storage PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-plugins
+  labels:
+    {{- include "vaultstadio.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.global.storageClass }}
+  storageClassName: {{ .Values.global.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.backend.pluginStorage.size }}
+{{- end }}

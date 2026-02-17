@@ -1,0 +1,192 @@
+# TrueNAS Scale App Configuration
+# These questions appear in the TrueNAS Scale UI when installing the app
+
+groups:
+  - name: "Application Configuration"
+    description: "Configure VaultStadio application settings"
+  - name: "Storage Configuration"
+    description: "Configure storage for files and database"
+  - name: "Network Configuration"
+    description: "Configure network access"
+  - name: "Security Configuration"
+    description: "Configure security settings"
+  - name: "Resources Configuration"
+    description: "Configure CPU and memory resources"
+
+questions:
+  # ============================================================================
+  # Application Configuration
+  # ============================================================================
+  - variable: backend.env.VAULTSTADIO_JWT_SECRET
+    label: "JWT Secret"
+    description: "Secret key for JWT token signing (min 32 characters)"
+    group: "Application Configuration"
+    schema:
+      type: string
+      required: true
+      min_length: 32
+      private: true
+      default: ""
+
+  - variable: backend.env.JAVA_OPTS
+    label: "Java Options"
+    description: "JVM options for the backend"
+    group: "Application Configuration"
+    schema:
+      type: string
+      default: "-Xms256m -Xmx1024m"
+
+  # ============================================================================
+  # Storage Configuration
+  # ============================================================================
+  - variable: backend.persistence.enabled
+    label: "Enable Storage"
+    description: "Enable persistent storage for files"
+    group: "Storage Configuration"
+    schema:
+      type: boolean
+      default: true
+
+  - variable: backend.persistence.hostPath.enabled
+    label: "Use Host Path"
+    description: "Use a host path instead of PVC (recommended for TrueNAS)"
+    group: "Storage Configuration"
+    schema:
+      type: boolean
+      default: true
+      show_if: [["backend.persistence.enabled", "=", true]]
+
+  - variable: backend.persistence.hostPath.path
+    label: "Host Path"
+    description: "Path on TrueNAS host for file storage (e.g., /mnt/pool/vaultstadio)"
+    group: "Storage Configuration"
+    schema:
+      type: hostpath
+      required: true
+      show_if: [["backend.persistence.hostPath.enabled", "=", true]]
+
+  - variable: backend.persistence.size
+    label: "Storage Size"
+    description: "Size of persistent volume (if not using host path)"
+    group: "Storage Configuration"
+    schema:
+      type: string
+      default: "100Gi"
+      show_if: [["backend.persistence.hostPath.enabled", "=", false]]
+
+  - variable: postgresql.primary.persistence.size
+    label: "Database Storage Size"
+    description: "Size of PostgreSQL database storage"
+    group: "Storage Configuration"
+    schema:
+      type: string
+      default: "10Gi"
+
+  # ============================================================================
+  # Network Configuration
+  # ============================================================================
+  - variable: ingress.enabled
+    label: "Enable Ingress"
+    description: "Enable ingress for external access"
+    group: "Network Configuration"
+    schema:
+      type: boolean
+      default: true
+
+  - variable: ingress.hosts[0].host
+    label: "Hostname"
+    description: "Hostname for accessing VaultStadio"
+    group: "Network Configuration"
+    schema:
+      type: string
+      default: "vaultstadio.local"
+      show_if: [["ingress.enabled", "=", true]]
+
+  - variable: frontend.service.type
+    label: "Frontend Service Type"
+    description: "Service type for frontend"
+    group: "Network Configuration"
+    schema:
+      type: string
+      default: "ClusterIP"
+      enum:
+        - value: "ClusterIP"
+          description: "ClusterIP (internal only)"
+        - value: "NodePort"
+          description: "NodePort (external access via node port)"
+        - value: "LoadBalancer"
+          description: "LoadBalancer (external load balancer)"
+
+  - variable: frontend.service.nodePort
+    label: "Frontend Node Port"
+    description: "Node port for frontend (30000-32767)"
+    group: "Network Configuration"
+    schema:
+      type: int
+      min: 30000
+      max: 32767
+      show_if: [["frontend.service.type", "=", "NodePort"]]
+
+  # ============================================================================
+  # Security Configuration
+  # ============================================================================
+  - variable: postgresql.auth.password
+    label: "Database Password"
+    description: "Password for PostgreSQL database"
+    group: "Security Configuration"
+    schema:
+      type: string
+      required: true
+      private: true
+      default: ""
+
+  - variable: securityContext.runAsUser
+    label: "Run As User ID"
+    description: "User ID to run containers as"
+    group: "Security Configuration"
+    schema:
+      type: int
+      default: 1000
+
+  - variable: securityContext.runAsGroup
+    label: "Run As Group ID"
+    description: "Group ID to run containers as"
+    group: "Security Configuration"
+    schema:
+      type: int
+      default: 1000
+
+  # ============================================================================
+  # Resources Configuration
+  # ============================================================================
+  - variable: backend.resources.requests.cpu
+    label: "Backend CPU Request"
+    description: "CPU request for backend"
+    group: "Resources Configuration"
+    schema:
+      type: string
+      default: "500m"
+
+  - variable: backend.resources.requests.memory
+    label: "Backend Memory Request"
+    description: "Memory request for backend"
+    group: "Resources Configuration"
+    schema:
+      type: string
+      default: "512Mi"
+
+  - variable: backend.resources.limits.cpu
+    label: "Backend CPU Limit"
+    description: "CPU limit for backend"
+    group: "Resources Configuration"
+    schema:
+      type: string
+      default: "2"
+
+  - variable: backend.resources.limits.memory
+    label: "Backend Memory Limit"
+    description: "Memory limit for backend"
+    group: "Resources Configuration"
+    schema:
+      type: string
+      default: "2Gi"

@@ -1,0 +1,46 @@
+---
+description: VaultStadio rules index – project rules are split into focused files
+alwaysApply: true
+globs: ["*"]
+---
+
+# VaultStadio – Rules Index
+
+Project rules are split into several `.mdc` files for better context and classification.
+
+## Rule Files
+
+| Rule File | When Applied | Purpose |
+|-----------|--------------|---------|
+| **vaultstadio-core.mdc** | Always | Language (English), project overview, structure, AI guidelines, coding standards, known issues |
+| **vaultstadio-commands.mdc** | Always | Gradle, Make, scripts: build, run, test, quality, Docker, DB, Helm |
+| **vaultstadio-quality.mdc** | Always | ktlint, detekt, FQN check, file size limits, testing, pre-commit order |
+| **vaultstadio-backend.mdc** | `kotlin-backend/**` | Ktor routes, API conventions, Koin, architecture, limitations |
+| **vaultstadio-frontend.mdc** | `compose-frontend/**` | Compose MP, components, screens, ViewModel, expect/actual, known issues |
+| **vaultstadio-api-reference.mdc** | API/shared files | Complete endpoint reference, shared models |
+| **vaultstadio-plugins.mdc** | `plugins/**`, `plugins-api/**` | Plugin system, events, metadata/search, AI integration |
+| **vaultstadio-docker-deploy.mdc** | `docker/**`, `helm/**` | Docker Compose, Helm, TrueNAS, CI |
+
+## Quick Reference
+
+### Code Quality (run before every commit)
+
+```bash
+./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt
+```
+
+### Key Constraints
+
+- **Language**: English only (code, docs, comments)
+- **Imports**: Explicit only, no wildcards (`import x.y.*`)
+- **Types**: No FQN in signatures; use imports and short names
+- **Max line length**: 120 characters
+
+### Documentation
+
+- **Index**: [docs/INDEX.md](docs/INDEX.md) – central navigation for all docs
+- **Overview**: [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) – what the project offers
+- **Known issues**: [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md) – resolved and current technical debt
+- **Roadmap**: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) – phases and future work (Phase 7)
+- **Commands**: See **vaultstadio-commands.mdc** for all build/run/test commands
+- **API**: See **vaultstadio-api-reference.mdc** for endpoints

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors -->
+    <color name="primary">#2563EB</color>
+    <color name="primary_variant">#1D4ED8</color>
+    <color name="secondary">#10B981</color>
+    <color name="secondary_variant">#059669</color>
+    
+    <!-- Background Colors -->
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_dark">#0F172A</color>
+    <color name="surface_light">#F8FAFC</color>
+    <color name="surface_dark">#1E293B</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary_light">#0F172A</color>
+    <color name="text_primary_dark">#F8FAFC</color>
+    <color name="text_secondary_light">#64748B</color>
+    <color name="text_secondary_dark">#94A3B8</color>
+    
+    <!-- Accent Colors -->
+    <color name="error">#EF4444</color>
+    <color name="warning">#F59E0B</color>
+    <color name="success">#10B981</color>
+    <color name="info">#3B82F6</color>
+    
+    <!-- Launcher Icon -->
+    <color name="ic_launcher_background">#2563EB</color>
+</resources>

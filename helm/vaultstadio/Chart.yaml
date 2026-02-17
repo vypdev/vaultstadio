@@ -1,0 +1,22 @@
+apiVersion: v2
+name: vaultstadio
+description: VaultStadio - Self-hosted storage platform with plugin architecture
+type: application
+version: 2.0.0
+appVersion: "2.0.0"
+keywords:
+  - storage
+  - files
+  - cloud
+  - self-hosted
+  - kotlin
+home: https://github.com/yourusername/vaultstadio
+sources:
+  - https://github.com/yourusername/vaultstadio
+maintainers:
+  - name: VaultStadio Team
+    email: team@vaultstadio.local
+icon: https://raw.githubusercontent.com/yourusername/vaultstadio/main/docs/icon.png
+annotations:
+  truenas.com/train: stable
+  truenas.com/category: productivity

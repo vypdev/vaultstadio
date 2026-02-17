@@ -1,0 +1,170 @@
+---
+description: VaultStadio backend – Ktor routes, API, Koin, architecture, known limitations
+globs: ["kotlin-backend/**/*.kt","kotlin-backend/**/*.kts"]
+---
+
+# VaultStadio – Backend
+
+Apply when working in `kotlin-backend/`. See [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md), [docs/api/API.md](docs/api/API.md).
+
+## Stack
+
+- **Ktor** (REST API, WebSocket, auth, middleware)
+- **Koin** (dependency injection)
+- **Arrow** `Either` for type-safe errors
+- **PostgreSQL** + Exposed ORM, Flyway migrations
+- **Coroutines** for async; no blocking in request handlers
+
+## Module Structure
+
+```
+kotlin-backend/
+├── core/               # Domain layer (no framework deps)
+│   ├── domain/model/   # StorageItem, User, ShareLink, FileVersion, etc.
+│   ├── domain/repository/  # Repository interfaces
+│   ├── domain/service/     # Business logic (StorageService, UserService, etc.)
+│   ├── domain/event/       # EventBus, FileEvent hierarchy
+│   └── exception/          # StorageException sealed hierarchy
+├── plugins-api/        # Plugin SDK (published artifact)
+│   ├── api/            # Plugin, PluginMetadata, PluginPermission
+│   ├── context/        # PluginContext, APIs available to plugins
+│   └── hooks/          # MetadataExtractionHook, ThumbnailHook
+├── api/                # Application layer
+│   ├── routes/         # Ktor route handlers (20+ files)
+│   ├── dto/            # Request/response DTOs
+│   ├── config/         # Koin, Security, Database, Routing
+│   ├── plugins/        # PluginManager
+│   └── middleware/     # Error handling, logging
+├── infrastructure/     # Infrastructure implementations
+│   ├── persistence/    # Exposed*Repository implementations
+│   ├── storage/        # LocalStorageBackend
+│   └── security/       # BCryptPasswordHasher
+└── plugins/            # Built-in plugins
+    ├── image-metadata/
+    ├── video-metadata/
+    ├── fulltext-search/
+    └── ai-classification/
+```
+
+## Routes (api/src/.../routes/)
+
+| File | Purpose |
+|------|---------|
+| AuthRoutes.kt | Login, register, refresh, logout |
+| UserRoutes.kt | Profile, settings, password change |
+| StorageRoutes.kt | File/folder CRUD, upload, download |
+| BatchRoutes.kt | Batch delete, move, copy, star, ZIP, empty trash |
+| ChunkedUploadRoutes.kt | Large file upload (> 100MB) |
+| FolderUploadRoutes.kt | Folder upload with structure |
+| ThumbnailRoutes.kt | Thumbnails, preview |
+| ShareRoutes.kt | Share links |
+| SearchRoutes.kt | File search, advanced search |
+| MetadataRoutes.kt | File metadata (image, video, document) |
+| AdminRoutes.kt | Admin user management |
+| ActivityRoutes.kt | User activity log |
+| PluginRoutes.kt | Plugin management |
+| AIRoutes.kt | AI providers, chat, vision, tagging |
+| VersionRoutes.kt | File versioning |
+| SyncRoutes.kt | Sync protocol |
+| FederationRoutes.kt | Federation |
+| CollaborationRoutes.kt | Real-time collaboration, WebSocket |
+| WebDAVRoutes.kt | WebDAV protocol |
+| S3Routes.kt | S3-compatible API |
+| HealthRoutes.kt | Health checks |
+
+## API Conventions
+
+- REST under `/api/v1/`
+- JWT authentication via `Authorization: Bearer <token>`
+- Consistent responses: `ApiResponse<T>` wrapper
+- Errors: `ApiError` with code, message, details
+- OpenAPI/Swagger at `/swagger-ui`
+
+## Error Handling Pattern
+
+Use Arrow Either with fold:
+
+```kotlin
+service.operation(id).fold(
+    ifLeft = { error -> throw error },  // StatusPages handles StorageException
+    ifRight = { result -> call.respond(HttpStatusCode.OK, result) }
+)
+```
+
+## Koin Modules (api/config/Koin.kt)
+
+| Module | Contents |
+|--------|----------|
+| `configModule` | AppConfig, sub-configs |
+| `coreModule` | EventBus, PasswordHasher, StorageBackend |
+| `repositoryModule` | All Exposed*Repository implementations |
+| `serviceModule` | All services with dependencies |
+| `pluginModule` | PluginManager |
+
+## Improvement Plan
+
+Backend improvements and technical debt are documented in [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md). Roadmap: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md). Key task areas:
+
+### Critical (BE-01 to BE-05)
+
+| ID | Task | Status |
+|----|------|--------|
+| BE-01 | Implement `S3StorageBackend` | Planned |
+| BE-02 | Implement `RedisMultipartUploadManager` | Planned |
+| BE-03 | Implement `RedisLockManager` | Planned |
+| BE-04 | Fix federation key management | Planned |
+| BE-05 | Remove dev secrets fallback | Planned |
+
+### High Priority Refactoring (BE-06 to BE-11)
+
+| ID | File | Lines | Split Into |
+|----|------|-------|------------|
+| BE-06 | S3Routes.kt | 867 | S3BucketRoutes, S3ObjectRoutes, S3MultipartRoutes |
+| BE-07 | WebDAVRoutes.kt | 875 | WebDAVPropertyRoutes, WebDAVLockRoutes |
+| BE-08 | FederationRoutes.kt | 570 | FederationInstanceRoutes, FederationShareRoutes |
+| BE-11 | CollaborationRoutes.kt | 948 | CollaborationSessionRoutes, CollaborationDocumentRoutes |
+
+### Code Deduplication (BE-12 to BE-15)
+
+| ID | Duplicated Code | Solution |
+|----|-----------------|----------|
+| BE-12 | Path resolution in S3/WebDAV | Create `PathResolver.kt` |
+| BE-13 | XML builders | Create `XmlResponseBuilder.kt` |
+| BE-14 | MD5 calculation | Create `HashUtils.kt` |
+| BE-15 | Error handling | Create `respondEither()` extension |
+
+## Current Limitations (Being Resolved)
+
+### S3StorageBackend (BE-01)
+
+Only `LocalStorageBackend` exists. Config supports S3 but implementation missing.
+
+### Redis Implementations (BE-02, BE-03)
+
+`RedisMultipartUploadManager` and `RedisLockManager` throw `NotImplementedError`.
+
+### Federation Security (BE-04)
+
+Uses JWT secret as key placeholder. Not production-ready.
+
+### Dev Secrets (BE-05)
+
+`AppConfig.kt` has fallback dev secrets that could leak to production.
+
+## Backend Commands
+
+```bash
+./gradlew :kotlin-backend:api:run                    # Run backend
+./gradlew :kotlin-backend:api:build -x test          # Build without tests
+./gradlew :kotlin-backend:core:test :kotlin-backend:api:test  # Run tests
+./gradlew :kotlin-backend:api:flywayMigrate          # Run migrations
+./gradlew :kotlin-backend:api:flywayClean            # Clean database (dev)
+```
+
+## Best Practices
+
+1. **Repositories**: Interfaces in core, implementations in infrastructure
+2. **Services**: Business logic in core, no framework dependencies
+3. **Routes**: Thin handlers, delegate to services
+4. **Transactions**: Repositories handle their own transactions
+5. **Events**: Use EventBus for plugin communication

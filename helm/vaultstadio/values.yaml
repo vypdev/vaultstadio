@@ -1,0 +1,134 @@
+# VaultStadio Helm Chart Values
+# For deployment on Kubernetes / TrueNAS Scale
+
+# Global settings
+global:
+  storageClass: ""
+  
+# Backend configuration
+backend:
+  replicaCount: 1
+  
+  image:
+    repository: vaultstadio/backend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 8080
+  
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: "500m"
+      memory: 512Mi
+  
+  env:
+    JAVA_OPTS: "-Xms256m -Xmx1024m"
+  
+  # Persistence for file storage
+  persistence:
+    enabled: true
+    storageClassName: ""
+    accessMode: ReadWriteOnce
+    size: 100Gi
+    # Existing PVC name (leave empty to create new)
+    existingClaim: ""
+    # Host path for TrueNAS (alternative to PVC)
+    hostPath:
+      enabled: false
+      path: /mnt/pool/vaultstadio
+  
+  # Plugin storage
+  pluginStorage:
+    enabled: true
+    size: 10Gi
+
+# Frontend configuration
+frontend:
+  replicaCount: 1
+  
+  image:
+    repository: vaultstadio/frontend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 80
+  
+  resources:
+    limits:
+      cpu: "500m"
+      memory: 256Mi
+    requests:
+      cpu: "100m"
+      memory: 128Mi
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    username: vaultstadio
+    password: vaultstadio
+    database: vaultstadio
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+  # External database (if postgresql.enabled is false)
+  external:
+    host: ""
+    port: 5432
+    username: ""
+    password: ""
+    database: ""
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    # TrueNAS Scale traefik annotations
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  hosts:
+    - host: vaultstadio.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# MinIO configuration (optional S3-compatible storage)
+minio:
+  enabled: false
+  auth:
+    rootUser: minioadmin
+    rootPassword: minioadmin
+  persistence:
+    enabled: true
+    size: 50Gi
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Service account
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}

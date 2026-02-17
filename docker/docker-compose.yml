@@ -1,0 +1,106 @@
+# VaultStadio Docker Compose - Kotlin Version
+# For development and production deployment
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: vaultstadio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-vaultstadio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vaultstadio}
+      POSTGRES_DB: ${POSTGRES_DB:-vaultstadio}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vaultstadio}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (Kotlin/Ktor)
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: vaultstadio-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-vaultstadio}
+      DATABASE_USER: ${POSTGRES_USER:-vaultstadio}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-vaultstadio}
+      VAULTSTADIO_STORAGE_PATH: /data/storage
+      VAULTSTADIO_DATA_PATH: /data/plugins
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx1024m}
+    volumes:
+      - storage_data:/data/storage
+      - plugins_data:/data/plugins
+      - ${HOST_STORAGE_PATH:-./storage}:/data/storage:rw
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (Compose Multiplatform Web)
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: vaultstadio-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MinIO Object Storage (Optional - for S3-compatible storage)
+  minio:
+    image: minio/minio:latest
+    container_name: vaultstadio-minio
+    restart: unless-stopped
+    profiles:
+      - s3
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  storage_data:
+    driver: local
+  plugins_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  default:
+    name: vaultstadio-network

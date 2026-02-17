@@ -1,0 +1,202 @@
+---
+description: VaultStadio frontend – Compose MP, Decompose navigation, per-screen ViewModels
+globs: ["compose-frontend/**/*.kt","compose-frontend/**/*.kts"]
+---
+
+# VaultStadio – Frontend
+
+Apply when working in `compose-frontend/`. See [docs/architecture/FRONTEND_ARCHITECTURE.md](docs/architecture/FRONTEND_ARCHITECTURE.md), [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md).
+
+## Stack
+
+- **Compose Multiplatform** (Web WASM, Android, iOS, Desktop)
+- **Decompose** for navigation (stack-based, type-safe, multiplatform)
+- **Material 3** theming with light/dark support
+- **Per-screen ViewModels** (target architecture)
+- **Shared module** for API client and DTOs
+
+## Structure (composeApp/src/commonMain/.../app/)
+
+```
+navigation/
+  RootComponent.kt       # Auth/Main split
+  RootContent.kt         # Root UI renderer
+  MainDestination.kt     # Navigation destinations enum
+feature/
+  auth/                  # AuthComponent, AuthViewModel, AuthContent
+  main/                  # MainComponent, MainContent (sidebar + child navigation)
+  files/                 # FilesComponent, FilesViewModel, FilesContent
+  admin/                 # AdminComponent, AdminViewModel, AdminContent
+  ... (17 features total)
+ui/
+  components/            # Reusable UI: Sidebar, FileGridItem, Breadcrumbs, dialogs
+  theme/                 # Theme.kt (Material 3, light/dark/system)
+platform/                # expect/actual: FilePicker, Storage, Download, DragDrop
+i18n/                    # Strings.kt, StringExtensions.kt (7 languages)
+VaultStadioRoot.kt       # Main entry point (replaces App.kt)
+```
+
+## Key Features (ViewModel state / methods)
+
+| Feature | State Variables | Key Methods |
+|---------|-----------------|-------------|
+| Multi-selection | `selectedItems`, `isSelectionMode` | `toggleItemSelection()`, `selectAll()`, `clearSelection()` |
+| Batch ops | - | `batchDeleteSelected`, `batchMoveSelected`, `batchCopySelected`, `emptyTrash()` |
+| Chunked upload | threshold 100MB, chunk 10MB | WASM `File.slice()`, Desktop `RandomAccessFile` |
+| Folder upload | Desktop folder picker; WASM multi-file | `relativePath` preservation |
+| Info panel | `showInfoPanel`, `selectedInfoItem` | `showItemInfo(item)`, `hideItemInfo()` |
+| Keyboard | - | `Modifier.keyboardShortcuts(actions)` (Ctrl+A, C, V, X, Delete, etc.) |
+
+## Platform (expect/actual)
+
+| File | Purpose | Desktop | WASM |
+|------|---------|---------|------|
+| `FilePicker.kt` | File selection | AWT `FileDialog` | HTML `<input type="file">` |
+| `Storage.kt` | Token persistence | Java `Preferences` | `localStorage` |
+| `Download.kt` | File download | Save dialog | Create `<a>` element |
+| `DragDrop.kt` | Drag and drop | AWT events | HTML5 Drag API |
+
+## Constants
+
+```kotlin
+LARGE_FILE_THRESHOLD = 100L * 1024 * 1024  // 100MB
+DEFAULT_CHUNK_SIZE = 10L * 1024 * 1024     // 10MB
+```
+
+## Target Architecture (Decompose + Per-Screen ViewModels)
+
+**Current state and issues: [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md)**
+
+### Navigation with Decompose
+
+```kotlin
+// RootComponent.kt
+interface RootComponent {
+    val stack: Value<ChildStack<*, Child>>
+    
+    sealed class Child {
+        class Auth(val component: AuthComponent) : Child()
+        class Main(val component: MainComponent) : Child()
+    }
+}
+
+// MainComponent.kt  
+interface MainComponent {
+    val stack: Value<ChildStack<*, Child>>
+    
+    sealed class Child {
+        class Files(val component: FilesComponent) : Child()
+        class AI(val component: AIComponent) : Child()
+        // ... one per screen
+    }
+    
+    fun navigateTo(destination: MainDestination)
+}
+```
+
+### Per-Screen ViewModel Pattern
+
+Each screen has its own ViewModel encapsulated in a Decompose Component:
+
+```kotlin
+// feature/auth/AuthComponent.kt
+interface AuthComponent {
+    val viewModel: AuthViewModel
+    fun onBack()
+}
+
+class DefaultAuthComponent(
+    componentContext: ComponentContext,
+    private val authRepository: AuthRepository,
+    private val onAuthSuccess: () -> Unit
+) : AuthComponent, ComponentContext by componentContext {
+    
+    override val viewModel = AuthViewModel(
+        authRepository = authRepository,
+        scope = coroutineScope(),
+        onSuccess = onAuthSuccess
+    )
+}
+
+// feature/auth/AuthViewModel.kt
+class AuthViewModel(
+    private val authRepository: AuthRepository,
+    private val scope: CoroutineScope,
+    private val onSuccess: () -> Unit
+) {
+    var isLoading by mutableStateOf(false)
+        private set
+    var error by mutableStateOf<String?>(null)
+        private set
+    
+    fun login(email: String, password: String) {
+        scope.launch {
+            isLoading = true
+            authRepository.login(email, password).fold(
+                onSuccess = { onSuccess() },
+                onFailure = { error = it.message }
+            )
+            isLoading = false
+        }
+    }
+}
+```
+
+### ViewModels to Create (17 total)
+
+| ViewModel | Screen(s) | Priority |
+|-----------|-----------|----------|
+| `AuthViewModel` | Login, Register | CRÍTICA |
+| `FilesViewModel` | Files, Recent, Starred, Trash | CRÍTICA |
+| `SearchViewModel` | Search | ALTA |
+| `SharesViewModel` | Shared | ALTA |
+| `SharedWithMeViewModel` | SharedWithMe | ALTA |
+| `AdminViewModel` | Admin | ALTA |
+| `UploadViewModel` | Upload dialogs | ALTA |
+| `AIViewModel` | AI | MEDIA |
+| `SyncViewModel` | Sync | MEDIA |
+| `FederationViewModel` | Federation | MEDIA |
+| `CollaborationViewModel` | Collaboration | MEDIA |
+| `VersionHistoryViewModel` | VersionHistory | MEDIA |
+| `MetadataViewModel` | File info panel | MEDIA |
+| `ActivityViewModel` | Activity | BAJA |
+| `PluginsViewModel` | Plugins | BAJA |
+| `ProfileViewModel` | Profile | BAJA |
+| `SettingsViewModel` | Settings | BAJA |
+
+### Migration Strategy
+
+1. **Add Decompose dependency** to build.gradle.kts
+2. **Create navigation structure** (RootComponent, MainComponent)
+3. **Migrate screens one by one**, extracting ViewModel
+4. **Keep AppViewModel** until all screens migrated
+5. **Delete AppViewModel** when empty
+
+## Current State (COMPLETE)
+
+**Status**: Full architecture migration completed (2026-01-30).
+
+The new architecture is now the **only** implementation:
+- **Entry point**: `VaultStadioRoot.kt` (replaced `App.kt`)
+- **Decompose navigation** implemented in `navigation/` folder
+- **17 per-screen ViewModels** created in `feature/` folder
+- **Legacy files removed**: `App.kt`, `AppViewModel.kt` deleted
+- All Main.kt entry points (desktop, wasmJs, Android) use `VaultStadioRoot()`
+- See [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md) for resolved issues
+
+## Frontend Commands
+
+```bash
+./gradlew :compose-frontend:composeApp:run                    # Desktop
+./gradlew :compose-frontend:composeApp:wasmJsBrowserRun       # Web dev server
+./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution  # Web production
+./gradlew :compose-frontend:androidApp:assembleRelease        # Android APK
+```
+
+## Best Practices
+
+1. **State**: Keep in ViewModel, not in composables
+2. **Callbacks**: Pass lambdas, not ViewModel references
+3. **remember**: Use for expensive calculations
+4. **LazyColumn/Grid**: Use for lists (not Column with forEach)
+5. **Strings**: Use `LocalStrings.current` for i18n (avoid hardcoded)

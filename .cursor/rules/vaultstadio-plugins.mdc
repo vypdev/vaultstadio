@@ -1,0 +1,50 @@
+---
+description: VaultStadio – plugin system, events, metadata, search, AI integration
+globs: ["kotlin-backend/plugins/**/*.kt","kotlin-backend/plugins-api/**/*.kt"]
+---
+
+# VaultStadio – Plugins
+
+Apply when working in `kotlin-backend/plugins/` or `plugins-api/`. See [docs/plugins/PLUGINS.md](docs/plugins/PLUGINS.md), [docs/plugins/PLUGIN_DEVELOPMENT.md](docs/plugins/PLUGIN_DEVELOPMENT.md), [docs/plugins/AI_INTEGRATION.md](docs/plugins/AI_INTEGRATION.md).
+
+## Built-in plugins
+
+| Plugin ID | Description | Deps |
+|-----------|-------------|------|
+| com.vaultstadio.plugins.image-metadata | EXIF, IPTC, XMP | metadata-extractor |
+| com.vaultstadio.plugins.video-metadata | Video metadata (FFprobe) | FFprobe |
+| com.vaultstadio.plugins.fulltext-search | Full-text search | Lucene + Tika |
+| com.vaultstadio.plugins.ai-classification | AI classification | Core AI |
+
+## Plugin structure (backend/plugins/)
+
+```
+image-metadata/   → ImageMetadataPlugin.kt
+video-metadata/   → VideoMetadataPlugin.kt
+fulltext-search/  → FullTextSearchPlugin.kt
+ai-classification/→ AIClassificationPlugin.kt
+```
+
+## Plugin events (FileEvent)
+
+- Uploaded, Downloaded, Deleted, Moved, Copied.
+
+## Plugin context (plugins-api / api PluginManager)
+
+- StorageApi, MetadataApi, UserApi, PluginLogger, ConfigStore, AIApi (optional), HttpClientApi.
+- Endpoint registration; scheduleTask/cancelTask.
+- Use **imports and short types**; no FQN in type positions.
+
+## AI integration (core/ai/)
+
+- **Providers**: Ollama (local), LM Studio (local), OpenRouter (cloud).
+- **Endpoints**: GET/POST /ai/providers, POST /ai/providers/active, GET /ai/models, POST /ai/chat, /ai/vision, /ai/describe, /ai/tag, /ai/classify, /ai/summarize.
+- **Core**: AIProvider.kt, AIService.kt, providers/OllamaProvider, LMStudioProvider, OpenRouterProvider.
+
+## Commands
+
+```bash
+./gradlew :kotlin-backend:plugins:image-metadata:pluginJar
+./gradlew :kotlin-backend:plugins:video-metadata:pluginJar
+make plugins-build
+```

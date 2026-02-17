@@ -1,0 +1,247 @@
+---
+description: VaultStadio – Complete API endpoints and shared data models reference
+globs: ["kotlin-backend/api/**/*.kt","shared/**/*.kt","kotlin-backend/core/**/*.kt"]
+---
+
+# VaultStadio – API & Shared Models Reference
+
+Apply when working on API routes, DTOs, or shared models. Full documentation: [docs/api/API.md](docs/api/API.md).
+
+## API Overview
+
+- **Base URL**: `/api/v1/`
+- **Auth**: JWT Bearer token (`Authorization: Bearer <token>`)
+- **Response format**: `ApiResponse<T>` wrapper
+- **Interactive docs**: `/swagger-ui`
+
+## Endpoint Categories
+
+### Authentication (public)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/auth/login` | POST | Login, returns tokens |
+| `/auth/register` | POST | Create account |
+| `/auth/refresh` | POST | Refresh access token |
+| `/auth/logout` | POST | Invalidate session |
+| `/auth/me` | GET | Current user info |
+
+### Storage (authenticated)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/storage/folder` | GET | List root folder |
+| `/storage/folder/{id}` | GET | List folder contents |
+| `/storage/folder` | POST | Create folder |
+| `/storage/{id}` | GET | Get item details |
+| `/storage/{id}` | PATCH | Rename/move item |
+| `/storage/{id}` | DELETE | Delete item |
+| `/storage/upload` | POST | Upload file |
+| `/storage/download/{id}` | GET | Download file |
+| `/storage/{id}/star` | POST | Toggle star |
+| `/storage/{id}/trash` | POST | Move to trash |
+| `/storage/{id}/restore` | POST | Restore from trash |
+| `/storage/starred` | GET | List starred items |
+| `/storage/trash` | GET | List trash |
+| `/storage/recent` | GET | List recent items |
+| `/storage/{id}/breadcrumbs` | GET | Get breadcrumbs |
+
+### Batch Operations
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/storage/batch/delete` | POST | Delete multiple items |
+| `/storage/batch/move` | POST | Move multiple items |
+| `/storage/batch/copy` | POST | Copy multiple items |
+| `/storage/batch/star` | POST | Star/unstar multiple |
+| `/storage/batch/download-zip` | POST | Download as ZIP |
+| `/storage/batch/empty-trash` | POST | Empty trash |
+
+### Chunked Upload (> 100MB)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/storage/upload/init` | POST | Initialize chunked upload |
+| `/storage/upload/{uploadId}/chunk/{index}` | POST | Upload chunk |
+| `/storage/upload/{uploadId}/status` | GET | Upload status |
+| `/storage/upload/{uploadId}/complete` | POST | Finalize upload |
+| `/storage/upload/{uploadId}` | DELETE | Cancel upload |
+| `/storage/upload-folder` | POST | Folder upload |
+
+### Thumbnails & Preview
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/storage/item/{id}/thumbnail` | GET | Get thumbnail (?size=small\|medium\|large\|xlarge) |
+| `/storage/item/{id}/preview` | GET | Get file preview |
+
+### Metadata
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/storage/item/{id}/metadata` | GET | All metadata |
+| `/storage/item/{id}/metadata/image` | GET | Image EXIF/IPTC |
+| `/storage/item/{id}/metadata/video` | GET | Video metadata |
+| `/storage/item/{id}/metadata/document` | GET | Document metadata |
+
+### Search
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/search?q=query` | GET | Simple search |
+| `/search/advanced` | POST | Advanced search with filters |
+| `/search/suggestions?prefix=` | GET | Autocomplete |
+| `/search/by-metadata?key=&value=` | GET | Search by metadata |
+
+### Shares
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/shares` | GET | List user's shares |
+| `/shares` | POST | Create share |
+| `/shares/{id}` | DELETE | Delete share |
+| `/share/{token}` | GET | Access shared file (public) |
+| `/share/{token}` | POST | Access with password |
+
+### Users
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/users/me` | GET | Get profile |
+| `/users/me` | PATCH | Update profile |
+| `/users/me/password` | POST | Change password |
+| `/users/me/quota` | GET | Get quota |
+
+### Admin (admin role)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/admin/users` | GET | List all users |
+| `/admin/users` | POST | Create user |
+| `/admin/users/{id}` | PATCH | Update user |
+| `/admin/users/{id}` | DELETE | Delete user |
+| `/admin/stats` | GET | System statistics |
+| `/admin/plugins/{id}/enable` | POST | Enable plugin |
+| `/admin/plugins/{id}/disable` | POST | Disable plugin |
+
+### AI Integration
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/ai/providers` | GET | List providers |
+| `/ai/providers` | POST | Configure provider |
+| `/ai/providers/active` | POST | Set active provider |
+| `/ai/models` | GET | List models |
+| `/ai/chat` | POST | Chat completion |
+| `/ai/vision` | POST | Image analysis |
+| `/ai/describe` | POST | Describe image |
+| `/ai/tag` | POST | Auto-tag image |
+| `/ai/classify` | POST | Classify content |
+| `/ai/summarize` | POST | Summarize text |
+
+### File Versioning (Phase 6)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/versions/item/{id}` | GET | Version history |
+| `/versions/item/{id}/version/{num}` | GET | Specific version |
+| `/versions/item/{id}/version/{num}/download` | GET | Download version |
+| `/versions/item/{id}/restore` | POST | Restore version |
+| `/versions/item/{id}/diff?from=&to=` | GET | Compare versions |
+| `/versions/item/{id}/cleanup` | POST | Apply retention policy |
+
+### Sync Protocol (Phase 6)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/sync/devices` | GET | List devices |
+| `/sync/devices` | POST | Register device |
+| `/sync/devices/{id}/deactivate` | POST | Deactivate device |
+| `/sync/devices/{id}` | DELETE | Remove device |
+| `/sync/pull` | POST | Pull changes |
+| `/sync/push` | POST | Push changes |
+| `/sync/conflicts` | GET | List conflicts |
+| `/sync/conflicts/{id}/resolve` | POST | Resolve conflict |
+
+### Federation (Phase 6)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/federation/.well-known/vaultstadio` | GET | Instance discovery (public) |
+| `/federation/instances` | GET | List federated instances |
+| `/federation/instances/request` | POST | Request federation |
+| `/federation/instances/{id}/block` | POST | Block instance |
+| `/federation/shares` | POST | Create federated share |
+| `/federation/shares/outgoing` | GET | Outgoing shares |
+| `/federation/shares/incoming` | GET | Incoming shares |
+| `/federation/shares/{id}/accept` | POST | Accept share |
+| `/federation/shares/{id}/decline` | POST | Decline share |
+| `/federation/identities` | GET/POST | Manage identities |
+
+### Collaboration (Phase 6)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/collaboration/sessions/join` | POST | Join session |
+| `/collaboration/sessions/{id}` | GET | Get session |
+| `/collaboration/sessions/{id}/leave` | POST | Leave session |
+| `/collaboration/documents/{id}` | GET | Get document state |
+| `/collaboration/documents/{id}/save` | POST | Save document |
+| `/collaboration/documents/{id}/comments` | GET/POST | Comments |
+| `/collaboration/ws/{sessionId}` | WebSocket | Real-time updates |
+
+### Protocol Compatibility (Phase 6)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/webdav/*` | Various | WebDAV protocol |
+| `/s3/*` | Various | S3-compatible API |
+
+### Health
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/ready` | GET | Readiness check |
+| `/metrics` | GET | Prometheus metrics |
+
+---
+
+## Shared Data Models (representative)
+
+### Core
+
+- `StorageItem`, `User`, `ShareLink`, `Activity`, `StorageQuota`
+- `ItemType`, `Visibility`, `UserRole`, `UserStatus`
+
+### Batch
+
+- `BatchDeleteRequest`, `BatchMoveRequest`, `BatchCopyRequest`, `BatchStarRequest`
+- `BatchResult`, `BatchError`
+
+### Upload
+
+- `ChunkedUploadInitRequest`, `ChunkedUploadInit`, `ChunkedUploadStatus`
+- `FolderUploadFile`, `FolderUploadResult`
+
+### Metadata
+
+- `FileMetadata`, `ImageMetadata`, `VideoMetadata`, `DocumentMetadata`
+- `AdvancedSearchRequest`, `MetadataSearchResult`
+
+### AI
+
+- `AIProviderType`, `AIProviderInfo`, `AIModel`
+- `AIChatMessage`, `AIChatRequest`, `AIChatResponse`
+- `AIVisionRequest`, `AIClassifyRequest`, `AISummarizeRequest`
+
+### Phase 6
+
+- `FileVersion`, `FileVersionHistory`, `VersionDiff`
+- `SyncDevice`, `SyncChange`, `SyncConflict`, `ConflictResolution`
+- `FederatedInstance`, `FederatedShare`, `FederatedIdentity`
+- `CollaborationSession`, `CollaborationParticipant`, `DocumentComment`
+
+---
+
+Use **short type names + imports** in Kotlin; no FQN in type positions.

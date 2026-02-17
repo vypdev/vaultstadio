@@ -1,0 +1,29 @@
+# VaultStadio API Configuration
+
+ktor:
+  application:
+    modules:
+      - com.vaultstadio.api.ApplicationKt.module
+  deployment:
+    port: 8080
+    host: 0.0.0.0
+
+vaultstadio:
+  storage:
+    path: ${VAULTSTADIO_STORAGE_PATH:/data/storage}
+    backend: local  # local, s3, minio
+  
+  database:
+    url: ${DATABASE_URL:jdbc:h2:file:./data/vaultstadio;MODE=PostgreSQL}
+    user: ${DATABASE_USER:sa}
+    password: ${DATABASE_PASSWORD:}
+  
+  security:
+    session:
+      duration: 168  # hours (7 days)
+    bcrypt:
+      cost: 12
+  
+  plugins:
+    directory: ${VAULTSTADIO_DATA_PATH:/data/plugins}
+    autoload: true

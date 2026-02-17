@@ -1,0 +1,122 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.egg-info/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.next/
+out/
+dist/
+
+# Kotlin / Gradle
+build/
+bin/
+.gradle/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+.kotlin/
+kotlin-js-store/
+out/
+!gradle-wrapper.jar
+local.properties
+
+# Kotlin Multiplatform
+.cxx/
+*.xcworkspace/
+*.xcuserdata/
+Pods/
+xcuserdata/
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+*.hprof
+.externalNativeBuild/
+.cxx/
+
+# iOS
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Compose
+compose-resources/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker
+.dockerignore
+docker/storage/
+
+# Local Development Data
+data/
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Helm
+*.tgz
+
+# Detekt
+config/detekt/baseline.xml
+
+# Android Signing
+*.keystore
+*.jks
+keystore.properties
+keystores/
