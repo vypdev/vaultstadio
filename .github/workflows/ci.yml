@@ -47,8 +47,26 @@ jobs:
         run: |
           ./gradlew :kotlin-backend:core:test \
             :kotlin-backend:api:test \
+            :kotlin-backend:infrastructure:test \
+            :kotlin-backend:plugins-api:test \
+            :kotlin-backend:plugins:image-metadata:test \
+            :kotlin-backend:plugins:video-metadata:test \
+            :kotlin-backend:plugins:fulltext-search:test \
+            :kotlin-backend:plugins:ai-classification:test \
             --continue
-      
+
+      - name: Generate backend coverage reports
+        run: |
+          ./gradlew :kotlin-backend:core:jacocoTestReport \
+            :kotlin-backend:api:jacocoTestReport \
+            :kotlin-backend:infrastructure:jacocoTestReport \
+            :kotlin-backend:plugins-api:jacocoTestReport \
+            :kotlin-backend:plugins:image-metadata:jacocoTestReport \
+            :kotlin-backend:plugins:video-metadata:jacocoTestReport \
+            :kotlin-backend:plugins:fulltext-search:jacocoTestReport \
+            :kotlin-backend:plugins:ai-classification:jacocoTestReport \
+            --continue
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -58,6 +76,92 @@ jobs:
             kotlin-backend/**/build/reports/tests/
             kotlin-backend/**/build/test-results/
           retention-days: 7
+
+      - name: Upload backend coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-backend
+          path: |
+            kotlin-backend/core/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/api/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml
+          retention-days: 1
+
+  # Build the frontend
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Build frontend (Desktop)
+        run: ./gradlew :compose-frontend:composeApp:compileKotlinDesktop
+
+      - name: Run frontend tests (desktop)
+        run: ./gradlew :compose-frontend:composeApp:desktopTest --continue
+
+      - name: Generate frontend coverage report
+        run: ./gradlew :compose-frontend:composeApp:jacocoTestReport --continue
+
+      - name: Upload frontend coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-frontend
+          path: compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          retention-days: 1
+
+  # Upload coverage to Codecov
+  coverage:
+    name: Coverage (Codecov)
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download backend coverage reports
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-coverage-backend
+
+      - name: Download frontend coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-coverage-frontend
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: |
+            kotlin-backend/core/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/api/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml
+            kotlin-backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml
+            compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   # Build plugins
   plugins:
@@ -105,27 +209,6 @@ jobs:
       
       - name: Build shared module
         run: ./gradlew :shared:build -x test
-
-  # Build the frontend
-  frontend:
-    name: Frontend Build
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-      
-      - name: Build frontend (Desktop)
-        run: ./gradlew :compose-frontend:composeApp:compileKotlinDesktop
 
   # Build Android app
   android:

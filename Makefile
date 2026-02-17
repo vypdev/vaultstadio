@@ -84,8 +84,21 @@ backend-test:
 	./gradlew :kotlin-backend:api:test
 
 test-coverage:
-	@echo "Running tests with coverage..."
-	./gradlew test jacocoTestReport
+	@echo "Running tests with coverage (backend + frontend, same as CI/Codecov)..."
+	./gradlew :kotlin-backend:core:jacocoTestReport \
+		:kotlin-backend:api:jacocoTestReport \
+		:kotlin-backend:infrastructure:jacocoTestReport \
+		:kotlin-backend:plugins-api:jacocoTestReport \
+		:kotlin-backend:plugins:image-metadata:jacocoTestReport \
+		:kotlin-backend:plugins:video-metadata:jacocoTestReport \
+		:kotlin-backend:plugins:fulltext-search:jacocoTestReport \
+		:kotlin-backend:plugins:ai-classification:jacocoTestReport \
+		:compose-frontend:composeApp:jacocoTestReport \
+		--continue
+	@echo "Coverage reports:"
+	@echo "  Backend:  kotlin-backend/*/build/reports/jacoco/test/"
+	@echo "  Frontend: compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/"
+	@echo "Validate codecov config: curl -s --data-binary @codecov.yml https://codecov.io/validate"
 
 # ==================== Development ====================
 

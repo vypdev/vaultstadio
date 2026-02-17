@@ -7,6 +7,9 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
@@ -14,6 +17,7 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    jacoco
 }
 
 kotlin {
@@ -191,5 +195,34 @@ compose.desktop {
                 iconFile.set(project.file("icons/icon.png"))
             }
         }
+    }
+}
+
+// JaCoCo coverage for desktop (JVM) tests; commonTest runs on desktop as desktopTest
+tasks.register<JacocoReport>("jacocoTestReport") {
+    group = "verification"
+    description = "Generates JaCoCo coverage report for desktop tests"
+
+    val desktopTest = tasks.named("desktopTest").get()
+    dependsOn(desktopTest)
+
+    val jacocoExt = desktopTest.extensions.findByType(JacocoTaskExtension::class.java)
+    executionData.setFrom(
+        if (jacocoExt != null) files(jacocoExt.destinationFile)
+        else fileTree(layout.buildDirectory) { include("jacoco/desktopTest.exec") }
+    )
+
+    val commonMainKotlin = kotlin.sourceSets.getByName("commonMain").kotlin.srcDirs
+    val desktopMainKotlin = kotlin.sourceSets.getByName("desktopMain").kotlin.srcDirs
+    sourceDirectories.setFrom(files(commonMainKotlin, desktopMainKotlin))
+
+    val desktopClasses = layout.buildDirectory.dir("classes/kotlin/desktop/main")
+    classDirectories.setFrom(
+        desktopClasses.map { dir -> fileTree(dir.asFile) { exclude("**/$$*") } }
+    )
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
     }
 }

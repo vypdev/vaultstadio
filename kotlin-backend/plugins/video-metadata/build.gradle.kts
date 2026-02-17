@@ -7,6 +7,7 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
+    jacoco
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -41,6 +42,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 // Create fat JAR for plugin distribution

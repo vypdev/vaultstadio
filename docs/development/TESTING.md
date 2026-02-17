@@ -72,9 +72,50 @@ VaultStadio uses a comprehensive testing approach with **65+ test files** coveri
 
 ### Run with Coverage Report
 
+**All modules (same as CI / Codecov):**
+
 ```bash
-./gradlew test jacocoTestReport
+make test-coverage
 ```
+
+Or with Gradle directly:
+
+```bash
+./gradlew :kotlin-backend:core:jacocoTestReport \
+  :kotlin-backend:api:jacocoTestReport \
+  :kotlin-backend:infrastructure:jacocoTestReport \
+  :kotlin-backend:plugins-api:jacocoTestReport \
+  :kotlin-backend:plugins:image-metadata:jacocoTestReport \
+  :kotlin-backend:plugins:video-metadata:jacocoTestReport \
+  :kotlin-backend:plugins:fulltext-search:jacocoTestReport \
+  :kotlin-backend:plugins:ai-classification:jacocoTestReport \
+  :compose-frontend:composeApp:jacocoTestReport \
+  --continue
+```
+
+**Output locations:**
+
+| Module | HTML report | XML (for Codecov) |
+|--------|-------------|-------------------|
+| Backend (core, api, infra, plugins-api, each plugin) | `kotlin-backend/<module>/build/reports/jacoco/test/html/` | `kotlin-backend/<module>/build/reports/jacoco/test/jacocoTestReport.xml` |
+| Frontend (composeApp) | `compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/` | `compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml` |
+
+**Validate Codecov config locally:**
+
+```bash
+curl -s --data-binary @codecov.yml https://codecov.io/validate
+```
+
+**Optional: upload from local** (to verify Codecov accepts your reports): install the [Codecov CLI](https://github.com/codecov/codecov-cli), set `CODECOV_TOKEN`, then run an upload with the same XML paths the CI uses (see `.github/workflows/ci.yml`).
+
+### Codecov (CI)
+
+Coverage is uploaded to [Codecov](https://codecov.io) on every push and pull request. To enable uploads:
+
+1. Add the repository to Codecov (e.g. at [codecov.io](https://codecov.io)).
+2. Add the `CODECOV_TOKEN` secret to the GitHub repository (Settings → Secrets and variables → Actions).
+
+The CI workflow runs coverage for all backend modules (core, api, infrastructure, plugins-api, and the four plugins: image-metadata, video-metadata, fulltext-search, ai-classification) and for the frontend (composeApp desktop tests). Configuration is in [codecov.yml](../../codecov.yml) at the repo root.
 
 ---
 
