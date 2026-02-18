@@ -5,7 +5,6 @@
 
 package com.vaultstadio.app.feature.profile
 
-import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.repository.AuthRepository
 import com.vaultstadio.app.domain.model.LoginResult
@@ -16,6 +15,7 @@ import com.vaultstadio.app.domain.usecase.auth.ChangePasswordUseCaseImpl
 import com.vaultstadio.app.domain.usecase.auth.GetCurrentUserUseCaseImpl
 import com.vaultstadio.app.domain.usecase.auth.GetQuotaUseCaseImpl
 import com.vaultstadio.app.domain.usecase.auth.UpdateProfileUseCaseImpl
+import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

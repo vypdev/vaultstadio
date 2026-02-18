@@ -112,8 +112,10 @@ class AdvancedEventsTest {
 
     @Test
     fun `SyncEvent ConflictDetected`() {
-        val local = SyncChange(itemId = "i1", changeType = ChangeType.MODIFY, userId = "u1", timestamp = now, cursor = 1)
-        val remote = SyncChange(itemId = "i1", changeType = ChangeType.MODIFY, userId = "u2", timestamp = now, cursor = 2)
+        val local =
+            SyncChange(itemId = "i1", changeType = ChangeType.MODIFY, userId = "u1", timestamp = now, cursor = 1)
+        val remote =
+            SyncChange(itemId = "i1", changeType = ChangeType.MODIFY, userId = "u2", timestamp = now, cursor = 2)
         val conflict = SyncConflict(
             itemId = "i1",
             localChange = local,
@@ -172,7 +174,13 @@ class AdvancedEventsTest {
 
     @Test
     fun `CollabEvent OperationApplied`() {
-        val op = CollaborationOperation.Insert(userId = "u1", timestamp = now, baseVersion = 1, position = 0, text = "hi")
+        val op = CollaborationOperation.Insert(
+            userId = "u1",
+            timestamp = now,
+            baseVersion = 1,
+            position = 0,
+            text = "hi",
+        )
         val e = CollabEvent.OperationApplied(
             userId = "u1",
             sessionId = "s1",

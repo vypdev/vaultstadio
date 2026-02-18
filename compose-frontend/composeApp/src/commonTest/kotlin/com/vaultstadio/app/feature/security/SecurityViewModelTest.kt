@@ -5,17 +5,16 @@
 
 package com.vaultstadio.app.feature.security
 
-import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.domain.model.ActiveSession
 import com.vaultstadio.app.domain.model.LoginEvent
 import com.vaultstadio.app.domain.model.SecuritySettings
 import com.vaultstadio.app.domain.model.SessionDeviceType
-import com.vaultstadio.app.domain.model.TwoFactorMethod
 import com.vaultstadio.app.domain.usecase.auth.GetActiveSessionsUseCase
 import com.vaultstadio.app.domain.usecase.auth.GetLoginHistoryUseCase
 import com.vaultstadio.app.domain.usecase.auth.GetSecuritySettingsUseCase
 import com.vaultstadio.app.domain.usecase.auth.RevokeSessionUseCase
+import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -12,7 +12,6 @@ import arrow.core.right
 import com.vaultstadio.core.domain.model.FederatedInstance
 import com.vaultstadio.core.domain.model.FederatedShare
 import com.vaultstadio.core.domain.model.FederatedShareStatus
-import com.vaultstadio.core.domain.model.InstanceStatus
 import com.vaultstadio.core.domain.model.SharePermission
 import com.vaultstadio.core.domain.repository.FederationRepository
 import com.vaultstadio.core.exception.DatabaseException
@@ -43,7 +42,8 @@ class FederationServiceMaintenanceTest {
     fun `runFederationHealthChecks returns Right empty map when no instances`() = runTest {
         val repo = mockk<FederationRepository>()
         coEvery { repo.listInstances(any(), any()) } returns emptyList<FederatedInstance>().right()
-        val result = runFederationHealthChecks(repo) { _, _ -> throw UnsupportedOperationException("should not be called") }
+        val result =
+            runFederationHealthChecks(repo) { _, _ -> throw UnsupportedOperationException("should not be called") }
         assertTrue(result.isRight())
         result.onRight { map -> assertTrue(map.isEmpty()) }
     }

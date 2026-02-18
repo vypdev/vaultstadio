@@ -8,15 +8,14 @@ package com.vaultstadio.plugins.lifecycle
 
 import com.vaultstadio.plugins.api.AbstractPlugin
 import com.vaultstadio.plugins.api.PluginMetadata
-import com.vaultstadio.plugins.api.PluginState
 import com.vaultstadio.plugins.context.AIApi
 import com.vaultstadio.plugins.context.HttpClientApi
 import com.vaultstadio.plugins.context.PluginContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.coroutines.EmptyCoroutineContext
 
 class PluginLifecycleTest {
 
@@ -60,7 +59,9 @@ class PluginLifecycleTest {
         override fun registerEndpoint(
             method: String,
             path: String,
-            handler: suspend (com.vaultstadio.plugins.context.EndpointRequest) -> com.vaultstadio.plugins.context.EndpointResponse,
+            handler: suspend (
+                com.vaultstadio.plugins.context.EndpointRequest,
+            ) -> com.vaultstadio.plugins.context.EndpointResponse,
         ) {}
         override fun unregisterEndpoint(method: String, path: String) {}
         override suspend fun scheduleTask(

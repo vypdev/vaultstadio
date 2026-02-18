@@ -10,7 +10,6 @@ import com.vaultstadio.app.domain.model.SecuritySettings
 import com.vaultstadio.app.domain.model.SessionDeviceType
 import com.vaultstadio.app.domain.model.TwoFactorMethod
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

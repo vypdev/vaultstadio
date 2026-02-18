@@ -7,9 +7,9 @@ package com.vaultstadio.app.domain.usecase.collaboration
 
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.repository.CollaborationRepository
-import com.vaultstadio.app.domain.model.CommentAnchor
 import com.vaultstadio.app.domain.model.CollaborationParticipant
 import com.vaultstadio.app.domain.model.CollaborationSession
+import com.vaultstadio.app.domain.model.CommentAnchor
 import com.vaultstadio.app.domain.model.DocumentComment
 import com.vaultstadio.app.domain.model.DocumentState
 import com.vaultstadio.app.domain.model.PresenceStatus

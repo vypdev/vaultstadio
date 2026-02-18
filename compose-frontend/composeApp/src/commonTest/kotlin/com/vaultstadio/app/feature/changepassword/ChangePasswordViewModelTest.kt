@@ -5,9 +5,9 @@
 
 package com.vaultstadio.app.feature.changepassword
 
-import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.domain.usecase.auth.ChangePasswordUseCase
+import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

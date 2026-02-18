@@ -14,7 +14,6 @@ import com.vaultstadio.core.domain.model.SyncChange
 import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.model.SyncDevice
 import com.vaultstadio.core.domain.model.SyncRequest
-import com.vaultstadio.core.domain.model.SyncResponse
 import com.vaultstadio.core.domain.repository.SyncRepository
 import com.vaultstadio.core.exception.DatabaseException
 import com.vaultstadio.core.exception.InvalidOperationException

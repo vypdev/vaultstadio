@@ -5,8 +5,8 @@
 package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
-import arrow.core.left
 import arrow.core.right
+import com.vaultstadio.core.domain.model.CollaborationOperation
 import com.vaultstadio.core.domain.model.CollaborationParticipant
 import com.vaultstadio.core.domain.model.CollaborationSession
 import com.vaultstadio.core.domain.model.CommentAnchor
@@ -15,8 +15,6 @@ import com.vaultstadio.core.domain.model.DocumentComment
 import com.vaultstadio.core.domain.model.PresenceStatus
 import com.vaultstadio.core.domain.model.TextSelection
 import com.vaultstadio.core.domain.model.UserPresence
-import com.vaultstadio.core.domain.model.CollaborationOperation
-import com.vaultstadio.core.domain.model.DocumentState
 import com.vaultstadio.core.domain.repository.CollaborationRepository
 import com.vaultstadio.core.exception.AuthorizationException
 import com.vaultstadio.core.exception.ItemNotFoundException

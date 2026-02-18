@@ -19,11 +19,11 @@ import com.vaultstadio.core.exception.InvalidOperationException
 import com.vaultstadio.core.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.io.ByteArrayInputStream
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.ByteArrayInputStream
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -634,7 +634,8 @@ class FileVersionServiceTest {
         coEvery { versionRepository.findByItemAndVersion(itemId, 2) } returns v2.right()
         coEvery { itemRepository.findById(itemId) } returns fileItem.right()
         coEvery { storageBackend.retrieve("k1") } returns ByteArrayInputStream("line1\nline2".toByteArray()).right()
-        coEvery { storageBackend.retrieve("k2") } returns ByteArrayInputStream("line1\nchanged\nline2".toByteArray()).right()
+        coEvery { storageBackend.retrieve("k2") } returns
+            ByteArrayInputStream("line1\nchanged\nline2".toByteArray()).right()
 
         val result = service.compareVersions(itemId, 1, 2)
 

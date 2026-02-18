@@ -5,7 +5,6 @@
 
 package com.vaultstadio.app.feature.auth
 
-import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.repository.AuthRepository
 import com.vaultstadio.app.domain.model.LoginResult
@@ -14,6 +13,7 @@ import com.vaultstadio.app.domain.model.User
 import com.vaultstadio.app.domain.model.UserRole
 import com.vaultstadio.app.domain.usecase.auth.LoginUseCaseImpl
 import com.vaultstadio.app.domain.usecase.auth.RegisterUseCaseImpl
+import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -7,7 +7,6 @@
 package com.vaultstadio.plugins.api
 
 import com.vaultstadio.plugins.context.PluginContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.coroutines.EmptyCoroutineContext
 
 class PluginTest {
 
@@ -307,7 +307,9 @@ class PluginTest {
             override fun registerEndpoint(
                 method: String,
                 path: String,
-                handler: suspend (com.vaultstadio.plugins.context.EndpointRequest) -> com.vaultstadio.plugins.context.EndpointResponse,
+                handler: suspend (
+                    com.vaultstadio.plugins.context.EndpointRequest,
+                ) -> com.vaultstadio.plugins.context.EndpointResponse,
             ) {}
             override fun unregisterEndpoint(method: String, path: String) {}
             override suspend fun scheduleTask(

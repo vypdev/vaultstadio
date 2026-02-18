@@ -4,7 +4,6 @@
 
 package com.vaultstadio.core.domain.service
 
-import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.model.FederatedActivity
@@ -198,7 +197,8 @@ class FederationServiceTest {
             status = InstanceStatus.BLOCKED,
             registeredAt = now,
         )
-        coEvery { federationRepository.updateInstanceStatus("inst-1", InstanceStatus.BLOCKED, null) } returns blocked.right()
+        coEvery { federationRepository.updateInstanceStatus("inst-1", InstanceStatus.BLOCKED, null) } returns
+            blocked.right()
 
         val result = service.blockInstance("inst-1")
 
@@ -259,7 +259,8 @@ class FederationServiceTest {
         )
         val updated = instance.copy(status = InstanceStatus.ONLINE, lastSeenAt = now)
         coEvery { federationRepository.findInstanceByDomain("online.com") } returns instance.right()
-        coEvery { federationRepository.updateInstanceStatus("i1", InstanceStatus.ONLINE, any()) } returns updated.right()
+        coEvery { federationRepository.updateInstanceStatus("i1", InstanceStatus.ONLINE, any()) } returns
+            updated.right()
 
         val result = service.updateInstanceHealth("online.com", isOnline = true)
 

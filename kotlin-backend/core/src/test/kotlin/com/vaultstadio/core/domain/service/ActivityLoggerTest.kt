@@ -10,7 +10,6 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
-import com.vaultstadio.core.domain.model.Activity
 import com.vaultstadio.core.domain.model.ActivityType
 import com.vaultstadio.core.domain.model.ItemType
 import com.vaultstadio.core.domain.model.StorageItem
@@ -23,7 +22,6 @@ import kotlinx.datetime.Clock
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class ActivityLoggerTest {
 
@@ -175,8 +173,10 @@ class ActivityLoggerTest {
         coVerify(exactly = 1) {
             activityRepository.create(
                 match {
-                    it.type == ActivityType.FILE_MOVED && it.itemId == "item-moved" &&
-                        it.details != null && it.details.contains("old/doc.txt")
+                    it.type == ActivityType.FILE_MOVED &&
+                        it.itemId == "item-moved" &&
+                        it.details != null &&
+                        it.details.contains("old/doc.txt")
                 },
             )
         }
@@ -207,8 +207,10 @@ class ActivityLoggerTest {
         coVerify(exactly = 1) {
             activityRepository.create(
                 match {
-                    it.type == ActivityType.FOLDER_DELETED && it.itemId == "folder-del" &&
-                        it.details != null && it.details.contains("3")
+                    it.type == ActivityType.FOLDER_DELETED &&
+                        it.itemId == "folder-del" &&
+                        it.details != null &&
+                        it.details.contains("3")
                 },
             )
         }

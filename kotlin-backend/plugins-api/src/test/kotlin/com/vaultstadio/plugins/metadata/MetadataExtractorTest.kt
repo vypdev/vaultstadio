@@ -14,25 +14,20 @@ import com.vaultstadio.core.domain.model.ItemType
 import com.vaultstadio.core.domain.model.StorageItem
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.plugins.api.PluginMetadata
+import com.vaultstadio.plugins.context.AIApi
 import com.vaultstadio.plugins.context.ConfigStore
 import com.vaultstadio.plugins.context.EndpointRequest
 import com.vaultstadio.plugins.context.EndpointResponse
+import com.vaultstadio.plugins.context.HttpClientApi
 import com.vaultstadio.plugins.context.MetadataApi
 import com.vaultstadio.plugins.context.PluginContext
 import com.vaultstadio.plugins.context.PluginLogger
 import com.vaultstadio.plugins.context.StorageApi
 import com.vaultstadio.plugins.context.UserApi
-import com.vaultstadio.plugins.context.AIApi
-import com.vaultstadio.plugins.context.HttpClientApi
 import com.vaultstadio.plugins.hooks.MetadataExtractionHook
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.nio.file.Path
-import java.nio.file.Paths
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -41,6 +36,11 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.nio.file.Path
+import java.nio.file.Paths
+import kotlin.coroutines.EmptyCoroutineContext
 
 class MetadataExtractorTest {
 
