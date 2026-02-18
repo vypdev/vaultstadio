@@ -5,6 +5,7 @@
 
 package com.vaultstadio.app.feature.plugins
 
+import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.domain.model.PluginInfo
 import com.vaultstadio.app.domain.usecase.plugin.DisablePluginUseCase
@@ -52,14 +53,14 @@ class PluginsViewModelTest {
     )
 
     @Test
-    fun clearError_doesNotThrow() {
+    fun clearError_doesNotThrow() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.clearError()
         assertNull(vm.error)
     }
 
     @Test
-    fun loadPlugins_doesNotThrow() {
+    fun loadPlugins_doesNotThrow() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.loadPlugins()
     }

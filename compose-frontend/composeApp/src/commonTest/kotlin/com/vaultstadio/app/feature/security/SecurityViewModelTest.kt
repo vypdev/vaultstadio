@@ -5,6 +5,7 @@
 
 package com.vaultstadio.app.feature.security
 
+import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.domain.model.ActiveSession
 import com.vaultstadio.app.domain.model.LoginEvent
@@ -69,7 +70,7 @@ class SecurityViewModelTest {
     )
 
     @Test
-    fun showRevokeDialog_setsSession() {
+    fun showRevokeDialog_setsSession() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertNull(vm.showRevokeSessionDialog)
         val session = testSession("s99")
@@ -78,7 +79,7 @@ class SecurityViewModelTest {
     }
 
     @Test
-    fun dismissRevokeDialog_clearsSession() {
+    fun dismissRevokeDialog_clearsSession() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.showRevokeDialog(testSession())
         vm.dismissRevokeDialog()
@@ -86,7 +87,7 @@ class SecurityViewModelTest {
     }
 
     @Test
-    fun dismissError_clearsErrorMessage() {
+    fun dismissError_clearsErrorMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.toggleTwoFactor()
         assertTrue(vm.errorMessage != null)
@@ -95,7 +96,7 @@ class SecurityViewModelTest {
     }
 
     @Test
-    fun toggleTwoFactor_setsNotAvailableMessage() {
+    fun toggleTwoFactor_setsNotAvailableMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.toggleTwoFactor()
         assertEquals("Two-factor authentication setup is not yet available", vm.errorMessage)

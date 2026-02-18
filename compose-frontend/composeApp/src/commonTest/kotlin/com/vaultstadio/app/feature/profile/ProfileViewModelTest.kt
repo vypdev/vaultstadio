@@ -5,6 +5,7 @@
 
 package com.vaultstadio.app.feature.profile
 
+import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.repository.AuthRepository
 import com.vaultstadio.app.domain.model.LoginResult
@@ -72,14 +73,14 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun clearError_clearsError() {
+    fun clearError_clearsError() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.clearError()
         assertNull(vm.error)
     }
 
     @Test
-    fun clearSuccessMessage_clearsSuccessMessage() {
+    fun clearSuccessMessage_clearsSuccessMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.clearSuccessMessage()
         assertNull(vm.successMessage)

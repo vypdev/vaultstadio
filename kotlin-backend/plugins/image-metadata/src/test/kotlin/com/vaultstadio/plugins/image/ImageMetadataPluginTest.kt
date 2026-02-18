@@ -107,6 +107,17 @@ class ImageMetadataPluginTest {
     }
 
     @Nested
+    inner class ConfigurationSchemaTests {
+
+        @Test
+        fun `getConfigurationSchema returns non-null schema with groups`() {
+            val schema = plugin.getConfigurationSchema()
+            assertNotNull(schema)
+            assertTrue(schema.groups.isNotEmpty())
+        }
+    }
+
+    @Nested
     inner class MetadataExtractionTests {
 
         @Test

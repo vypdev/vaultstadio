@@ -14,7 +14,7 @@ import com.vaultstadio.app.domain.usecase.admin.GetAdminUsersUseCase
 import com.vaultstadio.app.domain.usecase.admin.UpdateUserQuotaUseCase
 import com.vaultstadio.app.domain.usecase.admin.UpdateUserRoleUseCase
 import com.vaultstadio.app.domain.usecase.admin.UpdateUserStatusUseCase
-import kotlinx.coroutines.test.runTest
+import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -76,7 +76,7 @@ class AdminViewModelTest {
     )
 
     @Test
-    fun clearError_clearsErrorMessage() = runTest {
+    fun clearError_clearsErrorMessage() = ViewModelTestBase.runTestWithMain {
         val vm = createViewModel(getUsersResult = ApiResult.error("ERR", "Something failed"))
         vm.loadUsers()
         testScheduler.advanceUntilIdle()
@@ -86,7 +86,7 @@ class AdminViewModelTest {
     }
 
     @Test
-    fun loadUsers_onSuccess_updatesUsers() = runTest {
+    fun loadUsers_onSuccess_updatesUsers() = ViewModelTestBase.runTestWithMain {
         val users = listOf(testAdminUser())
         val vm = createViewModel(
             getUsersResult = ApiResult.success(PaginatedResponse(users, 1L, 0, 50, 1, false)),
@@ -98,7 +98,7 @@ class AdminViewModelTest {
     }
 
     @Test
-    fun clearError_doesNotThrow() {
+    fun clearError_doesNotThrow() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.clearError()
         assertNull(vm.error)

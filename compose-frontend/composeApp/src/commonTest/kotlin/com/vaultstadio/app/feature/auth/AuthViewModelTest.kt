@@ -5,6 +5,7 @@
 
 package com.vaultstadio.app.feature.auth
 
+import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.repository.AuthRepository
 import com.vaultstadio.app.domain.model.LoginResult
@@ -90,7 +91,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun updateLoginEmail_updatesState() {
+    fun updateLoginEmail_updatesState() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertEquals("", vm.loginEmail)
         vm.updateLoginEmail("a@b.com")
@@ -98,7 +99,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun updateLoginPassword_updatesState() {
+    fun updateLoginPassword_updatesState() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertEquals("", vm.loginPassword)
         vm.updateLoginPassword("secret")
@@ -106,7 +107,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun login_withBlankEmail_setsEmailPasswordRequired() {
+    fun login_withBlankEmail_setsEmailPasswordRequired() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateLoginPassword("pass")
         vm.login()
@@ -114,7 +115,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun login_withBlankPassword_setsEmailPasswordRequired() {
+    fun login_withBlankPassword_setsEmailPasswordRequired() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateLoginEmail("a@b.com")
         vm.login()
@@ -122,7 +123,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun register_withPasswordMismatch_setsPasswordsDoNotMatch() {
+    fun register_withPasswordMismatch_setsPasswordsDoNotMatch() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateRegisterEmail("a@b.com")
         vm.updateRegisterUsername("user")
@@ -133,7 +134,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun register_withShortPassword_setsPasswordTooShort() {
+    fun register_withShortPassword_setsPasswordTooShort() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateRegisterEmail("a@b.com")
         vm.updateRegisterUsername("user")
@@ -144,7 +145,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun register_withBlankFields_setsAllFieldsRequired() {
+    fun register_withBlankFields_setsAllFieldsRequired() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateRegisterEmail("a@b.com")
         vm.register()
@@ -152,7 +153,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun toggleRegister_flipsShowRegister() {
+    fun toggleRegister_flipsShowRegister() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertEquals(false, vm.showRegister)
         vm.toggleRegister()
@@ -162,7 +163,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun clearError_clearsAuthError() {
+    fun clearError_clearsAuthError() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateLoginPassword("x")
         vm.login()

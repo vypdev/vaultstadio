@@ -159,6 +159,9 @@ android {
     }
 }
 
+// ViewModel and UploadManager tests use UnconfinedTestDispatcher for Main (ViewModelTestBase)
+// so they run on desktop and Android without a real main looper.
+
 // Make sure compilation tasks depend on KSP metadata generation
 tasks.withType<KotlinCompilationTask<*>>().configureEach {
     if (name != "kspCommonMainKotlinMetadata") {

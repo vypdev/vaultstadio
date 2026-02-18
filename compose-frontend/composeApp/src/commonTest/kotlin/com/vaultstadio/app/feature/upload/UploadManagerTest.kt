@@ -17,8 +17,8 @@ import com.vaultstadio.app.domain.model.PaginatedResponse
 import com.vaultstadio.app.domain.model.SortField
 import com.vaultstadio.app.domain.model.SortOrder
 import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -120,20 +120,21 @@ private class StubStorageRepository : StorageRepository {
 class UploadManagerDestinationTest {
 
     @Test
-    fun `setUploadDestination and getCurrentDestinationFolderId update destination`() {
-        val manager = UploadManager(StubStorageRepository())
-        assertEquals(null, manager.getCurrentDestinationFolderId())
-        manager.setUploadDestination("folder-1")
-        assertEquals("folder-1", manager.getCurrentDestinationFolderId())
-        manager.setUploadDestination(null)
-        assertEquals(null, manager.getCurrentDestinationFolderId())
-    }
+    fun `setUploadDestination and getCurrentDestinationFolderId update destination`() =
+        ViewModelTestBase.withMainDispatcher {
+            val manager = UploadManager(StubStorageRepository())
+            assertEquals(null, manager.getCurrentDestinationFolderId())
+            manager.setUploadDestination("folder-1")
+            assertEquals("folder-1", manager.getCurrentDestinationFolderId())
+            manager.setUploadDestination(null)
+            assertEquals(null, manager.getCurrentDestinationFolderId())
+        }
 }
 
 class UploadManagerMinimizedTest {
 
     @Test
-    fun `setMinimized updates isMinimized state`() = runTest {
+    fun `setMinimized updates isMinimized state`() = ViewModelTestBase.runTestWithMain {
         val manager = UploadManager(StubStorageRepository())
         assertFalse(manager.isMinimized.first())
         manager.setMinimized(true)

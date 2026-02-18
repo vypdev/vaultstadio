@@ -5,6 +5,7 @@
 
 package com.vaultstadio.app.feature.changepassword
 
+import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.domain.usecase.auth.ChangePasswordUseCase
 import kotlin.test.Test
@@ -26,7 +27,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun updateCurrentPassword_updatesStateAndClearsError() {
+    fun updateCurrentPassword_updatesStateAndClearsError() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateNewPassword("x")
         vm.changePassword()
@@ -37,21 +38,21 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun updateNewPassword_updatesStateAndClearsError() {
+    fun updateNewPassword_updatesStateAndClearsError() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateNewPassword("newpass")
         assertEquals("newpass", vm.newPassword)
     }
 
     @Test
-    fun updateConfirmPassword_updatesState() {
+    fun updateConfirmPassword_updatesState() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateConfirmPassword("confirm")
         assertEquals("confirm", vm.confirmPassword)
     }
 
     @Test
-    fun changePassword_withBlankCurrent_setsErrorMessage() {
+    fun changePassword_withBlankCurrent_setsErrorMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateNewPassword("newpassword")
         vm.updateConfirmPassword("newpassword")
@@ -60,7 +61,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun changePassword_withBlankNew_setsErrorMessage() {
+    fun changePassword_withBlankNew_setsErrorMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateCurrentPassword("current")
         vm.updateConfirmPassword("newpassword")
@@ -69,7 +70,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun changePassword_withShortNew_setsErrorMessage() {
+    fun changePassword_withShortNew_setsErrorMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateCurrentPassword("current")
         vm.updateNewPassword("short")
@@ -79,7 +80,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun changePassword_whenPasswordsDoNotMatch_setsErrorMessage() {
+    fun changePassword_whenPasswordsDoNotMatch_setsErrorMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateCurrentPassword("current")
         vm.updateNewPassword("newpassword")
@@ -89,7 +90,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun changePassword_whenNewSameAsCurrent_setsErrorMessage() {
+    fun changePassword_whenNewSameAsCurrent_setsErrorMessage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateCurrentPassword("samepass")
         vm.updateNewPassword("samepass")
@@ -99,7 +100,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun toggleCurrentPasswordVisibility_flipsVisibility() {
+    fun toggleCurrentPasswordVisibility_flipsVisibility() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertFalse(vm.showCurrentPassword)
         vm.toggleCurrentPasswordVisibility()
@@ -109,7 +110,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun toggleNewPasswordVisibility_flipsVisibility() {
+    fun toggleNewPasswordVisibility_flipsVisibility() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertFalse(vm.showNewPassword)
         vm.toggleNewPasswordVisibility()
@@ -117,7 +118,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun toggleConfirmPasswordVisibility_flipsVisibility() {
+    fun toggleConfirmPasswordVisibility_flipsVisibility() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertFalse(vm.showConfirmPassword)
         vm.toggleConfirmPasswordVisibility()
@@ -125,7 +126,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun dismissSuccess_doesNotThrow() {
+    fun dismissSuccess_doesNotThrow() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.dismissSuccess()
         assertFalse(vm.isSuccess)

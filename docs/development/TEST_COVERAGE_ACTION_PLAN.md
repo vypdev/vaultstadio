@@ -8,26 +8,26 @@ This document defines a phased plan to achieve full test coverage across VaultSt
 
 ## Current coverage snapshot (Jacoco)
 
-*Generated from `./gradlew test jacocoTestReport` (all modules).*
+*Generated from backend test tasks + `:compose-frontend:composeApp:desktopTest` and respective `jacocoTestReport` (see [Running Tests](TESTING.md#running-tests)). Run `make test-coverage` excluding Android unit tests if needed.*
 
 ### Backend
 
 | Module | Instruction cov. | Branch cov. | Target | Priority |
 |--------|------------------|-------------|--------|----------|
-| **core** | **65%** | 46% | ≥80% | High |
+| **core** | **66%** | 46% | ≥80% | High |
 | **api** | 12% | 4% | ≥80% | High |
 | **plugins-api** | **80%** | 57% | ≥80% | **Met** – maintain |
-| **infrastructure** | 13% | 8% | ≥80% | Medium |
+| **infrastructure** | 13% | 9% | ≥80% | Medium |
 | **image-metadata** | 13% | 1% | ≥80% | Medium |
 | **video-metadata** | 9% | 0% | ≥80% | Medium |
-| **fulltext-search** | 14% | 0% | ≥80% | Medium |
+| **fulltext-search** | 17% | 0% | ≥80% | Medium |
 | **ai-classification** | 16% | 0% | ≥80% | Medium |
 
 ### Frontend (composeApp – desktopTest)
 
 | Module | Instruction cov. | Branch cov. | Notes |
 |--------|------------------|-------------|--------|
-| **composeApp** | **3%** | 0% | Most code in screens/components; only desktop JVM code measured |
+| **composeApp** | **5%** | ~0% | Most code in screens/components; only desktop JVM code measured |
 
 **Frontend packages with non-zero coverage:** `domain.upload` 76%, `navigation` 61%, `domain.model` 59%, `i18n` 50%, `ui.components.dialogs` 3%, `feature.upload` 7%, `feature.main` 1%, `platform` 1%, `data.repository` 2%. All `ui.screens.*` and most `feature.*` are 0%.
 
@@ -48,7 +48,7 @@ This document defines a phased plan to achieve full test coverage across VaultSt
 
 ---
 
-**Recent coverage improvements:** **Phase 3 (frontend ViewModels):** AuthViewModelTest; ChangePasswordViewModelTest (validation, visibility, dismissSuccess); SecurityViewModelTest (showRevokeDialog, dismissRevokeDialog, dismissError, toggleTwoFactor); SettingsViewModelTest (toggleDarkMode, updateThemeMode, setLanguage, resetCacheCleared); ProfileViewModelTest (clearError, clearSuccessMessage); AdminViewModelTest (clearError, loadUsers on success, clearError doesNotThrow); PluginsViewModelTest (clearError, loadPlugins doesNotThrow). **Phase 2 (plugins):** VideoMetadataPluginTest getConfigurationSchema. FullTextSearchPluginTest: analyzeContent (empty stream, plain text), getConfigurationSchema. **Frontend (composeApp):** FederationUseCaseTest extended with GetIncomingFederatedSharesUseCaseTest. **Backend (core):** StorageItemTest for StorageItem. — Prior: CollaborationUseCaseTest; FederationUseCaseTest; AIUseCaseTest; ApiResponseTest; ActivityUseCaseTest, PluginUseCaseTest, MetadataUseCaseTest, AuthUseCaseTest, ShareUseCaseTest, SyncUseCaseTest, VersionUseCaseTest, AdminUseCaseTest, StorageUseCaseTest; LocalStorageBackendTest; StorageExceptionTest, StorageEventTest, AdvancedEventsTest; HealthRoutesTest, FileVersionServiceTest, ActivityLoggerTest, MetadataExtractorTest, StorageServiceTest, UserServiceTest, etc. See TESTING.md § Untestable Components for Redis-backed classes.
+**Recent coverage improvements:** **Snapshot (Feb 2026):** core 66%, plugins-api 80%, composeApp 5%; backend api 12%, infrastructure 13%, plugins 9–17%. **Tests:** All tests pass; Android unit tests exclude ViewModel and UploadManager tests (they require main looper; run on desktopTest). **Plugins:** AIClassificationPluginTest getConfigurationSchema (non-null, groups with key "classification"); ImageMetadataPluginTest getConfigurationSchema (non-null, groups not empty). — Prior: Phase 3 ViewModels (Auth, ChangePassword, Security, Settings, Profile, Admin, Plugins); Phase 2 VideoMetadataPluginTest, FullTextSearchPluginTest; Phase 4 SharedWithMeScreenTest, BreadcrumbsLogicTest, i18n; StorageItemTest; etc. See TESTING.md § Untestable Components for Redis-backed classes.
 
 ---
 

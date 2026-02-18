@@ -68,6 +68,8 @@ VaultStadio uses a comprehensive testing approach with **65+ test files** coveri
 ./gradlew :compose-frontend:composeApp:desktopTest
 ```
 
+**Note:** ViewModel and UploadManager tests in `commonTest` use `ViewModelTestBase.withMainDispatcher` / `runTestWithMain` (UnconfinedTestDispatcher for Main), so they run on both **desktopTest** and Android unit tests without a real main looper. Coverage reports use desktopTest for the frontend.
+
 ### Run with Coverage Report
 
 **All modules (same as CI / Codecov):**

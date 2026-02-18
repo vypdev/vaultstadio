@@ -5,6 +5,7 @@
 
 package com.vaultstadio.app.feature.settings
 
+import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.domain.model.User
 import com.vaultstadio.app.domain.model.UserRole
@@ -44,7 +45,7 @@ class SettingsViewModelTest {
         SettingsViewModel(getCurrentUserUseCase = FakeGetCurrentUserUseCase())
 
     @Test
-    fun toggleDarkMode_flipsIsDarkMode() {
+    fun toggleDarkMode_flipsIsDarkMode() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         val before = vm.isDarkMode
         vm.toggleDarkMode()
@@ -54,7 +55,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun updateThemeMode_updatesThemeMode() {
+    fun updateThemeMode_updatesThemeMode() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.updateThemeMode(ThemeMode.DARK)
         assertEquals(ThemeMode.DARK, vm.themeMode)
@@ -65,7 +66,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun setLanguage_updatesCurrentLanguage() {
+    fun setLanguage_updatesCurrentLanguage() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.setLanguage(Language.SPANISH)
         assertEquals(Language.SPANISH, vm.currentLanguage)
@@ -74,7 +75,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun resetCacheCleared_resetsFlag() {
+    fun resetCacheCleared_resetsFlag() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         assertFalse(vm.cacheCleared)
         vm.resetCacheCleared()

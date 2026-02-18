@@ -79,6 +79,25 @@ class AIClassificationPluginTest {
     }
 
     @Nested
+    inner class ConfigurationSchemaTests {
+
+        @Test
+        fun `getConfigurationSchema returns non-null schema`() {
+            val schema = plugin.getConfigurationSchema()
+            assertNotNull(schema)
+        }
+
+        @Test
+        fun `getConfigurationSchema has groups`() {
+            val schema = plugin.getConfigurationSchema()
+            assertTrue(schema.groups.isNotEmpty())
+            val classificationGroup = schema.groups.find { it.key == "classification" }
+            assertNotNull(classificationGroup)
+            assertTrue(classificationGroup!!.fields.isNotEmpty())
+        }
+    }
+
+    @Nested
     inner class ClassificationTests {
 
         @Test
