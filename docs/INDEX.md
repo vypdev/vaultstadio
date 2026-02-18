@@ -58,6 +58,7 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | [development/WASM_BUNDLE_OPTIMIZATION.md](development/WASM_BUNDLE_OPTIMIZATION.md) | WASM bundle size, lazy loading, and build optimizations | Frontend/Web |
 | [development/AI_CODING_GUIDELINES.md](development/AI_CODING_GUIDELINES.md) | Guidelines for AI-assisted contributions | AI/Developers |
 | [development/TESTING.md](development/TESTING.md) | Test strategy, coverage, and best practices | Developers |
+| [development/TEST_COVERAGE_ACTION_PLAN.md](development/TEST_COVERAGE_ACTION_PLAN.md) | Phased plan for full test coverage | Developers |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution process and PR guidelines | Contributors |
 
 ### Plugins

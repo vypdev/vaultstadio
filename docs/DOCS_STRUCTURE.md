@@ -42,7 +42,8 @@ docs/
 ├── development/                 # Code quality, AI guidelines, testing
 │   ├── CODE_QUALITY.md
 │   ├── AI_CODING_GUIDELINES.md
-│   └── TESTING.md
+│   ├── TESTING.md
+│   └── TEST_COVERAGE_ACTION_PLAN.md
 │
 ├── frontend/                    # Compose UI and components
 │   ├── FRONTEND_COMPONENTS.md

@@ -463,3 +463,5 @@ When adding new features:
 2. Ensure all tests pass: `./gradlew test`
 3. Maintain minimum 80% coverage for business logic
 4. Document any untestable components in this file
+
+For a phased plan to improve coverage across the whole project, see [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md).
