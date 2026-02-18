@@ -255,6 +255,34 @@ Location: `kotlin-backend/core/src/test/kotlin/com/vaultstadio/core/domain/model
 | Shared Models | 4 | High |
 | Shared Network | 2 | High |
 
+### Phase 2 (Backend depth) summary
+
+- **Routes**: Every route module under `kotlin-backend/api/.../routes/` has a corresponding `*RoutesTest` (Health, Plugin, Activity, User, Admin, Search, Metadata, Share, Version, Sync, AI, Collaboration, Federation, WebDAV, Storage, S3, Thumbnail, FolderUpload, ChunkedUpload, Batch, Auth).
+- **Plugins**: Image, video, fulltext-search, and AI classification plugins have error-path tests (unsupported MIME types, empty streams, or non-supported types).
+- **Repos and infrastructure**: Exposed repositories and storage/security implementations have tests; optional edge-case tests can be added per the action plan.
+
+The full phased plan (goals, gap analysis, Phases 1–6) is in [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md).
+
+### Phase 3 (Frontend ViewModels and navigation) summary
+
+- **ViewModels:** AppViewModel and navigation state are covered by AppViewModelTest, AppViewModelDetailedTest, AppViewModelFunctionalTest, AppViewModelPhase6Test, and AdvancedFeaturesTest. Files logic is covered by FilesModeAndTrashStarTest and FilesUploadAndMoveTest.
+- **UploadManager:** UploadManagerTest covers upload destination (`setUploadDestination` / `getCurrentDestinationFolderId`) and minimized state (`setMinimized` / `isMinimized`).
+- **Navigation:** AppRoutes, AppRoute, RoutePaths, and RouteMatch are covered by AppRoutesTest and RouteMatchTest (pathSegments, pathParams, destination). RootComponent/RootContent are integration-level (auth vs main child).
+- **Coverage:** Run `./gradlew :compose-frontend:composeApp:desktopTest` and `:compose-frontend:composeApp:jacocoTestReport` to generate the frontend coverage report.
+
+### Phase 4 (Frontend screens and feature logic) summary
+
+- **Screens:** Settings, Admin, Profile, SharedWithMe logic in ScreensTest; SecurityScreenTest covers security models and session/login-event logic.
+- **Components:** DragDropComponentsTest covers DragOverlay, DropZone, ContextMenu, MoveDialog (logic only). SelectionToolbar and MainSidebar are UI composables without separate logic tests.
+- **Domain:** UploadQueueEntryTest covers UploadQueueEntry (WithData, Chunked), FolderUploadEntry, and ChunkedFileSource.
+- **i18n:** StringsTest includes settingsSecurity and verifies it in all languages.
+
+### Phase 5 (CI and coverage maintenance)
+
+- **CI:** Every push/PR runs backend tests (core, api, infrastructure, plugins-api, all four plugins) and frontend desktop tests; jacoco reports are generated and uploaded to Codecov. See [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
+- **Local:** Run `make test-coverage` to generate the same reports as CI (backend + frontend). Contributors are encouraged to run this before opening a PR; see [CONTRIBUTING.md](../../CONTRIBUTING.md#coverage).
+- **Docs:** [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md) describes goals, phases, and exit criteria.
+
 **Total Test Files: 65+**
 
 ---

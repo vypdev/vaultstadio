@@ -4,6 +4,8 @@
 
 package com.vaultstadio.core.domain.service
 
+import arrow.core.Either
+import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.model.FederatedActivity
 import com.vaultstadio.core.domain.model.FederatedIdentity
@@ -14,14 +16,18 @@ import com.vaultstadio.core.domain.model.FederationCapability
 import com.vaultstadio.core.domain.model.FederationRequest
 import com.vaultstadio.core.domain.model.InstanceStatus
 import com.vaultstadio.core.domain.model.SharePermission
+import com.vaultstadio.core.domain.model.SignedFederationMessage
 import com.vaultstadio.core.domain.repository.FederationRepository
+import com.vaultstadio.core.exception.DatabaseException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class FederationServiceTest {
@@ -281,5 +287,150 @@ class FederationServiceTest {
         assertEquals(instanceConfig.domain, message.senderDomain)
         assertTrue(message.signature.isNotEmpty())
         assertTrue(message.nonce.isNotEmpty())
+    }
+
+    @Nested
+    inner class VerifyMessageTests {
+
+        @Test
+        fun `verifyMessage returns Left when instance lookup fails`() = runTest {
+            val message = SignedFederationMessage(
+                payload = "test",
+                signature = "sig",
+                timestamp = Clock.System.now(),
+                nonce = "n1",
+                senderDomain = "remote.example.com",
+                algorithm = "Ed25519",
+            )
+            coEvery { federationRepository.findInstanceByDomain("remote.example.com") } returns
+                DatabaseException("DB error").left()
+
+            val result = service.verifyMessage(message)
+
+            assertTrue(result.isLeft())
+        }
+
+        @Test
+        fun `verifyMessage returns Right false when instance has blank public key`() = runTest {
+            val message = SignedFederationMessage(
+                payload = "test",
+                signature = "sig",
+                timestamp = Clock.System.now(),
+                nonce = "n1",
+                senderDomain = "remote.example.com",
+                algorithm = "Ed25519",
+            )
+            val instance = FederatedInstance(
+                id = "i1",
+                domain = "remote.example.com",
+                name = "Remote",
+                version = "2.0.0",
+                publicKey = "",
+                status = InstanceStatus.ONLINE,
+                registeredAt = Clock.System.now(),
+            )
+            coEvery { federationRepository.findInstanceByDomain("remote.example.com") } returns instance.right()
+
+            val result = service.verifyMessage(message)
+
+            assertTrue(result.isRight())
+            result.onRight { valid -> assertFalse(valid) }
+        }
+
+        @Test
+        fun `verifyMessage returns Right true when signature is valid`() = runTest {
+            val remoteCrypto = FederationCryptoService()
+            val publicKey = remoteCrypto.getPublicKeyBase64()!!
+            val now = Clock.System.now()
+            val payload = "hello"
+            val nonce = "nonce-1"
+            val signedPayload = remoteCrypto.signFederationMessage(payload, nonce, now.epochSeconds)!!
+            val message = SignedFederationMessage(
+                payload = payload,
+                signature = signedPayload.signature,
+                timestamp = now,
+                nonce = nonce,
+                senderDomain = "remote.example.com",
+                algorithm = signedPayload.algorithm,
+            )
+            val instance = FederatedInstance(
+                id = "i1",
+                domain = "remote.example.com",
+                name = "Remote",
+                version = "2.0.0",
+                publicKey = publicKey,
+                status = InstanceStatus.ONLINE,
+                registeredAt = Clock.System.now(),
+            )
+            coEvery { federationRepository.findInstanceByDomain("remote.example.com") } returns instance.right()
+
+            val result = service.verifyMessage(message)
+
+            assertTrue(result.isRight())
+            result.onRight { valid -> assertTrue(valid) }
+        }
+    }
+
+    @Nested
+    inner class RunHealthChecksTests {
+
+        @Test
+        fun `runHealthChecks returns Left when listInstances fails`() = runTest {
+            coEvery { federationRepository.listInstances(any(), any()) } returns
+                DatabaseException("DB error").left()
+
+            val result = service.runHealthChecks()
+
+            assertTrue(result.isLeft())
+        }
+
+        @Test
+        fun `runHealthChecks returns Right empty map when no instances`() = runTest {
+            coEvery { federationRepository.listInstances(any(), any()) } returns emptyList<FederatedInstance>().right()
+
+            val result = service.runHealthChecks()
+
+            assertTrue(result.isRight())
+            result.onRight { map -> assertTrue(map.isEmpty()) }
+        }
+    }
+
+    @Nested
+    inner class CleanupTests {
+
+        @Test
+        fun `cleanup returns Left when getExpiredShares fails`() = runTest {
+            coEvery { federationRepository.getExpiredShares(any()) } returns
+                DatabaseException("DB error").left()
+
+            val result = service.cleanup(30)
+
+            assertTrue(result.isLeft())
+        }
+
+        @Test
+        fun `cleanup returns Right count when expired shares and prune succeed`() = runTest {
+            val now = Clock.System.now()
+            val expiredShare = FederatedShare(
+                id = "share-1",
+                itemId = "item-1",
+                sourceInstance = "source.com",
+                targetInstance = instanceConfig.domain,
+                permissions = listOf(SharePermission.READ),
+                createdBy = "u1",
+                createdAt = now,
+                status = FederatedShareStatus.PENDING,
+            )
+            coEvery { federationRepository.getExpiredShares(any()) } returns listOf(expiredShare).right()
+            coEvery { federationRepository.updateShareStatus(any(), any(), any()) } returns expiredShare.copy(
+                status = FederatedShareStatus.EXPIRED,
+            ).right()
+            coEvery { federationRepository.pruneActivities(any()) } returns 3.right()
+
+            val result = service.cleanup(30)
+
+            assertTrue(result.isRight())
+            result.onRight { count -> assertEquals(4, count) }
+        }
     }
 }

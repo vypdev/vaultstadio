@@ -141,6 +141,7 @@ class StringsTest {
         assertNotNull(strings.settingsAutoSync)
         assertNotNull(strings.settingsClearCache)
         assertNotNull(strings.settingsChangePassword)
+        assertNotNull(strings.settingsSecurity)
     }
 
     @Test
@@ -172,6 +173,7 @@ class StringsTest {
             assertTrue(strings.navMyFiles.isNotEmpty())
             assertTrue(strings.actionUpload.isNotEmpty())
             assertTrue(strings.settingsTitle.isNotEmpty())
+            assertTrue(strings.settingsSecurity.isNotEmpty())
             assertTrue(strings.aiAssistant.isNotEmpty())
         }
     }

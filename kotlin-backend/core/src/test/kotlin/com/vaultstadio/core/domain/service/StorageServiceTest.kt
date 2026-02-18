@@ -13,6 +13,9 @@ import com.vaultstadio.core.domain.model.ItemType
 import com.vaultstadio.core.domain.model.StorageItem
 import com.vaultstadio.core.domain.model.Visibility
 import com.vaultstadio.core.domain.repository.PagedResult
+import com.vaultstadio.core.domain.repository.SortField
+import com.vaultstadio.core.domain.repository.SortOrder
+import com.vaultstadio.core.domain.repository.StorageItemQuery
 import com.vaultstadio.core.domain.repository.StorageItemRepository
 import com.vaultstadio.core.exception.AuthorizationException
 import com.vaultstadio.core.exception.ItemNotFoundException
@@ -293,6 +296,66 @@ class StorageServiceTest {
             // Then
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthorizationException)
+        }
+    }
+
+    @Nested
+    inner class ListFolderTests {
+
+        @Test
+        fun `should fail with ValidationException when folderId is a file`() = runTest {
+            val file = createTestFile("file-id", "doc.txt", "/doc.txt", "user-123")
+            coEvery { storageItemRepository.findById("file-id") } returns file.right()
+            val query = StorageItemQuery(
+                sortField = SortField.NAME,
+                sortOrder = SortOrder.ASC,
+            )
+
+            val result = storageService.listFolder("file-id", "user-123", query)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ValidationException)
+        }
+
+        @Test
+        fun `should list folder contents when folderId is valid folder`() = runTest {
+            val folder = createTestFolder("folder-id", "Docs", "/Docs", "user-123")
+            val child = createTestFile("child-id", "a.txt", "/Docs/a.txt", "user-123")
+            coEvery { storageItemRepository.findById("folder-id") } returns folder.right()
+            coEvery { storageItemRepository.query(any()) } returns PagedResult(
+                items = listOf(child),
+                total = 1,
+                offset = 0,
+                limit = 100,
+            ).right()
+
+            val query = StorageItemQuery(sortField = SortField.NAME, sortOrder = SortOrder.ASC)
+            val result = storageService.listFolder("folder-id", "user-123", query)
+
+            assertTrue(result.isRight())
+            assertEquals(1, (result as Either.Right).value.items.size)
+            assertEquals("a.txt", result.value.items.first().name)
+        }
+    }
+
+    @Nested
+    inner class GetBreadcrumbsTests {
+
+        @Test
+        fun `should return ancestors for item`() = runTest {
+            val item = createTestFile("item-id", "file.txt", "/A/B/file.txt", "user-123")
+            val ancestorA = createTestFolder("a-id", "A", "/A", "user-123")
+            val ancestorB = createTestFolder("b-id", "B", "/A/B", "user-123")
+            coEvery { storageItemRepository.findById("item-id") } returns item.right()
+            coEvery { storageItemRepository.getAncestors("item-id") } returns listOf(ancestorA, ancestorB).right()
+
+            val result = storageService.getBreadcrumbs("item-id", "user-123")
+
+            assertTrue(result.isRight())
+            val breadcrumbs = (result as Either.Right).value
+            assertEquals(2, breadcrumbs.size)
+            assertEquals("A", breadcrumbs[0].name)
+            assertEquals("B", breadcrumbs[1].name)
         }
     }
 

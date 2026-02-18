@@ -165,4 +165,23 @@ class AIClassificationPluginTest {
             assertTrue(true)
         }
     }
+
+    @Nested
+    inner class ErrorPathTests {
+
+        @Test
+        fun `should not support non-image mime types`() {
+            val nonImageTypes = listOf(
+                "video/mp4",
+                "application/pdf",
+                "text/plain",
+            )
+            nonImageTypes.forEach { mimeType ->
+                assertTrue(
+                    !plugin.metadata.supportedMimeTypes.contains(mimeType),
+                    "Should not support $mimeType for classification",
+                )
+            }
+        }
+    }
 }

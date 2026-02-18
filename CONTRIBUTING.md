@@ -89,6 +89,7 @@ refactor: Simplify authentication flow
 - [ ] Documentation updated
 - [ ] All tests pass
 - [ ] No detekt issues
+- [ ] (Recommended) Run `make test-coverage` and check coverage for new code
 
 ## Testing
 
@@ -107,6 +108,12 @@ Before submitting a PR:
 # Run with coverage
 ./gradlew jacocoTestReport
 ```
+
+### Coverage
+
+- **Before opening a PR**, run `make test-coverage` (or the equivalent Gradle jacoco tasks) to generate backend and frontend coverage reports. This matches what CI runs and uploads to Codecov.
+- **Goal:** Keep coverage ≥ 80% for new code where feasible. Avoid removing tests without adding equivalent coverage elsewhere.
+- See [docs/development/TESTING.md](docs/development/TESTING.md) for the test strategy and [docs/development/TEST_COVERAGE_ACTION_PLAN.md](docs/development/TEST_COVERAGE_ACTION_PLAN.md) for the phased coverage plan.
 
 ## Project Structure
 

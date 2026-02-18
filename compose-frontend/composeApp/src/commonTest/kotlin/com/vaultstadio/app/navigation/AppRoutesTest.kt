@@ -270,3 +270,36 @@ class RoutePathsTest {
         assertFalse(RoutePaths.isAuthPath("/settings"))
     }
 }
+
+/**
+ * Tests for [RouteMatch] (destination, pathParams, pathSegments).
+ */
+class RouteMatchTest {
+
+    @Test
+    fun `pathSegments returns path param list for files route`() {
+        val segments = listOf("my_folder", "other_folder", "my-song.mp3")
+        val match = RouteMatch(
+            destination = MainDestination.FILES,
+            pathParams = mapOf("path" to segments),
+        )
+        assertEquals(segments, match.pathSegments())
+        assertEquals(MainDestination.FILES, match.destination)
+    }
+
+    @Test
+    fun `pathSegments returns empty list when path param missing`() {
+        val match = RouteMatch(destination = MainDestination.SETTINGS)
+        assertTrue(match.pathParams.isEmpty())
+        assertTrue(match.pathSegments().isEmpty())
+    }
+
+    @Test
+    fun `pathSegments returns empty list for empty path param`() {
+        val match = RouteMatch(
+            destination = MainDestination.FILES,
+            pathParams = mapOf("path" to emptyList()),
+        )
+        assertTrue(match.pathSegments().isEmpty())
+    }
+}

@@ -185,6 +185,11 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 **Exit criteria:** Every ViewModel and navigation path has at least one test; coverage report shows improvement for commonMain.
 
+**Phase 3 inventory (3.1):**
+- **ViewModels:** AuthViewModel, FilesViewModel, AdminViewModel, ProfileViewModel, PluginsViewModel, SettingsViewModel, ChangePasswordViewModel, SecurityViewModel, CollaborationViewModel, FederationViewModel, AIViewModel, SyncViewModel, VersionHistoryViewModel, SharesViewModel, SharedWithMeViewModel, ActivityViewModel (16). AppViewModel is covered by AppViewModelTest, AppViewModelDetailedTest, AppViewModelFunctionalTest, AppViewModelPhase6Test, AdvancedFeaturesTest. FilesViewModel logic is covered by FilesModeAndTrashStarTest and FilesUploadAndMoveTest (mode, upload destination, move logic); no direct ViewModel test (would require mocking in commonTest).
+- **UploadManager:** Now has UploadManagerTest (destination and minimized state) with StubStorageRepository.
+- **Navigation:** AppRoutes, AppRoute, RoutePaths, RouteMatch covered by AppRoutesTest and RouteMatchTest. RootComponent/DefaultRootComponent and RootContent are Composable/wiring (auth vs main child); not unit-tested in commonTest (covered by integration/run).
+
 ---
 
 ### Phase 4 – Frontend screens and feature logic
@@ -200,6 +205,12 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 **Exit criteria:** All screens and major components listed in TESTING.md as “testable in commonTest” have tests; i18n coverage is up to date.
 
+**Phase 4 summary:**
+- **4.1 Screens:** Settings, Admin, Profile, SharedWithMe logic already in ScreensTest; SecurityScreenTest added (ActiveSession, LoginEvent, SecuritySettings, SessionDeviceType, TwoFactorMethod, filter current session).
+- **4.2 Components:** DragDropComponentsTest already covers DragOverlay, DropZone, ContextMenu, MoveDialog; SelectionToolbar and MainSidebar are UI-only (no separate logic tests).
+- **4.3 Feature/domain:** UploadQueueEntryTest added for UploadQueueEntry.WithData/Chunked, FolderUploadEntry (equality, properties), and ChunkedFileSource (readChunk range). MainContent/FilesContent/FilesLoader are Composable or internal with use-case deps; logic covered via ViewModel and Files*Test.
+- **4.4 i18n:** StringsTest extended with settingsSecurity in settings and in allLanguages_haveConsistentStrings.
+
 ---
 
 ### Phase 5 – CI gates and maintenance
@@ -214,6 +225,12 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 | 5.4 | Update TESTING.md with final coverage summary and link to this action plan | Maintainer |
 
 **Exit criteria:** CI runs coverage on every PR; contributors are instructed to run test-coverage; TESTING.md is up to date.
+
+**Phase 5 summary:**
+- **5.1:** CI already runs jacoco for backend (core, api, infrastructure, plugins-api, image-metadata, video-metadata, fulltext-search, ai-classification) and frontend (composeApp), then uploads artifacts to the coverage job which sends them to Codecov.
+- **5.2:** Coverage gate (fail if coverage drops > X%) left optional; can be enabled in Codecov or CI later.
+- **5.3:** CONTRIBUTING.md updated with a “Coverage” subsection: run `make test-coverage` before PR, keep coverage ≥ 80% for new code, links to TESTING.md and TEST_COVERAGE_ACTION_PLAN.md; PR checklist includes “Run make test-coverage” as recommended.
+- **5.4:** TESTING.md updated with “Phase 5 (CI and coverage maintenance)” and final coverage summary.
 
 ---
 

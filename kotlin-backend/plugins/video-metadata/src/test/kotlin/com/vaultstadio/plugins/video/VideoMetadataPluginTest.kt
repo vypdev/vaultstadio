@@ -4,6 +4,11 @@
 
 package com.vaultstadio.plugins.video
 
+import com.vaultstadio.core.domain.model.ItemType
+import com.vaultstadio.core.domain.model.StorageItem
+import java.io.ByteArrayInputStream
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -165,6 +170,35 @@ class VideoMetadataPluginTest {
             // When FFprobe is not available, plugin should not crash
             // Just return limited metadata or error
             assertTrue(true)
+        }
+    }
+
+    @Nested
+    inner class ErrorPathTests {
+
+        @Test
+        fun `extractMetadata returns empty map for unsupported mime type`() = runTest {
+            val item = StorageItem(
+                id = "i1",
+                name = "doc.pdf",
+                path = "/doc.pdf",
+                type = ItemType.FILE,
+                ownerId = "u1",
+                size = 0,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+                parentId = null,
+                storageKey = null,
+            )
+            val result = plugin.extractMetadata(item, ByteArrayInputStream(ByteArray(0)))
+            assertTrue(result.isEmpty())
+        }
+
+        @Test
+        fun `getSupportedMimeTypes matches hook implementation`() {
+            val fromHook = plugin.getSupportedMimeTypes()
+            assertTrue(plugin.metadata.supportedMimeTypes == fromHook)
         }
     }
 }

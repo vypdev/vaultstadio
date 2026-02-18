@@ -4,6 +4,11 @@
 
 package com.vaultstadio.plugins.image
 
+import com.vaultstadio.core.domain.model.ItemType
+import com.vaultstadio.core.domain.model.StorageItem
+import java.io.ByteArrayInputStream
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -141,6 +146,54 @@ class ImageMetadataPluginTest {
             )
 
             assertTrue(gpsFields.isNotEmpty())
+        }
+    }
+
+    @Nested
+    inner class ErrorPathTests {
+
+        @Test
+        fun `extractMetadata returns empty map for unsupported mime type`() = runTest {
+            val item = StorageItem(
+                id = "i1",
+                name = "doc.pdf",
+                path = "/doc.pdf",
+                type = ItemType.FILE,
+                ownerId = "u1",
+                size = 0,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+                parentId = null,
+                storageKey = null,
+            )
+            val result = plugin.extractMetadata(item, ByteArrayInputStream(ByteArray(0)))
+            assertTrue(result.isEmpty())
+        }
+
+        @Test
+        fun `extractMetadata returns empty map for empty stream`() = runTest {
+            val item = StorageItem(
+                id = "i1",
+                name = "empty.jpg",
+                path = "/empty.jpg",
+                type = ItemType.FILE,
+                ownerId = "u1",
+                size = 0,
+                mimeType = "image/jpeg",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+                parentId = null,
+                storageKey = null,
+            )
+            val result = plugin.extractMetadata(item, ByteArrayInputStream(ByteArray(0)))
+            assertTrue(result.isEmpty())
+        }
+
+        @Test
+        fun `getSupportedMimeTypes matches hook implementation`() {
+            val fromHook = plugin.getSupportedMimeTypes()
+            assertEquals(plugin.metadata.supportedMimeTypes, fromHook)
         }
     }
 }

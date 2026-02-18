@@ -12,6 +12,7 @@ help:
 	@echo "  make install       - Install dependencies"
 	@echo "  make build         - Build all modules"
 	@echo "  make test          - Run all tests"
+	@echo "  make test-coverage - Run tests and generate jacoco reports (backend + frontend)"
 	@echo "  make dev           - Start development servers"
 	@echo "  make clean         - Clean build artifacts"
 	@echo ""
