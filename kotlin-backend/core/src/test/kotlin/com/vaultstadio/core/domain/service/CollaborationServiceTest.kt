@@ -4,6 +4,8 @@
 
 package com.vaultstadio.core.domain.service
 
+import arrow.core.Either
+import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.model.CollaborationParticipant
 import com.vaultstadio.core.domain.model.CollaborationSession
@@ -13,7 +15,11 @@ import com.vaultstadio.core.domain.model.DocumentComment
 import com.vaultstadio.core.domain.model.PresenceStatus
 import com.vaultstadio.core.domain.model.TextSelection
 import com.vaultstadio.core.domain.model.UserPresence
+import com.vaultstadio.core.domain.model.CollaborationOperation
+import com.vaultstadio.core.domain.model.DocumentState
 import com.vaultstadio.core.domain.repository.CollaborationRepository
+import com.vaultstadio.core.exception.AuthorizationException
+import com.vaultstadio.core.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -140,6 +146,31 @@ class CollaborationServiceTest {
     }
 
     @Test
+    fun `updateCursor should return Left when participant not found`() = runTest {
+        val sessionId = "session-1"
+        val participantId = "missing-p"
+        val now = Clock.System.now()
+        val otherParticipant = CollaborationParticipant(
+            id = "p1",
+            userId = "user-1",
+            userName = "John",
+            color = "#FF6B6B",
+            joinedAt = now,
+            lastActiveAt = now,
+        )
+        coEvery { collaborationRepository.getParticipants(sessionId) } returns listOf(otherParticipant).right()
+
+        val result = service.updateCursor(
+            sessionId,
+            participantId,
+            CursorPosition(line = 0, column = 0, offset = 0),
+        )
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is ItemNotFoundException)
+    }
+
+    @Test
     fun `updateSelection should update participant selection`() = runTest {
         val sessionId = "session-1"
         val participantId = "p1"
@@ -170,6 +201,27 @@ class CollaborationServiceTest {
             assertEquals(selection, p.selection)
             assertEquals(20, p.selection?.length)
         }
+    }
+
+    @Test
+    fun `updateSelection should return Left when participant not found`() = runTest {
+        val sessionId = "session-1"
+        val participantId = "missing-p"
+        val now = Clock.System.now()
+        val otherParticipant = CollaborationParticipant(
+            id = "p1",
+            userId = "user-1",
+            userName = "John",
+            color = "#FF6B6B",
+            joinedAt = now,
+            lastActiveAt = now,
+        )
+        coEvery { collaborationRepository.getParticipants(sessionId) } returns listOf(otherParticipant).right()
+
+        val result = service.updateSelection(sessionId, participantId, null)
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is ItemNotFoundException)
     }
 
     @Test
@@ -250,5 +302,56 @@ class CollaborationServiceTest {
             assertEquals("session-1", presence.activeSession)
             assertEquals("doc-1", presence.activeDocument)
         }
+    }
+
+    @Test
+    fun `applyOperation should return Left when document state not found`() = runTest {
+        coEvery { collaborationRepository.getDocumentState("item-1") } returns null.right()
+
+        val result = service.applyOperation(
+            "item-1",
+            CollaborationOperation.Insert(
+                userId = "user-1",
+                timestamp = Clock.System.now(),
+                baseVersion = 0,
+                position = 0,
+                text = "text",
+            ),
+        )
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is ItemNotFoundException)
+    }
+
+    @Test
+    fun `deleteComment should return Left when comment not found`() = runTest {
+        coEvery { collaborationRepository.findComment("comment-missing") } returns null.right()
+
+        val result = service.deleteComment("comment-missing", "user-1")
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is ItemNotFoundException)
+    }
+
+    @Test
+    fun `deleteComment should return Left when user is not comment owner`() = runTest {
+        val now = Clock.System.now()
+        val comment = DocumentComment(
+            id = "c1",
+            itemId = "item-1",
+            userId = "owner-1",
+            content = "comment",
+            anchor = CommentAnchor(0, 0, 0, 0, null),
+            resolvedAt = null,
+            replies = emptyList(),
+            createdAt = now,
+            updatedAt = now,
+        )
+        coEvery { collaborationRepository.findComment("c1") } returns comment.right()
+
+        val result = service.deleteComment("c1", "other-user")
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is AuthorizationException)
     }
 }

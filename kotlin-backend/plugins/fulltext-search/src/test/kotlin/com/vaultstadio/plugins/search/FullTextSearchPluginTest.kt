@@ -4,6 +4,11 @@
 
 package com.vaultstadio.plugins.search
 
+import com.vaultstadio.core.domain.model.ItemType
+import com.vaultstadio.core.domain.model.StorageItem
+import java.io.ByteArrayInputStream
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -185,6 +190,56 @@ class FullTextSearchPluginTest {
         fun `should optimize index periodically`() {
             // Index should be optimized for performance
             assertTrue(true)
+        }
+    }
+
+    @Nested
+    inner class ErrorPathTests {
+
+        @Test
+        fun `analyzeContent returns result with null or empty text for empty stream`() = runTest {
+            val item = StorageItem(
+                id = "i1",
+                name = "empty.txt",
+                path = "/empty.txt",
+                type = ItemType.FILE,
+                ownerId = "u1",
+                size = 0,
+                mimeType = "text/plain",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+                parentId = null,
+                storageKey = null,
+            )
+            val result = plugin.analyzeContent(item, ByteArrayInputStream(ByteArray(0)))
+            assertTrue(result.text.isNullOrEmpty())
+            assertTrue(result.confidence in 0.0..1.0)
+        }
+
+        @Test
+        fun `analyzeContent returns text for plain text input`() = runTest {
+            val item = StorageItem(
+                id = "i1",
+                name = "hello.txt",
+                path = "/hello.txt",
+                type = ItemType.FILE,
+                ownerId = "u1",
+                size = 5,
+                mimeType = "text/plain",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+                parentId = null,
+                storageKey = null,
+            )
+            val result = plugin.analyzeContent(item, ByteArrayInputStream("hello".toByteArray()))
+            assertTrue((result.text ?: "").contains("hello"))
+        }
+
+        @Test
+        fun `getConfigurationSchema returns non-null schema`() {
+            val schema = plugin.getConfigurationSchema()
+            assertNotNull(schema)
+            assertTrue(schema.groups.isNotEmpty())
         }
     }
 }

@@ -16,6 +16,7 @@ import java.nio.file.Path
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class LocalStorageBackendTest {
@@ -237,6 +238,59 @@ class LocalStorageBackendTest {
             val originalContent = (backend.retrieve(originalKey) as Either.Right).value.readBytes()
             val copiedContent = (backend.retrieve(newKey) as Either.Right).value.readBytes()
             assertTrue(originalContent.contentEquals(copiedContent))
+        }
+
+        @Test
+        fun `copy should return error for non-existent source key`() = runTest {
+            val result = backend.copy("nonexistent-key-12345678901234567890")
+            assertTrue(result.isLeft())
+        }
+    }
+
+    @Nested
+    inner class GetPresignedUrlTests {
+
+        @Test
+        fun `getPresignedUrl returns Right null for local storage`() = runTest {
+            val result = backend.getPresignedUrl("any-key", 3600L)
+            assertTrue(result.isRight())
+            assertNull((result as Either.Right).value)
+        }
+    }
+
+    @Nested
+    inner class IsAvailableTests {
+
+        @Test
+        fun `isAvailable returns true when base path exists and is writable`() = runTest {
+            val result = backend.isAvailable()
+            assertTrue(result.isRight())
+            assertTrue((result as Either.Right).value)
+        }
+    }
+
+    @Nested
+    inner class CalculateChecksumTests {
+
+        @Test
+        fun `calculateChecksum returns SHA-256 hash for stored file`() = runTest {
+            val content = "Hello, World!".toByteArray()
+            val storeResult = backend.store(
+                ByteArrayInputStream(content),
+                content.size.toLong(),
+                "text/plain",
+            )
+            val storageKey = (storeResult as Either.Right).value
+            val checksum = backend.calculateChecksum(storageKey)
+            assertNotNull(checksum)
+            assertEquals(64, checksum.length)
+            assertTrue(checksum.all { it in '0'..'9' || it in 'a'..'f' })
+        }
+
+        @Test
+        fun `calculateChecksum returns null for non-existent key`() {
+            val checksum = backend.calculateChecksum("nonexistent-key-12345678901234567890")
+            assertNull(checksum)
         }
     }
 }

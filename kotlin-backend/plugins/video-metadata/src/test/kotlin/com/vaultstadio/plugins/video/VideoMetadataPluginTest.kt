@@ -200,5 +200,12 @@ class VideoMetadataPluginTest {
             val fromHook = plugin.getSupportedMimeTypes()
             assertTrue(plugin.metadata.supportedMimeTypes == fromHook)
         }
+
+        @Test
+        fun `getConfigurationSchema returns non-null schema`() {
+            val schema = plugin.getConfigurationSchema()
+            assertNotNull(schema)
+            assertTrue(schema.groups.isNotEmpty())
+        }
     }
 }

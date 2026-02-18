@@ -321,6 +321,21 @@ class ShareServiceTest {
             // Then
             assertTrue(result.isRight())
         }
+
+        @Test
+        fun `should fail when shared item not found`() = runTest {
+            val share = createTestShare("share-id", "missing-item", testUserId)
+            val input = AccessShareInput(token = share.token)
+
+            coEvery { shareRepository.findByToken(share.token) } returns share.right()
+            coEvery { storageItemRepository.findById("missing-item") } returns null.right()
+
+            val result = shareService.accessShare(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
+            assertTrue((result as Either.Left).value.message?.contains("Shared item not found") == true)
+        }
     }
 
     @Nested
@@ -377,6 +392,41 @@ class ShareServiceTest {
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthorizationException)
         }
+
+        @Test
+        fun `should fail get shares by item when item not found`() = runTest {
+            coEvery { storageItemRepository.findById("missing-item") } returns null.right()
+
+            val result = shareService.getSharesByItem("missing-item", testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
+    }
+
+    @Nested
+    inner class GetShareTests {
+
+        @Test
+        fun `should get share by id when found`() = runTest {
+            val share = createTestShare("share-1", testItemId, testUserId)
+            coEvery { shareRepository.findById("share-1") } returns share.right()
+
+            val result = shareService.getShare("share-1")
+
+            assertTrue(result.isRight())
+            assertEquals("share-1", (result as Either.Right).value.id)
+        }
+
+        @Test
+        fun `should fail get share when not found`() = runTest {
+            coEvery { shareRepository.findById("missing-share") } returns null.right()
+
+            val result = shareService.getShare("missing-share")
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
     }
 
     @Nested
@@ -413,6 +463,16 @@ class ShareServiceTest {
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthorizationException)
         }
+
+        @Test
+        fun `should fail when share not found`() = runTest {
+            coEvery { shareRepository.findById("missing-share") } returns null.right()
+
+            val result = shareService.deleteShare("missing-share", testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
     }
 
     @Nested
@@ -448,6 +508,16 @@ class ShareServiceTest {
             // Then
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthorizationException)
+        }
+
+        @Test
+        fun `should fail when share not found`() = runTest {
+            coEvery { shareRepository.findById("missing-share") } returns null.right()
+
+            val result = shareService.deactivateShare("missing-share", testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
         }
     }
 

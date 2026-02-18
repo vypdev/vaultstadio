@@ -5,6 +5,7 @@
 package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.UserEvent
@@ -18,6 +19,7 @@ import com.vaultstadio.core.domain.repository.UserQuery
 import com.vaultstadio.core.domain.repository.UserRepository
 import com.vaultstadio.core.exception.AuthenticationException
 import com.vaultstadio.core.exception.AuthorizationException
+import com.vaultstadio.core.exception.ItemNotFoundException
 import com.vaultstadio.core.exception.ValidationException
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -174,6 +176,39 @@ class UserServiceTest {
             assertTrue((result as Either.Left).value is ValidationException)
             assertTrue(result.value.message?.contains("Username") == true)
         }
+
+        @Test
+        fun `should propagate when existsByEmail returns Left`() = runTest {
+            val input = RegisterUserInput(
+                email = "test@example.com",
+                username = "testuser",
+                password = "password123",
+            )
+            val repoError = ItemNotFoundException("Database unavailable")
+            coEvery { userRepository.existsByEmail(any()) } returns repoError.left()
+
+            val result = userService.register(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
+
+        @Test
+        fun `should propagate when existsByUsername returns Left`() = runTest {
+            val input = RegisterUserInput(
+                email = "test@example.com",
+                username = "testuser",
+                password = "password123",
+            )
+            coEvery { userRepository.existsByEmail(any()) } returns false.right()
+            val repoError = ItemNotFoundException("Database error")
+            coEvery { userRepository.existsByUsername(any()) } returns repoError.left()
+
+            val result = userService.register(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
     }
 
     @Nested
@@ -309,6 +344,33 @@ class UserServiceTest {
             // Then
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthenticationException)
+        }
+
+        @Test
+        fun `should fail when session is expired`() = runTest {
+            val pastExpiry = kotlinx.datetime.Instant.DISTANT_PAST
+            val session = createTestSession("session-id", "user-123").copy(expiresAt = pastExpiry)
+            val user = createTestUser("user-123", "test@example.com", "testuser")
+            coEvery { sessionRepository.findByTokenHash(any()) } returns session.right()
+            coEvery { userRepository.findById("user-123") } returns user.right()
+            coEvery { sessionRepository.delete("session-id") } returns Unit.right()
+
+            val result = userService.validateSession("any-token")
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is AuthenticationException)
+            assertTrue(result.value.message?.contains("expired") == true)
+        }
+
+        @Test
+        fun `should propagate when findByTokenHash returns Left`() = runTest {
+            val repoError = ItemNotFoundException("Session store error")
+            coEvery { sessionRepository.findByTokenHash(any()) } returns repoError.left()
+
+            val result = userService.validateSession("any-token")
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ItemNotFoundException)
         }
 
         @Test

@@ -179,6 +179,29 @@ class AIServiceTest {
             // Then
             assertTrue(result.isLeft())
         }
+
+        @Test
+        fun `when removing active provider with multiple providers active switches to first remaining`() = runTest {
+            val ollamaConfig = AIProviderConfig(
+                type = AIProviderType.OLLAMA,
+                baseUrl = "http://localhost:11434",
+                model = "llava",
+            )
+            val openRouterConfig = AIProviderConfig(
+                type = AIProviderType.OPENROUTER,
+                baseUrl = "https://openrouter.ai/api/v1",
+                apiKey = "test-key",
+                model = "anthropic/claude-3-haiku",
+            )
+            aiService.configureProvider(ollamaConfig)
+            aiService.configureProvider(openRouterConfig)
+            aiService.setActiveProvider(AIProviderType.OPENROUTER)
+            assertEquals(AIProviderType.OPENROUTER, aiService.getActiveProvider()?.type)
+
+            aiService.removeProvider(AIProviderType.OPENROUTER)
+
+            assertEquals(AIProviderType.OLLAMA, aiService.getActiveProvider()?.type)
+        }
     }
 
     @Nested
@@ -241,6 +264,16 @@ class AIServiceTest {
 
             // Then
             assertTrue(result.isLeft())
+        }
+    }
+
+    @Nested
+    inner class IsProviderAvailableTests {
+
+        @Test
+        fun `should return false when provider not configured`() = runTest {
+            val available = aiService.isProviderAvailable(AIProviderType.OLLAMA)
+            assertFalse(available)
         }
     }
 

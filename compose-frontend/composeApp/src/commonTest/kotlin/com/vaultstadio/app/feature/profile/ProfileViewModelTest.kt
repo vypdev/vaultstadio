@@ -1,0 +1,87 @@
+/**
+ * Unit tests for ProfileViewModel: clearError and clearSuccessMessage.
+ * loadProfile, updateProfile, changePassword, exportData are async and covered by use case tests.
+ */
+
+package com.vaultstadio.app.feature.profile
+
+import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.data.repository.AuthRepository
+import com.vaultstadio.app.domain.model.LoginResult
+import com.vaultstadio.app.domain.model.StorageQuota
+import com.vaultstadio.app.domain.model.User
+import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.usecase.auth.ChangePasswordUseCaseImpl
+import com.vaultstadio.app.domain.usecase.auth.GetCurrentUserUseCaseImpl
+import com.vaultstadio.app.domain.usecase.auth.GetQuotaUseCaseImpl
+import com.vaultstadio.app.domain.usecase.auth.UpdateProfileUseCaseImpl
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.datetime.Instant
+import kotlin.test.Test
+import kotlin.test.assertNull
+
+private val testInstant = Instant.fromEpochMilliseconds(0L)
+
+private fun testUser() = User(
+    id = "u1",
+    email = "u@test.com",
+    username = "user",
+    role = UserRole.USER,
+    avatarUrl = null,
+    createdAt = testInstant,
+)
+
+private fun testQuota() = StorageQuota(
+    usedBytes = 0,
+    quotaBytes = null,
+    usagePercentage = 0.0,
+    fileCount = 0,
+    folderCount = 0,
+    remainingBytes = null,
+)
+
+private class FakeAuthRepositoryForProfile : AuthRepository {
+    private val _currentUserFlow = MutableStateFlow<User?>(testUser())
+    override val currentUserFlow: StateFlow<User?> = _currentUserFlow.asStateFlow()
+
+    override suspend fun login(email: String, password: String): ApiResult<LoginResult> =
+        ApiResult.error("", "")
+    override suspend fun register(email: String, username: String, password: String): ApiResult<User> =
+        ApiResult.error("", "")
+    override suspend fun logout() = ApiResult.success(Unit)
+    override suspend fun getCurrentUser() = ApiResult.success(testUser())
+    override suspend fun refreshCurrentUser() {}
+    override suspend fun getQuota(): ApiResult<StorageQuota> = ApiResult.success(testQuota())
+    override suspend fun updateProfile(username: String?, avatarUrl: String?) = ApiResult.success(testUser())
+    override suspend fun changePassword(currentPassword: String, newPassword: String) = ApiResult.success(Unit)
+    override fun isLoggedIn() = true
+}
+
+class ProfileViewModelTest {
+
+    private fun createViewModel(): ProfileViewModel {
+        val repo = FakeAuthRepositoryForProfile()
+        return ProfileViewModel(
+            getCurrentUserUseCase = GetCurrentUserUseCaseImpl(repo),
+            getQuotaUseCase = GetQuotaUseCaseImpl(repo),
+            updateProfileUseCase = UpdateProfileUseCaseImpl(repo),
+            changePasswordUseCase = ChangePasswordUseCaseImpl(repo),
+        )
+    }
+
+    @Test
+    fun clearError_clearsError() {
+        val vm = createViewModel()
+        vm.clearError()
+        assertNull(vm.error)
+    }
+
+    @Test
+    fun clearSuccessMessage_clearsSuccessMessage() {
+        val vm = createViewModel()
+        vm.clearSuccessMessage()
+        assertNull(vm.successMessage)
+    }
+}

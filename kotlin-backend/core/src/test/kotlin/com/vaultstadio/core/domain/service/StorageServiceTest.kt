@@ -5,6 +5,7 @@
 package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
@@ -296,6 +297,19 @@ class StorageServiceTest {
             // Then
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthorizationException)
+        }
+
+        @Test
+        fun `should propagate repository failure when findById returns Left`() = runTest {
+            val repoError = ItemNotFoundException("Database error")
+            coEvery { storageItemRepository.findById("file-id") } returns repoError.left()
+
+            val result = storageService.getItem("file-id", "user-123")
+
+            assertTrue(result.isLeft())
+            val ex = (result as Either.Left).value
+            assertTrue(ex is ItemNotFoundException)
+            assertTrue(ex.message?.contains("Database error") == true)
         }
     }
 

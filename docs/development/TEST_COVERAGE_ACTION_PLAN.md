@@ -6,14 +6,120 @@ This document defines a phased plan to achieve full test coverage across VaultSt
 
 ---
 
+## Current coverage snapshot (Jacoco)
+
+*Generated from `./gradlew test jacocoTestReport` (all modules).*
+
+### Backend
+
+| Module | Instruction cov. | Branch cov. | Target | Priority |
+|--------|------------------|-------------|--------|----------|
+| **core** | **65%** | 46% | ≥80% | High |
+| **api** | 12% | 4% | ≥80% | High |
+| **plugins-api** | **80%** | 57% | ≥80% | **Met** – maintain |
+| **infrastructure** | 13% | 8% | ≥80% | Medium |
+| **image-metadata** | 13% | 1% | ≥80% | Medium |
+| **video-metadata** | 9% | 0% | ≥80% | Medium |
+| **fulltext-search** | 14% | 0% | ≥80% | Medium |
+| **ai-classification** | 16% | 0% | ≥80% | Medium |
+
+### Frontend (composeApp – desktopTest)
+
+| Module | Instruction cov. | Branch cov. | Notes |
+|--------|------------------|-------------|--------|
+| **composeApp** | **3%** | 0% | Most code in screens/components; only desktop JVM code measured |
+
+**Frontend packages with non-zero coverage:** `domain.upload` 76%, `navigation` 61%, `domain.model` 59%, `i18n` 50%, `ui.components.dialogs` 3%, `feature.upload` 7%, `feature.main` 1%, `platform` 1%, `data.repository` 2%. All `ui.screens.*` and most `feature.*` are 0%.
+
+### Backend – coverage by package (core, api, infrastructure)
+
+- **core**: domain.service 62%, domain.model 71%, ai 69%, ai.providers 48%, domain.repository 41%, **domain.event 76%**, **exception 97%** (improved).
+- **api**: api.service 68%, config 32%, plugins 25%, sync 27%, version 25%, federation 22%; **routes (storage 3%, metadata 0%, ai 0%, auth 0%, health 0%, etc.)** and middleware 0%. Route tests use empty `application { }` so handlers are not executed; full coverage needs testApplication with `module()` + test DB.
+- **infrastructure**: **persistence 9%**, storage 29%, persistence.entities 22%; security 100%.
+
+**Focus areas for improvement:**
+
+1. **api**: Route handlers are barely executed (storage 3%, metadata/ai/auth 0%). Route tests use empty `application { }`; to hit handlers either use `testApplication { application { module() } }` with a test DB (e.g. Testcontainers) or document routes as integration-only. api.service (68%) and config (32%) can be extended.
+2. **core**: Keep improving domain.service (62%) and domain.repository (41%) branch coverage; domain.event (76%) and exception (97%) are in good shape.
+3. **plugins-api**: Target met (80%); maintain and add branch coverage for context (52%) where useful.
+4. **infrastructure**: Persistence 9% – add or extend repository tests; storage 29% – extend LocalStorageBackend/S3 tests.
+5. **Plugins (image, video, fulltext, ai)**: 9–16% instruction coverage; extraction logic uses native/IO. Add tests for entry points, error paths, and mockable boundaries.
+6. **Frontend**: Global 3%; focus on ViewModels, navigation (61%), domain.upload (76%), and feature/usecase logic testable in commonTest; screens are mostly Composables (0% in report).
+
+---
+
+**Recent coverage improvements:** **Phase 3 (frontend ViewModels):** AuthViewModelTest; ChangePasswordViewModelTest (validation, visibility, dismissSuccess); SecurityViewModelTest (showRevokeDialog, dismissRevokeDialog, dismissError, toggleTwoFactor); SettingsViewModelTest (toggleDarkMode, updateThemeMode, setLanguage, resetCacheCleared); ProfileViewModelTest (clearError, clearSuccessMessage); AdminViewModelTest (clearError, loadUsers on success, clearError doesNotThrow); PluginsViewModelTest (clearError, loadPlugins doesNotThrow). **Phase 2 (plugins):** VideoMetadataPluginTest getConfigurationSchema. FullTextSearchPluginTest: analyzeContent (empty stream, plain text), getConfigurationSchema. **Frontend (composeApp):** FederationUseCaseTest extended with GetIncomingFederatedSharesUseCaseTest. **Backend (core):** StorageItemTest for StorageItem. — Prior: CollaborationUseCaseTest; FederationUseCaseTest; AIUseCaseTest; ApiResponseTest; ActivityUseCaseTest, PluginUseCaseTest, MetadataUseCaseTest, AuthUseCaseTest, ShareUseCaseTest, SyncUseCaseTest, VersionUseCaseTest, AdminUseCaseTest, StorageUseCaseTest; LocalStorageBackendTest; StorageExceptionTest, StorageEventTest, AdvancedEventsTest; HealthRoutesTest, FileVersionServiceTest, ActivityLoggerTest, MetadataExtractorTest, StorageServiceTest, UserServiceTest, etc. See TESTING.md § Untestable Components for Redis-backed classes.
+
+---
+
+## Analysis summary – where to focus
+
+**Highest impact (backend):**
+
+1. **api** (12% instr.) – Routes dominate the module. Existing route tests use empty `application { }`, so handlers are never executed. Either: (a) add integration tests with `testApplication { application { module() } }` and a test DB (e.g. Testcontainers), or (b) document route coverage as integration-only. Extend api.service (68%) and config (32%) with unit tests where useful.
+2. **core** (65%) – Improve **domain.repository** (41%) and **domain.service** (62%) branch coverage; **domain.event** (76%) and **exception** (97%) are in good shape.
+3. **infrastructure** (13%) – **Persistence** (9%) is the main gap; add/expand Exposed* repository tests. Storage (29%) second.
+
+**Medium impact (backend):**
+
+4. **Plugins** (image 13%, video 9%, fulltext 14%, ai 16%) – Test plugin entry points, configuration, and error branches; extraction logic may remain low if it depends on native/IO.
+5. **plugins-api** – Already at 80%; maintain and optionally improve context (52%) and branch coverage.
+
+**Frontend:**
+
+6. **composeApp** (3% overall) – Coverage is measured on desktop JVM only; most UI (screens, components) is not exercised by unit tests. Prioritise: **domain.upload** (76% – keep), **navigation** (61% – keep), **domain.model** (59%), **i18n** (50%); then add tests for **domain.usecase.*** (many at 0%) and ViewModel logic that can run in commonTest. Screens are typically covered only by integration or manual testing.
+
+**How to regenerate this snapshot:** Run `./gradlew test jacocoTestReport` (or `make test-coverage`), then open each module’s `build/reports/jacoco/test/html/index.html` (or `compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html` for the frontend).
+
+---
+
+## Coverage analysis – where to focus efforts
+
+This section summarises **concrete focus areas** so efforts are directed at the code that most needs tests (all modules, backend and frontend).
+
+### Backend – priority order
+
+| Priority | Module        | Instr. | Branch | Main gap | Action |
+|----------|---------------|--------|--------|----------|--------|
+| 1        | **api**       | 12%    | 4%     | Route handlers not executed (tests use empty `application { }`) | Use `testApplication { application { module() } }` + test DB for critical routes, or extend **api.service** (68%) and **config** (32%) with unit tests |
+| 2        | **core**      | 65%    | 46%    | domain.service 62%, domain.repository 41% | Extend existing service tests for missing branches; add repository interface tests where useful |
+| 3        | **infrastructure** | 13% | 8%  | persistence 9%, storage 29% | Extend Exposed* repository tests; add LocalStorageBackend/S3 edge cases |
+| 4        | **image-metadata**  | 13% | 1%  | Extraction logic | Test entry points, config, error paths |
+| 5        | **video-metadata**  | 9%  | 0%  | Same as image | Same as image-metadata |
+| 6        | **fulltext-search**| 14% | 0%  | Indexing/search | Entry points, empty content, error handling |
+| 7        | **ai-classification** | 16% | 0% | AI calls | Error handling, timeouts; mock external AI |
+| –        | **plugins-api**| 80% | 57% | Target met | Maintain; optional: context and branch coverage |
+
+### Frontend – priority order
+
+| Priority | Package / area      | Cov.  | Action |
+|----------|---------------------|-------|--------|
+| 1        | **domain.usecase.*** (auth, share, storage, sync, version, admin, ai, collaboration, federation, metadata, activity, plugin) | 0% (most) | Add unit tests with fake repositories; only **config** has tests (100%). Same pattern as GetStorageUrlsUseCaseTest |
+| 2        | **data.repository** | 2%    | Test repository implementations with fake services or test doubles |
+| 3        | **feature.*** (files, auth, main, upload) | 0–7% | Test ViewModels and feature logic in commonTest; mock use cases |
+| 4        | **navigation**      | 61%   | Keep; add branch coverage if new routes |
+| 5        | **domain.upload**   | 76%   | Keep |
+| 6        | **domain.model**    | 59%   | Extend model tests for new types |
+| 7        | **i18n**            | 50%   | Extend StringsTest |
+| –        | **ui.screens.***    | 0%    | Mostly Composables; cover via state/callback tests or document as UI-only |
+
+### Quick wins
+
+- **Frontend:** Add one test file per use-case package (auth, share, storage, etc.) with a fake repository and tests for success/error paths. Each use case is a thin wrapper around the repository, so tests are small and repetitive.
+- **Backend api:** Add or extend unit tests for non-route code (e.g. AppConfigTest, SecurityTest, route extension helpers) so the api module coverage rises even if route handlers stay integration-only.
+- **Backend infrastructure:** Add tests for any Exposed* repository method not yet covered; add edge-case tests for LocalStorageBackend.
+
+---
+
 ## Table of Contents
 
 1. [Goals and Targets](#goals-and-targets)
 2. [Current State Summary](#current-state-summary)
-3. [Gap Analysis by Module](#gap-analysis-by-module)
-4. [Phased Action Plan](#phased-action-plan)
-5. [CI and Quality Gates](#ci-and-quality-gates)
-6. [Success Criteria](#success-criteria)
+3. [Coverage analysis – where to focus efforts](#coverage-analysis--where-to-focus-efforts)
+4. [Gap Analysis by Module](#gap-analysis-by-module)
+5. [Phased Action Plan](#phased-action-plan)
+6. [CI and Quality Gates](#ci-and-quality-gates)
+7. [Success Criteria](#success-criteria)
 
 ---
 
@@ -35,35 +141,25 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 | Area | Test files (approx.) | Coverage level | Notes |
 |------|----------------------|----------------|-------|
-| **Backend API routes** | 19+ | High | Route tests with testApplication; some handlers only indirectly covered |
-| **Backend core services** | 11 service + 4 model + 1 event + 4 AI | High | Storage, User, Share, Sync, Federation, Collaboration, FileVersion, DeltaSync, etc. |
-| **Backend core (gaps)** | — | — | TransactionManager, ActivityLogger, CollaborationOT, StorageService* split files not explicitly tested |
-| **Backend plugins-api** | **0** | **None** | Plugin, PluginContext, Hooks, MetadataExtractor, PluginLifecycle, PluginConfiguration |
-| **Backend infrastructure** | 12+ | High | Exposed repos, LocalStorageBackend, S3StorageBackend, BCrypt |
-| **Backend plugins** | 4 | High | image-metadata, video-metadata, fulltext-search, ai-classification |
-| **Backend API (config/services)** | 6 | Medium | AppConfig, Security, ErrorHandling, Logging, PluginManager, CronScheduler; UploadSessionManager, ThumbnailCache, RouteExtensions untested |
-| **Frontend commonTest** | 41 | Medium | ViewModels, screens, components, API models, navigation, i18n, platform; many screens/components only lightly covered |
+| **Backend API routes** | 19+ | Low (12% module) | Route test classes exist but many handlers not executed; storage 3%, metadata/ai/auth 0% |
+| **Backend core** | 11+ service, model, event, AI | 65% instr. | domain.service 62%, domain.event 76%, exception 97%; domain.repository 41% |
+| **Backend plugins-api** | 6 | **80%** | Plugin, PluginContext, Hooks, MetadataExtractor, PluginLifecycle, PluginConfiguration |
+| **Backend infrastructure** | 12+ | 13% | Persistence 9%, storage 29%, security 100%; Exposed repos, LocalStorageBackend, S3, BCrypt have tests |
+| **Backend plugins** | 4 | 9–16% | image-metadata, video-metadata, fulltext-search, ai-classification; extraction logic largely untested |
+| **Backend API (config/services)** | 6 | api.service 68% | UploadSessionManager, ThumbnailCache, RouteExtensions have tests; config 32% |
+| **Frontend commonTest** | 41+ | 3% (desktop report) | domain.upload 76%, navigation 61%, domain.model 59%, i18n 50%; screens/features mostly 0% in report |
 
 ---
 
 ## Gap Analysis by Module
 
-### 1. kotlin-backend/plugins-api (Priority: High)
+### 1. kotlin-backend/plugins-api (Priority: Maintain – target met)
 
-**Current:** No test source set; no tests.
+**Current:** ~80% instruction, 57% branch. Tests exist for Plugin, PluginContext, PluginConfiguration, MetadataExtractor, PluginLifecycle, Hooks.
 
-**Main sources to cover:**
+**Remaining gaps:** Context package ~52%; some DefaultImpls and branches. Optional: add tests for any new public APIs and edge cases.
 
-| File | Suggested focus |
-|------|------------------|
-| `Plugin.kt` | Interface contract; default implementations if any |
-| `PluginContext.kt` | Context methods (storage, metadata, events) with mocks |
-| `PluginConfiguration.kt` | Parsing, validation, defaults |
-| `MetadataExtractor.kt` | Interface; sample implementations of extract() |
-| `PluginLifecycle.kt` | Lifecycle states and transitions |
-| `Hooks.kt` | Hook invocation and ordering with mocks |
-
-**Action:** Add `src/test/kotlin` and create unit tests for each public type. Use MockK for dependencies. This is the plugin SDK; full coverage here reduces regressions for all plugins.
+**Action:** Keep coverage ≥80%; add branch/context coverage if adding new plugin SDK surface.
 
 ---
 
@@ -101,42 +197,42 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 ### 4. kotlin-backend/infrastructure (Priority: Medium)
 
-**Current:** All Exposed* repositories, LocalStorageBackend, S3StorageBackend, BCrypt have tests. Ensure:
+**Current:** 13% instruction, 8% branch. Persistence 9%, storage 29%, security 100%. Exposed* repositories, LocalStorageBackend, S3StorageBackend, BCrypt have test classes but many code paths (persistence) are not covered by unit tests.
 
-- Any new repository (e.g. ExposedFederationRepository, ExposedCollaborationRepository) has a dedicated test class if not already.
-- Edge cases (empty results, duplicates, constraints) are covered where business-critical.
-
-**Action:** Audit repository list vs test list; add tests for any missing repository. Add edge-case tests for repositories involved in sync/federation/collaboration.
+**Action:** Increase persistence coverage by exercising more repository methods and branches in unit tests (or document reliance on integration tests). Add edge-case tests for repositories involved in sync/federation/collaboration. Extend storage backend tests where feasible.
 
 ---
 
 ### 5. kotlin-backend/plugins (Priority: Medium)
 
-**Current:** Each plugin has one main test class. Ensure:
+**Current coverage:** image-metadata 13% (1% branch), video-metadata 9% (0% branch), fulltext-search 14% (0% branch), ai-classification 16% (0% branch). Each plugin has a test class but most code is extraction/runtime logic that is not exercised in unit tests.
 
-- Image/Video metadata: malformed files, missing fields, unsupported formats.
-- Fulltext-search: indexing lifecycle, empty content, large content.
-- AI-classification: error handling, timeouts, fallbacks.
+**Focus:**
 
-**Action:** Review each plugin’s public API and main branches; add tests for error paths and edge cases. Keep tests fast (no real external services).
+- Image/Video metadata: test entry points, configuration, and error paths (malformed input, unsupported format); extraction may stay low if it relies on native/IO.
+- Fulltext-search: indexing lifecycle, empty content, error handling.
+- AI-classification: error handling, timeouts, fallbacks; mock external AI calls.
+
+**Action:** Add tests for public API, config, and mockable boundaries; improve branch coverage where logic is testable without real files or external services.
 
 ---
 
 ### 6. compose-frontend/composeApp (Priority: Medium – High for business logic)
 
-**Current:** 41 test files; ViewModels, several screens, dialogs, and API models covered. Gaps (examples):
+**Current:** JaCoCo report (desktopTest) shows **3% instruction, 0% branch** overall. Packages with meaningful coverage: domain.upload 76%, navigation 61%, domain.model 59%, i18n 50%; feature.upload 7%; most ui.screens.* and feature.* are 0%. 41+ test files exist in commonTest; coverage is measured only for code run by desktop JVM tests.
+
+**Suggested focus:**
 
 | Area | Suggested focus |
 |------|------------------|
-| **ViewModels** | FilesViewModel, UploadManager (or equivalent) – all user-driven state transitions and error handling |
-| **Screens** | SettingsScreen, AdminScreen, ProfileScreen, SecurityScreen, SharedWithMeScreen – state and navigation (not visual) |
+| **ViewModels** | FilesViewModel, UploadManager – state transitions and error handling (mock deps in commonTest) |
+| **Screens** | State and navigation only for Settings, Admin, Profile, Security, SharedWithMe (not visual rendering) |
 | **Components** | MoveDialog, ContextMenu, SelectionToolbar, MainSidebar, Breadcrumbs, DropZone – callbacks and state |
-| **Feature** | MainContent, FilesContent, FilesLoader, UploadAction – logic that can run in commonTest |
-| **Navigation** | RootComponent, RootContent, RouteMatch – all route matching and navigation outcomes |
-| **Domain** | UploadQueueEntry, ChunkedFileSource – validation and state transitions |
-| **i18n** | All language files (keys, placeholders) – already have StringsTest; extend for new keys |
+| **Feature / domain** | MainContent, FilesContent, FilesLoader, UploadAction; UploadQueueEntry, ChunkedFileSource (already tested) |
+| **Navigation** | RootComponent, RootContent, RouteMatch – route matching and navigation outcomes (navigation already 61%) |
+| **i18n** | Extend StringsTest for new keys and placeholders |
 
-**Action:** Prioritise ViewModels and navigation; then screens (state only); then feature/domain and components. Use `runTest` for coroutines; mock platform/API where needed. Document any UI that is only testable via Compose UI Test or manual testing in TESTING.md.
+**Action:** Prioritise ViewModels and feature/usecase logic that can run in commonTest; then state-only screen tests. Use `runTest` for coroutines; mock platform/API where needed. Document UI that is only testable via Compose UI Test or manual testing in TESTING.md.
 
 ---
 
@@ -206,10 +302,10 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 **Exit criteria:** All screens and major components listed in TESTING.md as “testable in commonTest” have tests; i18n coverage is up to date.
 
 **Phase 4 summary:**
-- **4.1 Screens:** Settings, Admin, Profile, SharedWithMe logic already in ScreensTest; SecurityScreenTest added (ActiveSession, LoginEvent, SecuritySettings, SessionDeviceType, TwoFactorMethod, filter current session).
-- **4.2 Components:** DragDropComponentsTest already covers DragOverlay, DropZone, ContextMenu, MoveDialog; SelectionToolbar and MainSidebar are UI-only (no separate logic tests).
-- **4.3 Feature/domain:** UploadQueueEntryTest added for UploadQueueEntry.WithData/Chunked, FolderUploadEntry (equality, properties), and ChunkedFileSource (readChunk range). MainContent/FilesContent/FilesLoader are Composable or internal with use-case deps; logic covered via ViewModel and Files*Test.
-- **4.4 i18n:** StringsTest extended with settingsSecurity in settings and in allLanguages_haveConsistentStrings.
+- **4.1 Screens:** Settings, Admin, Profile, SharedWithMe logic in ScreensTest; SecurityScreenTest (ActiveSession, LoginEvent, SecuritySettings, SessionDeviceType, TwoFactorMethod, filter current session). **SharedWithMeScreenTest** added for SharedWithMeItem properties, groupBy owner, empty list, filter by file/folder.
+- **4.2 Components:** DragDropComponentsTest covers DragOverlay, DropZone, ContextMenu, MoveDialog; **BreadcrumbsLogicTest** added for Breadcrumb display name (home vs name), isHome, isLast, isClickable; SelectionToolbar and MainSidebar are UI-only (no separate logic tests).
+- **4.3 Feature/domain:** UploadQueueEntryTest for UploadQueueEntry.WithData/Chunked, FolderUploadEntry, ChunkedFileSource. MainContent/FilesContent/FilesLoader covered via ViewModel and Files*Test.
+- **4.4 i18n:** StringsTest extended with navHome, navSharedWithMe in navigation; englishStrings_hasAuthStrings; allLanguages_haveNavHome; allLanguages_haveConsistentStrings includes navHome.
 
 ---
 
@@ -220,17 +316,17 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 | Step | Task | Owner / note |
 |------|------|------------------|
 | 5.1 | Ensure CI runs jacoco for backend (core, api, infrastructure, plugins-api, all plugins) and frontend (composeApp); upload to Codecov | DevOps / maintainer |
-| 5.2 | (Optional) Add a coverage gate job: fail if project coverage drops by more than X% (e.g. 1%) from baseline | DevOps |
+| 5.2 | Add a coverage gate: fail if patch coverage drops by more than 1% (implemented in codecov.yml) | DevOps / maintainer |
 | 5.3 | Add a short “Coverage” section to CONTRIBUTING.md: run `make test-coverage` before PR; keep coverage ≥ 80% for new code | Maintainer |
 | 5.4 | Update TESTING.md with final coverage summary and link to this action plan | Maintainer |
 
-**Exit criteria:** CI runs coverage on every PR; contributors are instructed to run test-coverage; TESTING.md is up to date.
+**Exit criteria:** CI runs coverage on every PR; contributors are instructed to run test-coverage; TESTING.md is up to date; coverage gate (1% patch threshold) enabled in codecov.yml. **All met.**
 
-**Phase 5 summary:**
-- **5.1:** CI already runs jacoco for backend (core, api, infrastructure, plugins-api, image-metadata, video-metadata, fulltext-search, ai-classification) and frontend (composeApp), then uploads artifacts to the coverage job which sends them to Codecov.
-- **5.2:** Coverage gate (fail if coverage drops > X%) left optional; can be enabled in Codecov or CI later.
-- **5.3:** CONTRIBUTING.md updated with a “Coverage” subsection: run `make test-coverage` before PR, keep coverage ≥ 80% for new code, links to TESTING.md and TEST_COVERAGE_ACTION_PLAN.md; PR checklist includes “Run make test-coverage” as recommended.
-- **5.4:** TESTING.md updated with “Phase 5 (CI and coverage maintenance)” and final coverage summary.
+**Phase 5 summary (complete):**
+- **5.1:** CI runs jacoco for backend (core, api, infrastructure, plugins-api, image-metadata, video-metadata, fulltext-search, ai-classification) and frontend (composeApp); coverage job uploads to Codecov. See [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
+- **5.2:** Coverage gate implemented in [codecov.yml](../../codecov.yml): `status.project.default.threshold: 1%`. The Codecov status check fails if patch coverage (new/changed code in the PR) drops by more than 1%. Optional: a stricter project-level gate can be added in the Codecov UI if desired.
+- **5.3:** CONTRIBUTING.md has a “Coverage” subsection and PR checklist: run `make test-coverage` before PR, keep coverage ≥ 80% for new code, links to TESTING.md and this plan; local HTML report paths documented; PR checklist requires coverage step and states Codecov 1% threshold.
+- **5.4:** TESTING.md updated with Phase 5 (CI and coverage maintenance), coverage gate explanation (codecov.yml 1% threshold), refreshed Coverage Summary table, Phase 4 summary, and link to this plan for latest snapshot.
 
 ---
 
@@ -243,6 +339,11 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 | 6.1 | Consider PIT mutation testing for core and api (or a subset) to find weak tests | Backend |
 | 6.2 | Consider Testcontainers for one or two integration tests (e.g. full stack with Postgres) | Backend |
 | 6.3 | Document in TESTING.md any E2E or Compose UI Test plans (e.g. for critical user flows) | All |
+
+**Phase 6 summary (documented):**
+- **6.1:** [TESTING.md](TESTING.md) has a “Phase 6.1 – Mutation testing (PIT)” section: scope (core/api or subset), how to add the plugin, run command, and that it is optional.
+- **6.2:** [TESTING.md](TESTING.md) has “Phase 6.2 – Testcontainers and integration tests”: current use (ExposedStorageItemRepositoryTest, ExposedUserRepositoryTest with PostgreSQLContainer; api has testcontainers deps; CI has Docker). Next step: one or two full-stack integration tests (testApplication + Postgres) for api routes.
+- **6.3:** [TESTING.md](TESTING.md) has “Phase 6.3 – E2E and Compose UI Test plans”: E2E (Playwright/Selenium for web, Appium for mobile); Compose UI (desktop uiTestJUnit4 for critical flows). Status: documented, not yet implemented.
 
 ---
 

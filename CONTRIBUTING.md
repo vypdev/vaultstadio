@@ -78,9 +78,10 @@ refactor: Simplify authentication flow
 
 1. **Update Documentation**: Update relevant documentation
 2. **Add Tests**: Add tests for new features
-3. **Run Tests**: Ensure all tests pass
-4. **Update CHANGELOG**: Document your changes
-5. **Submit PR**: Create pull request with description
+3. **Run Tests**: Ensure all tests pass (`./gradlew test` or `make test`)
+4. **Run Coverage (recommended)**: Run `make test-coverage` and check that new code is covered (CI uploads to Codecov; PR status check uses a 1% threshold)
+5. **Update CHANGELOG**: Document your changes
+6. **Submit PR**: Create pull request with description
 
 ### PR Checklist
 
@@ -89,7 +90,7 @@ refactor: Simplify authentication flow
 - [ ] Documentation updated
 - [ ] All tests pass
 - [ ] No detekt issues
-- [ ] (Recommended) Run `make test-coverage` and check coverage for new code
+- [ ] **Coverage:** Run `make test-coverage` before opening the PR; ensure new code has tests (Codecov status check enforces 1% threshold on patch coverage)
 
 ## Testing
 
@@ -111,9 +112,11 @@ Before submitting a PR:
 
 ### Coverage
 
-- **Before opening a PR**, run `make test-coverage` (or the equivalent Gradle jacoco tasks) to generate backend and frontend coverage reports. This matches what CI runs and uploads to Codecov.
+- **Before opening a PR**, run `make test-coverage` to generate backend and frontend coverage reports. This matches what CI runs and uploads to Codecov. The Codecov status check on PRs uses a **1% threshold** (patch coverage); avoid dropping coverage for new or changed code.
 - **Goal:** Keep coverage ≥ 80% for new code where feasible. Avoid removing tests without adding equivalent coverage elsewhere.
-- See [docs/development/TESTING.md](docs/development/TESTING.md) for the test strategy and [docs/development/TEST_COVERAGE_ACTION_PLAN.md](docs/development/TEST_COVERAGE_ACTION_PLAN.md) for the phased coverage plan.
+- **Local HTML reports:** Backend modules: `kotlin-backend/<module>/build/reports/jacoco/test/html/index.html`. Frontend: `compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html`.
+- **Strategy and commands:** [docs/development/TESTING.md](docs/development/TESTING.md).
+- **Current snapshot and per-module targets:** [docs/development/TEST_COVERAGE_ACTION_PLAN.md](docs/development/TEST_COVERAGE_ACTION_PLAN.md).
 
 ## Project Structure
 

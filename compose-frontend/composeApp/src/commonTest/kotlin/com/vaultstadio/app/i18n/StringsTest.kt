@@ -65,8 +65,10 @@ class StringsTest {
         assertNotNull(strings.navRecent)
         assertNotNull(strings.navStarred)
         assertNotNull(strings.navShared)
+        assertNotNull(strings.navSharedWithMe)
         assertNotNull(strings.navTrash)
         assertNotNull(strings.navSettings)
+        assertNotNull(strings.navHome)
     }
 
     @Test
@@ -171,10 +173,39 @@ class StringsTest {
             // Verify all critical strings are non-empty
             assertTrue(strings.appName.isNotEmpty())
             assertTrue(strings.navMyFiles.isNotEmpty())
+            assertTrue(strings.navHome.isNotEmpty())
             assertTrue(strings.actionUpload.isNotEmpty())
             assertTrue(strings.settingsTitle.isNotEmpty())
             assertTrue(strings.settingsSecurity.isNotEmpty())
             assertTrue(strings.aiAssistant.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun englishStrings_hasAuthStrings() {
+        val strings = EnglishStrings
+        assertNotNull(strings.authLogin)
+        assertNotNull(strings.authRegister)
+        assertNotNull(strings.authEmail)
+        assertNotNull(strings.authPassword)
+        assertNotNull(strings.authUsername)
+        assertNotNull(strings.authConfirmPassword)
+        assertNotNull(strings.authWelcome)
+    }
+
+    @Test
+    fun allLanguages_haveNavHome() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navHome.isNotEmpty(), "navHome should be non-empty for all languages")
         }
     }
 

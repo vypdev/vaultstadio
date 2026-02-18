@@ -9,7 +9,8 @@ This document describes the testing strategy, current coverage, and known limita
 3. [Test Categories](#test-categories)
 4. [Coverage Summary](#coverage-summary)
 5. [Untestable Components](#untestable-components)
-6. [Future Improvements](#future-improvements)
+6. [Phase 6 (Optional) – Advanced quality](#phase-6-optional--advanced-quality)
+7. [Future Improvements](#future-improvements)
 
 ---
 
@@ -114,6 +115,8 @@ Coverage is uploaded to [Codecov](https://codecov.io) on every push and pull req
 
 The CI workflow runs coverage for all backend modules (core, api, infrastructure, plugins-api, and the four plugins: image-metadata, video-metadata, fulltext-search, ai-classification) and for the frontend (composeApp desktop tests). Configuration is in [codecov.yml](../../codecov.yml) at the repo root.
 
+**Coverage gate (Phase 5.2):** [codecov.yml](../../codecov.yml) sets `status.project.default.threshold: 1%`. The Codecov status check on PRs will fail if **patch coverage** (coverage of new or changed lines) drops by more than 1%, so coverage regressions are visible and enforced.
+
 ---
 
 ## Test Categories
@@ -214,17 +217,30 @@ Location: `kotlin-backend/api/src/test/kotlin/com/vaultstadio/api/`
 | `CronSchedulerTest.kt` | Cron expression parsing and scheduling |
 | `PluginManagerTest.kt` | Plugin lifecycle management |
 
-### 8. Frontend Tests (5 files)
+### 8. Frontend Tests (20+ files)
 
 Location: `compose-frontend/composeApp/src/commonTest/kotlin/`
 
-| Test File | Coverage |
-|-----------|----------|
-| `AppViewModelTest.kt` | Basic ViewModel tests |
-| `AppViewModelDetailedTest.kt` | Detailed state management |
-| `ComponentsTest.kt` | UI component logic |
-| `ScreensTest.kt` | Screen state logic |
-| `PlatformTest.kt` | Platform abstraction logic |
+| Test File / Area | Coverage |
+|------------------|----------|
+| `viewmodel/AppViewModelTest.kt`, `AppViewModelDetailedTest.kt`, etc. | App state, navigation |
+| `feature/auth/AuthViewModelTest.kt` | Login/register validation, clearError |
+| `feature/changepassword/ChangePasswordViewModelTest.kt` | Password validation, visibility |
+| `feature/security/SecurityViewModelTest.kt` | Sessions, revoke dialog, two-factor |
+| `feature/settings/SettingsViewModelTest.kt` | Theme, language, cache |
+| `feature/profile/ProfileViewModelTest.kt` | clearError, clearSuccessMessage |
+| `feature/admin/AdminViewModelTest.kt` | clearError, loadUsers |
+| `feature/plugins/PluginsViewModelTest.kt` | clearError, loadPlugins |
+| `ui/screens/ScreensTest.kt` | Screen logic (files, admin, settings, profile, shared, plugins, trash) |
+| `ui/screens/SecurityScreenTest.kt` | Security models, sessions, device types |
+| `ui/screens/SharedWithMeScreenTest.kt` | SharedWithMeItem, groupBy owner |
+| `ui/components/layout/DragDropComponentsTest.kt` | DragOverlay, DropZone, ContextMenu, MoveDialog |
+| `ui/components/layout/BreadcrumbsLogicTest.kt` | Breadcrumb display, isHome, isLast |
+| `i18n/StringsTest.kt` | Languages, navHome, auth, all languages consistent |
+| `domain/upload/UploadQueueEntryTest.kt` | Upload queue, ChunkedFileSource |
+| `feature/upload/UploadManagerTest.kt` | Upload destination, minimized state |
+| `navigation/AppRoutesTest.kt`, `RouteMatchTest.kt` | Routes, path params |
+| `ComponentsTest.kt`, `PlatformTest.kt` | Component logic, platform abstraction |
 
 ### 9. Phase 6 Model Tests (4 files)
 
@@ -250,10 +266,12 @@ Location: `kotlin-backend/core/src/test/kotlin/com/vaultstadio/core/domain/model
 | Backend Infrastructure | 9 | High |
 | Backend Plugins | 4 | High |
 | Backend Config/Middleware | 6 | High |
-| Frontend ViewModel | 2 | Medium |
-| Frontend Components | 3 | Medium |
+| Frontend ViewModels | 8+ | Medium–High |
+| Frontend Screens / Components | 5+ | Medium |
 | Shared Models | 4 | High |
 | Shared Network | 2 | High |
+
+For the latest instruction/branch coverage snapshot and per-module targets, see [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md).
 
 ### Phase 2 (Backend depth) summary
 
@@ -272,18 +290,19 @@ The full phased plan (goals, gap analysis, Phases 1–6) is in [TEST_COVERAGE_AC
 
 ### Phase 4 (Frontend screens and feature logic) summary
 
-- **Screens:** Settings, Admin, Profile, SharedWithMe logic in ScreensTest; SecurityScreenTest covers security models and session/login-event logic.
-- **Components:** DragDropComponentsTest covers DragOverlay, DropZone, ContextMenu, MoveDialog (logic only). SelectionToolbar and MainSidebar are UI composables without separate logic tests.
-- **Domain:** UploadQueueEntryTest covers UploadQueueEntry (WithData, Chunked), FolderUploadEntry, and ChunkedFileSource.
-- **i18n:** StringsTest includes settingsSecurity and verifies it in all languages.
+- **Screens:** Settings, Admin, Profile, SharedWithMe logic in ScreensTest; SecurityScreenTest (security models, session, login-event); SharedWithMeScreenTest (SharedWithMeItem, groupBy owner, filter by type).
+- **Components:** DragDropComponentsTest (DragOverlay, DropZone, ContextMenu, MoveDialog); BreadcrumbsLogicTest (Breadcrumb display name, isHome, isLast, isClickable). SelectionToolbar and MainSidebar are UI-only.
+- **Domain:** UploadQueueEntryTest (UploadQueueEntry, FolderUploadEntry, ChunkedFileSource).
+- **i18n:** StringsTest (navHome, navSharedWithMe, auth strings, allLanguages_haveNavHome, settingsSecurity).
 
-### Phase 5 (CI and coverage maintenance)
+### Phase 5 (CI and coverage maintenance) — complete
 
 - **CI:** Every push/PR runs backend tests (core, api, infrastructure, plugins-api, all four plugins) and frontend desktop tests; jacoco reports are generated and uploaded to Codecov. See [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
-- **Local:** Run `make test-coverage` to generate the same reports as CI (backend + frontend). Contributors are encouraged to run this before opening a PR; see [CONTRIBUTING.md](../../CONTRIBUTING.md#coverage).
+- **Local:** Run `make test-coverage` to generate the same reports as CI (backend + frontend). Contributors should run this before opening a PR; see [CONTRIBUTING.md](../../CONTRIBUTING.md#coverage).
+- **Coverage gate:** Implemented in [codecov.yml](../../codecov.yml): `threshold: 1%` so the Codecov status check fails if patch coverage (new/changed code) drops by more than 1%. PRs see coverage status and regressions are blocked.
 - **Docs:** [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md) describes goals, phases, and exit criteria.
 
-**Total Test Files: 65+**
+**Total Test Files: 70+**
 
 ---
 
@@ -373,7 +392,23 @@ The following components cannot be effectively tested with unit tests due to the
 - Mock WebSocket clients in tests
 - Integration tests with test server
 
-### 7. File Upload/Download Streams
+### 7. Redis-Backed Implementations (0% unit coverage)
+
+**Files:**
+- `kotlin-backend/core/.../RedisMultipartUploadManager.kt`
+- `kotlin-backend/core/.../RedisLockManager.kt`
+
+**Reason:** These require a running Redis instance and are used in multi-instance production. Unit tests use in-memory implementations (`InMemoryMultipartUploadManager`, `InMemoryLockManager`), which are fully covered.
+
+**Workaround:** Integration tests with Testcontainers (Redis) if multi-instance behaviour needs to be asserted.
+
+### 8. ActivityLogger Event Handlers (partial coverage)
+
+**Reason:** `ActivityLogger` subscribes to many `FileEvent` and `FolderEvent` types; each type has an anonymous handler. Tests cover the main subscription and one or two event types; exercising every event variant would require publishing all event types in a single test or many tests.
+
+**Workaround:** Add tests for critical event types (e.g. `Uploaded`, `Deleted`) as needed; document remaining handlers as covered indirectly by integration.
+
+### 9. File Upload/Download Streams
 
 **Reason:** Large file handling with streams requires:
 - Memory management
@@ -386,38 +421,75 @@ The following components cannot be effectively tested with unit tests due to the
 
 ---
 
+## Phase 6 (Optional) – Advanced quality
+
+The following items are documented for future implementation. See [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md) for the full Phase 6 scope.
+
+### Phase 6.1 – Mutation testing (PIT)
+
+**Goal:** Find weak tests by mutating production code (e.g. changing `>` to `>=`) and checking if tests fail. Low mutation score indicates tests that do not assert enough.
+
+**Scope (if adopted):** Start with `kotlin-backend/core` or `kotlin-backend/api` (or a subset such as domain services). PIT can be run locally or in a separate CI job (it is slow).
+
+**How to add (when desired):**
+
+- Add the [PIT mutation testing](https://pitest.org/) plugin to the root or module `build.gradle.kts`:
+  ```kotlin
+  plugins {
+      id("info.solidsoft.pitest") version "1.15.0"  // check latest version
+  }
+  pitest {
+      targetClasses.set(listOf("com.vaultstadio.*"))
+      targetTests.set(listOf("com.vaultstadio.*"))
+      outputFormats.set(listOf("HTML", "XML"))
+  }
+  ```
+- Run: `./gradlew pitest` (or `test pitest`). Reports are in `build/reports/pitest/`.
+
+**Status:** Not yet enabled; optional for teams that want to harden critical paths.
+
+### Phase 6.2 – Testcontainers and integration tests
+
+**Current state:** Testcontainers is already in use:
+
+- **Infrastructure:** [ExposedStorageItemRepositoryTest](../../kotlin-backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/ExposedStorageItemRepositoryTest.kt) and [ExposedUserRepositoryTest](../../kotlin-backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/ExposedUserRepositoryTest.kt) use `PostgreSQLContainer` for real DB tests.
+- **API module:** Has `testImplementation(libs.bundles.testcontainers)` (Postgres, MinIO, JUnit 5); CI ensures Docker is available before running tests.
+
+**Possible next step:** Add one or two **full-stack integration tests** (e.g. Ktor `testApplication { application { module() } }` with a Testcontainers Postgres instance) to hit real route handlers and DB. This would increase api module coverage for routes that are currently tested with an empty `application { }`. See “Real Database Integration Tests” under Untestable Components for context.
+
+**Test environment (optional):** For manual or extended integration testing, a [docker-compose.test.yml](#test-environment-setup) style setup is documented below.
+
+### Phase 6.3 – E2E and Compose UI Test plans
+
+**E2E (end-to-end):**
+
+- **Web (WASM):** Consider Playwright or Selenium for critical user flows (login, upload, browse, share). Not yet implemented.
+- **Mobile:** Consider Appium for iOS/Android if/when mobile flows become critical. Not yet implemented.
+
+**Compose UI Testing:**
+
+- For **desktop**, Compose provides `compose.desktop.uiTestJUnit4` (or the multiplatform equivalent). Plans (not yet implemented):
+  - Add dependency in `compose-frontend/composeApp/build.gradle.kts` for the desktop test source set.
+  - Write UI tests for critical flows (e.g. login screen → main screen, file list → open folder) using `runComposeUiTest` and `onNodeWithText` / `onNodeWithTag`.
+- **Web (WASM):** Compose for Web may have different UI test support; document when evaluated.
+
+**Status:** Documented here for future work; no E2E or Compose UI tests in the repo yet. When adding them, update this section and [TEST_COVERAGE_ACTION_PLAN.md](TEST_COVERAGE_ACTION_PLAN.md).
+
+---
+
 ## Future Improvements
 
 ### Recommended Test Additions
 
-1. **Testcontainers Integration**
-   ```kotlin
-   // Add to build.gradle.kts
-   testImplementation("org.testcontainers:postgresql:1.19.0")
-   testImplementation("org.testcontainers:junit-jupiter:1.19.0")
-   ```
+1. **Testcontainers:** Already used in infrastructure and api (see Phase 6.2). Dependencies are in `libs.versions.toml` and module `build.gradle.kts` files.
 
-2. **Compose UI Testing**
-   ```kotlin
-   // Add to compose-frontend/composeApp/build.gradle.kts
-   testImplementation(compose.desktop.uiTestJUnit4)
-   ```
+2. **Compose UI Testing:** See Phase 6.3. Add `testImplementation(compose.desktop.uiTestJUnit4)` to the desktop test source set when implementing.
 
-3. **E2E Test Framework**
-   - Consider Playwright or Selenium for web frontend
-   - Consider Appium for mobile (iOS/Android)
+3. **E2E:** See Phase 6.3 (Playwright/Selenium for web, Appium for mobile).
 
-4. **Performance Tests**
-   - JMeter or Gatling for API load testing
-   - Large file upload benchmarks
+4. **Performance Tests:** JMeter or Gatling for API load testing; large file upload benchmarks. Not yet in scope.
 
-5. **Mutation Testing**
-   ```kotlin
-   // Add PIT mutation testing
-   plugins {
-       id("info.solidsoft.pitest") version "1.9.0"
-   }
-   ```
+5. **Mutation Testing (PIT):** See Phase 6.1. Add the pitest plugin when the team wants to run mutation testing on core or api.
 
 ### Test Environment Setup
 
