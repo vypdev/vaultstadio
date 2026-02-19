@@ -4,7 +4,7 @@
 
 package com.vaultstadio.app.api
 
-import com.vaultstadio.app.domain.model.RestoreVersionRequest
+import com.vaultstadio.app.domain.version.model.RestoreVersionRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

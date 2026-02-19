@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.auth.model.User
 import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
-import com.vaultstadio.app.i18n.Language
-import com.vaultstadio.app.i18n.Strings
+import com.vaultstadio.app.core.resources.Language
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.ui.theme.ThemeMode
 import com.vaultstadio.app.ui.theme.ThemeSettings
 import kotlinx.coroutines.flow.collectLatest

@@ -10,7 +10,7 @@ import com.vaultstadio.app.domain.auth.model.User
 import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
 import com.vaultstadio.app.feature.ViewModelTestBase
-import com.vaultstadio.app.i18n.Language
+import com.vaultstadio.app.core.resources.Language
 import com.vaultstadio.app.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

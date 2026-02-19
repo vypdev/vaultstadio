@@ -20,13 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.LocalStrings
-import com.vaultstadio.app.i18n.clearSelection
-import com.vaultstadio.app.i18n.copy
-import com.vaultstadio.app.i18n.delete
-import com.vaultstadio.app.i18n.itemsSelected
-import com.vaultstadio.app.i18n.move
-import com.vaultstadio.app.i18n.star
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.clearSelection
+import com.vaultstadio.app.core.resources.copy
+import com.vaultstadio.app.core.resources.delete
+import com.vaultstadio.app.core.resources.itemsSelected
+import com.vaultstadio.app.core.resources.move
+import com.vaultstadio.app.core.resources.star
 
 /**
  * Floating toolbar for batch operations on selected items.

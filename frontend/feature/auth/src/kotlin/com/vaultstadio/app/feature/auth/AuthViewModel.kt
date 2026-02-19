@@ -1,3 +1,10 @@
+/**
+ * ViewModel for authentication screens (Login/Register).
+ *
+ * Use Cases are injected automatically by Koin.
+ * Runtime callback (onSuccess) is passed via parametersOf().
+ */
+
 package com.vaultstadio.app.feature.auth
 
 import androidx.compose.runtime.getValue
@@ -5,35 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.usecase.LoginUseCase
 import com.vaultstadio.app.domain.auth.usecase.RegisterUseCase
+import com.vaultstadio.app.domain.result.Result
 import kotlinx.coroutines.launch
-/**
- * Validation error types for authentication.
- */
-sealed class AuthError {
-    data object EmailPasswordRequired : AuthError()
-    data object AllFieldsRequired : AuthError()
-    data object PasswordsDoNotMatch : AuthError()
-    data object PasswordTooShort : AuthError()
-    data class ApiError(val message: String) : AuthError()
-}
 
-/**
- * Callback interface for authentication success.
- * Used instead of lambda to avoid KSP code generation issues with Function types.
- */
-fun interface AuthSuccessCallback {
-    fun onSuccess()
-}
-
-/**
- * ViewModel for authentication screens (Login/Register).
- *
- * Use Cases are injected automatically by Koin.
- * Runtime callback (onSuccess) is passed via parametersOf().
- */
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
@@ -136,7 +119,6 @@ class AuthViewModel(
 
             when (val result = registerUseCase(registerEmail, registerUsername, registerPassword)) {
                 is Result.Success -> {
-                    // After successful registration, log in automatically
                     when (val loginResult = loginUseCase(registerEmail, registerPassword)) {
                         is Result.Success -> onSuccessCallback.onSuccess()
                         is Result.Error -> authError = AuthError.ApiError(loginResult.message)

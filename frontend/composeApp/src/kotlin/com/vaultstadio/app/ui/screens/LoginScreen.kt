@@ -50,7 +50,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.LocalStrings
+import com.vaultstadio.app.core.resources.LocalStrings
 
 /**
  * Login screen.

@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.feature.main.MainComponent
-import com.vaultstadio.app.i18n.StringResources
+import com.vaultstadio.app.core.resources.StringResources
 
 /**
  * Dialog for creating a new folder.

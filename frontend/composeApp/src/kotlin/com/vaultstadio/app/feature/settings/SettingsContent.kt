@@ -3,6 +3,8 @@ package com.vaultstadio.app.feature.settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import com.vaultstadio.app.platform.PlatformStorage
+import com.vaultstadio.app.platform.StorageKeys
 import com.vaultstadio.app.ui.screens.SettingsScreen
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -29,7 +31,12 @@ fun SettingsContent(
         currentLanguage = viewModel.currentLanguage,
         isClearingCache = viewModel.isClearingCache,
         onThemeModeChange = viewModel::updateThemeMode,
-        onLanguageChange = viewModel::setLanguage,
+        onLanguageChange = { lang ->
+            viewModel.setLanguage(lang)
+            try {
+                PlatformStorage.setString(StorageKeys.LANGUAGE, lang.code)
+            } catch (_: Exception) { /* ignore */ }
+        },
         onClearCache = viewModel::clearCache,
         onNavigateBack = component::onBack,
         onLogout = component::logout,

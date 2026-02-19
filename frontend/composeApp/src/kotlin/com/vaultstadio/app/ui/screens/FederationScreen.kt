@@ -45,7 +45,7 @@ import com.vaultstadio.app.domain.federation.model.FederatedIdentity
 import com.vaultstadio.app.domain.federation.model.FederatedInstance
 import com.vaultstadio.app.domain.federation.model.FederatedShare
 import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.strings
 import com.vaultstadio.app.ui.screens.federation.ActivitiesTab
 import com.vaultstadio.app.ui.screens.federation.BlockInstanceDialog
 import com.vaultstadio.app.ui.screens.federation.ErrorDialog

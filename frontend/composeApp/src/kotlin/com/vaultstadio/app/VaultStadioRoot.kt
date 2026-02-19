@@ -21,9 +21,11 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.vaultstadio.app.config.LocalApiBaseUrl
 import com.vaultstadio.app.domain.upload.UploadQueueEntry
 import com.vaultstadio.app.feature.upload.UploadManager
-import com.vaultstadio.app.i18n.LocalStrings
-import com.vaultstadio.app.i18n.Strings
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.navigation.DefaultRootComponent
+import com.vaultstadio.app.platform.PlatformStorage
+import com.vaultstadio.app.platform.StorageKeys
 import com.vaultstadio.app.navigation.RootComponent
 import com.vaultstadio.app.navigation.RootContent
 import com.vaultstadio.app.platform.DragDropEvent
@@ -85,6 +87,11 @@ private fun VaultStadioContent(config: VaultStadioConfig) {
     // Drag and drop state
     val isDragging by DragDropState.isDragging.collectAsState(initial = false)
     val dropEvent by DragDropState.events.collectAsState(initial = null)
+
+    // Load persisted language at startup
+    LaunchedEffect(Unit) {
+        Strings.loadSavedLanguage(PlatformStorage.getString(StorageKeys.LANGUAGE))
+    }
 
     // Initialize drag and drop (no-op if not supported on platform)
     LaunchedEffect(Unit) {

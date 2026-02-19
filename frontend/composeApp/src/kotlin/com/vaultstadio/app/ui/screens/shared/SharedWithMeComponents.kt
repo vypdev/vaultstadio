@@ -47,8 +47,8 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.ItemType
 import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.storage.model.Visibility
-import com.vaultstadio.app.i18n.Strings
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.Strings
+import com.vaultstadio.app.core.resources.strings
 import com.vaultstadio.app.ui.screens.SharedWithMeItem
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatFileSize

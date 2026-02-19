@@ -1,6 +1,6 @@
 # Frontend modularisation and standalone projects (backend / frontend)
 
-**Last updated**: 2026-02-19
+**Last updated**: 2026-02-19 (domain:upload, composeApp cleanup, data:storage DTOs split, feature:auth migrated)
 
 ### Current implementation status
 
@@ -29,9 +29,14 @@
 - **:domain:collaboration** – Done. Models (one file per: CollaborationSession, CursorPosition, TextSelection, CollaborationParticipant, DocumentState, CommentAnchor, CommentReply, DocumentComment, PresenceStatus, UserPresence), CollaborationRepository, 13 use-case interfaces.
 - **:data:ai** – Done. AIApi, AIService, AIRepositoryImpl, DTOs (one file per), AIMapper, 12 use-case impls, `aiModule`. ComposeApp uses `aiModule`; AI beans removed from `appModule`.
 - **:data:collaboration** – Done. CollaborationApi, CollaborationService, CollaborationRepositoryImpl, DTOs (one file per), CollaborationMapper, CollaborationWebSocket (in websocket/), 13 use-case impls, `collaborationModule`. ComposeApp uses `collaborationModule`; collaboration beans removed from `appModule`.
-- **:feature:*** – Placeholder only; ViewModels/screens still in composeApp.
+- **:domain:upload** – Done. Models: `UploadQueueEntry`, `ChunkedFileSource`, `FolderUploadEntry` (one file per class). Placeholder removed.
+- **:domain:storage** – ViewMode added in `model/ViewMode.kt`. **:domain:metadata** – `AdvancedSearchRequest` in `model/AdvancedSearchRequest.kt`. **:domain:version** – `RestoreVersionRequest` in `model/RestoreVersionRequest.kt`.
+- **composeApp cleanup** – Removed duplicate `domain/upload`, `domain/model` (FileVersion, ViewMode, AdvancedSearchRequest, PluginInfo, Admin), and duplicate `data/` (Storage + Federation API, service, repository, mapper, DTOs). Imports updated to use domain/data modules.
+- **:data:storage** – DTOs split to one file per DTO (StorageItemDTO, CreateFolderRequestDTO, etc.); StorageDTOs.kt removed.
+- **:feature:auth** – Done. `AuthViewModel`, `AuthError`, `AuthSuccessCallback`, `AuthComponent`, `DefaultAuthComponent` (one file per class). ComposeApp keeps `AuthContent.kt` (uses i18n); depends on `:feature:auth`.
+- **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: migrate feature modules (move ViewModels/screens from composeApp to :feature:*); ensure composeApp storage imports use :domain:storage and :data:storage packages where applicable.
+Next: migrate remaining feature modules (move ViewModels/screens from composeApp to :feature:*). Full UI migration for a feature requires i18n in a shared module so :feature:* can use strings without depending on composeApp.
 
 ---
 

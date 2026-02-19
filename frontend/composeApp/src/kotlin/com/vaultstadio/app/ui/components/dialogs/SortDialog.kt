@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.SortField
 import com.vaultstadio.app.domain.storage.model.SortOrder
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.strings
 
 /**
  * Dialog for selecting sort field and order.

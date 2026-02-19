@@ -4,7 +4,7 @@
  * Multi-language support: use [Strings.resources] or [LocalStrings] for current locale.
  */
 
-package com.vaultstadio.app.i18n
+package com.vaultstadio.app.core.resources
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

@@ -1,6 +1,6 @@
 /**
  * Source for reading a large file in chunks without loading it fully into memory.
- * Used for chunked upload of files that exceed [LARGE_FILE_THRESHOLD].
+ * Used for chunked upload of files that exceed the large-file threshold.
  */
 
 package com.vaultstadio.app.domain.upload

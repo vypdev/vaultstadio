@@ -34,15 +34,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ViewMode
+import com.vaultstadio.app.domain.storage.model.ViewMode
 import com.vaultstadio.app.domain.storage.model.SortField
 import com.vaultstadio.app.domain.storage.model.SortOrder
-import com.vaultstadio.app.i18n.StringResources
-import com.vaultstadio.app.i18n.clear
-import com.vaultstadio.app.i18n.emptyTrash
-import com.vaultstadio.app.i18n.refresh
-import com.vaultstadio.app.i18n.selectAll
-import com.vaultstadio.app.i18n.toggleView
+import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.clear
+import com.vaultstadio.app.core.resources.emptyTrash
+import com.vaultstadio.app.core.resources.refresh
+import com.vaultstadio.app.core.resources.selectAll
+import com.vaultstadio.app.core.resources.toggleView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

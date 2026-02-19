@@ -54,7 +54,7 @@ import com.vaultstadio.app.domain.ai.model.AIModel
 import com.vaultstadio.app.domain.ai.model.AIProviderInfo
 import com.vaultstadio.app.domain.ai.model.AIProviderType
 import com.vaultstadio.app.domain.ai.model.ChatRole
-import com.vaultstadio.app.i18n.StringResources
+import com.vaultstadio.app.core.resources.StringResources
 
 @Composable
 fun AIModeSelector(

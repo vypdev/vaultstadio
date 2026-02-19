@@ -54,8 +54,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.plugin.model.PluginInfo
-import com.vaultstadio.app.i18n.Strings
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.Strings
+import com.vaultstadio.app.core.resources.strings
 
 /**
  * Plugins management screen.

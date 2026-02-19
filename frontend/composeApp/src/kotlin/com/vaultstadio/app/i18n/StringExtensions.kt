@@ -4,7 +4,7 @@
  * Shorthand access to common string resources.
  */
 
-package com.vaultstadio.app.i18n
+package com.vaultstadio.app.core.resources
 
 // Navigation shortcuts
 val StringResources.files: String get() = navMyFiles

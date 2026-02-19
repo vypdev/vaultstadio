@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
 import com.vaultstadio.app.domain.collaboration.model.CommentAnchor
 import com.vaultstadio.app.domain.collaboration.model.DocumentComment
-import com.vaultstadio.app.i18n.StringResources
-import com.vaultstadio.app.i18n.Strings
+import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview

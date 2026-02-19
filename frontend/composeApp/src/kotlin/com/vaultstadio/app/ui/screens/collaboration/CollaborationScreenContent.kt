@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.sp
 import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
 import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 import com.vaultstadio.app.domain.collaboration.model.DocumentState
-import com.vaultstadio.app.i18n.StringResources
+import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.utils.formatRelativeTime
 
 @OptIn(ExperimentalMaterial3Api::class)

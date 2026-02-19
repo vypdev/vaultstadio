@@ -41,7 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.AdvancedSearchRequest
+import com.vaultstadio.app.domain.metadata.model.AdvancedSearchRequest
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 

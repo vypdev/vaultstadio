@@ -23,7 +23,10 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(project(":domain:result"))
+                implementation(project(":domain:auth"))
                 implementation(project(":data:network"))
+                implementation(libs.jetbrains.lifecycle.viewmodel)
+                implementation(libs.decompose)
             }
         }
     }

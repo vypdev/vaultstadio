@@ -31,8 +31,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.StringResources
-import com.vaultstadio.app.i18n.Strings
+import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

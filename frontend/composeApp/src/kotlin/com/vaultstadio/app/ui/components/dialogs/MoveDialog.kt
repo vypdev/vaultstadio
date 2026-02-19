@@ -41,7 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.i18n.LocalStrings
+import com.vaultstadio.app.core.resources.LocalStrings
 
 /**
  * Move dialog for selecting destination folder.

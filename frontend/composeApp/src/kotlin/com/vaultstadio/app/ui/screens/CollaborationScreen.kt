@@ -24,7 +24,7 @@ import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 import com.vaultstadio.app.domain.collaboration.model.DocumentState
 import com.vaultstadio.app.domain.collaboration.model.PresenceStatus
 import com.vaultstadio.app.domain.collaboration.model.UserPresence
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.strings
 import com.vaultstadio.app.ui.screens.collaboration.AddCommentDialog
 import com.vaultstadio.app.ui.screens.collaboration.CollaborationErrorDialog
 import com.vaultstadio.app.ui.screens.collaboration.CollaborationLoadingState

@@ -40,8 +40,8 @@ import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.SyncConflict
 import com.vaultstadio.app.domain.sync.model.SyncDevice
 import com.vaultstadio.app.domain.sync.model.SyncResponse
-import com.vaultstadio.app.i18n.StringResources
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.strings
 import com.vaultstadio.app.ui.screens.sync.ConflictResolutionDialog
 import com.vaultstadio.app.ui.screens.sync.ConflictsTab
 import com.vaultstadio.app.ui.screens.sync.DeactivateDeviceDialog

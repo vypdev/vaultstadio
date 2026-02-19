@@ -40,8 +40,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.Language
-import com.vaultstadio.app.i18n.LocalStrings
+import com.vaultstadio.app.core.resources.Language
+import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.ui.screens.settings.AccountInfoItem
 import com.vaultstadio.app.ui.screens.settings.LanguageSelectionDialog
 import com.vaultstadio.app.ui.screens.settings.LogoutConfirmDialog

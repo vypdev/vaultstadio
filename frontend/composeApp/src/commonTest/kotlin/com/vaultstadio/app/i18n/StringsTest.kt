@@ -2,7 +2,7 @@
  * Tests for internationalization strings.
  */
 
-package com.vaultstadio.app.i18n
+package com.vaultstadio.app.core.resources
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -36,8 +36,8 @@ import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.SyncConflict
 import com.vaultstadio.app.domain.sync.model.SyncDevice
 import com.vaultstadio.app.domain.sync.model.SyncResponse
-import com.vaultstadio.app.i18n.StringResources
-import com.vaultstadio.app.i18n.Strings
+import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

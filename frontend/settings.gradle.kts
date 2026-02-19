@@ -41,6 +41,9 @@ include(":domain:ai")
 include(":domain:config")
 include(":domain:upload")
 
+// Core (shared resources)
+include(":core:resources")
+
 // Data (by area)
 include(":data:network")
 include(":data:auth")

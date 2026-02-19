@@ -25,9 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.StringResources
-import com.vaultstadio.app.i18n.clear
-import com.vaultstadio.app.i18n.searchPlaceholder
+import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.clear
+import com.vaultstadio.app.core.resources.searchPlaceholder
 
 @Composable
 internal fun FilesSearchBar(

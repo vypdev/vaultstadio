@@ -2,7 +2,7 @@
  * VaultStadio Internationalization (i18n) – String resources contract.
  */
 
-package com.vaultstadio.app.i18n
+package com.vaultstadio.app.core.resources
 
 /**
  * String resources interface. All locale implementations must provide every property.

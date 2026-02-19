@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.version.model.FileVersion
 import com.vaultstadio.app.domain.version.model.FileVersionHistory
 import com.vaultstadio.app.domain.version.model.VersionDiff
-import com.vaultstadio.app.i18n.strings
+import com.vaultstadio.app.core.resources.strings
 import com.vaultstadio.app.ui.screens.version.DiffView
 import com.vaultstadio.app.ui.screens.version.EmptyVersionState
 import com.vaultstadio.app.ui.screens.version.SummaryItem

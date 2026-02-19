@@ -1,8 +1,9 @@
-package com.vaultstadio.app.domain.model
-
 /**
  * Request model for advanced search operations.
  */
+
+package com.vaultstadio.app.domain.metadata.model
+
 data class AdvancedSearchRequest(
     val query: String,
     val searchContent: Boolean = false,

@@ -4,7 +4,7 @@
 
 package com.vaultstadio.app.ui.components.dialogs
 
-import com.vaultstadio.app.domain.model.AdvancedSearchRequest
+import com.vaultstadio.app.domain.metadata.model.AdvancedSearchRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

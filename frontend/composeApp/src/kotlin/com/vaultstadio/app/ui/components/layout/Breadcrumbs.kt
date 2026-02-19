@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.Breadcrumb
-import com.vaultstadio.app.i18n.LocalStrings
+import com.vaultstadio.app.core.resources.LocalStrings
 
 /**
  * Breadcrumbs navigation component showing current path when browsing folders.

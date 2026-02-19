@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.admin.model.AdminUser
-import com.vaultstadio.app.i18n.LocalStrings
+import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.ui.screens.admin.AdminErrorDialog
 import com.vaultstadio.app.ui.screens.admin.QuotaEditDialog
 import com.vaultstadio.app.ui.screens.admin.RoleEditDialog

@@ -45,15 +45,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.LocalStrings
-import com.vaultstadio.app.i18n.alreadyHaveAccount
-import com.vaultstadio.app.i18n.confirmPassword
-import com.vaultstadio.app.i18n.dontHaveAccount
-import com.vaultstadio.app.i18n.email
-import com.vaultstadio.app.i18n.login
-import com.vaultstadio.app.i18n.password
-import com.vaultstadio.app.i18n.register
-import com.vaultstadio.app.i18n.username
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.alreadyHaveAccount
+import com.vaultstadio.app.core.resources.confirmPassword
+import com.vaultstadio.app.core.resources.dontHaveAccount
+import com.vaultstadio.app.core.resources.email
+import com.vaultstadio.app.core.resources.login
+import com.vaultstadio.app.core.resources.password
+import com.vaultstadio.app.core.resources.register
+import com.vaultstadio.app.core.resources.username
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 

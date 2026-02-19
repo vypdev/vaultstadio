@@ -1,7 +1,7 @@
 /**
  * English strings.
  */
-package com.vaultstadio.app.i18n
+package com.vaultstadio.app.core.resources
 
 object EnglishStrings : StringResources {
     override val appName = "VaultStadio"

@@ -30,7 +30,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.i18n.LocalStrings
+import com.vaultstadio.app.core.resources.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
