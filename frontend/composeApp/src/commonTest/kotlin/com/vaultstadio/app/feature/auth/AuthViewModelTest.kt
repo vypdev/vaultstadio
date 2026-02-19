@@ -7,12 +7,12 @@ package com.vaultstadio.app.feature.auth
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.AuthRepository
-import com.vaultstadio.app.domain.model.LoginResult
-import com.vaultstadio.app.domain.model.StorageQuota
-import com.vaultstadio.app.domain.model.User
-import com.vaultstadio.app.domain.model.UserRole
-import com.vaultstadio.app.domain.usecase.auth.LoginUseCaseImpl
-import com.vaultstadio.app.domain.usecase.auth.RegisterUseCaseImpl
+import com.vaultstadio.app.domain.auth.model.LoginResult
+import com.vaultstadio.app.domain.auth.model.StorageQuota
+import com.vaultstadio.app.domain.auth.model.User
+import com.vaultstadio.app.domain.auth.model.UserRole
+import com.vaultstadio.app.data.auth.usecase.LoginUseCaseImpl
+import com.vaultstadio.app.data.auth.usecase.RegisterUseCaseImpl
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

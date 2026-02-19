@@ -8,7 +8,7 @@
 
 package com.vaultstadio.app.di
 
-import com.vaultstadio.app.data.auth.di.authModule
+import com.vaultstadio.app.data.auth.di.AuthModule
 import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.network.HttpClientFactory
 import com.vaultstadio.app.data.network.TokenProvider
@@ -58,7 +58,6 @@ class AppModule
  */
 fun runtimeModules(apiBaseUrl: String) = listOf(
     createCoreModule(apiBaseUrl),
-    authModule(),
 )
 
 /** @deprecated Use runtimeModules(apiBaseUrl) with startKoin<VaultStadioApp> { modules(runtimeModules(apiBaseUrl)) } */

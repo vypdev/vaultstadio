@@ -6,7 +6,7 @@
 
 package com.vaultstadio.app
 
-import com.vaultstadio.app.data.repository.AuthState
+import com.vaultstadio.app.data.auth.repository.AuthState
 import com.vaultstadio.app.viewmodel.NavDestination
 import kotlin.test.Test
 import kotlin.test.assertEquals
