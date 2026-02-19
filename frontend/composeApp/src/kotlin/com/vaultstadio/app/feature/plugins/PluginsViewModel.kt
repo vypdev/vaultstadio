@@ -11,12 +11,9 @@ import com.vaultstadio.app.domain.usecase.plugin.DisablePluginUseCase
 import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCase
 import com.vaultstadio.app.domain.usecase.plugin.GetPluginsUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for plugin management.
  */
-@KoinViewModel
 class PluginsViewModel(
     private val getPluginsUseCase: GetPluginsUseCase,
     private val enablePluginUseCase: EnablePluginUseCase,

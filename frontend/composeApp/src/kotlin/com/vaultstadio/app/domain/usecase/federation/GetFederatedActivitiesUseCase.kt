@@ -8,8 +8,6 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.FederationRepository
 import com.vaultstadio.app.domain.model.FederatedActivity
 import kotlinx.datetime.Instant
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for getting federated activities.
  */
@@ -21,7 +19,6 @@ interface GetFederatedActivitiesUseCase {
     ): Result<List<FederatedActivity>>
 }
 
-@Factory(binds = [GetFederatedActivitiesUseCase::class])
 class GetFederatedActivitiesUseCaseImpl(
     private val federationRepository: FederationRepository,
 ) : GetFederatedActivitiesUseCase {

@@ -51,7 +51,7 @@ import com.vaultstadio.app.domain.model.CommentReply
 import com.vaultstadio.app.domain.model.DocumentComment
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatRelativeTime
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**

@@ -10,8 +10,6 @@ import com.vaultstadio.app.domain.model.PaginatedResponse
 import com.vaultstadio.app.domain.model.SortField
 import com.vaultstadio.app.domain.model.SortOrder
 import com.vaultstadio.app.domain.model.StorageItem
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for getting folder items.
  */
@@ -25,7 +23,6 @@ interface GetFolderItemsUseCase {
     ): Result<PaginatedResponse<StorageItem>>
 }
 
-@Factory(binds = [GetFolderItemsUseCase::class])
 class GetFolderItemsUseCaseImpl(
     private val storageRepository: StorageRepository,
 ) : GetFolderItemsUseCase {

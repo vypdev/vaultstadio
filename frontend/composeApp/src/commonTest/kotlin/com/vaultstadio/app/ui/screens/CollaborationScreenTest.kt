@@ -11,7 +11,7 @@ import com.vaultstadio.app.domain.model.DocumentComment
 import com.vaultstadio.app.domain.model.DocumentState
 import com.vaultstadio.app.domain.model.PresenceStatus
 import com.vaultstadio.app.domain.model.UserPresence
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

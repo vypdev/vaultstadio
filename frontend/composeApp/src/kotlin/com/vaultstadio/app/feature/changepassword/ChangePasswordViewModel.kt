@@ -8,12 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.usecase.ChangePasswordUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for changing user password.
  */
-@KoinViewModel
 class ChangePasswordViewModel(
     private val changePasswordUseCase: ChangePasswordUseCase,
 ) : ViewModel() {

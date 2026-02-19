@@ -10,17 +10,17 @@ package com.vaultstadio.app
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import com.vaultstadio.app.di.VaultStadioApp
+import com.vaultstadio.app.data.auth.di.authModule
 import com.vaultstadio.app.di.runtimeModules
 import com.vaultstadio.app.di.wasmJsModule
-import org.koin.plugin.module.dsl.startKoin
+import org.koin.core.context.startKoin
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     // Default API URL; can be made configurable via host page (e.g. window.__VAULTSTADIO_API_URL__)
     val apiBaseUrl = "http://localhost:8080/api"
-    startKoin<VaultStadioApp> {
-        modules(runtimeModules(apiBaseUrl) + wasmJsModule())
+    startKoin {
+        modules(runtimeModules(apiBaseUrl) + wasmJsModule() + authModule)
     }
     ComposeViewport(content = {
             VaultStadioRoot(config = VaultStadioConfig(apiBaseUrl = apiBaseUrl))

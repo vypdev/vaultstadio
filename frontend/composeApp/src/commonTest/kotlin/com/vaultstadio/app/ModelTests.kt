@@ -11,7 +11,7 @@ import com.vaultstadio.app.domain.model.StorageItem
 import com.vaultstadio.app.domain.model.StorageQuota
 import com.vaultstadio.app.domain.model.UserRole
 import com.vaultstadio.app.domain.model.Visibility
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

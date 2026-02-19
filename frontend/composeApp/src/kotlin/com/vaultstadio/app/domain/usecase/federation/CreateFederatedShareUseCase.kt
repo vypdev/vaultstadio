@@ -8,8 +8,6 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.FederationRepository
 import com.vaultstadio.app.domain.model.FederatedShare
 import com.vaultstadio.app.domain.model.SharePermission
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for creating a federated share.
  */
@@ -23,7 +21,6 @@ interface CreateFederatedShareUseCase {
     ): Result<FederatedShare>
 }
 
-@Factory(binds = [CreateFederatedShareUseCase::class])
 class CreateFederatedShareUseCaseImpl(
     private val federationRepository: FederationRepository,
 ) : CreateFederatedShareUseCase {

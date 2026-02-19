@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.koin.compiler)
 }
 
 // Load keystore properties for release signing
@@ -135,10 +134,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
 
-    // Koin (compiler plugin in this module so startKoin<VaultStadioApp> is generated)
+    // Koin
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
-    implementation(libs.koin.annotations)
 
     // Ktor Client
     implementation(libs.ktor.client.android)

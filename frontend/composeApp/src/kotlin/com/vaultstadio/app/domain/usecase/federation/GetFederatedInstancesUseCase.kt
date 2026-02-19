@@ -8,8 +8,6 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.FederationRepository
 import com.vaultstadio.app.domain.model.FederatedInstance
 import com.vaultstadio.app.domain.model.InstanceStatus
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for getting federated instances.
  */
@@ -17,7 +15,6 @@ interface GetFederatedInstancesUseCase {
     suspend operator fun invoke(status: InstanceStatus? = null): Result<List<FederatedInstance>>
 }
 
-@Factory(binds = [GetFederatedInstancesUseCase::class])
 class GetFederatedInstancesUseCaseImpl(
     private val federationRepository: FederationRepository,
 ) : GetFederatedInstancesUseCase {

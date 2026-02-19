@@ -45,7 +45,7 @@ import com.vaultstadio.app.domain.model.DocumentComment
 import com.vaultstadio.app.i18n.StringResources
 import com.vaultstadio.app.i18n.Strings
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val SampleParticipant = CollaborationParticipant(

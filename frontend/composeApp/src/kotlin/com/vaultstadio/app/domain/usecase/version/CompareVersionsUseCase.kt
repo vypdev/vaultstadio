@@ -7,8 +7,6 @@ package com.vaultstadio.app.domain.usecase.version
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.VersionRepository
 import com.vaultstadio.app.domain.model.VersionDiff
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for comparing two versions of a file.
  */
@@ -16,7 +14,6 @@ interface CompareVersionsUseCase {
     suspend operator fun invoke(itemId: String, fromVersion: Int, toVersion: Int): Result<VersionDiff>
 }
 
-@Factory(binds = [CompareVersionsUseCase::class])
 class CompareVersionsUseCaseImpl(
     private val versionRepository: VersionRepository,
 ) : CompareVersionsUseCase {

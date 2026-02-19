@@ -5,7 +5,7 @@
 package com.vaultstadio.app.ui.screens
 
 import com.vaultstadio.app.domain.model.Activity
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

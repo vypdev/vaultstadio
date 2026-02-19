@@ -25,12 +25,9 @@ import com.vaultstadio.app.domain.usecase.federation.RequestFederationUseCase
 import com.vaultstadio.app.domain.usecase.federation.RevokeFederatedShareUseCase
 import com.vaultstadio.app.domain.usecase.federation.UnlinkIdentityUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for federation management.
  */
-@KoinViewModel
 class FederationViewModel(
     private val getFederatedInstancesUseCase: GetFederatedInstancesUseCase,
     private val getFederatedInstanceUseCase: GetFederatedInstanceUseCase,

@@ -8,8 +8,6 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.AIRepository
 import com.vaultstadio.app.domain.model.AIChatMessage
 import com.vaultstadio.app.domain.model.AIChatResponse
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for AI chat interactions.
  */
@@ -22,7 +20,6 @@ interface AIChatUseCase {
     ): Result<AIChatResponse>
 }
 
-@Factory(binds = [AIChatUseCase::class])
 class AIChatUseCaseImpl(
     private val aiRepository: AIRepository,
 ) : AIChatUseCase {

@@ -6,8 +6,6 @@ package com.vaultstadio.app.domain.usecase.version
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.VersionRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for restoring a file to a previous version.
  */
@@ -15,7 +13,6 @@ interface RestoreVersionUseCase {
     suspend operator fun invoke(itemId: String, versionNumber: Int, comment: String? = null): Result<Unit>
 }
 
-@Factory(binds = [RestoreVersionUseCase::class])
 class RestoreVersionUseCaseImpl(
     private val versionRepository: VersionRepository,
 ) : RestoreVersionUseCase {

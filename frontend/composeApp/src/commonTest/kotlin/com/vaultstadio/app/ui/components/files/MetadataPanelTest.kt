@@ -8,7 +8,7 @@ import com.vaultstadio.app.domain.model.DocumentMetadata
 import com.vaultstadio.app.domain.model.ImageMetadata
 import com.vaultstadio.app.domain.model.ThumbnailSize
 import com.vaultstadio.app.domain.model.VideoMetadata
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

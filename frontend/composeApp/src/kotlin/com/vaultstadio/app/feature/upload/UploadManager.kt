@@ -31,13 +31,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
-import org.koin.core.annotation.Single
-
+import kotlin.time.Clock
 /** Max number of small-file uploads to run in parallel. */
 private const val SMALL_FILE_PARALLELISM = 3
 
-@Single
 class UploadManager(
     private val storageRepository: StorageRepository,
 ) {

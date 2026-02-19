@@ -7,12 +7,9 @@
 package com.vaultstadio.app.domain.usecase.config
 
 import com.vaultstadio.app.data.repository.ConfigRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for getting the base URL for collaboration features.
  */
-@Factory
 class GetCollaborationUrlUseCase(
     private val configRepository: ConfigRepository,
 ) {

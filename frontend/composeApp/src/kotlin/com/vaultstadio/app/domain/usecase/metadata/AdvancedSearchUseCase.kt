@@ -9,8 +9,6 @@ import com.vaultstadio.app.data.repository.MetadataRepository
 import com.vaultstadio.app.domain.model.PaginatedResponse
 import com.vaultstadio.app.domain.model.StorageItem
 import kotlinx.datetime.Instant
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for advanced search with metadata filters.
  */
@@ -28,7 +26,6 @@ interface AdvancedSearchUseCase {
     ): Result<PaginatedResponse<StorageItem>>
 }
 
-@Factory(binds = [AdvancedSearchUseCase::class])
 class AdvancedSearchUseCaseImpl(
     private val metadataRepository: MetadataRepository,
 ) : AdvancedSearchUseCase {

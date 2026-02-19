@@ -19,12 +19,9 @@ import com.vaultstadio.app.domain.usecase.sync.RegisterDeviceUseCase
 import com.vaultstadio.app.domain.usecase.sync.RemoveDeviceUseCase
 import com.vaultstadio.app.domain.usecase.sync.ResolveConflictUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for device synchronization management.
  */
-@KoinViewModel
 class SyncViewModel(
     private val getDevicesUseCase: GetDevicesUseCase,
     private val getConflictsUseCase: GetConflictsUseCase,

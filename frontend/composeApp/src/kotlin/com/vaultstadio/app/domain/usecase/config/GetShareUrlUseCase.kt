@@ -7,12 +7,9 @@
 package com.vaultstadio.app.domain.usecase.config
 
 import com.vaultstadio.app.data.repository.ConfigRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for building share-related URLs.
  */
-@Factory
 class GetShareUrlUseCase(
     private val configRepository: ConfigRepository,
 ) {

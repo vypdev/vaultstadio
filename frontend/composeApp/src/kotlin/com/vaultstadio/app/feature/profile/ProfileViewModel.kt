@@ -14,13 +14,10 @@ import com.vaultstadio.app.domain.auth.usecase.GetQuotaUseCase
 import com.vaultstadio.app.domain.auth.usecase.UpdateProfileUseCase
 import com.vaultstadio.app.platform.downloadFile
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import org.koin.core.annotation.KoinViewModel
-
+import kotlin.time.Clock
 /**
  * ViewModel for user profile management.
  */
-@KoinViewModel
 class ProfileViewModel(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val getQuotaUseCase: GetQuotaUseCase,

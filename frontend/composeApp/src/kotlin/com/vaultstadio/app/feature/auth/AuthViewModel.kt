@@ -9,9 +9,6 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.usecase.LoginUseCase
 import com.vaultstadio.app.domain.auth.usecase.RegisterUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-import org.koin.core.annotation.InjectedParam
-
 /**
  * Validation error types for authentication.
  */
@@ -37,11 +34,10 @@ fun interface AuthSuccessCallback {
  * Use Cases are injected automatically by Koin.
  * Runtime callback (onSuccess) is passed via parametersOf().
  */
-@KoinViewModel
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
-    @InjectedParam private val onSuccessCallback: AuthSuccessCallback,
+    private val onSuccessCallback: AuthSuccessCallback,
 ) : ViewModel() {
     // State
     var isLoading by mutableStateOf(false)

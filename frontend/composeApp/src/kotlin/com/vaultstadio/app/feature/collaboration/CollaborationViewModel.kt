@@ -32,13 +32,9 @@ import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCase
 import com.vaultstadio.app.domain.usecase.config.GetCollaborationUrlUseCase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-import org.koin.core.annotation.InjectedParam
-
 /**
  * ViewModel for real-time collaboration on documents.
  */
-@KoinViewModel
 class CollaborationViewModel(
     private val joinSessionUseCase: JoinCollaborationSessionUseCase,
     private val leaveSessionUseCase: LeaveCollaborationSessionUseCase,
@@ -55,7 +51,7 @@ class CollaborationViewModel(
     private val setOfflineUseCase: SetOfflineUseCase,
     private val getCollaborationUrlUseCase: GetCollaborationUrlUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    @InjectedParam private val initialItemId: String,
+    private val initialItemId: String,
 ) : ViewModel() {
 
     private val userId: String

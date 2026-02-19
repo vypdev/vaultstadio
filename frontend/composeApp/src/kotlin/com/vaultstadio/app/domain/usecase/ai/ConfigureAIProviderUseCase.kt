@@ -7,8 +7,6 @@ package com.vaultstadio.app.domain.usecase.ai
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.AIRepository
 import com.vaultstadio.app.domain.model.AIProviderType
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for configuring an AI provider.
  */
@@ -21,7 +19,6 @@ interface ConfigureAIProviderUseCase {
     ): Result<String>
 }
 
-@Factory(binds = [ConfigureAIProviderUseCase::class])
 class ConfigureAIProviderUseCaseImpl(
     private val aiRepository: AIRepository,
 ) : ConfigureAIProviderUseCase {

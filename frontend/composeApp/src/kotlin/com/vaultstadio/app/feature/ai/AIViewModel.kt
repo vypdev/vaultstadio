@@ -21,12 +21,9 @@ import com.vaultstadio.app.domain.usecase.ai.GetProviderModelsUseCase
 import com.vaultstadio.app.domain.usecase.ai.SummarizeTextUseCase
 import com.vaultstadio.app.domain.usecase.ai.TagImageUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for AI features.
  */
-@KoinViewModel
 class AIViewModel(
     private val getAIProvidersUseCase: GetAIProvidersUseCase,
     private val getAIModelsUseCase: GetAIModelsUseCase,

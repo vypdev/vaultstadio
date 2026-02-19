@@ -4,6 +4,7 @@
 
 package com.vaultstadio.app.utils
 
+import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -41,7 +42,7 @@ fun formatFileSize(bytes: Long): String {
  * Format date to relative string (e.g., "2 hours ago").
  */
 fun formatRelativeTime(instant: Instant): String {
-    val now = kotlinx.datetime.Clock.System.now()
+    val now = Clock.System.now()
     val diff = now - instant
 
     val seconds = diff.inWholeSeconds

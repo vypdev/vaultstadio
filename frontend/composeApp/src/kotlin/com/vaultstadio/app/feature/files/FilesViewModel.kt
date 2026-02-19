@@ -39,14 +39,10 @@ import com.vaultstadio.app.feature.main.MainComponent
 import com.vaultstadio.app.platform.PlatformStorage
 import com.vaultstadio.app.platform.StorageKeys
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-import org.koin.core.annotation.InjectedParam
-
 /**
  * ViewModel for file management screens (Files, Recent, Starred, Trash).
  * Loading and path resolution are delegated to [FilesLoader]; this class holds state and UI callbacks.
  */
-@KoinViewModel
 class FilesViewModel(
     private val getFolderItemsUseCase: GetFolderItemsUseCase,
     private val getRecentUseCase: GetRecentUseCase,
@@ -70,7 +66,7 @@ class FilesViewModel(
     private val createShareUseCase: CreateShareUseCase,
     private val getStorageUrlsUseCase: GetStorageUrlsUseCase,
     private val getShareUrlUseCase: GetShareUrlUseCase,
-    @InjectedParam private val mode: MainComponent.FilesMode,
+    private val mode: MainComponent.FilesMode,
 ) : ViewModel() {
 
     companion object {

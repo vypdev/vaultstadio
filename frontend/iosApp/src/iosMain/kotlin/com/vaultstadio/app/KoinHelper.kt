@@ -6,9 +6,9 @@
 
 package com.vaultstadio.app
 
-import com.vaultstadio.app.di.VaultStadioApp
+import com.vaultstadio.app.data.auth.di.authModule
 import com.vaultstadio.app.di.runtimeModules
-import org.koin.plugin.module.dsl.startKoin
+import org.koin.core.context.startKoin
 
 /** Default API base URL when not provided by Swift. */
 private const val DEFAULT_API_BASE_URL = "http://localhost:8080/api"
@@ -34,9 +34,9 @@ object KoinHelper {
      * @param apiBaseUrl Backend API base URL (including /api). Defaults to localhost.
      */
     fun initKoin(apiBaseUrl: String = DEFAULT_API_BASE_URL) {
-        startKoin<VaultStadioApp> {
+        startKoin {
             modules(
-                runtimeModules(apiBaseUrl) + listOf(iosModule),
+                runtimeModules(apiBaseUrl) + listOf(iosModule, authModule),
             )
         }
     }

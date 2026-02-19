@@ -13,12 +13,9 @@ import com.vaultstadio.app.domain.usecase.share.GetSharedWithMeUseCase
 import com.vaultstadio.app.domain.usecase.storage.GetItemUseCase
 import com.vaultstadio.app.ui.screens.SharedWithMeItem
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for items shared with the current user.
  */
-@KoinViewModel
 class SharedWithMeViewModel(
     private val getSharedWithMeUseCase: GetSharedWithMeUseCase,
     private val getItemUseCase: GetItemUseCase,

@@ -8,7 +8,7 @@ package com.vaultstadio.app.ui.components.files
 
 import com.vaultstadio.app.domain.model.ItemType
 import com.vaultstadio.app.domain.model.Visibility
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals

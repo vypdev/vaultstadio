@@ -14,12 +14,9 @@ import com.vaultstadio.app.domain.auth.usecase.GetLoginHistoryUseCase
 import com.vaultstadio.app.domain.auth.usecase.GetSecuritySettingsUseCase
 import com.vaultstadio.app.domain.auth.usecase.RevokeSessionUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for security settings.
  */
-@KoinViewModel
 class SecurityViewModel(
     private val getActiveSessionsUseCase: GetActiveSessionsUseCase,
     private val getLoginHistoryUseCase: GetLoginHistoryUseCase,

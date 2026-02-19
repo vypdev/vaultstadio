@@ -13,12 +13,9 @@ import com.vaultstadio.app.ui.theme.ThemeMode
 import com.vaultstadio.app.ui.theme.ThemeSettings
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for Settings screen.
  */
-@KoinViewModel
 class SettingsViewModel(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
 ) : ViewModel() {

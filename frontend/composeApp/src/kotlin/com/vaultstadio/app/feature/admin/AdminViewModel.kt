@@ -14,12 +14,9 @@ import com.vaultstadio.app.domain.usecase.admin.UpdateUserQuotaUseCase
 import com.vaultstadio.app.domain.usecase.admin.UpdateUserRoleUseCase
 import com.vaultstadio.app.domain.usecase.admin.UpdateUserStatusUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for admin user management.
  */
-@KoinViewModel
 class AdminViewModel(
     private val getAdminUsersUseCase: GetAdminUsersUseCase,
     private val updateUserQuotaUseCase: UpdateUserQuotaUseCase,

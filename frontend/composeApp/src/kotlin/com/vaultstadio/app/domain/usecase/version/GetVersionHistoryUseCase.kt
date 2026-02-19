@@ -7,8 +7,6 @@ package com.vaultstadio.app.domain.usecase.version
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.VersionRepository
 import com.vaultstadio.app.domain.model.FileVersionHistory
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for getting the version history of a file.
  */
@@ -16,7 +14,6 @@ interface GetVersionHistoryUseCase {
     suspend operator fun invoke(itemId: String): Result<FileVersionHistory>
 }
 
-@Factory(binds = [GetVersionHistoryUseCase::class])
 class GetVersionHistoryUseCaseImpl(
     private val versionRepository: VersionRepository,
 ) : GetVersionHistoryUseCase {

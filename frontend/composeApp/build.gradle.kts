@@ -17,7 +17,6 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.koin.compiler)
     jacoco
 }
 
@@ -77,7 +76,6 @@ kotlin {
                 implementation(libs.koin.core.viewmodel)
                 implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
-                api(libs.koin.annotations)
 
                 // JetBrains Lifecycle (KMP ViewModel)
                 implementation(libs.jetbrains.lifecycle.viewmodel)

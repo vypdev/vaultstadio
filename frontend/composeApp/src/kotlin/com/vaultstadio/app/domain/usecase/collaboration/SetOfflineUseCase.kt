@@ -6,8 +6,6 @@ package com.vaultstadio.app.domain.usecase.collaboration
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.CollaborationRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for setting user presence to offline.
  */
@@ -15,7 +13,6 @@ interface SetOfflineUseCase {
     suspend operator fun invoke(): Result<Unit>
 }
 
-@Factory(binds = [SetOfflineUseCase::class])
 class SetOfflineUseCaseImpl(
     private val collaborationRepository: CollaborationRepository,
 ) : SetOfflineUseCase {

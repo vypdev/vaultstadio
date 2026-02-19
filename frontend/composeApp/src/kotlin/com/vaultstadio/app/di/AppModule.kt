@@ -1,21 +1,17 @@
 /**
  * Koin App Module
  *
- * Main module using Koin Annotations for automatic dependency injection.
- * The @ComponentScan annotation scans the entire package tree and automatically
- * registers all classes annotated with @Single, @Factory, etc.
+ * Core module (createCoreModule) and runtime module list. Application beans are in appModule (DSL).
+ * Auth beans are in authModule from :data:auth. Use startKoin { modules(runtimeModules(url) + authModule + appModule + ...) }.
  */
 
 package com.vaultstadio.app.di
 
-import com.vaultstadio.app.data.auth.di.AuthModule
 import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.network.HttpClientFactory
 import com.vaultstadio.app.data.network.TokenProvider
 import com.vaultstadio.app.data.network.TokenStorage
 import io.ktor.client.HttpClient
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
 import org.koin.dsl.module
 
 /**
@@ -41,26 +37,14 @@ fun createCoreModule(apiBaseUrl: String) = module {
 }
 
 /**
- * Main application module with component scanning.
- *
- * Uses @ComponentScan to automatically discover and register:
- * - APIs annotated with @Single
- * - Services annotated with @Single
- * - Repositories annotated with @Single (binds to interface)
- * - Use Cases annotated with @Factory
- */
-@Module
-@ComponentScan("com.vaultstadio.app")
-class AppModule
-
-/**
- * Runtime-only modules (core config, auth). Annotation modules are loaded via startKoin<VaultStadioApp>().
+ * Runtime modules: core config + app DSL module. Add authModule and platform module at each entry point.
  */
 fun runtimeModules(apiBaseUrl: String) = listOf(
     createCoreModule(apiBaseUrl),
+    appModule,
 )
 
-/** @deprecated Use runtimeModules(apiBaseUrl) with startKoin<VaultStadioApp> { modules(runtimeModules(apiBaseUrl)) } */
+/** @deprecated Use runtimeModules(apiBaseUrl) with startKoin { modules(runtimeModules(apiBaseUrl) + authModule + ...) } */
 fun allModules(apiBaseUrl: String) = runtimeModules(apiBaseUrl)
 
 /**

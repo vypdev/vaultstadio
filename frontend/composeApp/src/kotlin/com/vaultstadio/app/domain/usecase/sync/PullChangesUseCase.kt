@@ -7,8 +7,6 @@ package com.vaultstadio.app.domain.usecase.sync
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.SyncRepository
 import com.vaultstadio.app.domain.model.SyncResponse
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for pulling sync changes from the server.
  */
@@ -21,7 +19,6 @@ interface PullChangesUseCase {
     ): Result<SyncResponse>
 }
 
-@Factory(binds = [PullChangesUseCase::class])
 class PullChangesUseCaseImpl(
     private val syncRepository: SyncRepository,
 ) : PullChangesUseCase {

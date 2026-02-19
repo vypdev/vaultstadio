@@ -6,8 +6,6 @@ package com.vaultstadio.app.domain.usecase.version
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.VersionRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for cleaning up old versions of a file.
  */
@@ -20,7 +18,6 @@ interface CleanupVersionsUseCase {
     ): Result<Unit>
 }
 
-@Factory(binds = [CleanupVersionsUseCase::class])
 class CleanupVersionsUseCaseImpl(
     private val versionRepository: VersionRepository,
 ) : CleanupVersionsUseCase {

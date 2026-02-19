@@ -8,8 +8,6 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.MetadataRepository
 import com.vaultstadio.app.domain.model.MetadataSearchResult
 import com.vaultstadio.app.domain.model.PaginatedResponse
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for searching files by metadata key/value pairs.
  */
@@ -22,7 +20,6 @@ interface SearchByMetadataUseCase {
     ): Result<PaginatedResponse<MetadataSearchResult>>
 }
 
-@Factory(binds = [SearchByMetadataUseCase::class])
 class SearchByMetadataUseCaseImpl(
     private val metadataRepository: MetadataRepository,
 ) : SearchByMetadataUseCase {

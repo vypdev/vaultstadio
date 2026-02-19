@@ -6,8 +6,6 @@ package com.vaultstadio.app.domain.usecase.collaboration
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.CollaborationRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for creating a comment on a document.
  */
@@ -22,7 +20,6 @@ interface CreateDocumentCommentUseCase {
     ): Result<Unit>
 }
 
-@Factory(binds = [CreateDocumentCommentUseCase::class])
 class CreateDocumentCommentUseCaseImpl(
     private val collaborationRepository: CollaborationRepository,
 ) : CreateDocumentCommentUseCase {

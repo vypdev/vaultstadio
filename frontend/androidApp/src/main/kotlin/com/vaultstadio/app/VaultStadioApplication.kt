@@ -7,12 +7,12 @@
 package com.vaultstadio.app
 
 import android.app.Application
-import com.vaultstadio.app.di.VaultStadioApp
+import com.vaultstadio.app.data.auth.di.authModule
 import com.vaultstadio.app.di.runtimeModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
-import org.koin.plugin.module.dsl.startKoin
+import org.koin.core.context.startKoin
 
 /**
  * Application class for VaultStadio Android app.
@@ -31,11 +31,11 @@ class VaultStadioApplication : Application() {
     }
 
     private fun initializeKoin() {
-        startKoin<VaultStadioApp> {
+        startKoin {
             androidLogger(Level.INFO)
             androidContext(this@VaultStadioApplication)
             modules(
-                runtimeModules(getServerUrl()) + listOf(androidModule),
+                runtimeModules(getServerUrl()) + listOf(androidModule, authModule),
             )
         }
     }

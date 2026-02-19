@@ -8,7 +8,7 @@ import com.vaultstadio.app.domain.model.ConflictResolution
 import com.vaultstadio.app.domain.model.ConflictType
 import com.vaultstadio.app.domain.model.DeviceType
 import com.vaultstadio.app.domain.model.SyncDevice
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

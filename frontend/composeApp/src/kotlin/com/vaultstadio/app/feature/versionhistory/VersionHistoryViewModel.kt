@@ -17,13 +17,9 @@ import com.vaultstadio.app.domain.usecase.version.GetVersionHistoryUseCase
 import com.vaultstadio.app.domain.usecase.version.GetVersionUseCase
 import com.vaultstadio.app.domain.usecase.version.RestoreVersionUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-import org.koin.core.annotation.InjectedParam
-
 /**
  * ViewModel for version history management.
  */
-@KoinViewModel
 class VersionHistoryViewModel(
     private val getVersionHistoryUseCase: GetVersionHistoryUseCase,
     private val getVersionUseCase: GetVersionUseCase,
@@ -32,7 +28,7 @@ class VersionHistoryViewModel(
     private val deleteVersionUseCase: DeleteVersionUseCase,
     private val cleanupVersionsUseCase: CleanupVersionsUseCase,
     private val getVersionUrlsUseCase: GetVersionUrlsUseCase,
-    @InjectedParam private val initialItemId: String,
+    private val initialItemId: String,
 ) : ViewModel() {
 
     var versionHistory by mutableStateOf<FileVersionHistory?>(null)

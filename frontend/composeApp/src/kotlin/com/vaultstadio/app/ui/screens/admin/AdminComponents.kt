@@ -40,7 +40,7 @@ import com.vaultstadio.app.domain.model.AdminUser
 import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.model.UserStatus
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val SampleAdminUser = AdminUser(

@@ -7,8 +7,6 @@ package com.vaultstadio.app.domain.usecase.storage
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.StorageRepository
 import com.vaultstadio.app.domain.model.StorageItem
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for renaming an item.
  */
@@ -16,7 +14,6 @@ interface RenameItemUseCase {
     suspend operator fun invoke(itemId: String, newName: String): Result<StorageItem>
 }
 
-@Factory(binds = [RenameItemUseCase::class])
 class RenameItemUseCaseImpl(
     private val storageRepository: StorageRepository,
 ) : RenameItemUseCase {

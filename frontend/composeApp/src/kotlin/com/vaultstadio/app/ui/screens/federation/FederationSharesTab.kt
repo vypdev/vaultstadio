@@ -44,7 +44,7 @@ import com.vaultstadio.app.domain.model.FederatedShare
 import com.vaultstadio.app.domain.model.FederatedShareStatus
 import com.vaultstadio.app.domain.model.SharePermission
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.days
 

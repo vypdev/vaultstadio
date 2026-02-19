@@ -7,7 +7,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.koin.compiler)
 }
 
 kotlin {
@@ -32,9 +31,8 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)
 
-                // Koin (compiler plugin so startKoin<VaultStadioApp> is generated)
+                // Koin
                 implementation(libs.koin.core)
-                implementation(libs.koin.annotations)
             }
         }
 

@@ -9,12 +9,9 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.Activity
 import com.vaultstadio.app.domain.usecase.activity.GetRecentActivityUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for displaying recent activity.
  */
-@KoinViewModel
 class ActivityViewModel(
     private val getRecentActivityUseCase: GetRecentActivityUseCase,
 ) : ViewModel() {

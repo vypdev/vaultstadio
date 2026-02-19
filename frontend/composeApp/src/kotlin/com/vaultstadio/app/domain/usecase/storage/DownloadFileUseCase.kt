@@ -6,8 +6,6 @@ package com.vaultstadio.app.domain.usecase.storage
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.StorageRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for downloading a file.
  */
@@ -16,7 +14,6 @@ interface DownloadFileUseCase {
     fun getDownloadUrl(itemId: String): String
 }
 
-@Factory(binds = [DownloadFileUseCase::class])
 class DownloadFileUseCaseImpl(
     private val storageRepository: StorageRepository,
 ) : DownloadFileUseCase {

@@ -11,12 +11,9 @@ import com.vaultstadio.app.domain.usecase.config.GetShareUrlUseCase
 import com.vaultstadio.app.domain.usecase.share.DeleteShareUseCase
 import com.vaultstadio.app.domain.usecase.share.GetMySharesUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
-
 /**
  * ViewModel for managing user's shared links.
  */
-@KoinViewModel
 class SharesViewModel(
     private val getMySharesUseCase: GetMySharesUseCase,
     private val deleteShareUseCase: DeleteShareUseCase,

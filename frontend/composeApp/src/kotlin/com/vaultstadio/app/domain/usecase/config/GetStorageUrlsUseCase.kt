@@ -7,14 +7,11 @@
 package com.vaultstadio.app.domain.usecase.config
 
 import com.vaultstadio.app.data.repository.ConfigRepository
-import org.koin.core.annotation.Factory
-
 /**
  * Use case for building storage-related URLs.
  *
  * Encapsulates URL construction so ViewModels don't need to know API structure.
  */
-@Factory
 class GetStorageUrlsUseCase(
     private val configRepository: ConfigRepository,
 ) {

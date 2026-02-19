@@ -3,7 +3,7 @@
 kotlin = "2.3.20-Beta1"
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
-kotlinx-datetime = "0.6.1"
+kotlinx-datetime = "0.7.1"
 
 # Ktor
 ktor = "3.0.2"

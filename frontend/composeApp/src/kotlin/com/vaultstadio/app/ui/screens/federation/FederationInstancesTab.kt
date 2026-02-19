@@ -41,7 +41,7 @@ import com.vaultstadio.app.domain.model.FederatedInstance
 import com.vaultstadio.app.domain.model.FederationCapability
 import com.vaultstadio.app.domain.model.InstanceStatus
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.days
 
