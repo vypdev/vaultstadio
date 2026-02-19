@@ -36,10 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ConflictResolution
-import com.vaultstadio.app.domain.model.SyncConflict
-import com.vaultstadio.app.domain.model.SyncDevice
-import com.vaultstadio.app.domain.model.SyncResponse
+import com.vaultstadio.app.domain.sync.model.ConflictResolution
+import com.vaultstadio.app.domain.sync.model.SyncConflict
+import com.vaultstadio.app.domain.sync.model.SyncDevice
+import com.vaultstadio.app.domain.sync.model.SyncResponse
 import com.vaultstadio.app.i18n.StringResources
 import com.vaultstadio.app.i18n.strings
 import com.vaultstadio.app.ui.screens.sync.ConflictResolutionDialog

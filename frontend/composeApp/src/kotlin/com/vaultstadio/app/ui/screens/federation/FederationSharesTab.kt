@@ -40,9 +40,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FederatedShare
-import com.vaultstadio.app.domain.model.FederatedShareStatus
-import com.vaultstadio.app.domain.model.SharePermission
+import com.vaultstadio.app.domain.federation.model.FederatedShare
+import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
+import com.vaultstadio.app.domain.federation.model.SharePermission
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview

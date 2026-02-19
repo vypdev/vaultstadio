@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FederatedIdentity
+import com.vaultstadio.app.domain.federation.model.FederatedIdentity
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatRelativeTime
 import kotlin.time.Clock

@@ -22,9 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FederatedInstance
-import com.vaultstadio.app.domain.model.FederationCapability
-import com.vaultstadio.app.domain.model.InstanceStatus
+import com.vaultstadio.app.domain.federation.model.FederatedInstance
+import com.vaultstadio.app.domain.federation.model.FederationCapability
+import com.vaultstadio.app.domain.federation.model.InstanceStatus
 import com.vaultstadio.app.i18n.StringResources
 import com.vaultstadio.app.i18n.Strings
 import com.vaultstadio.app.ui.theme.VaultStadioPreview

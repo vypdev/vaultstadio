@@ -9,25 +9,13 @@ package com.vaultstadio.app.di
 
 import com.vaultstadio.app.data.api.AIApi
 import com.vaultstadio.app.data.api.CollaborationApi
-import com.vaultstadio.app.data.api.FederationApi
-import com.vaultstadio.app.data.api.MetadataApi
-import com.vaultstadio.app.data.api.SyncApi
 import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.repository.AIRepository
 import com.vaultstadio.app.data.repository.AIRepositoryImpl
 import com.vaultstadio.app.data.repository.CollaborationRepository
 import com.vaultstadio.app.data.repository.CollaborationRepositoryImpl
-import com.vaultstadio.app.data.repository.FederationRepository
-import com.vaultstadio.app.data.repository.FederationRepositoryImpl
-import com.vaultstadio.app.data.repository.MetadataRepository
-import com.vaultstadio.app.data.repository.MetadataRepositoryImpl
-import com.vaultstadio.app.data.repository.SyncRepository
-import com.vaultstadio.app.data.repository.SyncRepositoryImpl
 import com.vaultstadio.app.data.service.AIService
 import com.vaultstadio.app.data.service.CollaborationService
-import com.vaultstadio.app.data.service.FederationService
-import com.vaultstadio.app.data.service.MetadataService
-import com.vaultstadio.app.data.service.SyncService
 import com.vaultstadio.app.domain.usecase.ai.AIChatUseCase
 import com.vaultstadio.app.domain.usecase.ai.AIChatUseCaseImpl
 import com.vaultstadio.app.domain.usecase.ai.ClassifyContentUseCase
@@ -78,64 +66,20 @@ import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCase
 import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCaseImpl
 import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCase
 import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.AcceptFederatedShareUseCase
-import com.vaultstadio.app.domain.usecase.federation.AcceptFederatedShareUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.BlockInstanceUseCase
-import com.vaultstadio.app.domain.usecase.federation.BlockInstanceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.CreateFederatedShareUseCase
-import com.vaultstadio.app.domain.usecase.federation.CreateFederatedShareUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.DeclineFederatedShareUseCase
-import com.vaultstadio.app.domain.usecase.federation.DeclineFederatedShareUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedActivitiesUseCase
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedActivitiesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedIdentitiesUseCase
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedIdentitiesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedInstanceUseCase
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedInstanceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedInstancesUseCase
-import com.vaultstadio.app.domain.usecase.federation.GetFederatedInstancesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.GetIncomingFederatedSharesUseCase
-import com.vaultstadio.app.domain.usecase.federation.GetIncomingFederatedSharesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.GetOutgoingFederatedSharesUseCase
-import com.vaultstadio.app.domain.usecase.federation.GetOutgoingFederatedSharesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.LinkIdentityUseCase
-import com.vaultstadio.app.domain.usecase.federation.LinkIdentityUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.RemoveInstanceUseCase
-import com.vaultstadio.app.domain.usecase.federation.RemoveInstanceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.RequestFederationUseCase
-import com.vaultstadio.app.domain.usecase.federation.RequestFederationUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.RevokeFederatedShareUseCase
-import com.vaultstadio.app.domain.usecase.federation.RevokeFederatedShareUseCaseImpl
-import com.vaultstadio.app.domain.usecase.federation.UnlinkIdentityUseCase
-import com.vaultstadio.app.domain.usecase.federation.UnlinkIdentityUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.AdvancedSearchUseCase
-import com.vaultstadio.app.domain.usecase.metadata.AdvancedSearchUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.GetDocumentMetadataUseCase
-import com.vaultstadio.app.domain.usecase.metadata.GetDocumentMetadataUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.GetFileMetadataUseCase
-import com.vaultstadio.app.domain.usecase.metadata.GetFileMetadataUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.GetImageMetadataUseCase
-import com.vaultstadio.app.domain.usecase.metadata.GetImageMetadataUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.GetSearchSuggestionsUseCase
-import com.vaultstadio.app.domain.usecase.metadata.GetSearchSuggestionsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.GetVideoMetadataUseCase
-import com.vaultstadio.app.domain.usecase.metadata.GetVideoMetadataUseCaseImpl
-import com.vaultstadio.app.domain.usecase.metadata.SearchByMetadataUseCase
-import com.vaultstadio.app.domain.usecase.metadata.SearchByMetadataUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCase
-import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.GetConflictsUseCase
-import com.vaultstadio.app.domain.usecase.sync.GetConflictsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.GetDevicesUseCase
-import com.vaultstadio.app.domain.usecase.sync.GetDevicesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.PullChangesUseCase
-import com.vaultstadio.app.domain.usecase.sync.PullChangesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.RegisterDeviceUseCase
-import com.vaultstadio.app.domain.usecase.sync.RegisterDeviceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.RemoveDeviceUseCase
-import com.vaultstadio.app.domain.usecase.sync.RemoveDeviceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.sync.ResolveConflictUseCase
-import com.vaultstadio.app.domain.usecase.sync.ResolveConflictUseCaseImpl
+import com.vaultstadio.app.domain.federation.usecase.AcceptFederatedShareUseCase
+import com.vaultstadio.app.domain.federation.usecase.BlockInstanceUseCase
+import com.vaultstadio.app.domain.federation.usecase.DeclineFederatedShareUseCase
+import com.vaultstadio.app.domain.federation.usecase.GetFederatedActivitiesUseCase
+import com.vaultstadio.app.domain.federation.usecase.GetFederatedIdentitiesUseCase
+import com.vaultstadio.app.domain.federation.usecase.GetFederatedInstanceUseCase
+import com.vaultstadio.app.domain.federation.usecase.GetFederatedInstancesUseCase
+import com.vaultstadio.app.domain.federation.usecase.GetIncomingFederatedSharesUseCase
+import com.vaultstadio.app.domain.federation.usecase.GetOutgoingFederatedSharesUseCase
+import com.vaultstadio.app.domain.federation.usecase.LinkIdentityUseCase
+import com.vaultstadio.app.domain.federation.usecase.RemoveInstanceUseCase
+import com.vaultstadio.app.domain.federation.usecase.RequestFederationUseCase
+import com.vaultstadio.app.domain.federation.usecase.RevokeFederatedShareUseCase
+import com.vaultstadio.app.domain.federation.usecase.UnlinkIdentityUseCase
 import com.vaultstadio.app.feature.activity.ActivityViewModel
 import com.vaultstadio.app.feature.admin.AdminViewModel
 import com.vaultstadio.app.feature.ai.AIViewModel
@@ -152,6 +96,13 @@ import com.vaultstadio.app.feature.security.SecurityViewModel
 import com.vaultstadio.app.feature.settings.SettingsViewModel
 import com.vaultstadio.app.feature.shares.SharesViewModel
 import com.vaultstadio.app.feature.sharedwithme.SharedWithMeViewModel
+import com.vaultstadio.app.domain.sync.usecase.DeactivateDeviceUseCase
+import com.vaultstadio.app.domain.sync.usecase.GetConflictsUseCase
+import com.vaultstadio.app.domain.sync.usecase.GetDevicesUseCase
+import com.vaultstadio.app.domain.sync.usecase.PullChangesUseCase
+import com.vaultstadio.app.domain.sync.usecase.RegisterDeviceUseCase
+import com.vaultstadio.app.domain.sync.usecase.RemoveDeviceUseCase
+import com.vaultstadio.app.domain.sync.usecase.ResolveConflictUseCase
 import com.vaultstadio.app.feature.sync.SyncViewModel
 import com.vaultstadio.app.feature.upload.UploadManager
 import com.vaultstadio.app.feature.versionhistory.VersionHistoryViewModel
@@ -164,59 +115,15 @@ val appModule = module {
 
     // --- APIs (depend on HttpClient) ---
     single { AIApi(get()) }
-    single { SyncApi(get()) }
-    single { FederationApi(get()) }
-    single { MetadataApi(get()) }
     single { CollaborationApi(get()) }
 
     // --- Services (depend on APIs) ---
     single { AIService(get()) }
-    single { SyncService(get()) }
-    single { FederationService(get()) }
-    single { MetadataService(get()) }
     single { CollaborationService(get()) }
 
     // --- Repositories ---
     single<AIRepository> { AIRepositoryImpl(get()) }
-    single<SyncRepository> { SyncRepositoryImpl(get()) }
-    single<FederationRepository> { FederationRepositoryImpl(get()) }
-    single<MetadataRepository> { MetadataRepositoryImpl(get()) }
     single<CollaborationRepository> { CollaborationRepositoryImpl(get()) }
-
-    // --- Metadata use cases ---
-    factory<GetDocumentMetadataUseCase> { GetDocumentMetadataUseCaseImpl(get()) }
-    factory<AdvancedSearchUseCase> { AdvancedSearchUseCaseImpl(get()) }
-    factory<SearchByMetadataUseCase> { SearchByMetadataUseCaseImpl(get()) }
-    factory<GetSearchSuggestionsUseCase> { GetSearchSuggestionsUseCaseImpl(get()) }
-    factory<GetImageMetadataUseCase> { GetImageMetadataUseCaseImpl(get()) }
-    factory<GetFileMetadataUseCase> { GetFileMetadataUseCaseImpl(get()) }
-    factory<GetVideoMetadataUseCase> { GetVideoMetadataUseCaseImpl(get()) }
-
-    // --- Sync use cases ---
-    factory<ResolveConflictUseCase> { ResolveConflictUseCaseImpl(get()) }
-    factory<RegisterDeviceUseCase> { RegisterDeviceUseCaseImpl(get()) }
-    factory<GetDevicesUseCase> { GetDevicesUseCaseImpl(get()) }
-    factory<RemoveDeviceUseCase> { RemoveDeviceUseCaseImpl(get()) }
-    factory<DeactivateDeviceUseCase> { DeactivateDeviceUseCaseImpl(get()) }
-    factory<GetConflictsUseCase> { GetConflictsUseCaseImpl(get()) }
-    factory<PullChangesUseCase> { PullChangesUseCaseImpl(get()) }
-
-    // --- Federation use cases ---
-    factory<GetFederatedActivitiesUseCase> { GetFederatedActivitiesUseCaseImpl(get()) }
-    factory<BlockInstanceUseCase> { BlockInstanceUseCaseImpl(get()) }
-    factory<RequestFederationUseCase> { RequestFederationUseCaseImpl(get()) }
-    factory<LinkIdentityUseCase> { LinkIdentityUseCaseImpl(get()) }
-    factory<GetFederatedIdentitiesUseCase> { GetFederatedIdentitiesUseCaseImpl(get()) }
-    factory<RevokeFederatedShareUseCase> { RevokeFederatedShareUseCaseImpl(get()) }
-    factory<AcceptFederatedShareUseCase> { AcceptFederatedShareUseCaseImpl(get()) }
-    factory<GetFederatedInstancesUseCase> { GetFederatedInstancesUseCaseImpl(get()) }
-    factory<UnlinkIdentityUseCase> { UnlinkIdentityUseCaseImpl(get()) }
-    factory<RemoveInstanceUseCase> { RemoveInstanceUseCaseImpl(get()) }
-    factory<GetFederatedInstanceUseCase> { GetFederatedInstanceUseCaseImpl(get()) }
-    factory<GetOutgoingFederatedSharesUseCase> { GetOutgoingFederatedSharesUseCaseImpl(get()) }
-    factory<GetIncomingFederatedSharesUseCase> { GetIncomingFederatedSharesUseCaseImpl(get()) }
-    factory<DeclineFederatedShareUseCase> { DeclineFederatedShareUseCaseImpl(get()) }
-    factory<CreateFederatedShareUseCase> { CreateFederatedShareUseCaseImpl(get()) }
 
     // --- AI use cases ---
     factory<GetAIProviderStatusUseCase> { GetAIProviderStatusUseCaseImpl(get()) }
@@ -257,11 +164,33 @@ val appModule = module {
     viewModel { SecurityViewModel(get(), get(), get(), get()) }
     viewModel { SharesViewModel(get(), get(), get()) }
     viewModel { SharedWithMeViewModel(get(), get(), get(), get()) }
-    viewModel { SyncViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel {
+        SyncViewModel(
+            get<GetDevicesUseCase>(),
+            get<GetConflictsUseCase>(),
+            get<RegisterDeviceUseCase>(),
+            get<DeactivateDeviceUseCase>(),
+            get<RemoveDeviceUseCase>(),
+            get<ResolveConflictUseCase>(),
+            get<PullChangesUseCase>(),
+        )
+    }
     viewModel {
         FederationViewModel(
-            get(), get(), get(), get(), get(), get(), get(), get(),
-            get(), get(), get(), get(), get(), get(),
+            get<GetFederatedInstancesUseCase>(),
+            get<GetFederatedInstanceUseCase>(),
+            get<RequestFederationUseCase>(),
+            get<BlockInstanceUseCase>(),
+            get<RemoveInstanceUseCase>(),
+            get<GetOutgoingFederatedSharesUseCase>(),
+            get<GetIncomingFederatedSharesUseCase>(),
+            get<AcceptFederatedShareUseCase>(),
+            get<DeclineFederatedShareUseCase>(),
+            get<RevokeFederatedShareUseCase>(),
+            get<GetFederatedIdentitiesUseCase>(),
+            get<LinkIdentityUseCase>(),
+            get<UnlinkIdentityUseCase>(),
+            get<GetFederatedActivitiesUseCase>(),
         )
     }
     viewModel {

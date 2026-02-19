@@ -4,9 +4,9 @@
 
 package com.vaultstadio.app.api
 
-import com.vaultstadio.app.domain.model.ConflictResolution
-import com.vaultstadio.app.domain.model.DeviceType
-import com.vaultstadio.app.domain.model.SyncRequest
+import com.vaultstadio.app.domain.sync.model.ConflictResolution
+import com.vaultstadio.app.domain.sync.model.DeviceType
+import com.vaultstadio.app.domain.sync.model.SyncRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

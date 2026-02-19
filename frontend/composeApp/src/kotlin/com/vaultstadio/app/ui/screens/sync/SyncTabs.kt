@@ -34,8 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.SyncConflict
-import com.vaultstadio.app.domain.model.SyncDevice
+import com.vaultstadio.app.domain.sync.model.SyncConflict
+import com.vaultstadio.app.domain.sync.model.SyncDevice
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

@@ -6,18 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.ConflictResolution
-import com.vaultstadio.app.domain.model.DeviceType
-import com.vaultstadio.app.domain.model.SyncConflict
-import com.vaultstadio.app.domain.model.SyncDevice
-import com.vaultstadio.app.domain.model.SyncResponse
-import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCase
-import com.vaultstadio.app.domain.usecase.sync.GetConflictsUseCase
-import com.vaultstadio.app.domain.usecase.sync.GetDevicesUseCase
-import com.vaultstadio.app.domain.usecase.sync.PullChangesUseCase
-import com.vaultstadio.app.domain.usecase.sync.RegisterDeviceUseCase
-import com.vaultstadio.app.domain.usecase.sync.RemoveDeviceUseCase
-import com.vaultstadio.app.domain.usecase.sync.ResolveConflictUseCase
+import com.vaultstadio.app.domain.sync.model.ConflictResolution
+import com.vaultstadio.app.domain.sync.model.DeviceType
+import com.vaultstadio.app.domain.sync.model.SyncConflict
+import com.vaultstadio.app.domain.sync.model.SyncDevice
+import com.vaultstadio.app.domain.sync.model.SyncResponse
+import com.vaultstadio.app.domain.sync.usecase.DeactivateDeviceUseCase
+import com.vaultstadio.app.domain.sync.usecase.GetConflictsUseCase
+import com.vaultstadio.app.domain.sync.usecase.GetDevicesUseCase
+import com.vaultstadio.app.domain.sync.usecase.PullChangesUseCase
+import com.vaultstadio.app.domain.sync.usecase.RegisterDeviceUseCase
+import com.vaultstadio.app.domain.sync.usecase.RemoveDeviceUseCase
+import com.vaultstadio.app.domain.sync.usecase.ResolveConflictUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for device synchronization management.

@@ -44,9 +44,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.DocumentMetadata
-import com.vaultstadio.app.domain.model.ImageMetadata
-import com.vaultstadio.app.domain.model.VideoMetadata
+import com.vaultstadio.app.domain.metadata.model.DocumentMetadata
+import com.vaultstadio.app.domain.metadata.model.ImageMetadata
+import com.vaultstadio.app.domain.metadata.model.VideoMetadata
 import com.vaultstadio.app.utils.formatFileSize
 
 @Composable

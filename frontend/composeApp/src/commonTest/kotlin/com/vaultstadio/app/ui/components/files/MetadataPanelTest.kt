@@ -4,10 +4,10 @@
 
 package com.vaultstadio.app.ui.components.files
 
-import com.vaultstadio.app.domain.model.DocumentMetadata
-import com.vaultstadio.app.domain.model.ImageMetadata
-import com.vaultstadio.app.domain.model.ThumbnailSize
-import com.vaultstadio.app.domain.model.VideoMetadata
+import com.vaultstadio.app.domain.metadata.model.DocumentMetadata
+import com.vaultstadio.app.domain.metadata.model.ImageMetadata
+import com.vaultstadio.app.domain.metadata.model.ThumbnailSize
+import com.vaultstadio.app.domain.metadata.model.VideoMetadata
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals

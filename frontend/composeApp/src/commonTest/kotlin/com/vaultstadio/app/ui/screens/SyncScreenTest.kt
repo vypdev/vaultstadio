@@ -4,10 +4,10 @@
 
 package com.vaultstadio.app.ui.screens
 
-import com.vaultstadio.app.domain.model.ConflictResolution
-import com.vaultstadio.app.domain.model.ConflictType
-import com.vaultstadio.app.domain.model.DeviceType
-import com.vaultstadio.app.domain.model.SyncDevice
+import com.vaultstadio.app.domain.sync.model.ConflictResolution
+import com.vaultstadio.app.domain.sync.model.ConflictType
+import com.vaultstadio.app.domain.sync.model.DeviceType
+import com.vaultstadio.app.domain.sync.model.SyncDevice
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals

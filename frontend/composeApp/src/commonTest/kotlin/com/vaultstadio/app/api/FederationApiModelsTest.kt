@@ -1,12 +1,12 @@
 /**
- * VaultStadio Federation API Models Tests
+ * VaultStadio Federation API DTO and domain model tests.
  */
 
 package com.vaultstadio.app.api
 
-import com.vaultstadio.app.domain.model.CreateFederatedShareRequest
-import com.vaultstadio.app.domain.model.LinkIdentityRequest
-import com.vaultstadio.app.domain.model.SharePermission
+import com.vaultstadio.app.data.federation.dto.CreateFederatedShareRequestDTO
+import com.vaultstadio.app.data.federation.dto.LinkIdentityRequestDTO
+import com.vaultstadio.app.domain.federation.model.SharePermission
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -15,11 +15,11 @@ class FederationApiModelsTest {
 
     @Test
     fun testCreateFederatedShareRequestCreation() {
-        val request = CreateFederatedShareRequest(
+        val request = CreateFederatedShareRequestDTO(
             itemId = "item123",
             targetInstance = "vault.example.com",
             targetUserId = "user@example.com",
-            permissions = listOf(SharePermission.READ, SharePermission.WRITE),
+            permissions = listOf("READ", "WRITE"),
             expiresInDays = 30,
         )
 
@@ -31,35 +31,35 @@ class FederationApiModelsTest {
 
     @Test
     fun testCreateFederatedShareRequestDefaults() {
-        val request = CreateFederatedShareRequest(
+        val request = CreateFederatedShareRequestDTO(
             itemId = "item123",
             targetInstance = "vault.example.com",
         )
 
         assertEquals(null, request.targetUserId)
-        assertEquals(listOf(SharePermission.READ), request.permissions)
+        assertEquals(listOf("READ"), request.permissions)
         assertEquals(null, request.expiresInDays)
     }
 
     @Test
     fun testCreateFederatedShareRequestWithAllPermissions() {
-        val request = CreateFederatedShareRequest(
+        val request = CreateFederatedShareRequestDTO(
             itemId = "item123",
             targetInstance = "vault.example.com",
-            permissions = SharePermission.entries.toList(),
+            permissions = listOf("READ", "WRITE", "DELETE", "SHARE", "ADMIN"),
         )
 
         assertEquals(5, request.permissions.size)
-        assertTrue(request.permissions.contains(SharePermission.READ))
-        assertTrue(request.permissions.contains(SharePermission.WRITE))
-        assertTrue(request.permissions.contains(SharePermission.DELETE))
-        assertTrue(request.permissions.contains(SharePermission.SHARE))
-        assertTrue(request.permissions.contains(SharePermission.ADMIN))
+        assertTrue(request.permissions.contains("READ"))
+        assertTrue(request.permissions.contains("WRITE"))
+        assertTrue(request.permissions.contains("DELETE"))
+        assertTrue(request.permissions.contains("SHARE"))
+        assertTrue(request.permissions.contains("ADMIN"))
     }
 
     @Test
     fun testLinkIdentityRequestCreation() {
-        val request = LinkIdentityRequest(
+        val request = LinkIdentityRequestDTO(
             remoteUserId = "user123",
             remoteInstance = "vault.example.com",
             displayName = "John Doe",
@@ -72,7 +72,7 @@ class FederationApiModelsTest {
 
     @Test
     fun testLinkIdentityRequestWithMinimalData() {
-        val request = LinkIdentityRequest(
+        val request = LinkIdentityRequestDTO(
             remoteUserId = "user456",
             remoteInstance = "other.example.com",
             displayName = "User 456",

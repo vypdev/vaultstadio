@@ -16,7 +16,7 @@ import com.vaultstadio.app.domain.model.ViewMode
 import com.vaultstadio.app.domain.activity.usecase.GetItemActivityUseCase
 import com.vaultstadio.app.domain.config.usecase.GetShareUrlUseCase
 import com.vaultstadio.app.domain.config.usecase.GetStorageUrlsUseCase
-import com.vaultstadio.app.domain.usecase.metadata.GetSearchSuggestionsUseCase
+import com.vaultstadio.app.domain.metadata.usecase.GetSearchSuggestionsUseCase
 import com.vaultstadio.app.domain.share.usecase.CreateShareUseCase
 import com.vaultstadio.app.domain.usecase.storage.BatchCopyUseCase
 import com.vaultstadio.app.domain.usecase.storage.BatchDeleteUseCase

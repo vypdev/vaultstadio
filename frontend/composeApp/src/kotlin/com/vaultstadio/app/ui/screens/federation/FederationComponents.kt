@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.InstanceStatus
+import com.vaultstadio.app.domain.federation.model.InstanceStatus
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

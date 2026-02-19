@@ -40,11 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FederatedActivity
-import com.vaultstadio.app.domain.model.FederatedIdentity
-import com.vaultstadio.app.domain.model.FederatedInstance
-import com.vaultstadio.app.domain.model.FederatedShare
-import com.vaultstadio.app.domain.model.FederatedShareStatus
+import com.vaultstadio.app.domain.federation.model.FederatedActivity
+import com.vaultstadio.app.domain.federation.model.FederatedIdentity
+import com.vaultstadio.app.domain.federation.model.FederatedInstance
+import com.vaultstadio.app.domain.federation.model.FederatedShare
+import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
 import com.vaultstadio.app.i18n.strings
 import com.vaultstadio.app.ui.screens.federation.ActivitiesTab
 import com.vaultstadio.app.ui.screens.federation.BlockInstanceDialog

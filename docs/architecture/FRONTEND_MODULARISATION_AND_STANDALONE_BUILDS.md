@@ -19,9 +19,15 @@
 - **:data:admin** – Done. AdminApi, AdminService, AdminRepositoryImpl, DTOs, mapper, use-case impls, `adminModule`. ComposeApp uses `adminModule`; admin beans removed from `appModule`.
 - **:data:plugin** – Done. PluginApi, PluginService, PluginRepositoryImpl, DTO, mapper, use-case impls, `pluginModule`. ComposeApp uses `pluginModule`; plugin beans removed from `appModule`.
 - **:data:version** – Done. VersionApi, VersionService, VersionRepositoryImpl (uses ApiClientConfig, TokenStorage for download URL), DTOs, mapper, 6 use-case impls, `versionModule`. ComposeApp uses `versionModule`; version beans removed from `appModule`.
+- **:domain:sync** – Done. Models (DeviceType, SyncDevice, SyncChange, SyncConflict, SyncResponse, ConflictResolution, etc.), SyncRepository, 7 use-case interfaces. One file per class/enum.
+- **:data:sync** – Done. SyncApi, SyncService, SyncRepositoryImpl, DTOs (one file per DTO), SyncMapper, 7 use-case impls, `syncModule`. ComposeApp uses `syncModule`; sync beans removed from `appModule`.
+- **:domain:metadata** – Done. Models (FileMetadata, ImageMetadata, VideoMetadata, DocumentMetadata, MetadataSearchResult, ThumbnailSize), MetadataRepository, 7 use-case interfaces. Depends on :domain:storage for PaginatedResponse/StorageItem.
+- **:data:metadata** – Done. MetadataApi, MetadataService, MetadataRepositoryImpl, DTOs (one file per DTO), MetadataMapper, 7 use-case impls, `metadataModule`. Depends on :data:storage for advancedSearch mapping. ComposeApp uses `metadataModule`; metadata beans removed from `appModule`.
+- **:domain:federation** – Done. Models (InstanceStatus, FederationCapability, SharePermission, FederatedShareStatus, FederatedActivityType, FederatedInstance, FederatedShare, FederatedIdentity, FederatedActivity), FederationRepository, 15 use-case interfaces. One file per class/enum.
+- **:data:federation** – Done. FederationApi, FederationService, FederationRepositoryImpl, DTOs (one file per DTO), FederationMapper, 15 use-case impls, `federationModule`. ComposeApp uses `federationModule`; federation beans removed from `appModule`. Old composeApp domain/model/Federation.kt and domain/usecase/federation/* removed.
 - **:feature:*** – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: migrate remaining data slices (sync, metadata, federation, ai, collaboration) and feature modules per §10.
+Next: migrate remaining data slices (ai, collaboration) and feature modules per §10.
 
 ---
 

@@ -1,19 +1,24 @@
 /**
- * Unit tests for federation use cases (GetFederatedInstances, GetFederatedInstance).
+ * Unit tests for federation use cases (GetFederatedInstances, GetFederatedInstance, etc.).
  * Uses a fake FederationRepository to avoid platform/DI.
  */
 
 package com.vaultstadio.app.domain.usecase.federation
 
+import com.vaultstadio.app.data.federation.usecase.BlockInstanceUseCaseImpl
+import com.vaultstadio.app.data.federation.usecase.GetFederatedInstanceUseCaseImpl
+import com.vaultstadio.app.data.federation.usecase.GetFederatedInstancesUseCaseImpl
+import com.vaultstadio.app.data.federation.usecase.GetIncomingFederatedSharesUseCaseImpl
+import com.vaultstadio.app.data.federation.usecase.RequestFederationUseCaseImpl
+import com.vaultstadio.app.domain.federation.FederationRepository
+import com.vaultstadio.app.domain.federation.model.FederatedActivity
+import com.vaultstadio.app.domain.federation.model.FederatedIdentity
+import com.vaultstadio.app.domain.federation.model.FederatedInstance
+import com.vaultstadio.app.domain.federation.model.FederatedShare
+import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
+import com.vaultstadio.app.domain.federation.model.InstanceStatus
+import com.vaultstadio.app.domain.federation.model.SharePermission
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.FederationRepository
-import com.vaultstadio.app.domain.model.FederatedActivity
-import com.vaultstadio.app.domain.model.FederatedIdentity
-import com.vaultstadio.app.domain.model.FederatedInstance
-import com.vaultstadio.app.domain.model.FederatedShare
-import com.vaultstadio.app.domain.model.FederatedShareStatus
-import com.vaultstadio.app.domain.model.InstanceStatus
-import com.vaultstadio.app.domain.model.SharePermission
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test

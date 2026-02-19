@@ -8,9 +8,9 @@ package com.vaultstadio.app.viewmodel
 
 import com.vaultstadio.app.domain.model.AIProviderType
 import com.vaultstadio.app.domain.model.ChatRole
-import com.vaultstadio.app.domain.model.ConflictResolution
-import com.vaultstadio.app.domain.model.ConflictType
-import com.vaultstadio.app.domain.model.DeviceType
+import com.vaultstadio.app.domain.sync.model.ConflictResolution
+import com.vaultstadio.app.domain.sync.model.ConflictType
+import com.vaultstadio.app.domain.sync.model.DeviceType
 import com.vaultstadio.app.domain.model.FederatedShareStatus
 import com.vaultstadio.app.domain.model.InstanceStatus
 import com.vaultstadio.app.domain.model.SharePermission

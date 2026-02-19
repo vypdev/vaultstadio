@@ -5,13 +5,20 @@
 
 package com.vaultstadio.app.domain.usecase.sync
 
+import com.vaultstadio.app.data.sync.usecase.DeactivateDeviceUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.GetConflictsUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.GetDevicesUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.PullChangesUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.RegisterDeviceUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.RemoveDeviceUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.ResolveConflictUseCaseImpl
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.SyncRepository
-import com.vaultstadio.app.domain.model.ConflictResolution
-import com.vaultstadio.app.domain.model.DeviceType
-import com.vaultstadio.app.domain.model.SyncConflict
-import com.vaultstadio.app.domain.model.SyncDevice
-import com.vaultstadio.app.domain.model.SyncResponse
+import com.vaultstadio.app.domain.sync.SyncRepository
+import com.vaultstadio.app.domain.sync.model.ConflictResolution
+import com.vaultstadio.app.domain.sync.model.DeviceType
+import com.vaultstadio.app.domain.sync.model.SyncConflict
+import com.vaultstadio.app.domain.sync.model.SyncDevice
+import com.vaultstadio.app.domain.sync.model.SyncResponse
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test

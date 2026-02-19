@@ -42,9 +42,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.DeviceType
-import com.vaultstadio.app.domain.model.SyncConflict
-import com.vaultstadio.app.domain.model.SyncDevice
+import com.vaultstadio.app.domain.sync.model.DeviceType
+import com.vaultstadio.app.domain.sync.model.SyncConflict
+import com.vaultstadio.app.domain.sync.model.SyncDevice
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatRelativeTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
