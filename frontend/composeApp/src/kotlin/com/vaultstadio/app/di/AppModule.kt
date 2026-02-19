@@ -8,6 +8,7 @@
 
 package com.vaultstadio.app.di
 
+import com.vaultstadio.app.data.auth.di.authModule
 import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.network.HttpClientFactory
 import com.vaultstadio.app.data.network.TokenProvider

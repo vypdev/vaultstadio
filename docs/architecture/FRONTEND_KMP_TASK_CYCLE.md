@@ -59,11 +59,30 @@ So the issue is specific to how the JVM/desktop target is configured by the plug
 4. **Align with `:data:network`**  
    `:data:network` uses the same plugin and `jvm("desktop")` but does **not** show the cycle. We added the same source set layout and a `desktopMain` dependency in `:data:auth`; the cycle in `:data:auth` (and `:data:storage`) remained. So the cause is still unclear (e.g. number of dependencies, evaluation order).
 
+## Related: domain:auth not resolving in data:auth
+
+When `:data:auth` depends on `:domain:auth`, Gradle’s dependency resolution was **substituting** `project :domain:auth` with `project :data:auth` (so `:data:auth` ended up depending on itself for “domain” types). That happened because both projects default to the same **project name** (`"auth"`), and resolution was deduplicating by (group, name).
+
+**Fix applied:**
+
+1. **Distinct `group`** so resolution keeps both projects:
+   - In **`domain/auth/build.gradle.kts`**: `afterEvaluate { group = "com.vaultstadio.domain" }`
+   - In **`data/auth/build.gradle.kts`**: `afterEvaluate { group = "com.vaultstadio.data" }`
+   - Do **not** change `project.name` in `settings.gradle.kts` (e.g. to `"domain-auth"`); other projects reference `project(":domain:auth")` by path, and renaming can break those references.
+
+2. **`:data:auth`** needs **`kotlinx-datetime`** for DTOs/mappers: add `implementation(libs.kotlinx.datetime)` in `commonMain` in `data/auth/build.gradle.kts`.
+
+3. **composeApp** must import the auth Koin module: in `composeApp/.../di/AppModule.kt` add  
+   `import com.vaultstadio.app.data.auth.di.authModule` so `authModule()` resolves.
+
+After the group fix, `:data:auth:compileKotlinDesktop` and `:composeApp:compileKotlinDesktop` succeed. The task cycle described above may have been aggravated by the wrong resolution; if it reappears on other targets, the recommendations in “What we do” still apply.
+
 ## What we do in this project
 
 - **`:data:network`**: builds for desktop without changes.
-- **`:data:auth`** and **`:data:storage`**: currently hit the cycle when running `:data:auth:compileKotlinDesktop` or `:data:storage:compileKotlinDesktop`.  
-- **Recommended next steps**:  
+- **`:data:auth`**: after applying the **group** fix (and kotlinx-datetime + authModule import), desktop build succeeds. If the task cycle reappears, see “Recommended next steps” below.
+- **`:data:storage`**: if it shows the same cycle, apply the same group/disambiguation pattern if it has a sibling `:domain:storage`.
+- **Recommended next steps** (if the cycle reappears):  
   - Report the cycle to the [Android Kotlin Multiplatform Library](https://developer.android.com/kotlin/multiplatform/plugin) or Kotlin plugin issue tracker, with a minimal sample.  
   - Try a different version of the plugin or Gradle.  
   - As a last resort, avoid applying the Android KMP library plugin to modules that only need `commonMain` + desktop (if that setup is supported and doesn’t break other targets).
