@@ -4,10 +4,13 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.android.kotlin.multiplatform.library)
 }
+
+val libNamespace = "com.vaultstadio.app.feature.versionhistory"
+
 kotlin {
     jvm("desktop")
     android {
-        namespace = "com.vaultstadio.app.feature.versionhistory"
+        namespace = libNamespace
         compileSdk = 34
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
@@ -25,3 +28,4 @@ kotlin {
         }
     }
 }
+afterEvaluate { group = libNamespace }

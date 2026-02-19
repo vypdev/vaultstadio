@@ -1,8 +1,11 @@
 plugins { alias(libs.plugins.kotlin.multiplatform); alias(libs.plugins.android.kotlin.multiplatform.library) }
+
+val libNamespace = "com.vaultstadio.app.domain.upload"
+
 kotlin {
     jvm("desktop")
     android {
-        namespace = "com.vaultstadio.app.domain.upload"
+        namespace = libNamespace
         compileSdk = 34
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
@@ -16,3 +19,4 @@ kotlin {
         }
     }
 }
+afterEvaluate { group = libNamespace }

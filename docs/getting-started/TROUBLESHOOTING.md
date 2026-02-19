@@ -57,6 +57,23 @@ Common issues and their solutions for VaultStadio development and deployment.
    }
    ```
 
+#### Circular dependency `:data:storage:wasmJsPackageJson` (frontend)
+
+**Problem**: `./gradlew :composeApp:wasmJsBrowserDistribution` fails with:
+```text
+Circular dependency between the following tasks:
+:data:storage:wasmJsPackageJson
+\--- :data:storage:wasmJsPackageJson (*)
+```
+
+**Cause**: Known Kotlin Gradle plugin behaviour in multi-module Wasm: the plugin creates a self-cycle on `wasmJsPackageJson` for the `:data:storage` project when building the aggregated npm configuration.
+
+**Workarounds** (until fixed in the plugin):
+
+- Try a newer Kotlin / Compose version and see if the cycle is resolved.
+- Report the issue to [JetBrains YouTrack](https://youtrack.jetbrains.com/issues/KT) with a minimal multi-module Wasm project that reproduces the cycle (e.g. app + library with `wasmJs { browser() }` and the same dependency pattern).
+- As a last resort, you can temporarily remove the `wasmJs { browser() }` block from `frontend/data/storage/build.gradle.kts` and provide a Wasm-specific implementation of the storage API elsewhere (e.g. expect/actual in the app); this requires code changes and is not recommended unless necessary.
+
 ### Cannot GET /files or /settings/change-password (Web)
 
 **Problem**: Opening a direct URL (e.g. `http://localhost:8081/settings/change-password` or `http://localhost:8081/files`) returns "Cannot GET /path" instead of loading the app.
