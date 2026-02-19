@@ -4,13 +4,13 @@
 
 package com.vaultstadio.app.ui.screens
 
-import com.vaultstadio.app.domain.model.FederatedIdentity
-import com.vaultstadio.app.domain.model.FederatedInstance
-import com.vaultstadio.app.domain.model.FederatedShare
-import com.vaultstadio.app.domain.model.FederatedShareStatus
+import com.vaultstadio.app.domain.federation.model.FederatedIdentity
+import com.vaultstadio.app.domain.federation.model.FederatedInstance
+import com.vaultstadio.app.domain.federation.model.FederatedShare
+import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
 import com.vaultstadio.app.domain.federation.model.FederationCapability
-import com.vaultstadio.app.domain.model.InstanceStatus
-import com.vaultstadio.app.domain.model.SharePermission
+import com.vaultstadio.app.domain.federation.model.InstanceStatus
+import com.vaultstadio.app.domain.federation.model.SharePermission
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
