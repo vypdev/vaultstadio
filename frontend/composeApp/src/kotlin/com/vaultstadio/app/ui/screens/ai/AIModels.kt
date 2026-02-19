@@ -6,7 +6,7 @@
 
 package com.vaultstadio.app.ui.screens.ai
 
-import com.vaultstadio.app.domain.model.ChatRole
+import com.vaultstadio.app.domain.ai.model.ChatRole
 
 /**
  * AI mode selection.

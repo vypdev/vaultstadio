@@ -25,7 +25,7 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.feature.main.MainComponent
 import com.vaultstadio.app.ui.components.files.EmptyState
 import kotlin.math.roundToInt

@@ -6,8 +6,8 @@
 
 package com.vaultstadio.app.ui.components.dialogs
 
-import com.vaultstadio.app.domain.model.SortField
-import com.vaultstadio.app.domain.model.SortOrder
+import com.vaultstadio.app.domain.storage.model.SortField
+import com.vaultstadio.app.domain.storage.model.SortOrder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

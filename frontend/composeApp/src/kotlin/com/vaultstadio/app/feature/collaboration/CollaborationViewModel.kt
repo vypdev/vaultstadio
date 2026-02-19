@@ -6,29 +6,30 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.network.CollaborationMessageType
-import com.vaultstadio.app.data.network.CollaborationWebSocket
-import com.vaultstadio.app.data.network.ConnectionState
-import com.vaultstadio.app.domain.model.CollaborationParticipant
-import com.vaultstadio.app.domain.model.CollaborationSession
-import com.vaultstadio.app.domain.model.DocumentComment
-import com.vaultstadio.app.domain.model.DocumentState
-import com.vaultstadio.app.domain.model.PresenceStatus
-import com.vaultstadio.app.domain.model.UserPresence
+import com.vaultstadio.app.data.collaboration.websocket.ConnectionState
+import com.vaultstadio.app.data.collaboration.websocket.CollaborationWebSocket
+import com.vaultstadio.app.data.collaboration.websocket.CollaborationWsMessage
+import com.vaultstadio.app.data.collaboration.websocket.CollaborationWsMessageType
 import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.CreateDocumentCommentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.DeleteDocumentCommentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetCollaborationSessionUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetDocumentCommentsUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetDocumentStateUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetSessionParticipantsUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetUserPresenceUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.JoinCollaborationSessionUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.LeaveCollaborationSessionUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.ResolveDocumentCommentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.SaveDocumentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCase
+import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
+import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
+import com.vaultstadio.app.domain.collaboration.model.DocumentComment
+import com.vaultstadio.app.domain.collaboration.model.DocumentState
+import com.vaultstadio.app.domain.collaboration.model.PresenceStatus
+import com.vaultstadio.app.domain.collaboration.model.UserPresence
+import com.vaultstadio.app.domain.collaboration.usecase.CreateDocumentCommentUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.DeleteDocumentCommentUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetCollaborationSessionUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetDocumentCommentsUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetDocumentStateUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetSessionParticipantsUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetUserPresenceUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.JoinCollaborationSessionUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.LeaveCollaborationSessionUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.ResolveDocumentCommentUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.SaveDocumentUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.SetOfflineUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.UpdatePresenceUseCase
 import com.vaultstadio.app.domain.config.usecase.GetCollaborationUrlUseCase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -129,13 +130,13 @@ class CollaborationViewModel(
         viewModelScope.launch {
             webSocket?.messages?.collectLatest { message ->
                 when (message.type) {
-                    CollaborationMessageType.OPERATION.name -> {
+                    CollaborationWsMessageType.OPERATION.name -> {
                         message.content?.let { content ->
                             documentState = documentState?.copy(content = content)
                             message.version?.let { documentVersion = it }
                         }
                     }
-                    CollaborationMessageType.CURSOR_UPDATE.name -> {
+                    CollaborationWsMessageType.CURSOR_UPDATE.name -> {
                         message.userId?.let { uid ->
                             if (uid != userId) {
                                 message.cursorPosition?.let { cursor ->
@@ -149,12 +150,12 @@ class CollaborationViewModel(
                             }
                         }
                     }
-                    CollaborationMessageType.LEAVE.name -> {
+                    CollaborationWsMessageType.LEAVE.name -> {
                         message.userId?.let { uid ->
                             otherCursors = otherCursors - uid
                         }
                     }
-                    CollaborationMessageType.JOIN.name -> {
+                    CollaborationWsMessageType.JOIN.name -> {
                         // Optionally refresh participants list
                     }
                     else -> { /* Ignore other message types */ }

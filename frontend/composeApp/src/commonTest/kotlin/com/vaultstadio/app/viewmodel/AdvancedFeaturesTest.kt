@@ -6,14 +6,14 @@
 
 package com.vaultstadio.app.viewmodel
 
-import com.vaultstadio.app.domain.model.AIProviderType
-import com.vaultstadio.app.domain.model.ChatRole
+import com.vaultstadio.app.domain.ai.model.AIProviderType
+import com.vaultstadio.app.domain.ai.model.ChatRole
+import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
+import com.vaultstadio.app.domain.federation.model.InstanceStatus
+import com.vaultstadio.app.domain.federation.model.SharePermission
 import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.ConflictType
 import com.vaultstadio.app.domain.sync.model.DeviceType
-import com.vaultstadio.app.domain.model.FederatedShareStatus
-import com.vaultstadio.app.domain.model.InstanceStatus
-import com.vaultstadio.app.domain.model.SharePermission
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

@@ -24,8 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.StorageItem
 import com.vaultstadio.app.domain.model.ViewMode
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.upload.FolderUploadEntry
 import com.vaultstadio.app.domain.upload.UploadQueueEntry
 import com.vaultstadio.app.feature.main.MainComponent

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.Breadcrumb
+import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.ui.components.layout.Breadcrumbs
 
 @Composable

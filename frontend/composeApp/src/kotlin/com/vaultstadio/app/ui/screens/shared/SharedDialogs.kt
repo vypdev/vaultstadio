@@ -17,9 +17,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.StorageItem
-import com.vaultstadio.app.domain.model.Visibility
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.Visibility
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatFileSize
 import com.vaultstadio.app.utils.formatRelativeTime

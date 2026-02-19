@@ -1,17 +1,19 @@
 /**
- * Unit tests for AI use cases (GetAIProviders).
+ * Unit tests for AI use cases (GetAIProviders, GetAIModels).
  * Uses a fake AIRepository to avoid platform/DI.
  */
 
 package com.vaultstadio.app.domain.usecase.ai
 
+import com.vaultstadio.app.data.ai.usecase.GetAIModelsUseCaseImpl
+import com.vaultstadio.app.data.ai.usecase.GetAIProvidersUseCaseImpl
+import com.vaultstadio.app.domain.ai.AIRepository
+import com.vaultstadio.app.domain.ai.model.AIChatMessage
+import com.vaultstadio.app.domain.ai.model.AIChatResponse
+import com.vaultstadio.app.domain.ai.model.AIModel
+import com.vaultstadio.app.domain.ai.model.AIProviderInfo
+import com.vaultstadio.app.domain.ai.model.AIProviderType
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.AIRepository
-import com.vaultstadio.app.domain.model.AIChatMessage
-import com.vaultstadio.app.domain.model.AIChatResponse
-import com.vaultstadio.app.domain.model.AIModel
-import com.vaultstadio.app.domain.model.AIProviderInfo
-import com.vaultstadio.app.domain.model.AIProviderType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

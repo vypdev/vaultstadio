@@ -30,10 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.vaultstadio.app.domain.model.AIChatMessage
-import com.vaultstadio.app.domain.model.AIModel
-import com.vaultstadio.app.domain.model.AIProviderInfo
-import com.vaultstadio.app.domain.model.AIProviderType
+import com.vaultstadio.app.domain.ai.model.AIChatMessage
+import com.vaultstadio.app.domain.ai.model.AIModel
+import com.vaultstadio.app.domain.ai.model.AIProviderInfo
+import com.vaultstadio.app.domain.ai.model.AIProviderType
 import com.vaultstadio.app.i18n.strings
 import com.vaultstadio.app.ui.screens.ai.AIContentArea
 import com.vaultstadio.app.ui.screens.ai.AIErrorDialog

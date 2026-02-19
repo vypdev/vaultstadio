@@ -6,10 +6,10 @@
 
 package com.vaultstadio.app.ui.screens
 
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.model.UserRole
-import com.vaultstadio.app.domain.model.Visibility
+import com.vaultstadio.app.domain.storage.model.Visibility
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals

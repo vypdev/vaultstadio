@@ -1,15 +1,15 @@
 package com.vaultstadio.app.feature.files
 
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.Breadcrumb
-import com.vaultstadio.app.domain.model.SortField
-import com.vaultstadio.app.domain.model.SortOrder
-import com.vaultstadio.app.domain.model.StorageItem
-import com.vaultstadio.app.domain.usecase.storage.GetBreadcrumbsUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetFolderItemsUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetRecentUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetStarredUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetTrashUseCase
+import com.vaultstadio.app.domain.storage.model.Breadcrumb
+import com.vaultstadio.app.domain.storage.model.SortField
+import com.vaultstadio.app.domain.storage.model.SortOrder
+import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.usecase.GetBreadcrumbsUseCase
+import com.vaultstadio.app.domain.storage.usecase.GetFolderItemsUseCase
+import com.vaultstadio.app.domain.storage.usecase.GetRecentUseCase
+import com.vaultstadio.app.domain.storage.usecase.GetStarredUseCase
+import com.vaultstadio.app.domain.storage.usecase.GetTrashUseCase
 import com.vaultstadio.app.feature.main.MainComponent
 
 /**

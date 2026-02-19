@@ -43,7 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.StorageItem
 
 /**
  * Context menu dialog for file/folder operations.

@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.Breadcrumb
+import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.i18n.LocalStrings
 
 /**

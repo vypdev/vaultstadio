@@ -44,9 +44,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.StorageItem
-import com.vaultstadio.app.domain.model.Visibility
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.Visibility
 import com.vaultstadio.app.i18n.Strings
 import com.vaultstadio.app.i18n.strings
 import com.vaultstadio.app.ui.screens.SharedWithMeItem

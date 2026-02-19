@@ -6,20 +6,20 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.AIChatMessage
-import com.vaultstadio.app.domain.model.AIModel
-import com.vaultstadio.app.domain.model.AIProviderInfo
-import com.vaultstadio.app.domain.model.AIProviderType
-import com.vaultstadio.app.domain.usecase.ai.AIChatUseCase
-import com.vaultstadio.app.domain.usecase.ai.ClassifyContentUseCase
-import com.vaultstadio.app.domain.usecase.ai.DeleteAIProviderUseCase
-import com.vaultstadio.app.domain.usecase.ai.DescribeImageUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetAIModelsUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetAIProviderStatusUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetAIProvidersUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetProviderModelsUseCase
-import com.vaultstadio.app.domain.usecase.ai.SummarizeTextUseCase
-import com.vaultstadio.app.domain.usecase.ai.TagImageUseCase
+import com.vaultstadio.app.domain.ai.model.AIChatMessage
+import com.vaultstadio.app.domain.ai.model.AIModel
+import com.vaultstadio.app.domain.ai.model.AIProviderInfo
+import com.vaultstadio.app.domain.ai.model.AIProviderType
+import com.vaultstadio.app.domain.ai.usecase.AIChatUseCase
+import com.vaultstadio.app.domain.ai.usecase.ClassifyContentUseCase
+import com.vaultstadio.app.domain.ai.usecase.DeleteAIProviderUseCase
+import com.vaultstadio.app.domain.ai.usecase.DescribeImageUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetAIModelsUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetAIProviderStatusUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetAIProvidersUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetProviderModelsUseCase
+import com.vaultstadio.app.domain.ai.usecase.SummarizeTextUseCase
+import com.vaultstadio.app.domain.ai.usecase.TagImageUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for AI features.

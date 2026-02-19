@@ -7,65 +7,19 @@
 
 package com.vaultstadio.app.di
 
-import com.vaultstadio.app.data.api.AIApi
-import com.vaultstadio.app.data.api.CollaborationApi
 import com.vaultstadio.app.data.network.ApiClientConfig
-import com.vaultstadio.app.data.repository.AIRepository
-import com.vaultstadio.app.data.repository.AIRepositoryImpl
-import com.vaultstadio.app.data.repository.CollaborationRepository
-import com.vaultstadio.app.data.repository.CollaborationRepositoryImpl
-import com.vaultstadio.app.data.service.AIService
-import com.vaultstadio.app.data.service.CollaborationService
-import com.vaultstadio.app.domain.usecase.ai.AIChatUseCase
-import com.vaultstadio.app.domain.usecase.ai.AIChatUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.ClassifyContentUseCase
-import com.vaultstadio.app.domain.usecase.ai.ClassifyContentUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.ConfigureAIProviderUseCase
-import com.vaultstadio.app.domain.usecase.ai.ConfigureAIProviderUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.DeleteAIProviderUseCase
-import com.vaultstadio.app.domain.usecase.ai.DeleteAIProviderUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.DescribeImageUseCase
-import com.vaultstadio.app.domain.usecase.ai.DescribeImageUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.GetAIModelsUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetAIModelsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.GetAIProvidersUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetAIProvidersUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.GetAIProviderStatusUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetAIProviderStatusUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.GetProviderModelsUseCase
-import com.vaultstadio.app.domain.usecase.ai.GetProviderModelsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.SetActiveAIProviderUseCase
-import com.vaultstadio.app.domain.usecase.ai.SetActiveAIProviderUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.SummarizeTextUseCase
-import com.vaultstadio.app.domain.usecase.ai.SummarizeTextUseCaseImpl
-import com.vaultstadio.app.domain.usecase.ai.TagImageUseCase
-import com.vaultstadio.app.domain.usecase.ai.TagImageUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.CreateDocumentCommentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.CreateDocumentCommentUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.DeleteDocumentCommentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.DeleteDocumentCommentUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.GetCollaborationSessionUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetCollaborationSessionUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.GetDocumentCommentsUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetDocumentCommentsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.GetDocumentStateUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetDocumentStateUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.GetSessionParticipantsUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetSessionParticipantsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.GetUserPresenceUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.GetUserPresenceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.JoinCollaborationSessionUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.JoinCollaborationSessionUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.LeaveCollaborationSessionUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.LeaveCollaborationSessionUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.ResolveDocumentCommentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.ResolveDocumentCommentUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.SaveDocumentUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.SaveDocumentUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCaseImpl
-import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCase
-import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCaseImpl
+import com.vaultstadio.app.domain.ai.usecase.GetAIProviderStatusUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetAIModelsUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetAIProvidersUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetProviderModelsUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetCollaborationSessionUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetDocumentCommentsUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetDocumentStateUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetSessionParticipantsUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.GetUserPresenceUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.JoinCollaborationSessionUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.LeaveCollaborationSessionUseCase
+import com.vaultstadio.app.domain.collaboration.usecase.SaveDocumentUseCase
 import com.vaultstadio.app.domain.federation.usecase.AcceptFederatedShareUseCase
 import com.vaultstadio.app.domain.federation.usecase.BlockInstanceUseCase
 import com.vaultstadio.app.domain.federation.usecase.DeclineFederatedShareUseCase
@@ -113,46 +67,7 @@ import org.koin.plugin.module.dsl.viewModel
 
 val appModule = module {
 
-    // --- APIs (depend on HttpClient) ---
-    single { AIApi(get()) }
-    single { CollaborationApi(get()) }
-
-    // --- Services (depend on APIs) ---
-    single { AIService(get()) }
-    single { CollaborationService(get()) }
-
-    // --- Repositories ---
-    single<AIRepository> { AIRepositoryImpl(get()) }
-    single<CollaborationRepository> { CollaborationRepositoryImpl(get()) }
-
-    // --- AI use cases ---
-    factory<GetAIProviderStatusUseCase> { GetAIProviderStatusUseCaseImpl(get()) }
-    factory<SummarizeTextUseCase> { SummarizeTextUseCaseImpl(get()) }
-    factory<ClassifyContentUseCase> { ClassifyContentUseCaseImpl(get()) }
-    factory<GetAIModelsUseCase> { GetAIModelsUseCaseImpl(get()) }
-    factory<GetAIProvidersUseCase> { GetAIProvidersUseCaseImpl(get()) }
-    factory<ConfigureAIProviderUseCase> { ConfigureAIProviderUseCaseImpl(get()) }
-    factory<SetActiveAIProviderUseCase> { SetActiveAIProviderUseCaseImpl(get()) }
-    factory<DescribeImageUseCase> { DescribeImageUseCaseImpl(get()) }
-    factory<DeleteAIProviderUseCase> { DeleteAIProviderUseCaseImpl(get()) }
-    factory<AIChatUseCase> { AIChatUseCaseImpl(get()) }
-    factory<TagImageUseCase> { TagImageUseCaseImpl(get()) }
-    factory<GetProviderModelsUseCase> { GetProviderModelsUseCaseImpl(get()) }
-
-    // --- Collaboration use cases ---
-    factory<UpdatePresenceUseCase> { UpdatePresenceUseCaseImpl(get()) }
-    factory<ResolveDocumentCommentUseCase> { ResolveDocumentCommentUseCaseImpl(get()) }
-    factory<GetDocumentStateUseCase> { GetDocumentStateUseCaseImpl(get()) }
-    factory<LeaveCollaborationSessionUseCase> { LeaveCollaborationSessionUseCaseImpl(get()) }
-    factory<GetCollaborationSessionUseCase> { GetCollaborationSessionUseCaseImpl(get()) }
-    factory<CreateDocumentCommentUseCase> { CreateDocumentCommentUseCaseImpl(get()) }
-    factory<JoinCollaborationSessionUseCase> { JoinCollaborationSessionUseCaseImpl(get()) }
-    factory<DeleteDocumentCommentUseCase> { DeleteDocumentCommentUseCaseImpl(get()) }
-    factory<GetSessionParticipantsUseCase> { GetSessionParticipantsUseCaseImpl(get()) }
-    factory<GetDocumentCommentsUseCase> { GetDocumentCommentsUseCaseImpl(get()) }
-    factory<SaveDocumentUseCase> { SaveDocumentUseCaseImpl(get()) }
-    factory<SetOfflineUseCase> { SetOfflineUseCaseImpl(get()) }
-    factory<GetUserPresenceUseCase> { GetUserPresenceUseCaseImpl(get()) }
+    // --- AI and Collaboration beans are in aiModule and collaborationModule ---
 
     // --- Plugin use cases ---
     // --- Upload manager ---

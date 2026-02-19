@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
 
 /**
  * Grid item for displaying a file or folder.

@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.vaultstadio.app.config.LocalApiBaseUrl
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.platform.AudioPlayer
 import com.vaultstadio.app.platform.PdfViewer
 import com.vaultstadio.app.platform.VideoPlayer

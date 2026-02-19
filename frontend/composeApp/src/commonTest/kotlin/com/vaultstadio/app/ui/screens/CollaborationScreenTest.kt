@@ -4,13 +4,13 @@
 
 package com.vaultstadio.app.ui.screens
 
-import com.vaultstadio.app.domain.model.CollaborationParticipant
-import com.vaultstadio.app.domain.model.CollaborationSession
-import com.vaultstadio.app.domain.model.CommentAnchor
-import com.vaultstadio.app.domain.model.DocumentComment
-import com.vaultstadio.app.domain.model.DocumentState
-import com.vaultstadio.app.domain.model.PresenceStatus
-import com.vaultstadio.app.domain.model.UserPresence
+import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
+import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
+import com.vaultstadio.app.domain.collaboration.model.CommentAnchor
+import com.vaultstadio.app.domain.collaboration.model.DocumentComment
+import com.vaultstadio.app.domain.collaboration.model.DocumentState
+import com.vaultstadio.app.domain.collaboration.model.PresenceStatus
+import com.vaultstadio.app.domain.collaboration.model.UserPresence
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals

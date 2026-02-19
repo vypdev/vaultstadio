@@ -7,10 +7,10 @@
 
 package com.vaultstadio.app.feature.files
 
-import com.vaultstadio.app.domain.model.Breadcrumb
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.StorageItem
-import com.vaultstadio.app.domain.model.Visibility
+import com.vaultstadio.app.domain.storage.model.Breadcrumb
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.Visibility
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals

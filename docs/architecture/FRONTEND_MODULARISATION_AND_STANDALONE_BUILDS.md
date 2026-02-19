@@ -25,9 +25,13 @@
 - **:data:metadata** – Done. MetadataApi, MetadataService, MetadataRepositoryImpl, DTOs (one file per DTO), MetadataMapper, 7 use-case impls, `metadataModule`. Depends on :data:storage for advancedSearch mapping. ComposeApp uses `metadataModule`; metadata beans removed from `appModule`.
 - **:domain:federation** – Done. Models (InstanceStatus, FederationCapability, SharePermission, FederatedShareStatus, FederatedActivityType, FederatedInstance, FederatedShare, FederatedIdentity, FederatedActivity), FederationRepository, 15 use-case interfaces. One file per class/enum.
 - **:data:federation** – Done. FederationApi, FederationService, FederationRepositoryImpl, DTOs (one file per DTO), FederationMapper, 15 use-case impls, `federationModule`. ComposeApp uses `federationModule`; federation beans removed from `appModule`. Old composeApp domain/model/Federation.kt and domain/usecase/federation/* removed.
+- **:domain:ai** – Done. Models (one file per: AIProviderType, AIProviderInfo, AIModel, ChatRole, AIChatMessage, AIChatResponse, AIChatRequest, AIVisionRequest, AIDescribeRequest, AISummarizeRequest, AITagRequest, AIClassifyRequest), AIRepository, 12 use-case interfaces.
+- **:domain:collaboration** – Done. Models (one file per: CollaborationSession, CursorPosition, TextSelection, CollaborationParticipant, DocumentState, CommentAnchor, CommentReply, DocumentComment, PresenceStatus, UserPresence), CollaborationRepository, 13 use-case interfaces.
+- **:data:ai** – Done. AIApi, AIService, AIRepositoryImpl, DTOs (one file per), AIMapper, 12 use-case impls, `aiModule`. ComposeApp uses `aiModule`; AI beans removed from `appModule`.
+- **:data:collaboration** – Done. CollaborationApi, CollaborationService, CollaborationRepositoryImpl, DTOs (one file per), CollaborationMapper, CollaborationWebSocket (in websocket/), 13 use-case impls, `collaborationModule`. ComposeApp uses `collaborationModule`; collaboration beans removed from `appModule`.
 - **:feature:*** – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: migrate remaining data slices (ai, collaboration) and feature modules per §10.
+Next: migrate feature modules (move ViewModels/screens from composeApp to :feature:*); ensure composeApp storage imports use :domain:storage and :data:storage packages where applicable.
 
 ---
 

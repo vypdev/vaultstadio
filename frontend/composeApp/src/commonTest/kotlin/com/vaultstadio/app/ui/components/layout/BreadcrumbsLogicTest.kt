@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.ui.components.layout
 
-import com.vaultstadio.app.domain.model.Breadcrumb
+import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

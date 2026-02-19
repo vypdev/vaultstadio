@@ -6,8 +6,8 @@
 
 package com.vaultstadio.app.ui.components.files
 
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.Visibility
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.Visibility
 import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlin.test.Test

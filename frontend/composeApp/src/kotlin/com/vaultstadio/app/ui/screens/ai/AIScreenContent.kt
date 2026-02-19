@@ -49,11 +49,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.AIChatMessage
-import com.vaultstadio.app.domain.model.AIModel
-import com.vaultstadio.app.domain.model.AIProviderInfo
-import com.vaultstadio.app.domain.model.AIProviderType
-import com.vaultstadio.app.domain.model.ChatRole
+import com.vaultstadio.app.domain.ai.model.AIChatMessage
+import com.vaultstadio.app.domain.ai.model.AIModel
+import com.vaultstadio.app.domain.ai.model.AIProviderInfo
+import com.vaultstadio.app.domain.ai.model.AIProviderType
+import com.vaultstadio.app.domain.ai.model.ChatRole
 import com.vaultstadio.app.i18n.StringResources
 
 @Composable

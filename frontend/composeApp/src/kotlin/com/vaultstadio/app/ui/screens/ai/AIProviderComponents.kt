@@ -36,9 +36,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.AIModel
-import com.vaultstadio.app.domain.model.AIProviderInfo
-import com.vaultstadio.app.domain.model.AIProviderType
+import com.vaultstadio.app.domain.ai.model.AIModel
+import com.vaultstadio.app.domain.ai.model.AIProviderInfo
+import com.vaultstadio.app.domain.ai.model.AIProviderType
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

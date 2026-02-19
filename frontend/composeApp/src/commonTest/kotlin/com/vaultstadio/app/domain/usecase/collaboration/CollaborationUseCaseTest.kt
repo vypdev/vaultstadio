@@ -5,15 +5,19 @@
 
 package com.vaultstadio.app.domain.usecase.collaboration
 
+import com.vaultstadio.app.data.collaboration.usecase.GetCollaborationSessionUseCaseImpl
+import com.vaultstadio.app.data.collaboration.usecase.GetDocumentCommentsUseCaseImpl
+import com.vaultstadio.app.data.collaboration.usecase.JoinCollaborationSessionUseCaseImpl
+import com.vaultstadio.app.data.collaboration.usecase.LeaveCollaborationSessionUseCaseImpl
+import com.vaultstadio.app.domain.collaboration.CollaborationRepository
+import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
+import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
+import com.vaultstadio.app.domain.collaboration.model.CommentAnchor
+import com.vaultstadio.app.domain.collaboration.model.DocumentComment
+import com.vaultstadio.app.domain.collaboration.model.DocumentState
+import com.vaultstadio.app.domain.collaboration.model.PresenceStatus
+import com.vaultstadio.app.domain.collaboration.model.UserPresence
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.CollaborationRepository
-import com.vaultstadio.app.domain.model.CollaborationParticipant
-import com.vaultstadio.app.domain.model.CollaborationSession
-import com.vaultstadio.app.domain.model.CommentAnchor
-import com.vaultstadio.app.domain.model.DocumentComment
-import com.vaultstadio.app.domain.model.DocumentState
-import com.vaultstadio.app.domain.model.PresenceStatus
-import com.vaultstadio.app.domain.model.UserPresence
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test

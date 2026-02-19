@@ -39,9 +39,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.CollaborationParticipant
-import com.vaultstadio.app.domain.model.CommentAnchor
-import com.vaultstadio.app.domain.model.DocumentComment
+import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
+import com.vaultstadio.app.domain.collaboration.model.CommentAnchor
+import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 import com.vaultstadio.app.i18n.StringResources
 import com.vaultstadio.app.i18n.Strings
 import com.vaultstadio.app.ui.theme.VaultStadioPreview

@@ -22,8 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ItemType
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.feature.main.MainComponent
 import com.vaultstadio.app.ui.components.files.EmptyState
 import com.vaultstadio.app.ui.components.files.SelectableFileListItem

@@ -4,7 +4,7 @@
 
 package com.vaultstadio.app.api
 
-import com.vaultstadio.app.domain.model.PresenceStatus
+import com.vaultstadio.app.domain.collaboration.model.PresenceStatus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

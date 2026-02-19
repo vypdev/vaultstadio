@@ -4,15 +4,15 @@
 
 package com.vaultstadio.app.api
 
-import com.vaultstadio.app.domain.model.AIChatMessage
-import com.vaultstadio.app.domain.model.AIChatRequest
-import com.vaultstadio.app.domain.model.AIClassifyRequest
-import com.vaultstadio.app.domain.model.AIDescribeRequest
-import com.vaultstadio.app.domain.model.AIProviderType
-import com.vaultstadio.app.domain.model.AISummarizeRequest
-import com.vaultstadio.app.domain.model.AITagRequest
-import com.vaultstadio.app.domain.model.AIVisionRequest
-import com.vaultstadio.app.domain.model.ChatRole
+import com.vaultstadio.app.domain.ai.model.AIChatMessage
+import com.vaultstadio.app.domain.ai.model.AIChatRequest
+import com.vaultstadio.app.domain.ai.model.AIClassifyRequest
+import com.vaultstadio.app.domain.ai.model.AIDescribeRequest
+import com.vaultstadio.app.domain.ai.model.AIProviderType
+import com.vaultstadio.app.domain.ai.model.AISummarizeRequest
+import com.vaultstadio.app.domain.ai.model.AITagRequest
+import com.vaultstadio.app.domain.ai.model.AIVisionRequest
+import com.vaultstadio.app.domain.ai.model.ChatRole
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

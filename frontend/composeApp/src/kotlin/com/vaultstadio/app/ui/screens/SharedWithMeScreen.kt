@@ -41,7 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.i18n.strings
 import com.vaultstadio.app.ui.screens.shared.DownloadReadyDialog
 import com.vaultstadio.app.ui.screens.shared.EmptySharedWithMeState
