@@ -50,6 +50,7 @@ kotlin {
                 implementation(project(":domain:auth"))
                 implementation(project(":domain:storage"))
                 implementation(project(":data:network"))
+                implementation(project(":data:auth"))
                 implementation(project(":data:storage"))
                 implementation(compose.runtime)
                 implementation(compose.foundation)

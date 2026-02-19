@@ -12,7 +12,6 @@ import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.network.HttpClientFactory
 import com.vaultstadio.app.data.network.TokenProvider
 import com.vaultstadio.app.data.network.TokenStorage
-import com.vaultstadio.app.di.InMemoryTokenStorage
 import io.ktor.client.HttpClient
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
