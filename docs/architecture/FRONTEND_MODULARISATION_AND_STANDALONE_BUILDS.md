@@ -1,6 +1,6 @@
 # Frontend modularisation and standalone projects (backend / frontend)
 
-**Last updated**: 2026-02-19 (domain:upload, composeApp cleanup, data:storage DTOs split, feature:auth migrated)
+**Last updated**: 2026-02-19 (source layout src/main + src/test, ThemeMode in core:resources, :feature:settings migrated)
 
 ### Current implementation status
 
@@ -34,9 +34,10 @@
 - **composeApp cleanup** – Removed duplicate `domain/upload`, `domain/model` (FileVersion, ViewMode, AdvancedSearchRequest, PluginInfo, Admin), and duplicate `data/` (Storage + Federation API, service, repository, mapper, DTOs). Imports updated to use domain/data modules.
 - **:data:storage** – DTOs split to one file per DTO (StorageItemDTO, CreateFolderRequestDTO, etc.); StorageDTOs.kt removed.
 - **:feature:auth** – Done. Full screen in module: `AuthViewModel`, `AuthError`, `AuthSuccessCallback`, `AuthComponent`, `DefaultAuthComponent`, `AuthContent` (one file per class). Depends on `:core:resources`, `:domain:auth`, Koin Compose ViewModel, Material3; composeApp only wires navigation (RootContent uses AuthContent from module).
+- **:feature:settings** – Done. Full screen in module: `SettingsComponent`, `DefaultSettingsComponent`, `SettingsViewModel`, `SettingsContent`, `SettingsScreen`, `SettingsDialogs`, `SettingsComponents` (one file per class/group). Theme/language via component callbacks; `ThemeMode` in `:core:resources`. Depends on `:core:resources`, `:domain:auth`, Koin Compose ViewModel, Material3. `featureSettingsModule` loaded in all entry points.
 - **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: migrate remaining feature modules (move ViewModels/screens from composeApp to :feature:*). Use `:core:resources` for strings; follow :feature:auth as reference (ViewModel, Component, Content in module; depend on :core:resources, :domain:*, Koin Compose, Material3).
+Next: migrate remaining feature modules (profile, security, changepassword, licenses, then sync, shares, sharedwithme, activity, admin, plugins, versionhistory, files, collaboration, federation, ai, main). Use `:core:resources` for strings; follow :feature:auth / :feature:settings as reference (ViewModel, Component, Content in module; depend on :core:resources, :domain:*, Koin Compose, Material3).
 
 ### Koin module ownership
 
@@ -58,7 +59,8 @@ Each **feature**, **data**, **domain**, and **core** module that exposes or cons
 | Data    | :data:ai         | aiModule            | AIApi, AIRepository, AI use-case impls |
 | Data    | :data:collaboration | collaborationModule | CollaborationApi, CollaborationRepository, collaboration use-case impls |
 | Feature | :feature:auth   | featureAuthModule   | AuthViewModel (param: AuthSuccessCallback) |
-| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (profile, settings, sync, federation, ai, admin, activity, plugins, changepassword, versionhistory, files, collaboration) until their features are migrated |
+| Feature | :feature:settings | featureSettingsModule | SettingsViewModel (param: SettingsComponent) |
+| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (profile, sync, federation, ai, admin, activity, plugins, changepassword, versionhistory, files, collaboration) until their features are migrated |
 
 Domain and core modules typically do not define Koin modules (they expose interfaces/types; data/feature modules provide implementations and register them).
 
@@ -136,7 +138,7 @@ All frontend modules use the **same source layout** (no `commonMain` directory):
 - **Test Path**: `frontend/<layer>/<module>/src/test/kotlin/com/vaultstadio/app/<layer>/<module>/<rest>/`
 - **Module identifier** = package root: `com.vaultstadio.app.<layer>.<module>` (e.g. `com.vaultstadio.app.domain.auth`, `com.vaultstadio.app.data.auth`).
 
-In each module’s `build.gradle.kts`, point the `commonMain` Kotlin source set to `src/main`:
+All domain, data, feature, core, and composeApp modules use this layout (migrated from the previous `src/kotlin` and `src/commonTest/kotlin`). In each module’s `build.gradle.kts`, point the `commonMain` Kotlin source set to `src/main`, and `commonTest` to `src/test` where tests exist:
 
 ```kotlin
 sourceSets {

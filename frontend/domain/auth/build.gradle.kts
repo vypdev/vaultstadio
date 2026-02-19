@@ -28,7 +28,7 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDirs("src/kotlin")
+            kotlin.srcDirs("src/main")
             dependencies {
                 implementation(project(":domain:result"))
                 implementation(libs.kotlinx.coroutines.core)
@@ -36,6 +36,7 @@ kotlin {
             }
         }
         val commonTest by getting {
+            kotlin.srcDirs("src/test")
             dependencies {
                 implementation(kotlin("test"))
             }

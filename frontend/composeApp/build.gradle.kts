@@ -43,7 +43,7 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDirs("src/kotlin")
+            kotlin.srcDirs("src/main")
             dependencies {
                 implementation(project(":domain:result"))
                 implementation(project(":domain:auth"))
@@ -62,6 +62,7 @@ kotlin {
                 implementation(project(":domain:upload"))
                 implementation(project(":core:resources"))
                 implementation(project(":feature:auth"))
+                implementation(project(":feature:settings"))
                 implementation(project(":data:network"))
                 implementation(project(":data:sync"))
                 implementation(project(":data:metadata"))
@@ -155,6 +156,7 @@ kotlin {
         }
 
         val commonTest by getting {
+            kotlin.srcDirs("src/test")
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.kotlinx.coroutines.test)

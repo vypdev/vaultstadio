@@ -19,7 +19,7 @@ kotlin {
     iosX64(); iosArm64(); iosSimulatorArm64()
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDirs("src/kotlin")
+            kotlin.srcDirs("src/main")
             dependencies {
                 implementation(compose.runtime)
                 implementation(project(":domain:result"))

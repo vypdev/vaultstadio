@@ -27,12 +27,13 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDirs("src/kotlin")
+            kotlin.srcDirs("src/main")
             dependencies {
                 implementation(compose.runtime)
             }
         }
         val commonTest by getting {
+            kotlin.srcDirs("src/test")
             dependencies {
                 implementation(kotlin("test"))
             }
