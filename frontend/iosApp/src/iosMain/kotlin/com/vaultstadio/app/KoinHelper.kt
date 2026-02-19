@@ -8,8 +8,7 @@ package com.vaultstadio.app
 
 import com.vaultstadio.app.di.VaultStadioApp
 import com.vaultstadio.app.di.runtimeModules
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
+import org.koin.plugin.module.dsl.startKoin
 
 /** Default API base URL when not provided by Swift. */
 private const val DEFAULT_API_BASE_URL = "http://localhost:8080/api"

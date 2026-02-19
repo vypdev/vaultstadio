@@ -8,7 +8,7 @@ package com.vaultstadio.app
 
 import android.content.Context
 import com.vaultstadio.app.data.network.ApiClientConfig
-import com.vaultstadio.app.data.repository.TokenStorage
+import com.vaultstadio.app.data.network.TokenStorage
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.android.Android
 import org.koin.android.ext.koin.androidContext

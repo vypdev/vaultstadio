@@ -15,7 +15,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.vaultstadio.app.di.VaultStadioApp
 import com.vaultstadio.app.di.runtimeModules
-import org.koin.core.context.startKoin
+import org.koin.plugin.module.dsl.startKoin
 
 fun main() {
     startKoin<VaultStadioApp> {

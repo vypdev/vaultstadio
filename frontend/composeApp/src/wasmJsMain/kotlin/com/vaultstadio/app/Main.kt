@@ -9,11 +9,11 @@
 package com.vaultstadio.app
 
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.CanvasBasedWindow
+import androidx.compose.ui.window.ComposeViewport
 import com.vaultstadio.app.di.VaultStadioApp
 import com.vaultstadio.app.di.runtimeModules
 import com.vaultstadio.app.di.wasmJsModule
-import org.koin.core.context.startKoin
+import org.koin.plugin.module.dsl.startKoin
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
@@ -22,7 +22,7 @@ fun main() {
     startKoin<VaultStadioApp> {
         modules(runtimeModules(apiBaseUrl) + wasmJsModule())
     }
-    CanvasBasedWindow(canvasElementId = "ComposeTarget") {
-        VaultStadioRoot(config = VaultStadioConfig(apiBaseUrl = apiBaseUrl))
-    }
+    ComposeViewport(content = {
+            VaultStadioRoot(config = VaultStadioConfig(apiBaseUrl = apiBaseUrl))
+        })
 }

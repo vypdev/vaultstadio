@@ -11,8 +11,8 @@ import com.vaultstadio.app.di.VaultStadioApp
 import com.vaultstadio.app.di.runtimeModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import org.koin.plugin.module.dsl.startKoin
 
 /**
  * Application class for VaultStadio Android app.

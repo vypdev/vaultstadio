@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.koin.compiler)
 }
 
 // Load keystore properties for release signing
@@ -114,6 +115,9 @@ android {
 dependencies {
     // Shared Compose UI
     implementation(project(":composeApp"))
+    // Types used by androidApp (ApiClientConfig, TokenStorage, AuthRepository)
+    implementation(project(":domain:auth"))
+    implementation(project(":data:network"))
 
     // Compose
     implementation(compose.runtime)
@@ -131,9 +135,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
 
-    // Koin
+    // Koin (compiler plugin in this module so startKoin<VaultStadioApp> is generated)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+    implementation(libs.koin.annotations)
 
     // Ktor Client
     implementation(libs.ktor.client.android)

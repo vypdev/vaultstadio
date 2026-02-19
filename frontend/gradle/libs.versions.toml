@@ -10,7 +10,7 @@ ktor = "3.0.2"
 
 # Koin - Dependency Injection (4.2.0-RC1 for Compiler Plugin; annotations same version as koin-core)
 koin = "4.2.0-RC1"
-koin-plugin = "0.2.9"
+koin-plugin = "0.3.0"
 
 # KSP (deprecated for Koin; kept for other processors if needed)
 ksp = "2.0.21-1.0.27"

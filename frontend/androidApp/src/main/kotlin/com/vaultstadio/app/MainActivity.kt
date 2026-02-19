@@ -25,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.vaultstadio.app.VaultStadioRoot
-import com.vaultstadio.app.data.repository.AuthRepository
+import com.vaultstadio.app.domain.auth.AuthRepository
 import com.vaultstadio.app.ui.theme.VaultStadioTheme
 import org.koin.android.ext.android.inject
 
