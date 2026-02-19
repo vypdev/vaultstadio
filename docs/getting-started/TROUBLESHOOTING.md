@@ -66,13 +66,20 @@ Circular dependency between the following tasks:
 \--- :data:storage:wasmJsPackageJson (*)
 ```
 
-**Cause**: Known Kotlin Gradle plugin behaviour in multi-module Wasm: the plugin creates a self-cycle on `wasmJsPackageJson` for the `:data:storage` project when building the aggregated npm configuration.
+**Cause**: Gradle can substitute `:domain:storage` with `:data:storage` when both share the same resolution coordinates.
 
-**Workarounds** (until fixed in the plugin):
+**Fix**: Apply the same **group disambiguation** as for desktop (see [FRONTEND_KMP_TASK_CYCLE.md](../architecture/FRONTEND_KMP_TASK_CYCLE.md)): in `frontend/domain/storage/build.gradle.kts` and `frontend/data/storage/build.gradle.kts` set distinct `group` in `afterEvaluate { group = libNamespace }` with `libNamespace` equal to the module’s namespace (e.g. `com.vaultstadio.app.domain.storage` and `com.vaultstadio.app.data.storage`).
 
-- Try a newer Kotlin / Compose version and see if the cycle is resolved.
-- Report the issue to [JetBrains YouTrack](https://youtrack.jetbrains.com/issues/KT) with a minimal multi-module Wasm project that reproduces the cycle (e.g. app + library with `wasmJs { browser() }` and the same dependency pattern).
-- As a last resort, you can temporarily remove the `wasmJs { browser() }` block from `frontend/data/storage/build.gradle.kts` and provide a Wasm-specific implementation of the storage API elsewhere (e.g. expect/actual in the app); this requires code changes and is not recommended unless necessary.
+#### Internal compiler error on Wasm (data:auth, data:storage, or composeApp)
+
+**Problem**: `:data:auth:compileKotlinWasmJs`, `:data:storage:compileKotlinWasmJs`, or `:composeApp:compileProductionExecutableKotlinWasmJs` fails with *Internal compiler error* (e.g. *No file found for source null*, or *Compiler terminated with internal error*).
+
+**Cause**: KT-82395: compiler plugins that generate top-level declarations (e.g. Koin) can trigger ICEs when Wasm incremental compilation is used. A separate ICE can occur in the app’s production Wasm link step (Kotlin 2.3.x beta).
+
+**Fix applied in this project**:
+
+- In `frontend/build.gradle.kts`, all Wasm Kotlin compile tasks use the **IN_PROCESS** execution strategy so incremental compilation is disabled for Wasm (see comment *KT-82395* in the script). This resolves the ICE in `:data:auth` and `:data:storage`.
+- If `:composeApp:compileProductionExecutableKotlinWasmJs` still fails with an ICE, try a **stable** Kotlin version (e.g. 2.2.x) in `frontend/gradle/libs.versions.toml` and align Compose/Koin, or report the issue to [YouTrack](https://youtrack.jetbrains.com/issues/KT) with a minimal KMP Wasm project.
 
 ### Cannot GET /files or /settings/change-password (Web)
 

@@ -69,4 +69,15 @@ subprojects {
             allWarningsAsErrors.set(false)
         }
     }
+
+    // KT-82395: use IN_PROCESS for all Wasm compile tasks (disables incremental) when compiler plugins (e.g. Koin) generate top-level declarations
+    afterEvaluate {
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.CompileUsingKotlinDaemon>()
+            .matching { it.name.contains("KotlinWasmJs") }
+            .configureEach {
+                compilerExecutionStrategy.set(
+                    org.jetbrains.kotlin.gradle.tasks.KotlinCompilerExecutionStrategy.IN_PROCESS,
+                )
+            }
+    }
 }
