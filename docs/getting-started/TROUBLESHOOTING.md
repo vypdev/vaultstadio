@@ -98,6 +98,33 @@ Common issues and their solutions for VaultStadio development and deployment.
    xattr -d com.apple.quarantine /path/to/app.app
    ```
 
+### Desktop: UnsatisfiedLinkError (Skiko / RenderNodeContext_nMake) on macOS
+
+**Problem**: `./gradlew :composeApp:run` fails with:
+`java.lang.UnsatisfiedLinkError: 'long org.jetbrains.skiko.node.RenderNodeContextKt.RenderNodeContext_nMake(boolean)'`
+(or "Can't load library: libskiko-macos-arm64.dylib").
+
+**Cause**: On Apple Silicon (M1/M2), the JVM that runs the app must be **arm64**. If Gradle (or your IDE) uses an x86_64 JDK (e.g. under Rosetta), the wrong Skiko native library is loaded.
+
+**Solutions**:
+
+1. **Use an arm64 JDK** when running the desktop app:
+   ```bash
+   /usr/libexec/java_home -V
+   ```
+   Pick a JDK that shows **(arm64)** and set it before running:
+   ```bash
+   export JAVA_HOME=$(/usr/libexec/java_home -a arm64)
+   ./gradlew :composeApp:run
+   ```
+
+2. **Clear Skiko cache** (if the error persists):
+   ```bash
+   rm -rf ~/.skiko
+   ```
+
+3. The project forces the macOS ARM64 desktop runtime when building on Mac ARM; if you still see the error, ensure both your **Gradle JVM** and **run** JVM are arm64 (e.g. `java -version` should report aarch64 / arm64).
+
 ## Frontend Issues
 
 ### "Unresolved reference" Errors

@@ -42,9 +42,12 @@ testcontainers = "1.20.4"
 detekt = "1.23.8"
 ktlint = "14.0.1"
 
-# Compose Multiplatform
-compose-plugin = "1.7.1"
+# Compose Multiplatform (desktop, Android, iOS, Web)
+# Latest: 1.10.1. Requires Kotlin 2.1.0+; recommend 2.2.20+ for native/web.
+# Skiko is transitive (see dependencyInsight --dependency skiko --configuration desktopRuntimeClasspath).
+compose-plugin = "1.10.1"
 compose-compiler = "1.5.15"
+skiko = "0.9.37.3"
 
 # Android (AGP 9: use com.android.kotlin.multiplatform.library for KMP; Gradle 9.1+ required)
 agp = "9.0.0"
