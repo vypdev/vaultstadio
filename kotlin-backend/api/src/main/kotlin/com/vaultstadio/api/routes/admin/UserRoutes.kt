@@ -9,8 +9,12 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.ChangePasswordRequest
 import com.vaultstadio.api.dto.UpdateProfileRequest
 import com.vaultstadio.api.dto.toResponse
+import com.vaultstadio.api.application.usecase.user.ChangePasswordUseCase
+import com.vaultstadio.api.application.usecase.user.GetQuotaUseCase
+import com.vaultstadio.api.application.usecase.user.GetUserInfoUseCase
+import com.vaultstadio.api.application.usecase.user.LogoutAllUseCase
+import com.vaultstadio.api.application.usecase.user.UpdateUserUseCase
 import com.vaultstadio.core.domain.service.UpdateUserInput
-import com.vaultstadio.core.domain.service.UserService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.request.receive
@@ -35,10 +39,10 @@ fun Route.userRoutes() {
 
         // Get user quota
         get("/me/quota") {
-            val userService: UserService = call.application.koinGet()
+            val getQuotaUseCase: GetQuotaUseCase = call.application.koinGet()
             val user = call.user!!
 
-            userService.getQuota(user.id).fold(
+            getQuotaUseCase(user.id).fold(
                 { error -> throw error },
                 { quota ->
                     call.respond(
@@ -51,7 +55,7 @@ fun Route.userRoutes() {
 
         // Update profile
         patch("/me") {
-            val userService: UserService = call.application.koinGet()
+            val updateUserUseCase: UpdateUserUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<UpdateProfileRequest>()
 
@@ -61,7 +65,7 @@ fun Route.userRoutes() {
                 avatarUrl = request.avatarUrl,
             )
 
-            userService.updateUser(input).fold(
+            updateUserUseCase(input).fold(
                 { error -> throw error },
                 { updated ->
                     call.respond(
@@ -74,14 +78,14 @@ fun Route.userRoutes() {
 
         // Change password
         post("/me/password") {
-            val userService: UserService = call.application.koinGet()
+            val changePasswordUseCase: ChangePasswordUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<ChangePasswordRequest>()
 
-            userService.changePassword(
-                userId = user.id,
-                currentPassword = request.currentPassword,
-                newPassword = request.newPassword,
+            changePasswordUseCase(
+                user.id,
+                request.currentPassword,
+                request.newPassword,
             ).fold(
                 { error -> throw error },
                 {
@@ -95,10 +99,10 @@ fun Route.userRoutes() {
 
         // Logout from all sessions
         post("/me/logout-all") {
-            val userService: UserService = call.application.koinGet()
+            val logoutAllUseCase: LogoutAllUseCase = call.application.koinGet()
             val user = call.user!!
 
-            userService.logoutAll(user.id).fold(
+            logoutAllUseCase(user.id).fold(
                 { error -> throw error },
                 {
                     call.respond(
@@ -111,10 +115,10 @@ fun Route.userRoutes() {
 
         // Get public user info
         get("/{userId}") {
-            val userService: UserService = call.application.koinGet()
+            val getUserInfoUseCase: GetUserInfoUseCase = call.application.koinGet()
             val userId = call.parameters["userId"]!!
 
-            userService.getUserInfo(userId).fold(
+            getUserInfoUseCase(userId).fold(
                 { error -> throw error },
                 { userInfo ->
                     call.respond(

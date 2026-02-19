@@ -23,9 +23,8 @@
 package com.vaultstadio.api.routes.storage
 
 import com.vaultstadio.api.config.user
-import com.vaultstadio.core.domain.service.MultipartUploadManagerInterface
-import com.vaultstadio.core.domain.service.StorageService
 import io.ktor.server.application.ApplicationCall
+import org.koin.ktor.ext.get as koinGet
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -81,33 +80,35 @@ private fun ApplicationCall.getUserId(): String? = user?.id
 
 /**
  * Configure S3-compatible routes.
- *
- * @param storageService Service for file operations
- * @param multipartUploadManager Manager for multipart uploads
+ * Resolves S3Operations via Koin; no service injection in Routing.
  */
-fun Route.s3Routes(storageService: StorageService, multipartUploadManager: MultipartUploadManagerInterface) {
+fun Route.s3Routes() {
     authenticate("s3-signature", "jwt", optional = true) {
         route("/s3") {
             get {
                 val userId = call.getUserId() ?: "anonymous"
-                handleListBuckets(call, storageService, userId)
+                call.application.koinGet<S3Operations>().handleListBuckets(call, userId)
             }
 
             route("/{bucket}") {
                 get {
                     val bucket = call.parameters["bucket"]!!
                     val userId = call.getUserId() ?: "anonymous"
-                    handleListObjects(call, storageService, userId, bucket)
+                    call.application.koinGet<S3Operations>().handleListObjects(call, userId, bucket)
                 }
                 head {
-                    handleHeadBucket(call, call.getUserId())
+                    call.application.koinGet<S3Operations>().handleHeadBucket(call, call.getUserId())
                 }
                 put {
                     val bucket = call.parameters["bucket"]!!
-                    handleCreateBucket(call, storageService, bucket, call.getUserId())
+                    call.application.koinGet<S3Operations>().handleCreateBucket(
+                        call,
+                        bucket,
+                        call.getUserId(),
+                    )
                 }
                 delete {
-                    handleDeleteBucket(call, call.getUserId())
+                    call.application.koinGet<S3Operations>().handleDeleteBucket(call, call.getUserId())
                 }
 
                 route("/{key...}") {
@@ -115,20 +116,23 @@ fun Route.s3Routes(storageService: StorageService, multipartUploadManager: Multi
                         val key = call.parameters.getAll("key")?.joinToString("/") ?: ""
                         val bucket = call.parameters["bucket"]!!
                         val userId = call.getUserId() ?: "anonymous"
-                        handleGetObject(call, storageService, userId, bucket, key)
+                        call.application.koinGet<S3Operations>().handleGetObject(
+                            call,
+                            userId,
+                            bucket,
+                            key,
+                        )
                     }
                     head {
                         val key = call.parameters.getAll("key")?.joinToString("/") ?: ""
                         val userId = call.getUserId() ?: "anonymous"
-                        handleHeadObject(call, storageService, userId, key)
+                        call.application.koinGet<S3Operations>().handleHeadObject(call, userId, key)
                     }
                     put {
                         val key = call.parameters.getAll("key")?.joinToString("/") ?: ""
                         val bucket = call.parameters["bucket"]!!
-                        handlePutObject(
+                        call.application.koinGet<S3Operations>().handlePutObject(
                             call,
-                            storageService,
-                            multipartUploadManager,
                             call.getUserId(),
                             bucket,
                             key,
@@ -136,10 +140,8 @@ fun Route.s3Routes(storageService: StorageService, multipartUploadManager: Multi
                     }
                     delete {
                         val key = call.parameters.getAll("key")?.joinToString("/") ?: ""
-                        handleDeleteObject(
+                        call.application.koinGet<S3Operations>().handleDeleteObject(
                             call,
-                            storageService,
-                            multipartUploadManager,
                             call.getUserId(),
                             key,
                         )
@@ -151,10 +153,8 @@ fun Route.s3Routes(storageService: StorageService, multipartUploadManager: Multi
                 post {
                     val bucket = call.parameters["bucket"]!!
                     val key = call.parameters.getAll("key")?.joinToString("/") ?: ""
-                    handleMultipartPost(
+                    call.application.koinGet<S3Operations>().handleMultipartPost(
                         call,
-                        storageService,
-                        multipartUploadManager,
                         call.getUserId(),
                         bucket,
                         key,

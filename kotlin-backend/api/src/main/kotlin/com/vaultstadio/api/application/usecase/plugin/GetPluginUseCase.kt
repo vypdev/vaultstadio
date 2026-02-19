@@ -1,0 +1,22 @@
+/**
+ * Get Plugin Use Case
+ *
+ * Application use case for getting a plugin by ID with its runtime state.
+ */
+
+package com.vaultstadio.api.application.usecase.plugin
+
+import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.plugins.api.Plugin
+
+interface GetPluginUseCase {
+
+    operator fun invoke(pluginId: String): Plugin?
+}
+
+class GetPluginUseCaseImpl(
+    private val pluginManager: PluginManager,
+) : GetPluginUseCase {
+
+    override fun invoke(pluginId: String): Plugin? = pluginManager.getPlugin(pluginId)
+}

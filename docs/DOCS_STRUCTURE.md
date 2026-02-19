@@ -33,6 +33,7 @@ docs/
 │   ├── ARCHITECTURE.md          # Backend and full system
 │   ├── FRONTEND_ARCHITECTURE.md
 │   ├── KNOWN_ISSUES.md
+│   ├── CLEAN_ARCHITECTURE_REVIEW.md  # Clean Architecture alignment and improvements
 │   └── DOCUMENTATION_ANALYSIS.md
 │
 ├── api/                         # REST API and Phase 6 protocols

@@ -6,9 +6,15 @@
 
 package com.vaultstadio.api.routes.version
 
+import com.vaultstadio.api.application.usecase.version.ApplyRetentionPolicyUseCase
+import com.vaultstadio.api.application.usecase.version.CompareVersionsUseCase
+import com.vaultstadio.api.application.usecase.version.DeleteVersionUseCase
+import com.vaultstadio.api.application.usecase.version.GetVersionHistoryUseCase
+import com.vaultstadio.api.application.usecase.version.GetVersionUseCase
+import com.vaultstadio.api.application.usecase.version.RestoreVersionUseCase
 import com.vaultstadio.api.config.user
 import com.vaultstadio.core.domain.model.VersionRetentionPolicy
-import com.vaultstadio.core.domain.service.FileVersionService
+import com.vaultstadio.core.domain.service.RestoreVersionInput
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
@@ -20,6 +26,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import kotlinx.serialization.Serializable
+import org.koin.ktor.ext.get as koinGet
 
 /**
  * Request to create a new version.
@@ -106,15 +113,15 @@ data class CleanupRequest(
 /**
  * Configure version routes.
  */
-fun Route.versionRoutes(fileVersionService: FileVersionService) {
+fun Route.versionRoutes() {
     authenticate("auth-bearer") {
         route("/api/v1/versions") {
-            // Get version history for an item
             get("/item/{itemId}") {
+                val getVersionHistoryUseCase: GetVersionHistoryUseCase = call.application.koinGet()
                 val itemId = call.parameters["itemId"]
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing item ID")
 
-                fileVersionService.getHistory(itemId).fold(
+                getVersionHistoryUseCase(itemId).fold(
                     { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
                     { history ->
                         call.respond(
@@ -130,14 +137,14 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                 )
             }
 
-            // Get a specific version
             get("/item/{itemId}/version/{versionNumber}") {
+                val getVersionUseCase: GetVersionUseCase = call.application.koinGet()
                 val itemId = call.parameters["itemId"]
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing item ID")
                 val versionNumber = call.parameters["versionNumber"]?.toIntOrNull()
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid version number")
 
-                fileVersionService.getVersion(itemId, versionNumber).fold(
+                getVersionUseCase(itemId, versionNumber).fold(
                     { error -> call.respond(HttpStatusCode.NotFound, error.message ?: "Version not found") },
                     { version ->
                         if (version != null) {
@@ -149,14 +156,14 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                 )
             }
 
-            // Download a specific version
             get("/item/{itemId}/version/{versionNumber}/download") {
+                val getVersionUseCase: GetVersionUseCase = call.application.koinGet()
                 val itemId = call.parameters["itemId"]
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing item ID")
                 val versionNumber = call.parameters["versionNumber"]?.toIntOrNull()
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid version number")
 
-                fileVersionService.getVersion(itemId, versionNumber).fold(
+                getVersionUseCase(itemId, versionNumber).fold(
                     { error -> call.respond(HttpStatusCode.NotFound, error.message ?: "Version not found") },
                     { version ->
                         if (version != null) {
@@ -176,21 +183,21 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                 )
             }
 
-            // Restore a version
             post("/item/{itemId}/restore") {
+                val restoreVersionUseCase: RestoreVersionUseCase = call.application.koinGet()
                 val itemId = call.parameters["itemId"]
                     ?: return@post call.respond(HttpStatusCode.BadRequest, "Missing item ID")
                 val request = call.receive<RestoreVersionRequest>()
                 val user = call.user ?: return@post call.respond(HttpStatusCode.Unauthorized)
                 val userId = user.id
 
-                val input = com.vaultstadio.core.domain.service.RestoreVersionInput(
+                val input = RestoreVersionInput(
                     itemId = itemId,
                     versionNumber = request.versionNumber,
                     comment = request.comment,
                 )
 
-                fileVersionService.restoreVersion(input, userId).fold(
+                restoreVersionUseCase(input, userId).fold(
                     { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
                     { version ->
                         call.respond(
@@ -204,8 +211,8 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                 )
             }
 
-            // Compare two versions
             get("/item/{itemId}/diff") {
+                val compareVersionsUseCase: CompareVersionsUseCase = call.application.koinGet()
                 val itemId = call.parameters["itemId"]
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing item ID")
                 val fromVersion = call.request.queryParameters["from"]?.toIntOrNull()
@@ -213,7 +220,7 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                 val toVersion = call.request.queryParameters["to"]?.toIntOrNull()
                     ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing 'to' version")
 
-                fileVersionService.compareVersions(itemId, fromVersion, toVersion).fold(
+                compareVersionsUseCase(itemId, fromVersion, toVersion).fold(
                     { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
                     { diff ->
                         call.respond(
@@ -239,21 +246,21 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                 )
             }
 
-            // Delete a version
             delete("/{versionId}") {
+                val deleteVersionUseCase: DeleteVersionUseCase = call.application.koinGet()
                 val versionId = call.parameters["versionId"]
                     ?: return@delete call.respond(HttpStatusCode.BadRequest, "Missing version ID")
                 val user = call.user ?: return@delete call.respond(HttpStatusCode.Unauthorized)
                 val userId = user.id
 
-                fileVersionService.deleteVersion(versionId, userId).fold(
+                deleteVersionUseCase(versionId, userId).fold(
                     { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
                     { call.respond(HttpStatusCode.NoContent) },
                 )
             }
 
-            // Apply retention policy
             post("/item/{itemId}/cleanup") {
+                val applyRetentionPolicyUseCase: ApplyRetentionPolicyUseCase = call.application.koinGet()
                 val itemId = call.parameters["itemId"]
                     ?: return@post call.respond(HttpStatusCode.BadRequest, "Missing item ID")
                 val request = call.receive<CleanupRequest>()
@@ -264,7 +271,7 @@ fun Route.versionRoutes(fileVersionService: FileVersionService) {
                     minVersionsToKeep = request.minVersionsToKeep,
                 )
 
-                fileVersionService.applyRetentionPolicy(itemId, policy).fold(
+                applyRetentionPolicyUseCase(itemId, policy).fold(
                     { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
                     { deletedIds ->
                         call.respond(

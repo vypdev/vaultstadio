@@ -12,9 +12,12 @@ import com.vaultstadio.api.dto.RefreshRequest
 import com.vaultstadio.api.dto.RefreshResponse
 import com.vaultstadio.api.dto.RegisterRequest
 import com.vaultstadio.api.dto.toResponse
+import com.vaultstadio.api.application.usecase.auth.LoginUseCase
+import com.vaultstadio.api.application.usecase.auth.LogoutUseCase
+import com.vaultstadio.api.application.usecase.auth.RefreshSessionUseCase
+import com.vaultstadio.api.application.usecase.auth.RegisterUseCase
 import com.vaultstadio.core.domain.service.LoginInput
 import com.vaultstadio.core.domain.service.RegisterUserInput
-import com.vaultstadio.core.domain.service.UserService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
@@ -29,7 +32,7 @@ import org.koin.ktor.ext.get as koinGet
 fun Route.authRoutes() {
     route("/auth") {
         post("/register") {
-            val userService: UserService = call.application.koinGet()
+            val registerUseCase: RegisterUseCase = call.application.koinGet()
             val request = call.receive<RegisterRequest>()
 
             val input = RegisterUserInput(
@@ -38,7 +41,7 @@ fun Route.authRoutes() {
                 password = request.password,
             )
 
-            userService.register(input).fold(
+            registerUseCase(input).fold(
                 ifLeft = { throw it },
                 ifRight = { user ->
                     call.respond(
@@ -53,7 +56,7 @@ fun Route.authRoutes() {
         }
 
         post("/login") {
-            val userService: UserService = call.application.koinGet()
+            val loginUseCase: LoginUseCase = call.application.koinGet()
             val request = call.receive<LoginRequest>()
 
             val input = LoginInput(
@@ -63,7 +66,7 @@ fun Route.authRoutes() {
                 userAgent = call.request.headers["User-Agent"],
             )
 
-            userService.login(input).fold(
+            loginUseCase(input).fold(
                 { error -> throw error },
                 { result ->
                     call.respond(
@@ -83,10 +86,10 @@ fun Route.authRoutes() {
         }
 
         post("/refresh") {
-            val userService: UserService = call.application.koinGet()
+            val refreshSessionUseCase: RefreshSessionUseCase = call.application.koinGet()
             val request = call.receive<RefreshRequest>()
 
-            userService.refreshSession(request.refreshToken).fold(
+            refreshSessionUseCase(request.refreshToken).fold(
                 { error -> throw error },
                 { result ->
                     call.respond(
@@ -106,12 +109,12 @@ fun Route.authRoutes() {
         }
 
         post("/logout") {
-            val userService: UserService = call.application.koinGet()
+            val logoutUseCase: LogoutUseCase = call.application.koinGet()
             val token = call.request.headers["Authorization"]
                 ?.removePrefix("Bearer ")
 
             if (token != null) {
-                userService.logout(token)
+                logoutUseCase(token)
             }
 
             call.respond(

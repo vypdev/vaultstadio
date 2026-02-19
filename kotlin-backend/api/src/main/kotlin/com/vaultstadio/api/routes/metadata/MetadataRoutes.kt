@@ -9,8 +9,7 @@ package com.vaultstadio.api.routes.metadata
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.core.domain.repository.MetadataRepository
-import com.vaultstadio.core.domain.service.StorageService
+import com.vaultstadio.api.application.usecase.metadata.GetItemMetadataUseCase
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
@@ -104,34 +103,25 @@ fun Route.metadataRoutes() {
     route("/storage") {
         // Get all metadata for an item
         get("/item/{itemId}/metadata") {
-            val metadataRepository: MetadataRepository = call.application.koinGet()
-            val storageService: StorageService = call.application.koinGet()
+            val getItemMetadataUseCase: GetItemMetadataUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            // Verify access to the item
-            storageService.getItem(itemId, user.id).fold(
+            getItemMetadataUseCase(itemId, user.id).fold(
                 { error -> throw error },
-                { item ->
-                    // Get all metadata for the item
-                    metadataRepository.findByItemId(itemId).fold(
-                        { error -> throw error },
-                        { metadataList ->
-                            val metadataMap = metadataList.associate { it.key to it.value }
-                            val plugins = metadataList.map { it.pluginId }.distinct()
-
-                            call.respond(
-                                HttpStatusCode.OK,
-                                ApiResponse(
-                                    success = true,
-                                    data = FileMetadataResponse(
-                                        itemId = itemId,
-                                        metadata = metadataMap,
-                                        extractedBy = plugins,
-                                    ),
-                                ),
-                            )
-                        },
+                { (_, metadataList) ->
+                    val metadataMap = metadataList.associate { it.key to it.value }
+                    val plugins = metadataList.map { it.pluginId }.distinct()
+                    call.respond(
+                        HttpStatusCode.OK,
+                        ApiResponse(
+                            success = true,
+                            data = FileMetadataResponse(
+                                itemId = itemId,
+                                metadata = metadataMap,
+                                extractedBy = plugins,
+                            ),
+                        ),
                     )
                 },
             )
@@ -139,14 +129,13 @@ fun Route.metadataRoutes() {
 
         // Get image-specific metadata
         get("/item/{itemId}/metadata/image") {
-            val metadataRepository: MetadataRepository = call.application.koinGet()
-            val storageService: StorageService = call.application.koinGet()
+            val getItemMetadataUseCase: GetItemMetadataUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.getItem(itemId, user.id).fold(
+            getItemMetadataUseCase(itemId, user.id).fold(
                 { error -> throw error },
-                { item ->
+                { (item, metadataList) ->
                     if (item.mimeType?.startsWith("image/") != true) {
                         call.respond(
                             HttpStatusCode.BadRequest,
@@ -157,40 +146,34 @@ fun Route.metadataRoutes() {
                         )
                         return@get
                     }
+                    val m = metadataList.associate { it.key to it.value }
 
-                    metadataRepository.findByItemId(itemId).fold(
-                        { error -> throw error },
-                        { metadataList ->
-                            val m = metadataList.associate { it.key to it.value }
-
-                            call.respond(
-                                HttpStatusCode.OK,
-                                ApiResponse(
-                                    success = true,
-                                    data = ImageMetadataResponse(
-                                        width = m["width"]?.toIntOrNull(),
-                                        height = m["height"]?.toIntOrNull(),
-                                        cameraMake = m["cameraMake"],
-                                        cameraModel = m["cameraModel"],
-                                        dateTaken = m["dateTaken"],
-                                        aperture = m["aperture"],
-                                        exposureTime = m["exposureTime"],
-                                        iso = m["iso"]?.toIntOrNull(),
-                                        focalLength = m["focalLength"],
-                                        gpsLatitude = m["gpsLatitude"]?.toDoubleOrNull(),
-                                        gpsLongitude = m["gpsLongitude"]?.toDoubleOrNull(),
-                                        gpsAltitude = m["gpsAltitude"]?.toDoubleOrNull(),
-                                        colorSpace = m["colorSpace"],
-                                        bitDepth = m["bitDepth"]?.toIntOrNull(),
-                                        orientation = m["orientation"]?.toIntOrNull(),
-                                        description = m["description"],
-                                        keywords = m["keywords"]?.split(",") ?: emptyList(),
-                                        copyright = m["copyright"] ?: m["iptcCopyright"],
-                                        artist = m["artist"] ?: m["photographer"],
-                                    ),
-                                ),
-                            )
-                        },
+                    call.respond(
+                        HttpStatusCode.OK,
+                        ApiResponse(
+                            success = true,
+                            data = ImageMetadataResponse(
+                                width = m["width"]?.toIntOrNull(),
+                                height = m["height"]?.toIntOrNull(),
+                                cameraMake = m["cameraMake"],
+                                cameraModel = m["cameraModel"],
+                                dateTaken = m["dateTaken"],
+                                aperture = m["aperture"],
+                                exposureTime = m["exposureTime"],
+                                iso = m["iso"]?.toIntOrNull(),
+                                focalLength = m["focalLength"],
+                                gpsLatitude = m["gpsLatitude"]?.toDoubleOrNull(),
+                                gpsLongitude = m["gpsLongitude"]?.toDoubleOrNull(),
+                                gpsAltitude = m["gpsAltitude"]?.toDoubleOrNull(),
+                                colorSpace = m["colorSpace"],
+                                bitDepth = m["bitDepth"]?.toIntOrNull(),
+                                orientation = m["orientation"]?.toIntOrNull(),
+                                description = m["description"],
+                                keywords = m["keywords"]?.split(",") ?: emptyList(),
+                                copyright = m["copyright"] ?: m["iptcCopyright"],
+                                artist = m["artist"] ?: m["photographer"],
+                            ),
+                        ),
                     )
                 },
             )
@@ -198,14 +181,13 @@ fun Route.metadataRoutes() {
 
         // Get video-specific metadata
         get("/item/{itemId}/metadata/video") {
-            val metadataRepository: MetadataRepository = call.application.koinGet()
-            val storageService: StorageService = call.application.koinGet()
+            val getItemMetadataUseCase: GetItemMetadataUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.getItem(itemId, user.id).fold(
+            getItemMetadataUseCase(itemId, user.id).fold(
                 { error -> throw error },
-                { item ->
+                { (item, metadataList) ->
                     if (item.mimeType?.startsWith("video/") != true) {
                         call.respond(
                             HttpStatusCode.BadRequest,
@@ -216,39 +198,33 @@ fun Route.metadataRoutes() {
                         )
                         return@get
                     }
+                    val m = metadataList.associate { it.key to it.value }
 
-                    metadataRepository.findByItemId(itemId).fold(
-                        { error -> throw error },
-                        { metadataList ->
-                            val m = metadataList.associate { it.key to it.value }
-
-                            call.respond(
-                                HttpStatusCode.OK,
-                                ApiResponse(
-                                    success = true,
-                                    data = VideoMetadataResponse(
-                                        width = m["width"]?.toIntOrNull(),
-                                        height = m["height"]?.toIntOrNull(),
-                                        duration = m["duration"]?.toLongOrNull(),
-                                        durationFormatted = m["durationFormatted"],
-                                        videoCodec = m["videoCodec"],
-                                        audioCodec = m["audioCodec"],
-                                        frameRate = m["frameRate"],
-                                        bitrate = m["bitrate"]?.toLongOrNull(),
-                                        aspectRatio = m["aspectRatio"],
-                                        colorSpace = m["colorSpace"],
-                                        isHDR = m["isHDR"]?.toBoolean() ?: false,
-                                        channels = m["channels"]?.toIntOrNull(),
-                                        sampleRate = m["sampleRate"]?.toIntOrNull(),
-                                        title = m["title"],
-                                        artist = m["artist"],
-                                        chapterCount = m["chapterCount"]?.toIntOrNull(),
-                                        subtitleTracks = m["subtitleTracks"]?.split(",") ?: emptyList(),
-                                        audioLanguages = m["audioLanguages"]?.split(",") ?: emptyList(),
-                                    ),
-                                ),
-                            )
-                        },
+                    call.respond(
+                        HttpStatusCode.OK,
+                        ApiResponse(
+                            success = true,
+                            data = VideoMetadataResponse(
+                                width = m["width"]?.toIntOrNull(),
+                                height = m["height"]?.toIntOrNull(),
+                                duration = m["duration"]?.toLongOrNull(),
+                                durationFormatted = m["durationFormatted"],
+                                videoCodec = m["videoCodec"],
+                                audioCodec = m["audioCodec"],
+                                frameRate = m["frameRate"],
+                                bitrate = m["bitrate"]?.toLongOrNull(),
+                                aspectRatio = m["aspectRatio"],
+                                colorSpace = m["colorSpace"],
+                                isHDR = m["isHDR"]?.toBoolean() ?: false,
+                                channels = m["channels"]?.toIntOrNull(),
+                                sampleRate = m["sampleRate"]?.toIntOrNull(),
+                                title = m["title"],
+                                artist = m["artist"],
+                                chapterCount = m["chapterCount"]?.toIntOrNull(),
+                                subtitleTracks = m["subtitleTracks"]?.split(",") ?: emptyList(),
+                                audioLanguages = m["audioLanguages"]?.split(",") ?: emptyList(),
+                            ),
+                        ),
                     )
                 },
             )
@@ -256,14 +232,13 @@ fun Route.metadataRoutes() {
 
         // Get document-specific metadata
         get("/item/{itemId}/metadata/document") {
-            val metadataRepository: MetadataRepository = call.application.koinGet()
-            val storageService: StorageService = call.application.koinGet()
+            val getItemMetadataUseCase: GetItemMetadataUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.getItem(itemId, user.id).fold(
+            getItemMetadataUseCase(itemId, user.id).fold(
                 { error -> throw error },
-                { item ->
+                { (item, metadataList) ->
                     val docMimeTypes = setOf(
                         "application/pdf",
                         "application/msword",
@@ -276,7 +251,6 @@ fun Route.metadataRoutes() {
                         "text/html",
                         "text/markdown",
                     )
-
                     if (!docMimeTypes.contains(item.mimeType)) {
                         call.respond(
                             HttpStatusCode.BadRequest,
@@ -287,33 +261,27 @@ fun Route.metadataRoutes() {
                         )
                         return@get
                     }
+                    val m = metadataList.associate { it.key to it.value }
 
-                    metadataRepository.findByItemId(itemId).fold(
-                        { error -> throw error },
-                        { metadataList ->
-                            val m = metadataList.associate { it.key to it.value }
-
-                            call.respond(
-                                HttpStatusCode.OK,
-                                ApiResponse(
-                                    success = true,
-                                    data = DocumentMetadataResponse(
-                                        title = m["title"],
-                                        author = m["author"],
-                                        subject = m["subject"],
-                                        keywords = m["keywords"]?.split(",") ?: emptyList(),
-                                        creator = m["creator"],
-                                        producer = m["producer"],
-                                        creationDate = m["creationDate"],
-                                        modificationDate = m["modificationDate"],
-                                        pageCount = m["pageCount"]?.toIntOrNull(),
-                                        wordCount = m["wordCount"]?.toIntOrNull(),
-                                        isIndexed = m["indexed"]?.toBoolean() ?: false,
-                                        indexedAt = m["indexedAt"],
-                                    ),
-                                ),
-                            )
-                        },
+                    call.respond(
+                        HttpStatusCode.OK,
+                        ApiResponse(
+                            success = true,
+                            data = DocumentMetadataResponse(
+                                title = m["title"],
+                                author = m["author"],
+                                subject = m["subject"],
+                                keywords = m["keywords"]?.split(",") ?: emptyList(),
+                                creator = m["creator"],
+                                producer = m["producer"],
+                                creationDate = m["creationDate"],
+                                modificationDate = m["modificationDate"],
+                                pageCount = m["pageCount"]?.toIntOrNull(),
+                                wordCount = m["wordCount"]?.toIntOrNull(),
+                                isIndexed = m["indexed"]?.toBoolean() ?: false,
+                                indexedAt = m["indexedAt"],
+                            ),
+                        ),
                     )
                 },
             )

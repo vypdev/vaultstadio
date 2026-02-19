@@ -10,17 +10,19 @@ import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.core.ai.AIError
 import com.vaultstadio.core.ai.AIMessage
+import com.vaultstadio.api.application.usecase.ai.AIServiceUseCase
 import com.vaultstadio.core.ai.AIProviderConfig
 import com.vaultstadio.core.ai.AIProviderType
 import com.vaultstadio.core.ai.AIRequest
-import com.vaultstadio.core.ai.AIService
 import com.vaultstadio.core.domain.model.UserRole
+import org.koin.ktor.ext.get as koinGet
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 
-internal suspend fun handleGetProviders(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleGetProviders(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val user = call.user!!
     if (user.role != UserRole.ADMIN) {
         call.respond(
@@ -29,8 +31,8 @@ internal suspend fun handleGetProviders(call: ApplicationCall, aiService: AIServ
         )
         return
     }
-    val activeProvider = aiService.getActiveProvider()
-    val providers = aiService.getProviders().map { config ->
+    val activeProvider = aiUseCase.getActiveProvider()
+    val providers = aiUseCase.getProviders().map { config ->
         AIProviderResponse(
             type = config.type.name,
             baseUrl = config.baseUrl,
@@ -46,7 +48,8 @@ internal suspend fun handleGetProviders(call: ApplicationCall, aiService: AIServ
     call.respond(HttpStatusCode.OK, ApiResponse(success = true, data = providers))
 }
 
-internal suspend fun handleConfigureProvider(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleConfigureProvider(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val user = call.user!!
     if (user.role != UserRole.ADMIN) {
         call.respond(
@@ -78,7 +81,7 @@ internal suspend fun handleConfigureProvider(call: ApplicationCall, aiService: A
         temperature = request.temperature,
         enabled = request.enabled,
     )
-    aiService.configureProvider(config).fold(
+    aiUseCase.configureProvider(config).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -91,7 +94,8 @@ internal suspend fun handleConfigureProvider(call: ApplicationCall, aiService: A
     )
 }
 
-internal suspend fun handleSetActiveProvider(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleSetActiveProvider(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val user = call.user!!
     if (user.role != UserRole.ADMIN) {
         call.respond(
@@ -110,7 +114,7 @@ internal suspend fun handleSetActiveProvider(call: ApplicationCall, aiService: A
         )
         return
     }
-    aiService.setActiveProvider(providerType).fold(
+    aiUseCase.setActiveProvider(providerType).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -123,7 +127,8 @@ internal suspend fun handleSetActiveProvider(call: ApplicationCall, aiService: A
     )
 }
 
-internal suspend fun handleDeleteProvider(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleDeleteProvider(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val user = call.user!!
     if (user.role != UserRole.ADMIN) {
         call.respond(
@@ -142,7 +147,7 @@ internal suspend fun handleDeleteProvider(call: ApplicationCall, aiService: AISe
         )
         return
     }
-    aiService.removeProvider(providerType).fold(
+    aiUseCase.removeProvider(providerType).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -155,7 +160,8 @@ internal suspend fun handleDeleteProvider(call: ApplicationCall, aiService: AISe
     )
 }
 
-internal suspend fun handleGetProviderStatus(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleGetProviderStatus(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val typeParam = call.parameters["type"]!!
     val providerType = try {
         AIProviderType.valueOf(typeParam.uppercase())
@@ -166,12 +172,13 @@ internal suspend fun handleGetProviderStatus(call: ApplicationCall, aiService: A
         )
         return
     }
-    val available = aiService.isProviderAvailable(providerType)
+    val available = aiUseCase.isProviderAvailable(providerType)
     call.respond(HttpStatusCode.OK, ApiResponse(success = true, data = mapOf("available" to available)))
 }
 
-internal suspend fun handleListModels(call: ApplicationCall, aiService: AIService) {
-    aiService.listModels().fold(
+internal suspend fun handleListModels(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
+    aiUseCase.listModels().fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -194,7 +201,8 @@ internal suspend fun handleListModels(call: ApplicationCall, aiService: AIServic
     )
 }
 
-internal suspend fun handleListModelsByType(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleListModelsByType(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val typeParam = call.parameters["type"]!!
     val providerType = try {
         AIProviderType.valueOf(typeParam.uppercase())
@@ -205,7 +213,7 @@ internal suspend fun handleListModelsByType(call: ApplicationCall, aiService: AI
         )
         return
     }
-    aiService.listModels(providerType).fold(
+    aiUseCase.listModels(providerType).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -228,7 +236,8 @@ internal suspend fun handleListModelsByType(call: ApplicationCall, aiService: AI
     )
 }
 
-internal suspend fun handleChat(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleChat(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val request = call.receive<AIChatRequest>()
     val aiRequest = AIRequest(
         messages = request.messages.map { msg ->
@@ -238,7 +247,7 @@ internal suspend fun handleChat(call: ApplicationCall, aiService: AIService) {
         maxTokens = request.maxTokens,
         temperature = request.temperature,
     )
-    aiService.chat(aiRequest).fold(
+    aiUseCase.chat(aiRequest).fold(
         { error ->
             val statusCode = when (error) {
                 is AIError.AuthenticationError -> HttpStatusCode.Unauthorized
@@ -269,9 +278,10 @@ internal suspend fun handleChat(call: ApplicationCall, aiService: AIService) {
     )
 }
 
-internal suspend fun handleVision(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleVision(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val request = call.receive<AIVisionRequest>()
-    aiService.vision(
+    aiUseCase.vision(
         prompt = request.prompt,
         imageBase64 = request.imageBase64,
         mimeType = request.mimeType,
@@ -300,9 +310,10 @@ internal suspend fun handleVision(call: ApplicationCall, aiService: AIService) {
     )
 }
 
-internal suspend fun handleDescribe(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleDescribe(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val request = call.receive<AIDescribeRequest>()
-    aiService.describeImage(request.imageBase64).fold(
+    aiUseCase.describeImage(request.imageBase64).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -315,9 +326,10 @@ internal suspend fun handleDescribe(call: ApplicationCall, aiService: AIService)
     )
 }
 
-internal suspend fun handleTag(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleTag(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val request = call.receive<AITagRequest>()
-    aiService.tagImage(request.imageBase64).fold(
+    aiUseCase.tagImage(request.imageBase64).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -330,7 +342,8 @@ internal suspend fun handleTag(call: ApplicationCall, aiService: AIService) {
     )
 }
 
-internal suspend fun handleClassify(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleClassify(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val request = call.receive<AIClassifyRequest>()
     if (request.categories.isEmpty()) {
         call.respond(
@@ -342,7 +355,7 @@ internal suspend fun handleClassify(call: ApplicationCall, aiService: AIService)
         )
         return
     }
-    aiService.classify(request.content, request.categories).fold(
+    aiUseCase.classify(request.content, request.categories).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -358,9 +371,10 @@ internal suspend fun handleClassify(call: ApplicationCall, aiService: AIService)
     )
 }
 
-internal suspend fun handleSummarize(call: ApplicationCall, aiService: AIService) {
+internal suspend fun handleSummarize(call: ApplicationCall) {
+    val aiUseCase: AIServiceUseCase = call.application.koinGet()
     val request = call.receive<AISummarizeRequest>()
-    aiService.summarize(request.text, request.maxLength).fold(
+    aiUseCase.summarize(request.text, request.maxLength).fold(
         { error ->
             call.respond(
                 HttpStatusCode.BadRequest,

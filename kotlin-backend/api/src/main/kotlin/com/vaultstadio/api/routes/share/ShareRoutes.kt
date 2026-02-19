@@ -8,10 +8,15 @@ import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.CreateShareRequest
 import com.vaultstadio.api.dto.toResponse
+import com.vaultstadio.api.application.usecase.share.AccessShareUseCase
+import com.vaultstadio.api.application.usecase.share.CreateShareUseCase
+import com.vaultstadio.api.application.usecase.share.DeleteShareUseCase
+import com.vaultstadio.api.application.usecase.share.GetSharesByItemUseCase
+import com.vaultstadio.api.application.usecase.share.GetSharesByUserUseCase
+import com.vaultstadio.api.application.usecase.share.GetSharesSharedWithUserUseCase
+import com.vaultstadio.api.application.usecase.storage.DownloadFileUseCase
 import com.vaultstadio.core.domain.service.AccessShareInput
 import com.vaultstadio.core.domain.service.CreateShareInput
-import com.vaultstadio.core.domain.service.ShareService
-import com.vaultstadio.core.domain.service.StorageService
 import io.ktor.http.ContentDisposition
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -33,11 +38,11 @@ fun Route.shareRoutes() {
     route("/shares") {
         // List user's shares (created by user)
         get {
-            val shareService: ShareService = call.application.koinGet()
+            val getSharesByUserUseCase: GetSharesByUserUseCase = call.application.koinGet()
             val user = call.user!!
             val activeOnly = call.request.queryParameters["activeOnly"]?.toBoolean() ?: true
 
-            shareService.getSharesByUser(user.id, activeOnly).fold(
+            getSharesByUserUseCase(user.id, activeOnly).fold(
                 { error -> throw error },
                 { shares ->
                     val baseUrl = getBaseUrl(call)
@@ -54,11 +59,11 @@ fun Route.shareRoutes() {
 
         // List shares shared with the current user
         get("/shared-with-me") {
-            val shareService: ShareService = call.application.koinGet()
+            val getSharesSharedWithUserUseCase: GetSharesSharedWithUserUseCase = call.application.koinGet()
             val user = call.user!!
             val activeOnly = call.request.queryParameters["activeOnly"]?.toBoolean() ?: true
 
-            shareService.getSharesSharedWithUser(user.id, activeOnly).fold(
+            getSharesSharedWithUserUseCase(user.id, activeOnly).fold(
                 { error -> throw error },
                 { shares ->
                     val baseUrl = getBaseUrl(call)
@@ -75,7 +80,7 @@ fun Route.shareRoutes() {
 
         // Create share
         post {
-            val shareService: ShareService = call.application.koinGet()
+            val createShareUseCase: CreateShareUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<CreateShareRequest>()
 
@@ -87,7 +92,7 @@ fun Route.shareRoutes() {
                 maxDownloads = request.maxDownloads,
             )
 
-            shareService.createShare(input).fold(
+            createShareUseCase(input).fold(
                 { error -> throw error },
                 { share ->
                     val baseUrl = getBaseUrl(call)
@@ -101,11 +106,11 @@ fun Route.shareRoutes() {
 
         // Get shares for an item
         get("/item/{itemId}") {
-            val shareService: ShareService = call.application.koinGet()
+            val getSharesByItemUseCase: GetSharesByItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            shareService.getSharesByItem(itemId, user.id).fold(
+            getSharesByItemUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { shares ->
                     val baseUrl = getBaseUrl(call)
@@ -122,11 +127,11 @@ fun Route.shareRoutes() {
 
         // Delete share
         delete("/{shareId}") {
-            val shareService: ShareService = call.application.koinGet()
+            val deleteShareUseCase: DeleteShareUseCase = call.application.koinGet()
             val user = call.user!!
             val shareId = call.parameters["shareId"]!!
 
-            shareService.deleteShare(shareId, user.id).fold(
+            deleteShareUseCase(shareId, user.id).fold(
                 { error -> throw error },
                 {
                     call.respond(
@@ -144,7 +149,7 @@ fun Route.publicShareRoutes() {
     route("/share/{token}") {
         // Get share info
         get {
-            val shareService: ShareService = call.application.koinGet()
+            val accessShareUseCase: AccessShareUseCase = call.application.koinGet()
             val token = call.parameters["token"]!!
             val password = call.request.queryParameters["password"]
 
@@ -155,7 +160,7 @@ fun Route.publicShareRoutes() {
                 userAgent = call.request.headers["User-Agent"],
             )
 
-            shareService.accessShare(input).fold(
+            accessShareUseCase(input).fold(
                 { error -> throw error },
                 { (share, item) ->
                     call.respond(
@@ -175,8 +180,8 @@ fun Route.publicShareRoutes() {
 
         // Download shared file
         get("/download") {
-            val shareService: ShareService = call.application.koinGet()
-            val storageService: StorageService = call.application.koinGet()
+            val accessShareUseCase: AccessShareUseCase = call.application.koinGet()
+            val downloadFileUseCase: DownloadFileUseCase = call.application.koinGet()
             val token = call.parameters["token"]!!
             val password = call.request.queryParameters["password"]
 
@@ -187,11 +192,10 @@ fun Route.publicShareRoutes() {
                 userAgent = call.request.headers["User-Agent"],
             )
 
-            shareService.accessShare(input).fold(
+            accessShareUseCase(input).fold(
                 { error -> throw error },
                 { (_, item) ->
-                    // Use a system user context for downloads
-                    storageService.downloadFile(item.id, item.ownerId).fold(
+                    downloadFileUseCase(item.id, item.ownerId).fold(
                         { error -> throw error },
                         { (downloadItem, stream) ->
                             call.response.header(

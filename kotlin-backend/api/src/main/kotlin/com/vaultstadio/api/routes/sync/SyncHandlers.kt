@@ -6,6 +6,15 @@
 package com.vaultstadio.api.routes.sync
 
 import com.vaultstadio.api.config.user
+import com.vaultstadio.api.application.usecase.sync.DeactivateDeviceUseCase
+import com.vaultstadio.api.application.usecase.sync.GenerateFileSignatureUseCase
+import com.vaultstadio.api.application.usecase.sync.GetPendingConflictsUseCase
+import com.vaultstadio.api.application.usecase.sync.ListDevicesUseCase
+import com.vaultstadio.api.application.usecase.sync.RecordChangeUseCase
+import com.vaultstadio.api.application.usecase.sync.RegisterDeviceUseCase
+import com.vaultstadio.api.application.usecase.sync.RemoveDeviceUseCase
+import com.vaultstadio.api.application.usecase.sync.ResolveConflictUseCase
+import com.vaultstadio.api.application.usecase.sync.SyncPullUseCase
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.core.domain.model.ChangeType
 import com.vaultstadio.core.domain.model.ConflictResolution
@@ -15,15 +24,16 @@ import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.model.SyncDevice
 import com.vaultstadio.core.domain.service.RecordChangeInput
 import com.vaultstadio.core.domain.service.RegisterDeviceInput
-import com.vaultstadio.core.domain.service.SyncService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
+import org.koin.ktor.ext.get as koinGet
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import kotlinx.datetime.Clock
 import com.vaultstadio.core.domain.model.SyncRequest as CoreSyncRequest
 
-internal suspend fun handleRegisterDevice(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleRegisterDevice(call: ApplicationCall) {
+    val registerDeviceUseCase: RegisterDeviceUseCase = call.application.koinGet()
     val request = call.receive<RegisterDeviceRequest>()
     val user = call.user ?: run {
         call.respond(HttpStatusCode.Unauthorized)
@@ -39,7 +49,7 @@ internal suspend fun handleRegisterDevice(call: ApplicationCall, syncService: Sy
         deviceName = request.deviceName,
         deviceType = deviceType,
     )
-    syncService.registerDevice(input, user.id).fold(
+    registerDeviceUseCase(input, user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { device ->
             call.respond(HttpStatusCode.Created, ApiResponse(success = true, data = device.toResponse()))
@@ -47,13 +57,14 @@ internal suspend fun handleRegisterDevice(call: ApplicationCall, syncService: Sy
     )
 }
 
-internal suspend fun handleListDevices(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleListDevices(call: ApplicationCall) {
+    val listDevicesUseCase: ListDevicesUseCase = call.application.koinGet()
     val activeOnly = call.request.queryParameters["activeOnly"]?.toBoolean() ?: true
     val user = call.user ?: run {
         call.respond(HttpStatusCode.Unauthorized)
         return
     }
-    syncService.listDevices(user.id, activeOnly).fold(
+    listDevicesUseCase(user.id, activeOnly).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { devices ->
             call.respond(ApiResponse(success = true, data = devices.map { it.toResponse() }))
@@ -61,7 +72,8 @@ internal suspend fun handleListDevices(call: ApplicationCall, syncService: SyncS
     )
 }
 
-internal suspend fun handleDeactivateDevice(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleDeactivateDevice(call: ApplicationCall) {
+    val deactivateDeviceUseCase: DeactivateDeviceUseCase = call.application.koinGet()
     val deviceId = call.parameters["deviceId"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing device ID")
@@ -71,13 +83,14 @@ internal suspend fun handleDeactivateDevice(call: ApplicationCall, syncService: 
         call.respond(HttpStatusCode.Unauthorized)
         return
     }
-    syncService.deactivateDevice(deviceId, user.id).fold(
+    deactivateDeviceUseCase(deviceId, user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { call.respond(HttpStatusCode.OK, mapOf("message" to "Device deactivated")) },
     )
 }
 
-internal suspend fun handleRemoveDevice(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleRemoveDevice(call: ApplicationCall) {
+    val removeDeviceUseCase: RemoveDeviceUseCase = call.application.koinGet()
     val deviceId = call.parameters["deviceId"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing device ID")
@@ -87,13 +100,14 @@ internal suspend fun handleRemoveDevice(call: ApplicationCall, syncService: Sync
         call.respond(HttpStatusCode.Unauthorized)
         return
     }
-    syncService.removeDevice(deviceId, user.id).fold(
+    removeDeviceUseCase(deviceId, user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { call.respond(HttpStatusCode.NoContent) },
     )
 }
 
-internal suspend fun handlePull(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handlePull(call: ApplicationCall) {
+    val syncPullUseCase: SyncPullUseCase = call.application.koinGet()
     val deviceId = call.request.headers["X-Device-ID"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing X-Device-ID header")
@@ -109,7 +123,7 @@ internal suspend fun handlePull(call: ApplicationCall, syncService: SyncService)
         cursor = request.cursor,
         limit = request.limit,
     )
-    syncService.sync(syncRequest, user.id).fold(
+    syncPullUseCase(syncRequest, user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { response ->
             call.respond(
@@ -128,7 +142,8 @@ internal suspend fun handlePull(call: ApplicationCall, syncService: SyncService)
     )
 }
 
-internal suspend fun handlePush(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handlePush(call: ApplicationCall) {
+    val recordChangeUseCase: RecordChangeUseCase = call.application.koinGet()
     val deviceId = call.request.headers["X-Device-ID"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing X-Device-ID header")
@@ -156,7 +171,7 @@ internal suspend fun handlePush(call: ApplicationCall, syncService: SyncService)
             checksum = change.checksum,
             metadata = change.metadata,
         )
-        syncService.recordChange(input, user.id).fold(
+        recordChangeUseCase(input, user.id).fold(
             { _ -> },
             { _ -> accepted++ },
         )
@@ -169,12 +184,13 @@ internal suspend fun handlePush(call: ApplicationCall, syncService: SyncService)
     )
 }
 
-internal suspend fun handleGetPendingConflicts(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleGetPendingConflicts(call: ApplicationCall) {
+    val getPendingConflictsUseCase: GetPendingConflictsUseCase = call.application.koinGet()
     val user = call.user ?: run {
         call.respond(HttpStatusCode.Unauthorized)
         return
     }
-    syncService.getPendingConflicts(user.id).fold(
+    getPendingConflictsUseCase(user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { conflicts ->
             call.respond(ApiResponse(success = true, data = conflicts.map { it.toResponse() }))
@@ -182,7 +198,8 @@ internal suspend fun handleGetPendingConflicts(call: ApplicationCall, syncServic
     )
 }
 
-internal suspend fun handleResolveConflict(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleResolveConflict(call: ApplicationCall) {
+    val resolveConflictUseCase: ResolveConflictUseCase = call.application.koinGet()
     val conflictId = call.parameters["conflictId"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing conflict ID")
@@ -199,13 +216,14 @@ internal suspend fun handleResolveConflict(call: ApplicationCall, syncService: S
         call.respond(HttpStatusCode.BadRequest, "Invalid resolution")
         return
     }
-    syncService.resolveConflict(conflictId, resolution, user.id).fold(
+    resolveConflictUseCase(conflictId, resolution, user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { call.respond(HttpStatusCode.OK, mapOf("message" to "Conflict resolved")) },
     )
 }
 
-internal suspend fun handleGetFileSignature(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleGetFileSignature(call: ApplicationCall) {
+    val generateFileSignatureUseCase: GenerateFileSignatureUseCase = call.application.koinGet()
     val itemId = call.parameters["itemId"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing item ID")
@@ -213,7 +231,7 @@ internal suspend fun handleGetFileSignature(call: ApplicationCall, syncService: 
         }
     val blockSize = call.request.queryParameters["blockSize"]?.toIntOrNull() ?: 4096
     val versionNumber = call.request.queryParameters["version"]?.toIntOrNull() ?: 1
-    syncService.generateFileSignature(itemId, versionNumber, blockSize).fold(
+    generateFileSignatureUseCase(itemId, versionNumber, blockSize).fold(
         { error -> call.respond(HttpStatusCode.NotFound, error.message ?: "Error") },
         { signature ->
             call.respond(
@@ -234,7 +252,8 @@ internal suspend fun handleGetFileSignature(call: ApplicationCall, syncService: 
     )
 }
 
-internal suspend fun handleDeltaUpload(call: ApplicationCall, syncService: SyncService) {
+internal suspend fun handleDeltaUpload(call: ApplicationCall) {
+    val recordChangeUseCaseDelta: RecordChangeUseCase = call.application.koinGet()
     val itemId = call.parameters["itemId"]
         ?: run {
             call.respond(HttpStatusCode.BadRequest, "Missing item ID")
@@ -255,7 +274,7 @@ internal suspend fun handleDeltaUpload(call: ApplicationCall, syncService: SyncS
         deviceId = call.request.headers["X-Device-ID"],
         checksum = request.newChecksum,
     )
-    syncService.recordChange(changeInput, user.id).fold(
+    recordChangeUseCaseDelta(changeInput, user.id).fold(
         { error -> call.respond(HttpStatusCode.InternalServerError, error.message ?: "Error") },
         { change ->
             call.respond(

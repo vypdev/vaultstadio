@@ -7,7 +7,8 @@ package com.vaultstadio.api.routes.activity
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.toResponse
-import com.vaultstadio.core.domain.repository.ActivityRepository
+import com.vaultstadio.api.application.usecase.activity.GetRecentActivityByItemUseCase
+import com.vaultstadio.api.application.usecase.activity.GetRecentActivityByUserUseCase
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
@@ -20,11 +21,11 @@ fun Route.activityRoutes() {
     route("/activity") {
         // Get recent activities
         get {
-            val activityRepository: ActivityRepository = call.application.koinGet()
+            val getRecentActivityByUserUseCase: GetRecentActivityByUserUseCase = call.application.koinGet()
             val user = call.user!!
             val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 20
 
-            activityRepository.getRecentByUser(user.id, limit).fold(
+            getRecentActivityByUserUseCase(user.id, limit).fold(
                 { error -> throw error },
                 { activities ->
                     call.respond(
@@ -40,12 +41,12 @@ fun Route.activityRoutes() {
 
         // Get activities for an item
         get("/item/{itemId}") {
-            val activityRepository: ActivityRepository = call.application.koinGet()
+            val getRecentActivityByItemUseCase: GetRecentActivityByItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
             val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 20
 
-            activityRepository.getRecentByItem(itemId, limit).fold(
+            getRecentActivityByItemUseCase(itemId, limit).fold(
                 { error -> throw error },
                 { activities ->
                     // Filter to only show user's activities or public activities

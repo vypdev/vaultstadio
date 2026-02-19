@@ -10,14 +10,12 @@
 
 package com.vaultstadio.api.routes.ai
 
-import com.vaultstadio.core.ai.AIService
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import kotlinx.serialization.Serializable
-import org.koin.ktor.ext.get as koinGet
 
 @Serializable
 data class AIProviderConfigRequest(
@@ -114,44 +112,18 @@ data class SetActiveProviderRequest(
 
 fun Route.aiRoutes() {
     route("/ai") {
-        get("/providers") {
-            handleGetProviders(call, call.application.koinGet<AIService>())
-        }
-        post("/providers") {
-            handleConfigureProvider(call, call.application.koinGet<AIService>())
-        }
-        post("/providers/active") {
-            handleSetActiveProvider(call, call.application.koinGet<AIService>())
-        }
-        delete("/providers/{type}") {
-            handleDeleteProvider(call, call.application.koinGet<AIService>())
-        }
-        get("/providers/{type}/status") {
-            handleGetProviderStatus(call, call.application.koinGet<AIService>())
-        }
-        get("/models") {
-            handleListModels(call, call.application.koinGet<AIService>())
-        }
-        get("/providers/{type}/models") {
-            handleListModelsByType(call, call.application.koinGet<AIService>())
-        }
-        post("/chat") {
-            handleChat(call, call.application.koinGet<AIService>())
-        }
-        post("/vision") {
-            handleVision(call, call.application.koinGet<AIService>())
-        }
-        post("/describe") {
-            handleDescribe(call, call.application.koinGet<AIService>())
-        }
-        post("/tag") {
-            handleTag(call, call.application.koinGet<AIService>())
-        }
-        post("/classify") {
-            handleClassify(call, call.application.koinGet<AIService>())
-        }
-        post("/summarize") {
-            handleSummarize(call, call.application.koinGet<AIService>())
-        }
+        get("/providers") { handleGetProviders(call) }
+        post("/providers") { handleConfigureProvider(call) }
+        post("/providers/active") { handleSetActiveProvider(call) }
+        delete("/providers/{type}") { handleDeleteProvider(call) }
+        get("/providers/{type}/status") { handleGetProviderStatus(call) }
+        get("/models") { handleListModels(call) }
+        get("/providers/{type}/models") { handleListModelsByType(call) }
+        post("/chat") { handleChat(call) }
+        post("/vision") { handleVision(call) }
+        post("/describe") { handleDescribe(call) }
+        post("/tag") { handleTag(call) }
+        post("/classify") { handleClassify(call) }
+        post("/summarize") { handleSummarize(call) }
     }
 }

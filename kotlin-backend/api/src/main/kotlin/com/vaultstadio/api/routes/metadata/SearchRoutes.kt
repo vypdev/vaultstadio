@@ -13,6 +13,7 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.PaginatedResponse
 import com.vaultstadio.api.dto.SearchRequest
 import com.vaultstadio.api.dto.toResponse
+import com.vaultstadio.api.application.usecase.storage.SearchUseCase
 import com.vaultstadio.api.plugins.PluginManager
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.service.StorageService
@@ -87,7 +88,7 @@ fun Route.searchRoutes() {
     route("/search") {
         // Basic filename search
         get {
-            val storageService: StorageService = call.application.koinGet()
+            val searchUseCase: SearchUseCase = call.application.koinGet()
             val user = call.user!!
             val query = call.request.queryParameters["q"] ?: ""
             val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
@@ -104,7 +105,7 @@ fun Route.searchRoutes() {
                 return@get
             }
 
-            storageService.search(query, user.id, limit, offset).fold(
+            searchUseCase(query, user.id, limit, offset).fold(
                 { error -> throw error },
                 { result ->
                     val response = PaginatedResponse(
@@ -125,15 +126,15 @@ fun Route.searchRoutes() {
 
         // Basic search with POST body
         post {
-            val storageService: StorageService = call.application.koinGet()
+            val searchUseCase: SearchUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<SearchRequest>()
 
-            storageService.search(
-                query = request.query,
-                userId = user.id,
-                limit = request.limit,
-                offset = request.offset,
+            searchUseCase(
+                request.query,
+                user.id,
+                request.limit,
+                request.offset,
             ).fold(
                 { error -> throw error },
                 { result ->

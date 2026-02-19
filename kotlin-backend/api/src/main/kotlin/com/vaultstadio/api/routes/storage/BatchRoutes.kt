@@ -9,9 +9,15 @@ package com.vaultstadio.api.routes.storage
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
+import com.vaultstadio.api.application.usecase.storage.CopyItemUseCase
+import com.vaultstadio.api.application.usecase.storage.DeleteItemUseCase
+import com.vaultstadio.api.application.usecase.storage.DownloadFileUseCase
+import com.vaultstadio.api.application.usecase.storage.GetTrashItemsUseCase
+import com.vaultstadio.api.application.usecase.storage.MoveItemUseCase
+import com.vaultstadio.api.application.usecase.storage.SetStarUseCase
+import com.vaultstadio.api.application.usecase.storage.TrashItemUseCase
 import com.vaultstadio.core.domain.service.CopyItemInput
 import com.vaultstadio.core.domain.service.MoveItemInput
-import com.vaultstadio.core.domain.service.StorageService
 import io.ktor.http.ContentDisposition
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -96,7 +102,8 @@ fun Route.batchRoutes() {
     route("/storage/batch") {
         // Batch delete items
         post("/delete") {
-            val storageService: StorageService = call.application.koinGet()
+            val deleteItemUseCase: DeleteItemUseCase = call.application.koinGet()
+            val trashItemUseCase: TrashItemUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<BatchDeleteRequest>()
 
@@ -118,9 +125,9 @@ fun Route.batchRoutes() {
             request.itemIds.forEach { itemId ->
                 try {
                     val result = if (request.permanent) {
-                        storageService.deleteItem(itemId, user.id)
+                        deleteItemUseCase(itemId, user.id)
                     } else {
-                        storageService.trashItem(itemId, user.id)
+                        trashItemUseCase(itemId, user.id).map { }
                     }
 
                     result.fold(
@@ -147,7 +154,7 @@ fun Route.batchRoutes() {
 
         // Batch move items
         post("/move") {
-            val storageService: StorageService = call.application.koinGet()
+            val moveItemUseCase: MoveItemUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<BatchMoveRequest>()
 
@@ -175,7 +182,7 @@ fun Route.batchRoutes() {
                         userId = user.id,
                     )
 
-                    storageService.moveItem(input).fold(
+                    moveItemUseCase(input).fold(
                         { error ->
                             failed++
                             errors.add(BatchError(itemId, error.message ?: "Unknown error"))
@@ -199,7 +206,7 @@ fun Route.batchRoutes() {
 
         // Batch copy items
         post("/copy") {
-            val storageService: StorageService = call.application.koinGet()
+            val copyItemUseCase: CopyItemUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<BatchCopyRequest>()
 
@@ -227,7 +234,7 @@ fun Route.batchRoutes() {
                         userId = user.id,
                     )
 
-                    storageService.copyItem(input).fold(
+                    copyItemUseCase(input).fold(
                         { error ->
                             failed++
                             errors.add(BatchError(itemId, error.message ?: "Unknown error"))
@@ -251,7 +258,7 @@ fun Route.batchRoutes() {
 
         // Batch star/unstar items
         post("/star") {
-            val storageService: StorageService = call.application.koinGet()
+            val setStarUseCase: SetStarUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<BatchStarRequest>()
 
@@ -272,8 +279,7 @@ fun Route.batchRoutes() {
 
             request.itemIds.forEach { itemId ->
                 try {
-                    // Set star to the requested value
-                    storageService.setStar(itemId, user.id, request.starred).fold(
+                    setStarUseCase(itemId, user.id, request.starred).fold(
                         { error ->
                             failed++
                             errors.add(BatchError(itemId, error.message ?: "Unknown error"))
@@ -297,7 +303,7 @@ fun Route.batchRoutes() {
 
         // Download multiple items as ZIP
         post("/download-zip") {
-            val storageService: StorageService = call.application.koinGet()
+            val downloadFileUseCase: DownloadFileUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<DownloadZipRequest>()
 
@@ -327,7 +333,7 @@ fun Route.batchRoutes() {
                 ZipOutputStream(this).use { zipOut ->
                     request.itemIds.forEach { itemId ->
                         try {
-                            storageService.downloadFile(itemId, user.id).fold(
+                            downloadFileUseCase(itemId, user.id).fold(
                                 { /* Skip failed items */ },
                                 { (item, stream) ->
                                     // Add file to ZIP
@@ -348,11 +354,11 @@ fun Route.batchRoutes() {
 
         // Empty trash
         post("/empty-trash") {
-            val storageService: StorageService = call.application.koinGet()
+            val getTrashItemsUseCase: GetTrashItemsUseCase = call.application.koinGet()
+            val deleteItemUseCase: DeleteItemUseCase = call.application.koinGet()
             val user = call.user!!
 
-            // Get all trashed items
-            storageService.getTrashItems(user.id).fold(
+            getTrashItemsUseCase(user.id).fold(
                 { error -> throw error },
                 { trashedItems ->
                     var successful = 0
@@ -361,7 +367,7 @@ fun Route.batchRoutes() {
 
                     trashedItems.forEach { item ->
                         try {
-                            storageService.deleteItem(item.id, user.id).fold(
+                            deleteItemUseCase(item.id, user.id).fold(
                                 { error ->
                                     failed++
                                     errors.add(BatchError(item.id, error.message ?: "Unknown error"))

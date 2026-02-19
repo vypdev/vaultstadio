@@ -12,7 +12,8 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.service.CachedThumbnail
 import com.vaultstadio.api.service.ThumbnailCache
 import com.vaultstadio.api.service.ThumbnailCacheKey
-import com.vaultstadio.core.domain.service.StorageService
+import com.vaultstadio.api.application.usecase.storage.DownloadFileUseCase
+import com.vaultstadio.api.application.usecase.storage.GetItemUseCase
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
@@ -42,7 +43,8 @@ fun Route.thumbnailRoutes() {
     route("/storage") {
         // Get thumbnail for an item (with caching)
         get("/item/{itemId}/thumbnail") {
-            val storageService: StorageService = call.application.koinGet()
+            val getItemUseCase: GetItemUseCase = call.application.koinGet()
+            val downloadFileUseCase: DownloadFileUseCase = call.application.koinGet()
             val thumbnailCache: ThumbnailCache = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
@@ -56,8 +58,7 @@ fun Route.thumbnailRoutes() {
                 else -> ThumbnailSize.MEDIUM
             }
 
-            // Get the item first to check type and version
-            storageService.getItem(itemId, user.id).fold(
+            getItemUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { item ->
                     val mimeType = item.mimeType
@@ -92,7 +93,7 @@ fun Route.thumbnailRoutes() {
                     }
 
                     // Generate thumbnail
-                    storageService.downloadFile(itemId, user.id).fold(
+                    downloadFileUseCase(itemId, user.id).fold(
                         { error -> throw error },
                         { (_, stream) ->
                             try {
@@ -149,17 +150,16 @@ fun Route.thumbnailRoutes() {
 
         // Get preview for a file (returns file content for preview)
         get("/item/{itemId}/preview") {
-            val storageService: StorageService = call.application.koinGet()
+            val getItemUseCase: GetItemUseCase = call.application.koinGet()
+            val downloadFileUseCase: DownloadFileUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            // Get the item first
-            storageService.getItem(itemId, user.id).fold(
+            getItemUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { item ->
                     val mimeType = item.mimeType
 
-                    // Check if preview is supported
                     val isPreviewable = when {
                         mimeType?.startsWith("image/") == true -> true
                         mimeType?.startsWith("text/") == true -> true
@@ -181,8 +181,7 @@ fun Route.thumbnailRoutes() {
                         return@get
                     }
 
-                    // Stream the file for preview
-                    storageService.downloadFile(itemId, user.id).fold(
+                    downloadFileUseCase(itemId, user.id).fold(
                         { error -> throw error },
                         { (downloadItem, stream) ->
                             val contentType = when {

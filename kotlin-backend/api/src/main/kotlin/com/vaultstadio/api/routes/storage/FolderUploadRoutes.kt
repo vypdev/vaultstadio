@@ -9,7 +9,8 @@ package com.vaultstadio.api.routes.storage
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.core.domain.service.StorageService
+import com.vaultstadio.api.application.usecase.storage.GetOrCreateFolderUseCase
+import com.vaultstadio.api.application.usecase.storage.UploadFileUseCase
 import com.vaultstadio.core.domain.service.UploadFileInput
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
@@ -48,7 +49,8 @@ fun Route.folderUploadRoutes() {
     route("/storage") {
         // Upload a folder with structure
         post("/upload-folder") {
-            val storageService: StorageService = call.application.koinGet()
+            val getOrCreateFolderUseCase: GetOrCreateFolderUseCase = call.application.koinGet()
+            val uploadFileUseCase: UploadFileUseCase = call.application.koinGet()
             val user = call.user!!
 
             val multipart = call.receiveMultipart(formFieldLimit = 512L * 1024 * 1024) // 512 MB max per part
@@ -118,11 +120,10 @@ fun Route.folderUploadRoutes() {
                             folderPathKey = if (folderPathKey.isEmpty()) folderName else "$folderPathKey/$folderName"
 
                             if (!createdFolderIds.containsKey(folderPathKey)) {
-                                // Try to get or create this folder
-                                val existingFolder = storageService.getOrCreateFolder(
-                                    name = folderName,
-                                    parentId = currentParentId,
-                                    ownerId = user.id,
+                                val existingFolder = getOrCreateFolderUseCase(
+                                    folderName,
+                                    currentParentId,
+                                    user.id,
                                 )
 
                                 existingFolder.fold(
@@ -148,7 +149,6 @@ fun Route.folderUploadRoutes() {
                         }
                     }
 
-                    // Upload the file
                     val uploadInput = UploadFileInput(
                         name = file.fileName,
                         mimeType = file.contentType,
@@ -158,7 +158,7 @@ fun Route.folderUploadRoutes() {
                         inputStream = file.bytes.inputStream(),
                     )
 
-                    storageService.uploadFile(uploadInput).fold(
+                    uploadFileUseCase(uploadInput).fold(
                         { error ->
                             errors.add(FolderUploadError(file.relativePath, error.message ?: "Upload failed"))
                         },

@@ -9,9 +9,15 @@ package com.vaultstadio.api.routes.plugin
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
+import com.vaultstadio.api.application.usecase.plugin.DisablePluginUseCase
+import com.vaultstadio.api.application.usecase.plugin.EnablePluginUseCase
+import com.vaultstadio.api.application.usecase.plugin.GetPluginEndpointsUseCase
+import com.vaultstadio.api.application.usecase.plugin.GetPluginStateUseCase
+import com.vaultstadio.api.application.usecase.plugin.GetPluginUseCase
+import com.vaultstadio.api.application.usecase.plugin.HandlePluginEndpointUseCase
+import com.vaultstadio.api.application.usecase.plugin.ListPluginsUseCase
 import com.vaultstadio.api.dto.PluginConfigResponse
 import com.vaultstadio.api.dto.PluginInfoResponse
-import com.vaultstadio.api.plugins.PluginManager
 import com.vaultstadio.core.domain.model.UserRole
 import com.vaultstadio.plugins.context.EndpointRequest
 import io.ktor.http.ContentType
@@ -33,35 +39,34 @@ import org.koin.ktor.ext.get as koinGet
 
 fun Route.pluginRoutes() {
     route("/plugins") {
-        // List installed plugins
         get {
-            val pluginManager: PluginManager = call.application.koinGet()
-            val plugins = pluginManager.listPlugins()
+            val listPluginsUseCase: ListPluginsUseCase = call.application.koinGet()
+            val entries = listPluginsUseCase()
             call.respond(
                 HttpStatusCode.OK,
                 ApiResponse(
                     success = true,
-                    data = plugins.map { plugin ->
+                    data = entries.map { entry ->
                         PluginInfoResponse(
-                            id = plugin.metadata.id,
-                            name = plugin.metadata.name,
-                            version = plugin.metadata.version,
-                            description = plugin.metadata.description,
-                            author = plugin.metadata.author,
-                            isEnabled = pluginManager.isPluginEnabled(plugin.metadata.id),
-                            state = pluginManager.getPluginState(plugin.metadata.id).name,
+                            id = entry.plugin.metadata.id,
+                            name = entry.plugin.metadata.name,
+                            version = entry.plugin.metadata.version,
+                            description = entry.plugin.metadata.description,
+                            author = entry.plugin.metadata.author,
+                            isEnabled = entry.isEnabled,
+                            state = entry.state.name,
                         )
                     },
                 ),
             )
         }
 
-        // Get plugin details
         get("/{pluginId}") {
-            val pluginManager: PluginManager = call.application.koinGet()
+            val getPluginUseCase: GetPluginUseCase = call.application.koinGet()
+            val getPluginStateUseCase: GetPluginStateUseCase = call.application.koinGet()
             val pluginId = call.parameters["pluginId"]!!
 
-            val plugin = pluginManager.getPlugin(pluginId)
+            val plugin = getPluginUseCase(pluginId)
             if (plugin == null) {
                 call.respond(
                     HttpStatusCode.NotFound,
@@ -83,19 +88,18 @@ fun Route.pluginRoutes() {
                         version = plugin.metadata.version,
                         description = plugin.metadata.description,
                         author = plugin.metadata.author,
-                        isEnabled = pluginManager.isPluginEnabled(plugin.metadata.id),
-                        state = pluginManager.getPluginState(plugin.metadata.id).name,
+                        isEnabled = getPluginStateUseCase.isPluginEnabled(pluginId),
+                        state = getPluginStateUseCase.getPluginState(pluginId).name,
                     ),
                 ),
             )
         }
 
-        // Get plugin configuration
         get("/{pluginId}/config") {
-            val pluginManager: PluginManager = call.application.koinGet()
+            val getPluginUseCase: GetPluginUseCase = call.application.koinGet()
             val pluginId = call.parameters["pluginId"]!!
 
-            val plugin = pluginManager.getPlugin(pluginId)
+            val plugin = getPluginUseCase(pluginId)
             if (plugin == null) {
                 call.respond(
                     HttpStatusCode.NotFound,
@@ -119,9 +123,8 @@ fun Route.pluginRoutes() {
             )
         }
 
-        // Update plugin configuration (admin only)
         put("/{pluginId}/config") {
-            val pluginManager: PluginManager = call.application.koinGet()
+            val getPluginUseCase: GetPluginUseCase = call.application.koinGet()
             val user = call.user!!
             if (user.role != UserRole.ADMIN) {
                 call.respond(
@@ -137,7 +140,7 @@ fun Route.pluginRoutes() {
             val pluginId = call.parameters["pluginId"]!!
             val config = call.receive<Map<String, Any?>>()
 
-            val plugin = pluginManager.getPlugin(pluginId)
+            val plugin = getPluginUseCase(pluginId)
             if (plugin == null) {
                 call.respond(
                     HttpStatusCode.NotFound,
@@ -166,9 +169,8 @@ fun Route.pluginRoutes() {
             }
         }
 
-        // Enable plugin (admin only)
         post("/{pluginId}/enable") {
-            val pluginManager: PluginManager = call.application.koinGet()
+            val enablePluginUseCase: EnablePluginUseCase = call.application.koinGet()
             val user = call.user!!
             if (user.role != UserRole.ADMIN) {
                 call.respond(
@@ -183,7 +185,7 @@ fun Route.pluginRoutes() {
 
             val pluginId = call.parameters["pluginId"]!!
 
-            pluginManager.enablePlugin(pluginId).fold(
+            enablePluginUseCase(pluginId).fold(
                 { error -> throw error },
                 {
                     call.respond(
@@ -194,9 +196,8 @@ fun Route.pluginRoutes() {
             )
         }
 
-        // Disable plugin (admin only)
         post("/{pluginId}/disable") {
-            val pluginManager: PluginManager = call.application.koinGet()
+            val disablePluginUseCase: DisablePluginUseCase = call.application.koinGet()
             val user = call.user!!
             if (user.role != UserRole.ADMIN) {
                 call.respond(
@@ -211,7 +212,7 @@ fun Route.pluginRoutes() {
 
             val pluginId = call.parameters["pluginId"]!!
 
-            pluginManager.disablePlugin(pluginId).fold(
+            disablePluginUseCase(pluginId).fold(
                 { error -> throw error },
                 {
                     call.respond(
@@ -222,12 +223,11 @@ fun Route.pluginRoutes() {
             )
         }
 
-        // List registered endpoints for a plugin
         get("/{pluginId}/endpoints") {
-            val pluginManager: PluginManager = call.application.koinGet()
+            val getPluginEndpointsUseCase: GetPluginEndpointsUseCase = call.application.koinGet()
             val pluginId = call.parameters["pluginId"]!!
 
-            val endpoints = pluginManager.getPluginEndpoints(pluginId)
+            val endpoints = getPluginEndpointsUseCase(pluginId)
             call.respond(
                 HttpStatusCode.OK,
                 ApiResponse(
@@ -269,7 +269,9 @@ private suspend fun handlePluginEndpoint(
     call: ApplicationCall,
     method: String,
 ) {
-    val pluginManager: PluginManager = call.application.koinGet()
+    val getPluginUseCase: GetPluginUseCase = call.application.koinGet()
+    val getPluginStateUseCase: GetPluginStateUseCase = call.application.koinGet()
+    val handlePluginEndpointUseCase: HandlePluginEndpointUseCase = call.application.koinGet()
     val pluginId = call.parameters["pluginId"]
     val pathParts = call.parameters.getAll("path") ?: emptyList()
     val path = "/" + pathParts.joinToString("/")
@@ -285,7 +287,7 @@ private suspend fun handlePluginEndpoint(
         return
     }
 
-    val plugin = pluginManager.getPlugin(pluginId)
+    val plugin = getPluginUseCase(pluginId)
     if (plugin == null) {
         call.respond(
             HttpStatusCode.NotFound,
@@ -297,7 +299,7 @@ private suspend fun handlePluginEndpoint(
         return
     }
 
-    if (!pluginManager.isPluginEnabled(pluginId)) {
+    if (!getPluginStateUseCase.isPluginEnabled(pluginId)) {
         call.respond(
             HttpStatusCode.ServiceUnavailable,
             ApiResponse<Unit>(
@@ -308,7 +310,6 @@ private suspend fun handlePluginEndpoint(
         return
     }
 
-    // Build endpoint request
     val user = call.user
     val body = try {
         if (method in listOf("POST", "PUT", "PATCH")) {
@@ -329,8 +330,7 @@ private suspend fun handlePluginEndpoint(
         userId = user?.id,
     )
 
-    // Delegate to plugin
-    val response = pluginManager.handlePluginEndpoint(pluginId, method, path, request)
+    val response = handlePluginEndpointUseCase(pluginId, method, path, request)
 
     if (response == null) {
         call.respond(

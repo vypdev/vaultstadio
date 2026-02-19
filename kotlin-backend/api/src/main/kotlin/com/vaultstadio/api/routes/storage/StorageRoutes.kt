@@ -4,6 +4,22 @@
 
 package com.vaultstadio.api.routes.storage
 
+import com.vaultstadio.api.application.usecase.storage.CopyItemUseCase
+import com.vaultstadio.api.application.usecase.storage.CreateFolderUseCase
+import com.vaultstadio.api.application.usecase.storage.DeleteItemUseCase
+import com.vaultstadio.api.application.usecase.storage.DownloadFileUseCase
+import com.vaultstadio.api.application.usecase.storage.GetBreadcrumbsUseCase
+import com.vaultstadio.api.application.usecase.storage.GetItemUseCase
+import com.vaultstadio.api.application.usecase.storage.GetRecentItemsUseCase
+import com.vaultstadio.api.application.usecase.storage.GetStarredItemsUseCase
+import com.vaultstadio.api.application.usecase.storage.GetTrashItemsUseCase
+import com.vaultstadio.api.application.usecase.storage.ListFolderUseCase
+import com.vaultstadio.api.application.usecase.storage.MoveItemUseCase
+import com.vaultstadio.api.application.usecase.storage.RenameItemUseCase
+import com.vaultstadio.api.application.usecase.storage.RestoreItemUseCase
+import com.vaultstadio.api.application.usecase.storage.ToggleStarUseCase
+import com.vaultstadio.api.application.usecase.storage.TrashItemUseCase
+import com.vaultstadio.api.application.usecase.storage.UploadFileUseCase
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
@@ -19,7 +35,6 @@ import com.vaultstadio.core.domain.repository.StorageItemQuery
 import com.vaultstadio.core.domain.service.CopyItemInput
 import com.vaultstadio.core.domain.service.CreateFolderInput
 import com.vaultstadio.core.domain.service.MoveItemInput
-import com.vaultstadio.core.domain.service.StorageService
 import com.vaultstadio.core.domain.service.UploadFileInput
 import io.ktor.http.ContentDisposition
 import io.ktor.http.ContentType
@@ -47,7 +62,7 @@ fun Route.storageRoutes() {
     route("/storage") {
         // List folder contents
         get("/folder/{folderId?}") {
-            val storageService: StorageService = call.application.koinGet()
+            val listFolderUseCase: ListFolderUseCase = call.application.koinGet()
             val user = call.user!!
             val folderId = call.parameters["folderId"]
             val sortBy = call.request.queryParameters["sortBy"] ?: "name"
@@ -65,7 +80,7 @@ fun Route.storageRoutes() {
                 offset = offset,
             )
 
-            storageService.listFolder(folderId, user.id, query).fold(
+            listFolderUseCase(folderId, user.id, query).fold(
                 { error -> throw error },
                 { result ->
                     val response = PaginatedResponse(
@@ -86,11 +101,11 @@ fun Route.storageRoutes() {
 
         // Get item details
         get("/item/{itemId}") {
-            val storageService: StorageService = call.application.koinGet()
+            val getItemUseCase: GetItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.getItem(itemId, user.id).fold(
+            getItemUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { item ->
                     call.respond(
@@ -103,7 +118,7 @@ fun Route.storageRoutes() {
 
         // Create folder
         post("/folder") {
-            val storageService: StorageService = call.application.koinGet()
+            val createFolderUseCase: CreateFolderUseCase = call.application.koinGet()
             val user = call.user!!
             val request = call.receive<CreateFolderRequest>()
 
@@ -113,7 +128,7 @@ fun Route.storageRoutes() {
                 ownerId = user.id,
             )
 
-            storageService.createFolder(input).fold(
+            createFolderUseCase(input).fold(
                 { error -> throw error },
                 { folder ->
                     call.respond(
@@ -126,7 +141,7 @@ fun Route.storageRoutes() {
 
         // Upload file (parentId from query or from multipart form field)
         post("/upload") {
-            val storageService: StorageService = call.application.koinGet()
+            val uploadFileUseCase: UploadFileUseCase = call.application.koinGet()
             val user = call.user!!
             var parentId = call.request.queryParameters["parentId"]
 
@@ -172,7 +187,7 @@ fun Route.storageRoutes() {
                 inputStream = ByteArrayInputStream(fileBytes),
             )
 
-            storageService.uploadFile(input).fold(
+            uploadFileUseCase(input).fold(
                 { error -> throw error },
                 { file ->
                     call.respond(
@@ -185,11 +200,11 @@ fun Route.storageRoutes() {
 
         // Download file
         get("/download/{itemId}") {
-            val storageService: StorageService = call.application.koinGet()
+            val downloadFileUseCase: DownloadFileUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.downloadFile(itemId, user.id).fold(
+            downloadFileUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { (item, stream) ->
                     call.response.header(
@@ -212,12 +227,12 @@ fun Route.storageRoutes() {
 
         // Rename item
         patch("/item/{itemId}/rename") {
-            val storageService: StorageService = call.application.koinGet()
+            val renameItemUseCase: RenameItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
             val request = call.receive<RenameRequest>()
 
-            storageService.renameItem(itemId, request.name, user.id).fold(
+            renameItemUseCase(itemId, request.name, user.id).fold(
                 { error -> throw error },
                 { item ->
                     call.respond(
@@ -230,7 +245,7 @@ fun Route.storageRoutes() {
 
         // Move item
         post("/item/{itemId}/move") {
-            val storageService: StorageService = call.application.koinGet()
+            val moveItemUseCase: MoveItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
             val request = call.receive<MoveRequest>()
@@ -242,7 +257,7 @@ fun Route.storageRoutes() {
                 userId = user.id,
             )
 
-            storageService.moveItem(input).fold(
+            moveItemUseCase(input).fold(
                 { error -> throw error },
                 { item ->
                     call.respond(
@@ -255,7 +270,7 @@ fun Route.storageRoutes() {
 
         // Copy item
         post("/item/{itemId}/copy") {
-            val storageService: StorageService = call.application.koinGet()
+            val copyItemUseCase: CopyItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
             val request = call.receive<CopyRequest>()
@@ -267,7 +282,7 @@ fun Route.storageRoutes() {
                 userId = user.id,
             )
 
-            storageService.copyItem(input).fold(
+            copyItemUseCase(input).fold(
                 { error -> throw error },
                 { item ->
                     call.respond(
@@ -280,11 +295,11 @@ fun Route.storageRoutes() {
 
         // Toggle star
         post("/item/{itemId}/star") {
-            val storageService: StorageService = call.application.koinGet()
+            val toggleStarUseCase: ToggleStarUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.toggleStar(itemId, user.id).fold(
+            toggleStarUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { item ->
                     call.respond(
@@ -297,13 +312,14 @@ fun Route.storageRoutes() {
 
         // Trash item
         delete("/item/{itemId}") {
-            val storageService: StorageService = call.application.koinGet()
+            val deleteItemUseCase: DeleteItemUseCase = call.application.koinGet()
+            val trashItemUseCase: TrashItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
             val permanent = call.request.queryParameters["permanent"]?.toBoolean() ?: false
 
             if (permanent) {
-                storageService.deleteItem(itemId, user.id).fold(
+                deleteItemUseCase(itemId, user.id).fold(
                     { error -> throw error },
                     {
                         call.respond(
@@ -313,7 +329,7 @@ fun Route.storageRoutes() {
                     },
                 )
             } else {
-                storageService.trashItem(itemId, user.id).fold(
+                trashItemUseCase(itemId, user.id).fold(
                     { error -> throw error },
                     { item ->
                         call.respond(
@@ -327,11 +343,11 @@ fun Route.storageRoutes() {
 
         // Restore from trash
         post("/item/{itemId}/restore") {
-            val storageService: StorageService = call.application.koinGet()
+            val restoreItemUseCase: RestoreItemUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.restoreItem(itemId, user.id).fold(
+            restoreItemUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { item ->
                     call.respond(
@@ -344,10 +360,10 @@ fun Route.storageRoutes() {
 
         // Get trash contents
         get("/trash") {
-            val storageService: StorageService = call.application.koinGet()
+            val getTrashItemsUseCase: GetTrashItemsUseCase = call.application.koinGet()
             val user = call.user!!
 
-            storageService.getTrashItems(user.id).fold(
+            getTrashItemsUseCase(user.id).fold(
                 { error -> throw error },
                 { items ->
                     call.respond(
@@ -363,10 +379,10 @@ fun Route.storageRoutes() {
 
         // Get starred items
         get("/starred") {
-            val storageService: StorageService = call.application.koinGet()
+            val getStarredItemsUseCase: GetStarredItemsUseCase = call.application.koinGet()
             val user = call.user!!
 
-            storageService.getStarredItems(user.id).fold(
+            getStarredItemsUseCase(user.id).fold(
                 { error -> throw error },
                 { items ->
                     call.respond(
@@ -382,11 +398,11 @@ fun Route.storageRoutes() {
 
         // Get recent items
         get("/recent") {
-            val storageService: StorageService = call.application.koinGet()
+            val getRecentItemsUseCase: GetRecentItemsUseCase = call.application.koinGet()
             val user = call.user!!
             val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 20
 
-            storageService.getRecentItems(user.id, limit).fold(
+            getRecentItemsUseCase(user.id, limit).fold(
                 { error -> throw error },
                 { items ->
                     call.respond(
@@ -402,11 +418,11 @@ fun Route.storageRoutes() {
 
         // Get breadcrumbs
         get("/item/{itemId}/breadcrumbs") {
-            val storageService: StorageService = call.application.koinGet()
+            val getBreadcrumbsUseCase: GetBreadcrumbsUseCase = call.application.koinGet()
             val user = call.user!!
             val itemId = call.parameters["itemId"]!!
 
-            storageService.getBreadcrumbs(itemId, user.id).fold(
+            getBreadcrumbsUseCase(itemId, user.id).fold(
                 { error -> throw error },
                 { items ->
                     call.respond(

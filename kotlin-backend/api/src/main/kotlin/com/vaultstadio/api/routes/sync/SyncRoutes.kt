@@ -6,7 +6,6 @@
 
 package com.vaultstadio.api.routes.sync
 
-import com.vaultstadio.core.domain.service.SyncService
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -133,27 +132,27 @@ data class DeltaUploadResponse(
 /**
  * Configure sync routes.
  */
-fun Route.syncRoutes(syncService: SyncService) {
+fun Route.syncRoutes() {
     authenticate("auth-bearer") {
         route("/api/v1/sync") {
             route("/devices") {
-                post { handleRegisterDevice(call, syncService) }
-                get { handleListDevices(call, syncService) }
-                post("/{deviceId}/deactivate") { handleDeactivateDevice(call, syncService) }
-                delete("/{deviceId}") { handleRemoveDevice(call, syncService) }
+                post { handleRegisterDevice(call) }
+                get { handleListDevices(call) }
+                post("/{deviceId}/deactivate") { handleDeactivateDevice(call) }
+                delete("/{deviceId}") { handleRemoveDevice(call) }
             }
 
-            post("/pull") { handlePull(call, syncService) }
-            post("/push") { handlePush(call, syncService) }
+            post("/pull") { handlePull(call) }
+            post("/push") { handlePush(call) }
 
             route("/conflicts") {
-                get { handleGetPendingConflicts(call, syncService) }
-                post("/{conflictId}/resolve") { handleResolveConflict(call, syncService) }
+                get { handleGetPendingConflicts(call) }
+                post("/{conflictId}/resolve") { handleResolveConflict(call) }
             }
 
             route("/delta") {
-                get("/signature/{itemId}") { handleGetFileSignature(call, syncService) }
-                post("/upload/{itemId}") { handleDeltaUpload(call, syncService) }
+                get("/signature/{itemId}") { handleGetFileSignature(call) }
+                post("/upload/{itemId}") { handleDeltaUpload(call) }
             }
         }
     }

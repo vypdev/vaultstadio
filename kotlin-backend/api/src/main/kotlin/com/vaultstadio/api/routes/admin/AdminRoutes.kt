@@ -10,9 +10,11 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.PaginatedResponse
 import com.vaultstadio.api.dto.toAdminResponse
 import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.repository.ActivityRepository
+import com.vaultstadio.api.application.usecase.admin.DeleteUserUseCase
+import com.vaultstadio.api.application.usecase.admin.GetAdminStatisticsUseCase
+import com.vaultstadio.api.application.usecase.admin.ListUsersUseCase
+import com.vaultstadio.api.application.usecase.admin.UpdateQuotaUseCase
 import com.vaultstadio.core.domain.repository.UserQuery
-import com.vaultstadio.core.domain.service.UserService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
@@ -27,7 +29,7 @@ fun Route.adminRoutes() {
     route("/admin") {
         // List all users
         get("/users") {
-            val userService: UserService = call.application.koinGet()
+            val listUsersUseCase: ListUsersUseCase = call.application.koinGet()
             val user = call.user
             if (user?.role != UserRole.ADMIN) {
                 call.respond(
@@ -48,7 +50,7 @@ fun Route.adminRoutes() {
                 offset = offset,
             )
 
-            userService.listUsers(user.id, query).fold(
+            listUsersUseCase(user.id, query).fold(
                 { error -> throw error },
                 { result ->
                     val response = PaginatedResponse(
@@ -69,7 +71,7 @@ fun Route.adminRoutes() {
 
         // Get system statistics
         get("/statistics") {
-            val activityRepository: ActivityRepository = call.application.koinGet()
+            val getAdminStatisticsUseCase: GetAdminStatisticsUseCase = call.application.koinGet()
             val user = call.user
             if (user?.role != UserRole.ADMIN) {
                 call.respond(
@@ -82,7 +84,7 @@ fun Route.adminRoutes() {
                 return@get
             }
 
-            activityRepository.getStatistics().fold(
+            getAdminStatisticsUseCase().fold(
                 { error -> throw error },
                 { stats ->
                     call.respond(
@@ -95,7 +97,7 @@ fun Route.adminRoutes() {
 
         // Update user quota
         patch("/users/{userId}/quota") {
-            val userService: UserService = call.application.koinGet()
+            val updateQuotaUseCase: UpdateQuotaUseCase = call.application.koinGet()
             val adminUser = call.user
             if (adminUser?.role != UserRole.ADMIN) {
                 call.respond(
@@ -111,7 +113,7 @@ fun Route.adminRoutes() {
             val userId = call.parameters["userId"]!!
             val quotaBytes = call.request.queryParameters["quotaBytes"]?.toLongOrNull()
 
-            userService.updateQuota(userId, quotaBytes, adminUser.id).fold(
+            updateQuotaUseCase(userId, quotaBytes, adminUser.id).fold(
                 { error -> throw error },
                 { updatedUser ->
                     call.respond(
@@ -124,7 +126,7 @@ fun Route.adminRoutes() {
 
         // Delete user
         delete("/users/{userId}") {
-            val userService: UserService = call.application.koinGet()
+            val deleteUserUseCase: DeleteUserUseCase = call.application.koinGet()
             val adminUser = call.user
             if (adminUser?.role != UserRole.ADMIN) {
                 call.respond(
@@ -150,7 +152,7 @@ fun Route.adminRoutes() {
                 return@delete
             }
 
-            userService.deleteUser(userId, adminUser.id).fold(
+            deleteUserUseCase(userId, adminUser.id).fold(
                 { error -> throw error },
                 {
                     call.respond(

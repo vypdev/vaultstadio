@@ -19,9 +19,8 @@
 package com.vaultstadio.api.routes.storage
 
 import com.vaultstadio.api.config.user
-import com.vaultstadio.core.domain.service.LockManager
-import com.vaultstadio.core.domain.service.StorageService
 import io.ktor.http.HttpMethod
+import org.koin.ktor.ext.get as koinGet
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.UserIdPrincipal
 import io.ktor.server.auth.authenticate
@@ -71,44 +70,44 @@ private fun ApplicationCall.getWebDAVUserId(): String? =
 
 /**
  * Configure WebDAV routes.
- *
- * @param storageService Service for file operations
- * @param lockManager Lock manager for WebDAV locking
+ * Resolves WebDAVOperations via Koin; no service injection in Routing.
  */
-fun Route.webDAVRoutes(storageService: StorageService, lockManager: LockManager) {
+fun Route.webDAVRoutes() {
     authenticate("webdav-basic", "jwt", optional = true) {
         route("/webdav/{path...}") {
-            options { handleOptions(call) }
+            options {
+                call.application.koinGet<WebDAVOperations>().handleOptions(call)
+            }
 
             get {
                 val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                 val userId = call.getWebDAVUserId() ?: "anonymous"
-                handleGet(call, path, storageService, userId)
+                call.application.koinGet<WebDAVOperations>().handleGet(call, path, userId)
             }
 
             put {
                 val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                 val userId = call.getWebDAVUserId() ?: "anonymous"
-                handlePut(call, path, storageService, userId, lockManager)
+                call.application.koinGet<WebDAVOperations>().handlePut(call, path, userId)
             }
 
             delete {
                 val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                 val userId = call.getWebDAVUserId() ?: "anonymous"
-                handleDelete(call, path, storageService, userId, lockManager)
+                call.application.koinGet<WebDAVOperations>().handleDelete(call, path, userId)
             }
 
             head {
                 val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                 val userId = call.getWebDAVUserId() ?: "anonymous"
-                handleHead(call, path, storageService, userId)
+                call.application.koinGet<WebDAVOperations>().handleHead(call, path, userId)
             }
 
             route("", WebDAVMethods.PROPFIND) {
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                     val userId = call.getWebDAVUserId() ?: "anonymous"
-                    handlePropfind(call, path, storageService, userId, lockManager)
+                    call.application.koinGet<WebDAVOperations>().handlePropfind(call, path, userId)
                 }
             }
 
@@ -116,7 +115,7 @@ fun Route.webDAVRoutes(storageService: StorageService, lockManager: LockManager)
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                     val userId = call.getWebDAVUserId() ?: "anonymous"
-                    handleProppatch(call, path, storageService, userId)
+                    call.application.koinGet<WebDAVOperations>().handleProppatch(call, path, userId)
                 }
             }
 
@@ -124,7 +123,7 @@ fun Route.webDAVRoutes(storageService: StorageService, lockManager: LockManager)
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                     val userId = call.getWebDAVUserId() ?: "anonymous"
-                    handleMkcol(call, path, storageService, userId)
+                    call.application.koinGet<WebDAVOperations>().handleMkcol(call, path, userId)
                 }
             }
 
@@ -132,7 +131,7 @@ fun Route.webDAVRoutes(storageService: StorageService, lockManager: LockManager)
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                     val userId = call.getWebDAVUserId() ?: "anonymous"
-                    handleCopy(call, path, storageService, userId)
+                    call.application.koinGet<WebDAVOperations>().handleCopy(call, path, userId)
                 }
             }
 
@@ -140,7 +139,7 @@ fun Route.webDAVRoutes(storageService: StorageService, lockManager: LockManager)
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                     val userId = call.getWebDAVUserId() ?: "anonymous"
-                    handleMove(call, path, storageService, userId, lockManager)
+                    call.application.koinGet<WebDAVOperations>().handleMove(call, path, userId)
                 }
             }
 
@@ -148,14 +147,14 @@ fun Route.webDAVRoutes(storageService: StorageService, lockManager: LockManager)
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
                     val userId = call.getWebDAVUserId() ?: "anonymous"
-                    handleLock(call, path, userId, lockManager)
+                    call.application.koinGet<WebDAVOperations>().handleLock(call, path, userId)
                 }
             }
 
             route("", WebDAVMethods.UNLOCK) {
                 handle {
                     val path = "/" + (call.parameters.getAll("path")?.joinToString("/") ?: "")
-                    handleUnlock(call, path, lockManager)
+                    call.application.koinGet<WebDAVOperations>().handleUnlock(call, path)
                 }
             }
         }
