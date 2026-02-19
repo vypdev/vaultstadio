@@ -5,15 +5,15 @@
 
 package com.vaultstadio.app.feature.security
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.ActiveSession
 import com.vaultstadio.app.domain.model.LoginEvent
 import com.vaultstadio.app.domain.model.SecuritySettings
 import com.vaultstadio.app.domain.model.SessionDeviceType
-import com.vaultstadio.app.domain.usecase.auth.GetActiveSessionsUseCase
-import com.vaultstadio.app.domain.usecase.auth.GetLoginHistoryUseCase
-import com.vaultstadio.app.domain.usecase.auth.GetSecuritySettingsUseCase
-import com.vaultstadio.app.domain.usecase.auth.RevokeSessionUseCase
+import com.vaultstadio.app.domain.auth.usecase.GetActiveSessionsUseCase
+import com.vaultstadio.app.domain.auth.usecase.GetLoginHistoryUseCase
+import com.vaultstadio.app.domain.auth.usecase.GetSecuritySettingsUseCase
+import com.vaultstadio.app.domain.auth.usecase.RevokeSessionUseCase
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.datetime.Instant
 import kotlin.test.Test
@@ -34,29 +34,29 @@ private fun testSession(id: String = "s1") = ActiveSession(
 )
 
 private class FakeGetActiveSessionsUseCase(
-    var result: ApiResult<List<ActiveSession>> = ApiResult.success(emptyList()),
+    var result: Result<List<ActiveSession>> = Result.success(emptyList()),
 ) : GetActiveSessionsUseCase {
-    override suspend fun invoke(): ApiResult<List<ActiveSession>> = result
+    override suspend fun invoke(): Result<List<ActiveSession>> = result
 }
 
 private class FakeGetLoginHistoryUseCase(
-    var result: ApiResult<List<LoginEvent>> = ApiResult.success(emptyList()),
+    var result: Result<List<LoginEvent>> = Result.success(emptyList()),
 ) : GetLoginHistoryUseCase {
-    override suspend fun invoke(): ApiResult<List<LoginEvent>> = result
+    override suspend fun invoke(): Result<List<LoginEvent>> = result
 }
 
 private class FakeGetSecuritySettingsUseCase(
-    var result: ApiResult<SecuritySettings> = ApiResult.success(
+    var result: Result<SecuritySettings> = Result.success(
         SecuritySettings(twoFactorEnabled = false, twoFactorMethod = null),
     ),
 ) : GetSecuritySettingsUseCase {
-    override suspend fun invoke(): ApiResult<SecuritySettings> = result
+    override suspend fun invoke(): Result<SecuritySettings> = result
 }
 
 private class FakeRevokeSessionUseCase(
-    var result: ApiResult<Unit> = ApiResult.success(Unit),
+    var result: Result<Unit> = Result.success(Unit),
 ) : RevokeSessionUseCase {
-    override suspend fun invoke(sessionId: String): ApiResult<Unit> = result
+    override suspend fun invoke(sessionId: String): Result<Unit> = result
 }
 
 class SecurityViewModelTest {

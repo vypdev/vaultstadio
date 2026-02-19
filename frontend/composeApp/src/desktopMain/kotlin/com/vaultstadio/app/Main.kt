@@ -13,12 +13,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import com.vaultstadio.app.di.allModules
+import com.vaultstadio.app.di.VaultStadioApp
+import com.vaultstadio.app.di.runtimeModules
 import org.koin.core.context.startKoin
 
 fun main() {
-    startKoin {
-        modules(allModules("http://localhost:8080/api"))
+    startKoin<VaultStadioApp> {
+        modules(runtimeModules("http://localhost:8080/api"))
     }
     application {
         Window(

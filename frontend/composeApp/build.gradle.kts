@@ -10,25 +10,24 @@ import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.koin.compiler)
     jacoco
 }
 
 kotlin {
     jvm("desktop")
 
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
+    android {
+        namespace = "com.vaultstadio.app.shared"
+        compileSdk = 34
+        minSdk = 24
     }
 
     wasmJs {
@@ -45,7 +44,13 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
+            kotlin.srcDirs("src/kotlin")
             dependencies {
+                implementation(project(":domain:result"))
+                implementation(project(":domain:auth"))
+                implementation(project(":domain:storage"))
+                implementation(project(":data:network"))
+                implementation(project(":data:storage"))
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
@@ -134,50 +139,8 @@ kotlin {
     }
 }
 
-// KSP configuration for Koin Annotations
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
-    add("kspDesktop", libs.koin.ksp.compiler)
-    add("kspWasmJs", libs.koin.ksp.compiler)
-    add("kspAndroid", libs.koin.ksp.compiler)
-    add("kspIosX64", libs.koin.ksp.compiler)
-    add("kspIosArm64", libs.koin.ksp.compiler)
-    add("kspIosSimulatorArm64", libs.koin.ksp.compiler)
-}
-
-android {
-    namespace = "com.vaultstadio.app.shared"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 24
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-
 // ViewModel and UploadManager tests use UnconfinedTestDispatcher for Main (ViewModelTestBase)
 // so they run on desktop and Android without a real main looper.
-
-// Make sure compilation tasks depend on KSP metadata generation
-tasks.withType<KotlinCompilationTask<*>>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
-}
-
-// Make ktlint tasks depend on KSP to avoid race conditions
-tasks.matching { it.name.contains("Ktlint") && it.name.contains("CommonMain") }.configureEach {
-    dependsOn("kspCommonMainKotlinMetadata")
-}
-
-// Add generated source directories
-kotlin.sourceSets.commonMain {
-    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-}
 
 compose.desktop {
     application {

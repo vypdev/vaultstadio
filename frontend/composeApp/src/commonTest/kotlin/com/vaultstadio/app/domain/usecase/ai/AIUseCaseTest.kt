@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.domain.usecase.ai
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.AIRepository
 import com.vaultstadio.app.domain.model.AIChatMessage
 import com.vaultstadio.app.domain.model.AIChatResponse
@@ -34,7 +34,7 @@ private fun testAIProviderInfo(
     isActive = isActive,
 )
 
-private fun <T> stubResult(): ApiResult<T> = ApiResult.error("TEST", "Not implemented in fake")
+private fun <T> stubResult(): Result<T> = Result.error("TEST", "Not implemented in fake")
 
 private fun testAIModel(
     id: String = "model-1",
@@ -50,43 +50,43 @@ private fun testAIModel(
 )
 
 private class FakeAIRepository(
-    var getProvidersResult: ApiResult<List<AIProviderInfo>> = ApiResult.success(emptyList()),
-    var getModelsResult: ApiResult<List<AIModel>> = ApiResult.success(emptyList()),
+    var getProvidersResult: Result<List<AIProviderInfo>> = Result.success(emptyList()),
+    var getModelsResult: Result<List<AIModel>> = Result.success(emptyList()),
 ) : AIRepository {
 
-    override suspend fun getProviders(): ApiResult<List<AIProviderInfo>> = getProvidersResult
+    override suspend fun getProviders(): Result<List<AIProviderInfo>> = getProvidersResult
 
-    override suspend fun getModels(): ApiResult<List<AIModel>> = getModelsResult
+    override suspend fun getModels(): Result<List<AIModel>> = getModelsResult
 
     override suspend fun configureProvider(
         type: AIProviderType,
         baseUrl: String,
         apiKey: String?,
         model: String?,
-    ): ApiResult<String> = stubResult()
+    ): Result<String> = stubResult()
 
-    override suspend fun setActiveProvider(type: AIProviderType): ApiResult<String> = stubResult()
+    override suspend fun setActiveProvider(type: AIProviderType): Result<String> = stubResult()
 
-    override suspend fun deleteProvider(type: AIProviderType): ApiResult<Unit> = stubResult()
+    override suspend fun deleteProvider(type: AIProviderType): Result<Unit> = stubResult()
 
-    override suspend fun getProviderStatus(type: AIProviderType): ApiResult<Map<String, Boolean>> = stubResult()
+    override suspend fun getProviderStatus(type: AIProviderType): Result<Map<String, Boolean>> = stubResult()
 
-    override suspend fun getProviderModels(type: AIProviderType): ApiResult<List<AIModel>> = getModelsResult
+    override suspend fun getProviderModels(type: AIProviderType): Result<List<AIModel>> = getModelsResult
 
     override suspend fun chat(
         messages: List<AIChatMessage>,
         model: String?,
         maxTokens: Int?,
         temperature: Double?,
-    ): ApiResult<AIChatResponse> = stubResult()
+    ): Result<AIChatResponse> = stubResult()
 
-    override suspend fun describeImage(imageBase64: String, mimeType: String): ApiResult<String> = stubResult()
+    override suspend fun describeImage(imageBase64: String, mimeType: String): Result<String> = stubResult()
 
-    override suspend fun tagImage(imageBase64: String, mimeType: String): ApiResult<List<String>> = stubResult()
+    override suspend fun tagImage(imageBase64: String, mimeType: String): Result<List<String>> = stubResult()
 
-    override suspend fun classify(content: String, categories: List<String>): ApiResult<String> = stubResult()
+    override suspend fun classify(content: String, categories: List<String>): Result<String> = stubResult()
 
-    override suspend fun summarize(text: String, maxLength: Int): ApiResult<String> = stubResult()
+    override suspend fun summarize(text: String, maxLength: Int): Result<String> = stubResult()
 }
 
 class GetAIProvidersUseCaseTest {
@@ -97,7 +97,7 @@ class GetAIProvidersUseCaseTest {
             testAIProviderInfo(AIProviderType.OLLAMA, "http://localhost:11434"),
             testAIProviderInfo(AIProviderType.LM_STUDIO, "http://localhost:1234", isActive = true),
         )
-        val repo = FakeAIRepository(getProvidersResult = ApiResult.success(providers))
+        val repo = FakeAIRepository(getProvidersResult = Result.success(providers))
         val useCase = GetAIProvidersUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -108,7 +108,7 @@ class GetAIProvidersUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAIRepository(getProvidersResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeAIRepository(getProvidersResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = GetAIProvidersUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -124,7 +124,7 @@ class GetAIModelsUseCaseTest {
             testAIModel("m1", "llama2", AIProviderType.OLLAMA),
             testAIModel("m2", "codellama", AIProviderType.OLLAMA),
         )
-        val repo = FakeAIRepository(getModelsResult = ApiResult.success(models))
+        val repo = FakeAIRepository(getModelsResult = Result.success(models))
         val useCase = GetAIModelsUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -134,7 +134,7 @@ class GetAIModelsUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAIRepository(getModelsResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeAIRepository(getModelsResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = GetAIModelsUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())

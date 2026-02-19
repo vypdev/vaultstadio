@@ -42,11 +42,11 @@ This document reviews VaultStadio against [Clean Architecture](https://blog.clea
 | **Application layer** | **Use cases** in `domain/usecase`: interfaces + `*Impl` depending on repository interfaces. ViewModels depend on use cases only. | Same idea: use cases orchestrate repositories; UI depends on use cases. |
 | **Interface adapters** | ViewModels and screens use domain models and use-case results. | Presenters/ViewModels depend on use-case output types, not network types. |
 | **Data** | Repositories (interface in `data/repository`, impl in `data/`); services wrap API clients; API client in `data/api`, `data/network`. | Repositories implement ports; use cases depend on repository interfaces only. |
-| **Result type** | Use cases return `ApiResult<T>` from `data.network`. | Application/domain layer should not depend on `data`; a neutral `Result`/`Either` in domain or shared kernel is preferable. |
+| **Result type** | Domain: `Result<T>`. Data: `ApiResult<T>`. Repositories map ApiResult→Result at boundary via `toResult()`. | ✅ Aligned: two types; explicit mapping data→domain. |
 
 **Conclusion (frontend)**  
 - Use-case → repository abstraction and ViewModel → use-case dependency are aligned with Clean Architecture.  
-- Gaps: (1) **ApiResult** lives in `data.network` but is used by use cases and ViewModels—creates an inward dependency from domain/application to data. (2) Domain models are duplicated from backend; no shared contract (see “Shared module” below).
+- **Result** in domain, **ApiResult** in data (both real types); repositories map ApiResult→Result with `toResult()` so domain never sees ApiResult. Remaining gap: domain models duplicated from backend; no shared contract (see “Shared module” below).
 
 ---
 
@@ -67,10 +67,11 @@ This document reviews VaultStadio against [Clean Architecture](https://blog.clea
    - Use cases depend on domain services/repositories; return `Either<Error, T>` or domain types. Routes resolve use cases via Koin and call them; mapping (domain → DTO) remains in routes.  
    - **Benefit**: Routes are thin adapters; orchestration lives in use cases; domain types stay in core.
 
-2. **Frontend: Move `ApiResult` to domain (or shared kernel)**  
-   - Define a neutral result type (e.g. `domain.result.Result` or `domain.util.ApiResult`) and use it in use-case interfaces and implementations.  
-   - Repository implementations (in data) map from HTTP/API errors to this type.  
-   - **Benefit**: Use cases and ViewModels no longer depend on `data.network`; dependency rule is restored.
+2. **Frontend: Move `ApiResult` to domain (or shared kernel)** ✅ *Done*  
+   - **Domain** defines a neutral **`Result<T>`** in `domain.result`; use-case interfaces and ViewModels use only `Result<DomainModel>`.  
+   - **Data** defines **`ApiResult<T>`** in `data.network` (real sealed class); BaseApi and services return `ApiResult<DTO>` or `ApiResult<T>`.  
+   - At the boundary, repository implementations map **ApiResult → Result** via `data.mapper.toResult()` (and optionally `toResult(transform)` for DTO→domain). So `ApiResult<MyClassDTO>` becomes `Result<MyClass>` when crossing into domain.  
+   - **Benefit**: Two explicit types; no typealias; clean data→domain boundary with explicit mapping.
 
 3. **Backend: Centralise domain → DTO mapping**  
    - Group all `toResponse()` and request → domain mapping in a single api-boundary package or module (e.g. `api/boundary` or `api/mapper`).  

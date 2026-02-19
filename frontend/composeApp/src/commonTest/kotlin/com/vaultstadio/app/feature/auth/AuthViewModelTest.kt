@@ -5,8 +5,8 @@
 
 package com.vaultstadio.app.feature.auth
 
-import com.vaultstadio.app.data.network.ApiResult
-import com.vaultstadio.app.data.repository.AuthRepository
+import com.vaultstadio.app.domain.result.Result
+import com.vaultstadio.app.domain.auth.AuthRepository
 import com.vaultstadio.app.domain.model.LoginResult
 import com.vaultstadio.app.domain.model.StorageQuota
 import com.vaultstadio.app.domain.model.User
@@ -42,25 +42,25 @@ private fun testLoginResult() = LoginResult(
 )
 
 private class FakeAuthRepository(
-    var loginResult: ApiResult<LoginResult> = ApiResult.success(testLoginResult()),
-    var registerResult: ApiResult<User> = ApiResult.success(testUser()),
+    var loginResult: Result<LoginResult> = Result.success(testLoginResult()),
+    var registerResult: Result<User> = Result.success(testUser()),
 ) : AuthRepository {
     private val _currentUserFlow = MutableStateFlow<User?>(null)
     override val currentUserFlow: StateFlow<User?> = _currentUserFlow.asStateFlow()
 
-    override suspend fun login(email: String, password: String): ApiResult<LoginResult> {
+    override suspend fun login(email: String, password: String): Result<LoginResult> {
         loginResult.onSuccess { _currentUserFlow.value = it.user }
         return loginResult
     }
 
-    override suspend fun register(email: String, username: String, password: String): ApiResult<User> =
+    override suspend fun register(email: String, username: String, password: String): Result<User> =
         registerResult
 
-    override suspend fun logout(): ApiResult<Unit> = ApiResult.success(Unit)
-    override suspend fun getCurrentUser(): ApiResult<User> = ApiResult.success(testUser())
+    override suspend fun logout(): Result<Unit> = Result.success(Unit)
+    override suspend fun getCurrentUser(): Result<User> = Result.success(testUser())
     override suspend fun refreshCurrentUser() {}
-    override suspend fun getQuota(): ApiResult<StorageQuota> =
-        ApiResult.success(
+    override suspend fun getQuota(): Result<StorageQuota> =
+        Result.success(
             StorageQuota(
                 usedBytes = 0,
                 quotaBytes = null,
@@ -70,16 +70,16 @@ private class FakeAuthRepository(
                 remainingBytes = null,
             ),
         )
-    override suspend fun updateProfile(username: String?, avatarUrl: String?) = ApiResult.success(testUser())
-    override suspend fun changePassword(currentPassword: String, newPassword: String) = ApiResult.success(Unit)
+    override suspend fun updateProfile(username: String?, avatarUrl: String?) = Result.success(testUser())
+    override suspend fun changePassword(currentPassword: String, newPassword: String) = Result.success(Unit)
     override fun isLoggedIn(): Boolean = false
 }
 
 class AuthViewModelTest {
 
     private fun createViewModel(
-        loginResult: ApiResult<LoginResult> = ApiResult.success(testLoginResult()),
-        registerResult: ApiResult<User> = ApiResult.success(testUser()),
+        loginResult: Result<LoginResult> = Result.success(testLoginResult()),
+        registerResult: Result<User> = Result.success(testUser()),
         onSuccess: () -> Unit = {},
     ): AuthViewModel {
         val repo = FakeAuthRepository(loginResult = loginResult, registerResult = registerResult)

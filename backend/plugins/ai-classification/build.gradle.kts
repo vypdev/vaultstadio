@@ -24,8 +24,8 @@ tasks.withType<JavaCompile>().configureEach {
 
 dependencies {
     // Plugin SDK
-    implementation(project(":kotlin-backend:plugins-api"))
-    implementation(project(":kotlin-backend:core"))
+    implementation(project(":plugins-api"))
+    implementation(project(":core"))
 
     // HTTP Client for AI APIs
     implementation(libs.ktor.client.core)

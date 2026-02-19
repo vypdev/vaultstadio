@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.domain.usecase.activity
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.ActivityRepository
 import com.vaultstadio.app.domain.model.Activity
 import kotlinx.coroutines.test.runTest
@@ -32,13 +32,13 @@ private fun testActivity(
 )
 
 private class FakeActivityRepository(
-    var getRecentActivityResult: ApiResult<List<Activity>> = ApiResult.success(emptyList()),
-    var getItemActivityResult: ApiResult<List<Activity>> = ApiResult.success(emptyList()),
+    var getRecentActivityResult: Result<List<Activity>> = Result.success(emptyList()),
+    var getItemActivityResult: Result<List<Activity>> = Result.success(emptyList()),
 ) : ActivityRepository {
 
-    override suspend fun getRecentActivity(limit: Int): ApiResult<List<Activity>> = getRecentActivityResult
+    override suspend fun getRecentActivity(limit: Int): Result<List<Activity>> = getRecentActivityResult
 
-    override suspend fun getItemActivity(itemId: String, limit: Int): ApiResult<List<Activity>> = getItemActivityResult
+    override suspend fun getItemActivity(itemId: String, limit: Int): Result<List<Activity>> = getItemActivityResult
 }
 
 class GetRecentActivityUseCaseTest {
@@ -46,7 +46,7 @@ class GetRecentActivityUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetRecentActivityResult() = runTest {
         val activities = listOf(testActivity("a1"), testActivity("a2"))
-        val repo = FakeActivityRepository(getRecentActivityResult = ApiResult.success(activities))
+        val repo = FakeActivityRepository(getRecentActivityResult = Result.success(activities))
         val useCase = GetRecentActivityUseCaseImpl(repo)
         val result = useCase(limit = 20)
         assertTrue(result.isSuccess())
@@ -55,7 +55,7 @@ class GetRecentActivityUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeActivityRepository(getRecentActivityResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeActivityRepository(getRecentActivityResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = GetRecentActivityUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -68,7 +68,7 @@ class GetItemActivityUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetItemActivityResult() = runTest {
         val activities = listOf(testActivity("a1", itemId = "item-1"))
-        val repo = FakeActivityRepository(getItemActivityResult = ApiResult.success(activities))
+        val repo = FakeActivityRepository(getItemActivityResult = Result.success(activities))
         val useCase = GetItemActivityUseCaseImpl(repo)
         val result = useCase("item-1", limit = 20)
         assertTrue(result.isSuccess())
@@ -78,7 +78,7 @@ class GetItemActivityUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeActivityRepository(getItemActivityResult = ApiResult.error("NOT_FOUND", "Item not found"))
+        val repo = FakeActivityRepository(getItemActivityResult = Result.error("NOT_FOUND", "Item not found"))
         val useCase = GetItemActivityUseCaseImpl(repo)
         val result = useCase("missing")
         assertTrue(result.isError())

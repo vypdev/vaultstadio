@@ -5,12 +5,12 @@
 
 package com.vaultstadio.app.domain.usecase.auth
 
-import com.vaultstadio.app.data.network.ApiResult
-import com.vaultstadio.app.data.repository.AuthRepository
-import com.vaultstadio.app.domain.model.LoginResult
-import com.vaultstadio.app.domain.model.StorageQuota
-import com.vaultstadio.app.domain.model.User
-import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.result.Result
+import com.vaultstadio.app.domain.auth.AuthRepository
+import com.vaultstadio.app.domain.auth.model.LoginResult
+import com.vaultstadio.app.domain.auth.model.StorageQuota
+import com.vaultstadio.app.domain.auth.model.User
+import com.vaultstadio.app.domain.auth.model.UserRole
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,13 +53,13 @@ private fun testQuota() =
     )
 
 private class FakeAuthRepository(
-    var loginResult: ApiResult<LoginResult> = ApiResult.success(testLoginResult()),
-    var registerResult: ApiResult<User> = ApiResult.success(testUser()),
-    var logoutResult: ApiResult<Unit> = ApiResult.success(Unit),
-    var getCurrentUserResult: ApiResult<User> = ApiResult.success(testUser()),
-    var getQuotaResult: ApiResult<StorageQuota> = ApiResult.success(testQuota()),
-    var updateProfileResult: ApiResult<User> = ApiResult.success(testUser()),
-    var changePasswordResult: ApiResult<Unit> = ApiResult.success(Unit),
+    var loginResult: Result<LoginResult> = Result.success(testLoginResult()),
+    var registerResult: Result<User> = Result.success(testUser()),
+    var logoutResult: Result<Unit> = Result.success(Unit),
+    var getCurrentUserResult: Result<User> = Result.success(testUser()),
+    var getQuotaResult: Result<StorageQuota> = Result.success(testQuota()),
+    var updateProfileResult: Result<User> = Result.success(testUser()),
+    var changePasswordResult: Result<Unit> = Result.success(Unit),
     initialUser: User? = null,
     var isLoggedInValue: Boolean = false,
 ) : AuthRepository {
@@ -67,33 +67,33 @@ private class FakeAuthRepository(
     private val _currentUserFlow = MutableStateFlow(initialUser)
     override val currentUserFlow: StateFlow<User?> = _currentUserFlow.asStateFlow()
 
-    override suspend fun login(email: String, password: String): ApiResult<LoginResult> {
+    override suspend fun login(email: String, password: String): Result<LoginResult> {
         loginResult.onSuccess { _currentUserFlow.value = it.user }
         return loginResult
     }
 
-    override suspend fun register(email: String, username: String, password: String): ApiResult<User> =
+    override suspend fun register(email: String, username: String, password: String): Result<User> =
         registerResult
 
-    override suspend fun logout(): ApiResult<Unit> {
+    override suspend fun logout(): Result<Unit> {
         _currentUserFlow.value = null
         return logoutResult
     }
 
-    override suspend fun getCurrentUser(): ApiResult<User> = getCurrentUserResult
+    override suspend fun getCurrentUser(): Result<User> = getCurrentUserResult
 
     override suspend fun refreshCurrentUser() {
         getCurrentUserResult.onSuccess { _currentUserFlow.value = it }
     }
 
-    override suspend fun getQuota(): ApiResult<StorageQuota> = getQuotaResult
+    override suspend fun getQuota(): Result<StorageQuota> = getQuotaResult
 
-    override suspend fun updateProfile(username: String?, avatarUrl: String?): ApiResult<User> {
+    override suspend fun updateProfile(username: String?, avatarUrl: String?): Result<User> {
         updateProfileResult.onSuccess { _currentUserFlow.value = it }
         return updateProfileResult
     }
 
-    override suspend fun changePassword(currentPassword: String, newPassword: String): ApiResult<Unit> =
+    override suspend fun changePassword(currentPassword: String, newPassword: String): Result<Unit> =
         changePasswordResult
 
     override fun isLoggedIn(): Boolean = isLoggedInValue
@@ -104,7 +104,7 @@ class LoginUseCaseTest {
     @Test
     fun invoke_returnsRepositoryLoginResult() = runTest {
         val loginResult = testLoginResult(user = testUser("u2"), token = "jwt")
-        val repo = FakeAuthRepository(loginResult = ApiResult.success(loginResult))
+        val repo = FakeAuthRepository(loginResult = Result.success(loginResult))
         val useCase = LoginUseCaseImpl(repo)
         val result = useCase("a@b.com", "pass")
         assertTrue(result.isSuccess())
@@ -114,7 +114,7 @@ class LoginUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAuthRepository(loginResult = ApiResult.error("AUTH_FAILED", "Invalid credentials"))
+        val repo = FakeAuthRepository(loginResult = Result.error("AUTH_FAILED", "Invalid credentials"))
         val useCase = LoginUseCaseImpl(repo)
         val result = useCase("a@b.com", "wrong")
         assertTrue(result.isError())
@@ -127,7 +127,7 @@ class RegisterUseCaseTest {
     @Test
     fun invoke_returnsRepositoryRegisterResult() = runTest {
         val user = testUser("u3", username = "newuser")
-        val repo = FakeAuthRepository(registerResult = ApiResult.success(user))
+        val repo = FakeAuthRepository(registerResult = Result.success(user))
         val useCase = RegisterUseCaseImpl(repo)
         val result = useCase("new@test.com", "newuser", "secret")
         assertTrue(result.isSuccess())
@@ -136,7 +136,7 @@ class RegisterUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAuthRepository(registerResult = ApiResult.error("EMAIL_TAKEN", "Email already exists"))
+        val repo = FakeAuthRepository(registerResult = Result.error("EMAIL_TAKEN", "Email already exists"))
         val useCase = RegisterUseCaseImpl(repo)
         val result = useCase("a@b.com", "user", "pass")
         assertTrue(result.isError())
@@ -147,7 +147,7 @@ class LogoutUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryLogoutResult() = runTest {
-        val repo = FakeAuthRepository(initialUser = testUser(), logoutResult = ApiResult.success(Unit))
+        val repo = FakeAuthRepository(initialUser = testUser(), logoutResult = Result.success(Unit))
         val useCase = LogoutUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -156,7 +156,7 @@ class LogoutUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAuthRepository(logoutResult = ApiResult.error("NETWORK", "Offline"))
+        val repo = FakeAuthRepository(logoutResult = Result.error("NETWORK", "Offline"))
         val useCase = LogoutUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -168,7 +168,7 @@ class GetCurrentUserUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetCurrentUserResult() = runTest {
         val user = testUser("u4")
-        val repo = FakeAuthRepository(getCurrentUserResult = ApiResult.success(user))
+        val repo = FakeAuthRepository(getCurrentUserResult = Result.success(user))
         val useCase = GetCurrentUserUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -199,7 +199,7 @@ class GetQuotaUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetQuotaResult() = runTest {
         val quota = testQuota()
-        val repo = FakeAuthRepository(getQuotaResult = ApiResult.success(quota))
+        val repo = FakeAuthRepository(getQuotaResult = Result.success(quota))
         val useCase = GetQuotaUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -208,7 +208,7 @@ class GetQuotaUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAuthRepository(getQuotaResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeAuthRepository(getQuotaResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = GetQuotaUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -220,7 +220,7 @@ class UpdateProfileUseCaseTest {
     @Test
     fun invoke_returnsRepositoryUpdateProfileResult() = runTest {
         val user = testUser("u6", username = "updated")
-        val repo = FakeAuthRepository(updateProfileResult = ApiResult.success(user))
+        val repo = FakeAuthRepository(updateProfileResult = Result.success(user))
         val useCase = UpdateProfileUseCaseImpl(repo)
         val result = useCase("updated", null)
         assertTrue(result.isSuccess())
@@ -230,7 +230,7 @@ class UpdateProfileUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAuthRepository(updateProfileResult = ApiResult.error("CONFLICT", "Username taken"))
+        val repo = FakeAuthRepository(updateProfileResult = Result.error("CONFLICT", "Username taken"))
         val useCase = UpdateProfileUseCaseImpl(repo)
         val result = useCase("taken", null)
         assertTrue(result.isError())
@@ -241,7 +241,7 @@ class ChangePasswordUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryChangePasswordResult() = runTest {
-        val repo = FakeAuthRepository(changePasswordResult = ApiResult.success(Unit))
+        val repo = FakeAuthRepository(changePasswordResult = Result.success(Unit))
         val useCase = ChangePasswordUseCaseImpl(repo)
         val result = useCase("old", "new")
         assertTrue(result.isSuccess())
@@ -249,7 +249,7 @@ class ChangePasswordUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAuthRepository(changePasswordResult = ApiResult.error("BAD_REQUEST", "Wrong password"))
+        val repo = FakeAuthRepository(changePasswordResult = Result.error("BAD_REQUEST", "Wrong password"))
         val useCase = ChangePasswordUseCaseImpl(repo)
         val result = useCase("wrong", "new")
         assertTrue(result.isError())

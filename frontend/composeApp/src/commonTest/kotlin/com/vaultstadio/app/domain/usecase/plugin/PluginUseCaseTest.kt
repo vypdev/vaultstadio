@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.domain.usecase.plugin
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.PluginRepository
 import com.vaultstadio.app.domain.model.PluginInfo
 import kotlinx.coroutines.test.runTest
@@ -29,16 +29,16 @@ private fun testPluginInfo(
 )
 
 private class FakePluginRepository(
-    var getPluginsResult: ApiResult<List<PluginInfo>> = ApiResult.success(emptyList()),
-    var enablePluginResult: ApiResult<PluginInfo> = ApiResult.success(testPluginInfo(isEnabled = true)),
-    var disablePluginResult: ApiResult<Unit> = ApiResult.success(Unit),
+    var getPluginsResult: Result<List<PluginInfo>> = Result.success(emptyList()),
+    var enablePluginResult: Result<PluginInfo> = Result.success(testPluginInfo(isEnabled = true)),
+    var disablePluginResult: Result<Unit> = Result.success(Unit),
 ) : PluginRepository {
 
-    override suspend fun getPlugins(): ApiResult<List<PluginInfo>> = getPluginsResult
+    override suspend fun getPlugins(): Result<List<PluginInfo>> = getPluginsResult
 
-    override suspend fun enablePlugin(pluginId: String): ApiResult<PluginInfo> = enablePluginResult
+    override suspend fun enablePlugin(pluginId: String): Result<PluginInfo> = enablePluginResult
 
-    override suspend fun disablePlugin(pluginId: String): ApiResult<Unit> = disablePluginResult
+    override suspend fun disablePlugin(pluginId: String): Result<Unit> = disablePluginResult
 }
 
 class GetPluginsUseCaseTest {
@@ -46,7 +46,7 @@ class GetPluginsUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetPluginsResult() = runTest {
         val plugins = listOf(testPluginInfo("p1"), testPluginInfo("p2"))
-        val repo = FakePluginRepository(getPluginsResult = ApiResult.success(plugins))
+        val repo = FakePluginRepository(getPluginsResult = Result.success(plugins))
         val useCase = GetPluginsUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -55,7 +55,7 @@ class GetPluginsUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakePluginRepository(getPluginsResult = ApiResult.error("FORBIDDEN", "Admin only"))
+        val repo = FakePluginRepository(getPluginsResult = Result.error("FORBIDDEN", "Admin only"))
         val useCase = GetPluginsUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -68,7 +68,7 @@ class EnablePluginUseCaseTest {
     @Test
     fun invoke_returnsRepositoryEnablePluginResult() = runTest {
         val plugin = testPluginInfo(id = "p1", isEnabled = true)
-        val repo = FakePluginRepository(enablePluginResult = ApiResult.success(plugin))
+        val repo = FakePluginRepository(enablePluginResult = Result.success(plugin))
         val useCase = EnablePluginUseCaseImpl(repo)
         val result = useCase("p1")
         assertTrue(result.isSuccess())
@@ -78,7 +78,7 @@ class EnablePluginUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakePluginRepository(enablePluginResult = ApiResult.error("NOT_FOUND", "Plugin not found"))
+        val repo = FakePluginRepository(enablePluginResult = Result.error("NOT_FOUND", "Plugin not found"))
         val useCase = EnablePluginUseCaseImpl(repo)
         val result = useCase("missing")
         assertTrue(result.isError())
@@ -89,7 +89,7 @@ class DisablePluginUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryDisablePluginResult() = runTest {
-        val repo = FakePluginRepository(disablePluginResult = ApiResult.success(Unit))
+        val repo = FakePluginRepository(disablePluginResult = Result.success(Unit))
         val useCase = DisablePluginUseCaseImpl(repo)
         val result = useCase("plugin-1")
         assertTrue(result.isSuccess())
@@ -97,7 +97,7 @@ class DisablePluginUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakePluginRepository(disablePluginResult = ApiResult.error("CONFLICT", "Plugin in use"))
+        val repo = FakePluginRepository(disablePluginResult = Result.error("CONFLICT", "Plugin in use"))
         val useCase = DisablePluginUseCaseImpl(repo)
         val result = useCase("p1")
         assertTrue(result.isError())

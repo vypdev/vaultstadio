@@ -28,19 +28,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "vaultstadio"
 
-// Backend modules
-include(":kotlin-backend:core")
-include(":kotlin-backend:api")
-include(":kotlin-backend:plugins-api")
-include(":kotlin-backend:infrastructure")
+// Backend modules (backend is a standalone project; build with: cd backend && ./gradlew build)
+include(":backend:core")
+include(":backend:api")
+include(":backend:plugins-api")
+include(":backend:infrastructure")
+include(":backend:plugins:image-metadata")
+include(":backend:plugins:video-metadata")
+include(":backend:plugins:fulltext-search")
+include(":backend:plugins:ai-classification")
 
-// Backend plugins
-include(":kotlin-backend:plugins:image-metadata")
-include(":kotlin-backend:plugins:video-metadata")
-include(":kotlin-backend:plugins:fulltext-search")
-include(":kotlin-backend:plugins:ai-classification")
-
-// Compose Multiplatform Frontend
-include(":compose-frontend:composeApp")
-include(":compose-frontend:androidApp")
-include(":compose-frontend:iosApp")
+// Frontend is standalone: build with cd frontend && ./gradlew build (not included from root)

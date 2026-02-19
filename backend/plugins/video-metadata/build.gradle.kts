@@ -23,8 +23,8 @@ tasks.withType<JavaCompile>().configureEach {
 
 dependencies {
     // Plugin SDK
-    implementation(project(":kotlin-backend:plugins-api"))
-    implementation(project(":kotlin-backend:core"))
+    implementation(project(":plugins-api"))
+    implementation(project(":core"))
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)

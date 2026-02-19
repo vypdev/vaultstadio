@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.domain.usecase.storage
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.StorageRepository
 import com.vaultstadio.app.domain.model.BatchResult
 import com.vaultstadio.app.domain.model.Breadcrumb
@@ -49,18 +49,18 @@ private fun testStorageItem(
     metadata = null,
 )
 
-private fun <T> stubResult(): ApiResult<T> = ApiResult.error("TEST", "Not implemented in fake")
+private fun <T> stubResult(): Result<T> = Result.error("TEST", "Not implemented in fake")
 
 private fun testBreadcrumb(id: String?, name: String, path: String) = Breadcrumb(id = id, name = name, path = path)
 
 private class FakeStorageRepository(
-    var createFolderResult: ApiResult<StorageItem> = ApiResult.success(testStorageItem()),
-    var getItemResult: ApiResult<StorageItem> = ApiResult.success(testStorageItem()),
-    var searchResult: ApiResult<PaginatedResponse<StorageItem>> = ApiResult.success(
+    var createFolderResult: Result<StorageItem> = Result.success(testStorageItem()),
+    var getItemResult: Result<StorageItem> = Result.success(testStorageItem()),
+    var searchResult: Result<PaginatedResponse<StorageItem>> = Result.success(
         PaginatedResponse(emptyList(), 0L, 0, 50, 0, false),
     ),
-    var getBreadcrumbsResult: ApiResult<List<Breadcrumb>> = ApiResult.success(emptyList()),
-    var moveItemResult: ApiResult<StorageItem> = ApiResult.success(testStorageItem()),
+    var getBreadcrumbsResult: Result<List<Breadcrumb>> = Result.success(emptyList()),
+    var moveItemResult: Result<StorageItem> = Result.success(testStorageItem()),
 ) : StorageRepository {
 
     override suspend fun getItems(
@@ -69,48 +69,48 @@ private class FakeStorageRepository(
         sortOrder: SortOrder,
         limit: Int,
         offset: Int,
-    ): ApiResult<PaginatedResponse<StorageItem>> = stubResult()
+    ): Result<PaginatedResponse<StorageItem>> = stubResult()
 
-    override suspend fun getItem(itemId: String): ApiResult<StorageItem> = getItemResult
+    override suspend fun getItem(itemId: String): Result<StorageItem> = getItemResult
 
-    override suspend fun createFolder(name: String, parentId: String?): ApiResult<StorageItem> = createFolderResult
+    override suspend fun createFolder(name: String, parentId: String?): Result<StorageItem> = createFolderResult
 
-    override suspend fun getBreadcrumbs(itemId: String): ApiResult<List<Breadcrumb>> = getBreadcrumbsResult
+    override suspend fun getBreadcrumbs(itemId: String): Result<List<Breadcrumb>> = getBreadcrumbsResult
 
-    override suspend fun renameItem(itemId: String, newName: String): ApiResult<StorageItem> = stubResult()
+    override suspend fun renameItem(itemId: String, newName: String): Result<StorageItem> = stubResult()
 
-    override suspend fun moveItem(itemId: String, destinationId: String?, newName: String?): ApiResult<StorageItem> =
+    override suspend fun moveItem(itemId: String, destinationId: String?, newName: String?): Result<StorageItem> =
         moveItemResult
 
-    override suspend fun copyItem(itemId: String, destinationId: String?, newName: String?): ApiResult<StorageItem> =
+    override suspend fun copyItem(itemId: String, destinationId: String?, newName: String?): Result<StorageItem> =
         stubResult()
 
-    override suspend fun toggleStar(itemId: String): ApiResult<StorageItem> = stubResult()
+    override suspend fun toggleStar(itemId: String): Result<StorageItem> = stubResult()
 
-    override suspend fun trashItem(itemId: String): ApiResult<StorageItem> = stubResult()
+    override suspend fun trashItem(itemId: String): Result<StorageItem> = stubResult()
 
-    override suspend fun deleteItemPermanently(itemId: String): ApiResult<Unit> = stubResult()
+    override suspend fun deleteItemPermanently(itemId: String): Result<Unit> = stubResult()
 
-    override suspend fun restoreItem(itemId: String): ApiResult<StorageItem> = stubResult()
+    override suspend fun restoreItem(itemId: String): Result<StorageItem> = stubResult()
 
-    override suspend fun getTrash(): ApiResult<List<StorageItem>> = stubResult()
+    override suspend fun getTrash(): Result<List<StorageItem>> = stubResult()
 
-    override suspend fun emptyTrash(): ApiResult<BatchResult> = stubResult()
+    override suspend fun emptyTrash(): Result<BatchResult> = stubResult()
 
-    override suspend fun getStarred(): ApiResult<List<StorageItem>> = stubResult()
+    override suspend fun getStarred(): Result<List<StorageItem>> = stubResult()
 
-    override suspend fun getRecent(limit: Int): ApiResult<List<StorageItem>> = stubResult()
+    override suspend fun getRecent(limit: Int): Result<List<StorageItem>> = stubResult()
 
-    override suspend fun search(query: String, limit: Int, offset: Int): ApiResult<PaginatedResponse<StorageItem>> =
+    override suspend fun search(query: String, limit: Int, offset: Int): Result<PaginatedResponse<StorageItem>> =
         searchResult
 
-    override suspend fun batchDelete(itemIds: List<String>, permanent: Boolean): ApiResult<BatchResult> = stubResult()
+    override suspend fun batchDelete(itemIds: List<String>, permanent: Boolean): Result<BatchResult> = stubResult()
 
-    override suspend fun batchMove(itemIds: List<String>, destinationId: String?): ApiResult<BatchResult> = stubResult()
+    override suspend fun batchMove(itemIds: List<String>, destinationId: String?): Result<BatchResult> = stubResult()
 
-    override suspend fun batchCopy(itemIds: List<String>, destinationId: String?): ApiResult<BatchResult> = stubResult()
+    override suspend fun batchCopy(itemIds: List<String>, destinationId: String?): Result<BatchResult> = stubResult()
 
-    override suspend fun batchStar(itemIds: List<String>, starred: Boolean): ApiResult<BatchResult> = stubResult()
+    override suspend fun batchStar(itemIds: List<String>, starred: Boolean): Result<BatchResult> = stubResult()
 
     override suspend fun uploadFile(
         fileName: String,
@@ -118,13 +118,13 @@ private class FakeStorageRepository(
         mimeType: String,
         parentId: String?,
         onProgress: (Float) -> Unit,
-    ): ApiResult<StorageItem> = stubResult()
+    ): Result<StorageItem> = stubResult()
 
     override suspend fun uploadFolder(
         files: List<FolderUploadFile>,
         parentId: String?,
         onProgress: (Float) -> Unit,
-    ): ApiResult<FolderUploadResult> = stubResult()
+    ): Result<FolderUploadResult> = stubResult()
 
     override suspend fun initChunkedUpload(
         fileName: String,
@@ -132,21 +132,21 @@ private class FakeStorageRepository(
         mimeType: String?,
         parentId: String?,
         chunkSize: Long,
-    ): ApiResult<ChunkedUploadInit> = stubResult()
+    ): Result<ChunkedUploadInit> = stubResult()
 
     override suspend fun uploadChunk(
         uploadId: String,
         chunkIndex: Int,
         chunkData: ByteArray,
-    ): ApiResult<ChunkedUploadStatus> = stubResult()
+    ): Result<ChunkedUploadStatus> = stubResult()
 
-    override suspend fun getUploadStatus(uploadId: String): ApiResult<ChunkedUploadStatus> = stubResult()
+    override suspend fun getUploadStatus(uploadId: String): Result<ChunkedUploadStatus> = stubResult()
 
-    override suspend fun completeChunkedUpload(uploadId: String): ApiResult<StorageItem> = stubResult()
+    override suspend fun completeChunkedUpload(uploadId: String): Result<StorageItem> = stubResult()
 
-    override suspend fun cancelChunkedUpload(uploadId: String): ApiResult<Unit> = stubResult()
+    override suspend fun cancelChunkedUpload(uploadId: String): Result<Unit> = stubResult()
 
-    override suspend fun downloadFile(itemId: String): ApiResult<ByteArray> = stubResult()
+    override suspend fun downloadFile(itemId: String): Result<ByteArray> = stubResult()
 
     override fun getDownloadUrl(itemId: String): String = ""
 
@@ -160,7 +160,7 @@ class CreateFolderUseCaseTest {
     @Test
     fun invoke_returnsRepositoryCreateFolderResult() = runTest {
         val folder = testStorageItem(id = "f1", name = "NewFolder", parentId = "root")
-        val repo = FakeStorageRepository(createFolderResult = ApiResult.success(folder))
+        val repo = FakeStorageRepository(createFolderResult = Result.success(folder))
         val useCase = CreateFolderUseCaseImpl(repo)
         val result = useCase("NewFolder", "root")
         assertTrue(result.isSuccess())
@@ -170,7 +170,7 @@ class CreateFolderUseCaseTest {
     @Test
     fun invoke_withNullParentId_forwardsToRepository() = runTest {
         val folder = testStorageItem(parentId = null)
-        val repo = FakeStorageRepository(createFolderResult = ApiResult.success(folder))
+        val repo = FakeStorageRepository(createFolderResult = Result.success(folder))
         val useCase = CreateFolderUseCaseImpl(repo)
         val result = useCase("RootFolder", null)
         assertTrue(result.isSuccess())
@@ -178,7 +178,7 @@ class CreateFolderUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeStorageRepository(createFolderResult = ApiResult.error("CONFLICT", "Name already exists"))
+        val repo = FakeStorageRepository(createFolderResult = Result.error("CONFLICT", "Name already exists"))
         val useCase = CreateFolderUseCaseImpl(repo)
         val result = useCase("Existing", null)
         assertTrue(result.isError())
@@ -191,7 +191,7 @@ class GetItemUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetItemResult() = runTest {
         val item = testStorageItem(id = "i1", name = "file.pdf", type = ItemType.FILE)
-        val repo = FakeStorageRepository(getItemResult = ApiResult.success(item))
+        val repo = FakeStorageRepository(getItemResult = Result.success(item))
         val useCase = GetItemUseCaseImpl(repo)
         val result = useCase("i1")
         assertTrue(result.isSuccess())
@@ -200,7 +200,7 @@ class GetItemUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeStorageRepository(getItemResult = ApiResult.error("NOT_FOUND", "Item not found"))
+        val repo = FakeStorageRepository(getItemResult = Result.error("NOT_FOUND", "Item not found"))
         val useCase = GetItemUseCaseImpl(repo)
         val result = useCase("missing")
         assertTrue(result.isError())
@@ -213,7 +213,7 @@ class SearchUseCaseTest {
     fun invoke_returnsRepositorySearchResult() = runTest {
         val items = listOf(testStorageItem("s1", "match.pdf", ItemType.FILE))
         val paged = PaginatedResponse(items, 1L, 0, 50, 1, false)
-        val repo = FakeStorageRepository(searchResult = ApiResult.success(paged))
+        val repo = FakeStorageRepository(searchResult = Result.success(paged))
         val useCase = SearchUseCaseImpl(repo)
         val result = useCase("query", limit = 50, offset = 0)
         assertTrue(result.isSuccess())
@@ -223,7 +223,7 @@ class SearchUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeStorageRepository(searchResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeStorageRepository(searchResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = SearchUseCaseImpl(repo)
         val result = useCase("q")
         assertTrue(result.isError())
@@ -239,7 +239,7 @@ class GetBreadcrumbsUseCaseTest {
             testBreadcrumb("f1", "Documents", "/Documents"),
             testBreadcrumb("f2", "Report.pdf", "/Documents/Report.pdf"),
         )
-        val repo = FakeStorageRepository(getBreadcrumbsResult = ApiResult.success(breadcrumbs))
+        val repo = FakeStorageRepository(getBreadcrumbsResult = Result.success(breadcrumbs))
         val useCase = GetBreadcrumbsUseCaseImpl(repo)
         val result = useCase("item-1")
         assertTrue(result.isSuccess())
@@ -250,7 +250,7 @@ class GetBreadcrumbsUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeStorageRepository(getBreadcrumbsResult = ApiResult.error("NOT_FOUND", "Item not found"))
+        val repo = FakeStorageRepository(getBreadcrumbsResult = Result.error("NOT_FOUND", "Item not found"))
         val useCase = GetBreadcrumbsUseCaseImpl(repo)
         val result = useCase("missing")
         assertTrue(result.isError())
@@ -262,7 +262,7 @@ class MoveItemUseCaseTest {
     @Test
     fun invoke_returnsRepositoryMoveItemResult() = runTest {
         val item = testStorageItem(id = "moved-1", name = "Moved.pdf", parentId = "dest-folder")
-        val repo = FakeStorageRepository(moveItemResult = ApiResult.success(item))
+        val repo = FakeStorageRepository(moveItemResult = Result.success(item))
         val useCase = MoveItemUseCaseImpl(repo)
         val result = useCase("item-1", "dest-folder", null)
         assertTrue(result.isSuccess())
@@ -272,7 +272,7 @@ class MoveItemUseCaseTest {
     @Test
     fun invoke_withNewName_forwardsToRepository() = runTest {
         val item = testStorageItem(name = "Renamed.pdf")
-        val repo = FakeStorageRepository(moveItemResult = ApiResult.success(item))
+        val repo = FakeStorageRepository(moveItemResult = Result.success(item))
         val useCase = MoveItemUseCaseImpl(repo)
         val result = useCase("item-1", "dest-id", "Renamed.pdf")
         assertTrue(result.isSuccess())
@@ -281,7 +281,7 @@ class MoveItemUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeStorageRepository(moveItemResult = ApiResult.error("CONFLICT", "Name already exists"))
+        val repo = FakeStorageRepository(moveItemResult = Result.error("CONFLICT", "Name already exists"))
         val useCase = MoveItemUseCaseImpl(repo)
         val result = useCase("item-1", "dest", null)
         assertTrue(result.isError())

@@ -7,7 +7,7 @@
 
 package com.vaultstadio.app.di
 
-import com.vaultstadio.app.data.repository.TokenStorage
+import com.vaultstadio.app.data.network.TokenStorage
 import com.vaultstadio.app.platform.PersistentTokenStorage
 import org.koin.dsl.module
 

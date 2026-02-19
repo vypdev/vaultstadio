@@ -5,10 +5,10 @@
 
 package com.vaultstadio.app.feature.settings
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.User
 import com.vaultstadio.app.domain.model.UserRole
-import com.vaultstadio.app.domain.usecase.auth.GetCurrentUserUseCase
+import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
 import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.i18n.Language
 import com.vaultstadio.app.ui.theme.ThemeMode
@@ -31,8 +31,8 @@ private class FakeGetCurrentUserUseCase(
 
     private val defaultUser = User("u1", "a@b.com", "user", UserRole.USER, null, testInstant)
 
-    override suspend fun invoke(): ApiResult<User> =
-        ApiResult.success(user ?: defaultUser)
+    override suspend fun invoke(): Result<User> =
+        Result.success(user ?: defaultUser)
 
     override suspend fun refresh() {}
 

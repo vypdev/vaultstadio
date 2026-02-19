@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.feature.plugins
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.PluginInfo
 import com.vaultstadio.app.domain.usecase.plugin.DisablePluginUseCase
 import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCase
@@ -25,27 +25,27 @@ private fun testPlugin(id: String = "p1") = PluginInfo(
 )
 
 private class FakeGetPluginsUseCase(
-    var result: ApiResult<List<PluginInfo>> = ApiResult.success(emptyList()),
+    var result: Result<List<PluginInfo>> = Result.success(emptyList()),
 ) : GetPluginsUseCase {
-    override suspend fun invoke(): ApiResult<List<PluginInfo>> = result
+    override suspend fun invoke(): Result<List<PluginInfo>> = result
 }
 
 private class FakeEnablePluginUseCase(
-    var result: ApiResult<PluginInfo> = ApiResult.success(testPlugin()),
+    var result: Result<PluginInfo> = Result.success(testPlugin()),
 ) : EnablePluginUseCase {
-    override suspend fun invoke(pluginId: String): ApiResult<PluginInfo> = result
+    override suspend fun invoke(pluginId: String): Result<PluginInfo> = result
 }
 
 private class FakeDisablePluginUseCase(
-    var result: ApiResult<Unit> = ApiResult.success(Unit),
+    var result: Result<Unit> = Result.success(Unit),
 ) : DisablePluginUseCase {
-    override suspend fun invoke(pluginId: String): ApiResult<Unit> = result
+    override suspend fun invoke(pluginId: String): Result<Unit> = result
 }
 
 class PluginsViewModelTest {
 
     private fun createViewModel(
-        getPluginsResult: ApiResult<List<PluginInfo>> = ApiResult.success(emptyList()),
+        getPluginsResult: Result<List<PluginInfo>> = Result.success(emptyList()),
     ): PluginsViewModel = PluginsViewModel(
         getPluginsUseCase = FakeGetPluginsUseCase(getPluginsResult),
         enablePluginUseCase = FakeEnablePluginUseCase(),

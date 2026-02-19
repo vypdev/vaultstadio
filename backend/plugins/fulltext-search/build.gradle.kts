@@ -26,8 +26,8 @@ val luceneVersion = "9.11.1"
 
 dependencies {
     // Plugin SDK
-    implementation(project(":kotlin-backend:plugins-api"))
-    implementation(project(":kotlin-backend:core"))
+    implementation(project(":plugins-api"))
+    implementation(project(":core"))
 
     // Apache Lucene for full-text search
     implementation("org.apache.lucene:lucene-core:$luceneVersion")

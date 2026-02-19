@@ -24,7 +24,7 @@ kotlin {
 
 dependencies {
     // Core module for domain models
-    api(project(":kotlin-backend:core"))
+    api(project(":core"))
 
     // Kotlinx
     api(libs.kotlinx.coroutines.core)

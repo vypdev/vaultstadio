@@ -5,8 +5,8 @@
 
 package com.vaultstadio.app.feature.changepassword
 
-import com.vaultstadio.app.data.network.ApiResult
-import com.vaultstadio.app.domain.usecase.auth.ChangePasswordUseCase
+import com.vaultstadio.app.domain.result.Result
+import com.vaultstadio.app.domain.auth.usecase.ChangePasswordUseCase
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,14 +15,14 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private class FakeChangePasswordUseCase(
-    var result: ApiResult<Unit> = ApiResult.success(Unit),
+    var result: Result<Unit> = Result.success(Unit),
 ) : ChangePasswordUseCase {
-    override suspend fun invoke(currentPassword: String, newPassword: String): ApiResult<Unit> = result
+    override suspend fun invoke(currentPassword: String, newPassword: String): Result<Unit> = result
 }
 
 class ChangePasswordViewModelTest {
 
-    private fun createViewModel(result: ApiResult<Unit> = ApiResult.success(Unit)): ChangePasswordViewModel {
+    private fun createViewModel(result: Result<Unit> = Result.success(Unit)): ChangePasswordViewModel {
         return ChangePasswordViewModel(changePasswordUseCase = FakeChangePasswordUseCase(result))
     }
 

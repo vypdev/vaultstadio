@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.domain.usecase.sync
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.SyncRepository
 import com.vaultstadio.app.domain.model.ConflictResolution
 import com.vaultstadio.app.domain.model.DeviceType
@@ -37,39 +37,39 @@ private fun testSyncDevice(
 )
 
 private class FakeSyncRepository(
-    var getDevicesResult: ApiResult<List<SyncDevice>> = ApiResult.success(emptyList()),
-    var registerDeviceResult: ApiResult<SyncDevice> = ApiResult.success(testSyncDevice()),
-    var deactivateDeviceResult: ApiResult<Unit> = ApiResult.success(Unit),
-    var removeDeviceResult: ApiResult<Unit> = ApiResult.success(Unit),
-    var pullChangesResult: ApiResult<SyncResponse> = ApiResult.success(
+    var getDevicesResult: Result<List<SyncDevice>> = Result.success(emptyList()),
+    var registerDeviceResult: Result<SyncDevice> = Result.success(testSyncDevice()),
+    var deactivateDeviceResult: Result<Unit> = Result.success(Unit),
+    var removeDeviceResult: Result<Unit> = Result.success(Unit),
+    var pullChangesResult: Result<SyncResponse> = Result.success(
         SyncResponse(emptyList(), "", false, emptyList(), testInstant),
     ),
-    var getConflictsResult: ApiResult<List<SyncConflict>> = ApiResult.success(emptyList()),
-    var resolveConflictResult: ApiResult<Unit> = ApiResult.success(Unit),
+    var getConflictsResult: Result<List<SyncConflict>> = Result.success(emptyList()),
+    var resolveConflictResult: Result<Unit> = Result.success(Unit),
 ) : SyncRepository {
 
     override suspend fun registerDevice(
         deviceId: String,
         deviceName: String,
         deviceType: DeviceType,
-    ): ApiResult<SyncDevice> = registerDeviceResult
+    ): Result<SyncDevice> = registerDeviceResult
 
-    override suspend fun getDevices(activeOnly: Boolean): ApiResult<List<SyncDevice>> = getDevicesResult
+    override suspend fun getDevices(activeOnly: Boolean): Result<List<SyncDevice>> = getDevicesResult
 
-    override suspend fun deactivateDevice(deviceId: String): ApiResult<Unit> = deactivateDeviceResult
+    override suspend fun deactivateDevice(deviceId: String): Result<Unit> = deactivateDeviceResult
 
-    override suspend fun removeDevice(deviceId: String): ApiResult<Unit> = removeDeviceResult
+    override suspend fun removeDevice(deviceId: String): Result<Unit> = removeDeviceResult
 
     override suspend fun pullChanges(
         deviceId: String,
         cursor: String?,
         limit: Int,
         includeDeleted: Boolean,
-    ): ApiResult<SyncResponse> = pullChangesResult
+    ): Result<SyncResponse> = pullChangesResult
 
-    override suspend fun getConflicts(): ApiResult<List<SyncConflict>> = getConflictsResult
+    override suspend fun getConflicts(): Result<List<SyncConflict>> = getConflictsResult
 
-    override suspend fun resolveConflict(conflictId: String, resolution: ConflictResolution): ApiResult<Unit> =
+    override suspend fun resolveConflict(conflictId: String, resolution: ConflictResolution): Result<Unit> =
         resolveConflictResult
 }
 
@@ -78,7 +78,7 @@ class GetDevicesUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetDevicesResult() = runTest {
         val devices = listOf(testSyncDevice("d1"), testSyncDevice("d2"))
-        val repo = FakeSyncRepository(getDevicesResult = ApiResult.success(devices))
+        val repo = FakeSyncRepository(getDevicesResult = Result.success(devices))
         val useCase = GetDevicesUseCaseImpl(repo)
         val result = useCase(activeOnly = true)
         assertTrue(result.isSuccess())
@@ -87,7 +87,7 @@ class GetDevicesUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeSyncRepository(getDevicesResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeSyncRepository(getDevicesResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = GetDevicesUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -100,7 +100,7 @@ class RegisterDeviceUseCaseTest {
     @Test
     fun invoke_returnsRepositoryRegisterDeviceResult() = runTest {
         val device = testSyncDevice(id = "new-dev", deviceName = "Laptop")
-        val repo = FakeSyncRepository(registerDeviceResult = ApiResult.success(device))
+        val repo = FakeSyncRepository(registerDeviceResult = Result.success(device))
         val useCase = RegisterDeviceUseCaseImpl(repo)
         val result = useCase("dev-123", "Laptop", DeviceType.DESKTOP_MAC)
         assertTrue(result.isSuccess())
@@ -109,7 +109,7 @@ class RegisterDeviceUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeSyncRepository(registerDeviceResult = ApiResult.error("LIMIT", "Too many devices"))
+        val repo = FakeSyncRepository(registerDeviceResult = Result.error("LIMIT", "Too many devices"))
         val useCase = RegisterDeviceUseCaseImpl(repo)
         val result = useCase("x", "y", DeviceType.MOBILE_ANDROID)
         assertTrue(result.isError())
@@ -120,7 +120,7 @@ class DeactivateDeviceUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryDeactivateDeviceResult() = runTest {
-        val repo = FakeSyncRepository(deactivateDeviceResult = ApiResult.success(Unit))
+        val repo = FakeSyncRepository(deactivateDeviceResult = Result.success(Unit))
         val useCase = DeactivateDeviceUseCaseImpl(repo)
         val result = useCase("device-1")
         assertTrue(result.isSuccess())
@@ -128,7 +128,7 @@ class DeactivateDeviceUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeSyncRepository(deactivateDeviceResult = ApiResult.error("NOT_FOUND", "Device not found"))
+        val repo = FakeSyncRepository(deactivateDeviceResult = Result.error("NOT_FOUND", "Device not found"))
         val useCase = DeactivateDeviceUseCaseImpl(repo)
         val result = useCase("missing")
         assertTrue(result.isError())
@@ -139,7 +139,7 @@ class RemoveDeviceUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryRemoveDeviceResult() = runTest {
-        val repo = FakeSyncRepository(removeDeviceResult = ApiResult.success(Unit))
+        val repo = FakeSyncRepository(removeDeviceResult = Result.success(Unit))
         val useCase = RemoveDeviceUseCaseImpl(repo)
         val result = useCase("device-1")
         assertTrue(result.isSuccess())
@@ -150,7 +150,7 @@ class GetConflictsUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryGetConflictsResult() = runTest {
-        val repo = FakeSyncRepository(getConflictsResult = ApiResult.success(emptyList()))
+        val repo = FakeSyncRepository(getConflictsResult = Result.success(emptyList()))
         val useCase = GetConflictsUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isSuccess())
@@ -162,7 +162,7 @@ class ResolveConflictUseCaseTest {
 
     @Test
     fun invoke_returnsRepositoryResolveConflictResult() = runTest {
-        val repo = FakeSyncRepository(resolveConflictResult = ApiResult.success(Unit))
+        val repo = FakeSyncRepository(resolveConflictResult = Result.success(Unit))
         val useCase = ResolveConflictUseCaseImpl(repo)
         val result = useCase("conflict-1", ConflictResolution.KEEP_LOCAL)
         assertTrue(result.isSuccess())

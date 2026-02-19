@@ -6,7 +6,8 @@
 
 package com.vaultstadio.app
 
-import com.vaultstadio.app.di.sharedModule
+import com.vaultstadio.app.di.VaultStadioApp
+import com.vaultstadio.app.di.runtimeModules
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 
@@ -34,10 +35,9 @@ object KoinHelper {
      * @param apiBaseUrl Backend API base URL (including /api). Defaults to localhost.
      */
     fun initKoin(apiBaseUrl: String = DEFAULT_API_BASE_URL) {
-        startKoin {
+        startKoin<VaultStadioApp> {
             modules(
-                *sharedModule(apiBaseUrl).toTypedArray(),
-                iosModule,
+                runtimeModules(apiBaseUrl) + listOf(iosModule),
             )
         }
     }

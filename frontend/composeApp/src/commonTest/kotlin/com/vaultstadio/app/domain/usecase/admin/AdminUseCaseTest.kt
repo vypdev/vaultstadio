@@ -5,11 +5,11 @@
 
 package com.vaultstadio.app.domain.usecase.admin
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.AdminRepository
 import com.vaultstadio.app.domain.model.AdminUser
 import com.vaultstadio.app.domain.model.PaginatedResponse
-import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.model.UserStatus
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -41,22 +41,22 @@ private fun testAdminUser(
 )
 
 private class FakeAdminRepository(
-    var getUsersResult: ApiResult<PaginatedResponse<AdminUser>> = ApiResult.success(
+    var getUsersResult: Result<PaginatedResponse<AdminUser>> = Result.success(
         PaginatedResponse(emptyList(), 0L, 0, 50, 0, false),
     ),
-    var updateUserQuotaResult: ApiResult<AdminUser> = ApiResult.success(testAdminUser()),
-    var updateUserRoleResult: ApiResult<AdminUser> = ApiResult.success(testAdminUser()),
-    var updateUserStatusResult: ApiResult<AdminUser> = ApiResult.success(testAdminUser()),
+    var updateUserQuotaResult: Result<AdminUser> = Result.success(testAdminUser()),
+    var updateUserRoleResult: Result<AdminUser> = Result.success(testAdminUser()),
+    var updateUserStatusResult: Result<AdminUser> = Result.success(testAdminUser()),
 ) : AdminRepository {
 
-    override suspend fun getUsers(limit: Int, offset: Int): ApiResult<PaginatedResponse<AdminUser>> = getUsersResult
+    override suspend fun getUsers(limit: Int, offset: Int): Result<PaginatedResponse<AdminUser>> = getUsersResult
 
-    override suspend fun updateUserQuota(userId: String, quotaBytes: Long?): ApiResult<AdminUser> =
+    override suspend fun updateUserQuota(userId: String, quotaBytes: Long?): Result<AdminUser> =
         updateUserQuotaResult
 
-    override suspend fun updateUserRole(userId: String, role: UserRole): ApiResult<AdminUser> = updateUserRoleResult
+    override suspend fun updateUserRole(userId: String, role: UserRole): Result<AdminUser> = updateUserRoleResult
 
-    override suspend fun updateUserStatus(userId: String, status: UserStatus): ApiResult<AdminUser> =
+    override suspend fun updateUserStatus(userId: String, status: UserStatus): Result<AdminUser> =
         updateUserStatusResult
 }
 
@@ -66,7 +66,7 @@ class GetAdminUsersUseCaseTest {
     fun invoke_returnsRepositoryGetUsersResult() = runTest {
         val users = listOf(testAdminUser("u1"), testAdminUser("u2"))
         val paged = PaginatedResponse(users, 2L, 0, 50, 1, false)
-        val repo = FakeAdminRepository(getUsersResult = ApiResult.success(paged))
+        val repo = FakeAdminRepository(getUsersResult = Result.success(paged))
         val useCase = GetAdminUsersUseCaseImpl(repo)
         val result = useCase(limit = 50, offset = 0)
         assertTrue(result.isSuccess())
@@ -76,7 +76,7 @@ class GetAdminUsersUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeAdminRepository(getUsersResult = ApiResult.error("FORBIDDEN", "Admin only"))
+        val repo = FakeAdminRepository(getUsersResult = Result.error("FORBIDDEN", "Admin only"))
         val useCase = GetAdminUsersUseCaseImpl(repo)
         val result = useCase()
         assertTrue(result.isError())
@@ -89,7 +89,7 @@ class UpdateUserQuotaUseCaseTest {
     @Test
     fun invoke_returnsRepositoryUpdateUserQuotaResult() = runTest {
         val user = testAdminUser(id = "u3", quotaBytes = 20_000_000L)
-        val repo = FakeAdminRepository(updateUserQuotaResult = ApiResult.success(user))
+        val repo = FakeAdminRepository(updateUserQuotaResult = Result.success(user))
         val useCase = UpdateUserQuotaUseCaseImpl(repo)
         val result = useCase("u3", 20_000_000L)
         assertTrue(result.isSuccess())
@@ -99,7 +99,7 @@ class UpdateUserQuotaUseCaseTest {
     @Test
     fun invoke_withNullQuota_forwardsToRepository() = runTest {
         val user = testAdminUser(quotaBytes = null)
-        val repo = FakeAdminRepository(updateUserQuotaResult = ApiResult.success(user))
+        val repo = FakeAdminRepository(updateUserQuotaResult = Result.success(user))
         val useCase = UpdateUserQuotaUseCaseImpl(repo)
         val result = useCase("u1", null)
         assertTrue(result.isSuccess())
@@ -111,7 +111,7 @@ class UpdateUserRoleUseCaseTest {
     @Test
     fun invoke_returnsRepositoryUpdateUserRoleResult() = runTest {
         val user = testAdminUser(role = UserRole.USER)
-        val repo = FakeAdminRepository(updateUserRoleResult = ApiResult.success(user))
+        val repo = FakeAdminRepository(updateUserRoleResult = Result.success(user))
         val useCase = UpdateUserRoleUseCaseImpl(repo)
         val result = useCase("u1", UserRole.USER)
         assertTrue(result.isSuccess())
@@ -124,7 +124,7 @@ class UpdateUserStatusUseCaseTest {
     @Test
     fun invoke_returnsRepositoryUpdateUserStatusResult() = runTest {
         val user = testAdminUser(status = UserStatus.SUSPENDED)
-        val repo = FakeAdminRepository(updateUserStatusResult = ApiResult.success(user))
+        val repo = FakeAdminRepository(updateUserStatusResult = Result.success(user))
         val useCase = UpdateUserStatusUseCaseImpl(repo)
         val result = useCase("u1", UserStatus.SUSPENDED)
         assertTrue(result.isSuccess())

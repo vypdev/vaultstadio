@@ -5,10 +5,10 @@
 
 package com.vaultstadio.app.feature.admin
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.AdminUser
 import com.vaultstadio.app.domain.model.PaginatedResponse
-import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.model.UserStatus
 import com.vaultstadio.app.domain.usecase.admin.GetAdminUsersUseCase
 import com.vaultstadio.app.domain.usecase.admin.UpdateUserQuotaUseCase
@@ -37,35 +37,35 @@ private fun testAdminUser() = AdminUser(
 )
 
 private class FakeGetAdminUsersUseCase(
-    var result: ApiResult<PaginatedResponse<AdminUser>> = ApiResult.success(
+    var result: Result<PaginatedResponse<AdminUser>> = Result.success(
         PaginatedResponse(emptyList(), 0L, 0, 50, 0, false),
     ),
 ) : GetAdminUsersUseCase {
-    override suspend fun invoke(limit: Int, offset: Int): ApiResult<PaginatedResponse<AdminUser>> = result
+    override suspend fun invoke(limit: Int, offset: Int): Result<PaginatedResponse<AdminUser>> = result
 }
 
 private class FakeUpdateUserQuotaUseCase(
-    var result: ApiResult<AdminUser> = ApiResult.success(testAdminUser()),
+    var result: Result<AdminUser> = Result.success(testAdminUser()),
 ) : UpdateUserQuotaUseCase {
-    override suspend fun invoke(userId: String, quotaBytes: Long?): ApiResult<AdminUser> = result
+    override suspend fun invoke(userId: String, quotaBytes: Long?): Result<AdminUser> = result
 }
 
 private class FakeUpdateUserRoleUseCase(
-    var result: ApiResult<AdminUser> = ApiResult.success(testAdminUser()),
+    var result: Result<AdminUser> = Result.success(testAdminUser()),
 ) : UpdateUserRoleUseCase {
-    override suspend fun invoke(userId: String, role: UserRole): ApiResult<AdminUser> = result
+    override suspend fun invoke(userId: String, role: UserRole): Result<AdminUser> = result
 }
 
 private class FakeUpdateUserStatusUseCase(
-    var result: ApiResult<AdminUser> = ApiResult.success(testAdminUser()),
+    var result: Result<AdminUser> = Result.success(testAdminUser()),
 ) : UpdateUserStatusUseCase {
-    override suspend fun invoke(userId: String, status: UserStatus): ApiResult<AdminUser> = result
+    override suspend fun invoke(userId: String, status: UserStatus): Result<AdminUser> = result
 }
 
 class AdminViewModelTest {
 
     private fun createViewModel(
-        getUsersResult: ApiResult<PaginatedResponse<AdminUser>> = ApiResult.success(
+        getUsersResult: Result<PaginatedResponse<AdminUser>> = Result.success(
             PaginatedResponse(emptyList(), 0L, 0, 50, 0, false),
         ),
     ): AdminViewModel = AdminViewModel(
@@ -77,7 +77,7 @@ class AdminViewModelTest {
 
     @Test
     fun clearError_clearsErrorMessage() = ViewModelTestBase.runTestWithMain {
-        val vm = createViewModel(getUsersResult = ApiResult.error("ERR", "Something failed"))
+        val vm = createViewModel(getUsersResult = Result.error("ERR", "Something failed"))
         vm.loadUsers()
         testScheduler.advanceUntilIdle()
         assertTrue(vm.error != null)
@@ -89,7 +89,7 @@ class AdminViewModelTest {
     fun loadUsers_onSuccess_updatesUsers() = ViewModelTestBase.runTestWithMain {
         val users = listOf(testAdminUser())
         val vm = createViewModel(
-            getUsersResult = ApiResult.success(PaginatedResponse(users, 1L, 0, 50, 1, false)),
+            getUsersResult = Result.success(PaginatedResponse(users, 1L, 0, 50, 1, false)),
         )
         vm.loadUsers()
         testScheduler.advanceUntilIdle()

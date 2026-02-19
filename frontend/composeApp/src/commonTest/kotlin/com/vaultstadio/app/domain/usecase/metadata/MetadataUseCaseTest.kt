@@ -5,7 +5,7 @@
 
 package com.vaultstadio.app.domain.usecase.metadata
 
-import com.vaultstadio.app.data.network.ApiResult
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.data.repository.MetadataRepository
 import com.vaultstadio.app.domain.model.DocumentMetadata
 import com.vaultstadio.app.domain.model.FileMetadata
@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 
 private val testInstant = Instant.fromEpochMilliseconds(0L)
 
-private fun <T> stubResult(): ApiResult<T> = ApiResult.error("TEST", "Not implemented in fake")
+private fun <T> stubResult(): Result<T> = Result.error("TEST", "Not implemented in fake")
 
 private fun testMetadataSearchResult(
     itemId: String = "item-1",
@@ -48,20 +48,20 @@ private fun testFileMetadata(
 )
 
 private class FakeMetadataRepository(
-    var getSearchSuggestionsResult: ApiResult<List<String>> = ApiResult.success(emptyList()),
-    var searchByMetadataResult: ApiResult<PaginatedResponse<MetadataSearchResult>> = ApiResult.success(
+    var getSearchSuggestionsResult: Result<List<String>> = Result.success(emptyList()),
+    var searchByMetadataResult: Result<PaginatedResponse<MetadataSearchResult>> = Result.success(
         PaginatedResponse(emptyList(), 0L, 0, 50, 0, false),
     ),
-    var getFileMetadataResult: ApiResult<FileMetadata> = ApiResult.success(testFileMetadata()),
+    var getFileMetadataResult: Result<FileMetadata> = Result.success(testFileMetadata()),
 ) : MetadataRepository {
 
-    override suspend fun getFileMetadata(itemId: String): ApiResult<FileMetadata> = getFileMetadataResult
+    override suspend fun getFileMetadata(itemId: String): Result<FileMetadata> = getFileMetadataResult
 
-    override suspend fun getImageMetadata(itemId: String): ApiResult<ImageMetadata> = stubResult()
+    override suspend fun getImageMetadata(itemId: String): Result<ImageMetadata> = stubResult()
 
-    override suspend fun getVideoMetadata(itemId: String): ApiResult<VideoMetadata> = stubResult()
+    override suspend fun getVideoMetadata(itemId: String): Result<VideoMetadata> = stubResult()
 
-    override suspend fun getDocumentMetadata(itemId: String): ApiResult<DocumentMetadata> = stubResult()
+    override suspend fun getDocumentMetadata(itemId: String): Result<DocumentMetadata> = stubResult()
 
     override suspend fun advancedSearch(
         query: String,
@@ -73,16 +73,16 @@ private class FakeMetadataRepository(
         toDate: Instant?,
         limit: Int,
         offset: Int,
-    ): ApiResult<PaginatedResponse<StorageItem>> = stubResult()
+    ): Result<PaginatedResponse<StorageItem>> = stubResult()
 
     override suspend fun searchByMetadata(
         key: String,
         value: String?,
         pluginId: String?,
         limit: Int,
-    ): ApiResult<PaginatedResponse<MetadataSearchResult>> = searchByMetadataResult
+    ): Result<PaginatedResponse<MetadataSearchResult>> = searchByMetadataResult
 
-    override suspend fun getSearchSuggestions(prefix: String, limit: Int): ApiResult<List<String>> =
+    override suspend fun getSearchSuggestions(prefix: String, limit: Int): Result<List<String>> =
         getSearchSuggestionsResult
 }
 
@@ -91,7 +91,7 @@ class GetSearchSuggestionsUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetSearchSuggestionsResult() = runTest {
         val suggestions = listOf("camera", "camera-model", "created-date")
-        val repo = FakeMetadataRepository(getSearchSuggestionsResult = ApiResult.success(suggestions))
+        val repo = FakeMetadataRepository(getSearchSuggestionsResult = Result.success(suggestions))
         val useCase = GetSearchSuggestionsUseCaseImpl(repo)
         val result = useCase("cam", limit = 10)
         assertTrue(result.isSuccess())
@@ -101,7 +101,7 @@ class GetSearchSuggestionsUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeMetadataRepository(getSearchSuggestionsResult = ApiResult.error("UNAUTHORIZED", "Not logged in"))
+        val repo = FakeMetadataRepository(getSearchSuggestionsResult = Result.error("UNAUTHORIZED", "Not logged in"))
         val useCase = GetSearchSuggestionsUseCaseImpl(repo)
         val result = useCase("x")
         assertTrue(result.isError())
@@ -115,7 +115,7 @@ class SearchByMetadataUseCaseTest {
     fun invoke_returnsRepositorySearchByMetadataResult() = runTest {
         val results = listOf(testMetadataSearchResult("i1", "camera", "Canon"))
         val paged = PaginatedResponse(results, 1L, 0, 50, 1, false)
-        val repo = FakeMetadataRepository(searchByMetadataResult = ApiResult.success(paged))
+        val repo = FakeMetadataRepository(searchByMetadataResult = Result.success(paged))
         val useCase = SearchByMetadataUseCaseImpl(repo)
         val result = useCase("camera", value = "Canon", pluginId = null, limit = 50)
         assertTrue(result.isSuccess())
@@ -125,7 +125,7 @@ class SearchByMetadataUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeMetadataRepository(searchByMetadataResult = ApiResult.error("BAD_REQUEST", "Invalid key"))
+        val repo = FakeMetadataRepository(searchByMetadataResult = Result.error("BAD_REQUEST", "Invalid key"))
         val useCase = SearchByMetadataUseCaseImpl(repo)
         val result = useCase("key")
         assertTrue(result.isError())
@@ -137,7 +137,7 @@ class GetFileMetadataUseCaseTest {
     @Test
     fun invoke_returnsRepositoryGetFileMetadataResult() = runTest {
         val metadata = testFileMetadata("file-1", mapOf("mimeType" to "application/pdf", "size" to "1024"))
-        val repo = FakeMetadataRepository(getFileMetadataResult = ApiResult.success(metadata))
+        val repo = FakeMetadataRepository(getFileMetadataResult = Result.success(metadata))
         val useCase = GetFileMetadataUseCaseImpl(repo)
         val result = useCase("file-1")
         assertTrue(result.isSuccess())
@@ -147,7 +147,7 @@ class GetFileMetadataUseCaseTest {
 
     @Test
     fun invoke_propagatesError() = runTest {
-        val repo = FakeMetadataRepository(getFileMetadataResult = ApiResult.error("NOT_FOUND", "Item not found"))
+        val repo = FakeMetadataRepository(getFileMetadataResult = Result.error("NOT_FOUND", "Item not found"))
         val useCase = GetFileMetadataUseCaseImpl(repo)
         val result = useCase("missing")
         assertTrue(result.isError())

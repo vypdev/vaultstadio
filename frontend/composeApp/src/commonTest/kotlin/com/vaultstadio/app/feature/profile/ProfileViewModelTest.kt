@@ -5,8 +5,8 @@
 
 package com.vaultstadio.app.feature.profile
 
-import com.vaultstadio.app.data.network.ApiResult
-import com.vaultstadio.app.data.repository.AuthRepository
+import com.vaultstadio.app.domain.result.Result
+import com.vaultstadio.app.domain.auth.AuthRepository
 import com.vaultstadio.app.domain.model.LoginResult
 import com.vaultstadio.app.domain.model.StorageQuota
 import com.vaultstadio.app.domain.model.User
@@ -47,16 +47,16 @@ private class FakeAuthRepositoryForProfile : AuthRepository {
     private val _currentUserFlow = MutableStateFlow<User?>(testUser())
     override val currentUserFlow: StateFlow<User?> = _currentUserFlow.asStateFlow()
 
-    override suspend fun login(email: String, password: String): ApiResult<LoginResult> =
-        ApiResult.error("", "")
-    override suspend fun register(email: String, username: String, password: String): ApiResult<User> =
-        ApiResult.error("", "")
-    override suspend fun logout() = ApiResult.success(Unit)
-    override suspend fun getCurrentUser() = ApiResult.success(testUser())
+    override suspend fun login(email: String, password: String): Result<LoginResult> =
+        Result.error("", "")
+    override suspend fun register(email: String, username: String, password: String): Result<User> =
+        Result.error("", "")
+    override suspend fun logout() = Result.success(Unit)
+    override suspend fun getCurrentUser() = Result.success(testUser())
     override suspend fun refreshCurrentUser() {}
-    override suspend fun getQuota(): ApiResult<StorageQuota> = ApiResult.success(testQuota())
-    override suspend fun updateProfile(username: String?, avatarUrl: String?) = ApiResult.success(testUser())
-    override suspend fun changePassword(currentPassword: String, newPassword: String) = ApiResult.success(Unit)
+    override suspend fun getQuota(): Result<StorageQuota> = Result.success(testQuota())
+    override suspend fun updateProfile(username: String?, avatarUrl: String?) = Result.success(testUser())
+    override suspend fun changePassword(currentPassword: String, newPassword: String) = Result.success(Unit)
     override fun isLoggedIn() = true
 }
 

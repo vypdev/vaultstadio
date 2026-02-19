@@ -4,20 +4,18 @@
  * Native Android app using Compose Multiplatform shared UI.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
 }
 
 // Load keystore properties for release signing
-val keystorePropertiesFile = rootProject.file("compose-frontend/androidApp/keystore.properties")
+val keystorePropertiesFile = rootProject.file("androidApp/keystore.properties")
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
@@ -113,15 +111,9 @@ android {
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
-}
-
 dependencies {
     // Shared Compose UI
-    implementation(project(":compose-frontend:composeApp"))
+    implementation(project(":composeApp"))
 
     // Compose
     implementation(compose.runtime)

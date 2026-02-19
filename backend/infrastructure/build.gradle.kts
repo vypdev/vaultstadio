@@ -22,7 +22,7 @@ kotlin {
 
 dependencies {
     // Project modules
-    api(project(":kotlin-backend:core"))
+    api(project(":core"))
 
     // Kotlinx
     implementation(libs.kotlinx.coroutines.core)

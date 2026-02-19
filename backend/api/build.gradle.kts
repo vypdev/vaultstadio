@@ -27,9 +27,9 @@ application {
 
 dependencies {
     // Project modules
-    implementation(project(":kotlin-backend:core"))
-    implementation(project(":kotlin-backend:plugins-api"))
-    implementation(project(":kotlin-backend:infrastructure"))
+    implementation(project(":core"))
+    implementation(project(":plugins-api"))
+    implementation(project(":infrastructure"))
 
     // Ktor Server
     implementation(libs.bundles.ktor.server)

@@ -24,7 +24,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":compose-frontend:composeApp"))
+                implementation(project(":composeApp"))
 
                 // Kotlinx
                 implementation(libs.kotlinx.coroutines.core)

@@ -23,8 +23,8 @@ tasks.withType<JavaCompile>().configureEach {
 
 dependencies {
     // Plugin SDK
-    implementation(project(":kotlin-backend:plugins-api"))
-    implementation(project(":kotlin-backend:core"))
+    implementation(project(":plugins-api"))
+    implementation(project(":core"))
 
     // Image metadata extraction
     implementation("com.drewnoakes:metadata-extractor:2.19.0")
