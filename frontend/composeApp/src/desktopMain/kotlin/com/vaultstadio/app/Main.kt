@@ -18,13 +18,15 @@ import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.auth.di.authModule
 import com.vaultstadio.app.data.config.di.configModule
 import com.vaultstadio.app.data.share.di.shareModule
+import com.vaultstadio.app.data.plugin.di.pluginModule
 import com.vaultstadio.app.data.storage.di.storageModule
+import com.vaultstadio.app.data.version.di.versionModule
 import com.vaultstadio.app.di.runtimeModules
 import org.koin.core.context.startKoin
 
 fun main() {
     startKoin {
-        modules(runtimeModules("http://localhost:8080/api") + activityModule + adminModule + authModule + configModule + shareModule + storageModule)
+        modules(runtimeModules("http://localhost:8080/api") + activityModule + adminModule + authModule + configModule + shareModule + pluginModule + storageModule + versionModule)
     }
     application {
         Window(

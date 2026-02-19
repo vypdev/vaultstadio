@@ -4,9 +4,9 @@
 
 package com.vaultstadio.app.ui.screens
 
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.FileVersionHistory
-import com.vaultstadio.app.domain.model.VersionDiff
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
+import com.vaultstadio.app.domain.version.model.VersionDiff
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals

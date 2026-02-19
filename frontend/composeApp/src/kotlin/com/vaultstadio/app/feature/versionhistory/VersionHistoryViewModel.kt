@@ -6,16 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.FileVersionHistory
-import com.vaultstadio.app.domain.model.VersionDiff
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
+import com.vaultstadio.app.domain.version.model.VersionDiff
 import com.vaultstadio.app.domain.config.usecase.GetVersionUrlsUseCase
-import com.vaultstadio.app.domain.usecase.version.CleanupVersionsUseCase
-import com.vaultstadio.app.domain.usecase.version.CompareVersionsUseCase
-import com.vaultstadio.app.domain.usecase.version.DeleteVersionUseCase
-import com.vaultstadio.app.domain.usecase.version.GetVersionHistoryUseCase
-import com.vaultstadio.app.domain.usecase.version.GetVersionUseCase
-import com.vaultstadio.app.domain.usecase.version.RestoreVersionUseCase
+import com.vaultstadio.app.domain.version.usecase.CleanupVersionsUseCase
+import com.vaultstadio.app.domain.version.usecase.CompareVersionsUseCase
+import com.vaultstadio.app.domain.version.usecase.DeleteVersionUseCase
+import com.vaultstadio.app.domain.version.usecase.GetVersionHistoryUseCase
+import com.vaultstadio.app.domain.version.usecase.GetVersionUseCase
+import com.vaultstadio.app.domain.version.usecase.RestoreVersionUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for version history management.

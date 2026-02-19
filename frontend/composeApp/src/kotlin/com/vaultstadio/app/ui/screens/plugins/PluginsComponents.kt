@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.PluginInfo
+import com.vaultstadio.app.domain.plugin.model.PluginInfo
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

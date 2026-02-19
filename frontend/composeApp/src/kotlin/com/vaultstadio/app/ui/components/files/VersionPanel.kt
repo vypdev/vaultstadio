@@ -40,8 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.FileVersionHistory
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
 import com.vaultstadio.app.utils.formatFileSize
 import com.vaultstadio.app.utils.formatRelativeTime
 

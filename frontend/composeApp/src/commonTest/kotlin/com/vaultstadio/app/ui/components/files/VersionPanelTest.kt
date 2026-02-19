@@ -4,8 +4,8 @@
 
 package com.vaultstadio.app.ui.components.files
 
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.FileVersionHistory
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
 import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals

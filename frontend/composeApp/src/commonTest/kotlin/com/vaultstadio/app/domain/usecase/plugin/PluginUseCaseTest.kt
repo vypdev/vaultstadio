@@ -5,9 +5,12 @@
 
 package com.vaultstadio.app.domain.usecase.plugin
 
+import com.vaultstadio.app.domain.plugin.PluginRepository
+import com.vaultstadio.app.domain.plugin.model.PluginInfo
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.PluginRepository
-import com.vaultstadio.app.domain.model.PluginInfo
+import com.vaultstadio.app.data.plugin.usecase.DisablePluginUseCaseImpl
+import com.vaultstadio.app.data.plugin.usecase.EnablePluginUseCaseImpl
+import com.vaultstadio.app.data.plugin.usecase.GetPluginsUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -6,10 +6,16 @@
 package com.vaultstadio.app.domain.usecase.version
 
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.VersionRepository
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.FileVersionHistory
-import com.vaultstadio.app.domain.model.VersionDiff
+import com.vaultstadio.app.domain.version.VersionRepository
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
+import com.vaultstadio.app.domain.version.model.VersionDiff
+import com.vaultstadio.app.data.version.usecase.CleanupVersionsUseCaseImpl
+import com.vaultstadio.app.data.version.usecase.CompareVersionsUseCaseImpl
+import com.vaultstadio.app.data.version.usecase.DeleteVersionUseCaseImpl
+import com.vaultstadio.app.data.version.usecase.GetVersionHistoryUseCaseImpl
+import com.vaultstadio.app.data.version.usecase.GetVersionUseCaseImpl
+import com.vaultstadio.app.data.version.usecase.RestoreVersionUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test

@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.PluginInfo
-import com.vaultstadio.app.domain.usecase.plugin.DisablePluginUseCase
-import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCase
-import com.vaultstadio.app.domain.usecase.plugin.GetPluginsUseCase
+import com.vaultstadio.app.domain.plugin.model.PluginInfo
+import com.vaultstadio.app.domain.plugin.usecase.DisablePluginUseCase
+import com.vaultstadio.app.domain.plugin.usecase.EnablePluginUseCase
+import com.vaultstadio.app.domain.plugin.usecase.GetPluginsUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for plugin management.

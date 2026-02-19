@@ -11,9 +11,7 @@ import com.vaultstadio.app.data.api.AIApi
 import com.vaultstadio.app.data.api.CollaborationApi
 import com.vaultstadio.app.data.api.FederationApi
 import com.vaultstadio.app.data.api.MetadataApi
-import com.vaultstadio.app.data.api.PluginApi
 import com.vaultstadio.app.data.api.SyncApi
-import com.vaultstadio.app.data.api.VersionApi
 import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.repository.AIRepository
 import com.vaultstadio.app.data.repository.AIRepositoryImpl
@@ -23,19 +21,13 @@ import com.vaultstadio.app.data.repository.FederationRepository
 import com.vaultstadio.app.data.repository.FederationRepositoryImpl
 import com.vaultstadio.app.data.repository.MetadataRepository
 import com.vaultstadio.app.data.repository.MetadataRepositoryImpl
-import com.vaultstadio.app.data.repository.PluginRepository
-import com.vaultstadio.app.data.repository.PluginRepositoryImpl
 import com.vaultstadio.app.data.repository.SyncRepository
 import com.vaultstadio.app.data.repository.SyncRepositoryImpl
-import com.vaultstadio.app.data.repository.VersionRepository
-import com.vaultstadio.app.data.repository.VersionRepositoryImpl
 import com.vaultstadio.app.data.service.AIService
 import com.vaultstadio.app.data.service.CollaborationService
 import com.vaultstadio.app.data.service.FederationService
 import com.vaultstadio.app.data.service.MetadataService
-import com.vaultstadio.app.data.service.PluginService
 import com.vaultstadio.app.data.service.SyncService
-import com.vaultstadio.app.data.service.VersionService
 import com.vaultstadio.app.domain.usecase.ai.AIChatUseCase
 import com.vaultstadio.app.domain.usecase.ai.AIChatUseCaseImpl
 import com.vaultstadio.app.domain.usecase.ai.ClassifyContentUseCase
@@ -130,12 +122,6 @@ import com.vaultstadio.app.domain.usecase.metadata.GetVideoMetadataUseCase
 import com.vaultstadio.app.domain.usecase.metadata.GetVideoMetadataUseCaseImpl
 import com.vaultstadio.app.domain.usecase.metadata.SearchByMetadataUseCase
 import com.vaultstadio.app.domain.usecase.metadata.SearchByMetadataUseCaseImpl
-import com.vaultstadio.app.domain.usecase.plugin.DisablePluginUseCase
-import com.vaultstadio.app.domain.usecase.plugin.DisablePluginUseCaseImpl
-import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCase
-import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCaseImpl
-import com.vaultstadio.app.domain.usecase.plugin.GetPluginsUseCase
-import com.vaultstadio.app.domain.usecase.plugin.GetPluginsUseCaseImpl
 import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCase
 import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCaseImpl
 import com.vaultstadio.app.domain.usecase.sync.GetConflictsUseCase
@@ -150,18 +136,6 @@ import com.vaultstadio.app.domain.usecase.sync.RemoveDeviceUseCase
 import com.vaultstadio.app.domain.usecase.sync.RemoveDeviceUseCaseImpl
 import com.vaultstadio.app.domain.usecase.sync.ResolveConflictUseCase
 import com.vaultstadio.app.domain.usecase.sync.ResolveConflictUseCaseImpl
-import com.vaultstadio.app.domain.usecase.version.CompareVersionsUseCase
-import com.vaultstadio.app.domain.usecase.version.CompareVersionsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.version.CleanupVersionsUseCase
-import com.vaultstadio.app.domain.usecase.version.CleanupVersionsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.version.DeleteVersionUseCase
-import com.vaultstadio.app.domain.usecase.version.DeleteVersionUseCaseImpl
-import com.vaultstadio.app.domain.usecase.version.GetVersionHistoryUseCase
-import com.vaultstadio.app.domain.usecase.version.GetVersionHistoryUseCaseImpl
-import com.vaultstadio.app.domain.usecase.version.GetVersionUseCase
-import com.vaultstadio.app.domain.usecase.version.GetVersionUseCaseImpl
-import com.vaultstadio.app.domain.usecase.version.RestoreVersionUseCase
-import com.vaultstadio.app.domain.usecase.version.RestoreVersionUseCaseImpl
 import com.vaultstadio.app.feature.activity.ActivityViewModel
 import com.vaultstadio.app.feature.admin.AdminViewModel
 import com.vaultstadio.app.feature.ai.AIViewModel
@@ -189,8 +163,6 @@ import org.koin.plugin.module.dsl.viewModel
 val appModule = module {
 
     // --- APIs (depend on HttpClient) ---
-    single { VersionApi(get()) }
-    single { PluginApi(get()) }
     single { AIApi(get()) }
     single { SyncApi(get()) }
     single { FederationApi(get()) }
@@ -198,8 +170,6 @@ val appModule = module {
     single { CollaborationApi(get()) }
 
     // --- Services (depend on APIs) ---
-    single { VersionService(get()) }
-    single { PluginService(get()) }
     single { AIService(get()) }
     single { SyncService(get()) }
     single { FederationService(get()) }
@@ -207,8 +177,6 @@ val appModule = module {
     single { CollaborationService(get()) }
 
     // --- Repositories ---
-    single<VersionRepository> { VersionRepositoryImpl(get(), get(), get()) }
-    single<PluginRepository> { PluginRepositoryImpl(get()) }
     single<AIRepository> { AIRepositoryImpl(get()) }
     single<SyncRepository> { SyncRepositoryImpl(get()) }
     single<FederationRepository> { FederationRepositoryImpl(get()) }
@@ -264,14 +232,6 @@ val appModule = module {
     factory<TagImageUseCase> { TagImageUseCaseImpl(get()) }
     factory<GetProviderModelsUseCase> { GetProviderModelsUseCaseImpl(get()) }
 
-    // --- Version use cases ---
-    factory<GetVersionHistoryUseCase> { GetVersionHistoryUseCaseImpl(get()) }
-    factory<RestoreVersionUseCase> { RestoreVersionUseCaseImpl(get()) }
-    factory<GetVersionUseCase> { GetVersionUseCaseImpl(get()) }
-    factory<CleanupVersionsUseCase> { CleanupVersionsUseCaseImpl(get()) }
-    factory<DeleteVersionUseCase> { DeleteVersionUseCaseImpl(get()) }
-    factory<CompareVersionsUseCase> { CompareVersionsUseCaseImpl(get()) }
-
     // --- Collaboration use cases ---
     factory<UpdatePresenceUseCase> { UpdatePresenceUseCaseImpl(get()) }
     factory<ResolveDocumentCommentUseCase> { ResolveDocumentCommentUseCaseImpl(get()) }
@@ -288,10 +248,6 @@ val appModule = module {
     factory<GetUserPresenceUseCase> { GetUserPresenceUseCaseImpl(get()) }
 
     // --- Plugin use cases ---
-    factory<GetPluginsUseCase> { GetPluginsUseCaseImpl(get()) }
-    factory<EnablePluginUseCase> { EnablePluginUseCaseImpl(get()) }
-    factory<DisablePluginUseCase> { DisablePluginUseCaseImpl(get()) }
-
     // --- Upload manager ---
     single { UploadManager(get()) }
 

@@ -13,11 +13,15 @@
 - **:data:auth** – Done. AuthApi, AuthService, AuthRepositoryImpl, auth DTOs/mapper, use-case impls, `authModule` (Koin DSL).
 - **:data:storage** – Done. StorageApi, StorageService, StorageRepositoryImpl, DTOs, mapper, use-case impls, `storageModule` (Koin DSL). ComposeApp uses `storageModule`; storage beans removed from `appModule`.
 - **:data:config** – Done. `ConfigRepositoryImpl`, config use-case impls, `configModule`. ComposeApp uses `configModule`; config beans removed from `appModule`.
-- **:data:share**, **:data:activity**, etc. – Stubs only; implementations still in composeApp monolith.
-- **:domain:admin**, **:domain:sync**, **:domain:activity**, etc. – Placeholder only; interfaces/models still in composeApp.
+- **:domain:activity**, **:domain:admin**, **:domain:version**, **:domain:plugin** – Done. Models, repository interfaces, use-case interfaces.
+- **:data:share** – Done. ShareApi, ShareService, ShareRepositoryImpl, DTOs, mapper, use-case impls, `shareModule`. ComposeApp uses `shareModule`; share beans removed from `appModule`.
+- **:data:activity** – Done. ActivityApi, ActivityService, ActivityRepositoryImpl, DTO, mapper, use-case impls, `activityModule`. ComposeApp uses `activityModule`; activity beans removed from `appModule`.
+- **:data:admin** – Done. AdminApi, AdminService, AdminRepositoryImpl, DTOs, mapper, use-case impls, `adminModule`. ComposeApp uses `adminModule`; admin beans removed from `appModule`.
+- **:data:plugin** – Done. PluginApi, PluginService, PluginRepositoryImpl, DTO, mapper, use-case impls, `pluginModule`. ComposeApp uses `pluginModule`; plugin beans removed from `appModule`.
+- **:data:version** – Done. VersionApi, VersionService, VersionRepositoryImpl (uses ApiClientConfig, TokenStorage for download URL), DTOs, mapper, 6 use-case impls, `versionModule`. ComposeApp uses `versionModule`; version beans removed from `appModule`.
 - **:feature:*** – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: complete **:data:config** (ConfigRepositoryImpl, config use-case impls), then migrate remaining domain/data/feature slices per §10.
+Next: migrate remaining data slices (sync, metadata, federation, ai, collaboration) and feature modules per §10.
 
 ---
 

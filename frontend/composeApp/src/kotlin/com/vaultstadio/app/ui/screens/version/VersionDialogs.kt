@@ -29,8 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.VersionDiff
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.VersionDiff
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatFileSize
 import com.vaultstadio.app.utils.formatRelativeTime

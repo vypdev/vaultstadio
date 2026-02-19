@@ -45,8 +45,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.VersionDiff
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.VersionDiff
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatFileSize
 import com.vaultstadio.app.utils.formatRelativeTime

@@ -43,9 +43,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.FileVersion
-import com.vaultstadio.app.domain.model.FileVersionHistory
-import com.vaultstadio.app.domain.model.VersionDiff
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
+import com.vaultstadio.app.domain.version.model.VersionDiff
 import com.vaultstadio.app.i18n.strings
 import com.vaultstadio.app.ui.screens.version.DiffView
 import com.vaultstadio.app.ui.screens.version.EmptyVersionState
