@@ -7,14 +7,14 @@ package com.vaultstadio.app.feature.profile
 
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.AuthRepository
-import com.vaultstadio.app.domain.model.LoginResult
-import com.vaultstadio.app.domain.model.StorageQuota
-import com.vaultstadio.app.domain.model.User
-import com.vaultstadio.app.domain.model.UserRole
-import com.vaultstadio.app.domain.usecase.auth.ChangePasswordUseCaseImpl
-import com.vaultstadio.app.domain.usecase.auth.GetCurrentUserUseCaseImpl
-import com.vaultstadio.app.domain.usecase.auth.GetQuotaUseCaseImpl
-import com.vaultstadio.app.domain.usecase.auth.UpdateProfileUseCaseImpl
+import com.vaultstadio.app.domain.auth.model.LoginResult
+import com.vaultstadio.app.domain.auth.model.StorageQuota
+import com.vaultstadio.app.domain.auth.model.User
+import com.vaultstadio.app.domain.auth.model.UserRole
+import com.vaultstadio.app.data.auth.usecase.ChangePasswordUseCaseImpl
+import com.vaultstadio.app.data.auth.usecase.GetCurrentUserUseCaseImpl
+import com.vaultstadio.app.data.auth.usecase.GetQuotaUseCaseImpl
+import com.vaultstadio.app.data.auth.usecase.UpdateProfileUseCaseImpl
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

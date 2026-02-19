@@ -6,10 +6,10 @@
 package com.vaultstadio.app.feature.security
 
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.ActiveSession
-import com.vaultstadio.app.domain.model.LoginEvent
-import com.vaultstadio.app.domain.model.SecuritySettings
-import com.vaultstadio.app.domain.model.SessionDeviceType
+import com.vaultstadio.app.domain.auth.model.ActiveSession
+import com.vaultstadio.app.domain.auth.model.LoginEvent
+import com.vaultstadio.app.domain.auth.model.SecuritySettings
+import com.vaultstadio.app.domain.auth.model.SessionDeviceType
 import com.vaultstadio.app.domain.auth.usecase.GetActiveSessionsUseCase
 import com.vaultstadio.app.domain.auth.usecase.GetLoginHistoryUseCase
 import com.vaultstadio.app.domain.auth.usecase.GetSecuritySettingsUseCase

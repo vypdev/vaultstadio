@@ -6,8 +6,8 @@
 
 package com.vaultstadio.app.ui.components.layout
 
-import com.vaultstadio.app.domain.model.StorageQuota
-import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.auth.model.StorageQuota
+import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.viewmodel.NavDestination
 import kotlin.test.Test
 import kotlin.test.assertEquals

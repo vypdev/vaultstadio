@@ -8,8 +8,8 @@ package com.vaultstadio.app
 
 import com.vaultstadio.app.domain.storage.model.ItemType
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.domain.model.StorageQuota
-import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.auth.model.StorageQuota
+import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.storage.model.Visibility
 import kotlin.time.Clock
 import kotlin.test.Test

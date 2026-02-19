@@ -6,8 +6,8 @@
 package com.vaultstadio.app.feature.settings
 
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.User
-import com.vaultstadio.app.domain.model.UserRole
+import com.vaultstadio.app.domain.auth.model.User
+import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
 import com.vaultstadio.app.feature.ViewModelTestBase
 import com.vaultstadio.app.i18n.Language
