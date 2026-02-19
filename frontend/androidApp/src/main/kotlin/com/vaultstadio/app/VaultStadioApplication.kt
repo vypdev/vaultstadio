@@ -10,6 +10,7 @@ import android.app.Application
 import com.vaultstadio.app.data.activity.di.activityModule
 import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.auth.di.authModule
+import com.vaultstadio.app.feature.auth.di.featureAuthModule
 import com.vaultstadio.app.data.config.di.configModule
 import com.vaultstadio.app.data.share.di.shareModule
 import com.vaultstadio.app.data.plugin.di.pluginModule
@@ -47,7 +48,7 @@ class VaultStadioApplication : Application() {
             androidLogger(Level.INFO)
             androidContext(this@VaultStadioApplication)
             modules(
-                runtimeModules(getServerUrl()) + listOf(androidModule, activityModule, adminModule, authModule, aiModule, collaborationModule, configModule, shareModule, pluginModule, storageModule, metadataModule, syncModule, federationModule, versionModule),
+                runtimeModules(getServerUrl()) + listOf(androidModule, activityModule, adminModule, authModule, featureAuthModule, aiModule, collaborationModule, configModule, shareModule, pluginModule, storageModule, metadataModule, syncModule, federationModule, versionModule),
             )
         }
     }

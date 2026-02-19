@@ -1,8 +1,15 @@
 /**
- * Application module defined with Koin DSL (no annotations).
+ * Application-level Koin module (appModule).
  *
- * Replaces @ComponentScan("com.vaultstadio.app") and all @Single / @Factory / @KoinViewModel.
- * Auth beans are provided by authModule from :data:auth.
+ * Each feature/data/domain/core module should register its own Koin module (e.g. featureAuthModule,
+ * authModule) declaring the beans it consumes and exposes. Entry points load runtimeModules() plus
+ * all data/feature modules.
+ *
+ * This module only holds ViewModels and beans that still live in composeApp and are not yet
+ * in a dedicated feature/data module. As we migrate a feature to :feature:xxx, move its ViewModel
+ * registration to that module's di/ and remove it from here.
+ *
+ * Already moved: AuthViewModel -> featureAuthModule (:feature:auth).
  */
 
 package com.vaultstadio.app.di
@@ -37,8 +44,6 @@ import com.vaultstadio.app.domain.federation.usecase.UnlinkIdentityUseCase
 import com.vaultstadio.app.feature.activity.ActivityViewModel
 import com.vaultstadio.app.feature.admin.AdminViewModel
 import com.vaultstadio.app.feature.ai.AIViewModel
-import com.vaultstadio.app.feature.auth.AuthSuccessCallback
-import com.vaultstadio.app.feature.auth.AuthViewModel
 import com.vaultstadio.app.feature.changepassword.ChangePasswordViewModel
 import com.vaultstadio.app.feature.collaboration.CollaborationViewModel
 import com.vaultstadio.app.feature.federation.FederationViewModel
@@ -119,9 +124,7 @@ val appModule = module {
     viewModel { ChangePasswordViewModel(get()) }
 
     // --- ViewModels (with params) ---
-    viewModel { (callback: AuthSuccessCallback) ->
-        AuthViewModel(get(), get(), callback)
-    }
+    // AuthViewModel is in featureAuthModule (:feature:auth)
     viewModel { (itemId: String) ->
         VersionHistoryViewModel(get(), get(), get(), get(), get(), get(), get(), itemId)
     }

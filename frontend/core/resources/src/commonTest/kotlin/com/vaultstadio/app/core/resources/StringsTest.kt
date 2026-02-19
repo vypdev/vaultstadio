@@ -170,7 +170,6 @@ class StringsTest {
         )
 
         allStrings.forEach { strings ->
-            // Verify all critical strings are non-empty
             assertTrue(strings.appName.isNotEmpty())
             assertTrue(strings.navMyFiles.isNotEmpty())
             assertTrue(strings.navHome.isNotEmpty())
@@ -211,9 +210,7 @@ class StringsTest {
 
     @Test
     fun stringsObject_defaultsToEnglish() {
-        // Reset to default
         Strings.currentLanguage = Language.ENGLISH
-
         val resources = Strings.resources
         assertEquals(EnglishStrings.appName, resources.appName)
     }
@@ -226,7 +223,6 @@ class StringsTest {
         Strings.currentLanguage = Language.FRENCH
         assertEquals(FrenchStrings.appName, Strings.resources.appName)
 
-        // Reset to English
         Strings.currentLanguage = Language.ENGLISH
     }
 }

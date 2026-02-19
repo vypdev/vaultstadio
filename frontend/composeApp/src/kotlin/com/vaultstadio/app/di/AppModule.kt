@@ -1,8 +1,9 @@
 /**
  * Koin App Module
  *
- * Core module (createCoreModule) and runtime module list. Application beans are in appModule (DSL).
- * Auth beans are in authModule from :data:auth. Use startKoin { modules(runtimeModules(url) + authModule + appModule + ...) }.
+ * runtimeModules(apiBaseUrl) = createCoreModule + appModule. Each entry point (desktop, wasm, android, ios)
+ * must also load data modules (authModule, storageModule, ...) and feature modules (featureAuthModule, ...).
+ * See FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md § Koin module ownership.
  */
 
 package com.vaultstadio.app.di
@@ -37,7 +38,7 @@ fun createCoreModule(apiBaseUrl: String) = module {
 }
 
 /**
- * Runtime modules: core config + app DSL module. Add authModule and platform module at each entry point.
+ * Runtime modules: core config + app DSL. Entry points add data modules, feature modules, and platform module.
  */
 fun runtimeModules(apiBaseUrl: String) = listOf(
     createCoreModule(apiBaseUrl),

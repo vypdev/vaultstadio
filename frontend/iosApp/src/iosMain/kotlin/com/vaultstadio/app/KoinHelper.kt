@@ -9,6 +9,7 @@ package com.vaultstadio.app
 import com.vaultstadio.app.data.activity.di.activityModule
 import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.auth.di.authModule
+import com.vaultstadio.app.feature.auth.di.featureAuthModule
 import com.vaultstadio.app.data.config.di.configModule
 import com.vaultstadio.app.data.share.di.shareModule
 import com.vaultstadio.app.data.plugin.di.pluginModule
@@ -48,7 +49,7 @@ object KoinHelper {
     fun initKoin(apiBaseUrl: String = DEFAULT_API_BASE_URL) {
         startKoin {
             modules(
-                runtimeModules(apiBaseUrl) + listOf(iosModule, activityModule, adminModule, authModule, aiModule, collaborationModule, configModule, shareModule, pluginModule, storageModule, metadataModule, syncModule, federationModule, versionModule),
+                runtimeModules(apiBaseUrl) + listOf(iosModule, activityModule, adminModule, authModule, featureAuthModule, aiModule, collaborationModule, configModule, shareModule, pluginModule, storageModule, metadataModule, syncModule, federationModule, versionModule),
             )
         }
     }

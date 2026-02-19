@@ -33,10 +33,43 @@
 - **:domain:storage** – ViewMode added in `model/ViewMode.kt`. **:domain:metadata** – `AdvancedSearchRequest` in `model/AdvancedSearchRequest.kt`. **:domain:version** – `RestoreVersionRequest` in `model/RestoreVersionRequest.kt`.
 - **composeApp cleanup** – Removed duplicate `domain/upload`, `domain/model` (FileVersion, ViewMode, AdvancedSearchRequest, PluginInfo, Admin), and duplicate `data/` (Storage + Federation API, service, repository, mapper, DTOs). Imports updated to use domain/data modules.
 - **:data:storage** – DTOs split to one file per DTO (StorageItemDTO, CreateFolderRequestDTO, etc.); StorageDTOs.kt removed.
-- **:feature:auth** – Done. `AuthViewModel`, `AuthError`, `AuthSuccessCallback`, `AuthComponent`, `DefaultAuthComponent` (one file per class). ComposeApp keeps `AuthContent.kt` (uses i18n); depends on `:feature:auth`.
+- **:feature:auth** – Done. Full screen in module: `AuthViewModel`, `AuthError`, `AuthSuccessCallback`, `AuthComponent`, `DefaultAuthComponent`, `AuthContent` (one file per class). Depends on `:core:resources`, `:domain:auth`, Koin Compose ViewModel, Material3; composeApp only wires navigation (RootContent uses AuthContent from module).
 - **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: migrate remaining feature modules (move ViewModels/screens from composeApp to :feature:*). Full UI migration for a feature requires i18n in a shared module so :feature:* can use strings without depending on composeApp.
+Next: migrate remaining feature modules (move ViewModels/screens from composeApp to :feature:*). Use `:core:resources` for strings; follow :feature:auth as reference (ViewModel, Component, Content in module; depend on :core:resources, :domain:*, Koin Compose, Material3).
+
+### Koin module ownership
+
+Each **feature**, **data**, **domain**, and **core** module that exposes or consumes injectable components must declare its own Koin module (e.g. `featureAuthModule`, `authModule`). Entry points load `runtimeModules(apiBaseUrl)` plus all data and feature modules. **appModule** (in composeApp) only holds beans that still live in composeApp and are not yet in a dedicated module; as features are migrated, move their ViewModel/bean registration to that module's `di/` and remove from appModule.
+
+| Layer   | Module           | Koin module         | Declares |
+|---------|------------------|---------------------|----------|
+| Data    | :data:auth       | authModule          | AuthApi, AuthService, AuthRepository, auth use-case impls |
+| Data    | :data:storage    | storageModule       | StorageApi, StorageService, StorageRepository, storage use-case impls |
+| Data    | :data:config     | configModule        | ConfigRepository, config use-case impls |
+| Data    | :data:share      | shareModule         | ShareApi, ShareService, ShareRepository, share use-case impls |
+| Data    | :data:activity   | activityModule      | ActivityApi, ActivityRepository, activity use-case impls |
+| Data    | :data:admin      | adminModule         | AdminApi, AdminRepository, admin use-case impls |
+| Data    | :data:plugin     | pluginModule        | PluginApi, PluginRepository, plugin use-case impls |
+| Data    | :data:version    | versionModule       | VersionApi, VersionRepository, version use-case impls |
+| Data    | :data:sync       | syncModule          | SyncApi, SyncRepository, sync use-case impls |
+| Data    | :data:metadata   | metadataModule      | MetadataApi, MetadataRepository, metadata use-case impls |
+| Data    | :data:federation | federationModule    | FederationApi, FederationRepository, federation use-case impls |
+| Data    | :data:ai         | aiModule            | AIApi, AIRepository, AI use-case impls |
+| Data    | :data:collaboration | collaborationModule | CollaborationApi, CollaborationRepository, collaboration use-case impls |
+| Feature | :feature:auth   | featureAuthModule   | AuthViewModel (param: AuthSuccessCallback) |
+| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (profile, settings, sync, federation, ai, admin, activity, plugins, changepassword, versionhistory, files, collaboration) until their features are migrated |
+
+Domain and core modules typically do not define Koin modules (they expose interfaces/types; data/feature modules provide implementations and register them).
+
+### Feature vs data: who depends on whom
+
+- **Platform (composeApp, androidApp, etc.)** decides which **screens** exist and which **feature** and **data** modules to include. It depends on both and loads their Koin modules at startup.
+- **Feature modules** depend only on **:domain:*** (and :core:resources, UI libs). They consume use-case/repository **interfaces**; they do **not** depend on **:data:***.
+- **Data modules** implement domain interfaces and register them in Koin (e.g. `authModule` provides `LoginUseCase`, `RegisterUseCase`).
+- **DI at app level** resolves the rest: the app loads `authModule` then `featureAuthModule`. When the auth screen needs `AuthViewModel`, Koin injects `LoginUseCase`/`RegisterUseCase` from `authModule`. The feature never references :data:auth in code or Gradle.
+
+So **:feature:auth** does not (and should not) depend on **:data:auth**. It depends on **:domain:auth**; the platform adds **:data:auth** and wires both via Koin. Same pattern for any future :feature:* module.
 
 ---
 
@@ -99,15 +132,16 @@ vaultstadio/
 
 All frontend modules use the **same source layout** (no `commonMain` directory):
 
-- **Path**: `frontend/<layer>/<module>/src/kotlin/com/vaultstadio/app/<layer>/<module>/<rest>/`
+- **Path**: `frontend/<layer>/<module>/src/main/kotlin/com/vaultstadio/app/<layer>/<module>/<rest>/`
+- **Test Path**: `frontend/<layer>/<module>/src/test/kotlin/com/vaultstadio/app/<layer>/<module>/<rest>/`
 - **Module identifier** = package root: `com.vaultstadio.app.<layer>.<module>` (e.g. `com.vaultstadio.app.domain.auth`, `com.vaultstadio.app.data.auth`).
 
-In each module’s `build.gradle.kts`, point the `commonMain` Kotlin source set to `src/kotlin`:
+In each module’s `build.gradle.kts`, point the `commonMain` Kotlin source set to `src/main`:
 
 ```kotlin
 sourceSets {
     val commonMain by getting {
-        kotlin.srcDirs("src/kotlin")
+        kotlin.srcDirs("src/main")
         // ... dependencies
     }
 }
@@ -115,14 +149,14 @@ sourceSets {
 
 Examples:
 
-- **:domain:auth**: `src/kotlin/com/vaultstadio/app/domain/auth/` (e.g. `AuthRepository.kt`, `model/User.kt`, `usecase/LoginUseCase.kt`).
-- **:data:auth**: `src/kotlin/com/vaultstadio/app/data/auth/` (e.g. `api/AuthApi.kt`, `service/`, `repository/`, `dto/`, `mapper/`, `di/`, `usecase/`).
-- **:domain:result**: `src/kotlin/com/vaultstadio/app/domain/result/Result.kt`.
-- **:data:network**: `src/kotlin/com/vaultstadio/app/data/network/` (core types), `data/network/dto/common/` (ApiResponseDTO, etc.), `data/network/mapper/` (ApiResultMapper / toResult).
-- **:domain:storage** and all other domain stubs (admin, sync, share, activity, metadata, plugin, version, collaboration, federation, ai, config, upload) use `src/kotlin` with a single `Placeholder.kt` until real code is moved in.
-- **:data:storage** and all other data stubs (admin, config, sync, share, activity, metadata, plugin, version, collaboration, federation, ai) use `src/kotlin` with a single `Placeholder.kt` until real code is moved in.
-- **:feature:auth**, **:feature:main**, and all other feature modules (admin, sync, shares, sharedwithme, activity, profile, settings, security, changepassword, plugins, files, upload, versionhistory, collaboration, federation, ai, licenses) use `src/kotlin` with a single `Placeholder.kt` until screen/UI code is moved in.
-- **:composeApp**: `src/kotlin/com/vaultstadio/app/` (package root `com.vaultstadio.app`). All shared app code (di, config, platform, navigation, viewmodel, ui, data, feature, utils) lives under this path; `commonMain` only holds non-Kotlin resources if any.
+- **:domain:auth**: `src/main/kotlin/com/vaultstadio/app/domain/auth/` (e.g. `AuthRepository.kt`, `model/User.kt`, `usecase/LoginUseCase.kt`).
+- **:data:auth**: `src/main/kotlin/com/vaultstadio/app/data/auth/` (e.g. `api/AuthApi.kt`, `service/`, `repository/`, `dto/`, `mapper/`, `di/`, `usecase/`).
+- **:domain:result**: `src/main/kotlin/com/vaultstadio/app/domain/result/Result.kt`.
+- **:data:network**: `src/main/kotlin/com/vaultstadio/app/data/network/` (core types), `data/network/dto/common/` (ApiResponseDTO, etc.), `data/network/mapper/` (ApiResultMapper / toResult).
+- **:domain:storage** and all other domain stubs (admin, sync, share, activity, metadata, plugin, version, collaboration, federation, ai, config, upload) use `src/main/kotlin` with a single `Placeholder.kt` until real code is moved in.
+- **:data:storage** and all other data stubs (admin, config, sync, share, activity, metadata, plugin, version, collaboration, federation, ai) use `src/main/kotlin` with a single `Placeholder.kt` until real code is moved in.
+- **:feature:auth**, **:feature:main**, and all other feature modules (admin, sync, shares, sharedwithme, activity, profile, settings, security, changepassword, plugins, files, upload, versionhistory, collaboration, federation, ai, licenses) use `src/main/kotlin` with a single `Placeholder.kt` until screen/UI code is moved in.
+- **:composeApp**: `src/main/kotlin/com/vaultstadio/app/` (package root `com.vaultstadio.app`). All shared app code (di, config, platform, navigation, viewmodel, ui, data, feature, utils) lives under this path; `commonMain` only holds non-Kotlin resources if any.
 
 Apply this pattern to every new or migrated module.
 

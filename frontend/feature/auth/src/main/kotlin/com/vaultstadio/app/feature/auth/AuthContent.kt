@@ -1,3 +1,7 @@
+/**
+ * Authentication screen content (Login/Register).
+ */
+
 package com.vaultstadio.app.feature.auth
 
 import androidx.compose.animation.AnimatedVisibility
@@ -57,9 +61,6 @@ import com.vaultstadio.app.core.resources.username
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-/**
- * Authentication screen content (Login/Register).
- */
 @Composable
 fun AuthContent(
     component: AuthComponent,
@@ -86,7 +87,6 @@ fun AuthContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                // Title
                 Text(
                     text = if (viewModel.showRegister) strings.register else strings.login,
                     style = MaterialTheme.typography.headlineMedium,
@@ -94,7 +94,6 @@ fun AuthContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Error message
                 val errorMessage = viewModel.authError?.let { error ->
                     when (error) {
                         is AuthError.EmailPasswordRequired -> strings.errorEmailPasswordRequired
@@ -130,12 +129,10 @@ fun AuthContent(
                     )
                 }
 
-                // Loading indicator
                 if (viewModel.isLoading) {
                     CircularProgressIndicator()
                 }
 
-                // Toggle button
                 TextButton(
                     onClick = { viewModel.toggleRegister() },
                     enabled = !viewModel.isLoading,
