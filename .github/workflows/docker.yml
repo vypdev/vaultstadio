@@ -38,7 +38,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
       
       - name: Build backend JAR
-        run: ./gradlew :kotlin-backend:api:build -x test
+        run: ./gradlew :backend:api:build -x test
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -98,7 +98,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
       
       - name: Build frontend (Web)
-        run: ./gradlew :compose-frontend:composeApp:wasmJsBrowserProductionWebpack
+        run: cd frontend && ./gradlew :composeApp:wasmJsBrowserProductionWebpack
         continue-on-error: true
       
       - name: Set up Docker Buildx
@@ -161,13 +161,13 @@ jobs:
       
       - name: Build release artifacts
         run: |
-          ./gradlew :kotlin-backend:api:distZip -x test
+          ./gradlew :backend:api:distZip -x test
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            kotlin-backend/api/build/distributions/*.zip
+            backend/api/build/distributions/*.zip
           generate_release_notes: true
           draft: false
           prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}

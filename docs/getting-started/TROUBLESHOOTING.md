@@ -59,7 +59,7 @@ Common issues and their solutions for VaultStadio development and deployment.
 
 #### Circular dependency `:data:storage:wasmJsPackageJson` (frontend)
 
-**Problem**: `./gradlew :composeApp:wasmJsBrowserDistribution` fails with:
+**Problem**: From `frontend/`, `./gradlew :composeApp:wasmJsBrowserDistribution` fails with:
 ```text
 Circular dependency between the following tasks:
 :data:storage:wasmJsPackageJson
@@ -90,12 +90,12 @@ Circular dependency between the following tasks:
 **Solutions**:
 
 1. **Use the bundled dev server with SPA fallback** (if your setup supports it):  
-   The project includes `compose-frontend/composeApp/webpack.config.d/03.devServer.js` which sets `historyApiFallback: true`. If you run `wasmJsBrowserRun` or `wasmJsBrowserDevelopmentRun` and the plugin merges this config, direct URLs should work.
+   The project includes `frontend/composeApp/webpack.config.d/03.devServer.js` which sets `historyApiFallback: true`. If you run `wasmJsBrowserDevelopmentRun` or `wasmJsBrowserProductionRun` (from `frontend/`) and the plugin merges this config, direct URLs should work.
 
 2. **Serve the production build with an SPA-aware server**:
    ```bash
-   ./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
-   npx serve -s compose-frontend/composeApp/build/dist/wasmJs/productionExecutable -l 8081
+   cd frontend && ./gradlew :composeApp:wasmJsBrowserDistribution
+   npx serve -s frontend/composeApp/build/dist/wasmJs/productionExecutable -l 8081
    ```
    Then open `http://localhost:8081/files` or `http://localhost:8081/settings/change-password`.
 
@@ -163,10 +163,10 @@ Circular dependency between the following tasks:
 2. **Invalidate caches**:
    - IntelliJ: File → Invalidate Caches → Invalidate and Restart
 
-3. **Clean and rebuild**:
+3. **Clean and rebuild** (backend from repo root; frontend from `frontend/`):
    ```bash
-   ./gradlew clean
-   ./gradlew :compose-frontend:composeApp:build
+   ./gradlew clean && ./gradlew build -x test
+   cd frontend && ./gradlew clean && ./gradlew :composeApp:build
    ```
 
 ### Navigation Not Working
@@ -324,7 +324,7 @@ Circular dependency between the following tasks:
 
 1. **Check Flyway migrations**:
    ```
-   kotlin-backend/api/src/main/resources/db/migration/
+   backend/api/src/main/resources/db/migration/
    ```
 
 2. **Reset database** (development only):
@@ -389,7 +389,7 @@ Circular dependency between the following tasks:
 
 2. **Pod install**:
    ```bash
-   cd compose-frontend/iosApp
+   cd frontend/iosApp
    pod install
    ```
 
@@ -424,9 +424,9 @@ Circular dependency between the following tasks:
 2. **Disable caching**:
    Open DevTools → Network → Disable cache
 
-3. **Restart dev server**:
+3. **Restart dev server** (from `frontend/`):
    ```bash
-   ./gradlew :compose-frontend:composeApp:wasmJsBrowserDevelopmentRun
+   ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
    ```
 
 ## Performance Issues

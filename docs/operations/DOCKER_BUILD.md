@@ -29,10 +29,9 @@ docker build -f docker/Dockerfile.frontend -t vaultstadio-frontend:latest .
 
 ### Build Stages
 
-1. **Builder Stage** (gradle:8.10-jdk21):
-   - Copies Gradle configuration
-   - Copies source code
-   - Runs `gradle :kotlin-backend:api:installDist`
+1. **Builder Stage** (gradle:8.10-jdk17):
+   - Copies Gradle configuration and `backend/` source code
+   - Runs `gradle :backend:api:installDist`
 
 2. **Runtime Stage** (eclipse-temurin:21-jre-alpine):
    - Minimal JRE image
@@ -48,14 +47,14 @@ FROM gradle:8.10-jdk21 AS builder
 WORKDIR /app
 COPY settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
-COPY kotlin-backend ./kotlin-backend
-RUN gradle :kotlin-backend:api:installDist --no-daemon
+COPY backend ./backend
+RUN gradle :backend:api:installDist --no-daemon
 
 # Stage 2: Runtime
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-RUN addgroup -S vaultstadio && adduser -S vaultstadio -G vaultstadio
-COPY --from=builder /app/kotlin-backend/api/build/install/api /app
+RUN groupadd -r vaultstadio && useradd -r -g vaultstadio vaultstadio
+COPY --from=builder /app/backend/api/build/install/api /app
 RUN mkdir -p /data/storage /data/plugins
 USER vaultstadio
 EXPOSE 8080
@@ -76,12 +75,12 @@ CMD ["./bin/api"]
 
 ### Build Stages
 
-1. **Builder Stage** (gradle:8.10-jdk21):
-   - Compiles Compose Multiplatform for WASM
-   - Runs `gradle :compose-frontend:composeApp:wasmJsBrowserDistribution`
+1. **Builder Stage** (gradle:8.10-jdk17):
+   - Copies `frontend/` (standalone Gradle project)
+   - Runs `gradle -p frontend :composeApp:wasmJsBrowserDistribution`
 
 2. **Runtime Stage** (nginx:alpine):
-   - Copies compiled WASM files
+   - Copies compiled WASM files from `frontend/composeApp/build/dist/wasmJs/productionExecutable`
    - Serves via Nginx
    - Proxies API requests to backend
 
@@ -89,16 +88,14 @@ CMD ["./bin/api"]
 
 ```dockerfile
 # Stage 1: Build
-FROM gradle:8.10-jdk21 AS builder
+FROM gradle:8.10-jdk17 AS builder
 WORKDIR /app
-COPY settings.gradle.kts build.gradle.kts gradle.properties ./
-COPY gradle ./gradle
-COPY compose-frontend ./compose-frontend
-RUN gradle :compose-frontend:composeApp:wasmJsBrowserDistribution --no-daemon
+COPY frontend ./frontend
+RUN gradle -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
 
 # Stage 2: Serve
 FROM nginx:alpine
-COPY --from=builder /app/compose-frontend/composeApp/build/dist/wasmJs/productionExecutable /usr/share/nginx/html
+COPY --from=builder /app/frontend/composeApp/build/dist/wasmJs/productionExecutable /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
@@ -158,7 +155,7 @@ docker-compose -f docker/docker-compose.yml down
 **Solutions**:
 1. Ensure Docker has enough memory (at least 4GB)
 2. Check if all source files are present
-3. Try building locally first: `./gradlew :kotlin-backend:api:build`
+3. Try building locally first: `./gradlew :backend:api:build`
 
 ### Frontend Build Fails
 
@@ -167,7 +164,7 @@ docker-compose -f docker/docker-compose.yml down
 **Solutions**:
 1. Ensure JDK 21+ is being used
 2. Check Gradle memory settings
-3. Try building the frontend locally: `./gradlew :compose-frontend:composeApp:compileKotlinDesktop`
+3. Try building the frontend locally: `cd frontend && ./gradlew :composeApp:compileKotlinDesktop`
 
 ### Container Won't Start
 

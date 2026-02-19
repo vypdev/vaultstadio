@@ -5,11 +5,11 @@ echo "Building VaultStadio..."
 
 # Build backend
 echo "Building backend..."
-./gradlew :kotlin-backend:api:build -x test
+./gradlew :backend:api:build -x test
 
-# Build frontend (web)
+# Build frontend (web WASM production)
 echo "Building frontend..."
-./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
+make -C frontend frontend-web
 
 # Build Docker images (optional)
 if [ "$1" = "--docker" ]; then

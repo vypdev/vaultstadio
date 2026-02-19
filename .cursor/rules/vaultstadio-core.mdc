@@ -24,17 +24,19 @@ VaultStadio is a **self-hosted storage platform** with plugin architecture:
 
 ```
 vaultstadio/
-├── kotlin-backend/
+├── backend/            # Root Gradle project (:backend:*)
 │   ├── core/           # Domain: models, services, repositories (interfaces), events
 │   ├── plugins-api/    # Plugin SDK: Plugin interface, PluginContext, hooks
 │   ├── api/            # Ktor: routes, DTOs, config, middleware
 │   ├── infrastructure/ # Implementations: Exposed repos, LocalStorageBackend
 │   └── plugins/        # Built-in: image-metadata, video-metadata, fulltext-search, ai-classification
-├── shared/             # KMP: API client (VaultStadioApi), DTOs, repositories
-├── compose-frontend/
+├── frontend/           # Standalone Gradle project (run from frontend/)
 │   ├── composeApp/     # Shared UI: screens, components, ViewModel, platform expect/actual
-│   ├── androidApp/     # Android wrapper
-│   └── iosApp/         # iOS wrapper
+│   ├── androidApp/    # Android wrapper
+│   ├── iosApp/        # iOS wrapper
+│   ├── domain/        # KMP domain modules
+│   ├── data/          # KMP data modules
+│   └── feature/       # Feature modules
 ├── docker/             # Docker Compose, Dockerfiles, nginx
 ├── helm/vaultstadio/   # Kubernetes/TrueNAS Helm chart
 ├── docs/               # Documentation (see docs/INDEX.md; layout in docs/DOCS_STRUCTURE.md)

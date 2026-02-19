@@ -20,8 +20,10 @@ VaultStadio uses **Compose Multiplatform** to deliver a native experience on:
 
 ## Project Structure
 
+The frontend is a **standalone** Gradle project. Run all commands from the `frontend/` directory (or use `make frontend-*` / `make desktop-run` from repo root).
+
 ```
-compose-frontend/
+frontend/
 ├── composeApp/              # Shared Compose UI
 │   └── src/
 │       ├── commonMain/      # Shared code (all platforms)
@@ -41,7 +43,10 @@ compose-frontend/
 │       └── iosMain/         # iOS actual implementations
 ├── androidApp/              # Android app module
 ├── iosApp/                  # iOS app module
-└── build.gradle.kts         # Gradle configuration
+├── domain/                  # KMP domain modules
+├── data/                    # KMP data modules
+├── feature/                 # Feature modules
+└── Makefile                 # Convenience targets (make help)
 ```
 
 ## Quick Start
@@ -52,44 +57,51 @@ compose-frontend/
 # Clone the repository
 git clone https://github.com/your-org/vaultstadio.git
 cd vaultstadio
-
+cd frontend   # Frontend is standalone; run Gradle from here
 ```
 
 ### 2. Running the Frontend
 
 #### Web (WebAssembly)
 
-```bash
-# Development server with hot reload
-./gradlew :compose-frontend:composeApp:wasmJsBrowserDevelopmentRun
+From `frontend/` directory (or from repo root: `make frontend-run` / `make frontend-run-prod`):
 
-# Production build
-./gradlew :compose-frontend:composeApp:wasmJsBrowserProductionWebpack
+```bash
+# Development dev server (source maps, hot reload)
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+
+# Production dev server (optimized bundle)
+./gradlew :composeApp:wasmJsBrowserProductionRun
+
+# Production static bundle (output for deployment)
+./gradlew :composeApp:wasmJsBrowserDistribution
 ```
 
-The web app will be available at `http://localhost:8080`.
+The web app will be available at the URL shown by the dev server (e.g. `http://localhost:8080`).
 
 #### Desktop (JVM)
 
 ```bash
 # Run desktop app
-./gradlew :compose-frontend:composeApp:run
+./gradlew :composeApp:run
+# Or from repo root: make desktop-run
 
 # Package for distribution
-./gradlew :compose-frontend:composeApp:packageDmg       # macOS
-./gradlew :compose-frontend:composeApp:packageMsi       # Windows
-./gradlew :compose-frontend:composeApp:packageDeb       # Linux (Debian)
-./gradlew :compose-frontend:composeApp:packageRpm       # Linux (RHEL)
+./gradlew :composeApp:packageDmg       # macOS
+./gradlew :composeApp:packageMsi       # Windows
+./gradlew :composeApp:packageDeb       # Linux (Debian)
+./gradlew :composeApp:packageRpm       # Linux (RHEL)
 ```
 
 #### Android
 
 ```bash
 # Install debug APK
-./gradlew :compose-frontend:androidApp:installDebug
+./gradlew :androidApp:installDebug
 
 # Build release APK
-./gradlew :compose-frontend:androidApp:assembleRelease
+./gradlew :androidApp:assembleRelease
+# Or from repo root: make android-build
 ```
 
 Or open in Android Studio and run directly.
@@ -97,11 +109,12 @@ Or open in Android Studio and run directly.
 #### iOS
 
 ```bash
-# Build iOS framework
-./gradlew :compose-frontend:iosApp:build
+# Build iOS framework (requires Xcode)
+./gradlew :composeApp:linkReleaseFrameworkIosSimulatorArm64
+# Or: make ios-build
 ```
 
-Then open `compose-frontend/iosApp/iosApp.xcodeproj` in Xcode and run.
+Then open `frontend/iosApp/iosApp.xcodeproj` in Xcode and run.
 
 ## Development Workflow
 
@@ -259,15 +272,17 @@ Text(strings.myNewString)
 
 ### Running Tests
 
+From `frontend/` directory (or from repo root: `make frontend-test`):
+
 ```bash
-# All frontend tests
-./gradlew :compose-frontend:composeApp:allTests
+# Desktop tests (JVM)
+./gradlew :composeApp:desktopTest
 
-# Common tests only
-./gradlew :compose-frontend:composeApp:commonTest
+# WASM browser tests (if available)
+./gradlew :composeApp:wasmJsBrowserTest
 
-# Desktop tests
-./gradlew :compose-frontend:composeApp:desktopTest
+# JaCoCo coverage report
+./gradlew :composeApp:desktopTest :composeApp:jacocoTestReport
 ```
 
 ### Writing Tests
@@ -334,9 +349,11 @@ See [WASM_BUNDLE_OPTIMIZATION.md](../development/WASM_BUNDLE_OPTIMIZATION.md) fo
 
 ### "Unresolved reference" after changes
 
+From `frontend/`:
+
 ```bash
 ./gradlew clean
-./gradlew :compose-frontend:composeApp:build
+./gradlew :composeApp:build
 ```
 
 ### WASM build fails

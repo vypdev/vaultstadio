@@ -1,11 +1,11 @@
 ---
 description: VaultStadio backend – Ktor routes, API, Koin, architecture, known limitations
-globs: ["kotlin-backend/**/*.kt","kotlin-backend/**/*.kts"]
+globs: ["backend/**/*.kt","backend/**/*.kts"]
 ---
 
 # VaultStadio – Backend
 
-Apply when working in `kotlin-backend/`. See [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md), [docs/api/API.md](docs/api/API.md).
+Apply when working in `backend/`. Backend is part of the **root** Gradle project (`:backend:*`). See [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md), [docs/api/API.md](docs/api/API.md).
 
 ## Stack
 
@@ -18,7 +18,7 @@ Apply when working in `kotlin-backend/`. See [docs/architecture/ARCHITECTURE.md]
 ## Module Structure
 
 ```
-kotlin-backend/
+backend/
 ├── core/               # Domain layer (no framework deps)
 │   ├── domain/model/   # StorageItem, User, ShareLink, FileVersion, etc.
 │   ├── domain/repository/  # Repository interfaces
@@ -153,12 +153,15 @@ Uses JWT secret as key placeholder. Not production-ready.
 
 ## Backend Commands
 
+Run from **repo root** (backend is part of root Gradle project).
+
 ```bash
-./gradlew :kotlin-backend:api:run                    # Run backend
-./gradlew :kotlin-backend:api:build -x test          # Build without tests
-./gradlew :kotlin-backend:core:test :kotlin-backend:api:test  # Run tests
-./gradlew :kotlin-backend:api:flywayMigrate          # Run migrations
-./gradlew :kotlin-backend:api:flywayClean            # Clean database (dev)
+./gradlew :backend:api:run                    # Run backend
+./gradlew :backend:api:build -x test          # Build without tests
+./gradlew :backend:core:test :backend:api:test  # Run tests
+./gradlew :backend:api:flywayMigrate          # Run migrations
+./gradlew :backend:api:flywayClean            # Clean database (dev)
+# Or: make backend-run, make backend-build, make backend-test, make db-migrate
 ```
 
 ## Best Practices

@@ -16,7 +16,7 @@ Project rules are split into several `.mdc` files for better context and classif
 | **vaultstadio-commands.mdc** | Always | Gradle, Make, scripts: build, run, test, quality, Docker, DB, Helm |
 | **vaultstadio-quality.mdc** | Always | ktlint, detekt, FQN check, file size limits, testing, pre-commit order |
 | **vaultstadio-backend.mdc** | `kotlin-backend/**` | Ktor routes, API conventions, Koin, architecture, limitations |
-| **vaultstadio-frontend.mdc** | `compose-frontend/**` | Compose MP, components, screens, ViewModel, expect/actual, known issues |
+| **vaultstadio-frontend.mdc** | `frontend/**` | Compose MP, components, screens, ViewModel, expect/actual, known issues |
 | **vaultstadio-api-reference.mdc** | API/shared files | Complete endpoint reference, shared models |
 | **vaultstadio-plugins.mdc** | `plugins/**`, `plugins-api/**` | Plugin system, events, metadata/search, AI integration |
 | **vaultstadio-docker-deploy.mdc** | `docker/**`, `helm/**` | Docker Compose, Helm, TrueNAS, CI |

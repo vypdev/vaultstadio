@@ -54,11 +54,11 @@ jobs:
       - name: Decode Keystore
         if: ${{ github.event_name == 'push' || inputs.environment == 'prod' }}
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > compose-frontend/keystores/release.keystore
-          echo "storeFile=../keystores/release.keystore" > compose-frontend/androidApp/keystore.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> compose-frontend/androidApp/keystore.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> compose-frontend/androidApp/keystore.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> compose-frontend/androidApp/keystore.properties
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > frontend/keystores/release.keystore
+          echo "storeFile=../keystores/release.keystore" > frontend/androidApp/keystore.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> frontend/androidApp/keystore.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> frontend/androidApp/keystore.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> frontend/androidApp/keystore.properties
       
       - name: Determine build variant
         id: variant
@@ -79,18 +79,18 @@ jobs:
       
       - name: Build Release APK
         run: |
-          ./gradlew :compose-frontend:androidApp:assemble${{ steps.variant.outputs.flavor }}Release
+          cd frontend && ./gradlew :androidApp:assemble${{ steps.variant.outputs.flavor }}Release
       
       - name: Build Release AAB (for Play Store)
         if: ${{ steps.variant.outputs.signed == 'true' }}
         run: |
-          ./gradlew :compose-frontend:androidApp:bundle${{ steps.variant.outputs.flavor }}Release
+          cd frontend && ./gradlew :androidApp:bundle${{ steps.variant.outputs.flavor }}Release
       
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: android-apk-${{ steps.variant.outputs.flavor }}
-          path: compose-frontend/androidApp/build/outputs/apk/**/release/*.apk
+          path: frontend/androidApp/build/outputs/apk/**/release/*.apk
           retention-days: 30
       
       - name: Upload AAB
@@ -98,7 +98,7 @@ jobs:
         if: ${{ steps.variant.outputs.signed == 'true' }}
         with:
           name: android-aab-${{ steps.variant.outputs.flavor }}
-          path: compose-frontend/androidApp/build/outputs/bundle/**/release/*.aab
+          path: frontend/androidApp/build/outputs/bundle/**/release/*.aab
           retention-days: 30
       
       - name: Upload to GitHub Release
@@ -106,8 +106,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            compose-frontend/androidApp/build/outputs/apk/**/release/*.apk
-            compose-frontend/androidApp/build/outputs/bundle/**/release/*.aab
+            frontend/androidApp/build/outputs/apk/**/release/*.apk
+            frontend/androidApp/build/outputs/bundle/**/release/*.aab
 
   notify:
     name: Notify Build Status

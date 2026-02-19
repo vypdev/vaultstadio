@@ -55,11 +55,15 @@ If you use AI (e.g. Cursor) to contribute, follow [docs/development/AI_CODING_GU
 - Keep composables small and focused
 
 ```bash
-# Run frontend
-./gradlew :compose-frontend:composeApp:run
+# Run frontend (from repo root via Make, or from frontend/ with Gradle)
+make desktop-run    # Desktop
+make frontend-run   # Web (WASM development dev server)
+make frontend-run-prod  # Web (WASM production dev server)
 
-# Build for web
-./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+# Or from frontend/ directory:
+# ./gradlew :composeApp:run
+# ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+# ./gradlew :composeApp:wasmJsBrowserProductionRun
 ```
 
 ## Commit Messages
@@ -97,24 +101,23 @@ refactor: Simplify authentication flow
 Before submitting a PR:
 
 ```bash
-# Run all backend tests
-./gradlew :kotlin-backend:api:test
+# Run backend tests (from repo root)
+./gradlew :backend:api:test
+./gradlew :backend:core:test
+# Or: make backend-test
 
-# Run core module tests
-./gradlew :kotlin-backend:core:test
-
-# Run all tests
-./gradlew test
+# Run all tests (backend + frontend)
+make test
 
 # Run with coverage
-./gradlew jacocoTestReport
+make test-coverage
 ```
 
 ### Coverage
 
 - **Before opening a PR**, run `make test-coverage` to generate backend and frontend coverage reports. This matches what CI runs and uploads to Codecov. The Codecov status check on PRs uses a **1% threshold** (patch coverage); avoid dropping coverage for new or changed code.
 - **Goal:** Keep coverage ≥ 80% for new code where feasible. Avoid removing tests without adding equivalent coverage elsewhere.
-- **Local HTML reports:** Backend modules: `kotlin-backend/<module>/build/reports/jacoco/test/html/index.html`. Frontend: `compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html`.
+- **Local HTML reports:** Backend: `backend/<module>/build/reports/jacoco/test/html/index.html`. Frontend: `frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html`.
 - **Strategy and commands:** [docs/development/TESTING.md](docs/development/TESTING.md).
 - **Current snapshot and per-module targets:** [docs/development/TEST_COVERAGE_ACTION_PLAN.md](docs/development/TEST_COVERAGE_ACTION_PLAN.md).
 
@@ -122,12 +125,12 @@ Before submitting a PR:
 
 ```
 vaultstadio/
-├── kotlin-backend/          # Backend modules
+├── backend/                 # Backend (root Gradle project :backend:*)
 │   ├── core/               # Domain logic, models, services
 │   ├── plugins-api/        # Plugin SDK
 │   ├── api/                # Ktor REST API
 │   └── infrastructure/     # DB, storage implementations
-├── compose-frontend/        # Compose Multiplatform
+├── frontend/                # Compose Multiplatform (standalone Gradle project)
 └── docker/                  # Docker configurations
 ```
 

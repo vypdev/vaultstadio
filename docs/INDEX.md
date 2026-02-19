@@ -113,8 +113,8 @@ For AI-assisted development, context-aware rules are in `.cursor/rules/`:
 | `vaultstadio-core.mdc` | Always | Language, structure, coding standards |
 | `vaultstadio-commands.mdc` | Always | Build, run, test, Docker commands |
 | `vaultstadio-quality.mdc` | Always | ktlint, detekt, FQN checks |
-| `vaultstadio-backend.mdc` | `kotlin-backend/**` | Ktor, Koin, API conventions |
-| `vaultstadio-frontend.mdc` | `compose-frontend/**` | Compose MP, ViewModel, expect/actual |
+| `vaultstadio-backend.mdc` | `backend/**` | Ktor, Koin, API conventions |
+| `vaultstadio-frontend.mdc` | `frontend/**` | Compose MP, ViewModel, expect/actual |
 | `vaultstadio-api-reference.mdc` | API/shared files | Endpoint reference |
 | `vaultstadio-plugins.mdc` | `plugins/**` | Plugin development |
 | `vaultstadio-docker-deploy.mdc` | `docker/**`, `helm/**` | Deployment context |

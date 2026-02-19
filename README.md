@@ -67,12 +67,16 @@ docker-compose -f docker/docker-compose.yml up -d
 # Start PostgreSQL
 docker-compose -f docker/docker-compose.yml up -d postgres
 
-# Run backend
-./gradlew :kotlin-backend:api:run
+# Run backend (from repo root)
+./gradlew :backend:api:run
+# Or: make backend-run
 
-# Run frontend (choose one)
-./gradlew :compose-frontend:composeApp:run              # Desktop
-./gradlew :compose-frontend:composeApp:wasmJsBrowserRun # Web
+# Run frontend (from repo root via Make, or from frontend/ with Gradle)
+make desktop-run              # Desktop
+make frontend-run             # Web (WASM development dev server)
+make frontend-run-prod        # Web (WASM production dev server)
+# Or: cd frontend && ./gradlew :composeApp:run
+#     cd frontend && ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
 ```
 
 See [QUICK_START.md](docs/getting-started/QUICK_START.md) for TrueNAS deployment and more options.
@@ -81,11 +85,11 @@ See [QUICK_START.md](docs/getting-started/QUICK_START.md) for TrueNAS deployment
 
 ```
 vaultstadio/
-├── kotlin-backend/     # Ktor backend (core, api, infrastructure, plugins)
-├── compose-frontend/   # Compose Multiplatform UI
-├── docker/             # Docker Compose, Dockerfiles
-├── helm/               # Kubernetes/TrueNAS Helm charts
-└── docs/               # Documentation (see docs/INDEX.md)
+├── backend/            # Ktor backend (root Gradle project :backend:*)
+├── frontend/            # Compose Multiplatform (standalone Gradle project)
+├── docker/              # Docker Compose, Dockerfiles
+├── helm/                # Kubernetes/TrueNAS Helm charts
+└── docs/                # Documentation (see docs/INDEX.md)
 ```
 
 ## Documentation
@@ -104,12 +108,20 @@ vaultstadio/
 
 ```bash
 # Build
-make build                    # Full build
-./gradlew :kotlin-backend:api:build -x test
+make build                    # Backend + frontend
+make backend-build            # Backend only
+make frontend-web             # Frontend WASM production bundle
+
+# Run
+make backend-run              # Backend server
+make frontend-run              # Web (WASM dev server)
+make frontend-run-prod         # Web (WASM production dev server)
+make desktop-run              # Desktop app
 
 # Test
-make test                     # All tests
-./gradlew test
+make test                     # Backend + frontend tests
+make backend-test             # Backend only
+make frontend-test            # Frontend only
 
 # Quality (run before commit)
 ./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt

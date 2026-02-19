@@ -11,10 +11,10 @@ COPY settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 
 # Copy source code
-COPY kotlin-backend ./kotlin-backend
+COPY backend ./backend
 
 # Build the application
-RUN gradle :kotlin-backend:api:installDist --no-daemon
+RUN gradle :backend:api:installDist --no-daemon
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre
@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy built application
-COPY --from=builder /app/kotlin-backend/api/build/install/api /app
+COPY --from=builder /app/backend/api/build/install/api /app
 
 # Create directories
 RUN mkdir -p /data/storage /data/plugins /data/temp \

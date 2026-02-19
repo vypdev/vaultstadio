@@ -71,21 +71,31 @@ docker-compose -f docker/docker-compose.yml up -d postgres
 ### 3. Run the Backend
 
 ```bash
-./gradlew :kotlin-backend:api:run
+./gradlew :backend:api:run
 ```
 
 The API will be available at http://localhost:8080
 
 ### 4. Run the Frontend
 
+Frontend is a **standalone** project in `frontend/`. From repo root you can use Make, or run Gradle from `frontend/`:
+
 **Desktop App:**
 ```bash
-./gradlew :compose-frontend:composeApp:run
+make desktop-run
+# Or: cd frontend && ./gradlew :composeApp:run
 ```
 
-**Web (WASM):**
+**Web (WASM) – development dev server:**
 ```bash
-./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+make frontend-run
+# Or: cd frontend && ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+```
+
+**Web (WASM) – production dev server:**
+```bash
+make frontend-run-prod
+# Or: cd frontend && ./gradlew :composeApp:wasmJsBrowserProductionRun
 ```
 
 ---

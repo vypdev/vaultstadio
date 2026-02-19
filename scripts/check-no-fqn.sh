@@ -32,7 +32,7 @@ while IFS= read -r line; do
 done < <(
   grep -rn -E ':\s*(com|io|kotlinx|java|org|androidx)\.[a-zA-Z0-9.]+\b' \
     --include='*.kt' \
-    compose-frontend kotlin-backend \
+    frontend backend \
     2>/dev/null | grep -v '/build/\|/bin/\|/out/' || true
 )
 
@@ -51,7 +51,7 @@ while IFS= read -r line; do
 done < <(
   grep -rn -E '<(com|io|kotlinx|java|org|androidx)\.[a-zA-Z0-9.]+\b' \
     --include='*.kt' \
-    compose-frontend kotlin-backend \
+    frontend backend \
     2>/dev/null | grep -v '/build/\|/bin/\|/out/' || true
 )
 

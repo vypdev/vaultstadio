@@ -21,11 +21,15 @@ help:
 	@echo "  make backend-run   - Run backend server"
 	@echo "  make backend-test  - Run backend tests"
 	@echo ""
-	@echo "Frontend:"
-	@echo "  make frontend-web  - Build web frontend"
-	@echo "  make frontend-run  - Run web frontend (dev)"
-	@echo "  make desktop-run   - Run desktop app"
-	@echo "  make android-build - Build Android APK"
+	@echo "Frontend (run from root; frontend is standalone in frontend/):"
+	@echo "  make frontend-web        - Build web frontend (WASM production)"
+	@echo "  make frontend-web-dev    - Build web frontend (WASM development)"
+	@echo "  make frontend-run        - Run web frontend (WASM dev server)"
+	@echo "  make frontend-run-prod   - Run web frontend (WASM production dev server)"
+	@echo "  make desktop-run        - Run desktop app"
+	@echo "  make android-build      - Build Android APK"
+	@echo "  make frontend-test      - Run frontend tests"
+	@echo "  (See also: cd frontend && make help)"
 	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build  - Build Docker images"
@@ -55,50 +59,62 @@ install:
 build:
 	@echo "Building all modules..."
 	./gradlew build -x test
+	@echo "Building frontend (standalone)..."
+	$(MAKE) -C frontend build
 
 backend-build:
 	@echo "Building backend..."
-	./gradlew :kotlin-backend:api:build -x test
+	./gradlew :backend:api:build -x test
 
 frontend-web:
-	@echo "Building web frontend..."
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
+	@echo "Building web frontend (WASM production)..."
+	$(MAKE) -C frontend frontend-web
+
+frontend-web-dev:
+	@echo "Building web frontend (WASM development)..."
+	$(MAKE) -C frontend frontend-web-dev
 
 android-build:
 	@echo "Building Android APK..."
-	./gradlew :compose-frontend:androidApp:assembleRelease
+	$(MAKE) -C frontend android-build
 
 plugins-build:
 	@echo "Building plugins..."
-	./gradlew :kotlin-backend:plugins:image-metadata:pluginJar
-	./gradlew :kotlin-backend:plugins:video-metadata:pluginJar
+	./gradlew :backend:plugins:image-metadata:pluginJar
+	./gradlew :backend:plugins:video-metadata:pluginJar
 
 # ==================== Testing ====================
 
 test:
-	@echo "Running all tests..."
+	@echo "Running backend tests..."
 	./gradlew test
+	@echo "Running frontend tests..."
+	$(MAKE) -C frontend test
 
 backend-test:
 	@echo "Running backend tests..."
-	./gradlew :kotlin-backend:core:test
-	./gradlew :kotlin-backend:api:test
+	./gradlew :backend:core:test
+	./gradlew :backend:api:test
+
+frontend-test:
+	@echo "Running frontend tests..."
+	$(MAKE) -C frontend test
 
 test-coverage:
 	@echo "Running tests with coverage (backend + frontend, same as CI/Codecov)..."
-	./gradlew :kotlin-backend:core:jacocoTestReport \
-		:kotlin-backend:api:jacocoTestReport \
-		:kotlin-backend:infrastructure:jacocoTestReport \
-		:kotlin-backend:plugins-api:jacocoTestReport \
-		:kotlin-backend:plugins:image-metadata:jacocoTestReport \
-		:kotlin-backend:plugins:video-metadata:jacocoTestReport \
-		:kotlin-backend:plugins:fulltext-search:jacocoTestReport \
-		:kotlin-backend:plugins:ai-classification:jacocoTestReport \
-		:compose-frontend:composeApp:jacocoTestReport \
+	./gradlew :backend:core:jacocoTestReport \
+		:backend:api:jacocoTestReport \
+		:backend:infrastructure:jacocoTestReport \
+		:backend:plugins-api:jacocoTestReport \
+		:backend:plugins:image-metadata:jacocoTestReport \
+		:backend:plugins:video-metadata:jacocoTestReport \
+		:backend:plugins:fulltext-search:jacocoTestReport \
+		:backend:plugins:ai-classification:jacocoTestReport \
 		--continue
+	$(MAKE) -C frontend test-coverage
 	@echo "Coverage reports:"
-	@echo "  Backend:  kotlin-backend/*/build/reports/jacoco/test/"
-	@echo "  Frontend: compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/"
+	@echo "  Backend:  backend/*/build/reports/jacoco/test/"
+	@echo "  Frontend: frontend/composeApp/build/reports/jacoco/jacocoTestReport/"
 	@echo "Validate codecov config: curl -s --data-binary @codecov.yml https://codecov.io/validate"
 
 # ==================== Development ====================
@@ -108,20 +124,24 @@ dev:
 	docker-compose -f docker/docker-compose.yml up -d postgres
 	@echo "Waiting for PostgreSQL..."
 	sleep 5
-	./gradlew :kotlin-backend:api:run &
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+	./gradlew :backend:api:run &
+	$(MAKE) -C frontend frontend-run
 
 backend-run:
 	@echo "Starting backend server..."
-	./gradlew :kotlin-backend:api:run
+	./gradlew :backend:api:run
 
 frontend-run:
-	@echo "Starting web frontend (dev)..."
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+	@echo "Starting web frontend (WASM dev server)..."
+	$(MAKE) -C frontend frontend-run
+
+frontend-run-prod:
+	@echo "Starting web frontend (WASM production dev server)..."
+	$(MAKE) -C frontend frontend-run-prod
 
 desktop-run:
 	@echo "Starting desktop app..."
-	./gradlew :compose-frontend:composeApp:run
+	$(MAKE) -C frontend desktop-run
 
 # ==================== Docker ====================
 
@@ -155,9 +175,8 @@ clean:
 	@echo "Cleaning build artifacts..."
 	./gradlew clean
 	rm -rf .gradle
-	rm -rf kotlin-backend/*/build
-	rm -rf compose-frontend/*/build
-	rm -rf shared/build
+	rm -rf backend/*/build
+	$(MAKE) -C frontend clean 2>/dev/null || true
 
 docker-clean:
 	@echo "Cleaning Docker resources..."
@@ -170,21 +189,19 @@ release:
 	@echo "Creating release build..."
 	./gradlew clean
 	./gradlew build
-	./gradlew :kotlin-backend:api:shadowJar
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
-	./gradlew :compose-frontend:androidApp:assembleRelease
-	./gradlew :compose-frontend:composeApp:packageDistributionForCurrentOS
+	./gradlew :backend:api:shadowJar
+	$(MAKE) -C frontend release
 	@echo "Release artifacts created in build directories"
 
 # ==================== Database ====================
 
 db-migrate:
 	@echo "Running database migrations..."
-	./gradlew :kotlin-backend:api:flywayMigrate
+	./gradlew :backend:api:flywayMigrate
 
 db-clean:
 	@echo "Cleaning database..."
-	./gradlew :kotlin-backend:api:flywayClean
+	./gradlew :backend:api:flywayClean
 
 # ==================== Linting & Code Quality ====================
 

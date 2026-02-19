@@ -6,67 +6,79 @@ globs: ["*"]
 
 # VaultStadio – Commands
 
-Use these commands for build, run, test, quality, and Docker. See also [Makefile](Makefile), [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md), [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md).
+Use these commands for build, run, test, quality, and Docker. See also [Makefile](Makefile), [frontend/Makefile](frontend/Makefile), [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md), [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md).
+
+**Project layout**: Backend is part of the root Gradle project (`:backend:*`). Frontend is a **standalone** project in `frontend/` (run Gradle from `frontend/` or use `make frontend-*` from root).
 
 ## Build
 
 ```bash
-# Full build (skip tests)
-./gradlew build -x test
+# Full build (backend from root + frontend from frontend/)
 make build
 
-# Backend only
-./gradlew :kotlin-backend:api:build -x test
+# Backend only (from repo root)
+./gradlew :backend:api:build -x test
 make backend-build
 
-# Frontend – web (WASM)
-./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
+# Frontend – web WASM (from repo root or from frontend/)
 make frontend-web
+# Or from frontend/: ./gradlew :composeApp:wasmJsBrowserDistribution
 
-# Frontend – desktop
-./gradlew :compose-frontend:composeApp:compileKotlinWasmJs   # or compileKotlinIosArm64, etc.
+# Frontend – web WASM development bundle
+make frontend-web-dev
+# Or: cd frontend && ./gradlew :composeApp:wasmJsBrowserDevelopmentExecutableDistribution
 
-# Plugins
-./gradlew :kotlin-backend:plugins:image-metadata:pluginJar :kotlin-backend:plugins:video-metadata:pluginJar
+# Frontend – desktop (from frontend/)
+cd frontend && ./gradlew :composeApp:compileKotlinDesktop
+# Or: make desktop-run (from root runs frontend desktop)
+
+# Plugins (from repo root)
+./gradlew :backend:plugins:image-metadata:pluginJar :backend:plugins:video-metadata:pluginJar
 make plugins-build
 
-# Android APK
-./gradlew :compose-frontend:androidApp:assembleRelease
+# Android APK (from root or frontend/)
 make android-build
+# Or: cd frontend && ./gradlew :androidApp:assembleRelease
 ```
 
-## Run (development)
+## Run (development and production)
 
 ```bash
-# Backend (requires PostgreSQL; start with docker-compose first)
-./gradlew :kotlin-backend:api:run
+# Backend (from repo root; requires PostgreSQL)
+./gradlew :backend:api:run
 make backend-run
 
-# Frontend – desktop
-./gradlew :compose-frontend:composeApp:run
+# Frontend – desktop (from root or frontend/)
 make desktop-run
+# Or: cd frontend && ./gradlew :composeApp:run
 
-# Frontend – web (WASM dev server)
-./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+# Frontend – web WASM development dev server (source maps, hot reload)
 make frontend-run
+# Or: cd frontend && ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
 
-# Dev: Postgres + backend + frontend (Makefile)
+# Frontend – web WASM production dev server (optimized bundle)
+make frontend-run-prod
+# Or: cd frontend && ./gradlew :composeApp:wasmJsBrowserProductionRun
+
+# Full dev: Postgres + backend + frontend
 make dev
 ```
 
 ## Tests
 
 ```bash
-# All tests
-./gradlew test
+# All tests (backend + frontend)
 make test
 
-# Backend only
-./gradlew :kotlin-backend:core:test :kotlin-backend:api:test
+# Backend only (from repo root)
+./gradlew :backend:core:test :backend:api:test
 make backend-test
 
+# Frontend only (from root or frontend/)
+make frontend-test
+# Or: cd frontend && make test
+
 # With coverage
-./gradlew test jacocoTestReport
 make test-coverage
 ```
 
@@ -75,12 +87,14 @@ make test-coverage
 ```bash
 # 1. Format
 ./gradlew ktlintFormat
+cd frontend && ./gradlew ktlintFormat
 
 # 2. Check no FQN in type positions
 ./scripts/check-no-fqn.sh
 
 # 3. Static analysis (runs ktlintCheck then detekt)
 ./gradlew detekt
+cd frontend && ./gradlew detektMain
 ```
 
 Quick: `./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt`
@@ -111,18 +125,17 @@ make docker-down
 ## Database
 
 ```bash
-./gradlew :kotlin-backend:api:flywayMigrate   # migrate
+./gradlew :backend:api:flywayMigrate   # migrate
 make db-migrate
-./gradlew :kotlin-backend:api:flywayClean     # clean (dev)
+./gradlew :backend:api:flywayClean     # clean (dev)
 make db-clean
 ```
 
 ## Release / Clean
 
 ```bash
-make release      # shadowJar, WASM dist, Android, desktop package
-./gradlew clean
-make clean
+make release   # shadowJar, WASM dist, Android, desktop package
+make clean     # backend + frontend clean
 ```
 
 ## Helm (TrueNAS / Kubernetes)
