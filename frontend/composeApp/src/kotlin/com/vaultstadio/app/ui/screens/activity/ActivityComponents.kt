@@ -47,7 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.Activity
+import com.vaultstadio.app.domain.activity.model.Activity
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import com.vaultstadio.app.utils.formatRelativeTime
 import kotlin.time.Clock

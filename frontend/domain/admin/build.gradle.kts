@@ -15,7 +15,11 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             kotlin.srcDirs("src/kotlin")
-            dependencies { implementation(project(":domain:result")) }
+            dependencies {
+                implementation(project(":domain:result"))
+                implementation(project(":domain:auth"))
+                implementation(libs.kotlinx.datetime)
+            }
         }
     }
 }

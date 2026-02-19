@@ -6,7 +6,7 @@
 package com.vaultstadio.app.feature.upload
 
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.repository.StorageRepository
+import com.vaultstadio.app.domain.storage.StorageRepository
 import com.vaultstadio.app.domain.upload.FolderUploadEntry
 import com.vaultstadio.app.domain.upload.UploadQueueEntry
 import com.vaultstadio.app.platform.DEFAULT_CHUNK_SIZE

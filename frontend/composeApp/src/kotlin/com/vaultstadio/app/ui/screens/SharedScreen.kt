@@ -29,7 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.ShareLink
+import com.vaultstadio.app.domain.share.model.ShareLink
 import com.vaultstadio.app.ui.components.files.EmptyState
 import com.vaultstadio.app.ui.screens.shared.LinkCopiedDialog
 import com.vaultstadio.app.ui.screens.shared.ShareLinkCard

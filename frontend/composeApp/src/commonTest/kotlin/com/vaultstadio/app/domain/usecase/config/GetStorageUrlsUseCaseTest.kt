@@ -5,7 +5,11 @@
 
 package com.vaultstadio.app.domain.usecase.config
 
-import com.vaultstadio.app.data.repository.ConfigRepository
+import com.vaultstadio.app.data.config.usecase.GetCollaborationUrlUseCaseImpl
+import com.vaultstadio.app.data.config.usecase.GetShareUrlUseCaseImpl
+import com.vaultstadio.app.data.config.usecase.GetStorageUrlsUseCaseImpl
+import com.vaultstadio.app.data.config.usecase.GetVersionUrlsUseCaseImpl
+import com.vaultstadio.app.domain.config.ConfigRepository
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,7 +24,7 @@ class GetStorageUrlsUseCaseTest {
     @Test
     fun downloadUrl_returnsCorrectPath() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetStorageUrlsUseCase(repo)
+        val useCase = GetStorageUrlsUseCaseImpl(repo)
         assertEquals(
             "https://api.test/api/v1/storage/download/item-1",
             useCase.downloadUrl("item-1"),
@@ -30,7 +34,7 @@ class GetStorageUrlsUseCaseTest {
     @Test
     fun thumbnailUrl_includesSizeParameter() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetStorageUrlsUseCase(repo)
+        val useCase = GetStorageUrlsUseCaseImpl(repo)
         assertEquals(
             "https://api.test/api/v1/storage/item/item-1/thumbnail?size=medium",
             useCase.thumbnailUrl("item-1", "medium"),
@@ -40,7 +44,7 @@ class GetStorageUrlsUseCaseTest {
     @Test
     fun thumbnailUrl_usesDefaultSize() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetStorageUrlsUseCase(repo)
+        val useCase = GetStorageUrlsUseCaseImpl(repo)
         assertEquals(
             "https://api.test/api/v1/storage/item/item-1/thumbnail?size=medium",
             useCase.thumbnailUrl("item-1"),
@@ -50,7 +54,7 @@ class GetStorageUrlsUseCaseTest {
     @Test
     fun previewUrl_returnsCorrectPath() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetStorageUrlsUseCase(repo)
+        val useCase = GetStorageUrlsUseCaseImpl(repo)
         assertEquals(
             "https://api.test/api/v1/storage/item/item-1/preview",
             useCase.previewUrl("item-1"),
@@ -60,7 +64,7 @@ class GetStorageUrlsUseCaseTest {
     @Test
     fun batchDownloadZipUrl_returnsCorrectPath() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetStorageUrlsUseCase(repo)
+        val useCase = GetStorageUrlsUseCaseImpl(repo)
         assertEquals(
             "https://api.test/api/v1/storage/batch/download-zip",
             useCase.batchDownloadZipUrl(),
@@ -73,7 +77,7 @@ class GetShareUrlUseCaseTest {
     @Test
     fun invoke_returnsShareUrlWithToken() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetShareUrlUseCase(repo)
+        val useCase = GetShareUrlUseCaseImpl(repo)
         assertEquals(
             "https://api.test/share/abc123token",
             useCase("abc123token"),
@@ -86,7 +90,7 @@ class GetVersionUrlsUseCaseTest {
     @Test
     fun downloadUrl_returnsCorrectPath() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetVersionUrlsUseCase(repo)
+        val useCase = GetVersionUrlsUseCaseImpl(repo)
         assertEquals(
             "https://api.test/api/v1/versions/item-1/download/2",
             useCase.downloadUrl("item-1", 2),
@@ -99,7 +103,7 @@ class GetCollaborationUrlUseCaseTest {
     @Test
     fun invoke_returnsBaseUrl() {
         val repo = FakeConfigRepository("https://api.test")
-        val useCase = GetCollaborationUrlUseCase(repo)
+        val useCase = GetCollaborationUrlUseCaseImpl(repo)
         assertEquals("https://api.test", useCase())
     }
 }

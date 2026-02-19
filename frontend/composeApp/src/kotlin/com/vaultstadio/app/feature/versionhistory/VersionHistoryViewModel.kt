@@ -9,7 +9,7 @@ import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.FileVersion
 import com.vaultstadio.app.domain.model.FileVersionHistory
 import com.vaultstadio.app.domain.model.VersionDiff
-import com.vaultstadio.app.domain.usecase.config.GetVersionUrlsUseCase
+import com.vaultstadio.app.domain.config.usecase.GetVersionUrlsUseCase
 import com.vaultstadio.app.domain.usecase.version.CleanupVersionsUseCase
 import com.vaultstadio.app.domain.usecase.version.CompareVersionsUseCase
 import com.vaultstadio.app.domain.usecase.version.DeleteVersionUseCase

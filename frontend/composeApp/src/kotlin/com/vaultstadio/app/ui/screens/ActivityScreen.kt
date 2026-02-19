@@ -31,7 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.Activity
+import com.vaultstadio.app.domain.activity.model.Activity
 import com.vaultstadio.app.ui.screens.activity.ActivityCard
 import com.vaultstadio.app.ui.screens.activity.ActivityDetailDialog
 import com.vaultstadio.app.ui.screens.activity.ActivityErrorDialog

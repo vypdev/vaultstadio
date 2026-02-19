@@ -48,8 +48,16 @@ kotlin {
                 implementation(project(":domain:result"))
                 implementation(project(":domain:auth"))
                 implementation(project(":domain:storage"))
+                implementation(project(":domain:config"))
+                implementation(project(":domain:share"))
+                implementation(project(":domain:activity"))
+                implementation(project(":domain:admin"))
                 implementation(project(":data:network"))
+                implementation(project(":data:config"))
                 implementation(project(":data:auth"))
+                implementation(project(":data:activity"))
+                implementation(project(":data:admin"))
+                implementation(project(":data:share"))
                 implementation(project(":data:storage"))
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -133,6 +141,16 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.kotlinx.coroutines.test)
+                implementation(project(":domain:result"))
+                implementation(project(":domain:storage"))
+                implementation(project(":domain:config"))
+                implementation(project(":domain:share"))
+                implementation(project(":domain:activity"))
+                implementation(project(":data:storage"))
+                implementation(project(":data:config"))
+                implementation(project(":data:share"))
+                implementation(project(":data:activity"))
+                implementation(project(":data:admin"))
             }
         }
     }

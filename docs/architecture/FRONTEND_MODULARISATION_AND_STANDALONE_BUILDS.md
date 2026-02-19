@@ -2,6 +2,25 @@
 
 **Last updated**: 2026-02-19
 
+### Current implementation status
+
+- **:domain:result** – Done. `Result`, `ApiException`, `NetworkException`.
+- **:domain:auth** – Done. Auth use-case interfaces, `AuthRepository`, models (`User`, `Security`).
+- **:domain:storage** – Done. Storage use-case interfaces, `StorageRepository`, `StorageModels`.
+- **:domain:config** – Done. `ConfigRepository`, use-case interfaces (`GetStorageUrlsUseCase`, `GetShareUrlUseCase`, `GetCollaborationUrlUseCase`, `GetVersionUrlsUseCase`).
+- **:domain:share** – Done. `ShareRepository`, `ShareLink` model, use-case interfaces (`GetMySharesUseCase`, `GetSharedWithMeUseCase`, `CreateShareUseCase`, `DeleteShareUseCase`).
+- **:data:network** – Done. `ApiResult`, `BaseApi`, `HttpClientFactory`, `ApiClientConfig`, `TokenStorage`, `TokenProvider`, `ApiResultMapper`, DTOs.
+- **:data:auth** – Done. AuthApi, AuthService, AuthRepositoryImpl, auth DTOs/mapper, use-case impls, `authModule` (Koin DSL).
+- **:data:storage** – Done. StorageApi, StorageService, StorageRepositoryImpl, DTOs, mapper, use-case impls, `storageModule` (Koin DSL). ComposeApp uses `storageModule`; storage beans removed from `appModule`.
+- **:data:config** – Done. `ConfigRepositoryImpl`, config use-case impls, `configModule`. ComposeApp uses `configModule`; config beans removed from `appModule`.
+- **:data:share**, **:data:activity**, etc. – Stubs only; implementations still in composeApp monolith.
+- **:domain:admin**, **:domain:sync**, **:domain:activity**, etc. – Placeholder only; interfaces/models still in composeApp.
+- **:feature:*** – Placeholder only; ViewModels/screens still in composeApp.
+
+Next: complete **:data:config** (ConfigRepositoryImpl, config use-case impls), then migrate remaining domain/data/feature slices per §10.
+
+---
+
 This document describes the target layout for:
 
 1. **Backend** and **frontend** as **fully independent Kotlin/Gradle projects** (each with its own `settings.gradle.kts`, `build.gradle.kts`, `gradle/`, detekt, `libs.versions.toml`). No Gradle at repository root.

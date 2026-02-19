@@ -7,65 +7,35 @@
 
 package com.vaultstadio.app.di
 
-import com.vaultstadio.app.data.api.ActivityApi
-import com.vaultstadio.app.data.api.AdminApi
 import com.vaultstadio.app.data.api.AIApi
 import com.vaultstadio.app.data.api.CollaborationApi
 import com.vaultstadio.app.data.api.FederationApi
 import com.vaultstadio.app.data.api.MetadataApi
 import com.vaultstadio.app.data.api.PluginApi
-import com.vaultstadio.app.data.api.ShareApi
-import com.vaultstadio.app.data.api.StorageApi
 import com.vaultstadio.app.data.api.SyncApi
 import com.vaultstadio.app.data.api.VersionApi
 import com.vaultstadio.app.data.network.ApiClientConfig
-import com.vaultstadio.app.data.repository.ActivityRepository
-import com.vaultstadio.app.data.repository.ActivityRepositoryImpl
-import com.vaultstadio.app.data.repository.AdminRepository
-import com.vaultstadio.app.data.repository.AdminRepositoryImpl
 import com.vaultstadio.app.data.repository.AIRepository
 import com.vaultstadio.app.data.repository.AIRepositoryImpl
 import com.vaultstadio.app.data.repository.CollaborationRepository
 import com.vaultstadio.app.data.repository.CollaborationRepositoryImpl
-import com.vaultstadio.app.data.repository.ConfigRepository
-import com.vaultstadio.app.data.repository.ConfigRepositoryImpl
 import com.vaultstadio.app.data.repository.FederationRepository
 import com.vaultstadio.app.data.repository.FederationRepositoryImpl
 import com.vaultstadio.app.data.repository.MetadataRepository
 import com.vaultstadio.app.data.repository.MetadataRepositoryImpl
 import com.vaultstadio.app.data.repository.PluginRepository
 import com.vaultstadio.app.data.repository.PluginRepositoryImpl
-import com.vaultstadio.app.data.repository.ShareRepository
-import com.vaultstadio.app.data.repository.ShareRepositoryImpl
-import com.vaultstadio.app.data.repository.StorageRepository
-import com.vaultstadio.app.data.repository.StorageRepositoryImpl
 import com.vaultstadio.app.data.repository.SyncRepository
 import com.vaultstadio.app.data.repository.SyncRepositoryImpl
 import com.vaultstadio.app.data.repository.VersionRepository
 import com.vaultstadio.app.data.repository.VersionRepositoryImpl
-import com.vaultstadio.app.data.service.ActivityService
-import com.vaultstadio.app.data.service.AdminService
 import com.vaultstadio.app.data.service.AIService
 import com.vaultstadio.app.data.service.CollaborationService
 import com.vaultstadio.app.data.service.FederationService
 import com.vaultstadio.app.data.service.MetadataService
 import com.vaultstadio.app.data.service.PluginService
-import com.vaultstadio.app.data.service.ShareService
-import com.vaultstadio.app.data.service.StorageService
 import com.vaultstadio.app.data.service.SyncService
 import com.vaultstadio.app.data.service.VersionService
-import com.vaultstadio.app.domain.usecase.activity.GetItemActivityUseCase
-import com.vaultstadio.app.domain.usecase.activity.GetItemActivityUseCaseImpl
-import com.vaultstadio.app.domain.usecase.activity.GetRecentActivityUseCase
-import com.vaultstadio.app.domain.usecase.activity.GetRecentActivityUseCaseImpl
-import com.vaultstadio.app.domain.usecase.admin.GetAdminUsersUseCase
-import com.vaultstadio.app.domain.usecase.admin.GetAdminUsersUseCaseImpl
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserQuotaUseCase
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserQuotaUseCaseImpl
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserRoleUseCase
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserRoleUseCaseImpl
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserStatusUseCase
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserStatusUseCaseImpl
 import com.vaultstadio.app.domain.usecase.ai.AIChatUseCase
 import com.vaultstadio.app.domain.usecase.ai.AIChatUseCaseImpl
 import com.vaultstadio.app.domain.usecase.ai.ClassifyContentUseCase
@@ -116,10 +86,6 @@ import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCase
 import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCaseImpl
 import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCase
 import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCaseImpl
-import com.vaultstadio.app.domain.usecase.config.GetCollaborationUrlUseCase
-import com.vaultstadio.app.domain.usecase.config.GetShareUrlUseCase
-import com.vaultstadio.app.domain.usecase.config.GetStorageUrlsUseCase
-import com.vaultstadio.app.domain.usecase.config.GetVersionUrlsUseCase
 import com.vaultstadio.app.domain.usecase.federation.AcceptFederatedShareUseCase
 import com.vaultstadio.app.domain.usecase.federation.AcceptFederatedShareUseCaseImpl
 import com.vaultstadio.app.domain.usecase.federation.BlockInstanceUseCase
@@ -170,58 +136,6 @@ import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCase
 import com.vaultstadio.app.domain.usecase.plugin.EnablePluginUseCaseImpl
 import com.vaultstadio.app.domain.usecase.plugin.GetPluginsUseCase
 import com.vaultstadio.app.domain.usecase.plugin.GetPluginsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.share.CreateShareUseCase
-import com.vaultstadio.app.domain.usecase.share.CreateShareUseCaseImpl
-import com.vaultstadio.app.domain.usecase.share.DeleteShareUseCase
-import com.vaultstadio.app.domain.usecase.share.DeleteShareUseCaseImpl
-import com.vaultstadio.app.domain.usecase.share.GetMySharesUseCase
-import com.vaultstadio.app.domain.usecase.share.GetMySharesUseCaseImpl
-import com.vaultstadio.app.domain.usecase.share.GetSharedWithMeUseCase
-import com.vaultstadio.app.domain.usecase.share.GetSharedWithMeUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.BatchCopyUseCase
-import com.vaultstadio.app.domain.usecase.storage.BatchCopyUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.BatchDeleteUseCase
-import com.vaultstadio.app.domain.usecase.storage.BatchDeleteUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.BatchMoveUseCase
-import com.vaultstadio.app.domain.usecase.storage.BatchMoveUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.BatchStarUseCase
-import com.vaultstadio.app.domain.usecase.storage.BatchStarUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.CopyItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.CopyItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.CreateFolderUseCase
-import com.vaultstadio.app.domain.usecase.storage.CreateFolderUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.DeleteItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.DeleteItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.DownloadFileUseCase
-import com.vaultstadio.app.domain.usecase.storage.DownloadFileUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.EmptyTrashUseCase
-import com.vaultstadio.app.domain.usecase.storage.EmptyTrashUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.GetBreadcrumbsUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetBreadcrumbsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.GetFolderItemsUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetFolderItemsUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.GetItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.GetRecentUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetRecentUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.GetStarredUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetStarredUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.GetTrashUseCase
-import com.vaultstadio.app.domain.usecase.storage.GetTrashUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.MoveItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.MoveItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.RenameItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.RenameItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.RestoreItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.RestoreItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.SearchUseCase
-import com.vaultstadio.app.domain.usecase.storage.SearchUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.ToggleStarUseCase
-import com.vaultstadio.app.domain.usecase.storage.ToggleStarUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.TrashItemUseCase
-import com.vaultstadio.app.domain.usecase.storage.TrashItemUseCaseImpl
-import com.vaultstadio.app.domain.usecase.storage.UploadFileUseCase
-import com.vaultstadio.app.domain.usecase.storage.UploadFileUseCaseImpl
 import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCase
 import com.vaultstadio.app.domain.usecase.sync.DeactivateDeviceUseCaseImpl
 import com.vaultstadio.app.domain.usecase.sync.GetConflictsUseCase
@@ -275,10 +189,6 @@ import org.koin.plugin.module.dsl.viewModel
 val appModule = module {
 
     // --- APIs (depend on HttpClient) ---
-    single { StorageApi(get()) }
-    single { ShareApi(get()) }
-    single { ActivityApi(get()) }
-    single { AdminApi(get()) }
     single { VersionApi(get()) }
     single { PluginApi(get()) }
     single { AIApi(get()) }
@@ -288,10 +198,6 @@ val appModule = module {
     single { CollaborationApi(get()) }
 
     // --- Services (depend on APIs) ---
-    single { StorageService(get()) }
-    single { ShareService(get()) }
-    single { ActivityService(get()) }
-    single { AdminService(get()) }
     single { VersionService(get()) }
     single { PluginService(get()) }
     single { AIService(get()) }
@@ -301,11 +207,6 @@ val appModule = module {
     single { CollaborationService(get()) }
 
     // --- Repositories ---
-    single<ConfigRepository> { ConfigRepositoryImpl(get()) }
-    single<StorageRepository> { StorageRepositoryImpl(get(), get(), get()) }
-    single<ShareRepository> { ShareRepositoryImpl(get()) }
-    single<ActivityRepository> { ActivityRepositoryImpl(get()) }
-    single<AdminRepository> { AdminRepositoryImpl(get()) }
     single<VersionRepository> { VersionRepositoryImpl(get(), get(), get()) }
     single<PluginRepository> { PluginRepositoryImpl(get()) }
     single<AIRepository> { AIRepositoryImpl(get()) }
@@ -313,42 +214,6 @@ val appModule = module {
     single<FederationRepository> { FederationRepositoryImpl(get()) }
     single<MetadataRepository> { MetadataRepositoryImpl(get()) }
     single<CollaborationRepository> { CollaborationRepositoryImpl(get()) }
-
-    // --- Config use cases (no interface) ---
-    factory { GetShareUrlUseCase(get()) }
-    factory { GetStorageUrlsUseCase(get()) }
-    factory { GetCollaborationUrlUseCase(get()) }
-    factory { GetVersionUrlsUseCase(get()) }
-
-    // --- Storage use cases ---
-    factory<GetFolderItemsUseCase> { GetFolderItemsUseCaseImpl(get()) }
-    factory<GetItemUseCase> { GetItemUseCaseImpl(get()) }
-    factory<CreateFolderUseCase> { CreateFolderUseCaseImpl(get()) }
-    factory<GetBreadcrumbsUseCase> { GetBreadcrumbsUseCaseImpl(get()) }
-    factory<RenameItemUseCase> { RenameItemUseCaseImpl(get()) }
-    factory<MoveItemUseCase> { MoveItemUseCaseImpl(get()) }
-    factory<CopyItemUseCase> { CopyItemUseCaseImpl(get()) }
-    factory<ToggleStarUseCase> { ToggleStarUseCaseImpl(get()) }
-    factory<TrashItemUseCase> { TrashItemUseCaseImpl(get()) }
-    factory<DeleteItemUseCase> { DeleteItemUseCaseImpl(get()) }
-    factory<RestoreItemUseCase> { RestoreItemUseCaseImpl(get()) }
-    factory<GetTrashUseCase> { GetTrashUseCaseImpl(get()) }
-    factory<EmptyTrashUseCase> { EmptyTrashUseCaseImpl(get()) }
-    factory<GetStarredUseCase> { GetStarredUseCaseImpl(get()) }
-    factory<GetRecentUseCase> { GetRecentUseCaseImpl(get()) }
-    factory<SearchUseCase> { SearchUseCaseImpl(get()) }
-    factory<BatchDeleteUseCase> { BatchDeleteUseCaseImpl(get()) }
-    factory<BatchMoveUseCase> { BatchMoveUseCaseImpl(get()) }
-    factory<BatchCopyUseCase> { BatchCopyUseCaseImpl(get()) }
-    factory<BatchStarUseCase> { BatchStarUseCaseImpl(get()) }
-    factory<UploadFileUseCase> { UploadFileUseCaseImpl(get()) }
-    factory<DownloadFileUseCase> { DownloadFileUseCaseImpl(get()) }
-
-    // --- Share use cases ---
-    factory<GetMySharesUseCase> { GetMySharesUseCaseImpl(get()) }
-    factory<GetSharedWithMeUseCase> { GetSharedWithMeUseCaseImpl(get()) }
-    factory<CreateShareUseCase> { CreateShareUseCaseImpl(get()) }
-    factory<DeleteShareUseCase> { DeleteShareUseCaseImpl(get()) }
 
     // --- Metadata use cases ---
     factory<GetDocumentMetadataUseCase> { GetDocumentMetadataUseCaseImpl(get()) }
@@ -406,16 +271,6 @@ val appModule = module {
     factory<CleanupVersionsUseCase> { CleanupVersionsUseCaseImpl(get()) }
     factory<DeleteVersionUseCase> { DeleteVersionUseCaseImpl(get()) }
     factory<CompareVersionsUseCase> { CompareVersionsUseCaseImpl(get()) }
-
-    // --- Activity use cases ---
-    factory<GetRecentActivityUseCase> { GetRecentActivityUseCaseImpl(get()) }
-    factory<GetItemActivityUseCase> { GetItemActivityUseCaseImpl(get()) }
-
-    // --- Admin use cases ---
-    factory<GetAdminUsersUseCase> { GetAdminUsersUseCaseImpl(get()) }
-    factory<UpdateUserRoleUseCase> { UpdateUserRoleUseCaseImpl(get()) }
-    factory<UpdateUserStatusUseCase> { UpdateUserStatusUseCaseImpl(get()) }
-    factory<UpdateUserQuotaUseCase> { UpdateUserQuotaUseCaseImpl(get()) }
 
     // --- Collaboration use cases ---
     factory<UpdatePresenceUseCase> { UpdatePresenceUseCaseImpl(get()) }

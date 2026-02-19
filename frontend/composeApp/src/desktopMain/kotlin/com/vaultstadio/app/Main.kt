@@ -13,13 +13,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import com.vaultstadio.app.data.activity.di.activityModule
+import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.auth.di.authModule
+import com.vaultstadio.app.data.config.di.configModule
+import com.vaultstadio.app.data.share.di.shareModule
+import com.vaultstadio.app.data.storage.di.storageModule
 import com.vaultstadio.app.di.runtimeModules
 import org.koin.core.context.startKoin
 
 fun main() {
     startKoin {
-        modules(runtimeModules("http://localhost:8080/api") + authModule)
+        modules(runtimeModules("http://localhost:8080/api") + activityModule + adminModule + authModule + configModule + shareModule + storageModule)
     }
     application {
         Window(

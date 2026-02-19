@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.ShareLink
-import com.vaultstadio.app.domain.usecase.config.GetShareUrlUseCase
-import com.vaultstadio.app.domain.usecase.share.DeleteShareUseCase
-import com.vaultstadio.app.domain.usecase.share.GetMySharesUseCase
+import com.vaultstadio.app.domain.share.model.ShareLink
+import com.vaultstadio.app.domain.share.usecase.GetMySharesUseCase
+import com.vaultstadio.app.domain.share.usecase.DeleteShareUseCase
+import com.vaultstadio.app.domain.config.usecase.GetShareUrlUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for managing user's shared links.

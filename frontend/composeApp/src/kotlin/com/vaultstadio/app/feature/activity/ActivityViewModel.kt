@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.Activity
-import com.vaultstadio.app.domain.usecase.activity.GetRecentActivityUseCase
+import com.vaultstadio.app.domain.activity.model.Activity
+import com.vaultstadio.app.domain.activity.usecase.GetRecentActivityUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for displaying recent activity.

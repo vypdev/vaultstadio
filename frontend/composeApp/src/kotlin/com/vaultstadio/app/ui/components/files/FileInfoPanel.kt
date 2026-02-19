@@ -42,7 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.Activity
+import com.vaultstadio.app.domain.activity.model.Activity
 import com.vaultstadio.app.domain.model.StorageItem
 import com.vaultstadio.app.ui.theme.FileColor
 import com.vaultstadio.app.ui.theme.FolderColor

@@ -6,13 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.domain.model.AdminUser
+import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.auth.model.UserRole
-import com.vaultstadio.app.domain.model.UserStatus
-import com.vaultstadio.app.domain.usecase.admin.GetAdminUsersUseCase
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserQuotaUseCase
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserRoleUseCase
-import com.vaultstadio.app.domain.usecase.admin.UpdateUserStatusUseCase
+import com.vaultstadio.app.domain.admin.model.UserStatus
+import com.vaultstadio.app.domain.admin.usecase.GetAdminUsersUseCase
+import com.vaultstadio.app.domain.admin.usecase.UpdateUserQuotaUseCase
+import com.vaultstadio.app.domain.admin.usecase.UpdateUserRoleUseCase
+import com.vaultstadio.app.domain.admin.usecase.UpdateUserStatusUseCase
 import kotlinx.coroutines.launch
 /**
  * ViewModel for admin user management.

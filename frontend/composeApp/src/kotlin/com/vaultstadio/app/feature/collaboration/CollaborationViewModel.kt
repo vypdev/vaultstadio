@@ -29,7 +29,7 @@ import com.vaultstadio.app.domain.usecase.collaboration.ResolveDocumentCommentUs
 import com.vaultstadio.app.domain.usecase.collaboration.SaveDocumentUseCase
 import com.vaultstadio.app.domain.usecase.collaboration.SetOfflineUseCase
 import com.vaultstadio.app.domain.usecase.collaboration.UpdatePresenceUseCase
-import com.vaultstadio.app.domain.usecase.config.GetCollaborationUrlUseCase
+import com.vaultstadio.app.domain.config.usecase.GetCollaborationUrlUseCase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 /**

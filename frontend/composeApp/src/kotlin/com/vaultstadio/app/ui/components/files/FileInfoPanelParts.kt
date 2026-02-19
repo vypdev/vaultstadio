@@ -41,7 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.Activity
+import com.vaultstadio.app.domain.activity.model.Activity
 import com.vaultstadio.app.utils.formatRelativeTime
 import kotlinx.datetime.LocalDateTime
 

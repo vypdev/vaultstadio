@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.model.StorageItem
-import com.vaultstadio.app.domain.usecase.config.GetStorageUrlsUseCase
-import com.vaultstadio.app.domain.usecase.share.DeleteShareUseCase
-import com.vaultstadio.app.domain.usecase.share.GetSharedWithMeUseCase
+import com.vaultstadio.app.domain.config.usecase.GetStorageUrlsUseCase
+import com.vaultstadio.app.domain.share.usecase.DeleteShareUseCase
+import com.vaultstadio.app.domain.share.usecase.GetSharedWithMeUseCase
 import com.vaultstadio.app.domain.usecase.storage.GetItemUseCase
 import com.vaultstadio.app.ui.screens.SharedWithMeItem
 import kotlinx.coroutines.launch

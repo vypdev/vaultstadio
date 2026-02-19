@@ -36,9 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.model.AdminUser
+import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.auth.model.UserRole
-import com.vaultstadio.app.domain.model.UserStatus
+import com.vaultstadio.app.domain.admin.model.UserStatus
 import com.vaultstadio.app.ui.theme.VaultStadioPreview
 import kotlin.time.Clock
 import org.jetbrains.compose.ui.tooling.preview.Preview
