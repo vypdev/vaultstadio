@@ -22,8 +22,11 @@ kotlin {
             kotlin.srcDirs("src/main")
             dependencies {
                 implementation(compose.runtime)
-                implementation(project(":domain:result"))
-                implementation(project(":data:network"))
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
+                implementation(project(":core:resources"))
+                implementation(libs.decompose)
             }
         }
     }

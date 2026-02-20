@@ -244,7 +244,9 @@ class DefaultMainComponent(
                     onNavigateBack = ::goBack,
                     onNavigateToChangePassword = { navigateTo(MainDestination.CHANGE_PASSWORD) },
                     onNavigateToSecurity = { navigateTo(MainDestination.SECURITY) },
-                    onExportData = { /* Will be handled in ProfileViewModel */ },
+                    onExportData = { fileName, data, mimeType ->
+                        com.vaultstadio.app.platform.downloadFile(fileName, data, mimeType)
+                    },
                 ),
             )
             is Config.Admin -> MainComponent.Child.Admin(

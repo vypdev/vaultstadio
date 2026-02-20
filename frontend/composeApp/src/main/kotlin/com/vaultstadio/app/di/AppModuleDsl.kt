@@ -41,27 +41,11 @@ import com.vaultstadio.app.domain.federation.usecase.RemoveInstanceUseCase
 import com.vaultstadio.app.domain.federation.usecase.RequestFederationUseCase
 import com.vaultstadio.app.domain.federation.usecase.RevokeFederatedShareUseCase
 import com.vaultstadio.app.domain.federation.usecase.UnlinkIdentityUseCase
-import com.vaultstadio.app.feature.activity.ActivityViewModel
-import com.vaultstadio.app.feature.admin.AdminViewModel
 import com.vaultstadio.app.feature.ai.AIViewModel
-import com.vaultstadio.app.feature.changepassword.ChangePasswordViewModel
 import com.vaultstadio.app.feature.collaboration.CollaborationViewModel
 import com.vaultstadio.app.feature.federation.FederationViewModel
 import com.vaultstadio.app.feature.files.FilesViewModel
 import com.vaultstadio.app.feature.main.MainComponent
-import com.vaultstadio.app.feature.plugins.PluginsViewModel
-import com.vaultstadio.app.feature.profile.ProfileViewModel
-import com.vaultstadio.app.feature.security.SecurityViewModel
-import com.vaultstadio.app.feature.shares.SharesViewModel
-import com.vaultstadio.app.feature.sharedwithme.SharedWithMeViewModel
-import com.vaultstadio.app.domain.sync.usecase.DeactivateDeviceUseCase
-import com.vaultstadio.app.domain.sync.usecase.GetConflictsUseCase
-import com.vaultstadio.app.domain.sync.usecase.GetDevicesUseCase
-import com.vaultstadio.app.domain.sync.usecase.PullChangesUseCase
-import com.vaultstadio.app.domain.sync.usecase.RegisterDeviceUseCase
-import com.vaultstadio.app.domain.sync.usecase.RemoveDeviceUseCase
-import com.vaultstadio.app.domain.sync.usecase.ResolveConflictUseCase
-import com.vaultstadio.app.feature.sync.SyncViewModel
 import com.vaultstadio.app.feature.upload.UploadManager
 import com.vaultstadio.app.feature.versionhistory.VersionHistoryViewModel
 import io.ktor.client.HttpClient
@@ -78,22 +62,12 @@ val appModule = module {
     single { UploadManager(get()) }
 
     // --- ViewModels (no params) ---
-    viewModel { ProfileViewModel(get(), get(), get(), get()) }
+    // ProfileViewModel is in featureProfileModule (:feature:profile)
     // SettingsViewModel is in featureSettingsModule (:feature:settings)
-    viewModel { SecurityViewModel(get(), get(), get(), get()) }
-    viewModel { SharesViewModel(get(), get(), get()) }
-    viewModel { SharedWithMeViewModel(get(), get(), get(), get()) }
-    viewModel {
-        SyncViewModel(
-            get<GetDevicesUseCase>(),
-            get<GetConflictsUseCase>(),
-            get<RegisterDeviceUseCase>(),
-            get<DeactivateDeviceUseCase>(),
-            get<RemoveDeviceUseCase>(),
-            get<ResolveConflictUseCase>(),
-            get<PullChangesUseCase>(),
-        )
-    }
+    // SecurityViewModel is in featureSecurityModule (:feature:security)
+    // SharesViewModel is in featureSharesModule (:feature:shares)
+    // SharedWithMeViewModel is in featureSharedWithMeModule (:feature:sharedwithme)
+    // SyncViewModel is in featureSyncModule (:feature:sync)
     viewModel {
         FederationViewModel(
             get<GetFederatedInstancesUseCase>(),
@@ -117,10 +91,10 @@ val appModule = module {
             get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
         )
     }
-    viewModel { AdminViewModel(get(), get(), get(), get()) }
-    viewModel { ActivityViewModel(get()) }
-    viewModel { PluginsViewModel(get(), get(), get()) }
-    viewModel { ChangePasswordViewModel(get()) }
+    // AdminViewModel is in featureAdminModule (:feature:admin)
+    // ActivityViewModel is in featureActivityModule (:feature:activity)
+    // PluginsViewModel is in featurePluginsModule (:feature:plugins)
+    // ChangePasswordViewModel is in featureChangePasswordModule (:feature:changepassword)
 
     // --- ViewModels (with params) ---
     // AuthViewModel is in featureAuthModule (:feature:auth)

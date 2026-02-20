@@ -22,8 +22,17 @@ kotlin {
             kotlin.srcDirs("src/main")
             dependencies {
                 implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
                 implementation(project(":domain:result"))
-                implementation(project(":data:network"))
+                implementation(project(":domain:auth"))
+                implementation(libs.jetbrains.lifecycle.viewmodel)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.decompose)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
             }
         }
     }

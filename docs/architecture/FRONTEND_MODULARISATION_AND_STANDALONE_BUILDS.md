@@ -1,6 +1,6 @@
 # Frontend modularisation and standalone projects (backend / frontend)
 
-**Last updated**: 2026-02-19 (source layout src/main + src/test, ThemeMode in core:resources, :feature:settings migrated)
+**Last updated**: 2026-02-20 (source layout src/main + src/test, ThemeMode in core:resources, feature:settings/profile/security/changepassword/licenses/sync/activity/admin/plugins/shares/sharedwithme migrated)
 
 ### Current implementation status
 
@@ -35,9 +35,19 @@
 - **:data:storage** – DTOs split to one file per DTO (StorageItemDTO, CreateFolderRequestDTO, etc.); StorageDTOs.kt removed.
 - **:feature:auth** – Done. Full screen in module: `AuthViewModel`, `AuthError`, `AuthSuccessCallback`, `AuthComponent`, `DefaultAuthComponent`, `AuthContent` (one file per class). Depends on `:core:resources`, `:domain:auth`, Koin Compose ViewModel, Material3; composeApp only wires navigation (RootContent uses AuthContent from module).
 - **:feature:settings** – Done. Full screen in module: `SettingsComponent`, `DefaultSettingsComponent`, `SettingsViewModel`, `SettingsContent`, `SettingsScreen`, `SettingsDialogs`, `SettingsComponents` (one file per class/group). Theme/language via component callbacks; `ThemeMode` in `:core:resources`. Depends on `:core:resources`, `:domain:auth`, Koin Compose ViewModel, Material3. `featureSettingsModule` loaded in all entry points.
+- **:feature:profile** – Done. Full screen in module: `ProfileComponent`, `DefaultProfileComponent`, `ProfileViewModel`, `ProfileContent`, `ProfileScreen`, `ProfileComponents`, `ProfileDialogs`; export wiring delegated through component callback so module remains composeApp-independent.
+- **:feature:security** – Done. Full screen in module: `SecurityComponent`, `DefaultSecurityComponent`, `SecurityViewModel`, `SecurityContent`, `SecurityScreen`, `SecurityComponents`, `SecurityDialogs`.
+- **:feature:changepassword** – Done. Full screen in module: `ChangePasswordComponent`, `DefaultChangePasswordComponent`, `ChangePasswordViewModel`, `ChangePasswordContent`, `ChangePasswordScreen`.
+- **:feature:licenses** – Done. Full screen in module: `LicensesComponent`, `DefaultLicensesComponent`, `LicensesContent`, `LicensesScreen`.
+- **:feature:sync** – Done. Full screen in module: `SyncComponent`, `DefaultSyncComponent`, `SyncViewModel`, `SyncContent`, `SyncScreen`, `SyncComponents`, `SyncDialogs`, `SyncTabs`.
+- **:feature:activity** – Done. Full screen in module: `ActivityComponent`, `DefaultActivityComponent`, `ActivityViewModel`, `ActivityContent`, `ActivityScreen`, `ActivityComponents`.
+- **:feature:admin** – Done. Full screen in module: `AdminComponent`, `DefaultAdminComponent`, `AdminViewModel`, `AdminContent`, `AdminScreen`, `AdminComponents`, `AdminDialogs`.
+- **:feature:plugins** – Done. Full screen in module: `PluginsComponent`, `DefaultPluginsComponent`, `PluginsViewModel`, `PluginsContent`, `PluginsScreen`.
+- **:feature:shares** – Done. Full screen in module: `SharesComponent`, `DefaultSharesComponent`, `SharesViewModel`, `SharesContent`, `SharedScreen`, `SharedComponents`, `SharedDialogs`.
+- **:feature:sharedwithme** – Done. Full screen in module: `SharedWithMeComponent`, `DefaultSharedWithMeComponent`, `SharedWithMeViewModel`, `SharedWithMeContent`, `SharedWithMeScreen`, `SharedWithMeComponents`, `SharedDialogs`.
 - **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp.
 
-Next: migrate remaining feature modules (profile, security, changepassword, licenses, then sync, shares, sharedwithme, activity, admin, plugins, versionhistory, files, collaboration, federation, ai, main). Use `:core:resources` for strings; follow :feature:auth / :feature:settings as reference (ViewModel, Component, Content in module; depend on :core:resources, :domain:*, Koin Compose, Material3).
+Next: migrate remaining feature modules (versionhistory, files, collaboration, federation, ai, main). Use `:core:resources` for strings; follow :feature:auth / :feature:settings as reference (ViewModel, Component, Content in module; depend on :core:resources, :domain:*, Koin Compose, Material3).
 
 ### Koin module ownership
 
@@ -60,7 +70,16 @@ Each **feature**, **data**, **domain**, and **core** module that exposes or cons
 | Data    | :data:collaboration | collaborationModule | CollaborationApi, CollaborationRepository, collaboration use-case impls |
 | Feature | :feature:auth   | featureAuthModule   | AuthViewModel (param: AuthSuccessCallback) |
 | Feature | :feature:settings | featureSettingsModule | SettingsViewModel (param: SettingsComponent) |
-| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (profile, sync, federation, ai, admin, activity, plugins, changepassword, versionhistory, files, collaboration) until their features are migrated |
+| Feature | :feature:profile | featureProfileModule | ProfileViewModel (param: ProfileComponent) |
+| Feature | :feature:security | featureSecurityModule | SecurityViewModel |
+| Feature | :feature:changepassword | featureChangePasswordModule | ChangePasswordViewModel |
+| Feature | :feature:sync | featureSyncModule | SyncViewModel |
+| Feature | :feature:activity | featureActivityModule | ActivityViewModel |
+| Feature | :feature:admin | featureAdminModule | AdminViewModel |
+| Feature | :feature:plugins | featurePluginsModule | PluginsViewModel |
+| Feature | :feature:shares | featureSharesModule | SharesViewModel |
+| Feature | :feature:sharedwithme | featureSharedWithMeModule | SharedWithMeViewModel |
+| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (federation, ai, versionhistory, files, collaboration) until their features are migrated |
 
 Domain and core modules typically do not define Koin modules (they expose interfaces/types; data/feature modules provide implementations and register them).
 

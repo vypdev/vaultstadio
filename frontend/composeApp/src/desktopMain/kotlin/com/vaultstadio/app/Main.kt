@@ -17,7 +17,16 @@ import com.vaultstadio.app.data.activity.di.activityModule
 import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.auth.di.authModule
 import com.vaultstadio.app.feature.auth.di.featureAuthModule
+import com.vaultstadio.app.feature.activity.di.featureActivityModule
+import com.vaultstadio.app.feature.admin.di.featureAdminModule
+import com.vaultstadio.app.feature.changepassword.di.featureChangePasswordModule
+import com.vaultstadio.app.feature.profile.di.featureProfileModule
+import com.vaultstadio.app.feature.security.di.featureSecurityModule
 import com.vaultstadio.app.feature.settings.di.featureSettingsModule
+import com.vaultstadio.app.feature.sharedwithme.di.featureSharedWithMeModule
+import com.vaultstadio.app.feature.shares.di.featureSharesModule
+import com.vaultstadio.app.feature.sync.di.featureSyncModule
+import com.vaultstadio.app.feature.plugins.di.featurePluginsModule
 import com.vaultstadio.app.data.config.di.configModule
 import com.vaultstadio.app.data.share.di.shareModule
 import com.vaultstadio.app.data.plugin.di.pluginModule
@@ -33,7 +42,15 @@ import org.koin.core.context.startKoin
 
 fun main() {
     startKoin {
-        modules(runtimeModules("http://localhost:8080/api") + activityModule + adminModule + authModule + featureAuthModule + featureSettingsModule + aiModule + collaborationModule + configModule + shareModule + pluginModule + storageModule + metadataModule + syncModule + federationModule + versionModule)
+        modules(
+            runtimeModules("http://localhost:8080/api") +
+                activityModule + adminModule + authModule +
+                featureAuthModule + featureActivityModule + featureAdminModule + featureSettingsModule +
+                featureProfileModule + featureSecurityModule + featureChangePasswordModule + featureSyncModule +
+                featurePluginsModule + featureSharesModule + featureSharedWithMeModule +
+                aiModule + collaborationModule + configModule + shareModule + pluginModule +
+                storageModule + metadataModule + syncModule + federationModule + versionModule,
+        )
     }
     application {
         Window(
