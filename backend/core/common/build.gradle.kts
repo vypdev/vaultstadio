@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.kotlin.logging)
     implementation(libs.lettuce.core)
     testImplementation(libs.bundles.testing)
+    testImplementation(project(":domain:storage"))
 }
 
 tasks.test { useJUnitPlatform() }

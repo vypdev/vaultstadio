@@ -16,8 +16,8 @@ import com.vaultstadio.core.domain.model.PresenceStatus
 import com.vaultstadio.core.domain.model.TextSelection
 import com.vaultstadio.core.domain.model.UserPresence
 import com.vaultstadio.core.domain.repository.CollaborationRepository
-import com.vaultstadio.core.exception.AuthorizationException
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.AuthorizationException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

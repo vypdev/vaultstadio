@@ -10,10 +10,10 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
-import com.vaultstadio.core.domain.model.ActivityType
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.repository.ActivityRepository
+import com.vaultstadio.domain.activity.model.ActivityType
+import com.vaultstadio.domain.activity.repository.ActivityRepository
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -173,10 +173,11 @@ class ActivityLoggerTest {
         coVerify(exactly = 1) {
             activityRepository.create(
                 match {
+                    val details = it.details
                     it.type == ActivityType.FILE_MOVED &&
                         it.itemId == "item-moved" &&
-                        it.details != null &&
-                        it.details.contains("old/doc.txt")
+                        details != null &&
+                        details.contains("old/doc.txt")
                 },
             )
         }
@@ -207,10 +208,11 @@ class ActivityLoggerTest {
         coVerify(exactly = 1) {
             activityRepository.create(
                 match {
+                    val details = it.details
                     it.type == ActivityType.FOLDER_DELETED &&
                         it.itemId == "folder-del" &&
-                        it.details != null &&
-                        it.details.contains("3")
+                        details != null &&
+                        details.contains("3")
                 },
             )
         }

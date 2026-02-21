@@ -14,7 +14,7 @@ import com.vaultstadio.core.domain.model.FederatedShare
 import com.vaultstadio.core.domain.model.FederatedShareStatus
 import com.vaultstadio.core.domain.model.SharePermission
 import com.vaultstadio.core.domain.repository.FederationRepository
-import com.vaultstadio.core.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.DatabaseException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

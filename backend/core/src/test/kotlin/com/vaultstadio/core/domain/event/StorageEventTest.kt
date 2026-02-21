@@ -5,12 +5,12 @@
 
 package com.vaultstadio.core.domain.event
 
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.ShareLink
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.model.UserInfo
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
+import com.vaultstadio.domain.auth.model.UserInfo
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.domain.share.model.ShareLink
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test

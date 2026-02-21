@@ -13,7 +13,7 @@ import com.vaultstadio.core.domain.model.FederatedInstance
 import com.vaultstadio.core.domain.model.InstanceStatus
 import com.vaultstadio.core.domain.model.SignedFederationMessage
 import com.vaultstadio.core.domain.repository.FederationRepository
-import com.vaultstadio.core.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.DatabaseException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

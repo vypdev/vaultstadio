@@ -1,9 +1,12 @@
 /**
  * Unit tests for StorageItem computed properties (extension, isRoot, parentPath).
+ * StorageItem lives in domain:storage; core tests it for compatibility.
  */
 
 package com.vaultstadio.core.domain.model
 
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

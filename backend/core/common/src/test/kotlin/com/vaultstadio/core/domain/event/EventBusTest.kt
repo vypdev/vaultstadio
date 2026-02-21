@@ -32,11 +32,11 @@ class EventBusTest {
 
     // Test event for use in tests
     private fun createTestEvent(): FileEvent.Uploaded {
-        val testItem = com.vaultstadio.core.domain.model.StorageItem(
+        val testItem = com.vaultstadio.domain.storage.model.StorageItem(
             id = "item-123",
             name = "test.txt",
             path = "/test.txt",
-            type = com.vaultstadio.core.domain.model.ItemType.FILE,
+            type = com.vaultstadio.domain.storage.model.ItemType.FILE,
             ownerId = "user-123",
             size = 1024,
             mimeType = "text/plain",

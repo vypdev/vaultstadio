@@ -1,9 +1,31 @@
 /**
  * Tests for StorageException hierarchy (errorCode, httpStatus, message).
+ * Exception types live in domain:common.
  */
 
 package com.vaultstadio.core.exception
 
+import com.vaultstadio.domain.common.exception.AuthenticationException
+import com.vaultstadio.domain.common.exception.AuthorizationException
+import com.vaultstadio.domain.common.exception.ConcurrentModificationException
+import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.FileSizeLimitException
+import com.vaultstadio.domain.common.exception.InvalidOperationException
+import com.vaultstadio.domain.common.exception.ItemAlreadyExistsException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.PluginExecutionException
+import com.vaultstadio.domain.common.exception.PluginLoadException
+import com.vaultstadio.domain.common.exception.PluginNotFoundException
+import com.vaultstadio.domain.common.exception.PluginVersionException
+import com.vaultstadio.domain.common.exception.QuotaExceededException
+import com.vaultstadio.domain.common.exception.ShareDownloadLimitException
+import com.vaultstadio.domain.common.exception.ShareExpiredException
+import com.vaultstadio.domain.common.exception.ShareNotFoundException
+import com.vaultstadio.domain.common.exception.SharePasswordInvalidException
+import com.vaultstadio.domain.common.exception.SharePasswordRequiredException
+import com.vaultstadio.domain.common.exception.StorageBackendException
+import com.vaultstadio.domain.common.exception.UserNotFoundException
+import com.vaultstadio.domain.common.exception.ValidationException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
