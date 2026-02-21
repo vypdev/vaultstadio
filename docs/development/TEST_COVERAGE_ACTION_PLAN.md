@@ -185,7 +185,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 | Component | File(s) | Suggested tests |
 |-----------|---------|------------------|
-| UploadSessionManager | `UploadSessionManager.kt` | Create session; add parts; complete; abort; expiry |
+| UploadSessionManager | `InMemoryUploadSessionManager.kt` | Create session; add parts; complete; abort; expiry |
 | ThumbnailCache | `ThumbnailCache.kt` | Get (hit/miss); put; invalidate; size/limits if applicable |
 | RouteExtensions | `RouteExtensions.kt` | Any extension functions used by routes (e.g. user/session extraction); test with mock call context |
 
