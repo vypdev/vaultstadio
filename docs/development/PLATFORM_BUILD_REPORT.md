@@ -108,7 +108,7 @@
 
 ### 6.2 Cambios realizados
 
-1. **Targets iOS en composeApp**: Añadidos `iosX64()`, `iosArm64()`, `iosSimulatorArm64()` y source set `iosMain` con dependencia `ktor-client-darwin`.
+1. **Targets iOS en composeApp**: Añadidos `iosArm64()`, `iosSimulatorArm64()` y source set `iosMain` con dependencia `ktor-client-darwin`.
 2. **Koin**: En composeApp se añadió `fun sharedModule(apiBaseUrl: String) = allModules(apiBaseUrl)`. En iosApp, `KoinHelper.initKoin(apiBaseUrl)` y `doInitKoin(apiBaseUrl?)` usan `sharedModule(apiBaseUrl)` con URL por defecto o pasada desde Swift.
 3. **Actuales iOS**: En `composeApp/src/iosMain/` se añadieron implementaciones *stub* para: `Download`, `DragDrop`, `FilePicker`, `MediaPlayer`, `PlatformStorage`. Son válidas para compilar; para producción conviene sustituirlas por implementaciones nativas (UIDocumentPickerViewController, NSUserDefaults, AVPlayer, etc.).
 
@@ -116,7 +116,7 @@
 
 | Tema              | Estado | Nota |
 |-------------------|--------|------|
-| Target iOS en composeApp | Hecho | iosX64, iosArm64, iosSimulatorArm64 + iosMain. |
+| Target iOS en composeApp | Hecho | iosArm64, iosSimulatorArm64 + iosMain. |
 | Koin `sharedModule` | Hecho | `sharedModule(apiBaseUrl)` en composeApp; KoinHelper actualizado. |
 | Expect/actual iOS | Stubs | Download, DragDrop, FilePicker, MediaPlayer, PlatformStorage en iosMain; completar con APIs nativas cuando se requiera. |
 | Link framework    | Requiere Xcode | En macOS con Xcode el link del framework debería funcionar. |

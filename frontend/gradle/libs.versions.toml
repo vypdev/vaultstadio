@@ -162,6 +162,11 @@ testcontainers-minio = { module = "org.testcontainers:minio", version.ref = "tes
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow" }
 
+# Compose Multiplatform: use plugin-provided compose.* for runtime/foundation/material3/ui/resources
+# (explicit coordinates with compose-plugin version not published for all artifacts).
+# Only material-icons-extended declared explicitly (deprecated shortcut; pin to 1.7.3; migrate to Material Symbols later).
+compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version = "1.7.3" }
+
 # Image Loading
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }

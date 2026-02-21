@@ -37,7 +37,6 @@ kotlin {
         // so only the active screen is instantiated; all code remains in a single bundle (Kotlin/Wasm has no chunk splitting yet).
     }
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
@@ -95,7 +94,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
+                implementation(libs.compose.material.icons.extended)
                 implementation(compose.ui)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
@@ -157,12 +156,10 @@ kotlin {
             }
         }
 
-        val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {

@@ -16,7 +16,7 @@ kotlin {
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }
     wasmJs { browser() }
-    iosX64(); iosArm64(); iosSimulatorArm64()
+    iosArm64(); iosSimulatorArm64()
     sourceSets {
         val commonMain by getting {
             kotlin.srcDirs("src/main")
@@ -24,7 +24,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
+                implementation(libs.compose.material.icons.extended)
                 implementation(project(":domain:result"))
                 implementation(project(":domain:activity"))
                 implementation(libs.jetbrains.lifecycle.viewmodel)
