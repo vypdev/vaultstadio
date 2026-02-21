@@ -8,7 +8,8 @@ package com.vaultstadio.core.domain.repository
 
 import arrow.core.Either
 import com.vaultstadio.core.domain.model.StorageItemMetadata
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.common.pagination.PagedResult
 
 /**
  * Repository interface for storage item metadata.

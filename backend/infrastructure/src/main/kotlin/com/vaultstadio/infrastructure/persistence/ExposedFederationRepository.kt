@@ -15,8 +15,8 @@ import com.vaultstadio.core.domain.model.FederatedShareStatus
 import com.vaultstadio.core.domain.model.FederationCapability
 import com.vaultstadio.core.domain.model.InstanceStatus
 import com.vaultstadio.core.domain.repository.FederationRepository
-import com.vaultstadio.core.exception.DatabaseException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.infrastructure.persistence.entities.FederatedActivitiesTable
 import com.vaultstadio.infrastructure.persistence.entities.FederatedIdentitiesTable
 import com.vaultstadio.infrastructure.persistence.entities.FederatedInstancesTable

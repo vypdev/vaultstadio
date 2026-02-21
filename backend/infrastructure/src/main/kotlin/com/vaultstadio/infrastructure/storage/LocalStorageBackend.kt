@@ -10,8 +10,8 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.service.StorageBackend
-import com.vaultstadio.core.exception.StorageBackendException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageBackendException
+import com.vaultstadio.domain.common.exception.StorageException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

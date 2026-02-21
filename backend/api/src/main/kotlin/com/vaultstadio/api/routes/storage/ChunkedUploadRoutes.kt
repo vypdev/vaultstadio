@@ -7,17 +7,17 @@
 
 package com.vaultstadio.api.routes.storage
 
-import com.vaultstadio.api.application.usecase.chunkedupload.ChunkedUploadError
-import com.vaultstadio.api.application.usecase.chunkedupload.CancelChunkedUploadUseCase
-import com.vaultstadio.api.application.usecase.chunkedupload.CompleteChunkedUploadUseCase
-import com.vaultstadio.api.application.usecase.chunkedupload.GetChunkedUploadStatusUseCase
-import com.vaultstadio.api.application.usecase.chunkedupload.InitChunkedUploadUseCase
-import com.vaultstadio.api.application.usecase.chunkedupload.UploadChunkUseCase
+import com.vaultstadio.application.usecase.chunkedupload.ChunkedUploadError
+import com.vaultstadio.application.usecase.chunkedupload.CancelChunkedUploadUseCase
+import com.vaultstadio.application.usecase.chunkedupload.CompleteChunkedUploadUseCase
+import com.vaultstadio.application.usecase.chunkedupload.GetChunkedUploadStatusUseCase
+import com.vaultstadio.application.usecase.chunkedupload.InitChunkedUploadUseCase
+import com.vaultstadio.application.usecase.chunkedupload.UploadChunkUseCase
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.toResponse
-import com.vaultstadio.api.service.UploadSession
+import com.vaultstadio.core.domain.service.UploadSession
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart

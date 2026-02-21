@@ -7,8 +7,8 @@ package com.vaultstadio.api.routes.activity
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.toResponse
-import com.vaultstadio.api.application.usecase.activity.GetRecentActivityByItemUseCase
-import com.vaultstadio.api.application.usecase.activity.GetRecentActivityByUserUseCase
+import com.vaultstadio.application.usecase.activity.GetRecentActivityByItemUseCase
+import com.vaultstadio.application.usecase.activity.GetRecentActivityByUserUseCase
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.response.respond

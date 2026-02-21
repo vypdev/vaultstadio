@@ -21,8 +21,8 @@ import aws.sdk.kotlin.services.s3.presigners.presignGetObject
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.toByteArray
 import com.vaultstadio.core.domain.service.StorageBackend
-import com.vaultstadio.core.exception.StorageBackendException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageBackendException
+import com.vaultstadio.domain.common.exception.StorageException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

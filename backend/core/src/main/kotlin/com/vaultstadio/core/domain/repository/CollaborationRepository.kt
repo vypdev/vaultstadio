@@ -14,7 +14,7 @@ import com.vaultstadio.core.domain.model.CommentReply
 import com.vaultstadio.core.domain.model.DocumentComment
 import com.vaultstadio.core.domain.model.DocumentState
 import com.vaultstadio.core.domain.model.UserPresence
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 

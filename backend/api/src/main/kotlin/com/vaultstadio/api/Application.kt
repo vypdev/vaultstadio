@@ -16,7 +16,7 @@ import com.vaultstadio.api.config.configureSwagger
 import com.vaultstadio.api.middleware.configureErrorHandling
 import com.vaultstadio.api.middleware.configureLogging
 import com.vaultstadio.api.plugins.CronScheduler
-import com.vaultstadio.api.service.UploadSessionManager
+import com.vaultstadio.core.domain.service.UploadSessionManager
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -29,6 +29,7 @@ import io.ktor.server.websocket.WebSockets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlin.time.Duration
 import org.koin.ktor.ext.get as koinGet
 
 private val logger = KotlinLogging.logger {}
@@ -110,7 +111,7 @@ private fun Application.configureBackgroundJobs() {
         cronExpression = "*/15 * * * *", // Every 15 minutes
         taskName = "cleanup-expired-uploads",
     ) {
-        val cleaned = uploadSessionManager.cleanupExpiredSessions()
+        val cleaned = uploadSessionManager.cleanupExpiredSessions(Duration.parse("24h"))
         if (cleaned > 0) {
             logger.info { "Cleaned up $cleaned expired upload sessions" }
         }

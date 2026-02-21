@@ -12,8 +12,8 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.service.CachedThumbnail
 import com.vaultstadio.api.service.ThumbnailCache
 import com.vaultstadio.api.service.ThumbnailCacheKey
-import com.vaultstadio.api.application.usecase.storage.DownloadFileUseCase
-import com.vaultstadio.api.application.usecase.storage.GetItemUseCase
+import com.vaultstadio.application.usecase.storage.DownloadFileUseCase
+import com.vaultstadio.application.usecase.storage.GetItemUseCase
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call

@@ -9,11 +9,11 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.ChangePasswordRequest
 import com.vaultstadio.api.dto.UpdateProfileRequest
 import com.vaultstadio.api.dto.toResponse
-import com.vaultstadio.api.application.usecase.user.ChangePasswordUseCase
-import com.vaultstadio.api.application.usecase.user.GetQuotaUseCase
-import com.vaultstadio.api.application.usecase.user.GetUserInfoUseCase
-import com.vaultstadio.api.application.usecase.user.LogoutAllUseCase
-import com.vaultstadio.api.application.usecase.user.UpdateUserUseCase
+import com.vaultstadio.application.usecase.user.ChangePasswordUseCase
+import com.vaultstadio.application.usecase.user.GetQuotaUseCase
+import com.vaultstadio.application.usecase.user.GetUserInfoUseCase
+import com.vaultstadio.application.usecase.user.LogoutAllUseCase
+import com.vaultstadio.application.usecase.user.UpdateUserUseCase
 import com.vaultstadio.core.domain.service.UpdateUserInput
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call

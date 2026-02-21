@@ -9,8 +9,8 @@ package com.vaultstadio.api.routes.storage
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.api.application.usecase.storage.GetOrCreateFolderUseCase
-import com.vaultstadio.api.application.usecase.storage.UploadFileUseCase
+import com.vaultstadio.application.usecase.storage.GetOrCreateFolderUseCase
+import com.vaultstadio.application.usecase.storage.UploadFileUseCase
 import com.vaultstadio.core.domain.service.UploadFileInput
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData

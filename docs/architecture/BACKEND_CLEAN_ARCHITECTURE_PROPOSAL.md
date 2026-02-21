@@ -2,6 +2,11 @@
 
 **Last updated**: 2026-02-21
 
+**Implementation status**:
+- **Phase 1 (application module)**: Done. Use cases live in `backend/application`; api depends on `application`, loads application Koin modules, and routes import from `com.vaultstadio.application.usecase.*`. Ports moved: `UploadSessionManager`/`UploadSession` in core, `PluginManager` interface in plugins-api.
+- **Phase 2 (application submodules by area)**: Done. Application split into `application:auth`, `application:storage`, `application:share`, `application:user`, `application:admin`, `application:activity`, `application:metadata`, `application:version`, `application:sync`, `application:plugin`, `application:chunkedupload`, `application:health`, `application:ai`. Each has its own `build.gradle.kts` and Koin module; api depends on all and loads the 13 modules. No jacoco in application submodules (avoids Gradle task cycle); `afterEvaluate { group = …; archiveBaseName = "application-${project.name}" }` used.
+- **Phase 3 (core submodules by area)**: Done. Core split into `core:common` (EventBus, LockManager, TransactionManager, MultipartUploadManager, UploadSessionManager), `core:auth` (UserService, PasswordHasher), `core:storage` (StorageService*, StorageBackend), `core:share`, `core:activity`, `core:version`, `core:sync`, `core:federation`, `core:collaboration`, `core:ai`. The root `:core` module keeps only domain types (model, repository, event: FileEvent, UserEvent, etc.). api, infrastructure, plugins-api, and each application module depend on the required `core:*` and `:core`. Koin wiring remains in api.
+
 This document proposes a phased evolution of the VaultStadio backend toward Clean Architecture. It is actionable and complements [CLEAN_ARCHITECTURE_REVIEW.md](CLEAN_ARCHITECTURE_REVIEW.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---

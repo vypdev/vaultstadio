@@ -26,6 +26,14 @@ kotlin {
 }
 
 dependencies {
+    // Domain (types and ports)
+    api(project(":domain:common"))
+    api(project(":domain:storage"))
+    api(project(":domain:auth"))
+    api(project(":domain:share"))
+    api(project(":domain:activity"))
+    api(project(":domain:admin"))
+
     // Kotlinx
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.serialization.json)
@@ -34,25 +42,8 @@ dependencies {
     // Arrow for functional programming
     api(libs.bundles.arrow)
 
-    // Database
-    implementation(libs.bundles.exposed)
-    implementation(libs.hikari)
-
-    // HTTP Client for AI providers
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.serialization.kotlinx.json)
-
     // Logging
     implementation(libs.kotlin.logging)
-
-    // DI
-    implementation(libs.koin.core)
-
-    // Redis (for distributed lock/multipart upload managers)
-    implementation(libs.lettuce.core)
 
     // Testing
     testImplementation(libs.bundles.testing)

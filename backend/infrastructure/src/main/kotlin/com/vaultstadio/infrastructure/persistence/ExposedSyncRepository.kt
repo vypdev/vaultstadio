@@ -13,8 +13,8 @@ import com.vaultstadio.core.domain.model.SyncChange
 import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.model.SyncDevice
 import com.vaultstadio.core.domain.repository.SyncRepository
-import com.vaultstadio.core.exception.DatabaseException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.infrastructure.persistence.entities.SyncChangesTable
 import com.vaultstadio.infrastructure.persistence.entities.SyncConflictsTable
 import com.vaultstadio.infrastructure.persistence.entities.SyncDevicesTable

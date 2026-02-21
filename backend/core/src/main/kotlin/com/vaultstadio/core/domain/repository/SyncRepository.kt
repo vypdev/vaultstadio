@@ -12,7 +12,7 @@ import com.vaultstadio.core.domain.model.ConflictResolution
 import com.vaultstadio.core.domain.model.SyncChange
 import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.model.SyncDevice
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 

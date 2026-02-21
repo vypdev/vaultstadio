@@ -4,7 +4,7 @@
 
 package com.vaultstadio.api.config
 
-import com.vaultstadio.core.domain.model.User
+import com.vaultstadio.domain.auth.model.User
 import com.vaultstadio.core.domain.service.LoginInput
 import com.vaultstadio.core.domain.service.UserService
 import io.ktor.http.HttpHeaders

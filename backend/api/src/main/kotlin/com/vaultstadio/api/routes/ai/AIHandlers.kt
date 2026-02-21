@@ -10,11 +10,11 @@ import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.core.ai.AIError
 import com.vaultstadio.core.ai.AIMessage
-import com.vaultstadio.api.application.usecase.ai.AIServiceUseCase
+import com.vaultstadio.application.usecase.ai.AIServiceUseCase
 import com.vaultstadio.core.ai.AIProviderConfig
 import com.vaultstadio.core.ai.AIProviderType
 import com.vaultstadio.core.ai.AIRequest
-import com.vaultstadio.core.domain.model.UserRole
+import com.vaultstadio.domain.auth.model.UserRole
 import org.koin.ktor.ext.get as koinGet
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall

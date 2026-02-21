@@ -6,12 +6,12 @@
 
 package com.vaultstadio.api.routes.version
 
-import com.vaultstadio.api.application.usecase.version.ApplyRetentionPolicyUseCase
-import com.vaultstadio.api.application.usecase.version.CompareVersionsUseCase
-import com.vaultstadio.api.application.usecase.version.DeleteVersionUseCase
-import com.vaultstadio.api.application.usecase.version.GetVersionHistoryUseCase
-import com.vaultstadio.api.application.usecase.version.GetVersionUseCase
-import com.vaultstadio.api.application.usecase.version.RestoreVersionUseCase
+import com.vaultstadio.application.usecase.version.ApplyRetentionPolicyUseCase
+import com.vaultstadio.application.usecase.version.CompareVersionsUseCase
+import com.vaultstadio.application.usecase.version.DeleteVersionUseCase
+import com.vaultstadio.application.usecase.version.GetVersionHistoryUseCase
+import com.vaultstadio.application.usecase.version.GetVersionUseCase
+import com.vaultstadio.application.usecase.version.RestoreVersionUseCase
 import com.vaultstadio.api.config.user
 import com.vaultstadio.core.domain.model.VersionRetentionPolicy
 import com.vaultstadio.core.domain.service.RestoreVersionInput

@@ -9,9 +9,9 @@ import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.core.domain.repository.MetadataRepository
-import com.vaultstadio.core.domain.repository.PagedResult
-import com.vaultstadio.core.exception.DatabaseException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.common.pagination.PagedResult
 import com.vaultstadio.infrastructure.persistence.entities.StorageItemMetadataTable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers

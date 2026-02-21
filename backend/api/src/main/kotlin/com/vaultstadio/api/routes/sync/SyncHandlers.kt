@@ -6,15 +6,15 @@
 package com.vaultstadio.api.routes.sync
 
 import com.vaultstadio.api.config.user
-import com.vaultstadio.api.application.usecase.sync.DeactivateDeviceUseCase
-import com.vaultstadio.api.application.usecase.sync.GenerateFileSignatureUseCase
-import com.vaultstadio.api.application.usecase.sync.GetPendingConflictsUseCase
-import com.vaultstadio.api.application.usecase.sync.ListDevicesUseCase
-import com.vaultstadio.api.application.usecase.sync.RecordChangeUseCase
-import com.vaultstadio.api.application.usecase.sync.RegisterDeviceUseCase
-import com.vaultstadio.api.application.usecase.sync.RemoveDeviceUseCase
-import com.vaultstadio.api.application.usecase.sync.ResolveConflictUseCase
-import com.vaultstadio.api.application.usecase.sync.SyncPullUseCase
+import com.vaultstadio.application.usecase.sync.DeactivateDeviceUseCase
+import com.vaultstadio.application.usecase.sync.GenerateFileSignatureUseCase
+import com.vaultstadio.application.usecase.sync.GetPendingConflictsUseCase
+import com.vaultstadio.application.usecase.sync.ListDevicesUseCase
+import com.vaultstadio.application.usecase.sync.RecordChangeUseCase
+import com.vaultstadio.application.usecase.sync.RegisterDeviceUseCase
+import com.vaultstadio.application.usecase.sync.RemoveDeviceUseCase
+import com.vaultstadio.application.usecase.sync.ResolveConflictUseCase
+import com.vaultstadio.application.usecase.sync.SyncPullUseCase
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.core.domain.model.ChangeType
 import com.vaultstadio.core.domain.model.ConflictResolution

@@ -1,26 +1,27 @@
 /**
- * VaultStadio Plugin Manager
+ * VaultStadio Plugin Manager implementation.
  */
 
 package com.vaultstadio.api.plugins
 
 import arrow.core.Either
+import com.vaultstadio.plugins.api.PluginManager
 import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.ai.AIService
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.core.domain.repository.MetadataRepository
-import com.vaultstadio.core.domain.repository.StorageItemQuery
-import com.vaultstadio.core.domain.repository.StorageItemRepository
-import com.vaultstadio.core.domain.repository.UserRepository
 import com.vaultstadio.core.domain.service.StorageBackend
-import com.vaultstadio.core.exception.ItemNotFoundException
-import com.vaultstadio.core.exception.PluginException
-import com.vaultstadio.core.exception.PluginLoadException
-import com.vaultstadio.core.exception.PluginNotFoundException
-import com.vaultstadio.core.exception.StorageBackendException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.PluginException
+import com.vaultstadio.domain.common.exception.PluginLoadException
+import com.vaultstadio.domain.common.exception.PluginNotFoundException
+import com.vaultstadio.domain.common.exception.StorageBackendException
+import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.storage.repository.StorageItemQuery
+import com.vaultstadio.domain.storage.repository.StorageItemRepository
+import com.vaultstadio.domain.auth.repository.UserRepository
 import com.vaultstadio.plugins.api.Plugin
 import com.vaultstadio.plugins.api.PluginState
 import com.vaultstadio.plugins.context.AIApi
@@ -59,44 +60,6 @@ import java.util.ServiceLoader
 import java.util.concurrent.ConcurrentHashMap
 
 private val logger = KotlinLogging.logger {}
-
-/**
- * Plugin manager interface.
- */
-interface PluginManager {
-    fun listPlugins(): List<Plugin>
-    fun getPlugin(pluginId: String): Plugin?
-    fun isPluginEnabled(pluginId: String): Boolean
-    fun getPluginState(pluginId: String): PluginState
-    suspend fun enablePlugin(pluginId: String): Either<PluginException, Unit>
-    suspend fun disablePlugin(pluginId: String): Either<PluginException, Unit>
-    suspend fun loadPlugins()
-    suspend fun shutdown()
-
-    /**
-     * Handles a request to a plugin-registered endpoint.
-     *
-     * @param pluginId Plugin ID
-     * @param method HTTP method
-     * @param path Endpoint path (relative to /plugins/{pluginId}/)
-     * @param request The endpoint request
-     * @return The endpoint response, or null if endpoint not found
-     */
-    suspend fun handlePluginEndpoint(
-        pluginId: String,
-        method: String,
-        path: String,
-        request: EndpointRequest,
-    ): EndpointResponse?
-
-    /**
-     * Gets all registered endpoints for a plugin.
-     *
-     * @param pluginId Plugin ID
-     * @return Map of "METHOD:path" to handler
-     */
-    fun getPluginEndpoints(pluginId: String): Set<String>
-}
 
 /**
  * Plugin manager implementation.
@@ -325,24 +288,20 @@ class PluginContextImpl(
                 ).left()
             }
 
-            // Get the item first to get the storage key
             val itemResult = storageItemRepository.findById(itemId)
-            return when {
-                itemResult.isLeft() ->
-                    itemResult
-                        as Either<StorageException, InputStream>
-                else -> {
-                    val item = itemResult.getOrNull()
-                    when {
-                        item == null -> ItemNotFoundException(itemId).left()
-                        item.storageKey == null -> com.vaultstadio.core.exception.StorageBackendException(
+            return itemResult.fold(
+                { error -> error.left() },
+                { item ->
+                    if (item == null) ItemNotFoundException(itemId).left()
+                    else when {
+                        item.storageKey == null -> StorageBackendException(
                             "plugin",
                             "Item has no storage key",
                         ).left()
                         else -> storageBackend.retrieve(item.storageKey!!)
                     }
-                }
-            }
+                },
+            )
         }
 
         override suspend fun retrieve(

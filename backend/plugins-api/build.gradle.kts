@@ -23,8 +23,12 @@ kotlin {
 }
 
 dependencies {
-    // Core module for domain models
+    // Core module for types; core:common for EventBus, EventHandlerResult
     api(project(":core"))
+    api(project(":core:common"))
+    api(project(":domain:common"))
+    api(project(":domain:storage"))
+    api(project(":domain:auth"))
 
     // Kotlinx
     api(libs.kotlinx.coroutines.core)

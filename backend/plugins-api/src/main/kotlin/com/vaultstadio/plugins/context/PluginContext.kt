@@ -8,11 +8,11 @@ package com.vaultstadio.plugins.context
 
 import arrow.core.Either
 import com.vaultstadio.core.domain.event.EventBus
-import com.vaultstadio.core.domain.model.StorageItem
 import com.vaultstadio.core.domain.model.StorageItemMetadata
-import com.vaultstadio.core.domain.model.UserInfo
-import com.vaultstadio.core.domain.repository.PagedResult
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.auth.model.UserInfo
+import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.common.pagination.PagedResult
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.coroutines.CoroutineScope
 import java.io.InputStream
 import java.nio.file.Path

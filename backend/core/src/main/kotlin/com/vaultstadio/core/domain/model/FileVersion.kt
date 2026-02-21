@@ -7,6 +7,7 @@
 
 package com.vaultstadio.core.domain.model
 
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import java.util.UUID

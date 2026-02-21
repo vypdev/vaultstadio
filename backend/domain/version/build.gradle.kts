@@ -20,7 +20,9 @@ dependencies {
     api(libs.bundles.arrow)
     testImplementation(libs.bundles.testing)
 }
-tasks.test { useJUnitPlatform() }
+tasks.test {
+    useJUnitPlatform()
+}
 
 tasks.jacocoTestReport {
     reports {

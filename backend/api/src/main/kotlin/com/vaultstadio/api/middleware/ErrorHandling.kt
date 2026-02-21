@@ -7,7 +7,7 @@ package com.vaultstadio.api.middleware
 import com.vaultstadio.api.config.AuthenticationException
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application

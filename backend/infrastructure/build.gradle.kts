@@ -23,6 +23,14 @@ kotlin {
 dependencies {
     // Project modules
     api(project(":core"))
+    implementation(project(":core:common"))
+    implementation(project(":core:auth"))
+    implementation(project(":core:storage"))
+    implementation(project(":domain:common"))
+    implementation(project(":domain:storage"))
+    implementation(project(":domain:auth"))
+    implementation(project(":domain:share"))
+    implementation(project(":domain:activity"))
 
     // Kotlinx
     implementation(libs.kotlinx.coroutines.core)

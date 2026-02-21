@@ -10,7 +10,7 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.model.FileVersion
 import com.vaultstadio.core.domain.model.FileVersionHistory
 import com.vaultstadio.core.domain.model.VersionRetentionPolicy
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
 import kotlinx.coroutines.flow.Flow
 
 /**

@@ -13,8 +13,8 @@ import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.PaginatedResponse
 import com.vaultstadio.api.dto.SearchRequest
 import com.vaultstadio.api.dto.toResponse
-import com.vaultstadio.api.application.usecase.storage.SearchUseCase
-import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.application.usecase.storage.SearchUseCase
+import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.service.StorageService
 import io.ktor.http.HttpStatusCode

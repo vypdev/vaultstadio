@@ -6,7 +6,7 @@
 
 package com.vaultstadio.plugins.hooks
 
-import com.vaultstadio.core.domain.model.StorageItem
+import com.vaultstadio.domain.storage.model.StorageItem
 import java.io.InputStream
 
 /**

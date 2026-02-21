@@ -14,7 +14,7 @@ import com.vaultstadio.core.domain.model.FederatedShare
 import com.vaultstadio.core.domain.model.FederatedShareStatus
 import com.vaultstadio.core.domain.model.FederationCapability
 import com.vaultstadio.core.domain.model.InstanceStatus
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 

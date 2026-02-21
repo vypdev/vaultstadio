@@ -5,8 +5,8 @@
 
 package com.vaultstadio.api.routes.storage
 
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.repository.StorageItemQuery
+import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.storage.repository.StorageItemQuery
 import com.vaultstadio.core.domain.service.CopyItemInput
 import com.vaultstadio.core.domain.service.CreateFolderInput
 import com.vaultstadio.core.domain.service.LockManager

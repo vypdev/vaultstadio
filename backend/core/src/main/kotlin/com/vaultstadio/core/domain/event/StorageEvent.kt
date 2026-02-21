@@ -7,23 +7,20 @@
 
 package com.vaultstadio.core.domain.event
 
-import com.vaultstadio.core.domain.model.ShareLink
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.model.UserInfo
+import com.vaultstadio.domain.common.event.StorageEvent as DomainStorageEvent
+import com.vaultstadio.domain.auth.model.UserInfo
+import com.vaultstadio.domain.share.model.ShareLink
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
 /**
- * Base interface for all storage events.
+ * Base interface for all storage events (extends domain port).
  */
 @Serializable
-sealed interface StorageEvent {
-    val id: String
-    val timestamp: Instant
-    val userId: String?
-}
+sealed interface StorageEvent : DomainStorageEvent
 
 /**
  * Events related to file operations.

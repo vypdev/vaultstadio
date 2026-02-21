@@ -16,8 +16,8 @@ import com.vaultstadio.core.domain.model.DocumentState
 import com.vaultstadio.core.domain.model.PresenceStatus
 import com.vaultstadio.core.domain.model.UserPresence
 import com.vaultstadio.core.domain.repository.CollaborationRepository
-import com.vaultstadio.core.exception.DatabaseException
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.infrastructure.persistence.entities.CollaborationOperationsTable
 import com.vaultstadio.infrastructure.persistence.entities.CollaborationParticipantsTable
 import com.vaultstadio.infrastructure.persistence.entities.CollaborationSessionsTable

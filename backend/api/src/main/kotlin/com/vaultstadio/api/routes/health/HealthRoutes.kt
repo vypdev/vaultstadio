@@ -6,9 +6,9 @@
 
 package com.vaultstadio.api.routes.health
 
-import com.vaultstadio.api.application.usecase.health.ComponentHealthResult
-import com.vaultstadio.api.application.usecase.health.GetDetailedHealthUseCase
-import com.vaultstadio.api.application.usecase.health.GetReadinessUseCase
+import com.vaultstadio.application.usecase.health.ComponentHealthResult
+import com.vaultstadio.application.usecase.health.GetDetailedHealthUseCase
+import com.vaultstadio.application.usecase.health.GetReadinessUseCase
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.response.respond

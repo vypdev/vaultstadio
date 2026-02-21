@@ -4,18 +4,18 @@
 
 package com.vaultstadio.api.dto
 
-import com.vaultstadio.core.domain.model.Activity
-import com.vaultstadio.core.domain.model.ActivityType
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.ShareLink
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.model.StorageQuota
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserInfo
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
-import com.vaultstadio.core.domain.model.Visibility
-import com.vaultstadio.core.domain.repository.PagedResult
+import com.vaultstadio.domain.activity.model.Activity
+import com.vaultstadio.domain.activity.model.ActivityType
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserInfo
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.domain.common.pagination.PagedResult
+import com.vaultstadio.domain.share.model.ShareLink
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.storage.model.StorageQuota
+import com.vaultstadio.domain.storage.model.Visibility
 import kotlinx.datetime.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

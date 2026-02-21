@@ -8,7 +8,7 @@ package com.vaultstadio.api.routes
 
 import arrow.core.Either
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.core.exception.StorageException
+import com.vaultstadio.domain.common.exception.StorageException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respond

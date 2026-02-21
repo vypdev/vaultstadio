@@ -12,10 +12,10 @@ import com.vaultstadio.api.dto.RefreshRequest
 import com.vaultstadio.api.dto.RefreshResponse
 import com.vaultstadio.api.dto.RegisterRequest
 import com.vaultstadio.api.dto.toResponse
-import com.vaultstadio.api.application.usecase.auth.LoginUseCase
-import com.vaultstadio.api.application.usecase.auth.LogoutUseCase
-import com.vaultstadio.api.application.usecase.auth.RefreshSessionUseCase
-import com.vaultstadio.api.application.usecase.auth.RegisterUseCase
+import com.vaultstadio.application.usecase.auth.LoginUseCase
+import com.vaultstadio.application.usecase.auth.LogoutUseCase
+import com.vaultstadio.application.usecase.auth.RefreshSessionUseCase
+import com.vaultstadio.application.usecase.auth.RegisterUseCase
 import com.vaultstadio.core.domain.service.LoginInput
 import com.vaultstadio.core.domain.service.RegisterUserInput
 import io.ktor.http.HttpStatusCode

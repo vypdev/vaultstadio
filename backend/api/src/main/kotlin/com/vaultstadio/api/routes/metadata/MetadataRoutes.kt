@@ -9,7 +9,7 @@ package com.vaultstadio.api.routes.metadata
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.api.application.usecase.metadata.GetItemMetadataUseCase
+import com.vaultstadio.application.usecase.metadata.GetItemMetadataUseCase
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
