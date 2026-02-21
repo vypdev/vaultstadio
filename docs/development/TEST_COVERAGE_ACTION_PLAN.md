@@ -2,13 +2,45 @@
 
 This document defines a phased plan to achieve full test coverage across VaultStadio. It complements [TESTING.md](TESTING.md) (strategy, running tests, untestable components) and aligns with [CODE_QUALITY.md](CODE_QUALITY.md) and [AI_CODING_GUIDELINES.md](AI_CODING_GUIDELINES.md).
 
-**Last updated**: 2026-02-18
+**Last updated**: 2026-02-21
+
+---
+
+## Project structure (modules)
+
+The following reflects the current **backend** and **frontend** Gradle projects (see `backend/settings.gradle.kts` and `frontend/settings.gradle.kts`). Use this to keep the plan aligned with the codebase.
+
+### Backend (`backend/` – standalone Gradle project)
+
+| Layer | Modules | Jacoco in `make test-coverage`? |
+|-------|---------|----------------------------------|
+| **domain** | common, storage, auth, share, activity, admin, version, sync, federation, collaboration, metadata, plugin | No (tested transitively via core/api) |
+| **core** | core (aggregator), common, auth, storage, share, activity, version, sync, federation, collaboration, ai | **Yes** – `:core:jacocoTestReport` |
+| **application** | auth, storage, share, user, admin, activity, metadata, version, sync, plugin, chunkedupload, health, ai | No (tested transitively via api) |
+| **api** | api | **Yes** – `:api:jacocoTestReport` |
+| **plugins-api** | plugins-api | **Yes** – `:plugins-api:jacocoTestReport` |
+| **infrastructure** | infrastructure | **Yes** – `:infrastructure:jacocoTestReport` |
+| **plugins** | image-metadata, video-metadata, fulltext-search, ai-classification | **Yes** – each has `:plugins/<name>:jacocoTestReport` |
+
+Backend tests run via `./gradlew :core:test :api:test` (see `backend/Makefile`). Coverage reports are generated only for the modules listed as “Yes” above.
+
+### Frontend (`frontend/` – standalone Gradle project)
+
+| Layer | Modules | Jacoco in `make test-coverage`? |
+|-------|---------|----------------------------------|
+| **domain** | result, auth, storage, admin, sync, share, activity, metadata, plugin, version, collaboration, federation, ai, config, upload | No (included in composeApp report) |
+| **core** | resources | No (included in composeApp report) |
+| **data** | network, auth, storage, admin, sync, share, activity, metadata, plugin, version, collaboration, federation, ai, config | No (included in composeApp report) |
+| **feature** | auth, admin, sync, shares, sharedwithme, activity, profile, settings, security, changepassword, plugins, files, upload, versionhistory, collaboration, federation, ai, main, licenses | No (included in composeApp report) |
+| **app** | composeApp, androidApp, iosApp | **Yes** – `:composeApp:jacocoTestReport` (desktopTest only) |
+
+Frontend coverage is a single report for **composeApp** (desktop JVM tests); it includes code from domain, data, and feature modules that is exercised by those tests.
 
 ---
 
 ## Current coverage snapshot (Jacoco)
 
-*Generated from backend test tasks + `:compose-frontend:composeApp:desktopTest` and respective `jacocoTestReport` (see [Running Tests](TESTING.md#running-tests)). Run `make test-coverage` excluding Android unit tests if needed.*
+*Generated from backend test tasks + `:composeApp:desktopTest` and respective `jacocoTestReport` (see [Running Tests](TESTING.md#running-tests)). Run `make test-coverage` from repo root (or `make test-coverage` in `backend/` and `frontend/`).*
 
 ### Backend
 
@@ -23,13 +55,15 @@ This document defines a phased plan to achieve full test coverage across VaultSt
 | **fulltext-search** | 17% | 0% | ≥80% | Medium |
 | **ai-classification** | 16% | 0% | ≥80% | Medium |
 
+*Backend coverage is reported only for these modules (see [Project structure](#project-structure-modules)). Domain and application layers are tested when core and api tests run but do not produce separate Jacoco reports in `make test-coverage`.*
+
 ### Frontend (composeApp – desktopTest)
 
 | Module | Instruction cov. | Branch cov. | Notes |
 |--------|------------------|-------------|--------|
 | **composeApp** | **5%** | ~0% | Most code in screens/components; only desktop JVM code measured |
 
-**Frontend packages with non-zero coverage:** `domain.upload` 76%, `navigation` 61%, `domain.model` 59%, `i18n` 50%, `ui.components.dialogs` 3%, `feature.upload` 7%, `feature.main` 1%, `platform` 1%, `data.repository` 2%. All `ui.screens.*` and most `feature.*` are 0%.
+**Frontend packages with non-zero coverage:** `domain.upload` 76%, `navigation` 61%, `domain.model` 59%, `i18n` 50%, `ui.components.dialogs` 3%, `feature.upload` 7%, `feature.main` 1%, `platform` 1%, `data.repository` 2%, **`utils`** (FormattingTest covers formatFileSize, formatRelativeTime, formatDate, getFileIconName, getFileTypeName, isValidEmail, isStrongPassword, truncateText). All `ui.screens.*` and most `feature.*` are 0%.
 
 ### Backend – coverage by package (core, api, infrastructure)
 
@@ -48,7 +82,7 @@ This document defines a phased plan to achieve full test coverage across VaultSt
 
 ---
 
-**Recent coverage improvements:** **Snapshot (Feb 2026):** core 66%, plugins-api 80%, composeApp 5%; backend api 12%, infrastructure 13%, plugins 9–17%. **Tests:** All tests pass; Android unit tests exclude ViewModel and UploadManager tests (they require main looper; run on desktopTest). **Plugins:** AIClassificationPluginTest getConfigurationSchema (non-null, groups with key "classification"); ImageMetadataPluginTest getConfigurationSchema (non-null, groups not empty). — Prior: Phase 3 ViewModels (Auth, ChangePassword, Security, Settings, Profile, Admin, Plugins); Phase 2 VideoMetadataPluginTest, FullTextSearchPluginTest; Phase 4 SharedWithMeScreenTest, BreadcrumbsLogicTest, i18n; StorageItemTest; etc. See TESTING.md § Untestable Components for Redis-backed classes.
+**Recent coverage improvements:** **Snapshot (Feb 2026):** core 66%, plugins-api 80%, composeApp 5%; backend api 12%, infrastructure 13%, plugins 9–17%. **Frontend (Feb 2026):** **FormattingTest** added for `com.vaultstadio.app.utils`: formatFileSize (bytes, KB, MB, GB, TB, decimal rounding), formatRelativeTime, formatDate, getFileIconName, getFileTypeName, isValidEmail, isStrongPassword, truncateText (full coverage of Formatting.kt). StorageUseCaseTest extended with full FakeStorageRepository (configurable getItems, renameItem, toggleStar, trashItem, restoreItem, getTrash, getStarred, getRecent, emptyTrash, deleteItemPermanently, batchDelete, batchMove, batchStar) and 13 new use-case test classes. **Backend (Feb 2026):** UploadSessionManagerTest: added `removeSession returns session even when temp dir cleanup fails` (covers exception path in InMemoryUploadSessionManager); fixed flaky `cleanupExpiredSessions does not remove recent sessions` by using 10.seconds maxAge instead of 1.milliseconds. **RouteExtensionsTest:** added tests for default status parameters: `respondEither with Right uses default status when not specified`, `respondApiEither with Right uses default status when not specified`, `respondEitherUnit with Right uses default status when not specified`. **Tests:** All tests pass; Android unit tests exclude ViewModel and UploadManager tests (they require main looper; run on desktopTest). **Plugins:** AIClassificationPluginTest getConfigurationSchema (non-null, groups with key "classification"); ImageMetadataPluginTest getConfigurationSchema (non-null, groups not empty). — Prior: Phase 3 ViewModels; Phase 2 VideoMetadataPluginTest, FullTextSearchPluginTest; Phase 4 SharedWithMeScreenTest, BreadcrumbsLogicTest, i18n; StorageItemTest; etc. See TESTING.md § Untestable Components for Redis-backed classes.
 
 ---
 
@@ -69,7 +103,9 @@ This document defines a phased plan to achieve full test coverage across VaultSt
 
 6. **composeApp** (3% overall) – Coverage is measured on desktop JVM only; most UI (screens, components) is not exercised by unit tests. Prioritise: **domain.upload** (76% – keep), **navigation** (61% – keep), **domain.model** (59%), **i18n** (50%); then add tests for **domain.usecase.*** (many at 0%) and ViewModel logic that can run in commonTest. Screens are typically covered only by integration or manual testing.
 
-**How to regenerate this snapshot:** Run `./gradlew test jacocoTestReport` (or `make test-coverage`), then open each module’s `build/reports/jacoco/test/html/index.html` (or `compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html` for the frontend).
+**How to regenerate this snapshot:** From repo root run `make test-coverage` (or from `backend/` run `make test-coverage`, and from `frontend/` run `make test-coverage`). Then open:
+- **Backend:** each reported module’s `build/reports/jacoco/test/html/index.html` (e.g. `backend/core/build/reports/jacoco/test/html/index.html`, `backend/api/...`, `backend/infrastructure/...`, `backend/plugins-api/...`, `backend/plugins/<name>/...`).
+- **Frontend:** `frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html`.
 
 ---
 
@@ -94,7 +130,7 @@ This section summarises **concrete focus areas** so efforts are directed at the 
 
 | Priority | Package / area      | Cov.  | Action |
 |----------|---------------------|-------|--------|
-| 1        | **domain.usecase.*** (auth, share, storage, sync, version, admin, ai, collaboration, federation, metadata, activity, plugin) | 0% (most) | Add unit tests with fake repositories; only **config** has tests (100%). Same pattern as GetStorageUrlsUseCaseTest |
+| 1        | **domain.usecase.*** (auth, share, storage, sync, version, admin, ai, collaboration, federation, metadata, activity, plugin) | Improved (storage) | **Storage:** GetFolderItems, RenameItem, ToggleStar, TrashItem, RestoreItem, GetTrash, GetStarred, GetRecent, EmptyTrash, DeleteItem, BatchDelete, BatchMove, BatchStar covered in StorageUseCaseTest. Add same pattern for remaining use-case packages (auth, share, etc.) |
 | 2        | **data.repository** | 2%    | Test repository implementations with fake services or test doubles |
 | 3        | **feature.*** (files, auth, main, upload) | 0–7% | Test ViewModels and feature logic in commonTest; mock use cases |
 | 4        | **navigation**      | 61%   | Keep; add branch coverage if new routes |
@@ -105,7 +141,7 @@ This section summarises **concrete focus areas** so efforts are directed at the 
 
 ### Quick wins
 
-- **Frontend:** Add one test file per use-case package (auth, share, storage, etc.) with a fake repository and tests for success/error paths. Each use case is a thin wrapper around the repository, so tests are small and repetitive.
+- **Frontend:** Add one test file per use-case package (auth, share, storage, etc.) with a fake repository and tests for success/error paths. Each use case is a thin wrapper around the repository, so tests are small and repetitive. **Done for storage:** StorageUseCaseTest now covers GetFolderItems, RenameItem, ToggleStar, TrashItem, RestoreItem, GetTrash, GetStarred, GetRecent, EmptyTrash, DeleteItem, BatchDelete, BatchMove, BatchStar (same FakeStorageRepository pattern).
 - **Backend api:** Add or extend unit tests for non-route code (e.g. AppConfigTest, SecurityTest, route extension helpers) so the api module coverage rises even if route handlers stay integration-only.
 - **Backend infrastructure:** Add tests for any Exposed* repository method not yet covered; add edge-case tests for LocalStorageBackend.
 
@@ -113,13 +149,15 @@ This section summarises **concrete focus areas** so efforts are directed at the 
 
 ## Table of Contents
 
-1. [Goals and Targets](#goals-and-targets)
-2. [Current State Summary](#current-state-summary)
-3. [Coverage analysis – where to focus efforts](#coverage-analysis--where-to-focus-efforts)
-4. [Gap Analysis by Module](#gap-analysis-by-module)
-5. [Phased Action Plan](#phased-action-plan)
-6. [CI and Quality Gates](#ci-and-quality-gates)
-7. [Success Criteria](#success-criteria)
+1. [Project structure (modules)](#project-structure-modules)
+2. [Current coverage snapshot (Jacoco)](#current-coverage-snapshot-jacoco)
+3. [Goals and Targets](#goals-and-targets)
+4. [Current State Summary](#current-state-summary)
+5. [Coverage analysis – where to focus efforts](#coverage-analysis--where-to-focus-efforts)
+6. [Gap Analysis by Module](#gap-analysis-by-module)
+7. [Phased Action Plan](#phased-action-plan)
+8. [CI and Quality Gates](#ci-and-quality-gates)
+9. [Success Criteria](#success-criteria)
 
 ---
 
@@ -127,7 +165,7 @@ This section summarises **concrete focus areas** so efforts are directed at the 
 
 | Goal | Target |
 |------|--------|
-| **Line coverage (backend)** | ≥ 80% per module (core, api, infrastructure, plugins-api, each plugin) |
+| **Line coverage (backend)** | ≥ 80% per **reported** module: core, api, infrastructure, plugins-api, and each plugin (image-metadata, video-metadata, fulltext-search, ai-classification). Domain and application layers are tested transitively. |
 | **Branch coverage (critical paths)** | Auth, storage CRUD, share, sync, and versioning: key branches covered |
 | **Frontend (composeApp)** | All ViewModels and shared business logic covered; UI components via state/callback tests |
 | **No untested public API** | Every public function in domain/services and API route handlers has at least one test (or is documented as untestable in TESTING.md) |
@@ -141,19 +179,18 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 | Area | Test files (approx.) | Coverage level | Notes |
 |------|----------------------|----------------|-------|
-| **Backend API routes** | 19+ | Low (12% module) | Route test classes exist but many handlers not executed; storage 3%, metadata/ai/auth 0% |
-| **Backend core** | 11+ service, model, event, AI | 65% instr. | domain.service 62%, domain.event 76%, exception 97%; domain.repository 41% |
-| **Backend plugins-api** | 6 | **80%** | Plugin, PluginContext, Hooks, MetadataExtractor, PluginLifecycle, PluginConfiguration |
-| **Backend infrastructure** | 12+ | 13% | Persistence 9%, storage 29%, security 100%; Exposed repos, LocalStorageBackend, S3, BCrypt have tests |
-| **Backend plugins** | 4 | 9–16% | image-metadata, video-metadata, fulltext-search, ai-classification; extraction logic largely untested |
-| **Backend API (config/services)** | 6 | api.service 68% | UploadSessionManager, ThumbnailCache, RouteExtensions have tests; config 32% |
-| **Frontend commonTest** | 41+ | 3% (desktop report) | domain.upload 76%, navigation 61%, domain.model 59%, i18n 50%; screens/features mostly 0% in report |
+| **Backend api** (reported) | 19+ route tests, 6+ config/service | 12% instr. | Route test classes exist but many handlers not executed; storage 3%, metadata/ai/auth 0%. api.service 68%, config 32%. UploadSessionManager, ThumbnailCache, RouteExtensions have tests. |
+| **Backend core** (reported) | 11+ service, model, event, AI | 66% instr. | domain.service 62%, domain.event 76%, exception 97%; domain.repository 41%. Domain/application layers tested transitively. |
+| **Backend plugins-api** (reported) | 6 | **80%** | Plugin, PluginContext, Hooks, MetadataExtractor, PluginLifecycle, PluginConfiguration |
+| **Backend infrastructure** (reported) | 12+ | 13% | Persistence 9%, storage 29%, security 100%; Exposed repos, LocalStorageBackend, S3, BCrypt have tests |
+| **Backend plugins** (reported) | 4 modules | 9–16% | image-metadata, video-metadata, fulltext-search, ai-classification; extraction logic largely untested |
+| **Frontend composeApp** (reported) | 41+ in commonTest | ~5% (desktop report) | Single report; includes domain, data, feature code. domain.upload 76%, navigation 61%, domain.model 59%, i18n 50%, utils (FormattingTest); screens/features mostly 0%. |
 
 ---
 
 ## Gap Analysis by Module
 
-### 1. kotlin-backend/plugins-api (Priority: Maintain – target met)
+### 1. backend/plugins-api (Priority: Maintain – target met)
 
 **Current:** ~80% instruction, 57% branch. Tests exist for Plugin, PluginContext, PluginConfiguration, MetadataExtractor, PluginLifecycle, Hooks.
 
@@ -163,7 +200,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 ---
 
-### 2. kotlin-backend/core (Priority: High)
+### 2. backend/core (Priority: High)
 
 **Current:** Services, models, event bus, and AI are well covered. Gaps:
 
@@ -179,7 +216,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 ---
 
-### 3. kotlin-backend/api (Priority: High)
+### 3. backend/api (Priority: High)
 
 **Current:** Routes, Security, AppConfig, ErrorHandling, Logging, PluginManager, CronScheduler are tested. Gaps:
 
@@ -195,7 +232,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 ---
 
-### 4. kotlin-backend/infrastructure (Priority: Medium)
+### 4. backend/infrastructure (Priority: Medium)
 
 **Current:** 13% instruction, 8% branch. Persistence 9%, storage 29%, security 100%. Exposed* repositories, LocalStorageBackend, S3StorageBackend, BCrypt have test classes but many code paths (persistence) are not covered by unit tests.
 
@@ -203,7 +240,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 ---
 
-### 5. kotlin-backend/plugins (Priority: Medium)
+### 5. backend/plugins (Priority: Medium)
 
 **Current coverage:** image-metadata 13% (1% branch), video-metadata 9% (0% branch), fulltext-search 14% (0% branch), ai-classification 16% (0% branch). Each plugin has a test class but most code is extraction/runtime logic that is not exercised in unit tests.
 
@@ -217,7 +254,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 
 ---
 
-### 6. compose-frontend/composeApp (Priority: Medium – High for business logic)
+### 6. frontend/composeApp (Priority: Medium – High for business logic)
 
 **Current:** JaCoCo report (desktopTest) shows **3% instruction, 0% branch** overall. Packages with meaningful coverage: domain.upload 76%, navigation 61%, domain.model 59%, i18n 50%; feature.upload 7%; most ui.screens.* and feature.* are 0%. 41+ test files exist in commonTest; coverage is measured only for code run by desktop JVM tests.
 
@@ -323,7 +360,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 **Exit criteria:** CI runs coverage on every PR; contributors are instructed to run test-coverage; TESTING.md is up to date; coverage gate (1% patch threshold) enabled in codecov.yml. **All met.**
 
 **Phase 5 summary (complete):**
-- **5.1:** CI runs jacoco for backend (core, api, infrastructure, plugins-api, image-metadata, video-metadata, fulltext-search, ai-classification) and frontend (composeApp); coverage job uploads to Codecov. See [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
+- **5.1:** CI runs jacoco for backend **reported modules** (core, api, infrastructure, plugins-api, plugins:image-metadata, video-metadata, fulltext-search, ai-classification) and frontend (composeApp); coverage job uploads to Codecov. Backend domain/* and application/* are tested transitively when core and api tests run. See [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
 - **5.2:** Coverage gate implemented in [codecov.yml](../../codecov.yml): `status.project.default.threshold: 1%`. The Codecov status check fails if patch coverage (new/changed code in the PR) drops by more than 1%. Optional: a stricter project-level gate can be added in the Codecov UI if desired.
 - **5.3:** CONTRIBUTING.md has a “Coverage” subsection and PR checklist: run `make test-coverage` before PR, keep coverage ≥ 80% for new code, links to TESTING.md and this plan; local HTML report paths documented; PR checklist requires coverage step and states Codecov 1% threshold.
 - **5.4:** TESTING.md updated with Phase 5 (CI and coverage maintenance), coverage gate explanation (codecov.yml 1% threshold), refreshed Coverage Summary table, Phase 4 summary, and link to this plan for latest snapshot.
@@ -360,7 +397,7 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 ## Success Criteria
 
 1. **plugins-api:** Full test suite; ≥ 80% line coverage.
-2. **Backend (core, api, infrastructure, each plugin):** No untested public API in domain/services and route handlers (or documented in TESTING.md); ≥ 80% line coverage per module where feasible.
+2. **Backend (reported modules: core, api, infrastructure, plugins-api, each plugin):** No untested public API in domain/services and route handlers (or documented in TESTING.md); ≥ 80% line coverage per reported module where feasible. Domain and application modules are covered indirectly.
 3. **Frontend (composeApp):** All ViewModels and navigation paths tested; screens and major components covered for state/callbacks; coverage report generated and uploaded.
 4. **CI:** All tests and coverage run on every PR; coverage visible in Codecov; optional gate to prevent coverage regression.
 5. **Docs:** TESTING.md and this plan updated; CONTRIBUTING.md mentions coverage expectations.

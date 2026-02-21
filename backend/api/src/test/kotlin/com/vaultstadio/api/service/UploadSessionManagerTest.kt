@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class UploadSessionManagerTest {
 
@@ -134,7 +135,7 @@ class UploadSessionManagerTest {
             val session = createSession(id = "recent-session")
             manager.createSession(session)
             assertEquals(1, manager.getActiveSessionCount())
-            val cleaned = manager.cleanupExpiredSessions(maxAge = 1.milliseconds)
+            val cleaned = manager.cleanupExpiredSessions(maxAge = 10.seconds)
             assertEquals(0, cleaned)
             assertNotNull(manager.getSession("recent-session"))
         }
@@ -158,6 +159,16 @@ class UploadSessionManagerTest {
             val removed = manager.removeSession(session.id)
             assertNotNull(removed)
             assertFalse(tempDir.exists())
+        }
+
+        @Test
+        fun `removeSession returns session even when temp dir cleanup fails`() {
+            val session = createSession(id = "bad-temp", tempDir = "/nonexistent/path/that/does/not/exist")
+            manager.createSession(session)
+            val removed = manager.removeSession(session.id)
+            assertNotNull(removed)
+            assertEquals("bad-temp", removed!!.id)
+            assertNull(manager.getSession("bad-temp"))
         }
     }
 

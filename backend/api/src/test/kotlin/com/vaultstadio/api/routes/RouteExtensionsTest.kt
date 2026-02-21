@@ -26,6 +26,11 @@ class RouteExtensionsTest {
     }
 
     @Test
+    fun `respondEither with Right uses default status when not specified`() = runTest {
+        call.respondEither(Either.Right("data"))
+    }
+
+    @Test
     fun `respondEither with Left throws StorageException`() = runTest {
         val error = ItemNotFoundException(itemId = "x")
         try {
@@ -42,6 +47,11 @@ class RouteExtensionsTest {
     }
 
     @Test
+    fun `respondApiEither with Right uses default status when not specified`() = runTest {
+        call.respondApiEither(Either.Right("ok"))
+    }
+
+    @Test
     fun `respondApiEither with Left throws StorageException`() = runTest {
         val error = ItemNotFoundException(path = "/y")
         try {
@@ -55,6 +65,11 @@ class RouteExtensionsTest {
     @Test
     fun `respondEitherUnit with Right completes without throwing`() = runTest {
         call.respondEitherUnit(Either.Right(Unit), HttpStatusCode.NoContent)
+    }
+
+    @Test
+    fun `respondEitherUnit with Right uses default status when not specified`() = runTest {
+        call.respondEitherUnit(Either.Right(Unit))
     }
 
     @Test
