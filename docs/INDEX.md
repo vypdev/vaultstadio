@@ -39,6 +39,7 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | [architecture/FRONTEND_ARCHITECTURE.md](architecture/FRONTEND_ARCHITECTURE.md) | Compose Multiplatform patterns, ViewModel, navigation | Frontend Devs |
 | [architecture/KNOWN_ISSUES.md](architecture/KNOWN_ISSUES.md) | Documented architectural limitations and technical debt | Developers |
 | [architecture/CLEAN_ARCHITECTURE_REVIEW.md](architecture/CLEAN_ARCHITECTURE_REVIEW.md) | Clean Architecture alignment and improvement points | Developers |
+| [architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md](architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md) | Phased proposal to evolve backend toward Clean Architecture (application module, domain split) | Developers |
 | [architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md](architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md) | Frontend domain/data/feature modules and standalone Gradle builds (backend/frontend) | Developers |
 | [architecture/DOCUMENTATION_ANALYSIS.md](architecture/DOCUMENTATION_ANALYSIS.md) | Suitability of docs for humans and AIs; recommendations | Maintainers |
 | [GLOSSARY.md](GLOSSARY.md) | Terms and definitions | All |
