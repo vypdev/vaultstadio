@@ -16,7 +16,7 @@ kotlin {
     jvm("desktop")
     android {
         namespace = libNamespace
-        compileSdk = 34
+        compileSdk = 36
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }

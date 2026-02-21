@@ -60,6 +60,13 @@ private class FakeAuthRepositoryForProfile : AuthRepository {
     override fun isLoggedIn() = true
 }
 
+private class StubProfileComponent : ProfileComponent {
+    override fun onBack() {}
+    override fun navigateToChangePassword() {}
+    override fun navigateToSecurity() {}
+    override fun exportData(fileName: String, data: ByteArray, mimeType: String) {}
+}
+
 class ProfileViewModelTest {
 
     private fun createViewModel(): ProfileViewModel {
@@ -69,6 +76,7 @@ class ProfileViewModelTest {
             getQuotaUseCase = GetQuotaUseCaseImpl(repo),
             updateProfileUseCase = UpdateProfileUseCaseImpl(repo),
             changePasswordUseCase = ChangePasswordUseCaseImpl(repo),
+            profileComponent = StubProfileComponent(),
         )
     }
 
