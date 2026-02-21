@@ -15,8 +15,8 @@ import com.vaultstadio.app.domain.metadata.model.MetadataSearchResult
 import com.vaultstadio.app.domain.metadata.model.VideoMetadata
 import com.vaultstadio.app.domain.storage.model.PaginatedResponse
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.data.storage.mapper.toDomain as storageItemToDomain
 import kotlinx.datetime.Instant
+import com.vaultstadio.app.data.storage.mapper.toDomain as storageItemToDomain
 
 class MetadataService(private val metadataApi: MetadataApi) {
 

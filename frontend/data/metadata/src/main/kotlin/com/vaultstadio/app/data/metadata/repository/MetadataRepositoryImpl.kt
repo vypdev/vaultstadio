@@ -7,11 +7,6 @@ package com.vaultstadio.app.data.metadata.repository
 import com.vaultstadio.app.data.metadata.service.MetadataService
 import com.vaultstadio.app.data.network.mapper.toResult
 import com.vaultstadio.app.domain.metadata.MetadataRepository
-import com.vaultstadio.app.domain.metadata.model.DocumentMetadata
-import com.vaultstadio.app.domain.metadata.model.FileMetadata
-import com.vaultstadio.app.domain.metadata.model.ImageMetadata
-import com.vaultstadio.app.domain.metadata.model.MetadataSearchResult
-import com.vaultstadio.app.domain.metadata.model.VideoMetadata
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.storage.model.PaginatedResponse
 import com.vaultstadio.app.domain.storage.model.StorageItem
