@@ -197,7 +197,7 @@ db-clean:
 lint:
 	@echo "Running detekt (backend + root)..."
 	$(MAKE) -C backend lint
-	@echo "Run frontend lint from frontend/: cd frontend && ./gradlew detektMain"
+	@echo "Run frontend lint from frontend/: cd frontend && make lint (detektDesktopMain)"
 
 lint-baseline:
 	@echo "Generating detekt baseline..."

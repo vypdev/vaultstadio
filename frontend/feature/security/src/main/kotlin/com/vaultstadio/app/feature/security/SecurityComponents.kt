@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.auth.model.ActiveSession
 import com.vaultstadio.app.domain.auth.model.LoginEvent
 import com.vaultstadio.app.domain.auth.model.SessionDeviceType
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 @Composable
 fun SectionHeader(

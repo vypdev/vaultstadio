@@ -180,13 +180,15 @@ fun LinkIdentityDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    if (remoteUserId.isNotBlank() && remoteInstance.isNotBlank() &&
+                    if (remoteUserId.isNotBlank() &&
+                        remoteInstance.isNotBlank() &&
                         displayName.isNotBlank()
                     ) {
                         onConfirm(remoteUserId, remoteInstance, displayName)
                     }
                 },
-                enabled = remoteUserId.isNotBlank() && remoteInstance.isNotBlank() &&
+                enabled = remoteUserId.isNotBlank() &&
+                    remoteInstance.isNotBlank() &&
                     displayName.isNotBlank(),
             ) {
                 Text("Link")

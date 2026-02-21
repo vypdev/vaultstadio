@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vaultstadio.app.data.collaboration.websocket.ConnectionState
 import com.vaultstadio.app.data.collaboration.websocket.CollaborationWebSocket
 import com.vaultstadio.app.data.collaboration.websocket.CollaborationWsMessageType
+import com.vaultstadio.app.data.collaboration.websocket.ConnectionState
 import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
 import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
 import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
@@ -140,7 +140,7 @@ class CollaborationViewModel(
                                             message.userName ?: "User",
                                             Pair(cursor.line, cursor.column),
                                         )
-                                    )
+                                        )
                                 }
                             }
                         }

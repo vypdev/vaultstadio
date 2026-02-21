@@ -138,6 +138,27 @@ class UploadSessionManagerTest {
             assertEquals(0, cleaned)
             assertNotNull(manager.getSession("recent-session"))
         }
+
+        @Test
+        fun `cleanupExpiredSessions removes expired sessions`() {
+            val session = createSession(id = "expired-session")
+            manager.createSession(session)
+            Thread.sleep(2)
+            val cleaned = manager.cleanupExpiredSessions(maxAge = 1.milliseconds)
+            assertEquals(1, cleaned)
+            assertNull(manager.getSession("expired-session"))
+        }
+
+        @Test
+        fun `removeSession deletes temp dir when it exists`() {
+            val tempDir = java.io.File.createTempFile("upload_test_", "").apply { delete() }
+            assertTrue(tempDir.mkdir())
+            val session = createSession(id = "temp-session", tempDir = tempDir.absolutePath)
+            manager.createSession(session)
+            val removed = manager.removeSession(session.id)
+            assertNotNull(removed)
+            assertFalse(tempDir.exists())
+        }
     }
 
     @Nested

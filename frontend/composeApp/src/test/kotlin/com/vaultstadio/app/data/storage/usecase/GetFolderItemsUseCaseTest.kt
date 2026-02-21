@@ -198,7 +198,13 @@ class GetFolderItemsUseCaseTest {
         val repo = FakeStorageRepository(Result.Success(paginated))
         val useCase = GetFolderItemsUseCaseImpl(repo)
 
-        val result = useCase.invoke(folderId = null, sortBy = SortField.NAME, sortOrder = SortOrder.ASC, limit = 100, offset = 0)
+        val result = useCase.invoke(
+            folderId = null,
+            sortBy = SortField.NAME,
+            sortOrder = SortOrder.ASC,
+            limit = 100,
+            offset = 0,
+        )
 
         assertTrue(result.isSuccess())
         val success = result as Result.Success

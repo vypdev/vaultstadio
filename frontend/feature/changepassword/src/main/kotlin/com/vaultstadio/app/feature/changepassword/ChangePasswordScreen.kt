@@ -130,11 +130,21 @@ fun ChangePasswordScreen(
                         label = { Text("Current Password") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        visualTransformation = if (showCurrentPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation =
+                        if (showCurrentPassword) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
+                        },
                         trailingIcon = {
                             IconButton(onClick = onToggleCurrentPasswordVisibility) {
                                 Icon(
-                                    imageVector = if (showCurrentPassword) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                    imageVector =
+                                    if (showCurrentPassword) {
+                                        Icons.Default.VisibilityOff
+                                    } else {
+                                        Icons.Default.Visibility
+                                    },
                                     contentDescription = "Toggle password visibility",
                                 )
                             }
@@ -157,11 +167,21 @@ fun ChangePasswordScreen(
                         label = { Text("New Password") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        visualTransformation = if (showNewPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation =
+                        if (showNewPassword) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
+                        },
                         trailingIcon = {
                             IconButton(onClick = onToggleNewPasswordVisibility) {
                                 Icon(
-                                    imageVector = if (showNewPassword) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                    imageVector =
+                                    if (showNewPassword) {
+                                        Icons.Default.VisibilityOff
+                                    } else {
+                                        Icons.Default.Visibility
+                                    },
                                     contentDescription = "Toggle password visibility",
                                 )
                             }
@@ -183,11 +203,21 @@ fun ChangePasswordScreen(
                         label = { Text("Confirm New Password") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation =
+                        if (showConfirmPassword) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
+                        },
                         trailingIcon = {
                             IconButton(onClick = onToggleConfirmPasswordVisibility) {
                                 Icon(
-                                    imageVector = if (showConfirmPassword) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                    imageVector =
+                                    if (showConfirmPassword) {
+                                        Icons.Default.VisibilityOff
+                                    } else {
+                                        Icons.Default.Visibility
+                                    },
                                     contentDescription = "Toggle password visibility",
                                 )
                             }

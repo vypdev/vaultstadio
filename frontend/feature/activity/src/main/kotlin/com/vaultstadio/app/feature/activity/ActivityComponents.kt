@@ -42,8 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.activity.model.Activity
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 @Composable
 fun ActivityCard(

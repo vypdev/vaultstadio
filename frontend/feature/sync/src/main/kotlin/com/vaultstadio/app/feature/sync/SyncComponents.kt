@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.sync.model.DeviceType
 import com.vaultstadio.app.domain.sync.model.SyncConflict
 import com.vaultstadio.app.domain.sync.model.SyncDevice
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 @Composable
 fun DeviceCard(

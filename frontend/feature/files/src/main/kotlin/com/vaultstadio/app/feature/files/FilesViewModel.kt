@@ -5,9 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.activity.model.Activity
+import com.vaultstadio.app.domain.activity.usecase.GetItemActivityUseCase
+import com.vaultstadio.app.domain.config.usecase.GetShareUrlUseCase
+import com.vaultstadio.app.domain.config.usecase.GetStorageUrlsUseCase
+import com.vaultstadio.app.domain.metadata.usecase.GetSearchSuggestionsUseCase
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.share.model.ShareLink
+import com.vaultstadio.app.domain.share.usecase.CreateShareUseCase
 import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.domain.storage.model.SortField
 import com.vaultstadio.app.domain.storage.model.SortOrder
@@ -30,11 +35,6 @@ import com.vaultstadio.app.domain.storage.usecase.RestoreItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.SearchUseCase
 import com.vaultstadio.app.domain.storage.usecase.ToggleStarUseCase
 import com.vaultstadio.app.domain.storage.usecase.TrashItemUseCase
-import com.vaultstadio.app.domain.activity.usecase.GetItemActivityUseCase
-import com.vaultstadio.app.domain.config.usecase.GetShareUrlUseCase
-import com.vaultstadio.app.domain.config.usecase.GetStorageUrlsUseCase
-import com.vaultstadio.app.domain.metadata.usecase.GetSearchSuggestionsUseCase
-import com.vaultstadio.app.domain.share.usecase.CreateShareUseCase
 import kotlinx.coroutines.launch
 
 /**

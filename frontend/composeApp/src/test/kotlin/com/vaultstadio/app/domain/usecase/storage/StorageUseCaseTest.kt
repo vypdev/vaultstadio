@@ -260,6 +260,15 @@ class GetBreadcrumbsUseCaseTest {
         val result = useCase("missing")
         assertTrue(result.isError())
     }
+
+    @Test
+    fun invoke_returnsEmptyListWhenRepositoryReturnsEmpty() = runTest {
+        val repo = FakeStorageRepository(getBreadcrumbsResult = Result.success(emptyList()))
+        val useCase = GetBreadcrumbsUseCaseImpl(repo)
+        val result = useCase("root-item")
+        assertTrue(result.isSuccess())
+        assertEquals(0, result.getOrNull()?.size)
+    }
 }
 
 class MoveItemUseCaseTest {

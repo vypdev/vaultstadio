@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.ai.model.AIProviderInfo
-import com.vaultstadio.app.domain.ai.model.AIProviderType
 
 @Composable
 fun DeleteProviderDialog(

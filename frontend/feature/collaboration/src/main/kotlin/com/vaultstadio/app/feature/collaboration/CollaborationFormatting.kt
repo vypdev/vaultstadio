@@ -1,7 +1,7 @@
 package com.vaultstadio.app.feature.collaboration
 
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 fun formatCollaborationRelativeTime(instant: Instant): String {
     val now = Clock.System.now()

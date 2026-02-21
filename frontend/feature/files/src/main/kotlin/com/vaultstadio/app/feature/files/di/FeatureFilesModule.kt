@@ -23,8 +23,8 @@ import com.vaultstadio.app.domain.storage.usecase.SearchUseCase
 import com.vaultstadio.app.domain.storage.usecase.ToggleStarUseCase
 import com.vaultstadio.app.domain.storage.usecase.TrashItemUseCase
 import com.vaultstadio.app.feature.files.FilesMode
-import com.vaultstadio.app.feature.files.FilesViewPreferences
 import com.vaultstadio.app.feature.files.FilesViewModel
+import com.vaultstadio.app.feature.files.FilesViewPreferences
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

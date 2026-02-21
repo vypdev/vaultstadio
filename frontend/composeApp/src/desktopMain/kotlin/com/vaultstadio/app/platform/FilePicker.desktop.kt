@@ -101,32 +101,32 @@ actual suspend fun openFilePicker(
         return@withContext emptyList()
     }
 
-        files.mapNotNull { file ->
-            try {
-                // Check file size - if too large, skip loading data
-                if (file.length() > LARGE_FILE_THRESHOLD) {
-                    val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
-                    SelectedFile(
-                        name = file.name,
-                        size = file.length(),
-                        mimeType = mimeType,
-                        data = ByteArray(0), // Empty - use chunked upload
-                    )
-                } else {
-                    val bytes = Files.readAllBytes(file.toPath())
-                    val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
-                    SelectedFile(
-                        name = file.name,
-                        size = file.length(),
-                        mimeType = mimeType,
-                        data = bytes,
-                    )
-                }
-            } catch (_: IOException) {
-                // Skip unreadable file
-                null
+    files.mapNotNull { file ->
+        try {
+            // Check file size - if too large, skip loading data
+            if (file.length() > LARGE_FILE_THRESHOLD) {
+                val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
+                SelectedFile(
+                    name = file.name,
+                    size = file.length(),
+                    mimeType = mimeType,
+                    data = ByteArray(0), // Empty - use chunked upload
+                )
+            } else {
+                val bytes = Files.readAllBytes(file.toPath())
+                val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
+                SelectedFile(
+                    name = file.name,
+                    size = file.length(),
+                    mimeType = mimeType,
+                    data = bytes,
+                )
             }
+        } catch (_: IOException) {
+            // Skip unreadable file
+            null
         }
+    }
 }
 
 /**

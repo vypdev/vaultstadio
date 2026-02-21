@@ -16,7 +16,8 @@ kotlin {
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }
     wasmJs { browser() }
-    iosArm64(); iosSimulatorArm64()
+    iosArm64()
+    iosSimulatorArm64()
     sourceSets {
         val commonMain by getting {
             kotlin.srcDirs("src/main")

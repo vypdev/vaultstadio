@@ -1,7 +1,7 @@
 package com.vaultstadio.app.feature.federation
 
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 fun formatFederationRelativeTime(instant: Instant): String {
     val now = Clock.System.now()

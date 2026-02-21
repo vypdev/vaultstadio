@@ -4,9 +4,9 @@ import com.vaultstadio.app.domain.ai.usecase.AIChatUseCase
 import com.vaultstadio.app.domain.ai.usecase.ClassifyContentUseCase
 import com.vaultstadio.app.domain.ai.usecase.DeleteAIProviderUseCase
 import com.vaultstadio.app.domain.ai.usecase.DescribeImageUseCase
+import com.vaultstadio.app.domain.ai.usecase.GetAIModelsUseCase
 import com.vaultstadio.app.domain.ai.usecase.GetAIProviderStatusUseCase
 import com.vaultstadio.app.domain.ai.usecase.GetAIProvidersUseCase
-import com.vaultstadio.app.domain.ai.usecase.GetAIModelsUseCase
 import com.vaultstadio.app.domain.ai.usecase.GetProviderModelsUseCase
 import com.vaultstadio.app.domain.ai.usecase.SummarizeTextUseCase
 import com.vaultstadio.app.domain.ai.usecase.TagImageUseCase

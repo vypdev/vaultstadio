@@ -102,7 +102,7 @@ test-coverage:
 
 lint:
 	@echo "Running detekt (frontend)..."
-	./gradlew detektMain
+	./gradlew detektDesktopMain
 
 # ==================== Release ====================
 

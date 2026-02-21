@@ -5,7 +5,6 @@
 
 package com.vaultstadio.app.feature.settings
 
-import com.arkivanov.decompose.ComponentContext
 import com.vaultstadio.app.core.resources.Language
 import com.vaultstadio.app.core.resources.ThemeMode
 

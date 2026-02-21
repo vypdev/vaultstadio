@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.ai.model.AIModel
 import com.vaultstadio.app.domain.ai.model.AIProviderInfo
-import com.vaultstadio.app.domain.ai.model.AIProviderType
 
 @Composable
 fun ProviderCard(

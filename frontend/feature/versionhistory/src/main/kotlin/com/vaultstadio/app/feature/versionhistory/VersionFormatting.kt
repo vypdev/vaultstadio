@@ -1,7 +1,7 @@
 package com.vaultstadio.app.feature.versionhistory
 
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 fun formatVersionFileSize(bytes: Long): String {
     if (bytes < 1024) return "$bytes B"

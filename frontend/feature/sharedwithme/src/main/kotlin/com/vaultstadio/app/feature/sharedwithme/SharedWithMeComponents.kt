@@ -40,8 +40,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.core.resources.strings
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Clock
 
 @Composable
 fun SharedWithMeItemCard(

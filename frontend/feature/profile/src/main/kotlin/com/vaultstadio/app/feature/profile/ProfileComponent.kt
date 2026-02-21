@@ -19,5 +19,9 @@ class DefaultProfileComponent(
     override fun onBack() = onNavigateBack()
     override fun navigateToChangePassword() = onNavigateToChangePassword()
     override fun navigateToSecurity() = onNavigateToSecurity()
-    override fun exportData(fileName: String, data: ByteArray, mimeType: String) = onExportData(fileName, data, mimeType)
+    override fun exportData(
+        fileName: String,
+        data: ByteArray,
+        mimeType: String,
+    ) = onExportData(fileName, data, mimeType)
 }

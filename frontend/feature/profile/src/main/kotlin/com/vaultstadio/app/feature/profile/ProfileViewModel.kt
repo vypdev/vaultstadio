@@ -12,8 +12,8 @@ import com.vaultstadio.app.domain.auth.usecase.GetCurrentUserUseCase
 import com.vaultstadio.app.domain.auth.usecase.GetQuotaUseCase
 import com.vaultstadio.app.domain.auth.usecase.UpdateProfileUseCase
 import com.vaultstadio.app.domain.result.Result
-import kotlin.time.Clock
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 
 class ProfileViewModel(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
