@@ -24,7 +24,7 @@ VaultStadio is a **self-hosted storage platform** with plugin architecture:
 
 ```
 vaultstadio/
-├── backend/            # Root Gradle project (:backend:*)
+├── backend/            # Standalone Gradle project (run from backend/)
 │   ├── core/           # Domain: models, services, repositories (interfaces), events
 │   ├── plugins-api/    # Plugin SDK: Plugin interface, PluginContext, hooks
 │   ├── api/            # Ktor: routes, DTOs, config, middleware

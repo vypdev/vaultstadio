@@ -32,11 +32,12 @@ Thank you for your interest in contributing to VaultStadio!
 - **Quality**: detekt (run after formatting)
 
 ```bash
-# 1. Format code (fixes style)
-./gradlew ktlintFormat
+# 1. Format code (fixes style) – run in backend/ and frontend/
+cd backend && ./gradlew ktlintFormat
+cd frontend && ./gradlew ktlintFormat
 
 # 2. Run static analysis (detekt runs ktlintCheck first)
-./gradlew detekt
+make lint   # backend + frontend detekt; or: cd backend && ./gradlew detektMain
 
 # 3. Check no FQN in type positions (use imports instead)
 ./scripts/check-no-fqn.sh
@@ -82,7 +83,7 @@ refactor: Simplify authentication flow
 
 1. **Update Documentation**: Update relevant documentation
 2. **Add Tests**: Add tests for new features
-3. **Run Tests**: Ensure all tests pass (`./gradlew test` or `make test`)
+3. **Run Tests**: Ensure all tests pass (`make test`)
 4. **Run Coverage (recommended)**: Run `make test-coverage` and check that new code is covered (CI uploads to Codecov; PR status check uses a 1% threshold)
 5. **Update CHANGELOG**: Document your changes
 6. **Submit PR**: Create pull request with description
@@ -102,9 +103,8 @@ Before submitting a PR:
 
 ```bash
 # Run backend tests (from repo root)
-./gradlew :backend:api:test
-./gradlew :backend:core:test
-# Or: make backend-test
+make backend-test
+# Or: cd backend && ./gradlew :core:test :api:test
 
 # Run all tests (backend + frontend)
 make test

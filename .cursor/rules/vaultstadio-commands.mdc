@@ -8,19 +8,19 @@ globs: ["*"]
 
 Use these commands for build, run, test, quality, and Docker. See also [Makefile](Makefile), [frontend/Makefile](frontend/Makefile), [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md), [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md).
 
-**Project layout**: Backend is part of the root Gradle project (`:backend:*`). Frontend is a **standalone** project in `frontend/` (run Gradle from `frontend/` or use `make frontend-*` from root).
+**Project layout**: No Gradle at repo root. **Backend** and **frontend** are **standalone** Gradle projects in `backend/` and `frontend/` (each has its own `gradlew`, `settings.gradle.kts`, `build.gradle.kts`). Use `make` from root or run Gradle from the project directory.
 
 ## Build
 
 ```bash
-# Full build (backend from root + frontend from frontend/)
+# Full build (backend + frontend, from root)
 make build
 
-# Backend only (from repo root)
-./gradlew :backend:api:build -x test
+# Backend only (from root or from backend/)
 make backend-build
+# Or: cd backend && ./gradlew :api:build -x test
 
-# Frontend – web WASM (from repo root or from frontend/)
+# Frontend – web WASM (from root or from frontend/)
 make frontend-web
 # Or from frontend/: ./gradlew :composeApp:wasmJsBrowserDistribution
 
@@ -32,9 +32,9 @@ make frontend-web-dev
 cd frontend && ./gradlew :composeApp:compileKotlinDesktop
 # Or: make desktop-run (from root runs frontend desktop)
 
-# Plugins (from repo root)
-./gradlew :backend:plugins:image-metadata:pluginJar :backend:plugins:video-metadata:pluginJar
+# Plugins (from root or backend/)
 make plugins-build
+# Or: cd backend && ./gradlew :plugins:image-metadata:pluginJar :plugins:video-metadata:pluginJar
 
 # Android APK (from root or frontend/)
 make android-build
@@ -44,9 +44,9 @@ make android-build
 ## Run (development and production)
 
 ```bash
-# Backend (from repo root; requires PostgreSQL)
-./gradlew :backend:api:run
+# Backend (from root or backend/; requires PostgreSQL)
 make backend-run
+# Or: cd backend && ./gradlew :api:run
 
 # Frontend – desktop (from root or frontend/)
 make desktop-run
@@ -70,9 +70,9 @@ make dev
 # All tests (backend + frontend)
 make test
 
-# Backend only (from repo root)
-./gradlew :backend:core:test :backend:api:test
+# Backend only (from root or backend/)
 make backend-test
+# Or: cd backend && ./gradlew :core:test :api:test
 
 # Frontend only (from root or frontend/)
 make frontend-test
@@ -85,19 +85,19 @@ make test-coverage
 ## Code Quality (run before commit)
 
 ```bash
-# 1. Format
-./gradlew ktlintFormat
+# 1. Format (run in each project)
+cd backend && ./gradlew ktlintFormat
 cd frontend && ./gradlew ktlintFormat
 
 # 2. Check no FQN in type positions
 ./scripts/check-no-fqn.sh
 
 # 3. Static analysis (runs ktlintCheck then detekt)
-./gradlew detekt
+make lint   # backend detekt
 cd frontend && ./gradlew detektMain
 ```
 
-Quick: `./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt`
+Quick: `make lint` then `./scripts/check-no-fqn.sh`; format in backend/ and frontend/ with ktlintFormat.
 
 ## Docker
 
@@ -125,10 +125,8 @@ make docker-down
 ## Database
 
 ```bash
-./gradlew :backend:api:flywayMigrate   # migrate
-make db-migrate
-./gradlew :backend:api:flywayClean     # clean (dev)
-make db-clean
+make db-migrate   # or: cd backend && ./gradlew :api:flywayMigrate
+make db-clean     # or: cd backend && ./gradlew :api:flywayClean
 ```
 
 ## Release / Clean

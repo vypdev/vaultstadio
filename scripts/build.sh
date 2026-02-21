@@ -3,9 +3,9 @@ set -e
 
 echo "Building VaultStadio..."
 
-# Build backend
+# Build backend (standalone project)
 echo "Building backend..."
-./gradlew :backend:api:build -x test
+(cd backend && ./gradlew :api:build -x test)
 
 # Build frontend (web WASM production)
 echo "Building frontend..."

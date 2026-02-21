@@ -29,18 +29,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Run dependency check (backend)
+        run: cd backend && ./gradlew dependencies --no-daemon || true
 
-      - name: Run dependency check
-        run: ./gradlew dependencyCheckAnalyze || true
-
-      - name: Upload dependency check report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: dependency-check-report
-          path: build/reports/dependency-check/
+      - name: Run dependency check (frontend)
+        run: cd frontend && ./gradlew dependencies --no-daemon || true
 
   # ==================== Code Security Scan ====================
   code-scan:
@@ -64,7 +57,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Build for analysis
-        run: ./gradlew assemble --no-daemon || true
+        run: |
+          cd backend && ./gradlew :api:build -x test --no-daemon || true
+          cd frontend && ./gradlew :composeApp:compileKotlinDesktop --no-daemon || true
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

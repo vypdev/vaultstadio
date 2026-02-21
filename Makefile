@@ -51,20 +51,21 @@ help:
 # ==================== Installation ====================
 
 install:
-	@echo "Installing dependencies..."
-	./gradlew build --refresh-dependencies -x test
+	@echo "Installing dependencies (backend + frontend)..."
+	$(MAKE) -C backend build
+	$(MAKE) -C frontend build
 
 # ==================== Build ====================
 
 build:
-	@echo "Building all modules..."
-	./gradlew build -x test
+	@echo "Building backend (standalone)..."
+	$(MAKE) -C backend build
 	@echo "Building frontend (standalone)..."
 	$(MAKE) -C frontend build
 
 backend-build:
 	@echo "Building backend..."
-	./gradlew :backend:api:build -x test
+	$(MAKE) -C backend build
 
 frontend-web:
 	@echo "Building web frontend (WASM production)..."
@@ -80,21 +81,19 @@ android-build:
 
 plugins-build:
 	@echo "Building plugins..."
-	./gradlew :backend:plugins:image-metadata:pluginJar
-	./gradlew :backend:plugins:video-metadata:pluginJar
+	$(MAKE) -C backend plugins
 
 # ==================== Testing ====================
 
 test:
 	@echo "Running backend tests..."
-	./gradlew test
+	$(MAKE) -C backend test
 	@echo "Running frontend tests..."
 	$(MAKE) -C frontend test
 
 backend-test:
 	@echo "Running backend tests..."
-	./gradlew :backend:core:test
-	./gradlew :backend:api:test
+	$(MAKE) -C backend test
 
 frontend-test:
 	@echo "Running frontend tests..."
@@ -102,15 +101,7 @@ frontend-test:
 
 test-coverage:
 	@echo "Running tests with coverage (backend + frontend, same as CI/Codecov)..."
-	./gradlew :backend:core:jacocoTestReport \
-		:backend:api:jacocoTestReport \
-		:backend:infrastructure:jacocoTestReport \
-		:backend:plugins-api:jacocoTestReport \
-		:backend:plugins:image-metadata:jacocoTestReport \
-		:backend:plugins:video-metadata:jacocoTestReport \
-		:backend:plugins:fulltext-search:jacocoTestReport \
-		:backend:plugins:ai-classification:jacocoTestReport \
-		--continue
+	$(MAKE) -C backend test-coverage
 	$(MAKE) -C frontend test-coverage
 	@echo "Coverage reports:"
 	@echo "  Backend:  backend/*/build/reports/jacoco/test/"
@@ -124,12 +115,12 @@ dev:
 	docker-compose -f docker/docker-compose.yml up -d postgres
 	@echo "Waiting for PostgreSQL..."
 	sleep 5
-	./gradlew :backend:api:run &
+	$(MAKE) -C backend run &
 	$(MAKE) -C frontend frontend-run
 
 backend-run:
 	@echo "Starting backend server..."
-	./gradlew :backend:api:run
+	$(MAKE) -C backend run
 
 frontend-run:
 	@echo "Starting web frontend (WASM dev server)..."
@@ -173,9 +164,7 @@ docker-push:
 
 clean:
 	@echo "Cleaning build artifacts..."
-	./gradlew clean
-	rm -rf .gradle
-	rm -rf backend/*/build
+	$(MAKE) -C backend clean
 	$(MAKE) -C frontend clean 2>/dev/null || true
 
 docker-clean:
@@ -187,9 +176,9 @@ docker-clean:
 
 release:
 	@echo "Creating release build..."
-	./gradlew clean
-	./gradlew build
-	./gradlew :backend:api:shadowJar
+	$(MAKE) -C backend clean
+	$(MAKE) -C backend build
+	$(MAKE) -C backend release
 	$(MAKE) -C frontend release
 	@echo "Release artifacts created in build directories"
 
@@ -197,32 +186,33 @@ release:
 
 db-migrate:
 	@echo "Running database migrations..."
-	./gradlew :backend:api:flywayMigrate
+	$(MAKE) -C backend db-migrate
 
 db-clean:
 	@echo "Cleaning database..."
-	./gradlew :backend:api:flywayClean
+	$(MAKE) -C backend db-clean
 
 # ==================== Linting & Code Quality ====================
 
 lint:
-	@echo "Running detekt code analysis..."
-	./gradlew detektMain
+	@echo "Running detekt (backend + root)..."
+	$(MAKE) -C backend lint
+	@echo "Run frontend lint from frontend/: cd frontend && ./gradlew detektMain"
 
 lint-baseline:
 	@echo "Generating detekt baseline..."
-	./gradlew detektBaseline
+	$(MAKE) -C backend lint-baseline
 
 lint-report:
 	@echo "Running detekt with HTML report..."
-	./gradlew detektMain --continue
-	@echo "Reports generated in build/reports/detekt/"
+	$(MAKE) -C backend lint-report
+	@echo "Reports generated in backend/build/reports/detekt/"
 
 # ==================== Documentation ====================
 
 docs:
 	@echo "Generating documentation..."
-	./gradlew dokkaHtml
+	$(MAKE) -C backend docs
 
 # ==================== Helm ====================
 

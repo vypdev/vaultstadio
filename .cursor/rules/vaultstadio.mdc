@@ -26,7 +26,9 @@ Project rules are split into several `.mdc` files for better context and classif
 ### Code Quality (run before every commit)
 
 ```bash
-./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt
+make lint   # backend detekt; then cd frontend && ./gradlew detektMain
+./scripts/check-no-fqn.sh
+# Format: cd backend && ./gradlew ktlintFormat; cd frontend && ./gradlew ktlintFormat
 ```
 
 ### Key Constraints

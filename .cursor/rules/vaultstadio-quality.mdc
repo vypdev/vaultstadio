@@ -11,8 +11,8 @@ See [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md) for ful
 ## Formatting – ktlint
 
 - **Config**: [.editorconfig](.editorconfig). Max line length 120, indent 4, no trailing whitespace, final newline.
-- **Fix**: `./gradlew ktlintFormat`
-- **Check**: `./gradlew ktlintCheck` (CI runs this before detekt).
+- **Fix**: `cd backend && ./gradlew ktlintFormat` (and same in frontend/).
+- **Check**: `cd backend && ./gradlew ktlintCheck` (CI runs this before detekt).
 - **No wildcard imports** – explicit imports only (enforced by project rules and detekt).
 
 ## No FQN in type positions
@@ -23,8 +23,8 @@ See [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md) for ful
 
 ## Static analysis – detekt
 
-- **Config**: [config/detekt/detekt.yml](config/detekt/detekt.yml).
-- **Run**: `./gradlew detekt` (after ktlintCheck). Use `detektMain` for main source only; `detektBaseline` to generate baseline.
+- **Config**: Backend: [backend/config/detekt/detekt.yml](backend/config/detekt/detekt.yml). Frontend: [frontend/config/detekt/](frontend/config/detekt/).
+- **Run**: `make lint` (backend); `cd frontend && ./gradlew detektMain`. Use `detektBaseline` to generate baseline.
 - **Make**: `make lint`, `make lint-report`, `make lint-baseline`.
 
 ## File size guidelines
@@ -37,12 +37,12 @@ See [docs/development/CODE_QUALITY.md](docs/development/CODE_QUALITY.md) for ful
 ## Testing
 
 - **Stack**: JUnit 5, MockK, Testcontainers for integration tests.
-- **Run**: `./gradlew test`, `make backend-test`, `make test-coverage`.
+- **Run**: `make test`, `make backend-test`, `make test-coverage`.
 - Add unit tests for non-trivial logic; document in structural changes.
 
 ## Pre-commit / CI order
 
-1. `./gradlew ktlintFormat`
+1. `cd backend && ./gradlew ktlintFormat` (and frontend if needed)
 2. `./scripts/check-no-fqn.sh`
-3. `./gradlew detekt`
-4. `./gradlew test`
+3. `make lint` (backend + frontend detekt)
+4. `make test`

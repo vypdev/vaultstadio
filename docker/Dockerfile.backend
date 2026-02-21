@@ -1,20 +1,18 @@
 # VaultStadio Backend - Kotlin/Ktor
 # Multi-stage build for optimized Docker image
+# Backend is a standalone Gradle project; build from backend/ context.
 
 # Stage 1: Build
 FROM gradle:8.10-jdk17 AS builder
 
 WORKDIR /app
 
-# Copy Gradle files first for caching
-COPY settings.gradle.kts build.gradle.kts gradle.properties ./
-COPY gradle ./gradle
-
-# Copy source code
+# Copy backend (standalone project with its own gradlew, build.gradle.kts, settings.gradle.kts)
 COPY backend ./backend
 
-# Build the application
-RUN gradle :backend:api:installDist --no-daemon
+# Build from backend directory (no root Gradle)
+WORKDIR /app/backend
+RUN ./gradlew :api:installDist --no-daemon
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre

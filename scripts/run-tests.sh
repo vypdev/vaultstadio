@@ -3,11 +3,12 @@ set -e
 
 echo "Running tests..."
 
-# Backend tests
+# Backend tests (standalone project)
 echo "Running backend tests..."
-./gradlew :kotlin-backend:core:test
-./gradlew :kotlin-backend:infrastructure:test
-./gradlew :kotlin-backend:api:test
+(cd backend && ./gradlew :core:test :infrastructure:test :api:test)
+
+echo "Running frontend tests..."
+(cd frontend && ./gradlew :composeApp:desktopTest) 2>/dev/null || true
 
 echo "All tests complete!"
 
@@ -15,5 +16,5 @@ echo "All tests complete!"
 if [ "$1" = "--coverage" ]; then
     echo "Generating coverage report..."
     make test-coverage
-    echo "Coverage reports: kotlin-backend/*/build/reports/jacoco/, compose-frontend/composeApp/build/reports/jacoco/"
+    echo "Coverage reports: backend/*/build/reports/jacoco/, frontend/composeApp/build/reports/jacoco/"
 fi

@@ -156,11 +156,11 @@ Uses JWT secret as key placeholder. Not production-ready.
 Run from **repo root** (backend is part of root Gradle project).
 
 ```bash
-./gradlew :backend:api:run                    # Run backend
-./gradlew :backend:api:build -x test          # Build without tests
-./gradlew :backend:core:test :backend:api:test  # Run tests
-./gradlew :backend:api:flywayMigrate          # Run migrations
-./gradlew :backend:api:flywayClean            # Clean database (dev)
+cd backend && ./gradlew :api:run              # Run backend (or: make backend-run)
+cd backend && ./gradlew :api:build -x test     # Build without tests
+cd backend && ./gradlew :core:test :api:test  # Run tests
+cd backend && ./gradlew :api:flywayMigrate    # Run migrations
+cd backend && ./gradlew :api:flywayClean       # Clean database (dev)
 # Or: make backend-run, make backend-build, make backend-test, make db-migrate
 ```
 

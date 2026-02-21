@@ -68,8 +68,7 @@ docker-compose -f docker/docker-compose.yml up -d
 docker-compose -f docker/docker-compose.yml up -d postgres
 
 # Run backend (from repo root)
-./gradlew :backend:api:run
-# Or: make backend-run
+make backend-run   # or: cd backend && ./gradlew :api:run
 
 # Run frontend (from repo root via Make, or from frontend/ with Gradle)
 make desktop-run              # Desktop
@@ -85,7 +84,7 @@ See [QUICK_START.md](docs/getting-started/QUICK_START.md) for TrueNAS deployment
 
 ```
 vaultstadio/
-├── backend/            # Ktor backend (root Gradle project :backend:*)
+├── backend/            # Ktor backend (standalone Gradle project)
 ├── frontend/            # Compose Multiplatform (standalone Gradle project)
 ├── docker/              # Docker Compose, Dockerfiles
 ├── helm/                # Kubernetes/TrueNAS Helm charts
@@ -124,7 +123,9 @@ make backend-test             # Backend only
 make frontend-test            # Frontend only
 
 # Quality (run before commit)
-./gradlew ktlintFormat && ./scripts/check-no-fqn.sh && ./gradlew detekt
+make lint   # backend detekt; then cd frontend && ./gradlew detektMain for frontend
+# Format: cd backend && ./gradlew ktlintFormat; cd frontend && ./gradlew ktlintFormat
+# FQN check: ./scripts/check-no-fqn.sh
 
 # Docker
 make docker-up                # Start all

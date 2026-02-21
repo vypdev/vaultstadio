@@ -34,6 +34,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
+          project-root: backend
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
       
       - name: Ensure Docker is available (for Testcontainers)
@@ -59,35 +60,38 @@ jobs:
           fi
       
       - name: Build backend modules
+        working-directory: backend
         run: |
-          ./gradlew :backend:core:build \
-            :backend:plugins-api:build \
-            :backend:infrastructure:build \
-            :backend:api:build \
+          ./gradlew :core:build \
+            :plugins-api:build \
+            :infrastructure:build \
+            :api:build \
             -x test
       
       - name: Run backend tests
+        working-directory: backend
         run: |
-          ./gradlew :backend:core:test \
-            :backend:api:test \
-            :backend:infrastructure:test \
-            :backend:plugins-api:test \
-            :backend:plugins:image-metadata:test \
-            :backend:plugins:video-metadata:test \
-            :backend:plugins:fulltext-search:test \
-            :backend:plugins:ai-classification:test \
+          ./gradlew :core:test \
+            :api:test \
+            :infrastructure:test \
+            :plugins-api:test \
+            :plugins:image-metadata:test \
+            :plugins:video-metadata:test \
+            :plugins:fulltext-search:test \
+            :plugins:ai-classification:test \
             --continue
 
       - name: Generate backend coverage reports
+        working-directory: backend
         run: |
-          ./gradlew :backend:core:jacocoTestReport \
-            :backend:api:jacocoTestReport \
-            :backend:infrastructure:jacocoTestReport \
-            :backend:plugins-api:jacocoTestReport \
-            :backend:plugins:image-metadata:jacocoTestReport \
-            :backend:plugins:video-metadata:jacocoTestReport \
-            :backend:plugins:fulltext-search:jacocoTestReport \
-            :backend:plugins:ai-classification:jacocoTestReport \
+          ./gradlew :core:jacocoTestReport \
+            :api:jacocoTestReport \
+            :infrastructure:jacocoTestReport \
+            :plugins-api:jacocoTestReport \
+            :plugins:image-metadata:jacocoTestReport \
+            :plugins:video-metadata:jacocoTestReport \
+            :plugins:fulltext-search:jacocoTestReport \
+            :plugins:ai-classification:jacocoTestReport \
             --continue
 
       - name: Upload test results
@@ -217,13 +221,16 @@ jobs:
       
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
+        with:
+          project-root: backend
       
       - name: Build plugins
+        working-directory: backend
         run: |
-          ./gradlew :backend:plugins:image-metadata:build \
-            :backend:plugins:video-metadata:build \
-            :backend:plugins:fulltext-search:build \
-            :backend:plugins:ai-classification:build \
+          ./gradlew :plugins:image-metadata:build \
+            :plugins:video-metadata:build \
+            :plugins:fulltext-search:build \
+            :plugins:ai-classification:build \
             -x test
 
   # Build Android app
@@ -256,7 +263,7 @@ jobs:
       - name: Build Android APK (debug)
         run: cd frontend && ./gradlew :androidApp:assembleDevDebug
 
-  # Code quality checks
+  # Code quality checks (no root Gradle; backend and frontend are standalone)
   lint:
     name: Lint & Code Quality
     runs-on: [self-hosted, macOS, X64]
@@ -280,14 +287,16 @@ jobs:
             "platforms;android-34" \
             "build-tools;34.0.0"
       
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-      
       - name: Check no FQN in type positions
         run: ./scripts/check-no-fqn.sh
       
-      - name: Run Detekt
-        run: ./gradlew detekt --continue
+      - name: Run Detekt (backend)
+        working-directory: backend
+        run: ./gradlew detektMain --continue
+      
+      - name: Run Detekt (frontend)
+        working-directory: frontend
+        run: ./gradlew detektMain --continue
       
       - name: Upload Detekt report
         uses: actions/upload-artifact@v4

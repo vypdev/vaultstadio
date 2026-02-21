@@ -54,12 +54,14 @@ docker system prune -af --volumes
 echo -e "${GREEN}✓ Docker system cleaned${NC}"
 echo ""
 
-# Step 3: Clean Gradle build
+# Step 3: Clean Gradle build (backend and frontend are standalone)
 echo -e "${YELLOW}[3/6] Cleaning Gradle build...${NC}"
-./gradlew clean 2>/dev/null || true
-rm -rf .gradle
-rm -rf kotlin-backend/*/build
-rm -rf compose-frontend/*/build
+(cd "$PROJECT_ROOT/backend" && ./gradlew clean) 2>/dev/null || true
+(cd "$PROJECT_ROOT/frontend" && ./gradlew clean) 2>/dev/null || true
+rm -rf "$PROJECT_ROOT/backend/.gradle"
+rm -rf "$PROJECT_ROOT/frontend/.gradle"
+rm -rf "$PROJECT_ROOT/backend/"*/build
+rm -rf "$PROJECT_ROOT/frontend/"*/build
 echo -e "${GREEN}✓ Gradle build cleaned${NC}"
 echo ""
 

@@ -26,13 +26,13 @@ sleep 5
 
 # Run migrations (if needed)
 echo "Running database migrations..."
-./gradlew :backend:api:flywayMigrate 2>/dev/null || echo "Migrations skipped (may already be applied)"
+(cd backend && ./gradlew :api:flywayMigrate) 2>/dev/null || echo "Migrations skipped (may already be applied)"
 
 echo ""
 echo "Setup complete!"
 echo ""
 echo "To run the backend:"
-echo "   ./gradlew :backend:api:run   # or: make backend-run"
+echo "   make backend-run   # or: cd backend && ./gradlew :api:run"
 echo ""
 echo "To run the web frontend (WASM):"
 echo "   make frontend-run            # dev server"
