@@ -1,6 +1,6 @@
 # Frontend modularisation and standalone projects (backend / frontend)
 
-**Last updated**: 2026-02-20 (source layout src/main + src/test, ThemeMode in core:resources, feature:settings/profile/security/changepassword/licenses/sync/activity/admin/plugins/shares/sharedwithme migrated)
+**Last updated**: 2026-02-19 (feature:versionhistory, feature:collaboration, feature:federation, feature:ai migrated)
 
 ### Current implementation status
 
@@ -45,9 +45,13 @@
 - **:feature:plugins** – Done. Full screen in module: `PluginsComponent`, `DefaultPluginsComponent`, `PluginsViewModel`, `PluginsContent`, `PluginsScreen`.
 - **:feature:shares** – Done. Full screen in module: `SharesComponent`, `DefaultSharesComponent`, `SharesViewModel`, `SharesContent`, `SharedScreen`, `SharedComponents`, `SharedDialogs`.
 - **:feature:sharedwithme** – Done. Full screen in module: `SharedWithMeComponent`, `DefaultSharedWithMeComponent`, `SharedWithMeViewModel`, `SharedWithMeContent`, `SharedWithMeScreen`, `SharedWithMeComponents`, `SharedDialogs`.
-- **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp.
+- **:feature:versionhistory** – Done. Full screen in module: `VersionHistoryComponent`, `DefaultVersionHistoryComponent`, `VersionHistoryViewModel`, `VersionHistoryContent`, `VersionHistoryScreen`, `VersionComponents`, `VersionFormatting` (local formatFileSize/formatRelativeTime). Depends on `:domain:version`, `:domain:config`, `:core:resources`, Koin Compose ViewModel, Material3. `featureVersionHistoryModule` loaded in all entry points.
+- **:feature:collaboration** – Done. Full screen in module: `CollaborationComponent`, `DefaultCollaborationComponent`, `CollaborationViewModel`, `CollaborationContent`, `CollaborationScreen`, `CollaborationScreenContent`, `CollaborationComponents`, `CollaborationDialogs`, `CollaborationFormatting` (local formatRelativeTime). Depends on `:domain:collaboration`, `:domain:config`, `:domain:auth`, `:data:collaboration` (WebSocket), `:core:resources`, Koin Compose ViewModel, Material3. `featureCollaborationModule` loaded in all entry points.
+- **:feature:federation** – Done. Full screen in module: `FederationComponent`, `DefaultFederationComponent`, `FederationViewModel`, `FederationContent`, `FederationScreen`, `FederationComponents`, `FederationDialogs`, `FederationFormatting` (local formatRelativeTime), `FederationInstancesTab`, `FederationSharesTab`, `FederationIdentitiesTab`, `FederationActivitiesTab`. Depends on `:domain:federation`, `:core:resources`, Koin Compose ViewModel, Material3. `featureFederationModule` loaded in all entry points.
+- **:feature:ai** – Done. Full screen in module: `AIComponent`, `DefaultAIComponent`, `AIViewModel`, `AIContent`, `AIScreen`, `AIScreenContent`, `AIModels` (AIMode, ChatMessage), `AIChatComponents`, `AIComponents`, `AIDialogs`, `AIProviderComponents`. Depends on `:domain:ai`, `:core:resources`, Koin Compose ViewModel, Material3, Decompose. `featureAIModule` (ViewModel with 10 AI use cases via `get<UseCaseType>()`) loaded in all entry points.
+- **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp (files). MainComponent remains in composeApp.
 
-Next: migrate remaining feature modules (versionhistory, files, collaboration, federation, ai, main). Use `:core:resources` for strings; follow :feature:auth / :feature:settings as reference (ViewModel, Component, Content in module; depend on :core:resources, :domain:*, Koin Compose, Material3).
+Next: migrate :feature:files (largest; many files and ViewModel params). Use `:core:resources` for strings; follow :feature:federation / :feature:ai as reference.
 
 ### Koin module ownership
 
@@ -79,7 +83,11 @@ Each **feature**, **data**, **domain**, and **core** module that exposes or cons
 | Feature | :feature:plugins | featurePluginsModule | PluginsViewModel |
 | Feature | :feature:shares | featureSharesModule | SharesViewModel |
 | Feature | :feature:sharedwithme | featureSharedWithMeModule | SharedWithMeViewModel |
-| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (federation, ai, versionhistory, files, collaboration) until their features are migrated |
+| Feature | :feature:versionhistory | featureVersionHistoryModule | VersionHistoryViewModel (param: itemId) |
+| Feature | :feature:collaboration | featureCollaborationModule | CollaborationViewModel (param: itemId) |
+| Feature | :feature:federation | featureFederationModule | FederationViewModel |
+| Feature | :feature:ai | featureAIModule | AIViewModel |
+| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (files) until :feature:files is migrated |
 
 Domain and core modules typically do not define Koin modules (they expose interfaces/types; data/feature modules provide implementations and register them).
 
