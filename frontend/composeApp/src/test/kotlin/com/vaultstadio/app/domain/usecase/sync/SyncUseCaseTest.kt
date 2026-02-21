@@ -150,6 +150,14 @@ class RemoveDeviceUseCaseTest {
         val result = useCase("device-1")
         assertTrue(result.isSuccess())
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeSyncRepository(removeDeviceResult = Result.error("NOT_FOUND", "Device not found"))
+        val useCase = RemoveDeviceUseCaseImpl(repo)
+        val result = useCase("missing")
+        assertTrue(result.isError())
+    }
 }
 
 class GetConflictsUseCaseTest {
@@ -162,6 +170,15 @@ class GetConflictsUseCaseTest {
         assertTrue(result.isSuccess())
         assertEquals(0, result.getOrNull()?.size)
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeSyncRepository(getConflictsResult = Result.error("UNAUTHORIZED", "Not logged in"))
+        val useCase = GetConflictsUseCaseImpl(repo)
+        val result = useCase()
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
 }
 
 class ResolveConflictUseCaseTest {
@@ -172,5 +189,14 @@ class ResolveConflictUseCaseTest {
         val useCase = ResolveConflictUseCaseImpl(repo)
         val result = useCase("conflict-1", ConflictResolution.KEEP_LOCAL)
         assertTrue(result.isSuccess())
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeSyncRepository(resolveConflictResult = Result.error("NOT_FOUND", "Conflict not found"))
+        val useCase = ResolveConflictUseCaseImpl(repo)
+        val result = useCase("missing", ConflictResolution.KEEP_REMOTE)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
     }
 }

@@ -202,5 +202,6 @@ class AIClassificationPluginTest {
                 )
             }
         }
+
     }
 }

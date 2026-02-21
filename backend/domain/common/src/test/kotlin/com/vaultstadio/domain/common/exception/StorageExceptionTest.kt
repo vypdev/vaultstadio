@@ -93,4 +93,46 @@ class StorageExceptionTest {
         assertEquals("SHARE_EXPIRED", e.errorCode)
         assertEquals(410, e.httpStatus)
     }
+
+    @Test
+    fun invalidOperationExceptionHasCorrectErrorCodeAndStatus() {
+        val e = InvalidOperationException(operation = "delete_root")
+        assertEquals("INVALID_OPERATION", e.errorCode)
+        assertEquals(400, e.httpStatus)
+    }
+
+    @Test
+    fun storageBackendExceptionHasCorrectErrorCodeAndStatus() {
+        val e = StorageBackendException(backend = "s3", message = "Connection failed")
+        assertEquals("STORAGE_BACKEND_ERROR", e.errorCode)
+        assertEquals(500, e.httpStatus)
+    }
+
+    @Test
+    fun concurrentModificationExceptionHasCorrectErrorCodeAndStatus() {
+        val e = ConcurrentModificationException(itemId = "i1", expectedVersion = 1, actualVersion = 2)
+        assertEquals("CONCURRENT_MODIFICATION", e.errorCode)
+        assertEquals(409, e.httpStatus)
+    }
+
+    @Test
+    fun shareDownloadLimitExceptionHasCorrectErrorCodeAndStatus() {
+        val e = ShareDownloadLimitException(shareId = "s1", downloadLimit = 10)
+        assertEquals("SHARE_DOWNLOAD_LIMIT", e.errorCode)
+        assertEquals(429, e.httpStatus)
+    }
+
+    @Test
+    fun sharePasswordRequiredExceptionHasCorrectErrorCodeAndStatus() {
+        val e = SharePasswordRequiredException(shareId = "s1")
+        assertEquals("SHARE_PASSWORD_REQUIRED", e.errorCode)
+        assertEquals(401, e.httpStatus)
+    }
+
+    @Test
+    fun pluginLoadExceptionHasCorrectErrorCodeAndStatus() {
+        val e = PluginLoadException(pluginId = "my-plugin", message = "Load failed")
+        assertEquals("PLUGIN_LOAD_ERROR", e.errorCode)
+        assertEquals(500, e.httpStatus)
+    }
 }

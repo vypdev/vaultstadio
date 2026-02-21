@@ -45,6 +45,12 @@ class FormattingTest {
     }
 
     @Test
+    fun formatFileSize_petabytes() {
+        val onePB = 1024L * 1024 * 1024 * 1024 * 1024
+        assertEquals("1 PB", formatFileSize(onePB))
+    }
+
+    @Test
     fun formatFileSize_roundsToOneDecimalWhenNeeded() {
         // 2.5 MB: 1024*1024*2.5 = 2621440
         val bytes = (1024L * 1024 * 2.5).toLong()
@@ -172,5 +178,11 @@ class FormattingTest {
     fun truncateText_long() {
         assertEquals("hel...", truncateText("hello world", 6))
         assertEquals("a...", truncateText("abcde", 4))
+    }
+
+    @Test
+    fun truncateText_exactLength_returnsAsIs() {
+        assertEquals("hello", truncateText("hello", 5))
+        assertEquals("ab", truncateText("ab", 2))
     }
 }

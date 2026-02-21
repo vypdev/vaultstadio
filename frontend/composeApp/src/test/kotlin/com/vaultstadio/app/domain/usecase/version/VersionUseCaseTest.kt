@@ -146,6 +146,14 @@ class RestoreVersionUseCaseTest {
         val result = useCase("item-1", 1, null)
         assertTrue(result.isSuccess())
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeVersionRepository(restoreVersionResult = Result.error("CONFLICT", "Version conflict"))
+        val useCase = RestoreVersionUseCaseImpl(repo)
+        val result = useCase("item-1", 1, null)
+        assertTrue(result.isError())
+    }
 }
 
 class CompareVersionsUseCaseTest {
@@ -159,6 +167,14 @@ class CompareVersionsUseCaseTest {
         assertTrue(result.isSuccess())
         assertEquals(diff, result.getOrNull())
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeVersionRepository(compareVersionsResult = Result.error("NOT_FOUND", "Item not found"))
+        val useCase = CompareVersionsUseCaseImpl(repo)
+        val result = useCase("item-1", 1, 2)
+        assertTrue(result.isError())
+    }
 }
 
 class DeleteVersionUseCaseTest {
@@ -170,6 +186,14 @@ class DeleteVersionUseCaseTest {
         val result = useCase("version-id-1")
         assertTrue(result.isSuccess())
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeVersionRepository(deleteVersionResult = Result.error("FORBIDDEN", "Cannot delete"))
+        val useCase = DeleteVersionUseCaseImpl(repo)
+        val result = useCase("version-id-1")
+        assertTrue(result.isError())
+    }
 }
 
 class CleanupVersionsUseCaseTest {
@@ -180,5 +204,13 @@ class CleanupVersionsUseCaseTest {
         val useCase = CleanupVersionsUseCaseImpl(repo)
         val result = useCase("item-1", maxVersions = 10, maxAgeDays = 30, minVersionsToKeep = 1)
         assertTrue(result.isSuccess())
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeVersionRepository(cleanupVersionsResult = Result.error("INTERNAL", "Cleanup failed"))
+        val useCase = CleanupVersionsUseCaseImpl(repo)
+        val result = useCase("item-1", maxVersions = 10, maxAgeDays = null, minVersionsToKeep = 1)
+        assertTrue(result.isError())
     }
 }

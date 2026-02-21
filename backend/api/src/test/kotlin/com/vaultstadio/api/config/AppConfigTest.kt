@@ -142,6 +142,18 @@ class AppConfigTest {
             assertTrue(types.contains(StorageType.S3))
             assertTrue(types.contains(StorageType.MINIO))
         }
+
+        @Test
+        fun `StorageType valueOf returns correct enum`() {
+            assertEquals(StorageType.LOCAL, StorageType.valueOf("LOCAL"))
+            assertEquals(StorageType.S3, StorageType.valueOf("S3"))
+            assertEquals(StorageType.MINIO, StorageType.valueOf("MINIO"))
+        }
+
+        @Test
+        fun `StorageType has exactly three values`() {
+            assertEquals(3, StorageType.entries.size)
+        }
     }
 
     @Nested
