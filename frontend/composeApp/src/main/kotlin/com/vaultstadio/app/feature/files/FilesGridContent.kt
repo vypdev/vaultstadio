@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.feature.main.MainComponent
 import com.vaultstadio.app.ui.components.files.EmptyState
 import kotlin.math.roundToInt
 
@@ -44,7 +43,7 @@ interface FilesGridContextMenuCallbacks {
 @Composable
 internal fun FilesGridContent(
     viewModel: FilesViewModel,
-    mode: MainComponent.FilesMode,
+    mode: FilesMode,
     emptyTitle: String,
     isLoading: Boolean,
     items: List<StorageItem>,

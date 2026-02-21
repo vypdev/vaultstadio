@@ -21,6 +21,7 @@ import com.vaultstadio.app.feature.changepassword.ChangePasswordContent
 import com.vaultstadio.app.feature.collaboration.CollaborationContent
 import com.vaultstadio.app.feature.federation.FederationContent
 import com.vaultstadio.app.feature.files.FilesContent
+import com.vaultstadio.app.feature.files.FilesMode
 import com.vaultstadio.app.feature.licenses.LicensesContent
 import com.vaultstadio.app.feature.plugins.PluginsContent
 import com.vaultstadio.app.feature.profile.ProfileContent
@@ -54,10 +55,10 @@ fun MainContent(
     // Determine current destination for sidebar highlighting
     val currentDestination = when (currentChild) {
         is MainComponent.Child.Files -> when (currentChild.mode) {
-            MainComponent.FilesMode.ALL -> MainDestination.FILES
-            MainComponent.FilesMode.RECENT -> MainDestination.RECENT
-            MainComponent.FilesMode.STARRED -> MainDestination.STARRED
-            MainComponent.FilesMode.TRASH -> MainDestination.TRASH
+            FilesMode.ALL -> MainDestination.FILES
+            FilesMode.RECENT -> MainDestination.RECENT
+            FilesMode.STARRED -> MainDestination.STARRED
+            FilesMode.TRASH -> MainDestination.TRASH
         }
         is MainComponent.Child.Shares -> MainDestination.SHARED
         is MainComponent.Child.SharedWithMe -> MainDestination.SHARED_WITH_ME

@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.ItemType
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.feature.main.MainComponent
 import com.vaultstadio.app.ui.components.files.FileGridItem
 import com.vaultstadio.app.ui.components.files.SelectableFileGridItem
 
@@ -32,7 +31,7 @@ import com.vaultstadio.app.ui.components.files.SelectableFileGridItem
 internal fun FilesGridItemWithDrag(
     item: StorageItem,
     viewModel: FilesViewModel,
-    mode: MainComponent.FilesMode,
+    mode: FilesMode,
     contextMenuForId: String?,
     onContextMenuForId: (String?) -> Unit,
     draggedItemId: String?,
@@ -47,7 +46,7 @@ internal fun FilesGridItemWithDrag(
     callbacks: FilesGridContextMenuCallbacks,
 ) {
     val isFolder = item.type == ItemType.FOLDER
-    val canDrag = mode == MainComponent.FilesMode.ALL && !viewModel.isSelectionMode
+    val canDrag = mode == FilesMode.ALL && !viewModel.isSelectionMode
     val isDragging = draggedItemId == item.id
     val isDropTargetHighlight = isFolder &&
         dropTargetUnderPointer == item.id &&
@@ -181,7 +180,7 @@ internal fun FilesGridItemWithDrag(
                         onContextMenuForId(null)
                         viewModel.trashItem(item.id)
                     },
-                    onRestore = if (mode == MainComponent.FilesMode.TRASH) {
+                    onRestore = if (mode == FilesMode.TRASH) {
                         {
                             onContextMenuForId(null)
                             callbacks.onRequestRestore(item.id)
@@ -189,7 +188,7 @@ internal fun FilesGridItemWithDrag(
                     } else {
                         null
                     },
-                    onDeletePermanently = if (mode == MainComponent.FilesMode.TRASH) {
+                    onDeletePermanently = if (mode == FilesMode.TRASH) {
                         {
                             onContextMenuForId(null)
                             callbacks.onRequestDeletePermanently(item.id)

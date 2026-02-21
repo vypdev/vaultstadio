@@ -26,6 +26,7 @@ import com.vaultstadio.app.feature.federation.DefaultFederationComponent
 import com.vaultstadio.app.feature.federation.FederationComponent
 import com.vaultstadio.app.feature.files.DefaultFilesComponent
 import com.vaultstadio.app.feature.files.FilesComponent
+import com.vaultstadio.app.feature.files.FilesMode
 import com.vaultstadio.app.feature.licenses.DefaultLicensesComponent
 import com.vaultstadio.app.feature.licenses.LicensesComponent
 import com.vaultstadio.app.feature.plugins.DefaultPluginsComponent
@@ -84,7 +85,6 @@ interface MainComponent {
         data class Licenses(val component: LicensesComponent) : Child()
     }
 
-    enum class FilesMode { ALL, RECENT, STARRED, TRASH }
 }
 
 /**
@@ -124,10 +124,10 @@ class DefaultMainComponent(
         destination: MainDestination,
         pathSegments: List<String> = emptyList(),
     ): Config = when (destination) {
-        MainDestination.FILES -> Config.Files(MainComponent.FilesMode.ALL, pathSegments)
-        MainDestination.RECENT -> Config.Files(MainComponent.FilesMode.RECENT, pathSegments)
-        MainDestination.STARRED -> Config.Files(MainComponent.FilesMode.STARRED, pathSegments)
-        MainDestination.TRASH -> Config.Files(MainComponent.FilesMode.TRASH, pathSegments)
+        MainDestination.FILES -> Config.Files(FilesMode.ALL, pathSegments)
+        MainDestination.RECENT -> Config.Files(FilesMode.RECENT, pathSegments)
+        MainDestination.STARRED -> Config.Files(FilesMode.STARRED, pathSegments)
+        MainDestination.TRASH -> Config.Files(FilesMode.TRASH, pathSegments)
         MainDestination.SHARED -> Config.Shares
         MainDestination.SHARED_WITH_ME -> Config.SharedWithMe
         MainDestination.SETTINGS -> Config.Settings
@@ -287,7 +287,7 @@ class DefaultMainComponent(
     @Serializable
     private sealed interface Config {
         @Serializable
-        data class Files(val mode: MainComponent.FilesMode, val pathSegments: List<String> = emptyList()) : Config
+        data class Files(val mode: FilesMode, val pathSegments: List<String> = emptyList()) : Config
 
         @Serializable
         data object Shares : Config

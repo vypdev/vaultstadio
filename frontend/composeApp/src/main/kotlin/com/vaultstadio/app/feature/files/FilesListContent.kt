@@ -31,7 +31,7 @@ import com.vaultstadio.app.ui.components.files.SelectableFileListItem
 @Composable
 internal fun FilesListContent(
     viewModel: FilesViewModel,
-    mode: MainComponent.FilesMode,
+    mode: FilesMode,
     emptyTitle: String,
     isLoading: Boolean,
     items: List<StorageItem>,
@@ -101,7 +101,7 @@ internal fun FilesListContent(
 private fun FilesListItem(
     item: StorageItem,
     viewModel: FilesViewModel,
-    mode: MainComponent.FilesMode,
+    mode: FilesMode,
     contextMenuForId: String?,
     onContextMenuForId: (String?) -> Unit,
     callbacks: FilesGridContextMenuCallbacks,
@@ -180,7 +180,7 @@ private fun FilesListItem(
                         onContextMenuForId(null)
                         viewModel.trashItem(item.id)
                     },
-                    onRestore = if (mode == MainComponent.FilesMode.TRASH) {
+                    onRestore = if (mode == FilesMode.TRASH) {
                         {
                             onContextMenuForId(null)
                             callbacks.onRequestRestore(item.id)
@@ -188,7 +188,7 @@ private fun FilesListItem(
                     } else {
                         null
                     },
-                    onDeletePermanently = if (mode == MainComponent.FilesMode.TRASH) {
+                    onDeletePermanently = if (mode == FilesMode.TRASH) {
                         {
                             onContextMenuForId(null)
                             callbacks.onRequestDeletePermanently(item.id)

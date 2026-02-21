@@ -49,9 +49,10 @@
 - **:feature:collaboration** – Done. Full screen in module: `CollaborationComponent`, `DefaultCollaborationComponent`, `CollaborationViewModel`, `CollaborationContent`, `CollaborationScreen`, `CollaborationScreenContent`, `CollaborationComponents`, `CollaborationDialogs`, `CollaborationFormatting` (local formatRelativeTime). Depends on `:domain:collaboration`, `:domain:config`, `:domain:auth`, `:data:collaboration` (WebSocket), `:core:resources`, Koin Compose ViewModel, Material3. `featureCollaborationModule` loaded in all entry points.
 - **:feature:federation** – Done. Full screen in module: `FederationComponent`, `DefaultFederationComponent`, `FederationViewModel`, `FederationContent`, `FederationScreen`, `FederationComponents`, `FederationDialogs`, `FederationFormatting` (local formatRelativeTime), `FederationInstancesTab`, `FederationSharesTab`, `FederationIdentitiesTab`, `FederationActivitiesTab`. Depends on `:domain:federation`, `:core:resources`, Koin Compose ViewModel, Material3. `featureFederationModule` loaded in all entry points.
 - **:feature:ai** – Done. Full screen in module: `AIComponent`, `DefaultAIComponent`, `AIViewModel`, `AIContent`, `AIScreen`, `AIScreenContent`, `AIModels` (AIMode, ChatMessage), `AIChatComponents`, `AIComponents`, `AIDialogs`, `AIProviderComponents`. Depends on `:domain:ai`, `:core:resources`, Koin Compose ViewModel, Material3, Decompose. `featureAIModule` (ViewModel with 10 AI use cases via `get<UseCaseType>()`) loaded in all entry points.
-- **:feature:*** (rest) – Placeholder only; ViewModels/screens still in composeApp (files). MainComponent remains in composeApp.
+- **:feature:files** – Done (core). `FilesMode` enum, `FilesViewPreferences` interface, `FilesComponent`, `DefaultFilesComponent`, `FilesViewModel` (with `FilesViewPreferences` + 22 storage/activity/config/metadata/share use cases), `FilesLoader`. UI (FilesContent, dialogs, top bar, grid, list, etc.) remains in composeApp; app provides `PlatformFilesViewPreferences` and uses `FilesMode` from feature. `featureFilesModule` (viewModel with param `FilesMode`) loaded in all entry points. MainComponent uses `FilesMode` from feature.
+- **:feature:*** (rest) – Placeholder only. MainComponent remains in composeApp.
 
-Next: migrate :feature:files (largest; many files and ViewModel params). Use `:core:resources` for strings; follow :feature:federation / :feature:ai as reference.
+Next: optional – move files UI (FilesContent, dialogs, grid, list, etc.) into :feature:files for full encapsulation; would require moving or duplicating shared UI (Breadcrumbs, EmptyState, SelectionToolbar, FileInfoPanel) or introducing :core:ui.
 
 ### Koin module ownership
 
@@ -87,7 +88,8 @@ Each **feature**, **data**, **domain**, and **core** module that exposes or cons
 | Feature | :feature:collaboration | featureCollaborationModule | CollaborationViewModel (param: itemId) |
 | Feature | :feature:federation | featureFederationModule | FederationViewModel |
 | Feature | :feature:ai | featureAIModule | AIViewModel |
-| App     | composeApp      | appModule           | UploadManager; ViewModels still in composeApp (files) until :feature:files is migrated |
+| Feature | :feature:files | featureFilesModule | FilesViewModel (param: FilesMode) |
+| App     | composeApp      | appModule           | UploadManager, FilesViewPreferences; no ViewModels with params left in appModule |
 
 Domain and core modules typically do not define Koin modules (they expose interfaces/types; data/feature modules provide implementations and register them).
 

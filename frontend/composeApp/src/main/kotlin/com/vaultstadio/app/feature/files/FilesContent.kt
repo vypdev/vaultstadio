@@ -28,7 +28,7 @@ import com.vaultstadio.app.domain.storage.model.ViewMode
 import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.upload.FolderUploadEntry
 import com.vaultstadio.app.domain.upload.UploadQueueEntry
-import com.vaultstadio.app.feature.main.MainComponent
+import com.vaultstadio.app.feature.files.FilesMode
 import com.vaultstadio.app.feature.upload.LocalUploadManager
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.files
@@ -106,7 +106,7 @@ fun FilesContent(
 
     // Sync browser URL with current folder path when in Files mode (e.g. /files/test_folder/other_folder)
     LaunchedEffect(viewModel.breadcrumbs, component.mode) {
-        if (component.mode == MainComponent.FilesMode.ALL) {
+        if (component.mode == FilesMode.ALL) {
             val segments = viewModel.breadcrumbs
                 .filter { it.id != null }
                 .map { it.name }
@@ -118,7 +118,7 @@ fun FilesContent(
     // Tell upload manager where to upload/drop when user is in a folder (so files go into current folder)
     LaunchedEffect(component.mode, viewModel.currentFolderId, uploadManager) {
         uploadManager?.let {
-            if (component.mode == MainComponent.FilesMode.ALL) {
+            if (component.mode == FilesMode.ALL) {
                 it.setUploadDestination(viewModel.currentFolderId)
             } else {
                 it.setUploadDestination(null)
@@ -130,7 +130,7 @@ fun FilesContent(
     LaunchedEffect(uploadManager, component.mode) {
         uploadManager ?: return@LaunchedEffect
         uploadManager.uploadCompleted.collect {
-            if (component.mode == MainComponent.FilesMode.ALL) {
+            if (component.mode == FilesMode.ALL) {
                 viewModel.loadItemsForMode(component.mode)
             }
         }
@@ -165,10 +165,10 @@ fun FilesContent(
     }
 
     val title = when (component.mode) {
-        MainComponent.FilesMode.ALL -> strings.files
-        MainComponent.FilesMode.RECENT -> strings.recent
-        MainComponent.FilesMode.STARRED -> strings.starred
-        MainComponent.FilesMode.TRASH -> strings.trash
+        FilesMode.ALL -> strings.files
+        FilesMode.RECENT -> strings.recent
+        FilesMode.STARRED -> strings.starred
+        FilesMode.TRASH -> strings.trash
     }
 
     Scaffold(
@@ -176,7 +176,7 @@ fun FilesContent(
         topBar = {
             FilesTopBar(
                 title = title,
-                showBackButton = component.mode == MainComponent.FilesMode.ALL &&
+                showBackButton = component.mode == FilesMode.ALL &&
                     viewModel.breadcrumbs.size > 1,
                 onNavigateUp = { viewModel.navigateUp() },
                 searchQuery = viewModel.searchQuery,
@@ -196,19 +196,19 @@ fun FilesContent(
                 hasItems = viewModel.items.isNotEmpty(),
                 onSelectAll = { viewModel.selectAll() },
                 onRefresh = { viewModel.refresh() },
-                showUploadButton = component.mode == MainComponent.FilesMode.ALL &&
+                showUploadButton = component.mode == FilesMode.ALL &&
                     uploadManager != null,
                 showUploadMenu = showUploadMenu,
                 onUploadMenuChange = { showUploadMenu = it },
                 onUploadAction = { uploadAction = it },
-                showEmptyTrashButton = component.mode == MainComponent.FilesMode.TRASH &&
+                showEmptyTrashButton = component.mode == FilesMode.TRASH &&
                     viewModel.items.isNotEmpty(),
                 onEmptyTrash = { viewModel.emptyTrash(component.mode) },
                 strings = strings,
             )
         },
         floatingActionButton = {
-            if (component.mode == MainComponent.FilesMode.ALL && !viewModel.isSelectionMode) {
+            if (component.mode == FilesMode.ALL && !viewModel.isSelectionMode) {
                 FloatingActionButton(onClick = {
                     dialogState = dialogState.copy(showNewFolderDialog = true)
                 }) {
@@ -227,7 +227,7 @@ fun FilesContent(
             Column(
                 modifier = Modifier.weight(1f),
             ) {
-                if (component.mode == MainComponent.FilesMode.ALL) {
+                if (component.mode == FilesMode.ALL) {
                     FilesBreadcrumbsBar(
                         breadcrumbs = viewModel.breadcrumbs,
                         currentFolderId = viewModel.currentFolderId,
@@ -263,25 +263,25 @@ fun FilesContent(
                 if (viewModel.isSelectionMode) {
                     SelectionToolbar(
                         selectedCount = viewModel.selectedItems.size,
-                        onDelete = { viewModel.batchDelete(component.mode == MainComponent.FilesMode.TRASH) },
+                        onDelete = { viewModel.batchDelete(component.mode == FilesMode.TRASH) },
                         onClearSelection = { viewModel.clearSelection() },
-                        showMoveAndCopy = component.mode == MainComponent.FilesMode.ALL,
-                        onMove = if (component.mode == MainComponent.FilesMode.ALL) {
+                        showMoveAndCopy = component.mode == FilesMode.ALL,
+                        onMove = if (component.mode == FilesMode.ALL) {
                             { dialogState = dialogState.copy(showMoveDialog = true) }
                         } else {
                             null
                         },
-                        onCopy = if (component.mode == MainComponent.FilesMode.ALL) {
+                        onCopy = if (component.mode == FilesMode.ALL) {
                             { dialogState = dialogState.copy(showCopyDialog = true) }
                         } else {
                             null
                         },
-                        onStar = if (component.mode != MainComponent.FilesMode.TRASH) {
+                        onStar = if (component.mode != FilesMode.TRASH) {
                             { viewModel.batchStar(true) }
                         } else {
                             null
                         },
-                        onDownloadZip = if (component.mode != MainComponent.FilesMode.TRASH) {
+                        onDownloadZip = if (component.mode != FilesMode.TRASH) {
                             {
                                 // Get the ZIP download URL for selected items
                                 val zipUrl = viewModel.getDownloadZipUrl()
@@ -295,10 +295,10 @@ fun FilesContent(
                 }
 
                 val emptyTitle = when (component.mode) {
-                    MainComponent.FilesMode.ALL -> strings.noFiles
-                    MainComponent.FilesMode.RECENT -> strings.noRecentFiles
-                    MainComponent.FilesMode.STARRED -> strings.noStarredFiles
-                    MainComponent.FilesMode.TRASH -> strings.trashEmpty
+                    FilesMode.ALL -> strings.noFiles
+                    FilesMode.RECENT -> strings.noRecentFiles
+                    FilesMode.STARRED -> strings.noStarredFiles
+                    FilesMode.TRASH -> strings.trashEmpty
                 }
                 val gridCallbacks = remember {
                     object : FilesGridContextMenuCallbacks {
@@ -332,7 +332,7 @@ fun FilesContent(
                             emptyTitle = emptyTitle,
                             isLoading = viewModel.isLoading,
                             items = viewModel.items,
-                            folderHasMore = component.mode == MainComponent.FilesMode.ALL && viewModel.folderHasMore,
+                            folderHasMore = component.mode == FilesMode.ALL && viewModel.folderHasMore,
                             onLoadMore = { viewModel.loadMoreFolderItems() },
                             contextMenuForId = contextMenuForId,
                             onContextMenuForId = { contextMenuForId = it },
@@ -345,7 +345,7 @@ fun FilesContent(
                             emptyTitle = emptyTitle,
                             isLoading = viewModel.isLoading,
                             items = viewModel.items,
-                            folderHasMore = component.mode == MainComponent.FilesMode.ALL && viewModel.folderHasMore,
+                            folderHasMore = component.mode == FilesMode.ALL && viewModel.folderHasMore,
                             onLoadMore = { viewModel.loadMoreFolderItems() },
                             contextMenuForId = contextMenuForId,
                             onContextMenuForId = { contextMenuForId = it },
@@ -376,7 +376,7 @@ fun FilesContent(
                     item = currentItem,
                     itemActivity = viewModel.itemActivity,
                     isLoadingActivity = viewModel.isLoadingActivity,
-                    isTrashMode = component.mode == MainComponent.FilesMode.TRASH,
+                    isTrashMode = component.mode == FilesMode.TRASH,
                     previewUrl = viewModel.selectedInfoItem?.let {
                         if (!it.isFolder) viewModel.getPreviewUrl(it.id) else null
                     },
@@ -400,12 +400,12 @@ fun FilesContent(
                     },
                     onStar = { viewModel.toggleStar(currentItem) },
                     onDelete = { viewModel.trashItem(viewModel.selectedInfoItem!!.id) },
-                    onRestore = if (component.mode == MainComponent.FilesMode.TRASH) {
+                    onRestore = if (component.mode == FilesMode.TRASH) {
                         { dialogState = dialogState.copy(itemToRestore = viewModel.selectedInfoItem!!.id) }
                     } else {
                         null
                     },
-                    onDeletePermanently = if (component.mode == MainComponent.FilesMode.TRASH) {
+                    onDeletePermanently = if (component.mode == FilesMode.TRASH) {
                         { dialogState = dialogState.copy(itemToDeletePermanently = viewModel.selectedInfoItem!!.id) }
                     } else {
                         null

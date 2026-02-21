@@ -15,13 +15,11 @@
 package com.vaultstadio.app.di
 
 import com.vaultstadio.app.data.network.ApiClientConfig
-import com.vaultstadio.app.feature.files.FilesViewModel
-import com.vaultstadio.app.feature.main.MainComponent
+import com.vaultstadio.app.feature.files.FilesViewPreferences
+import com.vaultstadio.app.feature.files.PlatformFilesViewPreferences
 import com.vaultstadio.app.feature.upload.UploadManager
 import io.ktor.client.HttpClient
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import org.koin.plugin.module.dsl.viewModel
 
 val appModule = module {
 
@@ -30,6 +28,9 @@ val appModule = module {
     // --- Plugin use cases ---
     // --- Upload manager ---
     single { UploadManager(get()) }
+
+    // --- Files view preferences (implemented by app; consumed by :feature:files ViewModel) ---
+    single<FilesViewPreferences> { PlatformFilesViewPreferences() }
 
     // --- ViewModels (no params) ---
     // ProfileViewModel is in featureProfileModule (:feature:profile)
@@ -49,11 +50,5 @@ val appModule = module {
     // AuthViewModel is in featureAuthModule (:feature:auth)
     // VersionHistoryViewModel is in featureVersionHistoryModule (:feature:versionhistory)
     // CollaborationViewModel is in featureCollaborationModule (:feature:collaboration)
-    viewModel { (mode: MainComponent.FilesMode) ->
-        FilesViewModel(
-            get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
-            get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
-            get(), get(), mode,
-        )
-    }
+    // FilesViewModel is in featureFilesModule (:feature:files)
 }

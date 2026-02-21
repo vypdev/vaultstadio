@@ -77,6 +77,7 @@ kotlin {
                 implementation(project(":feature:collaboration"))
                 implementation(project(":feature:federation"))
                 implementation(project(":feature:ai"))
+                implementation(project(":feature:files"))
                 implementation(project(":data:network"))
                 implementation(project(":data:sync"))
                 implementation(project(":data:metadata"))

@@ -22,7 +22,7 @@ import com.vaultstadio.app.feature.main.MainComponent
 @Composable
 internal fun FileContextMenuItems(
     item: StorageItem,
-    mode: MainComponent.FilesMode,
+    mode: FilesMode,
     onOpen: () -> Unit,
     onRename: () -> Unit,
     onMove: () -> Unit,
@@ -43,7 +43,7 @@ internal fun FileContextMenuItems(
         onClick = onRename,
         leadingIcon = { Icon(Icons.Default.Refresh, contentDescription = null) },
     )
-    if (mode == MainComponent.FilesMode.ALL) {
+    if (mode == FilesMode.ALL) {
         DropdownMenuItem(
             text = { Text("Move to") },
             onClick = onMove,
@@ -55,21 +55,21 @@ internal fun FileContextMenuItems(
             leadingIcon = { Icon(Icons.Default.ArrowDownward, contentDescription = null) },
         )
     }
-    if (mode != MainComponent.FilesMode.TRASH && item.type != ItemType.FOLDER) {
+    if (mode != FilesMode.TRASH && item.type != ItemType.FOLDER) {
         DropdownMenuItem(
             text = { Text("Download") },
             onClick = onDownload,
             leadingIcon = { Icon(Icons.Default.CloudUpload, contentDescription = null) },
         )
     }
-    if (mode != MainComponent.FilesMode.TRASH) {
+    if (mode != FilesMode.TRASH) {
         DropdownMenuItem(
             text = { Text("Add to starred") },
             onClick = onStar,
             leadingIcon = { Icon(Icons.Default.Refresh, contentDescription = null) },
         )
     }
-    if (mode == MainComponent.FilesMode.TRASH) {
+    if (mode == FilesMode.TRASH) {
         onRestore?.let { restore ->
             DropdownMenuItem(
                 text = { Text("Restore") },

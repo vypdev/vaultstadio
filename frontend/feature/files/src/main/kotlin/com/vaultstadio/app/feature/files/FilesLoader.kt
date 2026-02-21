@@ -10,12 +10,7 @@ import com.vaultstadio.app.domain.storage.usecase.GetFolderItemsUseCase
 import com.vaultstadio.app.domain.storage.usecase.GetRecentUseCase
 import com.vaultstadio.app.domain.storage.usecase.GetStarredUseCase
 import com.vaultstadio.app.domain.storage.usecase.GetTrashUseCase
-import com.vaultstadio.app.feature.main.MainComponent
 
-/**
- * Result of loading folder/list items for the files screen.
- * Used by [FilesViewModel] to apply loading results to state.
- */
 internal sealed class LoadItemsResult {
     data class Success(
         val items: List<StorageItem>,
@@ -28,18 +23,11 @@ internal sealed class LoadItemsResult {
     data class Error(val message: String) : LoadItemsResult()
 }
 
-/**
- * Result of loading the next page of folder items (pagination).
- */
 internal sealed class LoadMoreResult {
     data class Success(val newItems: List<StorageItem>, val hasMore: Boolean) : LoadMoreResult()
     data class Error(val message: String) : LoadMoreResult()
 }
 
-/**
- * Encapsulates loading of folder items, recent/starred/trash lists, breadcrumbs, and pagination.
- * Keeps [FilesViewModel] focused on state and UI callbacks.
- */
 internal class FilesLoader(
     private val getFolderItemsUseCase: GetFolderItemsUseCase,
     private val getRecentUseCase: GetRecentUseCase,
@@ -50,26 +38,26 @@ internal class FilesLoader(
 ) {
 
     suspend fun loadItemsForMode(
-        mode: MainComponent.FilesMode,
+        mode: FilesMode,
         currentFolderId: String?,
         sortField: SortField,
         sortOrder: SortOrder,
         currentFolderName: String?,
     ): LoadItemsResult {
         return when (mode) {
-            MainComponent.FilesMode.ALL -> loadFolderItems(
+            FilesMode.ALL -> loadFolderItems(
                 currentFolderId = currentFolderId,
                 sortField = sortField,
                 sortOrder = sortOrder,
                 offset = 0,
                 currentFolderName = currentFolderName,
             )
-            MainComponent.FilesMode.RECENT, MainComponent.FilesMode.STARRED, MainComponent.FilesMode.TRASH -> {
+            FilesMode.RECENT, FilesMode.STARRED, FilesMode.TRASH -> {
                 val listResult = when (mode) {
-                    MainComponent.FilesMode.RECENT -> getRecentUseCase()
-                    MainComponent.FilesMode.STARRED -> getStarredUseCase()
-                    MainComponent.FilesMode.TRASH -> getTrashUseCase()
-                    MainComponent.FilesMode.ALL -> getRecentUseCase()
+                    FilesMode.RECENT -> getRecentUseCase()
+                    FilesMode.STARRED -> getStarredUseCase()
+                    FilesMode.TRASH -> getTrashUseCase()
+                    FilesMode.ALL -> getRecentUseCase()
                 }
                 when (listResult) {
                     is Result.Success -> LoadItemsResult.Success(

@@ -19,7 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.feature.main.MainComponent
+import com.vaultstadio.app.feature.files.FilesMode
 import com.vaultstadio.app.core.resources.StringResources
 
 /**
@@ -302,7 +302,7 @@ fun FilesScreenDialogs(
     state: FilesScreenDialogState,
     onStateChange: (FilesScreenDialogState) -> Unit,
     viewModel: FilesViewModel,
-    mode: MainComponent.FilesMode,
+    mode: FilesMode,
     strings: StringResources,
 ) {
     if (state.showNewFolderDialog) {

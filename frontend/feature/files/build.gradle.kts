@@ -23,7 +23,16 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(project(":domain:result"))
-                implementation(project(":data:network"))
+                implementation(project(":domain:storage"))
+                implementation(project(":domain:activity"))
+                implementation(project(":domain:config"))
+                implementation(project(":domain:metadata"))
+                implementation(project(":domain:share"))
+                implementation(libs.jetbrains.lifecycle.viewmodel)
+                implementation(libs.decompose)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
             }
         }
     }

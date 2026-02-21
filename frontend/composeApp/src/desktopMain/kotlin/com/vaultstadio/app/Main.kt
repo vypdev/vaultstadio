@@ -29,6 +29,7 @@ import com.vaultstadio.app.feature.versionhistory.di.featureVersionHistoryModule
 import com.vaultstadio.app.feature.collaboration.di.featureCollaborationModule
 import com.vaultstadio.app.feature.federation.di.featureFederationModule
 import com.vaultstadio.app.feature.ai.di.featureAIModule
+import com.vaultstadio.app.feature.files.di.featureFilesModule
 import com.vaultstadio.app.feature.sync.di.featureSyncModule
 import com.vaultstadio.app.feature.plugins.di.featurePluginsModule
 import com.vaultstadio.app.data.config.di.configModule
@@ -51,7 +52,7 @@ fun main() {
                 activityModule + adminModule + authModule +
                 featureAuthModule + featureActivityModule + featureAdminModule + featureSettingsModule +
                 featureProfileModule + featureSecurityModule + featureChangePasswordModule + featureSyncModule +
-                featurePluginsModule + featureSharesModule + featureSharedWithMeModule + featureVersionHistoryModule + featureCollaborationModule + featureFederationModule + featureAIModule +
+                featurePluginsModule + featureSharesModule + featureSharedWithMeModule + featureVersionHistoryModule + featureCollaborationModule + featureFederationModule + featureAIModule + featureFilesModule +
                 aiModule + collaborationModule + configModule + shareModule + pluginModule +
                 storageModule + metadataModule + syncModule + federationModule + versionModule,
         )

@@ -12,6 +12,7 @@ import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.domain.storage.model.SortField
 import com.vaultstadio.app.domain.storage.model.SortOrder
 import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.ViewMode
 import com.vaultstadio.app.domain.storage.usecase.BatchCopyUseCase
 import com.vaultstadio.app.domain.storage.usecase.BatchDeleteUseCase
 import com.vaultstadio.app.domain.storage.usecase.BatchMoveUseCase
@@ -34,16 +35,14 @@ import com.vaultstadio.app.domain.config.usecase.GetShareUrlUseCase
 import com.vaultstadio.app.domain.config.usecase.GetStorageUrlsUseCase
 import com.vaultstadio.app.domain.metadata.usecase.GetSearchSuggestionsUseCase
 import com.vaultstadio.app.domain.share.usecase.CreateShareUseCase
-import com.vaultstadio.app.domain.storage.model.ViewMode
-import com.vaultstadio.app.feature.main.MainComponent
-import com.vaultstadio.app.platform.PlatformStorage
-import com.vaultstadio.app.platform.StorageKeys
 import kotlinx.coroutines.launch
+
 /**
  * ViewModel for file management screens (Files, Recent, Starred, Trash).
  * Loading and path resolution are delegated to [FilesLoader]; this class holds state and UI callbacks.
  */
 class FilesViewModel(
+    private val filesViewPreferences: FilesViewPreferences,
     private val getFolderItemsUseCase: GetFolderItemsUseCase,
     private val getRecentUseCase: GetRecentUseCase,
     private val getStarredUseCase: GetStarredUseCase,
@@ -66,7 +65,7 @@ class FilesViewModel(
     private val createShareUseCase: CreateShareUseCase,
     private val getStorageUrlsUseCase: GetStorageUrlsUseCase,
     private val getShareUrlUseCase: GetShareUrlUseCase,
-    private val mode: MainComponent.FilesMode,
+    private val mode: FilesMode,
 ) : ViewModel() {
 
     companion object {
@@ -82,7 +81,6 @@ class FilesViewModel(
         folderPageSize = FOLDER_PAGE_SIZE,
     )
 
-    // Navigation state
     var currentFolderId by mutableStateOf<String?>(null)
         private set
     var currentFolderName by mutableStateOf<String?>(null)
@@ -90,7 +88,6 @@ class FilesViewModel(
     var breadcrumbs by mutableStateOf<List<Breadcrumb>>(emptyList())
         private set
 
-    // Content state
     var items by mutableStateOf<List<StorageItem>>(emptyList())
         private set
     var isLoading by mutableStateOf(false)
@@ -98,7 +95,6 @@ class FilesViewModel(
     var error by mutableStateOf<String?>(null)
         private set
 
-    // View state
     var viewMode by mutableStateOf(ViewMode.GRID)
         private set
     var sortField by mutableStateOf(SortField.TYPE)
@@ -106,7 +102,6 @@ class FilesViewModel(
     var sortOrder by mutableStateOf(SortOrder.ASC)
         private set
 
-    // Pagination
     var folderTotalItems by mutableStateOf(0L)
         private set
     var folderHasMore by mutableStateOf(false)
@@ -114,12 +109,10 @@ class FilesViewModel(
     var isLoadingMore by mutableStateOf(false)
         private set
 
-    // Multi-selection
     var selectedItems by mutableStateOf<Set<String>>(emptySet())
         private set
     val isSelectionMode: Boolean get() = selectedItems.isNotEmpty()
 
-    // Info panel
     var showInfoPanel by mutableStateOf(false)
         private set
     var selectedInfoItem by mutableStateOf<StorageItem?>(null)
@@ -129,9 +122,8 @@ class FilesViewModel(
     var isLoadingActivity by mutableStateOf(false)
         private set
 
-    private var displayedMode: MainComponent.FilesMode = mode
+    private var displayedMode: FilesMode = mode
 
-    // Search
     var searchQuery by mutableStateOf("")
         private set
     var isSearching by mutableStateOf(false)
@@ -139,7 +131,6 @@ class FilesViewModel(
     var searchSuggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
-    // Share
     var isCreatingShare by mutableStateOf(false)
         private set
     var lastCreatedShare by mutableStateOf<ShareLink?>(null)
@@ -153,23 +144,22 @@ class FilesViewModel(
     }
 
     private fun restoreFilesViewPreferences() {
-        PlatformStorage.getString(StorageKeys.VIEW_MODE)?.let { value ->
+        filesViewPreferences.getViewMode()?.let { value ->
             enumValues<ViewMode>().find { it.name == value }?.let { viewMode = it }
         }
-        PlatformStorage.getString(StorageKeys.FILES_SORT_FIELD)?.let { value ->
+        filesViewPreferences.getSortField()?.let { value ->
             enumValues<SortField>().find { it.name == value }?.let { sortField = it }
         }
-        PlatformStorage.getString(StorageKeys.FILES_SORT_ORDER)?.let { value ->
+        filesViewPreferences.getSortOrder()?.let { value ->
             enumValues<SortOrder>().find { it.name == value }?.let { sortOrder = it }
         }
     }
 
-    // --- Navigation ---
     fun navigateToFolder(folderId: String?, folderName: String? = null) {
         currentFolderId = folderId
         currentFolderName = folderName?.takeIf { it.isNotBlank() }
         clearSelection()
-        if (mode == MainComponent.FilesMode.ALL) {
+        if (mode == FilesMode.ALL) {
             breadcrumbs = if (folderId == null) {
                 listOf(Breadcrumb(id = null, name = "Home", path = "/"))
             } else {
@@ -183,7 +173,7 @@ class FilesViewModel(
     }
 
     fun openPathFromSegments(segments: List<String>) {
-        if (mode != MainComponent.FilesMode.ALL || segments.isEmpty()) return
+        if (mode != FilesMode.ALL || segments.isEmpty()) return
         viewModelScope.launch {
             val resolved = loader.resolvePathSegments(segments, sortField, sortOrder)
             resolved?.let { (id, name) -> navigateToFolder(id, name) }
@@ -202,7 +192,7 @@ class FilesViewModel(
 
     fun refresh() = loadItems()
 
-    fun loadItemsForMode(displayedMode: MainComponent.FilesMode) {
+    fun loadItemsForMode(displayedMode: FilesMode) {
         this.displayedMode = displayedMode
         viewModelScope.launch {
             isLoading = true
@@ -221,7 +211,7 @@ class FilesViewModel(
                     folderTotalItems = result.total
                     folderHasMore = result.hasMore
                     breadcrumbs = result.breadcrumbs
-                    if (currentFolderId == null && displayedMode == MainComponent.FilesMode.ALL) {
+                    if (currentFolderId == null && displayedMode == FilesMode.ALL) {
                         currentFolderName = null
                     } else {
                         currentFolderName = result.currentFolderName
@@ -236,7 +226,7 @@ class FilesViewModel(
     private fun loadItems() = loadItemsForMode(displayedMode)
 
     fun loadMoreFolderItems() {
-        if (displayedMode != MainComponent.FilesMode.ALL || !folderHasMore || isLoading || isLoadingMore) return
+        if (displayedMode != FilesMode.ALL || !folderHasMore || isLoading || isLoadingMore) return
         viewModelScope.launch {
             isLoadingMore = true
             when (
@@ -285,7 +275,6 @@ class FilesViewModel(
         }
     }
 
-    // --- File operations ---
     fun createFolder(name: String, onSuccess: () -> Unit = {}) {
         runOpWithLoading(
             block = { createFolderUseCase(name, currentFolderId) },
@@ -320,14 +309,13 @@ class FilesViewModel(
     fun restoreItem(itemId: String) = runOp(block = { restoreItemUseCase(itemId) })
     fun deleteItemPermanently(itemId: String) = runOp(block = { deleteItemUseCase(itemId) })
 
-    fun emptyTrash(displayedMode: MainComponent.FilesMode) {
+    fun emptyTrash(displayedMode: FilesMode) {
         runOpWithLoading(
             block = { emptyTrashUseCase() },
             onSuccess = { loadItemsForMode(displayedMode) },
         )
     }
 
-    // --- Selection ---
     fun toggleItemSelection(itemId: String) {
         selectedItems = if (itemId in selectedItems) selectedItems - itemId else selectedItems + itemId
     }
@@ -341,7 +329,6 @@ class FilesViewModel(
         selectedItems = emptySet()
     }
 
-    // --- Batch ---
     fun batchDelete(permanent: Boolean = false) {
         if (selectedItems.isEmpty()) return
         runOpWithLoading(
@@ -403,7 +390,6 @@ class FilesViewModel(
         )
     }
 
-    // --- Info panel ---
     fun showItemInfo(item: StorageItem) {
         selectedInfoItem = item
         showInfoPanel = true
@@ -427,16 +413,15 @@ class FilesViewModel(
         }
     }
 
-    // --- View controls ---
     fun updateViewMode(mode: ViewMode) {
         viewMode = mode
-        PlatformStorage.setString(StorageKeys.VIEW_MODE, mode.name)
+        filesViewPreferences.setViewMode(mode.name)
     }
 
     fun updateSortField(field: SortField) {
         if (sortField != field) {
             sortField = field
-            PlatformStorage.setString(StorageKeys.FILES_SORT_FIELD, field.name)
+            filesViewPreferences.setSortField(field.name)
             loadItems()
         }
     }
@@ -444,12 +429,11 @@ class FilesViewModel(
     fun updateSortOrder(order: SortOrder) {
         if (sortOrder != order) {
             sortOrder = order
-            PlatformStorage.setString(StorageKeys.FILES_SORT_ORDER, order.name)
+            filesViewPreferences.setSortOrder(order.name)
             loadItems()
         }
     }
 
-    // --- Search ---
     fun search(query: String) {
         searchQuery = query
         if (query.isBlank()) {
@@ -490,14 +474,12 @@ class FilesViewModel(
         searchSuggestions = emptyList()
     }
 
-    // --- URLs ---
     fun getDownloadUrl(itemId: String): String = getStorageUrlsUseCase.downloadUrl(itemId)
     fun getThumbnailUrl(itemId: String, size: String = "medium"): String =
         getStorageUrlsUseCase.thumbnailUrl(itemId, size)
     fun getPreviewUrl(itemId: String): String = getStorageUrlsUseCase.previewUrl(itemId)
     fun getDownloadZipUrl(): String = getStorageUrlsUseCase.batchDownloadZipUrl()
 
-    // --- Error / share ---
     fun clearError() {
         error = null
     }
