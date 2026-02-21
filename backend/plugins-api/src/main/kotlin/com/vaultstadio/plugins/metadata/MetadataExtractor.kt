@@ -11,7 +11,6 @@ import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.plugins.api.AbstractPlugin
 import com.vaultstadio.plugins.context.PluginContext
-import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.plugins.hooks.MetadataExtractionHook
 import kotlinx.serialization.Serializable
 import java.io.InputStream

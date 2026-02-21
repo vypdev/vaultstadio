@@ -5,6 +5,7 @@
 package com.vaultstadio.api.application.usecase.metadata
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.metadata.GetMetadataByItemIdAndPluginUseCaseImpl
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.domain.common.exception.DatabaseException
@@ -35,13 +36,15 @@ class GetMetadataByItemIdAndPluginUseCaseTest {
                 updatedAt = now,
             ),
         )
-        coEvery { metadataRepository.findByItemIdAndPluginId("item-1", "image-metadata") } returns Either.Right(metadata)
+        coEvery { metadataRepository.findByItemIdAndPluginId("item-1", "image-metadata") } returns
+            Either.Right(metadata)
 
         val result = useCase("item-1", "image-metadata")
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right<*>).value.size)
-        assertEquals("height", result.value[0].key)
+        val list = (result as Either.Right<List<StorageItemMetadata>>).value
+        assertEquals(1, list.size)
+        assertEquals("height", list[0].key)
     }
 
     @Test

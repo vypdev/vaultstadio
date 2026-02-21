@@ -14,9 +14,9 @@ import com.vaultstadio.api.dto.PaginatedResponse
 import com.vaultstadio.api.dto.SearchRequest
 import com.vaultstadio.api.dto.toResponse
 import com.vaultstadio.application.usecase.storage.SearchUseCase
-import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.service.StorageService
+import com.vaultstadio.plugins.api.PluginManager
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.request.receive

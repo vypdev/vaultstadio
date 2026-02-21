@@ -16,7 +16,6 @@ import com.vaultstadio.application.usecase.share.GetSharesByUserUseCase
 import com.vaultstadio.application.usecase.share.GetSharesSharedWithUserUseCase
 import com.vaultstadio.application.usecase.storage.DownloadFileUseCase
 import com.vaultstadio.core.domain.service.AccessShareInput
-import com.vaultstadio.domain.share.model.ShareLink
 import com.vaultstadio.core.domain.service.CreateShareInput
 import io.ktor.http.ContentDisposition
 import io.ktor.http.ContentType

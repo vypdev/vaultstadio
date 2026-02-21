@@ -25,6 +25,7 @@ dependencies {
     // Plugin SDK
     implementation(project(":plugins-api"))
     implementation(project(":core"))
+    implementation(project(":domain:storage"))
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
@@ -38,6 +39,7 @@ dependencies {
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
+    testRuntimeOnly(libs.logback)
 }
 
 tasks.test {

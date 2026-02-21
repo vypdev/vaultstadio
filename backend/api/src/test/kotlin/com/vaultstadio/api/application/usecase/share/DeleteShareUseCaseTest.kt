@@ -5,6 +5,7 @@
 package com.vaultstadio.api.application.usecase.share
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.share.DeleteShareUseCaseImpl
 import com.vaultstadio.core.domain.service.ShareService
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery

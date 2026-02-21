@@ -7,16 +7,16 @@
 
 package com.vaultstadio.api.routes.storage
 
-import com.vaultstadio.application.usecase.chunkedupload.ChunkedUploadError
-import com.vaultstadio.application.usecase.chunkedupload.CancelChunkedUploadUseCase
-import com.vaultstadio.application.usecase.chunkedupload.CompleteChunkedUploadUseCase
-import com.vaultstadio.application.usecase.chunkedupload.GetChunkedUploadStatusUseCase
-import com.vaultstadio.application.usecase.chunkedupload.InitChunkedUploadUseCase
-import com.vaultstadio.application.usecase.chunkedupload.UploadChunkUseCase
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.api.dto.toResponse
+import com.vaultstadio.application.usecase.chunkedupload.CancelChunkedUploadUseCase
+import com.vaultstadio.application.usecase.chunkedupload.ChunkedUploadError
+import com.vaultstadio.application.usecase.chunkedupload.CompleteChunkedUploadUseCase
+import com.vaultstadio.application.usecase.chunkedupload.GetChunkedUploadStatusUseCase
+import com.vaultstadio.application.usecase.chunkedupload.InitChunkedUploadUseCase
+import com.vaultstadio.application.usecase.chunkedupload.UploadChunkUseCase
 import com.vaultstadio.core.domain.service.UploadSession
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
@@ -83,10 +83,21 @@ private fun UploadSession.toStatusResponse() = UploadStatusResponse(
 )
 
 private fun ChunkedUploadError.toApiError(): Pair<HttpStatusCode, ApiError> = when (this) {
-    is ChunkedUploadError.NotFound -> HttpStatusCode.NotFound to ApiError("UPLOAD_NOT_FOUND", "Upload session not found")
-    is ChunkedUploadError.Incomplete -> HttpStatusCode.BadRequest to ApiError("INCOMPLETE_UPLOAD", "Missing chunks: ${missingChunks.take(10).joinToString(", ")}${if (missingChunks.size > 10) "..." else ""}")
+    is ChunkedUploadError.NotFound ->
+        HttpStatusCode.NotFound to
+            ApiError("UPLOAD_NOT_FOUND", "Upload session not found")
+    is ChunkedUploadError.Incomplete ->
+        HttpStatusCode.BadRequest to
+            ApiError(
+                "INCOMPLETE_UPLOAD",
+                "Missing chunks: ${missingChunks.take(
+                    10,
+                ).joinToString(", ")}${if (missingChunks.size > 10) "..." else ""}",
+            )
     is ChunkedUploadError.InvalidRequest -> HttpStatusCode.BadRequest to ApiError("INVALID_REQUEST", message)
-    is ChunkedUploadError.InvalidChunkIndex -> HttpStatusCode.BadRequest to ApiError("INVALID_CHUNK_INDEX", "Valid chunk index is required")
+    is ChunkedUploadError.InvalidChunkIndex ->
+        HttpStatusCode.BadRequest to
+            ApiError("INVALID_CHUNK_INDEX", "Valid chunk index is required")
 }
 
 fun Route.chunkedUploadRoutes() {
@@ -133,7 +144,10 @@ fun Route.chunkedUploadRoutes() {
             if (chunkIndex == null || chunkIndex < 0) {
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    ApiResponse<Unit>(success = false, error = ApiError("INVALID_CHUNK_INDEX", "Valid chunk index is required")),
+                    ApiResponse<Unit>(
+                        success = false,
+                        error = ApiError("INVALID_CHUNK_INDEX", "Valid chunk index is required"),
+                    ),
                 )
                 return@post
             }

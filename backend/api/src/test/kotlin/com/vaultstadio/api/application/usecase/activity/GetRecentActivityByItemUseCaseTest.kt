@@ -5,9 +5,10 @@
 package com.vaultstadio.api.application.usecase.activity
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.Activity
-import com.vaultstadio.core.domain.model.ActivityType
-import com.vaultstadio.core.domain.repository.ActivityRepository
+import com.vaultstadio.application.usecase.activity.GetRecentActivityByItemUseCaseImpl
+import com.vaultstadio.domain.activity.model.Activity
+import com.vaultstadio.domain.activity.model.ActivityType
+import com.vaultstadio.domain.activity.repository.ActivityRepository
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -38,7 +39,7 @@ class GetRecentActivityByItemUseCaseTest {
         val result = useCase("item-1", 20)
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right<*>).value.size)
+        assertEquals(1, (result as Either.Right<List<Activity>>).value.size)
     }
 
     @Test

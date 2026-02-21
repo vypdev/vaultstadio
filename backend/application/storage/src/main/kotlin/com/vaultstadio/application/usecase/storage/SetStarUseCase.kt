@@ -16,6 +16,10 @@ interface SetStarUseCase {
 }
 
 class SetStarUseCaseImpl(private val storageService: StorageService) : SetStarUseCase {
-    override suspend fun invoke(itemId: String, userId: String, starred: Boolean): Either<StorageException, StorageItem> =
+    override suspend fun invoke(
+        itemId: String,
+        userId: String,
+        starred: Boolean,
+    ): Either<StorageException, StorageItem> =
         storageService.setStar(itemId, userId, starred)
 }

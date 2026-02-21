@@ -9,7 +9,6 @@
 package com.vaultstadio.api.routes
 
 import arrow.core.Either
-import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.api.config.configureSecurity
 import com.vaultstadio.api.config.user

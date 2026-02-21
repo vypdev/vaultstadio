@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.chunkedupload
 
 import arrow.core.Either
-import com.vaultstadio.api.application.usecase.storage.UploadFileUseCase
-import com.vaultstadio.api.service.UploadSession
-import com.vaultstadio.api.service.UploadSessionManager
+import com.vaultstadio.application.usecase.chunkedupload.CompleteChunkedUploadUseCaseImpl
+import com.vaultstadio.application.usecase.storage.UploadFileUseCase
+import com.vaultstadio.core.domain.service.UploadSession
+import com.vaultstadio.core.domain.service.UploadSessionManager
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.storage.model.ItemType
 import com.vaultstadio.domain.storage.model.StorageItem
-import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -74,7 +75,7 @@ class CompleteChunkedUploadUseCaseTest {
             val result = useCase("upload-1", "user-1")
 
             assertTrue(result.isRight())
-            assertEquals("file-1", (result as Either.Right<*>).value.id)
+            assertEquals("file-1", (result as Either.Right<StorageItem>).value.id)
             verify(exactly = 1) { uploadSessionManager.removeSession("upload-1") }
         } finally {
             File(tempDir).deleteRecursively()

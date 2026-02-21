@@ -20,7 +20,6 @@ package com.vaultstadio.api.routes.storage
 
 import com.vaultstadio.api.config.user
 import io.ktor.http.HttpMethod
-import org.koin.ktor.ext.get as koinGet
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.UserIdPrincipal
 import io.ktor.server.auth.authenticate
@@ -33,6 +32,7 @@ import io.ktor.server.routing.options
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.util.pipeline.PipelineContext
+import org.koin.ktor.ext.get as koinGet
 
 /**
  * WebDAV HTTP methods not in Ktor by default.

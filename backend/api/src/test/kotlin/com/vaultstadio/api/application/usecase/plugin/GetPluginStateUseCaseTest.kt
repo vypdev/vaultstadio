@@ -4,14 +4,15 @@
 
 package com.vaultstadio.api.application.usecase.plugin
 
-import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.application.usecase.plugin.GetPluginStateUseCaseImpl
+import com.vaultstadio.plugins.api.PluginManager
+import com.vaultstadio.plugins.api.PluginState
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import com.vaultstadio.plugins.api.PluginState
 
 class GetPluginStateUseCaseTest {
 

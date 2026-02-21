@@ -5,7 +5,6 @@
 package com.vaultstadio.api.plugins
 
 import arrow.core.Either
-import com.vaultstadio.plugins.api.PluginManager
 import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.ai.AIService
@@ -13,6 +12,7 @@ import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.service.StorageBackend
+import com.vaultstadio.domain.auth.repository.UserRepository
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.PluginException
 import com.vaultstadio.domain.common.exception.PluginLoadException
@@ -21,8 +21,8 @@ import com.vaultstadio.domain.common.exception.StorageBackendException
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.storage.repository.StorageItemQuery
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
-import com.vaultstadio.domain.auth.repository.UserRepository
 import com.vaultstadio.plugins.api.Plugin
+import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.plugins.api.PluginState
 import com.vaultstadio.plugins.context.AIApi
 import com.vaultstadio.plugins.context.AIResult
@@ -292,13 +292,16 @@ class PluginContextImpl(
             return itemResult.fold(
                 { error -> error.left() },
                 { item ->
-                    if (item == null) ItemNotFoundException(itemId).left()
-                    else when {
-                        item.storageKey == null -> StorageBackendException(
-                            "plugin",
-                            "Item has no storage key",
-                        ).left()
-                        else -> storageBackend.retrieve(item.storageKey!!)
+                    if (item == null) {
+                        ItemNotFoundException(itemId).left()
+                    } else {
+                        when {
+                            item.storageKey == null -> StorageBackendException(
+                                "plugin",
+                                "Item has no storage key",
+                            ).left()
+                            else -> storageBackend.retrieve(item.storageKey!!)
+                        }
                     }
                 },
             )

@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.domain.auth.model.UserRole
-import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.application.usecase.auth.LoginUseCaseImpl
 import com.vaultstadio.core.domain.service.LoginInput
 import com.vaultstadio.core.domain.service.LoginResult
 import com.vaultstadio.core.domain.service.UserService
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.domain.common.exception.AuthenticationException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -53,7 +54,7 @@ class LoginUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right<*>).value.sessionToken == "token")
+        assertTrue((result as Either.Right<LoginResult>).value.sessionToken == "token")
     }
 
     @Test

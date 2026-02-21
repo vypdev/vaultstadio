@@ -4,7 +4,8 @@
 
 package com.vaultstadio.api.application.usecase.plugin
 
-import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.application.usecase.plugin.GetPluginEndpointsUseCaseImpl
+import com.vaultstadio.plugins.api.PluginManager
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals

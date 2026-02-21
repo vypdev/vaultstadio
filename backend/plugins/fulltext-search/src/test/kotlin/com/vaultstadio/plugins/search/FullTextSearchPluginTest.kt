@@ -4,8 +4,8 @@
 
 package com.vaultstadio.plugins.search
 
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach

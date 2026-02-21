@@ -6,6 +6,7 @@
 package com.vaultstadio.api.routes.sync
 
 import com.vaultstadio.api.config.user
+import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.application.usecase.sync.DeactivateDeviceUseCase
 import com.vaultstadio.application.usecase.sync.GenerateFileSignatureUseCase
 import com.vaultstadio.application.usecase.sync.GetPendingConflictsUseCase
@@ -15,7 +16,6 @@ import com.vaultstadio.application.usecase.sync.RegisterDeviceUseCase
 import com.vaultstadio.application.usecase.sync.RemoveDeviceUseCase
 import com.vaultstadio.application.usecase.sync.ResolveConflictUseCase
 import com.vaultstadio.application.usecase.sync.SyncPullUseCase
-import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.core.domain.model.ChangeType
 import com.vaultstadio.core.domain.model.ConflictResolution
 import com.vaultstadio.core.domain.model.DeviceType
@@ -26,11 +26,11 @@ import com.vaultstadio.core.domain.service.RecordChangeInput
 import com.vaultstadio.core.domain.service.RegisterDeviceInput
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
-import org.koin.ktor.ext.get as koinGet
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import kotlinx.datetime.Clock
 import com.vaultstadio.core.domain.model.SyncRequest as CoreSyncRequest
+import org.koin.ktor.ext.get as koinGet
 
 internal suspend fun handleRegisterDevice(call: ApplicationCall) {
     val registerDeviceUseCase: RegisterDeviceUseCase = call.application.koinGet()

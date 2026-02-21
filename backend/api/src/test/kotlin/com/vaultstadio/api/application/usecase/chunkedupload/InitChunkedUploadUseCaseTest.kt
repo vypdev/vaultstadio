@@ -5,12 +5,14 @@
 package com.vaultstadio.api.application.usecase.chunkedupload
 
 import arrow.core.Either
-import com.vaultstadio.api.service.UploadSession
-import com.vaultstadio.api.service.UploadSessionManager
+import com.vaultstadio.application.usecase.chunkedupload.ChunkedUploadError
+import com.vaultstadio.application.usecase.chunkedupload.InitChunkedUploadResult
+import com.vaultstadio.application.usecase.chunkedupload.InitChunkedUploadUseCaseImpl
+import com.vaultstadio.core.domain.service.UploadSession
+import com.vaultstadio.core.domain.service.UploadSessionManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -43,9 +45,16 @@ class InitChunkedUploadUseCaseTest {
         val result = useCase("large.bin", 50 * 1024 * 1024, "user-1", null, null, 10 * 1024 * 1024)
 
         assertTrue(result.isRight())
-        val data = (result as Either.Right<*>).value
+        val data = (result as Either.Right<InitChunkedUploadResult>).value
         assertEquals(5, data.totalChunks)
         assertEquals(10 * 1024 * 1024, data.chunkSize)
-        verify(exactly = 1) { uploadSessionManager.createSession(match<UploadSession> { it.fileName == "large.bin" && it.userId == "user-1" }) }
+        verify(exactly = 1) {
+            uploadSessionManager.createSession(
+                match<UploadSession> {
+                    it.fileName == "large.bin" &&
+                        it.userId == "user-1"
+                },
+            )
+        }
     }
 }

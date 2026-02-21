@@ -5,9 +5,9 @@
 package com.vaultstadio.application.usecase.share
 
 import arrow.core.Either
-import com.vaultstadio.domain.share.model.ShareLink
 import com.vaultstadio.core.domain.service.ShareService
 import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.share.model.ShareLink
 
 interface GetShareUseCase {
     suspend operator fun invoke(shareId: String): Either<StorageException, ShareLink>

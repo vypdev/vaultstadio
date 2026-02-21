@@ -9,6 +9,8 @@ package com.vaultstadio.api.routes.plugin
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
+import com.vaultstadio.api.dto.PluginConfigResponse
+import com.vaultstadio.api.dto.PluginInfoResponse
 import com.vaultstadio.application.usecase.plugin.DisablePluginUseCase
 import com.vaultstadio.application.usecase.plugin.EnablePluginUseCase
 import com.vaultstadio.application.usecase.plugin.GetPluginEndpointsUseCase
@@ -16,8 +18,6 @@ import com.vaultstadio.application.usecase.plugin.GetPluginStateUseCase
 import com.vaultstadio.application.usecase.plugin.GetPluginUseCase
 import com.vaultstadio.application.usecase.plugin.HandlePluginEndpointUseCase
 import com.vaultstadio.application.usecase.plugin.ListPluginsUseCase
-import com.vaultstadio.api.dto.PluginConfigResponse
-import com.vaultstadio.api.dto.PluginInfoResponse
 import com.vaultstadio.domain.auth.model.UserRole
 import com.vaultstadio.plugins.context.EndpointRequest
 import io.ktor.http.ContentType

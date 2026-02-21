@@ -6,9 +6,9 @@ package com.vaultstadio.api.application.usecase.user
 
 import arrow.core.Either
 import com.vaultstadio.application.usecase.user.GetQuotaUseCaseImpl
-import com.vaultstadio.domain.storage.model.StorageQuota
 import com.vaultstadio.core.domain.service.UserService
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.storage.model.StorageQuota
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

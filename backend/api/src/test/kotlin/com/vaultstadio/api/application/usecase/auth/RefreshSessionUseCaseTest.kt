@@ -5,11 +5,12 @@
 package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.domain.auth.model.UserRole
-import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.application.usecase.auth.RefreshSessionUseCaseImpl
 import com.vaultstadio.core.domain.service.RefreshResult
 import com.vaultstadio.core.domain.service.UserService
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -48,7 +49,7 @@ class RefreshSessionUseCaseTest {
         val result = useCase("refresh-1")
 
         assertTrue(result.isRight())
-        assertEquals("new-token", (result as Either.Right<*>).value.sessionToken)
+        assertEquals("new-token", (result as Either.Right<RefreshResult>).value.sessionToken)
     }
 
     @Test

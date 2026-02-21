@@ -4,6 +4,10 @@
 
 package com.vaultstadio.api.application.usecase.health
 
+import com.vaultstadio.application.usecase.health.ComponentHealthResult
+import com.vaultstadio.application.usecase.health.GetDetailedHealthUseCaseImpl
+import com.vaultstadio.application.usecase.health.GetReadinessUseCase
+import com.vaultstadio.application.usecase.health.ReadinessResult
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

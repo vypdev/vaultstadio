@@ -5,6 +5,11 @@
 package com.vaultstadio.api.config
 
 import com.vaultstadio.api.plugins.PluginManagerImpl
+import com.vaultstadio.api.routes.storage.S3Operations
+import com.vaultstadio.api.routes.storage.WebDAVOperations
+import com.vaultstadio.api.service.InMemoryThumbnailCache
+import com.vaultstadio.api.service.InMemoryUploadSessionManager
+import com.vaultstadio.api.service.ThumbnailCache
 import com.vaultstadio.application.di.applicationActivityModule
 import com.vaultstadio.application.di.applicationAdminModule
 import com.vaultstadio.application.di.applicationAiModule
@@ -18,13 +23,6 @@ import com.vaultstadio.application.di.applicationStorageModule
 import com.vaultstadio.application.di.applicationSyncModule
 import com.vaultstadio.application.di.applicationUserModule
 import com.vaultstadio.application.di.applicationVersionModule
-import com.vaultstadio.plugins.api.PluginManager
-import com.vaultstadio.api.routes.storage.S3Operations
-import com.vaultstadio.api.routes.storage.WebDAVOperations
-import com.vaultstadio.api.service.InMemoryThumbnailCache
-import com.vaultstadio.api.service.InMemoryUploadSessionManager
-import com.vaultstadio.api.service.ThumbnailCache
-import com.vaultstadio.core.domain.service.UploadSessionManager
 import com.vaultstadio.core.ai.AIService
 import com.vaultstadio.core.ai.AIServiceImpl
 import com.vaultstadio.core.domain.event.EventBus
@@ -34,12 +32,6 @@ import com.vaultstadio.core.domain.repository.FederationRepository
 import com.vaultstadio.core.domain.repository.FileVersionRepository
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.repository.SyncRepository
-import com.vaultstadio.domain.activity.repository.ActivityRepository
-import com.vaultstadio.domain.auth.repository.ApiKeyRepository
-import com.vaultstadio.domain.auth.repository.SessionRepository
-import com.vaultstadio.domain.auth.repository.UserRepository
-import com.vaultstadio.domain.share.repository.ShareRepository
-import com.vaultstadio.domain.storage.repository.StorageItemRepository
 import com.vaultstadio.core.domain.service.ActivityLogger
 import com.vaultstadio.core.domain.service.CollaborationService
 import com.vaultstadio.core.domain.service.FederationCryptoService
@@ -56,7 +48,14 @@ import com.vaultstadio.core.domain.service.StorageBackend
 import com.vaultstadio.core.domain.service.StorageService
 import com.vaultstadio.core.domain.service.SyncService
 import com.vaultstadio.core.domain.service.TransactionManager
+import com.vaultstadio.core.domain.service.UploadSessionManager
 import com.vaultstadio.core.domain.service.UserService
+import com.vaultstadio.domain.activity.repository.ActivityRepository
+import com.vaultstadio.domain.auth.repository.ApiKeyRepository
+import com.vaultstadio.domain.auth.repository.SessionRepository
+import com.vaultstadio.domain.auth.repository.UserRepository
+import com.vaultstadio.domain.share.repository.ShareRepository
+import com.vaultstadio.domain.storage.repository.StorageItemRepository
 import com.vaultstadio.infrastructure.persistence.ExposedActivityRepository
 import com.vaultstadio.infrastructure.persistence.ExposedApiKeyRepository
 import com.vaultstadio.infrastructure.persistence.ExposedCollaborationRepository
@@ -73,6 +72,7 @@ import com.vaultstadio.infrastructure.security.BCryptPasswordHasher
 import com.vaultstadio.infrastructure.storage.LocalStorageBackend
 import com.vaultstadio.infrastructure.storage.S3StorageBackend
 import com.vaultstadio.infrastructure.storage.S3StorageConfig
+import com.vaultstadio.plugins.api.PluginManager
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.Application
 import io.ktor.server.application.install

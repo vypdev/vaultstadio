@@ -7,9 +7,9 @@
 package com.vaultstadio.application.usecase.storage
 
 import arrow.core.Either
-import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.core.domain.service.StorageService
 import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.storage.model.StorageItem
 
 /**
  * Use case for getting breadcrumb path for an item.

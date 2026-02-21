@@ -5,8 +5,10 @@
 package com.vaultstadio.api.application.usecase.chunkedupload
 
 import arrow.core.Either
-import com.vaultstadio.api.service.UploadSession
-import com.vaultstadio.api.service.UploadSessionManager
+import com.vaultstadio.application.usecase.chunkedupload.ChunkedUploadError
+import com.vaultstadio.application.usecase.chunkedupload.GetChunkedUploadStatusUseCaseImpl
+import com.vaultstadio.core.domain.service.UploadSession
+import com.vaultstadio.core.domain.service.UploadSessionManager
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.Clock
@@ -48,6 +50,6 @@ class GetChunkedUploadStatusUseCaseTest {
         val result = useCase("upload-1", "user-1")
 
         assertTrue(result.isRight())
-        assertEquals("f.bin", (result as Either.Right<*>).value.fileName)
+        assertEquals("f.bin", (result as Either.Right<UploadSession>).value.fileName)
     }
 }

@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.share
 
 import arrow.core.Either
-import com.vaultstadio.domain.storage.model.ItemType
-import com.vaultstadio.core.domain.model.ShareLink
-import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.application.usecase.share.AccessShareUseCaseImpl
 import com.vaultstadio.core.domain.service.AccessShareInput
 import com.vaultstadio.core.domain.service.ShareService
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.share.model.ShareLink
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -48,7 +49,7 @@ class AccessShareUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        val pair = (result as Either.Right<*>).value
+        val pair = (result as Either.Right<Pair<ShareLink, StorageItem>>).value
         assertTrue(pair.first.id == "s1" && pair.second.id == "item-1")
     }
 

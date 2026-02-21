@@ -6,9 +6,6 @@
 
 package com.vaultstadio.application.usecase.health
 
-import com.vaultstadio.domain.auth.repository.UserRepository
-import com.vaultstadio.core.domain.service.StorageBackend
-
 /**
  * Use case for detailed health check (readiness checks + memory + uptime).
  */

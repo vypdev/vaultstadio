@@ -4,7 +4,8 @@
 
 package com.vaultstadio.api.application.usecase.plugin
 
-import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.application.usecase.plugin.HandlePluginEndpointUseCaseImpl
+import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.plugins.context.EndpointRequest
 import com.vaultstadio.plugins.context.EndpointResponse
 import io.mockk.coEvery

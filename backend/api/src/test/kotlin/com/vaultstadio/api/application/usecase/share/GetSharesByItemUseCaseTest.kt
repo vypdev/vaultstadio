@@ -5,9 +5,10 @@
 package com.vaultstadio.api.application.usecase.share
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ShareLink
+import com.vaultstadio.application.usecase.share.GetSharesByItemUseCaseImpl
 import com.vaultstadio.core.domain.service.ShareService
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.share.model.ShareLink
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -38,7 +39,7 @@ class GetSharesByItemUseCaseTest {
         val result = useCase("item-1", "user-1")
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right<*>).value.size)
+        assertEquals(1, (result as Either.Right<List<ShareLink>>).value.size)
     }
 
     @Test

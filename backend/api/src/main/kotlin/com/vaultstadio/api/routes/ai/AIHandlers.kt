@@ -8,18 +8,18 @@ package com.vaultstadio.api.routes.ai
 import com.vaultstadio.api.config.user
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
+import com.vaultstadio.application.usecase.ai.AIServiceUseCase
 import com.vaultstadio.core.ai.AIError
 import com.vaultstadio.core.ai.AIMessage
-import com.vaultstadio.application.usecase.ai.AIServiceUseCase
 import com.vaultstadio.core.ai.AIProviderConfig
 import com.vaultstadio.core.ai.AIProviderType
 import com.vaultstadio.core.ai.AIRequest
 import com.vaultstadio.domain.auth.model.UserRole
-import org.koin.ktor.ext.get as koinGet
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
+import org.koin.ktor.ext.get as koinGet
 
 internal suspend fun handleGetProviders(call: ApplicationCall) {
     val aiUseCase: AIServiceUseCase = call.application.koinGet()

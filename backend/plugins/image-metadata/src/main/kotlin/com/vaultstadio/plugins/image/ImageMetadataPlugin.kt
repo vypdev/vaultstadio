@@ -18,8 +18,8 @@ import com.drew.metadata.png.PngDirectory
 import com.drew.metadata.xmp.XmpDirectory
 import com.vaultstadio.core.domain.event.EventHandlerResult
 import com.vaultstadio.core.domain.event.FileEvent
-import com.vaultstadio.core.domain.model.StorageItem
 import com.vaultstadio.core.domain.model.StorageItemMetadata
+import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.plugins.api.AbstractPlugin
 import com.vaultstadio.plugins.api.PluginMetadata
 import com.vaultstadio.plugins.api.PluginPermission

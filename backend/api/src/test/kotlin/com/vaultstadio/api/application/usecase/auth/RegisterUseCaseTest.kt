@@ -5,11 +5,12 @@
 package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.domain.auth.model.UserRole
-import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.application.usecase.auth.RegisterUseCaseImpl
 import com.vaultstadio.core.domain.service.RegisterUserInput
 import com.vaultstadio.core.domain.service.UserService
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.domain.common.exception.ValidationException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -45,7 +46,7 @@ class RegisterUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right<*>).value.id == user.id)
+        assertTrue((result as Either.Right<User>).value.id == user.id)
     }
 
     @Test

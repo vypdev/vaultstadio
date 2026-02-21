@@ -6,8 +6,8 @@
 
 package com.vaultstadio.application.usecase.plugin
 
-import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.plugins.api.Plugin
+import com.vaultstadio.plugins.api.PluginManager
 
 interface GetPluginUseCase {
 

@@ -5,8 +5,9 @@
 package com.vaultstadio.api.application.usecase.plugin
 
 import arrow.core.Either
-import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.application.usecase.plugin.EnablePluginUseCaseImpl
 import com.vaultstadio.domain.common.exception.PluginNotFoundException
+import com.vaultstadio.plugins.api.PluginManager
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

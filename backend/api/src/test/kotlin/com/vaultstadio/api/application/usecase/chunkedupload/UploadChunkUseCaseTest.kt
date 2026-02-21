@@ -5,8 +5,10 @@
 package com.vaultstadio.api.application.usecase.chunkedupload
 
 import arrow.core.Either
-import com.vaultstadio.api.service.UploadSession
-import com.vaultstadio.api.service.UploadSessionManager
+import com.vaultstadio.application.usecase.chunkedupload.ChunkedUploadError
+import com.vaultstadio.application.usecase.chunkedupload.UploadChunkUseCaseImpl
+import com.vaultstadio.core.domain.service.UploadSession
+import com.vaultstadio.core.domain.service.UploadSessionManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

@@ -10,7 +10,6 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.service.GetOrCreateFolderResult
 import com.vaultstadio.core.domain.service.StorageService
 import com.vaultstadio.domain.common.exception.StorageException
-import com.vaultstadio.domain.storage.model.StorageItem
 
 interface GetOrCreateFolderUseCase {
     suspend operator fun invoke(

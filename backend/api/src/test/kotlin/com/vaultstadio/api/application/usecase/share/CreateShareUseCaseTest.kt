@@ -5,10 +5,11 @@
 package com.vaultstadio.api.application.usecase.share
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ShareLink
+import com.vaultstadio.application.usecase.share.CreateShareUseCaseImpl
 import com.vaultstadio.core.domain.service.CreateShareInput
 import com.vaultstadio.core.domain.service.ShareService
 import com.vaultstadio.domain.common.exception.AuthorizationException
+import com.vaultstadio.domain.share.model.ShareLink
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -47,7 +48,7 @@ class CreateShareUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right<*>).value.id == share.id)
+        assertTrue((result as Either.Right<ShareLink>).value.id == share.id)
     }
 
     @Test

@@ -8,12 +8,12 @@ package com.vaultstadio.application.usecase.chunkedupload
 
 import arrow.core.Either
 import com.vaultstadio.application.usecase.storage.UploadFileUseCase
+import com.vaultstadio.core.domain.service.UploadFileInput
 import com.vaultstadio.core.domain.service.UploadSessionManager
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.common.exception.ValidationException
 import com.vaultstadio.domain.storage.model.StorageItem
-import com.vaultstadio.core.domain.service.UploadFileInput
 import java.io.File
 import java.io.FileInputStream
 import java.io.SequenceInputStream

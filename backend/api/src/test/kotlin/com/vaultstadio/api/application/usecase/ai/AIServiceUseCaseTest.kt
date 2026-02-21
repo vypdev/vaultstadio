@@ -5,6 +5,7 @@
 package com.vaultstadio.api.application.usecase.ai
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.ai.AIServiceUseCaseImpl
 import com.vaultstadio.core.ai.AIModel
 import com.vaultstadio.core.ai.AIProviderConfig
 import com.vaultstadio.core.ai.AIProviderType
@@ -59,7 +60,7 @@ class AIServiceUseCaseTest {
         val result = useCase.listModels()
 
         assertTrue(result.isRight())
-        val list = (result as Either.Right<*>).value
+        val list = (result as Either.Right<List<AIModel>>).value
         assertEquals(1, list.size)
         assertEquals("llama2", list[0].id)
     }

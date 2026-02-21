@@ -28,6 +28,7 @@ dependencies {
     // Plugin SDK
     implementation(project(":plugins-api"))
     implementation(project(":core"))
+    implementation(project(":domain:storage"))
 
     // Apache Lucene for full-text search
     implementation("org.apache.lucene:lucene-core:$luceneVersion")
@@ -52,6 +53,7 @@ dependencies {
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
+    testRuntimeOnly(libs.logback)
 }
 
 tasks.test {

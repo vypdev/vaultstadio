@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.metadata
 
 import arrow.core.Either
-import com.vaultstadio.api.application.usecase.storage.GetItemUseCase
-import com.vaultstadio.domain.storage.model.ItemType
-import com.vaultstadio.domain.storage.model.StorageItem
-import com.vaultstadio.domain.storage.model.StorageItemMetadata
+import com.vaultstadio.application.usecase.metadata.GetItemMetadataUseCaseImpl
+import com.vaultstadio.application.usecase.storage.GetItemUseCase
+import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -54,7 +55,7 @@ class GetItemMetadataUseCaseTest {
         val result = useCase("item-1", "user-1")
 
         assertTrue(result.isRight())
-        val (resultItem, resultMeta) = (result as Either.Right<*>).value
+        val (resultItem, resultMeta) = (result as Either.Right<Pair<StorageItem, List<StorageItemMetadata>>>).value
         assertEquals(item.id, resultItem.id)
         assertEquals(1, resultMeta.size)
         assertEquals("width", resultMeta[0].key)

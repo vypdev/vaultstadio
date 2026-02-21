@@ -6,11 +6,11 @@ package com.vaultstadio.api.application.usecase.user
 
 import arrow.core.Either
 import com.vaultstadio.application.usecase.user.UpdateUserUseCaseImpl
+import com.vaultstadio.core.domain.service.UpdateUserInput
+import com.vaultstadio.core.domain.service.UserService
 import com.vaultstadio.domain.auth.model.User
 import com.vaultstadio.domain.auth.model.UserRole
 import com.vaultstadio.domain.auth.model.UserStatus
-import com.vaultstadio.core.domain.service.UpdateUserInput
-import com.vaultstadio.core.domain.service.UserService
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk

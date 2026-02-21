@@ -5,9 +5,10 @@
 package com.vaultstadio.api.application.usecase.activity
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.Activity
-import com.vaultstadio.core.domain.model.ActivityType
-import com.vaultstadio.core.domain.repository.ActivityRepository
+import com.vaultstadio.application.usecase.activity.GetRecentActivityByUserUseCaseImpl
+import com.vaultstadio.domain.activity.model.Activity
+import com.vaultstadio.domain.activity.model.ActivityType
+import com.vaultstadio.domain.activity.repository.ActivityRepository
 import com.vaultstadio.domain.common.exception.DatabaseException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -41,7 +42,7 @@ class GetRecentActivityByUserUseCaseTest {
         val result = useCase(userId, limit)
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right<*>).value.size)
+        assertEquals(1, (result as Either.Right<List<Activity>>).value.size)
     }
 
     @Test

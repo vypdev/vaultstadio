@@ -26,6 +26,7 @@ dependencies {
     // Plugin SDK
     implementation(project(":plugins-api"))
     implementation(project(":core"))
+    implementation(project(":domain:storage"))
 
     // HTTP Client for AI APIs
     implementation(libs.ktor.client.core)

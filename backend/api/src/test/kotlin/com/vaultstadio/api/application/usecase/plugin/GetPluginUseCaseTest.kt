@@ -4,8 +4,9 @@
 
 package com.vaultstadio.api.application.usecase.plugin
 
-import com.vaultstadio.api.plugins.PluginManager
+import com.vaultstadio.application.usecase.plugin.GetPluginUseCaseImpl
 import com.vaultstadio.plugins.api.Plugin
+import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.plugins.api.PluginMetadata
 import io.mockk.every
 import io.mockk.mockk

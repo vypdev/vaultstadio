@@ -5,8 +5,9 @@
 package com.vaultstadio.api.application.usecase.health
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.repository.UserRepository
+import com.vaultstadio.application.usecase.health.GetReadinessUseCaseImpl
 import com.vaultstadio.core.domain.service.StorageBackend
+import com.vaultstadio.domain.auth.repository.UserRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -35,7 +36,8 @@ class GetReadinessUseCaseTest {
 
     @Test
     fun invokeReturnsNotReadyWhenDatabaseFails() = runTest {
-        coEvery { userRepository.countAll() } returns Either.Left(com.vaultstadio.domain.common.exception.DatabaseException("DB down"))
+        coEvery { userRepository.countAll() } returns
+            Either.Left(com.vaultstadio.domain.common.exception.DatabaseException("DB down"))
         coEvery { storageBackend.isAvailable() } returns Either.Right(true)
 
         val result = useCase()

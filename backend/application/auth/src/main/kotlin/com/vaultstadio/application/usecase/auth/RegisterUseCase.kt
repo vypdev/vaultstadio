@@ -7,9 +7,9 @@
 package com.vaultstadio.application.usecase.auth
 
 import arrow.core.Either
-import com.vaultstadio.domain.auth.model.User
 import com.vaultstadio.core.domain.service.RegisterUserInput
 import com.vaultstadio.core.domain.service.UserService
+import com.vaultstadio.domain.auth.model.User
 import com.vaultstadio.domain.common.exception.StorageException
 
 interface RegisterUseCase {

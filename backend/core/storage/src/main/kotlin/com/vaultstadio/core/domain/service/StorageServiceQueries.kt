@@ -8,11 +8,11 @@ package com.vaultstadio.core.domain.service
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.vaultstadio.domain.storage.model.StorageItem
-import com.vaultstadio.domain.storage.repository.StorageItemRepository
 import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.storage.repository.StorageItemRepository
 
 /**
  * Get an item by ID and verify the user owns it.

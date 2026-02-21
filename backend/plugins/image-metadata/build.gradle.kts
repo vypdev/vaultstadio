@@ -25,6 +25,7 @@ dependencies {
     // Plugin SDK
     implementation(project(":plugins-api"))
     implementation(project(":core"))
+    implementation(project(":domain:storage"))
 
     // Image metadata extraction
     implementation("com.drewnoakes:metadata-extractor:2.19.0")
@@ -41,6 +42,7 @@ dependencies {
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
+    testRuntimeOnly(libs.logback)
 }
 
 tasks.test {

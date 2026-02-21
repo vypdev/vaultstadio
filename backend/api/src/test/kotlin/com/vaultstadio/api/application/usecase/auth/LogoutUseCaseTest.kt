@@ -5,6 +5,7 @@
 package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.auth.LogoutUseCaseImpl
 import com.vaultstadio.core.domain.service.UserService
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery

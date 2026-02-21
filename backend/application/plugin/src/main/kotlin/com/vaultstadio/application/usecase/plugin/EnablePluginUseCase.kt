@@ -7,8 +7,8 @@
 package com.vaultstadio.application.usecase.plugin
 
 import arrow.core.Either
-import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.domain.common.exception.PluginException
+import com.vaultstadio.plugins.api.PluginManager
 
 interface EnablePluginUseCase {
 

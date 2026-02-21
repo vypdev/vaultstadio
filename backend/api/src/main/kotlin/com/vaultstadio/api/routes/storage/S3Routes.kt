@@ -24,7 +24,6 @@ package com.vaultstadio.api.routes.storage
 
 import com.vaultstadio.api.config.user
 import io.ktor.server.application.ApplicationCall
-import org.koin.ktor.ext.get as koinGet
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -34,6 +33,7 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import java.util.UUID
+import org.koin.ktor.ext.get as koinGet
 
 /**
  * S3 error codes following AWS S3 specification.
