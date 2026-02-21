@@ -8,6 +8,8 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.vaultstadio.app.core.resources.Language
+import com.vaultstadio.app.core.resources.ThemeMode
 import com.vaultstadio.app.data.network.TokenStorage
 import com.vaultstadio.app.domain.auth.AuthRepository
 import com.vaultstadio.app.domain.auth.model.User
@@ -222,11 +224,11 @@ class DefaultMainComponent(
                     onNavigateToChangePassword = { navigateTo(MainDestination.CHANGE_PASSWORD) },
                     onNavigateToLicenses = { navigateTo(MainDestination.LICENSES) },
                     initialThemeMode = com.vaultstadio.app.ui.theme.ThemeSettings.themeMode,
-                    onThemeModeChangeCallback = { mode: com.vaultstadio.app.core.resources.ThemeMode ->
+                    onThemeModeChangeCallback = { mode: ThemeMode ->
                         com.vaultstadio.app.ui.theme.ThemeSettings.themeMode = mode
                     },
                     initialLanguage = com.vaultstadio.app.core.resources.Strings.currentLanguage,
-                    onLanguageChangeCallback = { lang: com.vaultstadio.app.core.resources.Language ->
+                    onLanguageChangeCallback = { lang: Language ->
                         com.vaultstadio.app.core.resources.Strings.currentLanguage = lang
                         try {
                             com.vaultstadio.app.platform.PlatformStorage.setString(

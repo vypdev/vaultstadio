@@ -6,8 +6,8 @@ package com.vaultstadio.app.domain.admin
 
 import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.admin.model.PaginatedResponse
-import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.admin.model.UserStatus
+import com.vaultstadio.app.domain.auth.model.UserRole
 import com.vaultstadio.app.domain.result.Result
 
 interface AdminRepository {

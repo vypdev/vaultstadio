@@ -25,8 +25,8 @@ private class FakeGetCurrentUserUseCase(
     initialUser: User? = null,
 ) : GetCurrentUserUseCase {
     private val user = initialUser
-    private val _flow = MutableStateFlow(user)
-    override val currentUserFlow: StateFlow<User?> = _flow.asStateFlow()
+    private val _currentUserFlow = MutableStateFlow(user)
+    override val currentUserFlow: StateFlow<User?> = _currentUserFlow.asStateFlow()
 
     private val defaultUser = User("u1", "a@b.com", "user", UserRole.USER, null, testInstant)
 

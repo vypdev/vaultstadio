@@ -9,9 +9,6 @@ import com.vaultstadio.app.data.sync.service.SyncService
 import com.vaultstadio.app.domain.sync.SyncRepository
 import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.DeviceType
-import com.vaultstadio.app.domain.sync.model.SyncConflict
-import com.vaultstadio.app.domain.sync.model.SyncDevice
-import com.vaultstadio.app.domain.sync.model.SyncResponse
 
 class SyncRepositoryImpl(
     private val syncService: SyncService,

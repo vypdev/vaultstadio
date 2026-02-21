@@ -6,7 +6,6 @@ package com.vaultstadio.app.data.share.service
 
 import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.share.api.ShareApi
-import com.vaultstadio.app.data.share.dto.CreateShareRequestDTO
 import com.vaultstadio.app.data.share.mapper.createShareRequestDTO
 import com.vaultstadio.app.data.share.mapper.toDomain
 import com.vaultstadio.app.data.share.mapper.toShareList

@@ -4,9 +4,9 @@
 
 package com.vaultstadio.app.data.share.dto
 
-import kotlin.time.Instant
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 @Serializable
 data class ShareLinkDTO(

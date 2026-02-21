@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.core.resources.strings
 import kotlin.time.Clock
+import kotlinx.datetime.Instant
 
 @Composable
 fun SharedWithMeItemCard(
@@ -251,7 +252,7 @@ private fun formatFileSize(sizeInBytes: Long): String {
     }
 }
 
-private fun formatRelativeTime(instant: kotlinx.datetime.Instant): String {
+private fun formatRelativeTime(instant: Instant): String {
     val now = Clock.System.now()
     val diff = now - instant
     val seconds = diff.inWholeSeconds

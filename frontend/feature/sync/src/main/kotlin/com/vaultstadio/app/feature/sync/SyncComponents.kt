@@ -40,6 +40,7 @@ import com.vaultstadio.app.domain.sync.model.DeviceType
 import com.vaultstadio.app.domain.sync.model.SyncConflict
 import com.vaultstadio.app.domain.sync.model.SyncDevice
 import kotlin.time.Clock
+import kotlinx.datetime.Instant
 
 @Composable
 fun DeviceCard(
@@ -231,7 +232,7 @@ fun getDeviceIcon(deviceType: DeviceType): ImageVector {
     }
 }
 
-private fun formatRelativeTime(instant: kotlinx.datetime.Instant): String {
+private fun formatRelativeTime(instant: Instant): String {
     val now = Clock.System.now()
     val diff = now - instant
     val seconds = diff.inWholeSeconds

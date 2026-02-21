@@ -1,3 +1,4 @@
+@file:Suppress("MatchingDeclarationName")
 /**
  * VaultStadio Desktop File Picker Implementation
  *
@@ -14,6 +15,7 @@ import kotlinx.coroutines.withContext
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.file.Files
 
@@ -99,37 +101,76 @@ actual suspend fun openFilePicker(
         return@withContext emptyList()
     }
 
-    files.mapNotNull { file ->
-        try {
-            // Check file size - if too large, skip loading data
-            if (file.length() > LARGE_FILE_THRESHOLD) {
-                val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
-                SelectedFile(
-                    name = file.name,
-                    size = file.length(),
-                    mimeType = mimeType,
-                    data = ByteArray(0), // Empty - use chunked upload
-                )
-            } else {
-                val bytes = Files.readAllBytes(file.toPath())
-                val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
-                SelectedFile(
-                    name = file.name,
-                    size = file.length(),
-                    mimeType = mimeType,
-                    data = bytes,
-                )
+        files.mapNotNull { file ->
+            try {
+                // Check file size - if too large, skip loading data
+                if (file.length() > LARGE_FILE_THRESHOLD) {
+                    val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
+                    SelectedFile(
+                        name = file.name,
+                        size = file.length(),
+                        mimeType = mimeType,
+                        data = ByteArray(0), // Empty - use chunked upload
+                    )
+                } else {
+                    val bytes = Files.readAllBytes(file.toPath())
+                    val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
+                    SelectedFile(
+                        name = file.name,
+                        size = file.length(),
+                        mimeType = mimeType,
+                        data = bytes,
+                    )
+                }
+            } catch (_: IOException) {
+                // Skip unreadable file
+                null
             }
-        } catch (e: Exception) {
-            null
         }
-    }
 }
 
 /**
  * File picker is available on desktop.
  */
 actual fun isFilePickerAvailable(): Boolean = true
+
+/**
+ * Adds a single file to [out] if readable and under size limit; returns true if added.
+ */
+private fun addFileIfReadable(file: File, basePathLength: Int, out: MutableList<FolderFile>): Boolean {
+    if (file.length() > LARGE_FILE_THRESHOLD) return false
+    return try {
+        val relativePath = file.absolutePath.substring(basePathLength)
+        val bytes = Files.readAllBytes(file.toPath())
+        val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
+        out.add(
+            FolderFile(
+                name = file.name,
+                relativePath = relativePath,
+                size = file.length(),
+                mimeType = mimeType,
+                data = bytes,
+            ),
+        )
+        true
+    } catch (_: IOException) {
+        false
+    }
+}
+
+/**
+ * Collects all files under [dir] into [out], with [basePathLength] for relative paths.
+ * Skips files larger than [LARGE_FILE_THRESHOLD]; skips unreadable files.
+ */
+private fun collectFolderFiles(dir: File, basePathLength: Int, out: MutableList<FolderFile>) {
+    for (file in dir.listFiles().orEmpty()) {
+        if (file.isDirectory) {
+            collectFolderFiles(file, basePathLength, out)
+        } else {
+            addFileIfReadable(file, basePathLength, out)
+        }
+    }
+}
 
 /**
  * Opens a folder picker for uploading entire directories.
@@ -149,41 +190,8 @@ actual suspend fun openFolderPicker(): List<FolderFile> = withContext(Dispatcher
         return@withContext emptyList()
     }
 
-    // Recursively get all files in the directory
     val basePathLength = selectedDir.absolutePath.length + 1
     val allFiles = mutableListOf<FolderFile>()
-
-    fun collectFiles(dir: File) {
-        dir.listFiles()?.forEach { file ->
-            if (file.isDirectory) {
-                collectFiles(file)
-            } else {
-                try {
-                    // Skip very large files
-                    if (file.length() > LARGE_FILE_THRESHOLD) {
-                        return@forEach
-                    }
-
-                    val relativePath = file.absolutePath.substring(basePathLength)
-                    val bytes = Files.readAllBytes(file.toPath())
-                    val mimeType = Files.probeContentType(file.toPath()) ?: "application/octet-stream"
-
-                    allFiles.add(
-                        FolderFile(
-                            name = file.name,
-                            relativePath = relativePath,
-                            size = file.length(),
-                            mimeType = mimeType,
-                            data = bytes,
-                        ),
-                    )
-                } catch (e: Exception) {
-                    // Skip files that can't be read
-                }
-            }
-        }
-    }
-
-    collectFiles(selectedDir)
+    collectFolderFiles(selectedDir, basePathLength, allFiles)
     allFiles
 }

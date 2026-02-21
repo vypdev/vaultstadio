@@ -120,7 +120,11 @@ class StorageRepositoryImpl(
     ): Result<ChunkedUploadInit> =
         storageService.initChunkedUpload(fileName, totalSize, mimeType, parentId, chunkSize).toResult()
 
-    override suspend fun uploadChunk(uploadId: String, chunkIndex: Int, chunkData: ByteArray): Result<ChunkedUploadStatus> =
+    override suspend fun uploadChunk(
+        uploadId: String,
+        chunkIndex: Int,
+        chunkData: ByteArray,
+    ): Result<ChunkedUploadStatus> =
         storageService.uploadChunk(uploadId, chunkIndex, chunkData).toResult()
 
     override suspend fun getUploadStatus(uploadId: String): Result<ChunkedUploadStatus> =

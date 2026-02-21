@@ -4,6 +4,7 @@
  * Data: storage (API client, repository impl).
  * Distinct group so resolution does not substitute with :domain:storage (see FRONTEND_KMP_TASK_CYCLE.md).
  */
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)

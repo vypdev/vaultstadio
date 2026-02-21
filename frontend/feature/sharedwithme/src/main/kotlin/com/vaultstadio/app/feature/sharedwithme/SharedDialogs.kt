@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.storage.model.StorageItem
+import kotlinx.datetime.Instant
 
 @Composable
 fun ItemDetailsDialog(
@@ -86,7 +87,7 @@ private fun formatFileSize(sizeInBytes: Long): String {
     }
 }
 
-private fun formatRelativeTime(instant: kotlinx.datetime.Instant): String {
+private fun formatRelativeTime(instant: Instant): String {
     val now = kotlin.time.Clock.System.now()
     val diff = now - instant
     val seconds = diff.inWholeSeconds

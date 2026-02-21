@@ -27,7 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.awt.Desktop
+import java.io.IOException
 import java.net.URI
+import java.net.URISyntaxException
 
 /**
  * Video player for Desktop.
@@ -69,8 +71,10 @@ actual fun VideoPlayer(
                     if (Desktop.isDesktopSupported()) {
                         Desktop.getDesktop().browse(URI(url))
                     }
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     onError(e.message ?: "Failed to open video")
+                } catch (e: URISyntaxException) {
+                    onError(e.message ?: "Invalid video URL")
                 }
             }) {
                 Icon(Icons.Filled.PlayArrow, contentDescription = null)
@@ -121,8 +125,10 @@ actual fun AudioPlayer(
                     if (Desktop.isDesktopSupported()) {
                         Desktop.getDesktop().browse(URI(url))
                     }
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     onError(e.message ?: "Failed to open audio")
+                } catch (e: URISyntaxException) {
+                    onError(e.message ?: "Invalid audio URL")
                 }
             }) {
                 Icon(Icons.Filled.PlayArrow, contentDescription = null)
@@ -173,8 +179,10 @@ actual fun PdfViewer(
                     if (Desktop.isDesktopSupported()) {
                         Desktop.getDesktop().browse(URI(url))
                     }
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     onError(e.message ?: "Failed to open PDF")
+                } catch (e: URISyntaxException) {
+                    onError(e.message ?: "Invalid PDF URL")
                 }
             }) {
                 Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null)

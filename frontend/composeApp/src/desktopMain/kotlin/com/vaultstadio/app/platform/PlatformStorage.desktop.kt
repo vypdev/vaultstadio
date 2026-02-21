@@ -1,3 +1,4 @@
+@file:Suppress("MatchingDeclarationName")
 /**
  * VaultStadio Desktop Platform Storage
  *
@@ -25,9 +26,7 @@ actual object PlatformStorage {
     /**
      * Get a string value.
      */
-    actual fun getString(key: String): String? {
-        return prefs.get(key, null)
-    }
+    actual fun getString(key: String): String? = prefs.get(key, null)
 
     /**
      * Remove a value.

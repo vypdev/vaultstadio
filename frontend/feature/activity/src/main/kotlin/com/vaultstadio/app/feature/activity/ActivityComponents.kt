@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.domain.activity.model.Activity
 import kotlin.time.Clock
+import kotlinx.datetime.Instant
 
 @Composable
 fun ActivityCard(
@@ -208,7 +209,7 @@ fun getActivityIconAndColor(type: String): Pair<ImageVector, Color> = when (type
     else -> Icons.Default.History to MaterialTheme.colorScheme.onSurfaceVariant
 }
 
-private fun formatRelativeTime(instant: kotlinx.datetime.Instant): String {
+private fun formatRelativeTime(instant: Instant): String {
     val now = Clock.System.now()
     val diff = now - instant
     val seconds = diff.inWholeSeconds

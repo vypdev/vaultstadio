@@ -33,6 +33,7 @@ import com.vaultstadio.app.domain.auth.model.ActiveSession
 import com.vaultstadio.app.domain.auth.model.LoginEvent
 import com.vaultstadio.app.domain.auth.model.SessionDeviceType
 import kotlin.time.Clock
+import kotlinx.datetime.Instant
 
 @Composable
 fun SectionHeader(
@@ -226,7 +227,7 @@ private fun getDeviceIcon(type: SessionDeviceType): ImageVector = when (type) {
     SessionDeviceType.UNKNOWN -> Icons.Default.Computer
 }
 
-private fun formatRelativeTime(instant: kotlinx.datetime.Instant): String {
+private fun formatRelativeTime(instant: Instant): String {
     val now = Clock.System.now()
     val diff = now - instant
 

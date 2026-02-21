@@ -28,8 +28,8 @@ import com.vaultstadio.app.data.storage.usecase.MoveItemUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.RenameItemUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.RestoreItemUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.SearchUseCaseImpl
-import com.vaultstadio.app.data.storage.usecase.TrashItemUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.ToggleStarUseCaseImpl
+import com.vaultstadio.app.data.storage.usecase.TrashItemUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.UploadFileUseCaseImpl
 import com.vaultstadio.app.domain.storage.StorageRepository
 import com.vaultstadio.app.domain.storage.usecase.BatchCopyUseCase
@@ -51,8 +51,8 @@ import com.vaultstadio.app.domain.storage.usecase.MoveItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.RenameItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.RestoreItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.SearchUseCase
-import com.vaultstadio.app.domain.storage.usecase.TrashItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.ToggleStarUseCase
+import com.vaultstadio.app.domain.storage.usecase.TrashItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.UploadFileUseCase
 import io.ktor.client.HttpClient
 import org.koin.dsl.module
