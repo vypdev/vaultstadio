@@ -5,11 +5,11 @@
 
 package com.vaultstadio.app.domain.usecase.activity
 
+import com.vaultstadio.app.data.activity.usecase.GetItemActivityUseCaseImpl
+import com.vaultstadio.app.data.activity.usecase.GetRecentActivityUseCaseImpl
 import com.vaultstadio.app.domain.activity.ActivityRepository
 import com.vaultstadio.app.domain.activity.model.Activity
 import com.vaultstadio.app.domain.result.Result
-import com.vaultstadio.app.data.activity.usecase.GetItemActivityUseCaseImpl
-import com.vaultstadio.app.data.activity.usecase.GetRecentActivityUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test

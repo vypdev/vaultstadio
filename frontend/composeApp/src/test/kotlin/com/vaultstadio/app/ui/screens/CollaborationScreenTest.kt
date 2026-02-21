@@ -11,11 +11,11 @@ import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 import com.vaultstadio.app.domain.collaboration.model.DocumentState
 import com.vaultstadio.app.domain.collaboration.model.PresenceStatus
 import com.vaultstadio.app.domain.collaboration.model.UserPresence
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class CollaborationScreenTest {
 

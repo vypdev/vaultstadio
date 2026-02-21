@@ -8,11 +8,11 @@ import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.ConflictType
 import com.vaultstadio.app.domain.sync.model.DeviceType
 import com.vaultstadio.app.domain.sync.model.SyncDevice
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class SyncScreenTest {
 

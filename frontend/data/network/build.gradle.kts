@@ -1,3 +1,5 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+
 /**
  * Data: network layer (ApiResult, BaseApi, HttpClientFactory, ApiResultMapper, common DTOs).
  * Depends on :domain:result for Result type at the boundary.

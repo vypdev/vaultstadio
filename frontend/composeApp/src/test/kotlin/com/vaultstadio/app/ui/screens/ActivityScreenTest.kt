@@ -6,10 +6,10 @@ package com.vaultstadio.app.ui.screens
 
 import com.vaultstadio.app.domain.activity.model.Activity
 import com.vaultstadio.app.feature.activity.ActivityFilter
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class ActivityScreenTest {
 

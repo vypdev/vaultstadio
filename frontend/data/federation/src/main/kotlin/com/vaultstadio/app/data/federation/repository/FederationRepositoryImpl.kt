@@ -8,9 +8,6 @@ import com.vaultstadio.app.data.federation.service.FederationService
 import com.vaultstadio.app.data.network.mapper.toResult
 import com.vaultstadio.app.domain.federation.FederationRepository
 import com.vaultstadio.app.domain.federation.model.FederatedActivity
-import com.vaultstadio.app.domain.federation.model.FederatedIdentity
-import com.vaultstadio.app.domain.federation.model.FederatedInstance
-import com.vaultstadio.app.domain.federation.model.FederatedShare
 import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
 import com.vaultstadio.app.domain.federation.model.InstanceStatus
 import com.vaultstadio.app.domain.federation.model.SharePermission

@@ -39,8 +39,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.storage.model.ViewMode
 import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.ViewMode
 import com.vaultstadio.app.ui.components.files.Breadcrumbs
 import com.vaultstadio.app.ui.components.files.EmptyState
 import com.vaultstadio.app.ui.components.files.FileGridItem

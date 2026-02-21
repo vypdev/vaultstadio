@@ -8,7 +8,6 @@ package com.vaultstadio.app.domain.usecase.sync
 import com.vaultstadio.app.data.sync.usecase.DeactivateDeviceUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.GetConflictsUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.GetDevicesUseCaseImpl
-import com.vaultstadio.app.data.sync.usecase.PullChangesUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.RegisterDeviceUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.RemoveDeviceUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.ResolveConflictUseCaseImpl

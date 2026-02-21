@@ -8,7 +8,6 @@ package com.vaultstadio.app.ui.components.files
 
 import com.vaultstadio.app.domain.storage.model.ItemType
 import com.vaultstadio.app.domain.storage.model.Visibility
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,6 +15,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes

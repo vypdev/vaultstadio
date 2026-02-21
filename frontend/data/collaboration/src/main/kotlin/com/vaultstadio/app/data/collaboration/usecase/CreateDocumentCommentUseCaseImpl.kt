@@ -13,6 +13,11 @@ class CreateDocumentCommentUseCaseImpl(private val collaborationRepository: Coll
         endLine: Int,
         endColumn: Int,
     ) = collaborationRepository.createComment(
-        itemId, content, startLine, startColumn, endLine, endColumn,
+        itemId,
+        content,
+        startLine,
+        startColumn,
+        endLine,
+        endColumn,
     )
 }

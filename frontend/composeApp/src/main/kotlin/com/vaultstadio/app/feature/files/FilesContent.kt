@@ -24,12 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.storage.model.ViewMode
-import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.domain.upload.FolderUploadEntry
-import com.vaultstadio.app.domain.upload.UploadQueueEntry
-import com.vaultstadio.app.feature.files.FilesMode
-import com.vaultstadio.app.feature.upload.LocalUploadManager
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.files
 import com.vaultstadio.app.core.resources.newFolder
@@ -40,6 +34,12 @@ import com.vaultstadio.app.core.resources.recent
 import com.vaultstadio.app.core.resources.starred
 import com.vaultstadio.app.core.resources.trash
 import com.vaultstadio.app.core.resources.trashEmpty
+import com.vaultstadio.app.domain.storage.model.StorageItem
+import com.vaultstadio.app.domain.storage.model.ViewMode
+import com.vaultstadio.app.domain.upload.FolderUploadEntry
+import com.vaultstadio.app.domain.upload.UploadQueueEntry
+import com.vaultstadio.app.feature.files.FilesMode
+import com.vaultstadio.app.feature.upload.LocalUploadManager
 import com.vaultstadio.app.navigation.MainDestination
 import com.vaultstadio.app.navigation.RoutePaths
 import com.vaultstadio.app.platform.openFilePicker

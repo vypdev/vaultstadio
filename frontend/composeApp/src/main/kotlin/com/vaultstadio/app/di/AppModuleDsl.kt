@@ -14,11 +14,9 @@
 
 package com.vaultstadio.app.di
 
-import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.feature.files.FilesViewPreferences
 import com.vaultstadio.app.feature.files.PlatformFilesViewPreferences
 import com.vaultstadio.app.feature.upload.UploadManager
-import io.ktor.client.HttpClient
 import org.koin.dsl.module
 
 val appModule = module {

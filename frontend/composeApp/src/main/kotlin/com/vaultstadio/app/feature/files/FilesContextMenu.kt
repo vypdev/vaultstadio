@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.vaultstadio.app.domain.storage.model.ItemType
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.feature.main.MainComponent
 
 @Composable
 internal fun FileContextMenuItems(

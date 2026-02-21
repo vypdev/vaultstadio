@@ -8,11 +8,11 @@ import com.vaultstadio.app.domain.metadata.model.DocumentMetadata
 import com.vaultstadio.app.domain.metadata.model.ImageMetadata
 import com.vaultstadio.app.domain.metadata.model.ThumbnailSize
 import com.vaultstadio.app.domain.metadata.model.VideoMetadata
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class MetadataPanelTest {
 

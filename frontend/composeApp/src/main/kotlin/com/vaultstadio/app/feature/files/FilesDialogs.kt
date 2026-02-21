@@ -19,8 +19,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.feature.files.FilesMode
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.feature.files.FilesMode
 
 /**
  * Dialog for creating a new folder.

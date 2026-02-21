@@ -13,9 +13,13 @@ class InMemoryTokenStorage : TokenStorage {
     private var refreshToken: String? = null
 
     override fun getAccessToken(): String? = accessToken
-    override fun setAccessToken(token: String?) { accessToken = token }
+    override fun setAccessToken(token: String?) {
+        accessToken = token
+    }
     override fun getRefreshToken(): String? = refreshToken
-    override fun setRefreshToken(token: String?) { refreshToken = token }
+    override fun setRefreshToken(token: String?) {
+        refreshToken = token
+    }
     override fun clear() {
         accessToken = null
         refreshToken = null

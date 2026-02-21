@@ -6,17 +6,17 @@
 
 package com.vaultstadio.app
 
-import com.vaultstadio.app.domain.storage.model.ItemType
-import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.auth.model.StorageQuota
 import com.vaultstadio.app.domain.auth.model.UserRole
+import com.vaultstadio.app.domain.storage.model.ItemType
+import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.storage.model.Visibility
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class StorageItemTest {
 

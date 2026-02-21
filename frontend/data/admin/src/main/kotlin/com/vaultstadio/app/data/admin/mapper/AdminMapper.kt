@@ -5,11 +5,11 @@
 package com.vaultstadio.app.data.admin.mapper
 
 import com.vaultstadio.app.data.admin.dto.AdminUserDTO
+import com.vaultstadio.app.data.network.dto.common.PaginatedResponseDTO
 import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.admin.model.PaginatedResponse
 import com.vaultstadio.app.domain.admin.model.UserStatus
 import com.vaultstadio.app.domain.auth.model.UserRole
-import com.vaultstadio.app.data.network.dto.common.PaginatedResponseDTO
 
 fun AdminUserDTO.toDomain(): AdminUser = AdminUser(
     id = id,

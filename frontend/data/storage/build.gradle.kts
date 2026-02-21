@@ -1,3 +1,5 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+
 /**
  * Data: storage (API client, repository impl).
  * Distinct group so resolution does not substitute with :domain:storage (see FRONTEND_KMP_TASK_CYCLE.md).

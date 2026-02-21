@@ -13,13 +13,10 @@ import com.vaultstadio.app.domain.metadata.model.DocumentMetadata
 import com.vaultstadio.app.domain.metadata.model.FileMetadata
 import com.vaultstadio.app.domain.metadata.model.ImageMetadata
 import com.vaultstadio.app.domain.metadata.model.MetadataSearchResult
-import com.vaultstadio.app.domain.metadata.usecase.GetFileMetadataUseCase
-import com.vaultstadio.app.domain.metadata.usecase.GetSearchSuggestionsUseCase
-import com.vaultstadio.app.domain.metadata.usecase.SearchByMetadataUseCase
+import com.vaultstadio.app.domain.metadata.model.VideoMetadata
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.storage.model.PaginatedResponse
 import com.vaultstadio.app.domain.storage.model.StorageItem
-import com.vaultstadio.app.domain.metadata.model.VideoMetadata
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test

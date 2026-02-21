@@ -11,8 +11,8 @@ import com.vaultstadio.app.data.ai.dto.AIDescribeRequestDTO
 import com.vaultstadio.app.data.ai.dto.AIProviderConfigRequestDTO
 import com.vaultstadio.app.data.ai.dto.AISummarizeRequestDTO
 import com.vaultstadio.app.data.ai.dto.AITagRequestDTO
-import com.vaultstadio.app.data.ai.mapper.toDomain
 import com.vaultstadio.app.data.ai.mapper.toDTO
+import com.vaultstadio.app.data.ai.mapper.toDomain
 import com.vaultstadio.app.data.ai.mapper.toModelList
 import com.vaultstadio.app.data.ai.mapper.toProviderList
 import com.vaultstadio.app.data.network.ApiResult

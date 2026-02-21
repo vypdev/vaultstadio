@@ -43,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.vaultstadio.app.domain.auth.model.User
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.activity
 import com.vaultstadio.app.core.resources.admin
@@ -65,6 +64,7 @@ import com.vaultstadio.app.core.resources.sharing
 import com.vaultstadio.app.core.resources.starred
 import com.vaultstadio.app.core.resources.sync
 import com.vaultstadio.app.core.resources.trash
+import com.vaultstadio.app.domain.auth.model.User
 import com.vaultstadio.app.navigation.MainDestination
 
 /**

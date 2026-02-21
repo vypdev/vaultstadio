@@ -6,9 +6,9 @@
 
 package com.vaultstadio.app.viewmodel
 
-import com.vaultstadio.app.domain.storage.model.ViewMode
 import com.vaultstadio.app.domain.storage.model.SortField
 import com.vaultstadio.app.domain.storage.model.SortOrder
+import com.vaultstadio.app.domain.storage.model.ViewMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

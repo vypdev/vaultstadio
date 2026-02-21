@@ -11,11 +11,11 @@ import com.vaultstadio.app.domain.federation.model.FederatedShareStatus
 import com.vaultstadio.app.domain.federation.model.FederationCapability
 import com.vaultstadio.app.domain.federation.model.InstanceStatus
 import com.vaultstadio.app.domain.federation.model.SharePermission
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class FederationScreenTest {
 

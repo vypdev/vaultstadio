@@ -5,7 +5,6 @@
 
 package com.vaultstadio.app.feature.admin
 
-import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.admin.model.PaginatedResponse
 import com.vaultstadio.app.domain.admin.model.UserStatus
@@ -14,6 +13,7 @@ import com.vaultstadio.app.domain.admin.usecase.UpdateUserQuotaUseCase
 import com.vaultstadio.app.domain.admin.usecase.UpdateUserRoleUseCase
 import com.vaultstadio.app.domain.admin.usecase.UpdateUserStatusUseCase
 import com.vaultstadio.app.domain.auth.model.UserRole
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.datetime.Instant
 import kotlin.test.Test

@@ -5,11 +5,11 @@
 
 package com.vaultstadio.app.feature.plugins
 
-import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.plugin.model.PluginInfo
 import com.vaultstadio.app.domain.plugin.usecase.DisablePluginUseCase
 import com.vaultstadio.app.domain.plugin.usecase.EnablePluginUseCase
 import com.vaultstadio.app.domain.plugin.usecase.GetPluginsUseCase
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlin.test.Test
 import kotlin.test.assertNull

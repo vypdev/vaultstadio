@@ -84,7 +84,6 @@ interface MainComponent {
         data class Security(val component: SecurityComponent) : Child()
         data class Licenses(val component: LicensesComponent) : Child()
     }
-
 }
 
 /**

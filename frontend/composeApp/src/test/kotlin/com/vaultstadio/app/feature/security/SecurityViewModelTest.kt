@@ -5,7 +5,6 @@
 
 package com.vaultstadio.app.feature.security
 
-import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.model.ActiveSession
 import com.vaultstadio.app.domain.auth.model.LoginEvent
 import com.vaultstadio.app.domain.auth.model.SecuritySettings
@@ -14,6 +13,7 @@ import com.vaultstadio.app.domain.auth.usecase.GetActiveSessionsUseCase
 import com.vaultstadio.app.domain.auth.usecase.GetLoginHistoryUseCase
 import com.vaultstadio.app.domain.auth.usecase.GetSecuritySettingsUseCase
 import com.vaultstadio.app.domain.auth.usecase.RevokeSessionUseCase
+import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlinx.datetime.Instant
 import kotlin.test.Test

@@ -9,12 +9,12 @@ import com.vaultstadio.app.domain.auth.model.LoginEvent
 import com.vaultstadio.app.domain.auth.model.SecuritySettings
 import com.vaultstadio.app.domain.auth.model.SessionDeviceType
 import com.vaultstadio.app.domain.auth.model.TwoFactorMethod
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class SecurityScreenTest {
 

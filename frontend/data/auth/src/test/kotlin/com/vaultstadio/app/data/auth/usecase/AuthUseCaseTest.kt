@@ -5,12 +5,12 @@
 
 package com.vaultstadio.app.data.auth.usecase
 
-import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.auth.AuthRepository
 import com.vaultstadio.app.domain.auth.model.LoginResult
 import com.vaultstadio.app.domain.auth.model.StorageQuota
 import com.vaultstadio.app.domain.auth.model.User
 import com.vaultstadio.app.domain.auth.model.UserRole
+import com.vaultstadio.app.domain.result.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

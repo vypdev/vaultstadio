@@ -13,7 +13,6 @@ import com.vaultstadio.app.domain.ai.model.AIChatResponse
 import com.vaultstadio.app.domain.ai.model.AIModel
 import com.vaultstadio.app.domain.ai.model.AIProviderInfo
 import com.vaultstadio.app.domain.ai.model.AIProviderType
-import com.vaultstadio.app.domain.ai.model.ChatRole
 
 fun AIProviderInfoDTO.toDomain(): AIProviderInfo = AIProviderInfo(
     type = try {

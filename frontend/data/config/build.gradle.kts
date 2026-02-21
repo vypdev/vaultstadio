@@ -1,7 +1,10 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+
 /**
  * Data: config (ConfigRepository impl, config use-case impls).
  * Depends on :domain:config and :data:network.
  */
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
