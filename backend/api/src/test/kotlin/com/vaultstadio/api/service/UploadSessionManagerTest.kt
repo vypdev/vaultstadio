@@ -6,6 +6,8 @@
 
 package com.vaultstadio.api.service
 
+import com.vaultstadio.core.domain.service.UploadSession
+import com.vaultstadio.core.domain.service.UploadSessionManager
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

@@ -6,9 +6,9 @@ package com.vaultstadio.api.middleware
 
 import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.core.exception.DatabaseException
-import com.vaultstadio.core.exception.ItemNotFoundException
-import com.vaultstadio.core.exception.StorageBackendException
+import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.StorageBackendException
 import io.ktor.http.HttpStatusCode
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

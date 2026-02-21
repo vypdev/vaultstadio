@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.user
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
+import com.vaultstadio.application.usecase.user.UpdateUserUseCaseImpl
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.core.domain.service.UpdateUserInput
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -42,7 +43,7 @@ class UpdateUserUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.username == "newname")
+        assertTrue((result as Either.Right<User>).value.username == "newname")
     }
 
     @Test

@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.GetPendingConflictsUseCaseImpl
 import com.vaultstadio.core.domain.model.ChangeType
 import com.vaultstadio.core.domain.model.ConflictType
 import com.vaultstadio.core.domain.model.SyncChange
 import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -55,8 +56,9 @@ class GetPendingConflictsUseCaseTest {
         val result = useCase("user-1")
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right).value.size)
-        assertEquals("item-1", result.value[0].itemId)
+        val right = result as Either.Right<List<SyncConflict>>
+        assertEquals(1, right.value.size)
+        assertEquals("item-1", right.value[0].itemId)
     }
 
     @Test
@@ -67,6 +69,6 @@ class GetPendingConflictsUseCaseTest {
         val result = useCase("user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

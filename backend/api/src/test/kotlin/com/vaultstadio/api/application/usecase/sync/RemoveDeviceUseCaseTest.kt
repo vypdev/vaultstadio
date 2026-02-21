@@ -5,8 +5,9 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.RemoveDeviceUseCaseImpl
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -35,6 +36,6 @@ class RemoveDeviceUseCaseTest {
         val result = useCase("dev-1", "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

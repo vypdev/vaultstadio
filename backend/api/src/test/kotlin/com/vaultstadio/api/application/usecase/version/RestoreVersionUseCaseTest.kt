@@ -5,10 +5,11 @@
 package com.vaultstadio.api.application.usecase.version
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.version.RestoreVersionUseCaseImpl
 import com.vaultstadio.core.domain.model.FileVersion
 import com.vaultstadio.core.domain.service.FileVersionService
 import com.vaultstadio.core.domain.service.RestoreVersionInput
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -46,8 +47,9 @@ class RestoreVersionUseCaseTest {
         val result = useCase(input, "user-1")
 
         assertTrue(result.isRight())
-        assertEquals(2, (result as Either.Right).value.versionNumber)
-        assertEquals(1, result.value.restoredFrom)
+        val right = result as Either.Right<FileVersion>
+        assertEquals(2, right.value.versionNumber)
+        assertEquals(1, right.value.restoredFrom)
     }
 
     @Test
@@ -63,6 +65,6 @@ class RestoreVersionUseCaseTest {
         val result = useCase(input, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
     }
 }

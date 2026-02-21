@@ -4,9 +4,9 @@
 
 package com.vaultstadio.api.config
 
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import io.ktor.server.auth.Principal
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.DisplayName

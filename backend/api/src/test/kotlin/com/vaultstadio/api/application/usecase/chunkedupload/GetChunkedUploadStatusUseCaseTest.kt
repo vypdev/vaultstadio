@@ -26,7 +26,7 @@ class GetChunkedUploadStatusUseCaseTest {
         val result = useCase("upload-1", "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ChunkedUploadError.NotFound)
+        assertTrue((result as Either.Left<*>).value is ChunkedUploadError.NotFound)
     }
 
     @Test
@@ -48,6 +48,6 @@ class GetChunkedUploadStatusUseCaseTest {
         val result = useCase("upload-1", "user-1")
 
         assertTrue(result.isRight())
-        assertEquals("f.bin", (result as Either.Right).value.fileName)
+        assertEquals("f.bin", (result as Either.Right<*>).value.fileName)
     }
 }

@@ -8,7 +8,7 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.model.Activity
 import com.vaultstadio.core.domain.model.ActivityType
 import com.vaultstadio.core.domain.repository.ActivityRepository
-import com.vaultstadio.core.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.DatabaseException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -41,7 +41,7 @@ class GetRecentActivityByUserUseCaseTest {
         val result = useCase(userId, limit)
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right).value.size)
+        assertEquals(1, (result as Either.Right<*>).value.size)
     }
 
     @Test

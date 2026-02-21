@@ -6,10 +6,10 @@ package com.vaultstadio.infrastructure.persistence
 
 import com.vaultstadio.core.domain.model.FileVersion
 import com.vaultstadio.core.domain.model.FileVersionHistory
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
 import com.vaultstadio.core.domain.model.VersionRetentionPolicy
 import com.vaultstadio.core.domain.repository.FileVersionRepository
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

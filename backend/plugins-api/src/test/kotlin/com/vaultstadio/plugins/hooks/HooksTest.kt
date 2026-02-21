@@ -7,8 +7,8 @@
 
 package com.vaultstadio.plugins.hooks
 
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

@@ -4,7 +4,7 @@
 
 package com.vaultstadio.api.dto
 
-import com.vaultstadio.core.domain.repository.PagedResult
+import com.vaultstadio.domain.common.pagination.PagedResult
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

@@ -8,7 +8,7 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.model.Activity
 import com.vaultstadio.core.domain.model.ActivityType
 import com.vaultstadio.core.domain.repository.ActivityRepository
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -38,7 +38,7 @@ class GetRecentActivityByItemUseCaseTest {
         val result = useCase("item-1", 20)
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right).value.size)
+        assertEquals(1, (result as Either.Right<*>).value.size)
     }
 
     @Test

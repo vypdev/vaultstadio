@@ -6,8 +6,9 @@ package com.vaultstadio.api.plugins
 
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.repository.MetadataRepository
-import com.vaultstadio.core.domain.repository.StorageItemRepository
-import com.vaultstadio.core.domain.repository.UserRepository
+import com.vaultstadio.domain.auth.repository.UserRepository
+import com.vaultstadio.domain.storage.repository.StorageItemRepository
+import com.vaultstadio.plugins.api.PluginManager
 import com.vaultstadio.plugins.api.PluginState
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

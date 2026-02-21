@@ -8,13 +8,13 @@
 package com.vaultstadio.api.routes
 
 import arrow.core.Either
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 class RouteExtensionsTest {
 
@@ -28,8 +28,11 @@ class RouteExtensionsTest {
     @Test
     fun `respondEither with Left throws StorageException`() = runTest {
         val error = ItemNotFoundException(itemId = "x")
-        assertThrows<ItemNotFoundException> {
+        try {
             call.respondEither(Either.Left(error))
+            fail("Expected ItemNotFoundException")
+        } catch (e: ItemNotFoundException) {
+            // expected
         }
     }
 
@@ -41,8 +44,11 @@ class RouteExtensionsTest {
     @Test
     fun `respondApiEither with Left throws StorageException`() = runTest {
         val error = ItemNotFoundException(path = "/y")
-        assertThrows<ItemNotFoundException> {
+        try {
             call.respondApiEither(Either.Left(error))
+            fail("Expected ItemNotFoundException")
+        } catch (e: ItemNotFoundException) {
+            // expected
         }
     }
 
@@ -54,8 +60,11 @@ class RouteExtensionsTest {
     @Test
     fun `respondEitherUnit with Left throws StorageException`() = runTest {
         val error = ItemNotFoundException(itemId = "z")
-        assertThrows<ItemNotFoundException> {
+        try {
             call.respondEitherUnit(Either.Left(error))
+            fail("Expected ItemNotFoundException")
+        } catch (e: ItemNotFoundException) {
+            // expected
         }
     }
 }

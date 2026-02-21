@@ -5,10 +5,11 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.SyncPullUseCaseImpl
 import com.vaultstadio.core.domain.model.SyncRequest
 import com.vaultstadio.core.domain.model.SyncResponse
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -43,7 +44,7 @@ class SyncPullUseCaseTest {
         val result = useCase(request, "user-1")
 
         assertTrue(result.isRight())
-        assertEquals("cur-1", (result as Either.Right).value.cursor)
+        assertEquals("cur-1", (result as Either.Right<SyncResponse>).value.cursor)
     }
 
     @Test
@@ -60,6 +61,6 @@ class SyncPullUseCaseTest {
         val result = useCase(request, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
     }
 }

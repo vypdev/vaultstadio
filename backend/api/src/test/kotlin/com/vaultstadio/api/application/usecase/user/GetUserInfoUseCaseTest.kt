@@ -5,11 +5,12 @@
 package com.vaultstadio.api.application.usecase.user
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.UserInfo
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
+import com.vaultstadio.application.usecase.user.GetUserInfoUseCaseImpl
+import com.vaultstadio.domain.auth.model.UserInfo
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -41,7 +42,7 @@ class GetUserInfoUseCaseTest {
         val result = useCase("user-1")
 
         assertTrue(result.isRight())
-        assertEquals("user-1", (result as Either.Right).value.id)
+        assertEquals("user-1", (result as Either.Right<UserInfo>).value.id)
     }
 
     @Test

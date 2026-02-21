@@ -4,8 +4,8 @@
 
 package com.vaultstadio.infrastructure.persistence
 
-import com.vaultstadio.core.domain.model.UserSession
-import com.vaultstadio.core.domain.repository.SessionRepository
+import com.vaultstadio.domain.auth.model.UserSession
+import com.vaultstadio.domain.auth.repository.SessionRepository
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

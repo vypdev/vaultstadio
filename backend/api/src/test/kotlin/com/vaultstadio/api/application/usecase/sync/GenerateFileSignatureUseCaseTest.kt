@@ -5,10 +5,11 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.GenerateFileSignatureUseCaseImpl
 import com.vaultstadio.core.domain.model.BlockChecksum
 import com.vaultstadio.core.domain.model.FileSignature
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -36,8 +37,9 @@ class GenerateFileSignatureUseCaseTest {
         val result = useCase("item-1", 1, 4096)
 
         assertTrue(result.isRight())
-        assertEquals("item-1", (result as Either.Right).value.itemId)
-        assertEquals(1, result.value.blocks.size)
+        val right = result as Either.Right<FileSignature>
+        assertEquals("item-1", right.value.itemId)
+        assertEquals(1, right.value.blocks.size)
     }
 
     @Test
@@ -48,6 +50,6 @@ class GenerateFileSignatureUseCaseTest {
         val result = useCase("item-1", 1, 4096)
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

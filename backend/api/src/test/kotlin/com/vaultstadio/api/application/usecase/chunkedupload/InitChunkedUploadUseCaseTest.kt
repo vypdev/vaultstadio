@@ -25,7 +25,7 @@ class InitChunkedUploadUseCaseTest {
         val result = useCase("file.txt", 0, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ChunkedUploadError.InvalidRequest)
+        assertTrue((result as Either.Left<*>).value is ChunkedUploadError.InvalidRequest)
     }
 
     @Test
@@ -33,7 +33,7 @@ class InitChunkedUploadUseCaseTest {
         val result = useCase("  ", 1000, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ChunkedUploadError.InvalidRequest)
+        assertTrue((result as Either.Left<*>).value is ChunkedUploadError.InvalidRequest)
     }
 
     @Test
@@ -43,7 +43,7 @@ class InitChunkedUploadUseCaseTest {
         val result = useCase("large.bin", 50 * 1024 * 1024, "user-1", null, null, 10 * 1024 * 1024)
 
         assertTrue(result.isRight())
-        val data = (result as Either.Right).value
+        val data = (result as Either.Right<*>).value
         assertEquals(5, data.totalChunks)
         assertEquals(10 * 1024 * 1024, data.chunkSize)
         verify(exactly = 1) { uploadSessionManager.createSession(match<UploadSession> { it.fileName == "large.bin" && it.userId == "user-1" }) }

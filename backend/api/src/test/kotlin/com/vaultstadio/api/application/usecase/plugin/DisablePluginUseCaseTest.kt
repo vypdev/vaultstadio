@@ -6,7 +6,7 @@ package com.vaultstadio.api.application.usecase.plugin
 
 import arrow.core.Either
 import com.vaultstadio.api.plugins.PluginManager
-import com.vaultstadio.core.exception.PluginNotFoundException
+import com.vaultstadio.domain.common.exception.PluginNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -35,6 +35,6 @@ class DisablePluginUseCaseTest {
         val result = useCase("test-plugin")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is PluginNotFoundException)
+        assertTrue((result as Either.Left<*>).value is PluginNotFoundException)
     }
 }

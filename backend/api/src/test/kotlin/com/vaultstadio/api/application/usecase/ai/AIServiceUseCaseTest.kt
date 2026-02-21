@@ -59,7 +59,7 @@ class AIServiceUseCaseTest {
         val result = useCase.listModels()
 
         assertTrue(result.isRight())
-        val list = (result as Either.Right).value
+        val list = (result as Either.Right<*>).value
         assertEquals(1, list.size)
         assertEquals("llama2", list[0].id)
     }

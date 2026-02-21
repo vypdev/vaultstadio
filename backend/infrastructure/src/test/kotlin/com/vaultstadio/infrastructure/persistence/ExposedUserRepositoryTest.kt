@@ -7,10 +7,10 @@
 package com.vaultstadio.infrastructure.persistence
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
-import com.vaultstadio.core.domain.repository.UserQuery
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.domain.auth.repository.UserQuery
 import com.vaultstadio.infrastructure.persistence.entities.ApiKeysTable
 import com.vaultstadio.infrastructure.persistence.entities.UserSessionsTable
 import com.vaultstadio.infrastructure.persistence.entities.UsersTable

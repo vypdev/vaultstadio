@@ -35,7 +35,7 @@ class GetReadinessUseCaseTest {
 
     @Test
     fun invokeReturnsNotReadyWhenDatabaseFails() = runTest {
-        coEvery { userRepository.countAll() } returns Either.Left(com.vaultstadio.core.exception.DatabaseException("DB down"))
+        coEvery { userRepository.countAll() } returns Either.Left(com.vaultstadio.domain.common.exception.DatabaseException("DB down"))
         coEvery { storageBackend.isAvailable() } returns Either.Right(true)
 
         val result = useCase()

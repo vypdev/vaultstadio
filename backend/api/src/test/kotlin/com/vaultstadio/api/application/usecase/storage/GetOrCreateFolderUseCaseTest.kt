@@ -5,11 +5,12 @@
 package com.vaultstadio.api.application.usecase.storage
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
+import com.vaultstadio.application.usecase.storage.GetOrCreateFolderUseCaseImpl
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.core.domain.service.GetOrCreateFolderResult
 import com.vaultstadio.core.domain.service.StorageService
-import com.vaultstadio.core.exception.ValidationException
+import com.vaultstadio.domain.common.exception.ValidationException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -40,8 +41,9 @@ class GetOrCreateFolderUseCaseTest {
         val result = useCase("New", null, "user-1")
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.created)
-        assertTrue(result.value.folder.name == "New")
+        val right = result as Either.Right<GetOrCreateFolderResult>
+        assertTrue(right.value.created)
+        assertTrue(right.value.folder.name == "New")
     }
 
     @Test

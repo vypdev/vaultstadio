@@ -5,11 +5,12 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.RecordChangeUseCaseImpl
 import com.vaultstadio.core.domain.model.ChangeType
 import com.vaultstadio.core.domain.model.SyncChange
 import com.vaultstadio.core.domain.service.RecordChangeInput
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -48,8 +49,9 @@ class RecordChangeUseCaseTest {
         val result = useCase(input, "user-1")
 
         assertTrue(result.isRight())
-        assertEquals("item-1", (result as Either.Right).value.itemId)
-        assertEquals(ChangeType.MODIFY, result.value.changeType)
+        val right = result as Either.Right<SyncChange>
+        assertEquals("item-1", right.value.itemId)
+        assertEquals(ChangeType.MODIFY, right.value.changeType)
     }
 
     @Test
@@ -69,6 +71,6 @@ class RecordChangeUseCaseTest {
         val result = useCase(input, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

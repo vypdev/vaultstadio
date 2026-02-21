@@ -4,10 +4,10 @@
 
 package com.vaultstadio.infrastructure.persistence
 
-import com.vaultstadio.core.domain.model.Activity
-import com.vaultstadio.core.domain.model.ActivityType
-import com.vaultstadio.core.domain.repository.ActivityQuery
-import com.vaultstadio.core.domain.repository.ActivityRepository
+import com.vaultstadio.domain.activity.model.Activity
+import com.vaultstadio.domain.activity.model.ActivityType
+import com.vaultstadio.domain.activity.repository.ActivityQuery
+import com.vaultstadio.domain.activity.repository.ActivityRepository
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

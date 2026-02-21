@@ -7,7 +7,7 @@ package com.vaultstadio.api.application.usecase.metadata
 import arrow.core.Either
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.core.domain.repository.MetadataRepository
-import com.vaultstadio.core.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.DatabaseException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -40,7 +40,7 @@ class GetMetadataByItemIdAndPluginUseCaseTest {
         val result = useCase("item-1", "image-metadata")
 
         assertTrue(result.isRight())
-        assertEquals(1, (result as Either.Right).value.size)
+        assertEquals(1, (result as Either.Right<*>).value.size)
         assertEquals("height", result.value[0].key)
     }
 

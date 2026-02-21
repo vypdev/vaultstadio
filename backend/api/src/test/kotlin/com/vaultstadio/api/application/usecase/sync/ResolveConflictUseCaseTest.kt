@@ -5,13 +5,14 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.ResolveConflictUseCaseImpl
 import com.vaultstadio.core.domain.model.ChangeType
 import com.vaultstadio.core.domain.model.ConflictResolution
 import com.vaultstadio.core.domain.model.ConflictType
 import com.vaultstadio.core.domain.model.SyncChange
 import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -58,8 +59,9 @@ class ResolveConflictUseCaseTest {
         val result = useCase("conflict-1", ConflictResolution.KEEP_LOCAL, "user-1")
 
         assertTrue(result.isRight())
-        assertEquals("item-1", (result as Either.Right).value.itemId)
-        assertEquals(ConflictResolution.KEEP_LOCAL, result.value.resolution)
+        val right = result as Either.Right<SyncConflict>
+        assertEquals("item-1", right.value.itemId)
+        assertEquals(ConflictResolution.KEEP_LOCAL, right.value.resolution)
     }
 
     @Test
@@ -70,6 +72,6 @@ class ResolveConflictUseCaseTest {
         val result = useCase("conflict-1", ConflictResolution.KEEP_REMOTE, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

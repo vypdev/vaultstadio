@@ -5,10 +5,11 @@
 package com.vaultstadio.api.application.usecase.storage
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
+import com.vaultstadio.application.usecase.storage.RestoreItemUseCaseImpl
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.core.domain.service.StorageService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -38,7 +39,7 @@ class RestoreItemUseCaseTest {
         val result = useCase("item-1", "user-1")
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.id == "item-1")
+        assertTrue((result as Either.Right<StorageItem>).value.id == "item-1")
     }
 
     @Test
@@ -49,6 +50,6 @@ class RestoreItemUseCaseTest {
         val result = useCase("item-1", "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

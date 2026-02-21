@@ -5,10 +5,11 @@
 package com.vaultstadio.api.application.usecase.sync
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.sync.ListDevicesUseCaseImpl
 import com.vaultstadio.core.domain.model.DeviceType
 import com.vaultstadio.core.domain.model.SyncDevice
 import com.vaultstadio.core.domain.service.SyncService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -41,10 +42,10 @@ class ListDevicesUseCaseTest {
         val result = useCase("user-1", activeOnly = true)
 
         assertTrue(result.isRight())
-        val list = (result as Either.Right).value
-        assertEquals(1, list.size)
-        assertEquals("dev-1", list[0].deviceId)
-        assertEquals("My Laptop", list[0].deviceName)
+        val right = result as Either.Right<List<SyncDevice>>
+        assertEquals(1, right.value.size)
+        assertEquals("dev-1", right.value[0].deviceId)
+        assertEquals("My Laptop", right.value[0].deviceName)
     }
 
     @Test
@@ -55,6 +56,6 @@ class ListDevicesUseCaseTest {
         val result = useCase("user-1", activeOnly = false)
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

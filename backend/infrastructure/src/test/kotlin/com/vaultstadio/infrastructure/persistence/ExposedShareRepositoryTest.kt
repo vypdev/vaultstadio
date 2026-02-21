@@ -4,8 +4,8 @@
 
 package com.vaultstadio.infrastructure.persistence
 
-import com.vaultstadio.core.domain.model.ShareLink
-import com.vaultstadio.core.domain.repository.ShareRepository
+import com.vaultstadio.domain.share.model.ShareLink
+import com.vaultstadio.domain.share.repository.ShareRepository
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

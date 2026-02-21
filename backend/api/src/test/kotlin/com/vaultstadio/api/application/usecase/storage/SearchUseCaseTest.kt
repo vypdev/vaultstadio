@@ -5,11 +5,12 @@
 package com.vaultstadio.api.application.usecase.storage
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.repository.PagedResult
+import com.vaultstadio.application.usecase.storage.SearchUseCaseImpl
 import com.vaultstadio.core.domain.service.StorageService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.pagination.PagedResult
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -39,7 +40,7 @@ class SearchUseCaseTest {
         val result = useCase("doc", "user-1", 50, 0)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.items.size == 1)
+        assertTrue((result as Either.Right<PagedResult<StorageItem>>).value.items.size == 1)
     }
 
     @Test

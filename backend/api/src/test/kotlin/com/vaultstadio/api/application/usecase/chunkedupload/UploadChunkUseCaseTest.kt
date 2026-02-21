@@ -27,7 +27,7 @@ class UploadChunkUseCaseTest {
         val result = useCase("upload-1", "user-1", 0, byteArrayOf(1, 2, 3))
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ChunkedUploadError.NotFound)
+        assertTrue((result as Either.Left<*>).value is ChunkedUploadError.NotFound)
     }
 
     @Test
@@ -51,7 +51,7 @@ class UploadChunkUseCaseTest {
             val result = useCase("upload-1", "user-1", 5, byteArrayOf(1, 2))
 
             assertTrue(result.isLeft())
-            assertTrue((result as Either.Left).value is ChunkedUploadError.InvalidChunkIndex)
+            assertTrue((result as Either.Left<*>).value is ChunkedUploadError.InvalidChunkIndex)
         } finally {
             java.io.File(tempDir).deleteRecursively()
         }

@@ -8,7 +8,7 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.model.ShareLink
 import com.vaultstadio.core.domain.service.CreateShareInput
 import com.vaultstadio.core.domain.service.ShareService
-import com.vaultstadio.core.exception.AuthorizationException
+import com.vaultstadio.domain.common.exception.AuthorizationException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -47,7 +47,7 @@ class CreateShareUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.id == share.id)
+        assertTrue((result as Either.Right<*>).value.id == share.id)
     }
 
     @Test
@@ -59,6 +59,6 @@ class CreateShareUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is AuthorizationException)
+        assertTrue((result as Either.Left<*>).value is AuthorizationException)
     }
 }

@@ -7,7 +7,7 @@ package com.vaultstadio.api.application.usecase.admin
 import arrow.core.Either
 import com.vaultstadio.core.domain.model.StorageStatistics
 import com.vaultstadio.core.domain.repository.ActivityRepository
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -39,7 +39,7 @@ class GetAdminStatisticsUseCaseTest {
         val result = useCase()
 
         assertTrue(result.isRight())
-        assertEquals(10L, (result as Either.Right).value.totalFiles)
+        assertEquals(10L, (result as Either.Right<*>).value.totalFiles)
     }
 
     @Test

@@ -7,14 +7,15 @@
 package com.vaultstadio.api.application.usecase.storage
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.repository.PagedResult
-import com.vaultstadio.core.domain.repository.SortField
-import com.vaultstadio.core.domain.repository.SortOrder
-import com.vaultstadio.core.domain.repository.StorageItemQuery
+import com.vaultstadio.application.usecase.storage.ListFolderUseCaseImpl
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.core.domain.service.StorageService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.pagination.PagedResult
+import com.vaultstadio.domain.common.pagination.SortOrder
+import com.vaultstadio.domain.storage.repository.SortField
+import com.vaultstadio.domain.storage.repository.StorageItemQuery
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -64,8 +65,9 @@ class ListFolderUseCaseTest {
         val result = useCase(folderId, userId, query)
 
         assertTrue(result.isRight())
-        assertEquals(pagedResult.items.size, (result as Either.Right).value.items.size)
-        assertEquals(pagedResult.total, result.value.total)
+        val right = result as Either.Right<PagedResult<StorageItem>>
+        assertEquals(pagedResult.items.size, right.value.items.size)
+        assertEquals(pagedResult.total, right.value.total)
     }
 
     @Test
@@ -85,6 +87,6 @@ class ListFolderUseCaseTest {
         val result = useCase(folderId, userId, query)
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

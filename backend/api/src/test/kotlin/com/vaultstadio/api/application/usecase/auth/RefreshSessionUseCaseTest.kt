@@ -6,11 +6,11 @@ package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
 import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.core.domain.service.RefreshResult
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -48,7 +48,7 @@ class RefreshSessionUseCaseTest {
         val result = useCase("refresh-1")
 
         assertTrue(result.isRight())
-        assertEquals("new-token", (result as Either.Right).value.sessionToken)
+        assertEquals("new-token", (result as Either.Right<*>).value.sessionToken)
     }
 
     @Test
@@ -58,6 +58,6 @@ class RefreshSessionUseCaseTest {
         val result = useCase("bad")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

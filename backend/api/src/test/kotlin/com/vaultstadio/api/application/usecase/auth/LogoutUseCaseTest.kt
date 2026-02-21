@@ -6,7 +6,7 @@ package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -34,6 +34,6 @@ class LogoutUseCaseTest {
         val result = useCase("token-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<*>).value is ItemNotFoundException)
     }
 }

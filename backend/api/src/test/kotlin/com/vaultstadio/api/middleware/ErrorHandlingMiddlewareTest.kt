@@ -8,7 +8,7 @@ package com.vaultstadio.api.middleware
 
 import com.vaultstadio.api.config.AuthenticationException
 import com.vaultstadio.api.dto.ApiResponse
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get

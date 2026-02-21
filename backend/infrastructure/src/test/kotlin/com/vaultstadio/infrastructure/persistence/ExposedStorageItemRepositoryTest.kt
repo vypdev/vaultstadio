@@ -7,15 +7,15 @@
 package com.vaultstadio.infrastructure.persistence
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
-import com.vaultstadio.core.domain.model.Visibility
-import com.vaultstadio.core.domain.repository.SortField
-import com.vaultstadio.core.domain.repository.SortOrder
-import com.vaultstadio.core.domain.repository.StorageItemQuery
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.domain.common.pagination.SortOrder
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.storage.model.Visibility
+import com.vaultstadio.domain.storage.repository.SortField
+import com.vaultstadio.domain.storage.repository.StorageItemQuery
 import com.vaultstadio.infrastructure.persistence.entities.StorageItemMetadataTable
 import com.vaultstadio.infrastructure.persistence.entities.StorageItemsTable
 import com.vaultstadio.infrastructure.persistence.entities.UsersTable

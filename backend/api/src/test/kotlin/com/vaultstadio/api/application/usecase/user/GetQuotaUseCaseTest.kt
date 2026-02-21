@@ -5,9 +5,10 @@
 package com.vaultstadio.api.application.usecase.user
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.model.StorageQuota
+import com.vaultstadio.application.usecase.user.GetQuotaUseCaseImpl
+import com.vaultstadio.domain.storage.model.StorageQuota
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -34,7 +35,7 @@ class GetQuotaUseCaseTest {
         val result = useCase(userId)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.usedBytes == 1024L)
+        assertTrue((result as Either.Right<StorageQuota>).value.usedBytes == 1024L)
     }
 
     @Test

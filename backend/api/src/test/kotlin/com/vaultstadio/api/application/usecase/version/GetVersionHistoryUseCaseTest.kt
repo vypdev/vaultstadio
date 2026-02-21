@@ -5,12 +5,13 @@
 package com.vaultstadio.api.application.usecase.version
 
 import arrow.core.Either
+import com.vaultstadio.application.usecase.version.GetVersionHistoryUseCaseImpl
 import com.vaultstadio.core.domain.model.FileVersion
 import com.vaultstadio.core.domain.model.FileVersionHistory
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
 import com.vaultstadio.core.domain.service.FileVersionService
-import com.vaultstadio.core.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -57,7 +58,7 @@ class GetVersionHistoryUseCaseTest {
         val result = useCase("item-1")
 
         assertTrue(result.isRight())
-        val resultHistory = (result as Either.Right).value
+        val resultHistory = (result as Either.Right<FileVersionHistory>).value
         assertEquals("item-1", resultHistory.item.id)
         assertEquals(1, resultHistory.versions.size)
         assertEquals(1, resultHistory.totalVersions)
@@ -71,6 +72,6 @@ class GetVersionHistoryUseCaseTest {
         val result = useCase("item-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ItemNotFoundException)
+        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
     }
 }

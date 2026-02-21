@@ -6,11 +6,11 @@ package com.vaultstadio.api.application.usecase.auth
 
 import arrow.core.Either
 import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.core.domain.service.RegisterUserInput
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.ValidationException
+import com.vaultstadio.domain.common.exception.ValidationException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -45,7 +45,7 @@ class RegisterUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isRight())
-        assertTrue((result as Either.Right).value.id == user.id)
+        assertTrue((result as Either.Right<*>).value.id == user.id)
     }
 
     @Test
@@ -60,6 +60,6 @@ class RegisterUseCaseTest {
         val result = useCase(input)
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left).value is ValidationException)
+        assertTrue((result as Either.Left<*>).value is ValidationException)
     }
 }

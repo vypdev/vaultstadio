@@ -10,8 +10,8 @@ package com.vaultstadio.plugins.metadata
 import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
-import com.vaultstadio.core.domain.model.ItemType
-import com.vaultstadio.core.domain.model.StorageItem
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.core.domain.model.StorageItemMetadata
 import com.vaultstadio.plugins.api.PluginMetadata
 import com.vaultstadio.plugins.context.AIApi

@@ -8,6 +8,7 @@
 
 package com.vaultstadio.api.routes
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.api.config.configureSecurity
@@ -17,12 +18,12 @@ import com.vaultstadio.api.routes.collaboration.JoinSessionRequest
 import com.vaultstadio.api.routes.collaboration.ParticipantResponse
 import com.vaultstadio.core.domain.model.CollaborationParticipant
 import com.vaultstadio.core.domain.model.CollaborationSession
-import com.vaultstadio.core.domain.model.User
-import com.vaultstadio.core.domain.model.UserRole
-import com.vaultstadio.core.domain.model.UserStatus
 import com.vaultstadio.core.domain.service.CollaborationService
 import com.vaultstadio.core.domain.service.UserService
-import com.vaultstadio.core.exception.AuthenticationException
+import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserRole
+import com.vaultstadio.domain.auth.model.UserStatus
+import com.vaultstadio.domain.common.exception.AuthenticationException
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -61,7 +62,7 @@ class ProtectedRoutesAuthTest {
     fun `POST collaboration sessions join without Authorization returns 401`() = testApplication {
         val userService = mockk<UserService>()
         val collaborationService = mockk<CollaborationService>()
-        coEvery { userService.validateSession(any()) } returns AuthenticationException("invalid").left()
+        coEvery { userService.validateSession(any()) } returns Either.Left(AuthenticationException("invalid"))
 
         application {
             (this as Application).install(Koin) {
@@ -151,7 +152,7 @@ class ProtectedRoutesAuthTest {
         val userService = mockk<UserService>()
         val collaborationService = mockk<CollaborationService>()
         // Any token accepted so test is independent of exact header format from test client
-        coEvery { userService.validateSession(any()) } returns testUser.right()
+        coEvery { userService.validateSession(any()) } returns Either.Right(testUser)
 
         val session = CollaborationSession(
             id = "session-1",
