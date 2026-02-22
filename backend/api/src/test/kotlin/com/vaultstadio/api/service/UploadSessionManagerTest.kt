@@ -76,6 +76,11 @@ class UploadSessionManagerTest {
         }
 
         @Test
+        fun `getSessionForUser returns null for missing upload id`() {
+            assertNull(manager.getSessionForUser("nonexistent", "any-user"))
+        }
+
+        @Test
         fun `getSession returns null for missing id`() {
             assertNull(manager.getSession("nonexistent"))
         }

@@ -5,6 +5,7 @@
 package com.vaultstadio.infrastructure.storage
 
 import arrow.core.Either
+import com.vaultstadio.domain.common.exception.StorageBackendException
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -111,6 +112,7 @@ class LocalStorageBackendTest {
             val result = backend.retrieve("nonexistent-key-12345678901234567890")
 
             assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is StorageBackendException)
         }
     }
 
@@ -136,11 +138,9 @@ class LocalStorageBackendTest {
         }
 
         @Test
-        fun `delete should handle non-existent key`() = runTest {
+        fun `delete should succeed for non-existent key`() = runTest {
             val result = backend.delete("nonexistent-key-12345678901234567890")
-
-            // Should succeed or return appropriate error
-            // Depends on implementation
+            assertTrue(result.isRight())
         }
     }
 
@@ -196,6 +196,7 @@ class LocalStorageBackendTest {
             val result = backend.getSize("nonexistent-key-12345678901234567890")
 
             assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is StorageBackendException)
         }
     }
 
@@ -210,6 +211,15 @@ class LocalStorageBackendTest {
             // Verify subdirectories were created
             val subdirs = Files.list(tempDir).toList()
             assertTrue(subdirs.isNotEmpty())
+        }
+
+        @Test
+        fun `constructor creates base directory when it does not exist`() {
+            val newBasePath = tempDir.resolve("new-storage-subdir")
+            assertFalse(Files.exists(newBasePath))
+            LocalStorageBackend(newBasePath)
+            assertTrue(Files.exists(newBasePath))
+            assertTrue(Files.isDirectory(newBasePath))
         }
     }
 

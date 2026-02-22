@@ -120,6 +120,18 @@ class CollaborationContentApplyTest {
     }
 
     @Test
+    fun `applyOperationToContent Retain with empty content returns empty string`() {
+        val op = CollaborationOperation.Retain(
+            userId = "u1",
+            timestamp = instant(0),
+            baseVersion = 1,
+            count = 0,
+        )
+        val result = applyOperationToContent("", op)
+        assertEquals("", result)
+    }
+
+    @Test
     fun `applyOperationToContent Insert into empty string`() {
         val op = CollaborationOperation.Insert(
             userId = "u1",
@@ -130,5 +142,31 @@ class CollaborationContentApplyTest {
         )
         val result = applyOperationToContent("", op)
         assertEquals("x", result)
+    }
+
+    @Test
+    fun `applyOperationToContent Delete with length zero leaves content unchanged`() {
+        val op = CollaborationOperation.Delete(
+            userId = "u1",
+            timestamp = instant(0),
+            baseVersion = 1,
+            position = 1,
+            length = 0,
+        )
+        val result = applyOperationToContent("abc", op)
+        assertEquals("abc", result)
+    }
+
+    @Test
+    fun `applyOperationToContent Insert with negative position clamped to start`() {
+        val op = CollaborationOperation.Insert(
+            userId = "u1",
+            timestamp = instant(0),
+            baseVersion = 1,
+            position = -1,
+            text = "X",
+        )
+        val result = applyOperationToContent("ab", op)
+        assertEquals("Xab", result)
     }
 }

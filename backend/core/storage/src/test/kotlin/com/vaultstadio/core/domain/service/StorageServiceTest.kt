@@ -353,6 +353,32 @@ class StorageServiceTest {
     }
 
     @Nested
+    inner class DownloadFileTests {
+
+        @Test
+        fun `should fail with ValidationException when item is a folder`() = runTest {
+            val folder = createTestFolder("folder-id", "Docs", "/Docs", "user-123")
+            coEvery { storageItemRepository.findById("folder-id") } returns folder.right()
+
+            val result = storageService.downloadFile("folder-id", "user-123")
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ValidationException)
+        }
+
+        @Test
+        fun `should fail with ValidationException when file has no storage key`() = runTest {
+            val fileWithoutKey = createTestFile("file-id", "doc.txt", "/doc.txt", "user-123").copy(storageKey = null)
+            coEvery { storageItemRepository.findById("file-id") } returns fileWithoutKey.right()
+
+            val result = storageService.downloadFile("file-id", "user-123")
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ValidationException)
+        }
+    }
+
+    @Nested
     inner class GetBreadcrumbsTests {
 
         @Test
@@ -414,6 +440,52 @@ class StorageServiceTest {
             val result = storageService.renameItem("file-id", "  ", "user-123")
 
             // Then
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ValidationException)
+        }
+    }
+
+    @Nested
+    inner class MoveItemTests {
+
+        @Test
+        fun `should fail with ValidationException when destination is not a folder`() = runTest {
+            val item = createTestFile("file-id", "doc.txt", "/doc.txt", "user-123")
+            val destinationFile = createTestFile("dest-id", "not-a-folder.txt", "/not-a-folder.txt", "user-123")
+            coEvery { storageItemRepository.findById("file-id") } returns item.right()
+            coEvery { storageItemRepository.findById("dest-id") } returns destinationFile.right()
+
+            val input = MoveItemInput(
+                itemId = "file-id",
+                newParentId = "dest-id",
+                newName = null,
+                userId = "user-123",
+            )
+            val result = storageService.moveItem(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is ValidationException)
+        }
+    }
+
+    @Nested
+    inner class CopyItemTests {
+
+        @Test
+        fun `should fail with ValidationException when destination is not a folder`() = runTest {
+            val item = createTestFile("file-id", "doc.txt", "/doc.txt", "user-123")
+            val destinationFile = createTestFile("dest-id", "not-a-folder.txt", "/not-a-folder.txt", "user-123")
+            coEvery { storageItemRepository.findById("file-id") } returns item.right()
+            coEvery { storageItemRepository.findById("dest-id") } returns destinationFile.right()
+
+            val input = CopyItemInput(
+                itemId = "file-id",
+                destinationParentId = "dest-id",
+                newName = null,
+                userId = "user-123",
+            )
+            val result = storageService.copyItem(input)
+
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is ValidationException)
         }

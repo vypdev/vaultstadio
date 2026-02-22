@@ -10,6 +10,9 @@ import arrow.core.Either
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
+import com.vaultstadio.core.domain.event.ShareEvent
+import com.vaultstadio.core.domain.event.SystemEvent
+import com.vaultstadio.core.domain.event.UserEvent
 import com.vaultstadio.domain.activity.model.ActivityType
 import com.vaultstadio.domain.activity.repository.ActivityRepository
 import com.vaultstadio.domain.common.exception.StorageBackendException
@@ -429,6 +432,137 @@ class ActivityLoggerTest {
                             it.details != null &&
                             it.details!!.contains("source-1") &&
                             it.details!!.contains("original.pdf")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish FolderEvent Moved calls activityRepository create with FOLDER_MOVED`() =
+        runTest {
+            activityLogger.start()
+            val folder = StorageItem(
+                id = "folder-moved",
+                name = "Docs",
+                path = "/new/Docs",
+                type = ItemType.FOLDER,
+                ownerId = "user-1",
+                size = 0,
+                mimeType = null,
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FolderEvent.Moved(
+                id = "ev-fmoved",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                folder = folder,
+                previousPath = "/old/Docs",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.FOLDER_MOVED &&
+                            it.itemId == "folder-moved" &&
+                            it.itemPath == "/new/Docs" &&
+                            it.details != null &&
+                            it.details!!.contains("/old/Docs")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish ShareEvent Deleted calls activityRepository create with SHARE_DELETED`() =
+        runTest {
+            activityLogger.start()
+            val event = ShareEvent.Deleted(
+                id = "ev-share-del",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                shareId = "share-123",
+                itemId = "item-456",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.SHARE_DELETED &&
+                            it.userId == "user-1" &&
+                            it.itemId == "item-456" &&
+                            it.details != null &&
+                            it.details!!.contains("share-123")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish UserEvent LoggedOut calls activityRepository create with USER_LOGOUT`() =
+        runTest {
+            activityLogger.start()
+            val event = UserEvent.LoggedOut(
+                id = "ev-logout",
+                timestamp = Clock.System.now(),
+                userId = "user-99",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.USER_LOGOUT &&
+                            it.userId == "user-99" &&
+                            it.itemId == null &&
+                            it.details == null
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish SystemEvent PluginInstalled calls activityRepository create with PLUGIN_INSTALLED`() =
+        runTest {
+            activityLogger.start()
+            val event = SystemEvent.PluginInstalled(
+                id = "ev-install",
+                timestamp = Clock.System.now(),
+                userId = "admin-1",
+                pluginId = "plugin-image-metadata",
+                pluginVersion = "1.0.0",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.PLUGIN_INSTALLED &&
+                            it.userId == "admin-1" &&
+                            it.details != null &&
+                            it.details!!.contains("plugin-image-metadata") &&
+                            it.details!!.contains("1.0.0")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish SystemEvent PluginUninstalled calls activityRepository create with PLUGIN_UNINSTALLED`() =
+        runTest {
+            activityLogger.start()
+            val event = SystemEvent.PluginUninstalled(
+                id = "ev-uninstall",
+                timestamp = Clock.System.now(),
+                userId = "admin-1",
+                pluginId = "plugin-video-metadata",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.PLUGIN_UNINSTALLED &&
+                            it.userId == "admin-1" &&
+                            it.details != null &&
+                            it.details!!.contains("plugin-video-metadata")
                     },
                 )
             }

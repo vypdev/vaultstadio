@@ -111,4 +111,10 @@ class FederationApiModelsTest {
         val permission = SharePermission.ADMIN
         assertEquals("ADMIN", permission.name)
     }
+
+    @Test
+    fun testSharePermissionDeleteAndShare() {
+        assertEquals("DELETE", SharePermission.DELETE.name)
+        assertEquals("SHARE", SharePermission.SHARE.name)
+    }
 }

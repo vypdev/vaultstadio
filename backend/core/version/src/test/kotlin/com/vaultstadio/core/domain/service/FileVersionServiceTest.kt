@@ -237,6 +237,28 @@ class FileVersionServiceTest {
     }
 
     @Test
+    fun `getVersionCount should propagate when repository returns Left`() = runTest {
+        val repoError = DatabaseException("db error")
+        coEvery { versionRepository.countVersions("item-1") } returns repoError.left()
+
+        val result = service.getVersionCount("item-1")
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is DatabaseException)
+    }
+
+    @Test
+    fun `getTotalVersionSize should propagate when repository returns Left`() = runTest {
+        val repoError = DatabaseException("db error")
+        coEvery { versionRepository.getTotalVersionSize("item-1") } returns repoError.left()
+
+        val result = service.getTotalVersionSize("item-1")
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is DatabaseException)
+    }
+
+    @Test
     fun `createVersion should propagate when itemRepository findById returns Left`() = runTest {
         val input = CreateVersionInput("item-1", 1024, "c1", "key1")
         val repoError = ItemNotFoundException("item-1")
@@ -318,6 +340,16 @@ class FileVersionServiceTest {
     }
 
     @Test
+    fun `getVersion should propagate when versionRepository findByItemAndVersion returns Left`() = runTest {
+        coEvery { versionRepository.findByItemAndVersion("item-1", 1) } returns DatabaseException("db error").left()
+
+        val result = service.getVersion("item-1", 1)
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is DatabaseException)
+    }
+
+    @Test
     fun `getLatestVersion should fail when no versions exist`() = runTest {
         coEvery { versionRepository.findLatest("item-1") } returns null.right()
 
@@ -325,6 +357,16 @@ class FileVersionServiceTest {
 
         assertTrue(result.isLeft())
         assertTrue((result as Either.Left).value is ItemNotFoundException)
+    }
+
+    @Test
+    fun `getLatestVersion should propagate when versionRepository findLatest returns Left`() = runTest {
+        coEvery { versionRepository.findLatest("item-1") } returns DatabaseException("db error").left()
+
+        val result = service.getLatestVersion("item-1")
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is DatabaseException)
     }
 
     @Test

@@ -204,4 +204,15 @@ class FormattingTest {
         assertEquals("hello", truncateText("hello", 5))
         assertEquals("ab", truncateText("ab", 2))
     }
+
+    @Test
+    fun truncateText_emptyString_returnsEmpty() {
+        assertEquals("", truncateText("", 10))
+        assertEquals("", truncateText("", 0))
+    }
+
+    @Test
+    fun truncateText_maxLengthThree_returnsEllipsisOnly() {
+        assertEquals("...", truncateText("hello", 3))
+    }
 }

@@ -40,6 +40,11 @@ class ImageMetadataPluginTest {
         }
 
         @Test
+        fun `should have exact plugin name`() {
+            assertEquals("Image Metadata Extractor", plugin.metadata.name)
+        }
+
+        @Test
         fun `should have description`() {
             assertNotNull(plugin.metadata.description)
         }
@@ -70,6 +75,21 @@ class ImageMetadataPluginTest {
             )
 
             imageTypes.forEach { mimeType ->
+                assertTrue(
+                    plugin.metadata.supportedMimeTypes.contains(mimeType),
+                    "Should support $mimeType",
+                )
+            }
+        }
+
+        @Test
+        fun `should support heic heif and bmp`() {
+            val extraImageTypes = listOf(
+                "image/heic",
+                "image/heif",
+                "image/bmp",
+            )
+            extraImageTypes.forEach { mimeType ->
                 assertTrue(
                     plugin.metadata.supportedMimeTypes.contains(mimeType),
                     "Should support $mimeType",

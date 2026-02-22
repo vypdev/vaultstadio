@@ -162,6 +162,14 @@ class ErrorHandlingTest {
         }
 
         @Test
+        fun `204 No Content should be created correctly`() {
+            val status = HttpStatusCode.NoContent
+
+            assertEquals(204, status.value)
+            assertEquals("No Content", status.description)
+        }
+
+        @Test
         fun `status code can be created from value`() {
             val status = HttpStatusCode.fromValue(404)
 

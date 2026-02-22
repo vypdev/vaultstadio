@@ -139,6 +139,22 @@ class VersionApiModelsTest {
     }
 
     @Test
+    fun testFileVersionHistoryWithEmptyVersions() {
+        val history = FileVersionHistory(
+            itemId = "item-2",
+            itemName = "empty.txt",
+            versions = emptyList(),
+            totalVersions = 0,
+            totalSize = 0L,
+        )
+        assertEquals("item-2", history.itemId)
+        assertEquals("empty.txt", history.itemName)
+        assertTrue(history.versions.isEmpty())
+        assertEquals(0, history.totalVersions)
+        assertEquals(0L, history.totalSize)
+    }
+
+    @Test
     fun testFileVersionIsRestoreWhenRestoredFromSet() {
         val now = Instant.fromEpochMilliseconds(0L)
         val version = FileVersion(

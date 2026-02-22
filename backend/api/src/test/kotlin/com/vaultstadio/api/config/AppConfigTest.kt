@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
@@ -65,6 +66,18 @@ class AppConfigTest {
             assertEquals("http://localhost:3000", origins[0])
             assertEquals("http://localhost:5173", origins[1])
         }
+
+        @Test
+        fun `should support development flag`() {
+            val config = HttpServerConfig(
+                host = "127.0.0.1",
+                port = 9000,
+                development = true,
+                corsAllowedOrigins = listOf("*"),
+            )
+            assertTrue(config.development)
+            assertEquals(9000, config.port)
+        }
     }
 
     @Nested
@@ -102,6 +115,40 @@ class AppConfigTest {
             assertTrue(config.minIdle <= config.maxPoolSize)
             assertTrue(config.idleTimeout > 0)
             assertTrue(config.connectionTimeout > 0)
+        }
+
+        @Test
+        fun `should support runMigrations false`() {
+            val config = DbConfig(
+                url = "jdbc:postgresql://localhost:5432/app",
+                user = "u",
+                password = "p",
+                driver = "org.postgresql.Driver",
+                maxPoolSize = 5,
+                minIdle = 1,
+                idleTimeout = 300000,
+                connectionTimeout = 10000,
+                maxLifetime = 900000,
+                runMigrations = false,
+            )
+            assertFalse(config.runMigrations)
+        }
+
+        @Test
+        fun `should support runMigrations true`() {
+            val config = DbConfig(
+                url = "jdbc:postgresql://localhost:5432/app",
+                user = "u",
+                password = "p",
+                driver = "org.postgresql.Driver",
+                maxPoolSize = 5,
+                minIdle = 1,
+                idleTimeout = 300000,
+                connectionTimeout = 10000,
+                maxLifetime = 900000,
+                runMigrations = true,
+            )
+            assertTrue(config.runMigrations)
         }
     }
 
@@ -154,6 +201,30 @@ class AppConfigTest {
         fun `StorageType has exactly three values`() {
             assertEquals(3, StorageType.entries.size)
         }
+
+        @Test
+        fun `StorageConfig with S3 type holds s3 config`() {
+            val s3Config = S3Config(
+                endpoint = "http://minio:9000",
+                region = "us-east-1",
+                bucket = "vault",
+                accessKey = "key",
+                secretKey = "secret",
+                usePathStyle = true,
+            )
+            val config = StorageConfig(
+                type = StorageType.S3,
+                localPath = "./data/storage",
+                tempPath = "./data/temp",
+                maxFileSize = 5L * 1024 * 1024 * 1024,
+                allowedMimeTypes = listOf("*"),
+                s3 = s3Config,
+            )
+            assertEquals(StorageType.S3, config.type)
+            val s3 = requireNotNull(config.s3)
+            assertEquals("http://minio:9000", s3.endpoint)
+            assertEquals("vault", s3.bucket)
+        }
     }
 
     @Nested
@@ -185,6 +256,20 @@ class AppConfigTest {
 
             assertEquals("us-east-1", config.region)
             assertTrue(config.usePathStyle)
+        }
+
+        @Test
+        fun `should support usePathStyle false for AWS S3`() {
+            val config = S3Config(
+                endpoint = "https://s3.amazonaws.com",
+                region = "eu-west-1",
+                bucket = "my-bucket",
+                accessKey = "ak",
+                secretKey = "sk",
+                usePathStyle = false,
+            )
+            assertFalse(config.usePathStyle)
+            assertEquals("my-bucket", config.bucket)
         }
     }
 
@@ -273,6 +358,26 @@ class AppConfigTest {
             assertTrue(config.rateLimitRequests > 0)
             assertTrue(config.rateLimitWindowSeconds > 0)
         }
+
+        @Test
+        fun `should support optional federation keys`() {
+            val config = SecurityConfig(
+                jwtSecret = "test-secret-key-minimum-32-characters-long",
+                jwtIssuer = "vaultstadio",
+                jwtAudience = "vaultstadio-api",
+                sessionDuration = 24.hours,
+                refreshTokenDuration = 30.days,
+                bcryptRounds = 12,
+                rateLimitEnabled = false,
+                rateLimitRequests = 50,
+                rateLimitWindowSeconds = 120,
+                federationPublicKey = "public-key-pem",
+                federationPrivateKey = "private-key-pem",
+            )
+            assertEquals("public-key-pem", config.federationPublicKey)
+            assertEquals("private-key-pem", config.federationPrivateKey)
+            assertFalse(config.rateLimitEnabled)
+        }
     }
 
     @Nested
@@ -315,6 +420,18 @@ class AppConfigTest {
             val enabledPlugins = "".split(",").map { it.trim() }.filter { it.isNotEmpty() }
 
             assertTrue(enabledPlugins.isEmpty())
+        }
+
+        @Test
+        fun `should support autoLoad false`() {
+            val config = PluginsConfig(
+                directory = "/opt/plugins",
+                autoLoad = false,
+                enabledPlugins = emptyList(),
+            )
+
+            assertFalse(config.autoLoad)
+            assertEquals("/opt/plugins", config.directory)
         }
     }
 

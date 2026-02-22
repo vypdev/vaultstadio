@@ -110,6 +110,23 @@ class StringsTest {
     }
 
     @Test
+    fun allLanguages_haveNavTrashAndActionCancel() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navTrash.isNotEmpty(), "navTrash should be non-empty for all languages")
+            assertTrue(strings.actionCancel.isNotEmpty(), "actionCancel should be non-empty for all languages")
+        }
+    }
+
+    @Test
     fun englishStrings_hasActionStrings() {
         val strings = EnglishStrings
         assertNotNull(strings.actionNew)
@@ -247,6 +264,38 @@ class StringsTest {
     }
 
     @Test
+    fun allLanguages_haveErrorGeneric() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.errorGeneric.isNotEmpty(), "errorGeneric should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveAppName() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.appName.isNotEmpty(), "appName should be non-empty for all languages")
+        }
+    }
+
+    @Test
     fun stringsObject_defaultsToEnglish() {
         Strings.currentLanguage = Language.ENGLISH
         val resources = Strings.resources
@@ -262,5 +311,177 @@ class StringsTest {
         assertEquals(FrenchStrings.appName, Strings.resources.appName)
 
         Strings.currentLanguage = Language.ENGLISH
+    }
+
+    @Test
+    fun loadSavedLanguage_withValidCode_setsLanguage() {
+        Strings.currentLanguage = Language.ENGLISH
+        Strings.loadSavedLanguage("es")
+        assertEquals(Language.SPANISH, Strings.currentLanguage)
+        assertEquals(SpanishStrings.appName, Strings.resources.appName)
+
+        Strings.loadSavedLanguage("de")
+        assertEquals(Language.GERMAN, Strings.currentLanguage)
+        Strings.currentLanguage = Language.ENGLISH
+    }
+
+    @Test
+    fun loadSavedLanguage_withNull_keepsCurrent() {
+        Strings.currentLanguage = Language.FRENCH
+        Strings.loadSavedLanguage(null)
+        assertEquals(Language.FRENCH, Strings.currentLanguage)
+        Strings.currentLanguage = Language.ENGLISH
+    }
+
+    @Test
+    fun loadSavedLanguage_withUnknownCode_fallsBackToEnglish() {
+        Strings.currentLanguage = Language.SPANISH
+        Strings.loadSavedLanguage("xx")
+        assertEquals(Language.ENGLISH, Strings.currentLanguage)
+    }
+
+    @Test
+    fun allLanguages_haveActionSave() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionSave.isNotEmpty(), "actionSave should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveNavSettings() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navSettings.isNotEmpty(), "navSettings should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionDelete() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionDelete.isNotEmpty(), "actionDelete should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionRename() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionRename.isNotEmpty(), "actionRename should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionClose() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionClose.isNotEmpty(), "actionClose should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionCopyAndActionMove() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionCopy.isNotEmpty(), "actionCopy should be non-empty for all languages")
+            assertTrue(strings.actionMove.isNotEmpty(), "actionMove should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionCopyLink() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionCopyLink.isNotEmpty(), "actionCopyLink should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionDownload() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionDownload.isNotEmpty(), "actionDownload should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionShare() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionShare.isNotEmpty(), "actionShare should be non-empty for all languages")
+        }
     }
 }

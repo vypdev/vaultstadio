@@ -62,6 +62,13 @@ class StorageEventTest {
     }
 
     @Test
+    fun `FileEvent Downloaded without share uses defaults`() {
+        val e = FileEvent.Downloaded(userId = "u1", item = testItem)
+        assertTrue(!e.accessedViaShare)
+        assertEquals(null, e.shareId)
+    }
+
+    @Test
     fun `FileEvent Deleting permanent`() {
         val e = FileEvent.Deleting(userId = "u1", item = testItem, permanent = true)
         assertTrue(e.permanent)

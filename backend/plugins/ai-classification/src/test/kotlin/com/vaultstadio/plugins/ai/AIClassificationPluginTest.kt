@@ -7,6 +7,7 @@ package com.vaultstadio.plugins.ai
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -25,6 +26,11 @@ class AIClassificationPluginTest {
         @Test
         fun `should have correct plugin id`() {
             assertTrue(plugin.metadata.id.contains("ai") || plugin.metadata.id.contains("classification"))
+        }
+
+        @Test
+        fun `should have exact plugin id`() {
+            assertEquals("com.vaultstadio.plugins.ai-classification", plugin.metadata.id)
         }
 
         @Test
@@ -65,6 +71,13 @@ class AIClassificationPluginTest {
                     "Should support $mimeType",
                 )
             }
+        }
+
+        @Test
+        fun `should support gif and webp and bmp`() {
+            assertTrue(plugin.metadata.supportedMimeTypes.contains("image/gif"))
+            assertTrue(plugin.metadata.supportedMimeTypes.contains("image/webp"))
+            assertTrue(plugin.metadata.supportedMimeTypes.contains("image/bmp"))
         }
     }
 

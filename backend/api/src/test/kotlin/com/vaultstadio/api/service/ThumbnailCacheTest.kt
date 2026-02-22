@@ -213,6 +213,12 @@ class ThumbnailCacheTest {
             assertEquals("64", k.size)
             assertEquals(2L, k.version)
         }
+
+        @Test
+        fun `key default version is zero`() {
+            val k = ThumbnailCacheKey(itemId = "id", size = "256")
+            assertEquals(0L, k.version)
+        }
     }
 
     @Nested
@@ -237,6 +243,15 @@ class ThumbnailCacheTest {
             assertEquals(0, stats.misses)
             assertEquals(0.0, stats.hitRate, 0.0)
         }
+
+        @Test
+        fun `ThumbnailCacheStats construction`() {
+            val stats = ThumbnailCacheStats(size = 5, hits = 10, misses = 2, hitRate = 0.833)
+            assertEquals(5, stats.size)
+            assertEquals(10, stats.hits)
+            assertEquals(2, stats.misses)
+            assertEquals(0.833, stats.hitRate, 0.001)
+        }
     }
 
     @Nested
@@ -251,6 +266,13 @@ class ThumbnailCacheTest {
             assertEquals(a, b)
             assertNotEquals(a, c)
             assertEquals(a.hashCode(), b.hashCode())
+        }
+
+        @Test
+        fun `CachedThumbnail equals false for null and other type`() {
+            val t = thumbnail()
+            assertNotEquals(t, null)
+            assertNotEquals(t, "not a thumbnail")
         }
     }
 }

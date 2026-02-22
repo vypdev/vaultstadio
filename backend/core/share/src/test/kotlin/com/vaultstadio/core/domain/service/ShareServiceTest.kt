@@ -5,10 +5,12 @@
 package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.ShareEvent
 import com.vaultstadio.domain.common.exception.AuthorizationException
+import com.vaultstadio.domain.common.exception.DatabaseException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.share.model.ShareLink
 import com.vaultstadio.domain.share.repository.ShareRepository
@@ -146,6 +148,21 @@ class ShareServiceTest {
         }
 
         @Test
+        fun `should propagate when storageItemRepository findById returns Left`() = runTest {
+            val input = CreateShareInput(
+                itemId = testItemId,
+                userId = testUserId,
+            )
+            val repoError = DatabaseException("database unavailable")
+            coEvery { storageItemRepository.findById(testItemId) } returns repoError.left()
+
+            val result = shareService.createShare(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
+        }
+
+        @Test
         fun `should fail when user is not owner`() = runTest {
             // Given
             val item = createTestItem(testItemId, "other-user")
@@ -162,6 +179,20 @@ class ShareServiceTest {
             // Then
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is AuthorizationException)
+        }
+
+        @Test
+        fun `should propagate when shareRepository create returns Left`() = runTest {
+            val item = createTestItem(testItemId, testUserId)
+            val input = CreateShareInput(itemId = testItemId, userId = testUserId)
+            coEvery { storageItemRepository.findById(testItemId) } returns item.right()
+            val repoError = DatabaseException("create failed")
+            coEvery { shareRepository.create(any()) } returns repoError.left()
+
+            val result = shareService.createShare(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
         }
     }
 
@@ -204,6 +235,32 @@ class ShareServiceTest {
             // Then
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
+
+        @Test
+        fun `should propagate when shareRepository findByToken returns Left`() = runTest {
+            val input = AccessShareInput(token = "token-1")
+            val repoError = DatabaseException("database unavailable")
+            coEvery { shareRepository.findByToken("token-1") } returns repoError.left()
+
+            val result = shareService.accessShare(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
+        }
+
+        @Test
+        fun `should propagate when storageItemRepository findById returns Left for accessShare`() = runTest {
+            val share = createTestShare("share-id", testItemId, testUserId)
+            val input = AccessShareInput(token = share.token)
+            coEvery { shareRepository.findByToken(share.token) } returns share.right()
+            val repoError = DatabaseException("database unavailable")
+            coEvery { storageItemRepository.findById(testItemId) } returns repoError.left()
+
+            val result = shareService.accessShare(input)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
         }
 
         @Test
@@ -360,6 +417,39 @@ class ShareServiceTest {
         }
 
         @Test
+        fun `should propagate when shareRepository findByCreatedBy returns Left for getSharesByUser`() = runTest {
+            val repoError = DatabaseException("database unavailable")
+            coEvery { shareRepository.findByCreatedBy(testUserId, true) } returns repoError.left()
+
+            val result = shareService.getSharesByUser(testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
+        }
+
+        @Test
+        fun `should get shares shared with user`() = runTest {
+            val shares = listOf(createTestShare("share-1", "item-1", "other-user"))
+            coEvery { shareRepository.findSharedWithUser(testUserId, true) } returns shares.right()
+
+            val result = shareService.getSharesSharedWithUser(testUserId)
+
+            assertTrue(result.isRight())
+            assertEquals(1, (result as Either.Right).value.size)
+        }
+
+        @Test
+        fun `should propagate when shareRepository findSharedWithUser returns Left`() = runTest {
+            val repoError = DatabaseException("database unavailable")
+            coEvery { shareRepository.findSharedWithUser(testUserId, true) } returns repoError.left()
+
+            val result = shareService.getSharesSharedWithUser(testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
+        }
+
+        @Test
         fun `should get shares by item`() = runTest {
             // Given
             val item = createTestItem(testItemId, testUserId)
@@ -402,6 +492,17 @@ class ShareServiceTest {
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is ItemNotFoundException)
         }
+
+        @Test
+        fun `should propagate when storageItemRepository findById returns Left for getSharesByItem`() = runTest {
+            val repoError = DatabaseException("database unavailable")
+            coEvery { storageItemRepository.findById(testItemId) } returns repoError.left()
+
+            val result = shareService.getSharesByItem(testItemId, testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
+        }
     }
 
     @Nested
@@ -426,6 +527,17 @@ class ShareServiceTest {
 
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
+
+        @Test
+        fun `should propagate when shareRepository findById returns Left`() = runTest {
+            val repoError = DatabaseException("database unavailable")
+            coEvery { shareRepository.findById("share-1") } returns repoError.left()
+
+            val result = shareService.getShare("share-1")
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
         }
     }
 
@@ -473,6 +585,19 @@ class ShareServiceTest {
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is ItemNotFoundException)
         }
+
+        @Test
+        fun `should propagate when shareRepository delete returns Left`() = runTest {
+            val share = createTestShare("share-id", testItemId, testUserId)
+            coEvery { shareRepository.findById("share-id") } returns share.right()
+            val repoError = DatabaseException("delete failed")
+            coEvery { shareRepository.delete("share-id") } returns repoError.left()
+
+            val result = shareService.deleteShare("share-id", testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
+        }
     }
 
     @Nested
@@ -518,6 +643,19 @@ class ShareServiceTest {
 
             assertTrue(result.isLeft())
             assertTrue((result as Either.Left).value is ItemNotFoundException)
+        }
+
+        @Test
+        fun `should propagate when shareRepository update returns Left`() = runTest {
+            val share = createTestShare("share-id", testItemId, testUserId)
+            coEvery { shareRepository.findById("share-id") } returns share.right()
+            val repoError = DatabaseException("update failed")
+            coEvery { shareRepository.update(any()) } returns repoError.left()
+
+            val result = shareService.deactivateShare("share-id", testUserId)
+
+            assertTrue(result.isLeft())
+            assertTrue((result as Either.Left).value is DatabaseException)
         }
     }
 

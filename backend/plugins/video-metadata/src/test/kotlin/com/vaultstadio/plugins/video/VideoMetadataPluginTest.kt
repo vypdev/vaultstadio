@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -33,9 +34,19 @@ class VideoMetadataPluginTest {
         }
 
         @Test
+        fun `should have exact plugin id`() {
+            assertEquals("com.vaultstadio.plugins.video-metadata", plugin.metadata.id)
+        }
+
+        @Test
         fun `should have name`() {
             assertNotNull(plugin.metadata.name)
             assertTrue(plugin.metadata.name.isNotEmpty())
+        }
+
+        @Test
+        fun `should have exact plugin name`() {
+            assertEquals("Video Metadata Extractor", plugin.metadata.name)
         }
 
         @Test
@@ -66,6 +77,20 @@ class VideoMetadataPluginTest {
             )
 
             videoTypes.forEach { mimeType ->
+                assertTrue(
+                    plugin.metadata.supportedMimeTypes.contains(mimeType),
+                    "Should support $mimeType",
+                )
+            }
+        }
+
+        @Test
+        fun `should support matroska and mpeg`() {
+            val extraVideoTypes = listOf(
+                "video/x-matroska",
+                "video/mpeg",
+            )
+            extraVideoTypes.forEach { mimeType ->
                 assertTrue(
                     plugin.metadata.supportedMimeTypes.contains(mimeType),
                     "Should support $mimeType",

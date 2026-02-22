@@ -54,6 +54,22 @@ class S3StorageBackendTest {
             assertTrue(config.usePathStyle)
             assertEquals("files", config.prefix)
         }
+
+        @Test
+        @DisplayName("should support bucket and region only")
+        fun shouldSupportBucketAndRegionOnly() {
+            val config = S3StorageConfig(
+                bucket = "prod-bucket",
+                region = "eu-central-1",
+            )
+            assertEquals("prod-bucket", config.bucket)
+            assertEquals("eu-central-1", config.region)
+            assertEquals(null, config.endpoint)
+            assertEquals(null, config.accessKeyId)
+            assertEquals(null, config.secretAccessKey)
+            assertEquals(false, config.usePathStyle)
+            assertEquals("", config.prefix)
+        }
     }
 
     @Nested
