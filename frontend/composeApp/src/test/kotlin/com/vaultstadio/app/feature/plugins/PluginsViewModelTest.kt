@@ -12,7 +12,9 @@ import com.vaultstadio.app.domain.plugin.usecase.GetPluginsUseCase
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.feature.ViewModelTestBase
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 private fun testPlugin(id: String = "p1") = PluginInfo(
     id = id,
@@ -63,5 +65,23 @@ class PluginsViewModelTest {
     fun loadPlugins_doesNotThrow() = ViewModelTestBase.withMainDispatcher {
         val vm = createViewModel()
         vm.loadPlugins()
+    }
+
+    @Test
+    fun loadPlugins_success_setsPlugins() = ViewModelTestBase.runTestWithMain {
+        val list = listOf(testPlugin("p1"), testPlugin("p2"))
+        val vm = createViewModel(getPluginsResult = Result.success(list))
+        vm.loadPlugins()
+        assertEquals(2, vm.plugins.size)
+        assertEquals("p1", vm.plugins[0].id)
+        assertNull(vm.error)
+    }
+
+    @Test
+    fun loadPlugins_error_setsError() = ViewModelTestBase.runTestWithMain {
+        val vm = createViewModel(getPluginsResult = Result.error("FORBIDDEN", "Access denied"))
+        vm.loadPlugins()
+        assertTrue(vm.plugins.isEmpty())
+        assertEquals("Access denied", vm.error)
     }
 }

@@ -484,4 +484,104 @@ class StringsTest {
             assertTrue(strings.actionShare.isNotEmpty(), "actionShare should be non-empty for all languages")
         }
     }
+
+    @Test
+    fun allLanguages_haveShareTitle() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.shareTitle.isNotEmpty(), "shareTitle should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveNavRecentAndNavStarred() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navRecent.isNotEmpty(), "navRecent should be non-empty for all languages")
+            assertTrue(strings.navStarred.isNotEmpty(), "navStarred should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveVersionTitleAndSyncTitle() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.versionTitle.isNotEmpty(), "versionTitle should be non-empty for all languages")
+            assertTrue(strings.syncTitle.isNotEmpty(), "syncTitle should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActivityNoActivity() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.activityNoActivity.isNotEmpty(), "activityNoActivity should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveActionRestoreAndActionNew() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.actionRestore.isNotEmpty(), "actionRestore should be non-empty for all languages")
+            assertTrue(strings.actionNew.isNotEmpty(), "actionNew should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveCommonBackAndCommonRetry() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.commonBack.isNotEmpty(), "commonBack should be non-empty for all languages")
+            assertTrue(strings.commonRetry.isNotEmpty(), "commonRetry should be non-empty for all languages")
+        }
+    }
 }

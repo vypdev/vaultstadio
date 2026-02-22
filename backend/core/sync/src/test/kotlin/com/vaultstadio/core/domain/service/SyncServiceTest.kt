@@ -15,6 +15,7 @@ import com.vaultstadio.core.domain.model.SyncConflict
 import com.vaultstadio.core.domain.model.SyncDevice
 import com.vaultstadio.core.domain.model.SyncRequest
 import com.vaultstadio.core.domain.repository.SyncRepository
+import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.DatabaseException
 import com.vaultstadio.domain.common.exception.InvalidOperationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
@@ -276,6 +277,86 @@ class SyncServiceTest {
     }
 
     @Test
+    fun `registerDevice should propagate error when updateDevice returns Left on reactivate`() = runTest {
+        val userId = "user-1"
+        val now = Clock.System.now()
+        val existingDevice = SyncDevice(
+            id = "existing-id",
+            userId = userId,
+            deviceId = "device-123",
+            deviceName = "Old Name",
+            deviceType = DeviceType.DESKTOP_MAC,
+            isActive = false,
+            createdAt = now,
+            updatedAt = now,
+        )
+        val input = RegisterDeviceInput(
+            deviceId = "device-123",
+            deviceName = "New Name",
+            deviceType = DeviceType.DESKTOP_MAC,
+        )
+        coEvery { syncRepository.findDeviceByUserAndId(userId, input.deviceId) } returns existingDevice.right()
+        coEvery { syncRepository.updateDevice(any()) } returns DatabaseException("update failed").left()
+
+        val result = service.registerDevice(input, userId)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err -> assertTrue(err is DatabaseException) }
+    }
+
+    @Test
+    fun `deactivateDevice should return AuthorizationException when device belongs to another user`() = runTest {
+        val userId = "user-1"
+        val otherUserId = "user-2"
+        val now = Clock.System.now()
+        val otherUserDevice = SyncDevice(
+            id = "dev-1",
+            userId = otherUserId,
+            deviceId = "device-1",
+            deviceName = "Other Device",
+            deviceType = DeviceType.DESKTOP_MAC,
+            isActive = true,
+            createdAt = now,
+            updatedAt = now,
+        )
+        coEvery { syncRepository.findDeviceByUserAndId(userId, "device-1") } returns otherUserDevice.right()
+
+        val result = service.deactivateDevice("device-1", userId)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err ->
+            assertTrue(err is AuthorizationException)
+            assertTrue(err.message!!.contains("Not authorized to deactivate"))
+        }
+    }
+
+    @Test
+    fun `removeDevice should return AuthorizationException when device belongs to another user`() = runTest {
+        val userId = "user-1"
+        val otherUserId = "user-2"
+        val now = Clock.System.now()
+        val otherUserDevice = SyncDevice(
+            id = "dev-1",
+            userId = otherUserId,
+            deviceId = "device-1",
+            deviceName = "Other Device",
+            deviceType = DeviceType.DESKTOP_MAC,
+            isActive = true,
+            createdAt = now,
+            updatedAt = now,
+        )
+        coEvery { syncRepository.findDeviceByUserAndId(userId, "device-1") } returns otherUserDevice.right()
+
+        val result = service.removeDevice("device-1", userId)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err ->
+            assertTrue(err is AuthorizationException)
+            assertTrue(err.message!!.contains("Not authorized to remove"))
+        }
+    }
+
+    @Test
     fun `listDevices should propagate error when repository returns Left`() = runTest {
         val userId = "user-1"
         val repoError = DatabaseException("DB error")
@@ -333,6 +414,50 @@ class SyncServiceTest {
             assertTrue(err is ItemNotFoundException)
             assertTrue(err.message.contains("Device not found"))
         }
+    }
+
+    @Test
+    fun `deactivateDevice should succeed when device found and repository returns Right`() = runTest {
+        val userId = "user-1"
+        val now = Clock.System.now()
+        val device = SyncDevice(
+            id = "dev-1",
+            userId = userId,
+            deviceId = "device-1",
+            deviceName = "Laptop",
+            deviceType = DeviceType.DESKTOP_MAC,
+            isActive = true,
+            createdAt = now,
+            updatedAt = now,
+        )
+        coEvery { syncRepository.findDeviceByUserAndId(userId, "device-1") } returns device.right()
+        coEvery { syncRepository.deactivateDevice("dev-1") } returns Unit.right()
+
+        val result = service.deactivateDevice("device-1", userId)
+
+        assertTrue(result.isRight())
+    }
+
+    @Test
+    fun `removeDevice should succeed when device found and repository returns Right`() = runTest {
+        val userId = "user-1"
+        val now = Clock.System.now()
+        val device = SyncDevice(
+            id = "dev-1",
+            userId = userId,
+            deviceId = "device-1",
+            deviceName = "Laptop",
+            deviceType = DeviceType.DESKTOP_MAC,
+            isActive = true,
+            createdAt = now,
+            updatedAt = now,
+        )
+        coEvery { syncRepository.findDeviceByUserAndId(userId, "device-1") } returns device.right()
+        coEvery { syncRepository.removeDevice("dev-1") } returns Unit.right()
+
+        val result = service.removeDevice("device-1", userId)
+
+        assertTrue(result.isRight())
     }
 
     @Test
@@ -473,6 +598,45 @@ class SyncServiceTest {
             assertTrue(err is InvalidOperationException)
             assertTrue(err.message.contains("already resolved"))
         }
+    }
+
+    @Test
+    fun `resolveConflict should propagate when repository resolveConflict returns Left`() = runTest {
+        val conflictId = "conflict-1"
+        val userId = "user-1"
+        val now = Clock.System.now()
+        val localChange = SyncChange(
+            id = "local-1",
+            itemId = "item-1",
+            changeType = ChangeType.MODIFY,
+            userId = userId,
+            timestamp = now,
+            cursor = 100,
+        )
+        val remoteChange = SyncChange(
+            id = "remote-1",
+            itemId = "item-1",
+            changeType = ChangeType.MODIFY,
+            userId = userId,
+            timestamp = now,
+            cursor = 101,
+        )
+        val pendingConflict = SyncConflict(
+            id = conflictId,
+            itemId = "item-1",
+            localChange = localChange,
+            remoteChange = remoteChange,
+            conflictType = ConflictType.EDIT_CONFLICT,
+            createdAt = now,
+        )
+        coEvery { syncRepository.findConflict(conflictId) } returns pendingConflict.right()
+        coEvery { syncRepository.resolveConflict(conflictId, ConflictResolution.KEEP_REMOTE, any()) } returns
+            DatabaseException("db error").left()
+
+        val result = service.resolveConflict(conflictId, ConflictResolution.KEEP_REMOTE, userId)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err -> assertTrue(err is DatabaseException) }
     }
 
     @Test
