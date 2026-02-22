@@ -123,6 +123,14 @@ class FormattingTest {
     }
 
     @Test
+    fun getFileIconName_archiveAndCodeVariants() {
+        assertEquals("archive", getFileIconName("application/x-compressed"))
+        assertEquals("archive", getFileIconName("application/x-archive"))
+        assertEquals("code", getFileIconName("application/javascript"))
+        assertEquals("code", getFileIconName("application/xml"))
+    }
+
+    @Test
     fun getFileTypeName_byMimeType() {
         assertEquals("Image", getFileTypeName("image/jpeg", null))
         assertEquals("Video", getFileTypeName("video/mp4", null))
@@ -135,9 +143,20 @@ class FormattingTest {
     }
 
     @Test
+    fun getFileTypeName_archiveByMimeContains() {
+        assertEquals("Archive", getFileTypeName("application/x-archive", null))
+    }
+
+    @Test
     fun getFileTypeName_fallbackToExtension() {
         assertEquals("PDF File", getFileTypeName(null, "pdf"))
         assertEquals("TXT File", getFileTypeName(null, "txt"))
+    }
+
+    @Test
+    fun getFileTypeName_extensionUsedWhenMimeUnrecognized() {
+        assertEquals("DAT File", getFileTypeName("application/octet-stream", "dat"))
+        assertEquals("BIN File", getFileTypeName("application/octet-stream", "bin"))
     }
 
     @Test

@@ -8,6 +8,7 @@ package com.vaultstadio.app.domain.usecase.sync
 import com.vaultstadio.app.data.sync.usecase.DeactivateDeviceUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.GetConflictsUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.GetDevicesUseCaseImpl
+import com.vaultstadio.app.data.sync.usecase.PullChangesUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.RegisterDeviceUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.RemoveDeviceUseCaseImpl
 import com.vaultstadio.app.data.sync.usecase.ResolveConflictUseCaseImpl
@@ -196,6 +197,29 @@ class ResolveConflictUseCaseTest {
         val repo = FakeSyncRepository(resolveConflictResult = Result.error("NOT_FOUND", "Conflict not found"))
         val useCase = ResolveConflictUseCaseImpl(repo)
         val result = useCase("missing", ConflictResolution.KEEP_REMOTE)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
+}
+
+class PullChangesUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryPullChangesResult() = runTest {
+        val response = SyncResponse(emptyList(), "cursor-1", false, emptyList(), testInstant)
+        val repo = FakeSyncRepository(pullChangesResult = Result.success(response))
+        val useCase = PullChangesUseCaseImpl(repo)
+        val result = useCase("device-1", cursor = null, limit = 50, includeDeleted = false)
+        assertTrue(result.isSuccess())
+        assertEquals(response, result.getOrNull())
+        assertEquals("cursor-1", result.getOrNull()?.cursor)
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeSyncRepository(pullChangesResult = Result.error("NETWORK", "Sync failed"))
+        val useCase = PullChangesUseCaseImpl(repo)
+        val result = useCase("device-1", "cursor", 100, includeDeleted = true)
         assertTrue(result.isError())
         assertNull(result.getOrNull())
     }

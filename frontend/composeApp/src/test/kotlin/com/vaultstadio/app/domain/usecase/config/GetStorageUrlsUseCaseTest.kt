@@ -96,6 +96,16 @@ class GetVersionUrlsUseCaseTest {
             useCase.downloadUrl("item-1", 2),
         )
     }
+
+    @Test
+    fun downloadUrl_withDifferentItemAndVersion_buildsCorrectUrl() {
+        val repo = FakeConfigRepository("https://app.example.com")
+        val useCase = GetVersionUrlsUseCaseImpl(repo)
+        assertEquals(
+            "https://app.example.com/api/v1/versions/doc-id/download/5",
+            useCase.downloadUrl("doc-id", 5),
+        )
+    }
 }
 
 class GetCollaborationUrlUseCaseTest {

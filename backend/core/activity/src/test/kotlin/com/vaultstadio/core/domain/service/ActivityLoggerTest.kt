@@ -282,4 +282,155 @@ class ActivityLoggerTest {
             eventBus.publish(event, async = false)
             coVerify(exactly = 1) { activityRepository.create(any()) }
         }
+
+    @Test
+    fun `start then publish FileEvent Deleted calls activityRepository create with FILE_DELETED`() =
+        runTest {
+            activityLogger.start()
+            val item = StorageItem(
+                id = "item-del",
+                name = "old.pdf",
+                path = "/old.pdf",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 100,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FileEvent.Deleted(
+                id = "ev-del",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                item = item,
+                permanent = true,
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.FILE_DELETED &&
+                            it.itemId == "item-del" &&
+                            it.details != null &&
+                            it.details!!.contains("true")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish FileEvent Renamed calls activityRepository create with FILE_RENAMED`() =
+        runTest {
+            activityLogger.start()
+            val item = StorageItem(
+                id = "item-renamed",
+                name = "new-name.txt",
+                path = "/new-name.txt",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 50,
+                mimeType = "text/plain",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FileEvent.Renamed(
+                id = "ev-renamed",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                item = item,
+                previousName = "old-name.txt",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.FILE_RENAMED &&
+                            it.itemId == "item-renamed" &&
+                            it.details != null &&
+                            it.details!!.contains("old-name.txt") &&
+                            it.details!!.contains("new-name.txt")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish FileEvent Restored calls activityRepository create with FILE_RESTORED`() =
+        runTest {
+            activityLogger.start()
+            val item = StorageItem(
+                id = "item-restored",
+                name = "doc.pdf",
+                path = "/doc.pdf",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 100,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FileEvent.Restored(
+                id = "ev-restored",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                item = item,
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.FILE_RESTORED &&
+                            it.itemId == "item-restored" &&
+                            it.itemPath == "/doc.pdf"
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `start then publish FileEvent Copied calls activityRepository create with FILE_COPIED`() =
+        runTest {
+            activityLogger.start()
+            val sourceItem = StorageItem(
+                id = "source-1",
+                name = "original.pdf",
+                path = "/original.pdf",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 200,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val item = StorageItem(
+                id = "copy-1",
+                name = "copy.pdf",
+                path = "/copy.pdf",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 200,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FileEvent.Copied(
+                id = "ev-copied",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                item = item,
+                sourceItem = sourceItem,
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.FILE_COPIED &&
+                            it.itemId == "copy-1" &&
+                            it.details != null &&
+                            it.details!!.contains("source-1") &&
+                            it.details!!.contains("original.pdf")
+                    },
+                )
+            }
+        }
 }

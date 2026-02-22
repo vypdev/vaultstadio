@@ -155,6 +155,14 @@ class ThumbnailCacheTest {
             assertNull(cache.get(key(itemId = "i1", size = "128")))
             assertNotNull(cache.get(key(itemId = "i2")))
         }
+
+        @Test
+        fun `invalidate for non-existent itemId does not throw`() {
+            cache.put(key(itemId = "i1"), thumbnail())
+            cache.invalidate("other-item")
+            assertNotNull(cache.get(key(itemId = "i1")))
+            assertEquals(1, cache.getStats().size)
+        }
     }
 
     @Nested

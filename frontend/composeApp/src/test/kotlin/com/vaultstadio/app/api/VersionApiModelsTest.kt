@@ -4,10 +4,16 @@
 
 package com.vaultstadio.app.api
 
+import com.vaultstadio.app.domain.version.model.FileVersion
+import com.vaultstadio.app.domain.version.model.FileVersionHistory
 import com.vaultstadio.app.domain.version.model.RestoreVersionRequest
+import com.vaultstadio.app.domain.version.model.VersionDiff
+import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class VersionApiModelsTest {
 
@@ -67,5 +73,106 @@ class VersionApiModelsTest {
 
         assertEquals(2, request.versionNumber)
         assertEquals(longComment, request.comment)
+    }
+
+    @Test
+    fun testVersionDiffCreation() {
+        val diff = VersionDiff(
+            fromVersion = 1,
+            toVersion = 2,
+            sizeChange = 1024L,
+            additions = 50,
+            deletions = 10,
+            isBinary = false,
+        )
+
+        assertEquals(1, diff.fromVersion)
+        assertEquals(2, diff.toVersion)
+        assertEquals(1024L, diff.sizeChange)
+        assertEquals(50, diff.additions)
+        assertEquals(10, diff.deletions)
+        assertFalse(diff.isBinary)
+    }
+
+    @Test
+    fun testVersionDiffBinary() {
+        val diff = VersionDiff(
+            fromVersion = 2,
+            toVersion = 3,
+            sizeChange = -500L,
+            additions = 0,
+            deletions = 0,
+            isBinary = true,
+        )
+
+        assertTrue(diff.isBinary)
+        assertEquals(-500L, diff.sizeChange)
+    }
+
+    @Test
+    fun testFileVersionHistoryCreation() {
+        val now = Instant.fromEpochMilliseconds(0L)
+        val v1 = FileVersion(
+            id = "v1",
+            itemId = "item-1",
+            versionNumber = 1,
+            size = 1000L,
+            checksum = "abc",
+            createdBy = "user-1",
+            createdAt = now,
+            comment = null,
+            isLatest = false,
+            restoredFrom = null,
+        )
+        val history = FileVersionHistory(
+            itemId = "item-1",
+            itemName = "doc.pdf",
+            versions = listOf(v1),
+            totalVersions = 1,
+            totalSize = 1000L,
+        )
+        assertEquals("item-1", history.itemId)
+        assertEquals("doc.pdf", history.itemName)
+        assertEquals(1, history.versions.size)
+        assertEquals(1, history.totalVersions)
+        assertEquals(1000L, history.totalSize)
+    }
+
+    @Test
+    fun testFileVersionIsRestoreWhenRestoredFromSet() {
+        val now = Instant.fromEpochMilliseconds(0L)
+        val version = FileVersion(
+            id = "v2",
+            itemId = "item-1",
+            versionNumber = 2,
+            size = 1024L,
+            checksum = "def",
+            createdBy = "user-1",
+            createdAt = now,
+            comment = "Restored",
+            isLatest = true,
+            restoredFrom = 1,
+        )
+        assertTrue(version.isRestore)
+        assertEquals(1, version.restoredFrom)
+    }
+
+    @Test
+    fun testFileVersionIsNotRestoreWhenRestoredFromNull() {
+        val now = Instant.fromEpochMilliseconds(0L)
+        val version = FileVersion(
+            id = "v1",
+            itemId = "item-1",
+            versionNumber = 1,
+            size = 1000L,
+            checksum = "abc",
+            createdBy = "user-1",
+            createdAt = now,
+            comment = null,
+            isLatest = true,
+            restoredFrom = null,
+        )
+        assertFalse(version.isRestore)
+        assertNull(version.restoredFrom)
     }
 }

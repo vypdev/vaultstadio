@@ -93,6 +93,23 @@ class StringsTest {
     }
 
     @Test
+    fun allLanguages_haveSyncAndPluginsNav() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navSync.isNotEmpty(), "navSync should be non-empty for all languages")
+            assertTrue(strings.navPlugins.isNotEmpty(), "navPlugins should be non-empty for all languages")
+        }
+    }
+
+    @Test
     fun englishStrings_hasActionStrings() {
         val strings = EnglishStrings
         assertNotNull(strings.actionNew)

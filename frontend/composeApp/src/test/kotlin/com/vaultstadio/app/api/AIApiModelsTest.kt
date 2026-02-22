@@ -155,4 +155,20 @@ class AIApiModelsTest {
         assertTrue(types.contains(AIProviderType.LM_STUDIO))
         assertTrue(types.contains(AIProviderType.OPENROUTER))
     }
+
+    @Test
+    fun testChatRoleValues() {
+        val roles = ChatRole.entries
+        assertEquals(3, roles.size)
+        assertTrue(roles.contains(ChatRole.SYSTEM))
+        assertTrue(roles.contains(ChatRole.USER))
+        assertTrue(roles.contains(ChatRole.ASSISTANT))
+    }
+
+    @Test
+    fun testChatRoleNames() {
+        assertEquals("SYSTEM", ChatRole.SYSTEM.name)
+        assertEquals("USER", ChatRole.USER.name)
+        assertEquals("ASSISTANT", ChatRole.ASSISTANT.name)
+    }
 }

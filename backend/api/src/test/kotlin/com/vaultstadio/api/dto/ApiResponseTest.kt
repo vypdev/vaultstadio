@@ -7,6 +7,7 @@ package com.vaultstadio.api.dto
 import com.vaultstadio.domain.activity.model.Activity
 import com.vaultstadio.domain.activity.model.ActivityType
 import com.vaultstadio.domain.auth.model.User
+import com.vaultstadio.domain.auth.model.UserInfo
 import com.vaultstadio.domain.auth.model.UserRole
 import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.domain.common.pagination.PagedResult
@@ -282,6 +283,50 @@ class ActivityToResponseTest {
     }
 }
 
+class UserInfoToResponseTest {
+
+    private val testInstant = Instant.fromEpochMilliseconds(0L)
+
+    @Test
+    fun `toResponse maps UserInfo to UserResponse`() {
+        val info = UserInfo(
+            id = "info-1",
+            email = "info@example.com",
+            username = "infouser",
+            role = UserRole.USER,
+            status = UserStatus.ACTIVE,
+            quotaBytes = 5_000L,
+            avatarUrl = "https://example.com/avatar.jpg",
+            createdAt = testInstant,
+        )
+        val response = info.toResponse()
+        assertEquals("info-1", response.id)
+        assertEquals("info@example.com", response.email)
+        assertEquals("infouser", response.username)
+        assertEquals(UserRole.USER, response.role)
+        assertEquals(UserStatus.ACTIVE, response.status)
+        assertEquals("https://example.com/avatar.jpg", response.avatarUrl)
+        assertEquals(testInstant, response.createdAt)
+    }
+
+    @Test
+    fun `toResponse with null avatarUrl`() {
+        val info = UserInfo(
+            id = "u2",
+            email = "u2@test.com",
+            username = "u2",
+            role = UserRole.ADMIN,
+            status = UserStatus.ACTIVE,
+            quotaBytes = null,
+            avatarUrl = null,
+            createdAt = testInstant,
+        )
+        val response = info.toResponse()
+        assertNull(response.avatarUrl)
+        assertEquals("u2", response.id)
+    }
+}
+
 class UserToResponseTest {
 
     private val testInstant = Instant.fromEpochMilliseconds(0L)
@@ -358,5 +403,156 @@ class UserToAdminResponseTest {
         assertEquals(0L, response.usedBytes)
         assertNull(response.quotaBytes)
         assertNull(response.lastLoginAt)
+    }
+}
+
+class CreateShareRequestTest {
+
+    @Test
+    fun `holds itemId and optional fields`() {
+        val req = CreateShareRequest(
+            itemId = "item-1",
+            expirationDays = 7,
+            password = "secret",
+            maxDownloads = 10,
+        )
+        assertEquals("item-1", req.itemId)
+        assertEquals(7, req.expirationDays)
+        assertEquals("secret", req.password)
+        assertEquals(10, req.maxDownloads)
+    }
+
+    @Test
+    fun `defaults optional fields to null`() {
+        val req = CreateShareRequest(itemId = "item-2")
+        assertEquals("item-2", req.itemId)
+        assertNull(req.expirationDays)
+        assertNull(req.password)
+        assertNull(req.maxDownloads)
+    }
+}
+
+class AccessShareRequestTest {
+
+    @Test
+    fun `holds optional password`() {
+        val req = AccessShareRequest(password = "pwd")
+        assertEquals("pwd", req.password)
+    }
+
+    @Test
+    fun `defaults password to null`() {
+        val req = AccessShareRequest()
+        assertNull(req.password)
+    }
+}
+
+class SearchRequestTest {
+
+    @Test
+    fun `holds query and optional params`() {
+        val req = SearchRequest(
+            query = "test",
+            type = ItemType.FILE,
+            mimeType = "image/*",
+            limit = 20,
+            offset = 10,
+        )
+        assertEquals("test", req.query)
+        assertEquals(ItemType.FILE, req.type)
+        assertEquals("image/*", req.mimeType)
+        assertEquals(20, req.limit)
+        assertEquals(10, req.offset)
+    }
+
+    @Test
+    fun `defaults type mimeType offset and limit`() {
+        val req = SearchRequest(query = "q")
+        assertEquals("q", req.query)
+        assertNull(req.type)
+        assertNull(req.mimeType)
+        assertEquals(50, req.limit)
+        assertEquals(0, req.offset)
+    }
+}
+
+class PluginInfoResponseTest {
+
+    @Test
+    fun `holds all plugin info fields`() {
+        val res = PluginInfoResponse(
+            id = "plugin-1",
+            name = "Image Metadata",
+            version = "1.0.0",
+            description = "Extracts EXIF",
+            author = "VaultStadio",
+            isEnabled = true,
+            state = "loaded",
+        )
+        assertEquals("plugin-1", res.id)
+        assertEquals("Image Metadata", res.name)
+        assertEquals("1.0.0", res.version)
+        assertTrue(res.isEnabled)
+        assertEquals("loaded", res.state)
+    }
+}
+
+class CreateFolderRequestTest {
+
+    @Test
+    fun `holds name and optional parentId`() {
+        val req = CreateFolderRequest(name = "Documents", parentId = "parent-1")
+        assertEquals("Documents", req.name)
+        assertEquals("parent-1", req.parentId)
+    }
+
+    @Test
+    fun `defaults parentId to null`() {
+        val req = CreateFolderRequest(name = "New Folder")
+        assertEquals("New Folder", req.name)
+        assertNull(req.parentId)
+    }
+}
+
+class RenameRequestTest {
+
+    @Test
+    fun `holds name`() {
+        val req = RenameRequest(name = "renamed.txt")
+        assertEquals("renamed.txt", req.name)
+    }
+}
+
+class MoveRequestTest {
+
+    @Test
+    fun `holds destinationId and optional newName`() {
+        val req = MoveRequest(destinationId = "folder-1", newName = "moved.pdf")
+        assertEquals("folder-1", req.destinationId)
+        assertEquals("moved.pdf", req.newName)
+    }
+
+    @Test
+    fun `defaults newName to null`() {
+        val req = MoveRequest(destinationId = null)
+        assertNull(req.destinationId)
+        assertNull(req.newName)
+    }
+}
+
+class CopyRequestTest {
+
+    @Test
+    fun `holds destinationId and optional newName`() {
+        val req = CopyRequest(destinationId = "target-folder", newName = "copy.pdf")
+        assertEquals("target-folder", req.destinationId)
+        assertEquals("copy.pdf", req.newName)
+    }
+
+    @Test
+    fun `defaults newName to null`() {
+        val req = CopyRequest(destinationId = "dest")
+        assertEquals("dest", req.destinationId)
+        assertNull(req.newName)
     }
 }
