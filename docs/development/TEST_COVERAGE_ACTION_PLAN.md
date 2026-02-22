@@ -2,7 +2,19 @@
 
 This document defines a phased plan to achieve full test coverage across VaultStadio. It complements [TESTING.md](TESTING.md) (strategy, running tests, untestable components) and aligns with [CODE_QUALITY.md](CODE_QUALITY.md) and [AI_CODING_GUIDELINES.md](AI_CODING_GUIDELINES.md).
 
-**Last updated**: 2026-02-21
+**Last updated**: 2026-02-22
+
+---
+
+## Executive summary – path to full coverage
+
+To get **full coverage** (front + back) without leaving any test or piece of code out:
+
+1. **Use the [Exhaustive checklist](#exhaustive-checklist--full-coverage-no-gaps)** as the single source of truth: it lists every backend main file and every frontend area with the test to add or extend.
+2. **Follow the [Phased Action Plan](#phased-action-plan)** in order (Phase 1 → 5). Each phase references the same checklist.
+3. **After each phase**, run [Verification checklist](#verification-checklist-after-each-phase): `make test-coverage`, open Jacoco HTML reports, tick off covered items, update "Recent coverage improvements".
+4. **Backend priority:** api (routes + services + DTOs) → core (services, events, AI) → infrastructure (persistence, storage) → plugins. Target ≥80% instruction coverage per reported module.
+5. **Frontend priority:** domain.usecase.* and ViewModels first (they drive coverage of data/feature); then navigation, utils, i18n; then screen/component state tests. Maximise testable logic in commonTest.
 
 ---
 
@@ -82,7 +94,7 @@ Frontend coverage is a single report for **composeApp** (desktop JVM tests); it 
 
 ---
 
-**Recent coverage improvements:** **Snapshot (Feb 2026):** core 66%, plugins-api 80%, composeApp 5%; backend api 12%, infrastructure 13%, plugins 9–17%. **Frontend (Feb 2026):** **FormattingTest** added for `com.vaultstadio.app.utils`: formatFileSize (bytes, KB, MB, GB, TB, decimal rounding), formatRelativeTime, formatDate, getFileIconName, getFileTypeName, isValidEmail, isStrongPassword, truncateText (full coverage of Formatting.kt). StorageUseCaseTest extended with full FakeStorageRepository (configurable getItems, renameItem, toggleStar, trashItem, restoreItem, getTrash, getStarred, getRecent, emptyTrash, deleteItemPermanently, batchDelete, batchMove, batchStar) and 13 new use-case test classes. **Backend (Feb 2026):** UploadSessionManagerTest: added `removeSession returns session even when temp dir cleanup fails` (covers exception path in InMemoryUploadSessionManager); fixed flaky `cleanupExpiredSessions does not remove recent sessions` by using 10.seconds maxAge instead of 1.milliseconds. **RouteExtensionsTest:** added tests for default status parameters. **ApiResponseTest (PagedResultToResponseTest):** `toResponse with partial page sets hasMore true and totalPages`, `toResponse with limit zero yields zero totalPages and page one`. **AppConfigTest (StorageConfigTests):** `StorageType valueOf returns correct enum`, `StorageType has exactly three values`. **Frontend FormattingTest:** `formatFileSize_petabytes` (1 PB), `truncateText_exactLength_returnsAsIs`. **domain/common StorageExceptionTest:** `invalidOperationExceptionHasCorrectErrorCodeAndStatus`, `storageBackendExceptionHasCorrectErrorCodeAndStatus`, `concurrentModificationExceptionHasCorrectErrorCodeAndStatus`, `shareDownloadLimitExceptionHasCorrectErrorCodeAndStatus`, `sharePasswordRequiredExceptionHasCorrectErrorCodeAndStatus`, `pluginLoadExceptionHasCorrectErrorCodeAndStatus`. **api/dto ShareLinkToResponseTest:** `toResponse builds url from baseUrl and token`, `toResponse sets hasPassword true when password is not null`. **Frontend SyncUseCaseTest:** `ResolveConflictUseCaseTest invoke_propagatesError`, `RemoveDeviceUseCaseTest invoke_propagatesError`, `GetConflictsUseCaseTest invoke_propagatesError`. **ApiResponseTest (api/dto):** **StorageQuotaToResponseTest** (`toResponse maps all fields`, `toResponse with null quotaBytes`), **ActivityToResponseTest** (`toResponse maps all fields`), **UserToResponseTest** (`toResponse maps user to UserResponse`). **VersionUseCaseTest (frontend):** `RestoreVersionUseCaseTest invoke_propagatesError`, `CompareVersionsUseCaseTest invoke_propagatesError`, `DeleteVersionUseCaseTest invoke_propagatesError`, `CleanupVersionsUseCaseTest invoke_propagatesError`. **Tests:** All tests pass; Android unit tests exclude ViewModel and UploadManager tests (they require main looper; run on desktopTest). **Plugins:** AIClassificationPluginTest getConfigurationSchema (non-null, groups with key "classification"); ImageMetadataPluginTest getConfigurationSchema (non-null, groups not empty). — Prior: Phase 3 ViewModels; Phase 2 VideoMetadataPluginTest, FullTextSearchPluginTest; Phase 4 SharedWithMeScreenTest, BreadcrumbsLogicTest, i18n; StorageItemTest; etc. See TESTING.md § Untestable Components for Redis-backed classes.
+**Recent coverage improvements:** **Applied (continuation 2026-02-22):** **Frontend composeApp:** **FederationViewModelTest** fixed and run: use case fakes updated to correct signatures (GetFederatedInstancesUseCase with status, GetIncomingFederatedSharesUseCase with status, GetFederatedActivitiesUseCase with instance/since/limit); GetFederatedInstanceUseCase returns Result<FederatedInstance>. **CollaborationViewModelTest** added: loadSession (success/error), loadParticipants (success after loadSession), leaveSession (success/error), updatePresence, loadUserPresences, setOffline, clearError; uses initialItemId = "" to avoid joinSession/WebSocket in init; fakes for all 15 use cases including GetCurrentUserUseCase (StateFlow). **AIViewModelTest** added: loadProviders (success/error), loadModels, chat (success/error with callback), describeImage, tagImage, classifyContent, summarize, configureProvider, hideProviderConfig, deleteProvider success, checkProviderStatus, loadProviderModels, clearProviderStatus, clearProviderModels, clearError. **AIUseCaseTest** extended: **GetProviderModelsUseCaseTest** (invoke returns repo result, invoke propagates error), **GetAIProviderStatusUseCaseTest** (invoke returns repo result, invoke propagates error), **DeleteAIProviderUseCaseTest** (invoke returns repo result, invoke propagates error); FakeAIRepository now has getProviderModelsResult, getProviderStatusResult, deleteProviderResult. — **Applied (continuation):** **Frontend composeApp:** **VersionHistoryViewModelTest** added for VersionHistoryViewModel: loadHistory (success/error), getVersion success, clearSelectedVersion, downloadVersion, clearDownloadUrl, compareVersions success, clearDiff, clearError, deleteVersion error path. **SharedWithMeViewModelTest** added for SharedWithMeViewModel: loadSharedItems (empty list, with share+item, error), onItemClick, clearSelectedItem, downloadItem, clearDownloadUrl, removeShare (success/error), clearError. **ActivityViewModelTest** added for ActivityViewModel: loadActivities (success/error), onActivityClick, clearSelectedActivity, clearError, loadActivities(limit) passes limit to use case. **SyncViewModelTest** added for SyncViewModel: loadDevices (success/error), loadConflicts (success/error), clearError, clearSyncResponse, pullChanges then clearSyncResponse. Uses fake use cases (GetDevices, GetConflicts, RegisterDevice, DeactivateDevice, RemoveDevice, ResolveConflict, PullChanges) and ViewModelTestBase.runTestWithMain. — **Applied Phase 4 (2026-02-22):** **Frontend i18n:** StringsTest extended with navProfile, navAdmin, navPlugins, navSync in englishStrings_hasNavigationStrings; new test allLanguages_haveProfileAndAdminNav ensures all 7 languages have non-empty navProfile and navAdmin. Screens and components (ScreensTest, SharedWithMeScreenTest, BreadcrumbsLogicTest, SortDialogTest, AdvancedSearchDialogTest, etc.) already present; no new screen test added. — **Applied Phase 3 (2026-02-22):** **Frontend composeApp:** **SharesViewModelTest** added for SharesViewModel: loadShares (success/error), copyLink, clearClipboardLink, deleteShare (success/error), clearError. Uses FakeGetMySharesUseCase, FakeDeleteShareUseCase, FakeGetShareUrlUseCase and ViewModelTestBase.runTestWithMain. Navigation (AppRoutes, RouteMatch, RoutePaths) already covered by AppRoutesTest. — **Applied Phase 2 (2026-02-22):** **Backend infrastructure:** **CollaborationContentApplyTest** added for `applyOperationToContent`: Insert (start, middle, end, position clamped, empty string), Delete (range, full content, clamped), Retain unchanged. Covers persistence helper used by ExposedCollaborationRepository. — **Applied Phase 1 (2026-02-22):** **Backend api:** ApiResponseTest extended with **UserToAdminResponseTest** – `toAdminResponse maps user to AdminUserResponse with usedBytes`, `toAdminResponse with default usedBytes yields zero` (covers User.toAdminResponse and AdminUserResponse). **Backend core/activity:** ActivityLoggerTest extended with `start then publish FileEvent Downloaded with accessedViaShare includes shareId in details` (covers FILE_DOWNLOADED branch with shareId in details) and `when activityRepository create returns Left logger still invokes create and does not throw` (covers logActivity error path when repository returns Either.Left). **Phase 1 checklist:** Core TransactionManager, ActivityLogger, CollaborationOT tests confirmed present and complete; FederationServiceSigning/Maintenance tests present; API ErrorHandling, CronScheduler, PluginManager tests present; DTO mappers extended. — **Snapshot (Feb 2026):** core 66%, plugins-api 80%, composeApp 5%; backend api 12%, infrastructure 13%, plugins 9–17%. **Frontend (Feb 2026):** **FormattingTest** added for `com.vaultstadio.app.utils`: formatFileSize (bytes, KB, MB, GB, TB, decimal rounding), formatRelativeTime, formatDate, getFileIconName, getFileTypeName, isValidEmail, isStrongPassword, truncateText (full coverage of Formatting.kt). StorageUseCaseTest extended with full FakeStorageRepository (configurable getItems, renameItem, toggleStar, trashItem, restoreItem, getTrash, getStarred, getRecent, emptyTrash, deleteItemPermanently, batchDelete, batchMove, batchStar) and 13 new use-case test classes. **Backend (Feb 2026):** UploadSessionManagerTest: added `removeSession returns session even when temp dir cleanup fails` (covers exception path in InMemoryUploadSessionManager); fixed flaky `cleanupExpiredSessions does not remove recent sessions` by using 10.seconds maxAge instead of 1.milliseconds. **RouteExtensionsTest:** added tests for default status parameters. **ApiResponseTest (PagedResultToResponseTest):** `toResponse with partial page sets hasMore true and totalPages`, `toResponse with limit zero yields zero totalPages and page one`. **AppConfigTest (StorageConfigTests):** `StorageType valueOf returns correct enum`, `StorageType has exactly three values`. **Frontend FormattingTest:** `formatFileSize_petabytes` (1 PB), `truncateText_exactLength_returnsAsIs`. **domain/common StorageExceptionTest:** `invalidOperationExceptionHasCorrectErrorCodeAndStatus`, `storageBackendExceptionHasCorrectErrorCodeAndStatus`, `concurrentModificationExceptionHasCorrectErrorCodeAndStatus`, `shareDownloadLimitExceptionHasCorrectErrorCodeAndStatus`, `sharePasswordRequiredExceptionHasCorrectErrorCodeAndStatus`, `pluginLoadExceptionHasCorrectErrorCodeAndStatus`. **api/dto ShareLinkToResponseTest:** `toResponse builds url from baseUrl and token`, `toResponse sets hasPassword true when password is not null`. **Frontend SyncUseCaseTest:** `ResolveConflictUseCaseTest invoke_propagatesError`, `RemoveDeviceUseCaseTest invoke_propagatesError`, `GetConflictsUseCaseTest invoke_propagatesError`. **ApiResponseTest (api/dto):** **StorageQuotaToResponseTest** (`toResponse maps all fields`, `toResponse with null quotaBytes`), **ActivityToResponseTest** (`toResponse maps all fields`), **UserToResponseTest** (`toResponse maps user to UserResponse`). **VersionUseCaseTest (frontend):** `RestoreVersionUseCaseTest invoke_propagatesError`, `CompareVersionsUseCaseTest invoke_propagatesError`, `DeleteVersionUseCaseTest invoke_propagatesError`, `CleanupVersionsUseCaseTest invoke_propagatesError`. **ApiResponseTest (api/dto):** **StorageItemToResponseTest** (`toResponse maps item to StorageItemResponse`, `toResponse with metadata passes metadata to response`). **AdminUseCaseTest (frontend):** `UpdateUserQuotaUseCaseTest invoke_propagatesError`, `UpdateUserRoleUseCaseTest invoke_propagatesError`, `UpdateUserStatusUseCaseTest invoke_propagatesError`. **Tests:** All tests pass; Android unit tests exclude ViewModel and UploadManager tests (they require main looper; run on desktopTest). **Plugins:** AIClassificationPluginTest getConfigurationSchema (non-null, groups with key "classification"); ImageMetadataPluginTest getConfigurationSchema (non-null, groups not empty). — Prior: Phase 3 ViewModels; Phase 2 VideoMetadataPluginTest, FullTextSearchPluginTest; Phase 4 SharedWithMeScreenTest, BreadcrumbsLogicTest, i18n; StorageItemTest; etc. See TESTING.md § Untestable Components for Redis-backed classes.
 
 ---
 
@@ -155,9 +167,10 @@ This section summarises **concrete focus areas** so efforts are directed at the 
 4. [Current State Summary](#current-state-summary)
 5. [Coverage analysis – where to focus efforts](#coverage-analysis--where-to-focus-efforts)
 6. [Gap Analysis by Module](#gap-analysis-by-module)
-7. [Phased Action Plan](#phased-action-plan)
-8. [CI and Quality Gates](#ci-and-quality-gates)
-9. [Success Criteria](#success-criteria)
+7. [**Exhaustive checklist – full coverage (no gaps)**](#exhaustive-checklist--full-coverage-no-gaps)
+8. [Phased Action Plan](#phased-action-plan)
+9. [CI and Quality Gates](#ci-and-quality-gates)
+10. [Success Criteria](#success-criteria)
 
 ---
 
@@ -270,6 +283,242 @@ Existing Codecov config (`codecov.yml`) uses `range: "60..80"` and `threshold: 1
 | **i18n** | Extend StringsTest for new keys and placeholders |
 
 **Action:** Prioritise ViewModels and feature/usecase logic that can run in commonTest; then state-only screen tests. Use `runTest` for coroutines; mock platform/API where needed. Document UI that is only testable via Compose UI Test or manual testing in TESTING.md.
+
+---
+
+## Exhaustive checklist – full coverage (no gaps)
+
+This section is the **master checklist** to reach full coverage: every test to add and every piece of code to cover. Use it to avoid leaving any area out. Tick items as you complete them; run `make test-coverage` after each phase and verify the reported modules meet targets.
+
+### How to use this checklist
+
+- **Backend:** For each **main** source file, ensure there is a corresponding test (same module or a module that depends on it). “Covered transitively” = exercised by api/core tests; “Unit test” = dedicated test class in that module.
+- **Frontend:** Coverage is reported only for `composeApp` (desktopTest). Code in domain/data/feature is included when exercised by composeApp tests. Ensure every ViewModel, use case, and testable util has at least one test in `composeApp/src/test` (commonTest).
+- After implementing tests, run `make test-coverage` and open the Jacoco HTML reports; confirm no new uncovered file and that instruction/branch coverage per module meets the targets in [Goals and Targets](#goals-and-targets).
+
+---
+
+### Backend – file-by-file checklist
+
+#### backend/api (target ≥80% instruction)
+
+| Main source file | Test / coverage | Action if missing |
+|------------------|-----------------|-------------------|
+| `config/AppConfig.kt` | AppConfigTest | Add StorageConfigTests, env parsing |
+| `config/Security.kt` | SecurityTest | Extend for all branches |
+| `config/Routing.kt` | Route tests | Covered by route tests or add RoutingTest |
+| `config/Koin.kt` | Integration / bootstrap | Document as wiring; optional smoke test |
+| `config/Database.kt` | Integration | Document as wiring |
+| `config/Serialization.kt` | Integration | Document as wiring |
+| `config/Swagger.kt` | Optional | Document or minimal test |
+| `Application.kt` | Integration | Document as bootstrap |
+| `service/InMemoryUploadSessionManager.kt` | UploadSessionManagerTest | Extend for all branches (create, addPart, complete, abort, expiry, cleanup) |
+| `service/ThumbnailCache.kt` | ThumbnailCacheTest | Extend for hit/miss, put, invalidate, limits |
+| `routes/RouteExtensions.kt` | RouteExtensionsTest | Extend for every extension (user/session extraction, status defaults) |
+| `dto/ApiResponse.kt` | ApiResponseTest | Extend for every DTO mapper (StorageItem, User, Activity, ShareLink, PagedResult, etc.) |
+| `middleware/ErrorHandling.kt` | ErrorHandling test | Add or extend middleware test |
+| `middleware/Logging.kt` | Optional | Document or minimal test |
+| `plugins/PluginManager.kt` | PluginManager test | Add or extend |
+| `plugins/CronScheduler.kt` | CronScheduler test | Add or extend |
+| `routes/auth/AuthRoutes.kt` | AuthRoutesTest | Use testApplication + module() for handler execution or document integration-only |
+| `routes/storage/StorageRoutes.kt` | StorageRoutesTest | Same |
+| `routes/storage/BatchRoutes.kt` | BatchRoutesTest | Same |
+| `routes/storage/ChunkedUploadRoutes.kt` | ChunkedUploadRoutesTest | Same |
+| `routes/storage/FolderUploadRoutes.kt` | FolderUploadRoutesTest | Same |
+| `routes/storage/ThumbnailRoutes.kt` | ThumbnailRoutesTest | Same |
+| `routes/storage/S3Routes.kt` | S3RoutesTest | Same |
+| `routes/storage/S3Handlers.kt` | S3RoutesTest / S3HandlersTest | Same |
+| `routes/storage/S3Operations.kt` | Unit test or S3RoutesTest | Add S3OperationsTest if not covered |
+| `routes/storage/WebDAVRoutes.kt` | WebDAVRoutesTest | Same |
+| `routes/storage/WebDAVHandlers.kt` | WebDAVHandlersTest or WebDAVRoutesTest | Same |
+| `routes/storage/WebDAVOperations.kt` | Unit test or WebDAV test | Add if not covered |
+| `routes/share/ShareRoutes.kt` | ShareRoutesTest | Same |
+| `routes/plugin/PluginRoutes.kt` | PluginRoutesTest | Same |
+| `routes/metadata/SearchRoutes.kt` | SearchRoutesTest | Same |
+| `routes/metadata/MetadataRoutes.kt` | MetadataRoutesTest | Same |
+| `routes/ai/AIRoutes.kt` | AIRoutesTest | Same |
+| `routes/ai/AIHandlers.kt` | AIHandlersTest or AIRoutesTest | Same |
+| `routes/admin/AdminRoutes.kt` | AdminRoutesTest | Same |
+| `routes/admin/UserRoutes.kt` | UserRoutesTest | Same |
+| `routes/health/HealthRoutes.kt` | HealthRoutesTest | Same |
+| `routes/activity/ActivityRoutes.kt` | ActivityRoutesTest | Same |
+| `routes/version/VersionRoutes.kt` | VersionRoutesTest | Same |
+| `routes/sync/SyncRoutes.kt` | SyncRoutesTest | Same |
+| `routes/sync/SyncHandlers.kt` | SyncHandlersTest or SyncRoutesTest | Same |
+| `routes/collaboration/CollaborationRoutes.kt` | CollaborationRoutesTest | Same |
+| `routes/collaboration/CollaborationWebSocket.kt` | WebSocket test or document | Add or document |
+| `routes/collaboration/CollaborationRoutesModels.kt` | Model test | Add if DTOs not covered |
+| `routes/federation/FederationRoutes.kt` | FederationRoutesTest | Same |
+| `routes/federation/FederationHandlers.kt` | FederationHandlersTest or FederationRoutesTest | Same |
+| **Application use cases** (auth, storage, share, plugin, metadata, health, chunkedupload, admin, user) | Each has *UseCaseTest in api | Extend for missing branches |
+
+#### backend/core (target ≥80% instruction)
+
+| Main source file | Test / coverage | Action if missing |
+|------------------|-----------------|-------------------|
+| `domain/event/StorageEvent.kt` | StorageEventTest / event tests | Extend event tests |
+| `domain/event/EventBus.kt` | EventBusTest | Add or extend |
+| `domain/event/AdvancedEvents.kt` | AdvancedEventsTest | Add or extend |
+| `domain/service/TransactionManager.kt` | TransactionManagerTest | Add: run in transaction, rollback, commit |
+| `domain/service/ActivityLogger.kt` | ActivityLoggerTest | Add: log with types, verify repo calls |
+| `domain/service/UploadSessionManager.kt` (interface) | Covered by api impl test | N/A |
+| `domain/service/MultipartUploadManager.kt` | Unit test | Add if logic present |
+| `domain/service/LockManager.kt` | LockManagerTest | Add or extend |
+| `domain/model/*` (FileVersion, StorageItemMetadata, Sync, Federation, Collaboration) | Model tests | Add per-model tests |
+| `domain/repository/*` (interfaces) | Covered by impl tests | N/A |
+| core/storage: StorageService, StorageServiceQueries, StorageServiceMutations, StorageServiceWrite | StorageServiceTest | Extend for every public function and branch |
+| core/share: ShareService.kt | ShareServiceTest | Extend for all branches |
+| core/auth: UserService.kt | UserServiceTest | Add or extend |
+| core/version: FileVersionService.kt | FileVersionServiceTest | Extend for all branches |
+| core/sync: SyncService.kt, DeltaSync.kt | SyncServiceTest | Extend for all branches |
+| core/activity: ActivityLogger.kt | ActivityLoggerTest | Add |
+| core/federation: FederationService, FederationServiceSigning, FederationServiceMaintenance, FederationCrypto | FederationServiceTest | Extend for signing, maintenance, crypto |
+| core/collaboration: CollaborationService.kt, CollaborationOT.kt | CollaborationServiceTest, CollaborationOTTest | Add CollaborationOTTest; extend service |
+| core/ai: AIService.kt, AIProvider.kt, providers (OpenRouter, Ollama, LMStudio) | AIServiceTest, provider tests | Extend for all providers and error paths |
+
+#### backend/infrastructure (target ≥80% instruction)
+
+| Main source file | Test / coverage | Action if missing |
+|------------------|-----------------|-------------------|
+| `persistence/ExposedTransactionManager.kt` | TransactionManagerTest (impl) | Add or extend |
+| `persistence/ExposedStorageItemRepository.kt` | ExposedStorageItemRepositoryTest | Extend every method and branch |
+| `persistence/ExposedUserRepository.kt` | ExposedUserRepositoryTest | Same |
+| `persistence/ExposedShareRepository.kt` | ExposedShareRepositoryTest | Same |
+| `persistence/ExposedFileVersionRepository.kt` | ExposedFileVersionRepositoryTest | Same |
+| `persistence/ExposedMetadataRepository.kt` | ExposedMetadataRepositoryTest | Same |
+| `persistence/ExposedSyncRepository.kt` | ExposedSyncRepositoryTest | Same |
+| `persistence/ExposedFederationRepository.kt` | ExposedFederationRepositoryTest | Same |
+| `persistence/ExposedCollaborationRepository.kt` | ExposedCollaborationRepositoryTest | Same |
+| `persistence/Exposed*Mappers.kt` | Covered by repo tests | Extend repo tests to hit mappers |
+| `persistence/CollaborationContentApply.kt` | Unit test | Add CollaborationContentApplyTest |
+| `persistence/entities/Tables.kt` | Covered by repo tests | N/A |
+| `storage/LocalStorageBackend.kt` | LocalStorageBackendTest | Extend for all operations and errors |
+| `storage/S3StorageBackend.kt` | S3StorageBackendTest | Same |
+| `security/BCryptPasswordHasher.kt` | BCrypt test | Extend for hash/verify branches |
+
+#### backend/plugins-api (target ≥80% – maintain)
+
+| Main source file | Test / coverage | Action if missing |
+|------------------|-----------------|-------------------|
+| Plugin, PluginContext, Hooks, MetadataExtractor, PluginLifecycle, PluginConfiguration | Existing tests | Maintain; add branch coverage for context (52%) |
+
+#### backend/plugins (each target ≥80% instruction)
+
+| Plugin | Main files | Test / coverage | Action if missing |
+|--------|------------|-----------------|-------------------|
+| image-metadata | ImageMetadataPlugin, extraction | ImageMetadataPluginTest | Add config, error paths, unsupported format |
+| video-metadata | VideoMetadataPlugin, extraction | VideoMetadataPluginTest | Same |
+| fulltext-search | FullTextSearchPlugin, indexing | FullTextSearchPluginTest | Add indexing lifecycle, empty content, errors |
+| ai-classification | AIClassificationPlugin, AI calls | AIClassificationPluginTest | Add error handling, timeouts; mock AI |
+
+#### backend/domain and application (covered transitively)
+
+Domain and application modules do not produce their own Jacoco report; they are exercised when core and api tests run. Ensure every **public** function in domain services and application use cases is hit by at least one test in core or api (see api application use case tests and core service tests).
+
+- **domain/** (common, storage, auth, share, activity, admin, version, sync, federation, collaboration, metadata, plugin): model and exception tests exist; extend for any new public API.
+- **application/** (auth, storage, share, user, admin, activity, metadata, version, sync, plugin, chunkedupload, health, ai): each use case has *UseCaseTest in api; extend for missing branches.
+
+---
+
+### Frontend – exhaustive checklist (composeApp report target: raise from ~5% to maximum testable)
+
+Coverage is measured only for code executed by `composeApp` desktopTest. The following lists **every area** that should have at least one test so no testable piece is left out.
+
+#### composeApp – app layer (src/main in composeApp)
+
+| Component / file | Test file | Action if missing |
+|------------------|-----------|-------------------|
+| `utils/Formatting.kt` | FormattingTest | Done – keep and extend for new helpers |
+| `navigation/AppRoute.kt`, RoutePaths, RouteMatch, MainDestination | AppRoutesTest, RouteMatchTest | Extend for new routes and branches |
+| `navigation/RootComponent.kt`, RootContent.kt | Document or state test | Optional: navigation state test |
+| `viewmodel/AppViewModel` | AppViewModelTest, AppViewModelDetailedTest, etc. | Extend for new flows |
+| `viewmodel/NavDestination.kt` | Covered by navigation tests | N/A |
+| `feature/upload/UploadManager.kt`, LocalUploadManager.kt | UploadManagerTest | Extend for all states and error paths |
+| `feature/files/FilesViewModel.kt` | FilesModeAndTrashStarTest, FilesUploadAndMoveTest | Add direct ViewModel test if needed for uncovered logic |
+| `feature/files/UploadAction.kt` | Covered by upload tests | Extend if branches missing |
+| `feature/main/MainComponent.kt`, MainContent.kt | Covered by AppViewModel / integration | Optional state test |
+| `di/AppModule.kt`, AppModuleDsl.kt, InMemoryTokenStorage.kt | Integration / document | Document or minimal test |
+| `config/AppConfig.kt` | Optional | Add if logic present |
+| `platform/*` (Download, DragDrop, FilePicker, etc.) | expect/actual – document | Document as platform; test any shared logic |
+
+#### composeApp – UI (screens and components)
+
+| Area | Test file | Action if missing |
+|------|-----------|-------------------|
+| Screens (Settings, Admin, Profile, Security, SharedWithMe, Activity, Sync, VersionHistory, Federation, Collaboration, AI, Login) | ScreensTest, SecurityScreenTest, SharedWithMeScreenTest, etc. | Add state/callback tests for any screen not yet covered |
+| Components: MoveDialog, ContextMenu, SelectionToolbar, MainSidebar, Breadcrumbs, DropZone, DragOverlay | DragDropComponentsTest, BreadcrumbsLogicTest | Extend for every callback and branch |
+| File components: FileItem, FileInfoPanel, MetadataPanel, VersionPanel, etc. | FileItemTest, FileInfoPanelTest, etc. | Extend for new behaviour |
+| Dialogs: SortDialog, AdvancedSearchDialog, FilterDialog, UploadDialog | SortDialogTest, AdvancedSearchDialogTest | Extend for new dialogs |
+
+#### Frontend – domain (included in composeApp report when exercised)
+
+| Package | Test file | Action if missing |
+|---------|-----------|-------------------|
+| domain.upload | UploadQueueEntryTest, ChunkedFileSource tests | Keep; extend for new types |
+| domain.model | ModelTests | Extend for new models |
+| domain.usecase.storage | StorageUseCaseTest | Done – extend for new use cases |
+| domain.usecase.auth | AuthViewModelTest / AuthUseCaseTest | Extend for error paths |
+| domain.usecase.share | ShareUseCaseTest | Extend for all use cases and errors |
+| domain.usecase.sync | SyncUseCaseTest | Same |
+| domain.usecase.version | VersionUseCaseTest | Same |
+| domain.usecase.admin | AdminUseCaseTest | Same |
+| domain.usecase.activity | ActivityUseCaseTest | Same |
+| domain.usecase.metadata | MetadataUseCaseTest | Same |
+| domain.usecase.plugin | PluginUseCaseTest | Same |
+| domain.usecase.collaboration | CollaborationUseCaseTest | Same |
+| domain.usecase.federation | FederationUseCaseTest | Same |
+| domain.usecase.ai | AIUseCaseTest | Same |
+| domain.usecase.config | GetStorageUrlsUseCaseTest | Extend for new config use cases |
+
+#### Frontend – data (included in composeApp report when exercised)
+
+| Package | Test file | Action if missing |
+|---------|-----------|-------------------|
+| data.repository (storage, auth, admin, sync, etc.) | Test via use case tests or add Fake* in tests | Add repository tests with fakes or test doubles for uncovered impls |
+| data.*.service, data.*.mapper | Covered by use case / ViewModel tests | Extend use case tests to hit all branches |
+
+#### Frontend – feature ViewModels and logic
+
+| ViewModel / feature | Test file | Action if missing |
+|---------------------|-----------|-------------------|
+| AuthViewModel | AuthViewModelTest | Extend for all states |
+| FilesViewModel | FilesModeAndTrashStarTest, FilesUploadAndMoveTest | Add FilesViewModelTest if branches missing |
+| AdminViewModel | AdminViewModelTest | Extend |
+| ProfileViewModel | ProfileViewModelTest | Extend |
+| SettingsViewModel | SettingsViewModelTest | Extend |
+| ChangePasswordViewModel | ChangePasswordViewModelTest | Extend |
+| SecurityViewModel | SecurityViewModelTest | Extend |
+| PluginsViewModel | PluginsViewModelTest | Extend |
+| SyncViewModel | SyncScreenTest / ViewModel test | Add SyncViewModelTest if needed |
+| VersionHistoryViewModel | VersionHistoryScreenTest | Same |
+| SharesViewModel | Add SharesViewModelTest | Add if not present |
+| SharedWithMeViewModel | SharedWithMeScreenTest | Extend |
+| ActivityViewModel | ActivityScreenTest | Extend |
+| CollaborationViewModel | CollaborationScreenTest | Extend |
+| FederationViewModel | FederationScreenTest | Extend |
+| AIViewModel | AIScreenTest | Extend |
+
+#### Frontend – core/resources (i18n)
+
+| Area | Test file | Action if missing |
+|------|-----------|-------------------|
+| Strings, all languages | StringsTest | Extend for every new key and placeholder; allLanguages_haveConsistentStrings |
+
+#### Frontend – API models (composeApp api package)
+
+| Area | Test file | Action if missing |
+|------|-----------|-------------------|
+| Version, Sync, Collaboration, Federation, AI API models | VersionApiModelsTest, SyncApiModelsTest, etc. | Add test for any new DTO or mapper |
+
+---
+
+### Verification checklist (after each phase)
+
+- [ ] Run `make test-coverage` from repo root.
+- [ ] Backend: open each module’s `build/reports/jacoco/test/html/index.html` (core, api, infrastructure, plugins-api, each plugin). Confirm instruction coverage ≥80% (or document exception).
+- [ ] Frontend: open `frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html`. Confirm no new uncovered package and that domain/usecase/viewmodel coverage has increased.
+- [ ] No main source file in the tables above is left without a tick in “Test / coverage” (either existing test or “Action if missing” done).
+- [ ] Update “Recent coverage improvements” in this document with the new snapshot and new tests added.
 
 ---
 

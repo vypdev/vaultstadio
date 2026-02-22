@@ -108,6 +108,15 @@ class UpdateUserQuotaUseCaseTest {
         val result = useCase("u1", null)
         assertTrue(result.isSuccess())
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeAdminRepository(updateUserQuotaResult = Result.error("NOT_FOUND", "User not found"))
+        val useCase = UpdateUserQuotaUseCaseImpl(repo)
+        val result = useCase("missing", 1000L)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
 }
 
 class UpdateUserRoleUseCaseTest {
@@ -121,6 +130,15 @@ class UpdateUserRoleUseCaseTest {
         assertTrue(result.isSuccess())
         assertEquals(UserRole.USER, result.getOrNull()?.role)
     }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeAdminRepository(updateUserRoleResult = Result.error("FORBIDDEN", "Cannot change role"))
+        val useCase = UpdateUserRoleUseCaseImpl(repo)
+        val result = useCase("u1", UserRole.USER)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
 }
 
 class UpdateUserStatusUseCaseTest {
@@ -133,5 +151,14 @@ class UpdateUserStatusUseCaseTest {
         val result = useCase("u1", UserStatus.SUSPENDED)
         assertTrue(result.isSuccess())
         assertEquals(UserStatus.SUSPENDED, result.getOrNull()?.status)
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeAdminRepository(updateUserStatusResult = Result.error("CONFLICT", "Invalid status"))
+        val useCase = UpdateUserStatusUseCaseImpl(repo)
+        val result = useCase("u1", UserStatus.SUSPENDED)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
     }
 }

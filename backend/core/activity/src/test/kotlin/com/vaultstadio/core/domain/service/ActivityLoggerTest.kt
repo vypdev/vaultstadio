@@ -12,6 +12,7 @@ import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
 import com.vaultstadio.domain.activity.model.ActivityType
 import com.vaultstadio.domain.activity.repository.ActivityRepository
+import com.vaultstadio.domain.common.exception.StorageBackendException
 import com.vaultstadio.domain.storage.model.ItemType
 import com.vaultstadio.domain.storage.model.StorageItem
 import io.mockk.coEvery
@@ -217,4 +218,68 @@ class ActivityLoggerTest {
             )
         }
     }
+
+    @Test
+    fun `start then publish FileEvent Downloaded with accessedViaShare includes shareId in details`() =
+        runTest {
+            activityLogger.start()
+            val item = StorageItem(
+                id = "item-share",
+                name = "shared.pdf",
+                path = "/shared.pdf",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 100,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FileEvent.Downloaded(
+                id = "ev-share",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                item = item,
+                accessedViaShare = true,
+                shareId = "share-123",
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) {
+                activityRepository.create(
+                    match {
+                        it.type == ActivityType.FILE_DOWNLOADED &&
+                            it.itemId == "item-share" &&
+                            it.details != null &&
+                            it.details!!.contains("share-123")
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `when activityRepository create returns Left logger still invokes create and does not throw`() =
+        runTest {
+            coEvery { activityRepository.create(any()) } returns Either.Left(
+                StorageBackendException("test", "create failed"),
+            )
+            activityLogger.start()
+            val item = StorageItem(
+                id = "item-err",
+                name = "x.pdf",
+                path = "/x.pdf",
+                type = ItemType.FILE,
+                ownerId = "user-1",
+                size = 0,
+                mimeType = "application/pdf",
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now(),
+            )
+            val event = FileEvent.Uploaded(
+                id = "ev-err",
+                timestamp = Clock.System.now(),
+                userId = "user-1",
+                item = item,
+            )
+            eventBus.publish(event, async = false)
+            coVerify(exactly = 1) { activityRepository.create(any()) }
+        }
 }

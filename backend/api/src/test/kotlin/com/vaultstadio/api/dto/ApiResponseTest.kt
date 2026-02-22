@@ -11,7 +11,10 @@ import com.vaultstadio.domain.auth.model.UserRole
 import com.vaultstadio.domain.auth.model.UserStatus
 import com.vaultstadio.domain.common.pagination.PagedResult
 import com.vaultstadio.domain.share.model.ShareLink
+import com.vaultstadio.domain.storage.model.ItemType
+import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.domain.storage.model.StorageQuota
+import com.vaultstadio.domain.storage.model.Visibility
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -160,6 +163,63 @@ class ShareLinkToResponseTest {
     }
 }
 
+class StorageItemToResponseTest {
+
+    private val testInstant = Instant.fromEpochMilliseconds(0L)
+
+    @Test
+    fun `toResponse maps item to StorageItemResponse`() {
+        val item = StorageItem(
+            id = "item-1",
+            name = "doc.pdf",
+            path = "/doc.pdf",
+            type = ItemType.FILE,
+            parentId = "parent-1",
+            ownerId = "user-1",
+            size = 1024L,
+            mimeType = "application/pdf",
+            visibility = Visibility.PRIVATE,
+            isStarred = true,
+            isTrashed = false,
+            createdAt = testInstant,
+            updatedAt = testInstant,
+        )
+        val response = item.toResponse()
+        assertEquals("item-1", response.id)
+        assertEquals("doc.pdf", response.name)
+        assertEquals("/doc.pdf", response.path)
+        assertEquals(ItemType.FILE, response.type)
+        assertEquals("parent-1", response.parentId)
+        assertEquals(1024L, response.size)
+        assertEquals("application/pdf", response.mimeType)
+        assertEquals(Visibility.PRIVATE, response.visibility)
+        assertTrue(response.isStarred)
+        assertFalse(response.isTrashed)
+        assertEquals(testInstant, response.createdAt)
+        assertEquals(testInstant, response.updatedAt)
+        assertNull(response.metadata)
+    }
+
+    @Test
+    fun `toResponse with metadata passes metadata to response`() {
+        val item = StorageItem(
+            id = "f1",
+            name = "photo.jpg",
+            path = "/photo.jpg",
+            type = ItemType.FILE,
+            parentId = null,
+            ownerId = "user-1",
+            size = 0,
+            createdAt = testInstant,
+            updatedAt = testInstant,
+        )
+        val metadata = mapOf("camera" to "Canon", "width" to "1920")
+        val response = item.toResponse(metadata = metadata)
+        assertEquals(metadata, response.metadata)
+        assertEquals("f1", response.id)
+    }
+}
+
 class StorageQuotaToResponseTest {
 
     @Test
@@ -246,5 +306,57 @@ class UserToResponseTest {
         assertEquals(UserRole.USER, response.role)
         assertEquals(UserStatus.ACTIVE, response.status)
         assertEquals(testInstant, response.createdAt)
+    }
+}
+
+class UserToAdminResponseTest {
+
+    private val testInstant = Instant.fromEpochMilliseconds(0L)
+
+    @Test
+    fun `toAdminResponse maps user to AdminUserResponse with usedBytes`() {
+        val user = User(
+            id = "admin-user-1",
+            email = "admin@example.com",
+            username = "adminuser",
+            passwordHash = "hash",
+            role = UserRole.ADMIN,
+            status = UserStatus.ACTIVE,
+            quotaBytes = 1_000_000L,
+            avatarUrl = "https://example.com/avatar.png",
+            lastLoginAt = testInstant,
+            createdAt = testInstant,
+            updatedAt = testInstant,
+        )
+        val response = user.toAdminResponse(usedBytes = 500_000L)
+        assertEquals("admin-user-1", response.id)
+        assertEquals("admin@example.com", response.email)
+        assertEquals("adminuser", response.username)
+        assertEquals(UserRole.ADMIN, response.role)
+        assertEquals(UserStatus.ACTIVE, response.status)
+        assertEquals("https://example.com/avatar.png", response.avatarUrl)
+        assertEquals(1_000_000L, response.quotaBytes)
+        assertEquals(500_000L, response.usedBytes)
+        assertEquals(testInstant, response.createdAt)
+        assertEquals(testInstant, response.lastLoginAt)
+    }
+
+    @Test
+    fun `toAdminResponse with default usedBytes yields zero`() {
+        val user = User(
+            id = "u2",
+            email = "u2@test.com",
+            username = "u2",
+            passwordHash = "h",
+            role = UserRole.USER,
+            status = UserStatus.ACTIVE,
+            quotaBytes = null,
+            createdAt = testInstant,
+            updatedAt = testInstant,
+        )
+        val response = user.toAdminResponse()
+        assertEquals(0L, response.usedBytes)
+        assertNull(response.quotaBytes)
+        assertNull(response.lastLoginAt)
     }
 }

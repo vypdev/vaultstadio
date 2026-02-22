@@ -69,6 +69,27 @@ class StringsTest {
         assertNotNull(strings.navTrash)
         assertNotNull(strings.navSettings)
         assertNotNull(strings.navHome)
+        assertNotNull(strings.navProfile)
+        assertNotNull(strings.navAdmin)
+        assertNotNull(strings.navPlugins)
+        assertNotNull(strings.navSync)
+    }
+
+    @Test
+    fun allLanguages_haveProfileAndAdminNav() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navProfile.isNotEmpty(), "navProfile should be non-empty for all languages")
+            assertTrue(strings.navAdmin.isNotEmpty(), "navAdmin should be non-empty for all languages")
+        }
     }
 
     @Test

@@ -5,8 +5,11 @@
 
 package com.vaultstadio.app.domain.usecase.ai
 
+import com.vaultstadio.app.data.ai.usecase.DeleteAIProviderUseCaseImpl
 import com.vaultstadio.app.data.ai.usecase.GetAIModelsUseCaseImpl
+import com.vaultstadio.app.data.ai.usecase.GetAIProviderStatusUseCaseImpl
 import com.vaultstadio.app.data.ai.usecase.GetAIProvidersUseCaseImpl
+import com.vaultstadio.app.data.ai.usecase.GetProviderModelsUseCaseImpl
 import com.vaultstadio.app.domain.ai.AIRepository
 import com.vaultstadio.app.domain.ai.model.AIChatMessage
 import com.vaultstadio.app.domain.ai.model.AIChatResponse
@@ -54,6 +57,9 @@ private fun testAIModel(
 private class FakeAIRepository(
     var getProvidersResult: Result<List<AIProviderInfo>> = Result.success(emptyList()),
     var getModelsResult: Result<List<AIModel>> = Result.success(emptyList()),
+    var getProviderModelsResult: Result<List<AIModel>> = Result.success(emptyList()),
+    var getProviderStatusResult: Result<Map<String, Boolean>> = Result.success(emptyMap()),
+    var deleteProviderResult: Result<Unit> = Result.success(Unit),
 ) : AIRepository {
 
     override suspend fun getProviders(): Result<List<AIProviderInfo>> = getProvidersResult
@@ -69,11 +75,11 @@ private class FakeAIRepository(
 
     override suspend fun setActiveProvider(type: AIProviderType): Result<String> = stubResult()
 
-    override suspend fun deleteProvider(type: AIProviderType): Result<Unit> = stubResult()
+    override suspend fun deleteProvider(type: AIProviderType): Result<Unit> = deleteProviderResult
 
-    override suspend fun getProviderStatus(type: AIProviderType): Result<Map<String, Boolean>> = stubResult()
+    override suspend fun getProviderStatus(type: AIProviderType): Result<Map<String, Boolean>> = getProviderStatusResult
 
-    override suspend fun getProviderModels(type: AIProviderType): Result<List<AIModel>> = getModelsResult
+    override suspend fun getProviderModels(type: AIProviderType): Result<List<AIModel>> = getProviderModelsResult
 
     override suspend fun chat(
         messages: List<AIChatMessage>,
@@ -141,5 +147,71 @@ class GetAIModelsUseCaseTest {
         val result = useCase()
         assertTrue(result.isError())
         assertNull(result.getOrNull())
+    }
+}
+
+class GetProviderModelsUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryGetProviderModelsResult() = runTest {
+        val models = listOf(
+            testAIModel("pm1", "llama3", AIProviderType.OLLAMA),
+        )
+        val repo = FakeAIRepository(getProviderModelsResult = Result.success(models))
+        val useCase = GetProviderModelsUseCaseImpl(repo)
+        val result = useCase(AIProviderType.OLLAMA)
+        assertTrue(result.isSuccess())
+        assertEquals(1, result.getOrNull()?.size)
+        assertEquals("llama3", result.getOrNull()?.get(0)?.name)
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeAIRepository(getProviderModelsResult = Result.error("UNAVAILABLE", "Provider down"))
+        val useCase = GetProviderModelsUseCaseImpl(repo)
+        val result = useCase(AIProviderType.LM_STUDIO)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
+}
+
+class GetAIProviderStatusUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryGetProviderStatusResult() = runTest {
+        val status = mapOf("healthy" to true)
+        val repo = FakeAIRepository(getProviderStatusResult = Result.success(status))
+        val useCase = GetAIProviderStatusUseCaseImpl(repo)
+        val result = useCase(AIProviderType.OLLAMA)
+        assertTrue(result.isSuccess())
+        assertEquals(status, result.getOrNull())
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeAIRepository(getProviderStatusResult = Result.error("TIMEOUT", "Check failed"))
+        val useCase = GetAIProviderStatusUseCaseImpl(repo)
+        val result = useCase(AIProviderType.OPENROUTER)
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
+}
+
+class DeleteAIProviderUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryDeleteProviderResult() = runTest {
+        val repo = FakeAIRepository(deleteProviderResult = Result.success(Unit))
+        val useCase = DeleteAIProviderUseCaseImpl(repo)
+        val result = useCase(AIProviderType.OLLAMA)
+        assertTrue(result.isSuccess())
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeAIRepository(deleteProviderResult = Result.error("IN_USE", "Cannot delete active provider"))
+        val useCase = DeleteAIProviderUseCaseImpl(repo)
+        val result = useCase(AIProviderType.LM_STUDIO)
+        assertTrue(result.isError())
     }
 }
