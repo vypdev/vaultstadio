@@ -121,6 +121,26 @@ Until then, Swagger/OpenAPI and `docs/api/API.md` can disagree while both appear
 
 The repository rules require English, but the audit found Spanish prose in `docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md` and multiple lines in `docs/development/PLATFORM_BUILD_REPORT.md`. This should be handled as a documentation cleanup slice, with technical claims revalidated rather than mechanically translated.
 
+### P0 — The published Swagger URL is inconsistent with the implementation
+
+`backend/api/src/main/kotlin/com/vaultstadio/api/config/Swagger.kt` configures Swagger at `/swagger`, while `README.md`, `docs/getting-started/QUICK_START.md`, `docs/operations/DEPLOYMENT.md`, and `docs/api/API.md` advertise `/swagger-ui`. Standardize the documented URL or change the implementation after an explicit API decision; do not leave both paths presented as supported.
+
+### P0 — Security workflow references a nonexistent Dockerfile
+
+`.github/workflows/security.yml` references `docker/Dockerfile.backend.kotlin`, but the checkout contains `docker/Dockerfile.backend`. The command is also fail-open via `|| true`, so the missing file can be hidden from the workflow result. This should be corrected or the scan step should be retired, then its failure policy should be made explicit.
+
+### P1 — Release and product versions have no single source of truth
+
+Verified version values diverge across the repository: `backend/build.gradle.kts` uses `1.0.0-SNAPSHOT`, `helm/vaultstadio/Chart.yaml` uses `2.0.0`, `CHANGELOG.md` lists `2.2.0` as the latest release, and the release/hotfix workflow defaults use `1.0.0`. Establish and document the authoritative version source before changing release automation or publishing artifacts.
+
+### P1 — The documentation index is incomplete and contains stale analysis
+
+`docs/INDEX.md` and `docs/DOCS_STRUCTURE.md` omit several tracked documents, including the file/folder analysis, frontend task-cycle documentation, directory-structure analysis, frontend modularisation document, platform build report, and WASM optimization document. `docs/DOCUMENTATION_ANALYSIS.md` also makes claims contradicted by the current tree, including saying that `PROJECT_OVERVIEW.md` and `GLOSSARY.md` are absent. The index and analysis should be refreshed together, with historical conclusions explicitly labelled.
+
+### P1 — CI and release onboarding requirements are inconsistent
+
+The repository uses JDK 17 in CI, backend build configuration, and Dockerfiles, while `CONTRIBUTING.md` and Quick Start require JDK 21+. The backend and frontend also use different Gradle wrapper versions. `docs/frontend/FRONTEND_TESTING.md` describes release-tag CI behavior that is not present in `.github/workflows/ci.yml`. Publish one supported toolchain matrix and a dedicated CI/release runbook before treating workflow behavior as a contributor contract.
+
 ## RepoWise evidence
 
 `repowise 0.42.0 health --no-workspace --format json --refactoring-targets` completed against the reviewed checkout. It produced 20 targets. The highest-priority signals included:
