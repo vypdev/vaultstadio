@@ -62,6 +62,7 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | [development/AI_CODING_GUIDELINES.md](development/AI_CODING_GUIDELINES.md) | Guidelines for AI-assisted contributions | AI/Developers |
 | [development/TESTING.md](development/TESTING.md) | Test strategy, coverage, and best practices | Developers |
 | [development/TEST_COVERAGE_ACTION_PLAN.md](development/TEST_COVERAGE_ACTION_PLAN.md) | Phased plan for full test coverage | Developers |
+| [development/REPOSITORY_AUDIT.md](development/REPOSITORY_AUDIT.md) | Evidence-based documentation, SDD, CI, and architecture audit baseline | Maintainers |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution process and PR guidelines | Contributors |
 
 ### Plugins

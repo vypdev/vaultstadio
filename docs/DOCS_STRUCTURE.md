@@ -44,7 +44,8 @@ docs/
 │   ├── CODE_QUALITY.md
 │   ├── AI_CODING_GUIDELINES.md
 │   ├── TESTING.md
-│   └── TEST_COVERAGE_ACTION_PLAN.md
+│   ├── TEST_COVERAGE_ACTION_PLAN.md
+│   └── REPOSITORY_AUDIT.md
 │
 ├── frontend/                    # Compose UI and components
 │   ├── FRONTEND_COMPONENTS.md
@@ -103,3 +104,4 @@ When adding or moving documents:
 - [INDEX.md](INDEX.md) – Full document index and quick navigation
 - [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) – What VaultStadio offers
 - [GLOSSARY.md](GLOSSARY.md) – Term definitions
+- [development/REPOSITORY_AUDIT.md](development/REPOSITORY_AUDIT.md) – Evidence-based repository audit baseline
