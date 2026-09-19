@@ -96,6 +96,31 @@ The workflow configuration contains several fail-open or non-blocking paths:
 
 This may be intentional while the self-hosted infrastructure is unstable, but documentation must label these checks as advisory instead of implying that they are release gates. Hardening them is a separate operational change requiring runner evidence and an explicit failure policy.
 
+### P0 — Onboarding and published metadata still use a placeholder repository
+
+The following tracked files still point to `github.com/yourusername/vaultstadio`: `README.md`, `docs/getting-started/QUICK_START.md`, and `helm/vaultstadio/Chart.yaml` (home, source, and icon metadata). A new contributor or operator can copy an invalid clone URL, and Helm metadata points away from the actual project.
+
+Replace the placeholder with the canonical repository URL and add a validator that rejects `yourusername` in user-facing metadata.
+
+### P0 — API documentation has no single authoritative contract
+
+The repository contains a generated-looking OpenAPI YAML with 12 path entries, while `docs/api/API.md` documents a much larger surface including Sync and Collaboration endpoints. A source scan found 218 route-like declarations, but that count also includes non-route `get()` calls and must not be treated as an exact endpoint count.
+
+Choose one of these explicit contracts:
+
+1. generate or validate OpenAPI from the implemented route contract and publish the generated artifact; or
+2. label the YAML as partial, state that source routes are authoritative, and add a coverage matrix for documented versus specified endpoints.
+
+Until then, Swagger/OpenAPI and `docs/api/API.md` can disagree while both appear authoritative.
+
+### P1 — Release workflows reference a different project shape
+
+`.github/workflows/release_workflow.yml` and `.github/workflows/hotfix_workflow.yml` contain steps named for `package.json` and `dist/`/`build/` publication, but the checkout has no root `package.json`, `build/`, or `dist/`. The Kotlin project publishes through the backend and frontend Gradle projects instead. These workflows need a deliberate classification as retired, experimental, or migrated before being treated as release gates.
+
+### P1 — Internal documentation violates the English-only repository rule
+
+The repository rules require English, but the audit found Spanish prose in `docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md` and multiple lines in `docs/development/PLATFORM_BUILD_REPORT.md`. This should be handled as a documentation cleanup slice, with technical claims revalidated rather than mechanically translated.
+
 ## RepoWise evidence
 
 `repowise 0.42.0 health --no-workspace --format json --refactoring-targets` completed against the reviewed checkout. It produced 20 targets. The highest-priority signals included:
