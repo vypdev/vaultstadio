@@ -14,6 +14,7 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | Get started quickly | [getting-started/QUICK_START.md](getting-started/QUICK_START.md) |
 | Look up a term | [GLOSSARY.md](GLOSSARY.md) |
 | Understand the architecture | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md) |
+| Read the authoritative SDD catalog | [../specs/CATALOG.md](../specs/CATALOG.md) |
 | See API endpoints | [api/API.md](api/API.md) |
 | Deploy to production | [operations/DEPLOYMENT.md](operations/DEPLOYMENT.md) |
 | Develop a plugin | [plugins/PLUGIN_DEVELOPMENT.md](plugins/PLUGIN_DEVELOPMENT.md) |
@@ -44,6 +45,16 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | [architecture/DOCUMENTATION_ANALYSIS.md](architecture/DOCUMENTATION_ANALYSIS.md) | Suitability of docs for humans and AIs; recommendations | Maintainers |
 | [GLOSSARY.md](GLOSSARY.md) | Terms and definitions | All |
 | [DOCS_STRUCTURE.md](DOCS_STRUCTURE.md) | Directory layout and navigation by role | All |
+
+### Specifications
+
+| Document | Description | Audience |
+|----------|-------------|----------|
+| [../specs/README.md](../specs/README.md) | SDD standard, states, required sections, and validation rules | Maintainers |
+| [../specs/CATALOG.md](../specs/CATALOG.md) | Human-readable capability and SDD catalog | All contributors |
+| [../specs/SDD-0000-architecture-quality-and-product-contract.md](../specs/SDD-0000-architecture-quality-and-product-contract.md) | SDD portfolio ordering and evidence policy | Maintainers |
+| [../specs/SDD-0001-standalone-projects-and-clean-architecture.md](../specs/SDD-0001-standalone-projects-and-clean-architecture.md) | Current backend/frontend architecture baseline | Developers |
+| [../specs/SDD-0002-public-api-and-protocol-contract.md](../specs/SDD-0002-public-api-and-protocol-contract.md) | REST, OpenAPI, WebDAV, S3, and WebSocket contract | API developers |
 
 ### API and integration
 
