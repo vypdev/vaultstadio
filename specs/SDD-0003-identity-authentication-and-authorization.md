@@ -104,7 +104,7 @@ Text equivalent: User registers/logs in -> receives token pair -> calls protecte
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `anonymous` | No authenticated identity | user | login/register |
 | `authenticated` | Token accepted | user | authorized request |

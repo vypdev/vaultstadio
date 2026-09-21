@@ -104,7 +104,7 @@ Text equivalent: User opens history -> selects version/diff -> previews -> reque
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `current` | Version is active head | user | edit/history |
 | `historical` | Version retained for recovery | user | compare/restore/delete |

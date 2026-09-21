@@ -105,7 +105,7 @@ Text equivalent: Operator discovers plugin -> validates metadata/configuration -
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `discovered` | Plugin metadata available | operator | inspect/enable |
 | `disabled` | Not executing | operator | enable/remove |

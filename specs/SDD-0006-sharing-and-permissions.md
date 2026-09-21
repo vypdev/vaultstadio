@@ -105,7 +105,7 @@ Text equivalent: Owner selects item -> chooses recipient/permission/expiry -> sh
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `draft` | Share inputs not persisted | owner | validate/create |
 | `active` | Share grants bounded access | owner/recipient | use/update/revoke |

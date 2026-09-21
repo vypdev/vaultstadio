@@ -106,7 +106,7 @@ Text equivalent: Platform entrypoint starts app -> root resolves navigation/sess
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `booting` | Platform app starting | user | wait/error |
 | `unauthenticated` | No valid session | user | login |

@@ -104,7 +104,7 @@ Text equivalent: Operator configures identity -> instance advertises/requests tr
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `untrusted` | Remote identity unknown | operator | inspect/request |
 | `pending` | Trust request awaiting decision | operator | accept/reject |

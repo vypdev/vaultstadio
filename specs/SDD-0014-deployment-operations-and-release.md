@@ -110,7 +110,7 @@ Text equivalent: Operator selects version/config -> validates prerequisites -> b
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `planned` | Inputs and target selected | operator | validate |
 | `validated` | Prerequisites/config accepted | operator | build |

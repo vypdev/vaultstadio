@@ -105,7 +105,7 @@ Text equivalent: User opens document -> joins session -> receives snapshot/prese
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `available` | Document can accept session | user | join |
 | `joining` | Membership being authorized | system | active/rejected |

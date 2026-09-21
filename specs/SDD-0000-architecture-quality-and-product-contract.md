@@ -103,7 +103,7 @@ Text equivalent: Audit current repository -> classify evidence -> define owner S
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `draft` | Portfolio incomplete | maintainers | proposed |
 | `proposed` | Scope and ordering under review | maintainers | ready-for-implementation or blocked |

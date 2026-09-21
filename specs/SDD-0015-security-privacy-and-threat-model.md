@@ -106,7 +106,7 @@ Text equivalent: Identify asset -> cross trust boundary -> validate identity/inp
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `unclassified` | Asset/threat not mapped | maintainer | classify |
 | `mitigated` | Control exists and is tested | maintainer | verify |

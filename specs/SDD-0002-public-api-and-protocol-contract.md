@@ -103,7 +103,7 @@ Text equivalent: Client discovers contract -> authenticates -> calls bounded pro
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `available` | Route is registered and documented | client | call |
 | `unauthorized` | Credentials absent/invalid | client | authenticate |

@@ -105,7 +105,7 @@ Text equivalent: Contributor selects backend or frontend root -> loads the match
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `documented` | Current topology is recorded | contributor | implementing |
 | `implementing` | One boundary is changing | owner | validating or blocked |

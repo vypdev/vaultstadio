@@ -106,7 +106,7 @@ Text equivalent: User authenticates -> lists/creates/moves/uploads item -> metad
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `active` | Item is visible and usable | user | read/update/share |
 | `trashed` | Item retained but hidden from normal listing | user | restore/delete |

@@ -106,7 +106,7 @@ Text equivalent: File changes -> metadata is extracted/indexed -> user searches 
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `unindexed` | Source exists without current derived metadata | system | index |
 | `indexed` | Derived metadata/search entry current | user | search/use |

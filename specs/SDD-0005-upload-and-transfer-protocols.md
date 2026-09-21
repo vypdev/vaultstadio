@@ -104,7 +104,7 @@ Text equivalent: Client starts transfer -> sends parts/method requests -> server
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `initialized` | Session allocated | client | upload parts |
 | `in-progress` | Some content received | client | continue/status/cancel |

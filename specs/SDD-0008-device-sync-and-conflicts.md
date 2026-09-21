@@ -107,7 +107,7 @@ Text equivalent: Device registers -> pulls known changes -> pushes local changes
 
 ### 6.3 State machine
 
-| State | Entered when | User-visible meaning | Allowed next states | Recovery/owner |
+| State | Trigger/condition | Owner | Allowed next states |
 |---|---|---|---|---|
 | `unregistered` | Device unknown | client | register |
 | `active` | Device may sync | client | pull/push/deactivate |
