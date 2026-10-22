@@ -314,7 +314,7 @@ jobs:
       
       - name: Run Detekt (frontend)
         working-directory: frontend
-        run: ./gradlew detektMain --continue
+        run: ./gradlew detektDesktopMain --continue
       
       - name: Upload Detekt report
         uses: actions/upload-artifact@v4
