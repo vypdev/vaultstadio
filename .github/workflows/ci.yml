@@ -1,6 +1,6 @@
 # VaultStadio CI Pipeline
 # Runs on every push and pull request
-# Runner: self-hosted macOS X64 (labels: self-hosted, macOS, X64)
+# Runners: Ubuntu for Docker/Testcontainers; self-hosted macOS for desktop/Android
 
 name: CI
 
@@ -19,7 +19,7 @@ jobs:
   # Build and test the Kotlin backend
   backend:
     name: Backend Build & Test
-    runs-on: [self-hosted, macOS, X64]
+    runs-on: ubuntu-24.04
     
     steps:
       - name: Checkout code
@@ -248,8 +248,17 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
       
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       
       - name: Install Android SDK components
         run: |
@@ -278,8 +287,17 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
       
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       
       - name: Install Android SDK components
         run: |
@@ -296,7 +314,7 @@ jobs:
       
       - name: Run Detekt (frontend)
         working-directory: frontend
-        run: ./gradlew detektMain --continue
+        run: ./gradlew detektDesktopMain --continue
       
       - name: Upload Detekt report
         uses: actions/upload-artifact@v4
