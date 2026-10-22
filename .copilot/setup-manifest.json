@@ -12,7 +12,7 @@
     },
     ".copilot/AGENT_GUIDE.md": {
       "role": "guide",
-      "sha256": "07ef187d584f4da868a6cebe6b6d7c7654b057af703e0d10ede11f768ba64674"
+      "sha256": "c3bd0df4bfdcbba2a007b1596a93480a3bb3145a6285e0a91809f3a93c3fbcd0"
     },
     ".copilot/repository-profile.json": {
       "role": "profile",
@@ -25,9 +25,9 @@
   },
   "installation": {
     "schemaVersion": 1,
-    "operationId": "805aa9c8-79c6-4dd2-95e1-8f51ea562e57",
+    "operationId": "8ba4fa70-43a5-4936-bdc4-ce2d2473f817",
     "repositoryId": 1159654519,
-    "baseSha": "5a2488ee2b1c1f71befd0e00a4afc838ab4a0e04",
-    "planDigest": "d31a1a4ce23dbcec1f2c644502f0bf4b6f8b7913d30a73ca25f0c672eedf6076"
+    "baseSha": "e2272875315da4a7bbea2d2797b3593e7f3da489",
+    "planDigest": "901cd9d2bd32e751ef2e78f315ef90803bee5b6bd4e3190b180a28b5ca82022e"
   }
 }
