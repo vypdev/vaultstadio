@@ -18,7 +18,10 @@ jobs:
   # ==================== Dependency Scan ====================
   dependency-scan:
     name: Dependency Vulnerability Scan
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,7 +41,10 @@ jobs:
   # ==================== Code Security Scan ====================
   code-scan:
     name: Code Security Scan
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     permissions:
       security-events: write
     steps:
@@ -106,7 +112,10 @@ jobs:
   # ==================== Secret Scanning ====================
   secret-scan:
     name: Secret Detection
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
