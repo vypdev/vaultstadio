@@ -75,7 +75,8 @@ CMD ["./bin/api"]
 
 ### Build Stages
 
-1. **Builder Stage** (gradle:8.10-jdk17):
+1. **Builder Stage** (gradle:8.10-jdk17 on the native builder platform):
+   - Compiles portable Wasm/JS artifacts natively; the final Nginx image retains its requested target platform, avoiding emulation of the compiler
    - Installs `libatomic1`, required by Kotlin's downloaded Linux Node runtime
    - Copies `frontend/` (standalone Gradle project) as the Gradle build user
    - Runs `./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution`; the checked-in wrapper selects Gradle 9.1.0 as required by the Android plugin
@@ -89,7 +90,7 @@ CMD ["./bin/api"]
 
 ```dockerfile
 # Stage 1: Build
-FROM gradle:8.10-jdk17 AS builder
+FROM --platform=$BUILDPLATFORM gradle:8.10-jdk17 AS builder
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends libatomic1 \
     && rm -rf /var/lib/apt/lists/*
