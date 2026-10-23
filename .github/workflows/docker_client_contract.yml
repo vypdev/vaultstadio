@@ -28,11 +28,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
       - name: Test private credentials with native Docker and a fixture registry
         run: |
-          python -m venv "$RUNNER_TEMP/docker-client-contract"
-          "$RUNNER_TEMP/docker-client-contract/bin/python" -m pip install PyYAML==6.0.3
+          python3 -c 'import sys; assert sys.version_info >= (3, 11), "The macOS runner needs Python 3.11 or newer."'
+          python3 -m venv "$RUNNER_TEMP/docker-client-contract"
+          "$RUNNER_TEMP/docker-client-contract/bin/python" -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
           "$RUNNER_TEMP/docker-client-contract/bin/python" -m unittest discover -s .github/scripts/tests -p test_docker_client.py -v
