@@ -75,9 +75,11 @@ CMD ["./bin/api"]
 
 ### Build Stages
 
-1. **Builder Stage** (gradle:8.10-jdk17):
-   - Copies `frontend/` (standalone Gradle project)
-   - Runs `gradle -p frontend :composeApp:wasmJsBrowserDistribution`
+1. **Builder Stage** (gradle:8.10-jdk17 on the native builder platform):
+   - Compiles portable Wasm/JS artifacts natively; the final Nginx image retains its requested target platform, avoiding emulation of the compiler
+   - Installs `libatomic1`, required by Kotlin's downloaded Linux Node runtime
+   - Copies `frontend/` (standalone Gradle project) as the Gradle build user
+   - Runs `./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution`; the checked-in wrapper selects Gradle 9.1.0 as required by the Android plugin
 
 2. **Runtime Stage** (nginx:alpine):
    - Copies compiled WASM files from `frontend/composeApp/build/dist/wasmJs/productionExecutable`
@@ -88,10 +90,14 @@ CMD ["./bin/api"]
 
 ```dockerfile
 # Stage 1: Build
-FROM gradle:8.10-jdk17 AS builder
+FROM --platform=$BUILDPLATFORM gradle:8.10-jdk17 AS builder
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends libatomic1 \
+    && rm -rf /var/lib/apt/lists/*
+USER gradle
 WORKDIR /app
-COPY frontend ./frontend
-RUN gradle -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
+COPY --chown=gradle:gradle frontend ./frontend
+RUN ./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
 
 # Stage 2: Serve
 FROM nginx:alpine
@@ -100,6 +106,8 @@ COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
+
+The root `.dockerignore` excludes checkout credentials, Gradle caches, generated build outputs, Node dependencies, and machine-specific Android SDK paths. Both images build from source inside their builder stages. CI uses independent GitHub Actions cache scopes for backend and frontend.
 
 ## Image Sizes
 

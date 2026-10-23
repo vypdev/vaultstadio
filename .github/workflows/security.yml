@@ -1,7 +1,7 @@
 # VaultStadio Security Scanning
 #
 # This workflow runs security scans on the codebase and Docker images.
-# Runner: self-hosted macOS X64 (labels: self-hosted, macOS, X64)
+# Container scans use the Docker-capable Apple Silicon runners; other scans use macOS X64.
 
 name: Security
 
@@ -67,18 +67,25 @@ jobs:
   # ==================== Container Scan ====================
   container-scan:
     name: Container Security Scan
-    runs-on: [self-hosted, macOS, X64]
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, ARM64]
+    timeout-minutes: 45
     if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Prepare private Docker client
+        uses: ./.github/actions/prepare-docker
+        timeout-minutes: 2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Build backend image for scanning
         run: |
-          docker build -f docker/Dockerfile.backend.kotlin -t vaultstadio-backend:scan . || true
+          docker build --platform linux/amd64 -f docker/Dockerfile.backend -t vaultstadio-backend:scan . || true
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master

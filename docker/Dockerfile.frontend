@@ -2,15 +2,23 @@
 # Multi-stage build
 
 # Stage 1: Build
-FROM gradle:8.10-jdk17 AS builder
+# Wasm/JS artifacts are portable; compile natively and keep the runtime target separate.
+FROM --platform=$BUILDPLATFORM gradle:8.10-jdk17 AS builder
+
+# Kotlin's downloaded Node runtime requires libatomic on Linux.
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends libatomic1 \
+    && rm -rf /var/lib/apt/lists/*
+USER gradle
 
 WORKDIR /app
 
 # Copy frontend (standalone Gradle project; build with -p frontend)
-COPY frontend ./frontend
+COPY --chown=gradle:gradle frontend ./frontend
 
 # Build the web application
-RUN gradle -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
+# Use the project wrapper so the Android plugin sees its required Gradle version.
+RUN ./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
