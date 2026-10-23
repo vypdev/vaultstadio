@@ -171,7 +171,8 @@ class ThumbnailCacheTest {
         @Test
         fun `cleanup returns zero when no entries expired`() {
             cache.put(key(), thumbnail())
-            val count = cache.cleanup(maxAge = 1.milliseconds)
+            // A fresh entry must not rely on the scheduler returning within one millisecond.
+            val count = cache.cleanup(maxAge = 1.hours)
             assertEquals(0, count)
         }
 

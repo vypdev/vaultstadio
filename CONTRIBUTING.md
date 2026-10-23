@@ -21,6 +21,26 @@ Thank you for your interest in contributing to VaultStadio!
 - Gradle 8.10+
 - Docker (for running tests with Testcontainers)
 
+### CI runners for Docker
+
+Docker image builds and the container security scan use the `vypdev` runner group
+with `[self-hosted, macOS, ARM64]`. These jobs require the Apple Silicon host's
+running Docker daemon; the older Mac and Linux/Windows VMs do not provide Docker.
+Published images retain the `linux/amd64` target. Backend Testcontainers CI stays
+on GitHub-hosted Ubuntu, and other macOS builds keep their existing runner selection.
+
+The local `prepare-docker` action checks the daemon and preserves its endpoint in
+a private client configuration under `RUNNER_TEMP`. Each job gets separate registry
+credentials and Buildx state, and the Docker image jobs use disposable container
+builders. Keep Docker available in both ARM64 runners' service PATH and keep the
+host awake while jobs run. Two registered runners share this host's CPU, memory,
+and daemon; they do not provide two independent machines.
+
+Same-repository pull requests touching the image inputs run both Docker builds
+without logging into or publishing to the registry. The frontend image build is
+required to succeed on PRs, even though its existing publication-step tolerance is
+preserved on pushes. Fork PRs do not run these self-hosted Docker image jobs.
+
 ## Coding Standards
 
 ### Kotlin (Backend & Shared)
