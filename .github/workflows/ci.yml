@@ -1,6 +1,6 @@
 # VaultStadio CI Pipeline
 # Runs on every push and pull request
-# Runners: Ubuntu for Docker/Testcontainers; self-hosted macOS for desktop/Android
+# Runners: shared self-hosted Linux/macOS; Docker/Testcontainers on Apple Silicon
 
 name: CI
 
@@ -19,7 +19,10 @@ jobs:
   # Build and test the Kotlin backend
   backend:
     name: Backend Build & Test
-    runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, ARM64]
     
     steps:
       - name: Checkout code
@@ -37,6 +40,21 @@ jobs:
           project-root: backend
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
       
+      - name: Prepare private Docker client
+        uses: ./.github/actions/prepare-docker
+
+      - name: Configure Testcontainers for the runner Docker context
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint="$(docker context inspect --format '{{.Endpoints.docker.Host}}')"
+          case "$endpoint" in
+            unix:///*) ;;
+            *) echo "Expected the runner's local Unix Docker socket." >&2; exit 1 ;;
+          esac
+          printf 'DOCKER_HOST=%s\n' "$endpoint" >> "$GITHUB_ENV"
+          echo 'TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock' >> "$GITHUB_ENV"
+
       - name: Ensure Docker is available (for Testcontainers)
         run: |
           if [ -d "/Applications/Docker.app" ]; then
@@ -122,7 +140,10 @@ jobs:
   # Build the frontend (standalone project in frontend/)
   frontend:
     name: Frontend Build
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
 
     steps:
       - name: Checkout code
@@ -156,7 +177,10 @@ jobs:
   # Upload coverage to Codecov
   coverage:
     name: Coverage (Codecov)
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     needs: [backend, frontend]
 
     steps:
@@ -207,7 +231,10 @@ jobs:
   # Build plugins
   plugins:
     name: Plugins Build
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -236,7 +263,10 @@ jobs:
   # Build Android app
   android:
     name: Android Build
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -275,7 +305,10 @@ jobs:
   # Code quality checks (no root Gradle; backend and frontend are standalone)
   lint:
     name: Lint & Code Quality
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
@@ -327,7 +360,10 @@ jobs:
   # Security scanning
   security:
     name: Security Scan
-    runs-on: [self-hosted, macOS, X64]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
     
     steps:
       - name: Checkout code
