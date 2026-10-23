@@ -58,6 +58,14 @@ jobs:
           state_directory="$(mktemp -d "$RUNNER_TEMP/vaultstadio-codeql.XXXXXX")"
           echo "database=$state_directory/databases" >> "$GITHUB_OUTPUT"
           echo "GRADLE_USER_HOME=$state_directory/gradle" >> "$GITHUB_ENV"
+          mkdir -p "$state_directory/gradle"
+          # In-process Kotlin needs class metadata space as well as heap. Bound
+          # workers so concurrent module compilers fit on the shared runner.
+          cat > "$state_directory/gradle/gradle.properties" <<'PROPERTIES'
+          org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8
+          org.gradle.workers.max=2
+          org.gradle.parallel=false
+          PROPERTIES
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
