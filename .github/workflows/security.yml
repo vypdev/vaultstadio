@@ -51,10 +51,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Isolate CodeQL database and Gradle state for this analysis
+        id: codeql-state
+        shell: bash
+        run: |
+          state_directory="$(mktemp -d "$RUNNER_TEMP/vaultstadio-codeql.XXXXXX")"
+          echo "database=$state_directory/databases" >> "$GITHUB_OUTPUT"
+          echo "GRADLE_USER_HOME=$state_directory/gradle" >> "$GITHUB_ENV"
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin, javascript
+          db-location: ${{ steps.codeql-state.outputs.database }}
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -62,10 +71,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build for analysis
+      # Keep traced Kotlin compilation in this job's JVM; a shared compiler
+      # daemon can outlive the build and write into a finalized source archive.
+      - name: Build backend for analysis
+        working-directory: backend
+        run: ./gradlew :api:build -x test --no-daemon --no-build-cache --no-configuration-cache --rerun-tasks -Pkotlin.compiler.execution.strategy=in-process
+
+      - name: Build frontend for analysis
+        working-directory: frontend
         run: |
-          cd backend && ./gradlew :api:build -x test --no-daemon || true
-          cd frontend && ./gradlew :composeApp:compileKotlinDesktop --no-daemon || true
+          ./gradlew :composeApp:compileKotlinDesktop --no-daemon --no-build-cache --no-configuration-cache --rerun-tasks -Pkotlin.compiler.execution.strategy=in-process
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
