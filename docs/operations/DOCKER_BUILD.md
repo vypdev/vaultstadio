@@ -77,7 +77,7 @@ CMD ["./bin/api"]
 
 1. **Builder Stage** (gradle:8.10-jdk17):
    - Copies `frontend/` (standalone Gradle project)
-   - Runs `gradle -p frontend :composeApp:wasmJsBrowserDistribution`
+   - Runs `./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution`; the checked-in wrapper selects Gradle 9.1.0 as required by the Android plugin
 
 2. **Runtime Stage** (nginx:alpine):
    - Copies compiled WASM files from `frontend/composeApp/build/dist/wasmJs/productionExecutable`
@@ -91,7 +91,7 @@ CMD ["./bin/api"]
 FROM gradle:8.10-jdk17 AS builder
 WORKDIR /app
 COPY frontend ./frontend
-RUN gradle -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
+RUN ./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
 
 # Stage 2: Serve
 FROM nginx:alpine
@@ -100,6 +100,8 @@ COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
+
+The root `.dockerignore` excludes checkout credentials, Gradle caches, generated build outputs, Node dependencies, and machine-specific Android SDK paths. Both images build from source inside their builder stages. CI uses independent GitHub Actions cache scopes for backend and frontend.
 
 ## Image Sizes
 

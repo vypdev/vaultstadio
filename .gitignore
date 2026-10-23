@@ -85,7 +85,6 @@ compose-resources/
 *.sqlite3
 
 # Docker
-.dockerignore
 docker/storage/
 
 # Local Development Data (root-level only; frontend/data/ are KMP modules and must be committed)

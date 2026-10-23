@@ -10,7 +10,8 @@ WORKDIR /app
 COPY frontend ./frontend
 
 # Build the web application
-RUN gradle -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
+# Use the project wrapper so the Android plugin sees its required Gradle version.
+RUN ./frontend/gradlew -p frontend :composeApp:wasmJsBrowserDistribution --no-daemon
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
