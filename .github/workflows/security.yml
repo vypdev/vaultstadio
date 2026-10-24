@@ -138,6 +138,7 @@ jobs:
           image-ref: ${{ env.SCAN_IMAGE }}
           format: 'sarif'
           output: 'trivy-results.sarif'
+          cache-dir: ${{ runner.temp }}/trivy-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload Trivy scan results
         if: ${{ !cancelled() && steps.trivy.outcome == 'success' }}
