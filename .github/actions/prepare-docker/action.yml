@@ -11,8 +11,13 @@ runs:
         docker_host="$(docker context inspect --format '{{.Endpoints.docker.Host}}')"
         docker_config="$(mktemp -d "$RUNNER_TEMP/docker-client.XXXXXX")"
         chmod 700 "$docker_config"
+        # Empty configs auto-select the shared native credential store. A
+        # token-free sentinel keeps file storage selected even after logout.
+        printf '{"auths":{"job-credentials.invalid":{}}}\n' > "$docker_config/config.json"
+        chmod 600 "$docker_config/config.json"
         {
           printf 'DOCKER_HOST=%s\n' "$docker_host"
           printf 'DOCKER_CONFIG=%s\n' "$docker_config"
           printf 'DOCKER_CONTEXT=\n'
+          printf 'DOCKER_AUTH_CONFIG=\n'
         } >> "$GITHUB_ENV"
