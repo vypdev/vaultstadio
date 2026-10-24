@@ -1,0 +1,36 @@
+name: Docker client contract
+
+on:
+  pull_request:
+    paths:
+      - '.github/actions/prepare-docker/**'
+      - '.github/scripts/tests/test_docker_client.py'
+      - '.github/workflows/docker_client_contract.yml'
+  push:
+    branches: [master, develop]
+    paths:
+      - '.github/actions/prepare-docker/**'
+      - '.github/scripts/tests/test_docker_client.py'
+      - '.github/workflows/docker_client_contract.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  credentials:
+    name: Native Docker credential isolation
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, ARM64]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test private credentials with native Docker and a fixture registry
+        run: |
+          python3 -c 'import sys; assert sys.version_info >= (3, 11), "The macOS runner needs Python 3.11 or newer."'
+          python3 -m venv "$RUNNER_TEMP/docker-client-contract"
+          "$RUNNER_TEMP/docker-client-contract/bin/python" -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
+          "$RUNNER_TEMP/docker-client-contract/bin/python" -m unittest discover -s .github/scripts/tests -p test_docker_client.py -v
