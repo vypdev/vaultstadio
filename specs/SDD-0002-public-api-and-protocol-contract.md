@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.
-- Related issues/PRs: none recorded
+- Related issues/PRs: #71
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -110,6 +110,10 @@ Text equivalent: Client discovers contract -> authenticates -> calls bounded pro
 | `forbidden` | Identity lacks permission | owner | request access |
 | `invalid` | Request violates schema | client | repair request |
 | `unavailable` | Dependency cannot serve request | operator/client | bounded retry |
+
+### 6.4 Client bootstrap transport — issue #76
+
+The owning frontend startup contract is BOOT-SER-01/02 and BOOT-HTTP-01 in [SDD-0013](SDD-0013-frontend-kmp-and-platform-architecture.md#64-client-startup-correction--issue-76). Client-side serializer descriptor identity MUST NOT change the public ISO-8601 JSON wire values. Serving a Wasm artifact MUST use one correct MIME header; missing assets retain their HTTP error status. Public API routes, authentication and versioning are not changed by this bootstrap repair.
 
 ## 7. User-facing configuration
 
