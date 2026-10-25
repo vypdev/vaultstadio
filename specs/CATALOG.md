@@ -27,4 +27,3 @@ Generated from `specs/catalog.json`. The JSON catalog is authoritative.
 - `As-built baseline` records observed behavior and known debt; it is not a completeness claim.
 - `Proposed` documents contain open decisions and cannot be treated as implemented.
 - Evidence paths are checked by `python3 scripts/validate-specification-catalog.py`.
-
