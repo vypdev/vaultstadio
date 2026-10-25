@@ -20,6 +20,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
+import kotlinx.datetime.toDeprecatedInstant
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
@@ -133,7 +134,7 @@ data class CronExpression(
             candidateDateTime.minute,
             0,
             0,
-        ).toInstant(timeZone)
+        ).toInstant(timeZone).toDeprecatedInstant()
 
         val maxIterations = 60 * 24 * 365 * 2
         var iterations = 0
