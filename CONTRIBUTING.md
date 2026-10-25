@@ -21,6 +21,26 @@ Thank you for your interest in contributing to VaultStadio!
 - Gradle 8.10+
 - Docker (for running tests with Testcontainers)
 
+### CI runners for Docker
+
+Docker image builds and the container security scan use the `vypdev` runner group
+with `[self-hosted, macOS, ARM64]`. These jobs require the Apple Silicon host's
+running Docker daemon; the older Mac and Linux/Windows VMs do not provide Docker.
+Published images retain the `linux/amd64` target. Backend Testcontainers CI stays
+on GitHub-hosted Ubuntu, and other macOS builds keep their existing runner selection.
+
+The local `prepare-docker` action checks the daemon and preserves its endpoint in
+a private client configuration under `RUNNER_TEMP`. Each job gets separate registry
+credentials and Buildx state, and the Docker image jobs use disposable container
+builders. Keep Docker available in both ARM64 runners' service PATH and keep the
+host awake while jobs run. Two registered runners share this host's CPU, memory,
+and daemon; they do not provide two independent machines.
+
+Same-repository pull requests touching the image inputs run both Docker builds
+without logging into or publishing to the registry. The frontend image build is
+required to succeed on PRs, even though its existing publication-step tolerance is
+preserved on pushes. Fork PRs do not run these self-hosted Docker image jobs.
+
 ## Coding Standards
 
 ### Kotlin (Backend & Shared)
@@ -32,11 +52,12 @@ Thank you for your interest in contributing to VaultStadio!
 - **Quality**: detekt (run after formatting)
 
 ```bash
-# 1. Format code (fixes style)
-./gradlew ktlintFormat
+# 1. Format code (fixes style) – run in backend/ and frontend/
+cd backend && ./gradlew ktlintFormat
+cd frontend && ./gradlew ktlintFormat
 
 # 2. Run static analysis (detekt runs ktlintCheck first)
-./gradlew detekt
+make lint   # backend + frontend detekt; or: cd backend && ./gradlew detektMain
 
 # 3. Check no FQN in type positions (use imports instead)
 ./scripts/check-no-fqn.sh
@@ -55,11 +76,15 @@ If you use AI (e.g. Cursor) to contribute, follow [docs/development/AI_CODING_GU
 - Keep composables small and focused
 
 ```bash
-# Run frontend
-./gradlew :compose-frontend:composeApp:run
+# Run frontend (from repo root via Make, or from frontend/ with Gradle)
+make desktop-run    # Desktop
+make frontend-run   # Web (WASM development dev server)
+make frontend-run-prod  # Web (WASM production dev server)
 
-# Build for web
-./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+# Or from frontend/ directory:
+# ./gradlew :composeApp:run
+# ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+# ./gradlew :composeApp:wasmJsBrowserProductionRun
 ```
 
 ## Commit Messages
@@ -78,9 +103,10 @@ refactor: Simplify authentication flow
 
 1. **Update Documentation**: Update relevant documentation
 2. **Add Tests**: Add tests for new features
-3. **Run Tests**: Ensure all tests pass
-4. **Update CHANGELOG**: Document your changes
-5. **Submit PR**: Create pull request with description
+3. **Run Tests**: Ensure all tests pass (`make test`)
+4. **Run Coverage (recommended)**: Run `make test-coverage` and check that new code is covered (CI uploads to Codecov; PR status check uses a 1% threshold)
+5. **Update CHANGELOG**: Document your changes
+6. **Submit PR**: Create pull request with description
 
 ### PR Checklist
 
@@ -89,35 +115,42 @@ refactor: Simplify authentication flow
 - [ ] Documentation updated
 - [ ] All tests pass
 - [ ] No detekt issues
+- [ ] **Coverage:** Run `make test-coverage` before opening the PR; ensure new code has tests (Codecov status check enforces 1% threshold on patch coverage)
 
 ## Testing
 
 Before submitting a PR:
 
 ```bash
-# Run all backend tests
-./gradlew :kotlin-backend:api:test
+# Run backend tests (from repo root)
+make backend-test
+# Or: cd backend && ./gradlew :core:test :api:test
 
-# Run core module tests
-./gradlew :kotlin-backend:core:test
-
-# Run all tests
-./gradlew test
+# Run all tests (backend + frontend)
+make test
 
 # Run with coverage
-./gradlew jacocoTestReport
+make test-coverage
 ```
+
+### Coverage
+
+- **Before opening a PR**, run `make test-coverage` to generate backend and frontend coverage reports. This matches what CI runs and uploads to Codecov. The Codecov status check on PRs uses a **1% threshold** (patch coverage); avoid dropping coverage for new or changed code.
+- **Goal:** Keep coverage ≥ 80% for new code where feasible. Avoid removing tests without adding equivalent coverage elsewhere.
+- **Local HTML reports:** Backend: `backend/<module>/build/reports/jacoco/test/html/index.html`. Frontend: `frontend/composeApp/build/reports/jacoco/jacocoTestReport/html/index.html`.
+- **Strategy and commands:** [docs/development/TESTING.md](docs/development/TESTING.md).
+- **Current snapshot and per-module targets:** [docs/development/TEST_COVERAGE_ACTION_PLAN.md](docs/development/TEST_COVERAGE_ACTION_PLAN.md).
 
 ## Project Structure
 
 ```
 vaultstadio/
-├── kotlin-backend/          # Backend modules
+├── backend/                 # Backend (root Gradle project :backend:*)
 │   ├── core/               # Domain logic, models, services
 │   ├── plugins-api/        # Plugin SDK
 │   ├── api/                # Ktor REST API
 │   └── infrastructure/     # DB, storage implementations
-├── compose-frontend/        # Compose Multiplatform
+├── frontend/                # Compose Multiplatform (standalone Gradle project)
 └── docker/                  # Docker configurations
 ```
 
