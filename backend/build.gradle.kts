@@ -6,11 +6,13 @@
  */
 
 plugins {
-    kotlin("jvm") version "2.0.21" apply false
-    kotlin("plugin.serialization") version "2.0.21" apply false
+    kotlin("jvm") version "2.3.10" apply false
+    kotlin("plugin.serialization") version "2.3.10" apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
 }
+
+val junitPlatformLauncher = libs.junit.platform.launcher
 
 allprojects {
     group = "com.vaultstadio"
@@ -30,6 +32,10 @@ detekt {
 subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        dependencies.add("testRuntimeOnly", junitPlatformLauncher)
+    }
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         filter {
@@ -60,7 +66,6 @@ subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-            freeCompilerArgs.add("-Xcontext-receivers")
         }
     }
 

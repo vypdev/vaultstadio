@@ -17,7 +17,7 @@ import com.vaultstadio.infrastructure.persistence.entities.SyncConflictsTable
 import com.vaultstadio.infrastructure.persistence.entities.SyncDevicesTable
 import kotlinx.datetime.Clock
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 
 private val json = Json { ignoreUnknownKeys = true }
 
