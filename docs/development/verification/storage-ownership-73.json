@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "issue": 73,
+  "verifiedSourceCommit": "348b067df9ec4488017c78aa1338b858e98fc53f",
+  "verifiedAtUtc": "2026-10-25T15:38:30.969440+00:00",
+  "scope": "Storage ownership and atomic leaf deletion; not whole-platform readiness",
+  "backendTests": {
+    "tests": 1964,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "leafDeletionCollectedCases": [
+    "empty leaf delete and missing replay succeed()",
+    "committing child first makes a racing delete fail without cascade()",
+    "locking delete first rejects a racing child instead of cascading it()",
+    "real cascade cannot delete owned or foreign children()",
+    "SQL failure returns a typed error without changing data()"
+  ],
+  "coverage": {
+    "allBackendJvmModules": {
+      "branch": {
+        "covered": 964,
+        "missed": 4371,
+        "total": 5335,
+        "percent": 18.07
+      },
+      "line": {
+        "covered": 6358,
+        "missed": 9628,
+        "total": 15986,
+        "percent": 39.77
+      }
+    },
+    "changedPolicySources": {
+      "StorageDeletion.kt": {
+        "branch": {
+          "covered": 4,
+          "missed": 0,
+          "total": 4,
+          "percent": 100.0
+        },
+        "line": {
+          "covered": 15,
+          "missed": 0,
+          "total": 15,
+          "percent": 100.0
+        }
+      },
+      "StorageHierarchy.kt": {
+        "branch": {
+          "covered": 18,
+          "missed": 0,
+          "total": 18,
+          "percent": 100.0
+        },
+        "line": {
+          "covered": 25,
+          "missed": 0,
+          "total": 25,
+          "percent": 100.0
+        }
+      },
+      "StorageAccessPolicy.kt": {
+        "branch": {
+          "covered": 8,
+          "missed": 0,
+          "total": 8,
+          "percent": 100.0
+        },
+        "line": {
+          "covered": 8,
+          "missed": 0,
+          "total": 8,
+          "percent": 100.0
+        }
+      },
+      "StorageLeafDeletion.kt": {
+        "branch": {
+          "covered": 5,
+          "missed": 1,
+          "total": 6,
+          "percent": 83.33
+        },
+        "line": {
+          "covered": 17,
+          "missed": 0,
+          "total": 17,
+          "percent": 100.0
+        }
+      }
+    },
+    "exclusions": []
+  },
+  "coverageGateControl": {
+    "normalPolicyAndHierarchy": "PASS",
+    "unrelatedNonemptyExecutionData": "EXPECTED FAILURE: 0% line/branch coverage, minimum 100%",
+    "versionedConfigurationModifiedByControl": false
+  },
+  "checks": {
+    "allBackendTests": "PASS",
+    "detektMain": "PASS (preexisting warnings remain)",
+    "noFqn": "PASS",
+    "specificationCatalog": "PASS (16 capabilities)",
+    "actionlintCiYaml": "PASS"
+  },
+  "pending": [
+    "Remote CI and Copilot review",
+    "Native approval and normal protected-branch merge",
+    "Version/collaboration authorization, quotas, client startup and remaining audit roadmap"
+  ],
+  "postgresIntegrationTests": 58,
+  "httpProductionRouteTests": 53
+}
