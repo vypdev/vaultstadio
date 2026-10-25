@@ -60,8 +60,12 @@ Local verification of the combined candidate on JDK 17:
 - Full frontend `ktlintFormat` reports eight pre-existing file-naming/line-length
   violations in untouched common tests. No lint rule or gate is disabled, and
   unrelated formatter-only edits are excluded from this PR.
-- Both Docker images and the JRE 25 startup smoke are being verified against the
-  candidate. Their result and the remote CI status are recorded in the PR.
+- Both candidate Docker images build successfully for `linux/amd64`. The backend
+  reports JRE 25 and passes application startup and health checks against the
+  private PostgreSQL container. The frontend builds its production Web/Wasm
+  distribution natively inside the Linux builder.
+- The standalone Web/Wasm production distribution also passes on macOS. Remote
+  CI and review status remain visible on the PR rather than in this static record.
 
 Existing results from the closed source PRs are reference material and are not
 claimed as results for this combined candidate.
