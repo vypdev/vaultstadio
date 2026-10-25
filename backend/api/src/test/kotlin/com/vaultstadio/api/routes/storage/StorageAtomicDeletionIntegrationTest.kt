@@ -7,12 +7,17 @@ import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageBackendException
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import java.sql.DriverManager
+import java.sql.SQLException
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -77,6 +82,41 @@ class StorageAtomicDeletionIntegrationTest {
         assertEquals(file, assertIs<Either.Right<*>>(f.repository.findById(file.id)).value)
         assertEquals(1, f.byteFileCount())
         assertIs<Either.Right<*>>(f.repository.deleteLeaf(file.id, f.alice.id) { f.backend.delete(it.storageKey!!) })
+        assertEquals(0, f.rowCount())
+        assertEquals(0, f.byteFileCount())
+    }
+
+    @Test
+    fun `suspended content callback retains the PostgreSQL item lock`() = runBlocking<Unit> {
+        val file = f.seedStoredFile()
+        val locked = CompletableDeferred<Unit>()
+        val finish = CompletableDeferred<Unit>()
+        val deletion = async {
+            f.repository.deleteLeaf(file.id, f.alice.id) { snapshot ->
+                locked.complete(Unit)
+                finish.await()
+                f.backend.delete(snapshot.storageKey!!)
+            }
+        }
+        try {
+            withTimeout(10000) { locked.await() }
+            val failure = assertFailsWith<SQLException> {
+                DriverManager.getConnection(
+                    f.postgres.jdbcUrl,
+                    f.postgres.username,
+                    f.postgres.password,
+                ).use { connection ->
+                    connection.prepareStatement("SELECT id FROM storage_items WHERE id = ? FOR KEY SHARE NOWAIT").use {
+                        it.setString(1, file.id)
+                        it.executeQuery().close()
+                    }
+                }
+            }
+            assertEquals("55P03", failure.sqlState)
+        } finally {
+            finish.complete(Unit)
+        }
+        assertIs<Either.Right<*>>(withTimeout(10000) { deletion.await() })
         assertEquals(0, f.rowCount())
         assertEquals(0, f.byteFileCount())
     }

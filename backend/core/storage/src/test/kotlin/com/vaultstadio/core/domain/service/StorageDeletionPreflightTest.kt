@@ -10,10 +10,12 @@ import com.vaultstadio.domain.common.exception.StorageBackendException
 import com.vaultstadio.domain.storage.model.ItemType
 import io.mockk.coEvery
 import io.mockk.coVerify
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.test.assertIs
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class StorageDeletionPreflightTest {
     @Test
@@ -75,5 +77,23 @@ class StorageDeletionPreflightTest {
         assertIs<Either.Right<*>>(f.service.deleteItem("parent", ACTOR))
         coVerify(exactly = 0) { f.backend.delete("old-key") }
         coVerify(exactly = 1) { f.events.publish(match<FileEvent.Deleted> { it.item == current }) }
+    }
+
+    @Test
+    fun `suspended provider must finish before publishing successful deletion`() = runTest {
+        val f = StorageAuthorizationFixture()
+        val file = item(type = ItemType.FILE).copy(storageKey = "key")
+        var completed = false
+        coEvery { f.repository.findById("parent") } returns file.right()
+        f.allowLeafDeletion(file)
+        coEvery { f.backend.delete("key") } coAnswers {
+            delay(10)
+            completed = true
+            Unit.right()
+        }
+        coEvery { f.events.publish(any()) } coAnswers { assertTrue(completed) }
+        assertIs<Either.Right<*>>(f.service.deleteItem("parent", ACTOR))
+        assertTrue(completed)
+        coVerify(exactly = 1) { f.events.publish(any()) }
     }
 }
