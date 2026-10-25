@@ -723,3 +723,7 @@ Coverage is measured only for code executed by `composeApp` desktopTest. The fol
 - [AI_CODING_GUIDELINES.md](AI_CODING_GUIDELINES.md) – Unit tests for non-trivial logic
 - [codecov.yml](../../codecov.yml) – Codecov configuration
 - [.github/workflows/ci.yml](../../.github/workflows/ci.yml) – CI test and coverage steps
+
+## Audit checkpoint — 2026-10-25
+
+Las mejoras locales de este registro se preservan completas en `eea796b`. La medición agregada actual está en [REPOSITORY_AUDIT_2026-10-25.md](REPOSITORY_AUDIT_2026-10-25.md): backend 37,68 % de líneas / 15,94 % de ramas; frontend JVM/desktop 19,32 % / 2,81 %. Pasan 1.762 tests backend y 1.130 frontend, pero varios recorridos reales fallan y la CI omite 517 de esos casos. Consultar el [roadmap](AUDIT_ROADMAP_2026-10-25.md) para el orden de corrección; los porcentajes parciales históricos no acreditan cobertura del repositorio completo.

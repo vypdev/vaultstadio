@@ -88,3 +88,7 @@ changes the stated contract or evidence status.
   contract tests, or maintainer decisions.
 - Never mark an SDD `Implemented` solely because a route, class, or mocked test exists. Distinguish
   modeled, unit-tested, integration-tested, and real external verification states.
+
+## Audit checkpoint — 2026-10-25
+
+La [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md) añade ejecución completa de suites, cobertura agregada y pruebas reales de API, arranque y recuperación sobre master `615f11a…`. Los [resultados](../docs/development/audits/2026-10-25/verification-summary.json) incluyen fallos de aceptación y un [roadmap priorizado](../docs/development/AUDIT_ROADMAP_2026-10-25.md). Los estados y la verificación original se conservan: un catálogo válido no certifica que la aplicación sea operativa.

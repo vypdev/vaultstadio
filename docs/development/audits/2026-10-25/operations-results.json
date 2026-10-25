@@ -1,0 +1,56 @@
+{
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "database and content snapshot created",
+      "passed": true
+    },
+    {
+      "name": "liveness survives database outage",
+      "status": 200,
+      "passed": true,
+      "elapsed_seconds": 0.03,
+      "body": {
+        "status": "healthy",
+        "version": "1.0.0",
+        "uptime": 795386
+      }
+    },
+    {
+      "name": "readiness fails during database outage",
+      "passed": false,
+      "error": "timed out"
+    },
+    {
+      "name": "readiness recovers after database restart",
+      "status": 200,
+      "passed": true,
+      "elapsed_seconds": 0.03,
+      "body": {
+        "ready": true,
+        "checks": {
+          "database": {
+            "status": "healthy",
+            "message": "Connected, 6 users",
+            "latencyMs": 13
+          },
+          "storage": {
+            "status": "healthy",
+            "message": "Storage backend available",
+            "latencyMs": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "restored database row counts match",
+      "passed": true,
+      "counts": {
+        "vaultstadio_audit": "6|20|21",
+        "vaultstadio_restore_audit": "6|20|21"
+      }
+    }
+  ]
+}

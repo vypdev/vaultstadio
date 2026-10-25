@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.
-- Related issues/PRs: none recorded
+- Related issues/PRs: #71
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -43,6 +43,12 @@ Backend has share domain/core/application modules and share routes; frontend has
 - **Known debt and limitations:** documentation/source mismatches, incomplete external verification, and explicitly named unsupported operations remain debt until closed.
 - **Unknown rationale:** historic reasons for the current structure are unknown unless a source reference states them.
 - **Proposed improvements:** any future change is listed in the implementation sequence and must not be read as implemented behavior.
+
+### 2.5 Audit checkpoint — 2026-10-25
+
+Crear, descargar y revocar un enlace simple funcionan; A05 muestra que su información pública y la del enlace protegido con contraseña correcta no se serializan. No declarar completo el recorrido de sharing.
+
+Evidencia parcial de producto en master `615f11adf5272bd1d4626f9571b31e691eeee062`: [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md), [resultados saneados](../docs/development/audits/2026-10-25/verification-summary.json) y [roadmap](../docs/development/AUDIT_ROADMAP_2026-10-25.md), issue #71. Este checkpoint no modifica el estado declarado ni sustituye la verificación original de la baseline.
 
 ## 3. Actors, surfaces, and terminology
 

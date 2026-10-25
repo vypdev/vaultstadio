@@ -27,3 +27,7 @@ Generated from `specs/catalog.json`. The JSON catalog is authoritative.
 - `As-built baseline` records observed behavior and known debt; it is not a completeness claim.
 - `Proposed` documents contain open decisions and cannot be treated as implemented.
 - Evidence paths are checked by `python3 scripts/validate-specification-catalog.py`.
+
+## Audit checkpoint — 2026-10-25
+
+La [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md) añade ejecución completa de suites, cobertura agregada y pruebas reales de API, arranque y recuperación sobre master `615f11a…`. Los [resultados](../docs/development/audits/2026-10-25/verification-summary.json) incluyen fallos de aceptación y un [roadmap priorizado](../docs/development/AUDIT_ROADMAP_2026-10-25.md). Los estados y la verificación original se conservan: un catálogo válido no certifica que la aplicación sea operativa.

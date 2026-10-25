@@ -20,7 +20,9 @@
         "backend/settings.gradle.kts",
         "frontend/settings.gradle.kts",
         "docs/architecture/ARCHITECTURE.md",
-        "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md"
+        "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -41,7 +43,9 @@
         "frontend/build.gradle.kts",
         "docs/architecture/ARCHITECTURE.md",
         "docs/architecture/CLEAN_ARCHITECTURE_REVIEW.md",
-        "docs/architecture/FRONTEND_ARCHITECTURE.md"
+        "docs/architecture/FRONTEND_ARCHITECTURE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -60,7 +64,9 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Swagger.kt",
         "backend/api/src/main/resources/openapi/documentation.yaml",
         "docs/api/API.md",
-        "backend/api/src/test/kotlin/com/vaultstadio/api/routes"
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -80,7 +86,9 @@
         "backend/core/auth",
         "backend/application/auth",
         "backend/api/src/test/kotlin/com/vaultstadio/api/config/SecurityTest.kt",
-        "docs/operations/SECURITY.md"
+        "docs/operations/SECURITY.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -102,7 +110,9 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/AppConfig.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
         "docs/operations/STORAGE_CONFIGURATION.md",
-        "docs/operations/BACKUP_RESTORE.md"
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -122,7 +132,9 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/FolderUploadRoutes.kt",
         "backend/core/common/src/main/kotlin/com/vaultstadio/core/domain/service/MultipartUploadManager.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/WebDAVRoutes.kt",
-        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/S3Routes.kt"
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/S3Routes.kt",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -143,7 +155,9 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareRoutes.kt",
         "frontend/feature/shares",
         "frontend/feature/sharedwithme",
-        "docs/api/API.md"
+        "docs/api/API.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -163,7 +177,9 @@
         "backend/application/version",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt",
         "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version",
-        "docs/operations/BACKUP_RESTORE.md"
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -186,7 +202,9 @@
         "backend/api/src/test/kotlin/com/vaultstadio/api/routes/SyncRoutesTest.kt",
         "frontend/domain/sync",
         "frontend/data/sync",
-        "frontend/feature/sync"
+        "frontend/feature/sync",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -207,7 +225,9 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocket.kt",
         "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationService.kt",
         "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationOT.kt",
-        "frontend/feature/collaboration"
+        "frontend/feature/collaboration",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -227,7 +247,9 @@
         "backend/core/federation/src/main/kotlin/com/vaultstadio/core/domain/service/FederationService.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/federation/FederationRoutes.kt",
         "docs/api/PHASE6_ADVANCED_FEATURES.md",
-        "docs/operations/SECURITY.md"
+        "docs/operations/SECURITY.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -248,7 +270,9 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/plugins/PluginManager.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/plugin/PluginRoutes.kt",
         "docs/plugins/PLUGINS.md",
-        "docs/plugins/PLUGIN_DEVELOPMENT.md"
+        "docs/plugins/PLUGIN_DEVELOPMENT.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -270,7 +294,9 @@
         "backend/plugins/fulltext-search",
         "backend/plugins/ai-classification",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/ai/AIRoutes.kt",
-        "docs/plugins/AI_INTEGRATION.md"
+        "docs/plugins/AI_INTEGRATION.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -292,7 +318,9 @@
         "frontend/feature",
         "docs/architecture/FRONTEND_ARCHITECTURE.md",
         "docs/architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md",
-        "docs/frontend/FRONTEND_TESTING.md"
+        "docs/frontend/FRONTEND_TESTING.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -318,7 +346,9 @@
         "helm/vaultstadio/Chart.yaml",
         "helm/vaultstadio/values.yaml",
         "docs/operations/DEPLOYMENT.md",
-        "docs/operations/BACKUP_RESTORE.md"
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     },
@@ -340,7 +370,9 @@
         "backend/core/federation",
         "backend/plugins",
         "docs/plugins/AI_INTEGRATION.md",
-        ".github/workflows/security.yml"
+        ".github/workflows/security.yml",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
       "openDecisions": "see the explicit decisions and limitations in the SDD"
     }

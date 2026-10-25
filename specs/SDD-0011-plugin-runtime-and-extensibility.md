@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define plugin discovery, lifecycle, API, endpoint exposure, configuration, isolation, permissions, and failure containment.
-- Related issues/PRs: none recorded
+- Related issues/PRs: #71
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -43,6 +43,12 @@ The repository has `plugins-api`, plugin modules, `PluginManager`, plugin routes
 - **Known debt and limitations:** documentation/source mismatches, incomplete external verification, and explicitly named unsupported operations remain debt until closed.
 - **Unknown rationale:** historic reasons for the current structure are unknown unless a source reference states them.
 - **Proposed improvements:** any future change is listed in the implementation sequence and must not be read as implemented behavior.
+
+### 2.5 Audit checkpoint — 2026-10-25
+
+Pasan los tests de los cuatro plugins. La imagen ejecutada informa una lista vacía; la carga de JARs y sus efectos en el artefacto publicado requieren un smoke específico antes de acreditar la capacidad desplegada.
+
+Evidencia parcial de producto en master `615f11adf5272bd1d4626f9571b31e691eeee062`: [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md), [resultados saneados](../docs/development/audits/2026-10-25/verification-summary.json) y [roadmap](../docs/development/AUDIT_ROADMAP_2026-10-25.md), issue #71. Este checkpoint no modifica el estado declarado ni sustituye la verificación original de la baseline.
 
 ## 3. Actors, surfaces, and terminology
 

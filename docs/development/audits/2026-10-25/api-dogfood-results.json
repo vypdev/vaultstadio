@@ -1,0 +1,1189 @@
+{
+  "run": "8cb4177d90",
+  "base_url": "http://localhost:8080",
+  "fixture_sha256": "ef2d0736aa3e96a49452a3c484dd3a23e59e4f832a62d339075b9f6a69cc8281",
+  "total": 81,
+  "passed": 73,
+  "failed": 8,
+  "results": [
+    {
+      "name": "liveness",
+      "method": "GET",
+      "path": "/health",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 73,
+      "error": null,
+      "elapsed_ms": 44.5
+    },
+    {
+      "name": "readiness database and storage",
+      "method": "GET",
+      "path": "/ready",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 326,
+      "error": null,
+      "elapsed_ms": 62.0
+    },
+    {
+      "name": "anonymous folder denied",
+      "method": "GET",
+      "path": "/api/v1/storage/folder",
+      "status": 401,
+      "expected": [
+        401
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "error": null,
+      "elapsed_ms": 25.1
+    },
+    {
+      "name": "invalid bearer denied",
+      "method": "GET",
+      "path": "/api/v1/storage/folder",
+      "status": 401,
+      "expected": [
+        401
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "error": null,
+      "elapsed_ms": 14.3
+    },
+    {
+      "name": "invalid registration email rejected",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "status": 400,
+      "expected": [
+        400,
+        422
+      ],
+      "passed": true,
+      "response_bytes": 196,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Validation failed for field: Invalid email format",
+        "details": null
+      },
+      "elapsed_ms": 73.0
+    },
+    {
+      "name": "weak password rejected",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "status": 400,
+      "expected": [
+        400,
+        422
+      ],
+      "passed": true,
+      "response_bytes": 239,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Validation failed for field: Password must be at least 8 characters with letters and numbers",
+        "details": null
+      },
+      "elapsed_ms": 15.3
+    },
+    {
+      "name": "register a",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 339,
+      "error": null,
+      "elapsed_ms": 505.8
+    },
+    {
+      "name": "login a",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 582,
+      "error": null,
+      "elapsed_ms": 415.9
+    },
+    {
+      "name": "register b",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 339,
+      "error": null,
+      "elapsed_ms": 383.0
+    },
+    {
+      "name": "login b",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 582,
+      "error": null,
+      "elapsed_ms": 395.1
+    },
+    {
+      "name": "register ui",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 341,
+      "error": null,
+      "elapsed_ms": 387.4
+    },
+    {
+      "name": "login ui",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 584,
+      "error": null,
+      "elapsed_ms": 388.9
+    },
+    {
+      "name": "duplicate registration rejected",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "status": 400,
+      "expected": [
+        400,
+        409,
+        422
+      ],
+      "passed": true,
+      "response_bytes": 200,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Validation failed for field: Email already registered",
+        "details": null
+      },
+      "elapsed_ms": 18.4
+    },
+    {
+      "name": "bad login rejected",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 401,
+      "expected": [
+        401
+      ],
+      "passed": true,
+      "response_bytes": 179,
+      "error": {
+        "code": "AUTHENTICATION_REQUIRED",
+        "message": "Invalid email or password",
+        "details": null
+      },
+      "elapsed_ms": 382.4
+    },
+    {
+      "name": "current user",
+      "method": "GET",
+      "path": "/api/v1/user/me",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 336,
+      "error": null,
+      "elapsed_ms": 27.9
+    },
+    {
+      "name": "auth alias current user",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 336,
+      "error": null,
+      "elapsed_ms": 20.2
+    },
+    {
+      "name": "quota",
+      "method": "GET",
+      "path": "/api/v1/user/me/quota",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 242,
+      "error": null,
+      "elapsed_ms": 34.1
+    },
+    {
+      "name": "non-admin users denied",
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "passed": true,
+      "response_bytes": 165,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Admin access required",
+        "details": null
+      },
+      "elapsed_ms": 24.4
+    },
+    {
+      "name": "non-admin statistics denied",
+      "method": "GET",
+      "path": "/api/v1/admin/statistics",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "passed": true,
+      "response_bytes": 165,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Admin access required",
+        "details": null
+      },
+      "elapsed_ms": 24.5
+    },
+    {
+      "name": "create folder",
+      "method": "POST",
+      "path": "/api/v1/storage/folder",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 511,
+      "error": null,
+      "elapsed_ms": 35.6
+    },
+    {
+      "name": "path traversal folder rejected",
+      "method": "POST",
+      "path": "/api/v1/storage/folder",
+      "status": 201,
+      "expected": [
+        400,
+        422
+      ],
+      "passed": false,
+      "response_bytes": 531,
+      "error": null,
+      "elapsed_ms": 37.5
+    },
+    {
+      "name": "empty folder name rejected",
+      "method": "POST",
+      "path": "/api/v1/storage/folder",
+      "status": 400,
+      "expected": [
+        400,
+        422
+      ],
+      "passed": true,
+      "response_bytes": 203,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Validation failed for field: Folder name cannot be empty",
+        "details": null
+      },
+      "elapsed_ms": 28.2
+    },
+    {
+      "name": "upload audit-8cb4177d90.txt",
+      "method": "POST",
+      "path": "/api/v1/storage/upload",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 577,
+      "error": null,
+      "elapsed_ms": 109.0
+    },
+    {
+      "name": "get uploaded item",
+      "method": "GET",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 571,
+      "error": null,
+      "elapsed_ms": 28.1
+    },
+    {
+      "name": "download byte identity",
+      "method": "GET",
+      "path": "/api/v1/storage/download/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 38,
+      "error": null,
+      "elapsed_ms": 46.6
+    },
+    {
+      "name": "cross-user item denied",
+      "method": "GET",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 403,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": true,
+      "response_bytes": 181,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Access denied: requires Access denied",
+        "details": null
+      },
+      "elapsed_ms": 28.7
+    },
+    {
+      "name": "cross-user download denied",
+      "method": "GET",
+      "path": "/api/v1/storage/download/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 403,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": true,
+      "response_bytes": 181,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Access denied: requires Access denied",
+        "details": null
+      },
+      "elapsed_ms": 20.0
+    },
+    {
+      "name": "cross-user rename denied",
+      "method": "PATCH",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/rename",
+      "status": 403,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": true,
+      "response_bytes": 181,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Access denied: requires Access denied",
+        "details": null
+      },
+      "elapsed_ms": 30.8
+    },
+    {
+      "name": "cross-user folder upload denied",
+      "method": "POST",
+      "path": "/api/v1/storage/folder",
+      "status": 201,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": false,
+      "response_bytes": 560,
+      "error": null,
+      "elapsed_ms": 38.5
+    },
+    {
+      "name": "breadcrumbs",
+      "method": "GET",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/breadcrumbs",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 577,
+      "error": null,
+      "elapsed_ms": 37.9
+    },
+    {
+      "name": "rename file",
+      "method": "PATCH",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/rename",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 578,
+      "error": null,
+      "elapsed_ms": 24.1
+    },
+    {
+      "name": "move file root",
+      "method": "POST",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/move",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 527,
+      "error": null,
+      "elapsed_ms": 24.3
+    },
+    {
+      "name": "copy file",
+      "method": "POST",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/copy",
+      "status": 200,
+      "expected": [
+        200,
+        201
+      ],
+      "passed": true,
+      "response_bytes": 579,
+      "error": null,
+      "elapsed_ms": 66.8
+    },
+    {
+      "name": "star file",
+      "method": "POST",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/star",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 526,
+      "error": null,
+      "elapsed_ms": 22.5
+    },
+    {
+      "name": "list starred",
+      "method": "GET",
+      "path": "/api/v1/storage/starred",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 595,
+      "error": null,
+      "elapsed_ms": 19.3
+    },
+    {
+      "name": "list recent",
+      "method": "GET",
+      "path": "/api/v1/storage/recent",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 2228,
+      "error": null,
+      "elapsed_ms": 16.3
+    },
+    {
+      "name": "create public share",
+      "method": "POST",
+      "path": "/api/v1/shares",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 622,
+      "error": null,
+      "elapsed_ms": 57.2
+    },
+    {
+      "name": "public share info",
+      "method": "GET",
+      "path": "/api/v1/share/[redacted]",
+      "status": 400,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 307,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Serializer for class 'ApiResponse' is not found.\nPlease ensure that class is marked as '@Serializable' and that the serialization compiler plugin is applied.\n",
+        "details": null
+      },
+      "elapsed_ms": 40.5
+    },
+    {
+      "name": "public share download byte identity",
+      "method": "GET",
+      "path": "/api/v1/share/[redacted]/download",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 38,
+      "error": null,
+      "elapsed_ms": 24.4
+    },
+    {
+      "name": "cross-user revoke denied",
+      "method": "DELETE",
+      "path": "/api/v1/shares/bb24b6a4-853d-49c1-90e9-f84c13279a27",
+      "status": 403,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": true,
+      "response_bytes": 206,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Access denied: requires Only the creator can delete this share",
+        "details": null
+      },
+      "elapsed_ms": 26.4
+    },
+    {
+      "name": "owner revoke share",
+      "method": "DELETE",
+      "path": "/api/v1/shares/bb24b6a4-853d-49c1-90e9-f84c13279a27",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 60,
+      "error": null,
+      "elapsed_ms": 27.5
+    },
+    {
+      "name": "revoked share denied",
+      "method": "GET",
+      "path": "/api/v1/share/[redacted]",
+      "status": 404,
+      "expected": [
+        403,
+        404,
+        410
+      ],
+      "passed": true,
+      "response_bytes": 176,
+      "error": {
+        "code": "ITEM_NOT_FOUND",
+        "message": "Item not found: Share not found",
+        "details": null
+      },
+      "elapsed_ms": 15.2
+    },
+    {
+      "name": "create password share",
+      "method": "POST",
+      "path": "/api/v1/shares",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 621,
+      "error": null,
+      "elapsed_ms": 397.1
+    },
+    {
+      "name": "password share missing password denied",
+      "method": "GET",
+      "path": "/api/v1/share/[redacted]",
+      "status": 403,
+      "expected": [
+        401,
+        403
+      ],
+      "passed": true,
+      "response_bytes": 185,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Access denied: requires Password required",
+        "details": null
+      },
+      "elapsed_ms": 13.0
+    },
+    {
+      "name": "password share wrong password denied",
+      "method": "GET",
+      "path": "/api/v1/share/[redacted]",
+      "status": 403,
+      "expected": [
+        401,
+        403
+      ],
+      "passed": true,
+      "response_bytes": 184,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Access denied: requires Invalid password",
+        "details": null
+      },
+      "elapsed_ms": 373.3
+    },
+    {
+      "name": "password share correct password",
+      "method": "GET",
+      "path": "/api/v1/share/[redacted]",
+      "status": 400,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 307,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Serializer for class 'ApiResponse' is not found.\nPlease ensure that class is marked as '@Serializable' and that the serialization compiler plugin is applied.\n",
+        "details": null
+      },
+      "elapsed_ms": 385.0
+    },
+    {
+      "name": "version list",
+      "method": "GET",
+      "path": "/api/v1/versions/item/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 162,
+      "error": null,
+      "elapsed_ms": 10.9
+    },
+    {
+      "name": "cross-user version list denied",
+      "method": "GET",
+      "path": "/api/v1/versions/item/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 200,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": false,
+      "response_bytes": 162,
+      "error": null,
+      "elapsed_ms": 11.9
+    },
+    {
+      "name": "join collaboration owner",
+      "method": "POST",
+      "path": "/api/v1/collaboration/sessions/join",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 626,
+      "error": null,
+      "elapsed_ms": 53.9
+    },
+    {
+      "name": "cross-user collaboration join denied",
+      "method": "POST",
+      "path": "/api/v1/collaboration/sessions/join",
+      "status": 201,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": false,
+      "response_bytes": 935,
+      "error": null,
+      "elapsed_ms": 32.4
+    },
+    {
+      "name": "cross-user document denied",
+      "method": "GET",
+      "path": "/api/v1/collaboration/documents/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 404,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": true,
+      "response_bytes": 158,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource not found",
+        "details": null
+      },
+      "elapsed_ms": 26.0
+    },
+    {
+      "name": "trash file",
+      "method": "DELETE",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 525,
+      "error": null,
+      "elapsed_ms": 24.6
+    },
+    {
+      "name": "trash listing contains file",
+      "method": "GET",
+      "path": "/api/v1/storage/trash",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 594,
+      "error": null,
+      "elapsed_ms": 15.3
+    },
+    {
+      "name": "restore file",
+      "method": "POST",
+      "path": "/api/v1/storage/item/0cf5a08c-71f4-4eab-a263-2303e23d7278/restore",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 526,
+      "error": null,
+      "elapsed_ms": 20.8
+    },
+    {
+      "name": "restored bytes unchanged",
+      "method": "GET",
+      "path": "/api/v1/storage/download/0cf5a08c-71f4-4eab-a263-2303e23d7278",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 38,
+      "error": null,
+      "elapsed_ms": 10.3
+    },
+    {
+      "name": "list root",
+      "method": "GET",
+      "path": "/api/v1/storage/folder",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 1969,
+      "error": null,
+      "elapsed_ms": 28.1
+    },
+    {
+      "name": "invalid sort rejected as client error",
+      "method": "GET",
+      "path": "/api/v1/storage/folder",
+      "status": 400,
+      "expected": [
+        400,
+        422
+      ],
+      "passed": true,
+      "response_bytes": 223,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "No enum constant com.vaultstadio.domain.storage.repository.SortField.INVALID",
+        "details": null
+      },
+      "elapsed_ms": 21.1
+    },
+    {
+      "name": "negative page limit rejected",
+      "method": "GET",
+      "path": "/api/v1/storage/folder",
+      "status": 500,
+      "expected": [
+        400,
+        422
+      ],
+      "passed": false,
+      "response_bytes": 174,
+      "error": {
+        "code": "DATABASE_ERROR",
+        "message": "Failed to query storage items",
+        "details": null
+      },
+      "elapsed_ms": 37.0
+    },
+    {
+      "name": "register sync device",
+      "method": "POST",
+      "path": "/api/v1/sync/devices",
+      "status": 201,
+      "expected": [
+        200,
+        201
+      ],
+      "passed": true,
+      "response_bytes": 338,
+      "error": null,
+      "elapsed_ms": 26.7
+    },
+    {
+      "name": "list sync devices",
+      "method": "GET",
+      "path": "/api/v1/sync/devices",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 383,
+      "error": null,
+      "elapsed_ms": 11.7
+    },
+    {
+      "name": "sync pull",
+      "method": "POST",
+      "path": "/api/v1/sync/pull",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 215,
+      "error": null,
+      "elapsed_ms": 39.8
+    },
+    {
+      "name": "pending sync conflicts",
+      "method": "GET",
+      "path": "/api/v1/sync/conflicts",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 58,
+      "error": null,
+      "elapsed_ms": 19.4
+    },
+    {
+      "name": "search own file",
+      "method": "GET",
+      "path": "/api/v1/search",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 2611,
+      "error": null,
+      "elapsed_ms": 13.0
+    },
+    {
+      "name": "activity feed",
+      "method": "GET",
+      "path": "/api/v1/activity",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 4859,
+      "error": null,
+      "elapsed_ms": 16.7
+    },
+    {
+      "name": "plugins list",
+      "method": "GET",
+      "path": "/api/v1/plugins",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 58,
+      "error": null,
+      "elapsed_ms": 16.9
+    },
+    {
+      "name": "AI providers non-admin denied (no external calls)",
+      "method": "GET",
+      "path": "/api/v1/ai/providers",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "passed": true,
+      "response_bytes": 161,
+      "error": {
+        "code": "FORBIDDEN",
+        "message": "Admin access required",
+        "details": null
+      },
+      "elapsed_ms": 8.3
+    },
+    {
+      "name": "federation liveness",
+      "method": "GET",
+      "path": "/api/v1/federation/health",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 77,
+      "error": null,
+      "elapsed_ms": 7.6
+    },
+    {
+      "name": "S3 absent under LOCAL",
+      "method": "GET",
+      "path": "/s3",
+      "status": 404,
+      "expected": [
+        404
+      ],
+      "passed": true,
+      "response_bytes": 158,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource not found",
+        "details": null
+      },
+      "elapsed_ms": 9.4
+    },
+    {
+      "name": "WebDAV PROPFIND owner",
+      "method": "PROPFIND",
+      "path": "/webdav/",
+      "status": 207,
+      "expected": [
+        207
+      ],
+      "passed": true,
+      "response_bytes": 3071,
+      "error": null,
+      "elapsed_ms": 401.2
+    },
+    {
+      "name": "chunk session init",
+      "method": "POST",
+      "path": "/api/v1/storage/upload/init",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 178,
+      "error": null,
+      "elapsed_ms": 32.1
+    },
+    {
+      "name": "incomplete chunk completion rejected",
+      "method": "POST",
+      "path": "/api/v1/storage/upload/f7f72550-a83f-4f4e-9ac8-aff5093a3837/complete",
+      "status": 400,
+      "expected": [
+        400,
+        409,
+        422
+      ],
+      "passed": true,
+      "response_bytes": 166,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Missing chunks: [0]",
+        "details": null
+      },
+      "elapsed_ms": 17.5
+    },
+    {
+      "name": "cross-user chunk status denied",
+      "method": "GET",
+      "path": "/api/v1/storage/upload/f7f72550-a83f-4f4e-9ac8-aff5093a3837/status",
+      "status": 404,
+      "expected": [
+        403,
+        404
+      ],
+      "passed": true,
+      "response_bytes": 158,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource not found",
+        "details": null
+      },
+      "elapsed_ms": 17.2
+    },
+    {
+      "name": "chunk upload",
+      "method": "POST",
+      "path": "/api/v1/storage/upload/f7f72550-a83f-4f4e-9ac8-aff5093a3837/chunk/0",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 360,
+      "error": null,
+      "elapsed_ms": 24.6
+    },
+    {
+      "name": "chunk complete",
+      "method": "POST",
+      "path": "/api/v1/storage/upload/f7f72550-a83f-4f4e-9ac8-aff5093a3837/complete",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 526,
+      "error": null,
+      "elapsed_ms": 22.2
+    },
+    {
+      "name": "chunk assembled byte identity",
+      "method": "GET",
+      "path": "/api/v1/storage/download/25bb2367-b04d-429a-b68b-9ed1e143e257",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 38,
+      "error": null,
+      "elapsed_ms": 14.4
+    },
+    {
+      "name": "duplicate chunk completion idempotent",
+      "method": "POST",
+      "path": "/api/v1/storage/upload/f7f72550-a83f-4f4e-9ac8-aff5093a3837/complete",
+      "status": 404,
+      "expected": [
+        200,
+        201
+      ],
+      "passed": false,
+      "response_bytes": 169,
+      "error": {
+        "code": "ITEM_NOT_FOUND",
+        "message": "Upload session not found",
+        "details": null
+      },
+      "elapsed_ms": 20.0
+    },
+    {
+      "name": "refresh rotates token",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 582,
+      "error": null,
+      "elapsed_ms": 27.0
+    },
+    {
+      "name": "old refresh token rejected",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 401,
+      "expected": [
+        401
+      ],
+      "passed": true,
+      "response_bytes": 175,
+      "error": {
+        "code": "AUTHENTICATION_REQUIRED",
+        "message": "Invalid refresh token",
+        "details": null
+      },
+      "elapsed_ms": 9.1
+    },
+    {
+      "name": "old access token rejected after rotation",
+      "method": "GET",
+      "path": "/api/v1/user/me",
+      "status": 401,
+      "expected": [
+        401
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "error": null,
+      "elapsed_ms": 4.9
+    },
+    {
+      "name": "logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 60,
+      "error": null,
+      "elapsed_ms": 10.0
+    },
+    {
+      "name": "logged out token denied",
+      "method": "GET",
+      "path": "/api/v1/user/me",
+      "status": 401,
+      "expected": [
+        401
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "error": null,
+      "elapsed_ms": 6.2
+    }
+  ]
+}
