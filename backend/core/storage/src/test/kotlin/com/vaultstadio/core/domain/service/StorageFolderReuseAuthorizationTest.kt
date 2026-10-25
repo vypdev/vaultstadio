@@ -29,7 +29,13 @@ class StorageFolderReuseAuthorizationTest {
                 }
                 coEvery { f.repository.findByPath("/child", ACTOR) } returns existing.right()
                 val error = assertIs<Either.Left<*>>(f.service.getOrCreateFolder("child", null, ACTOR)).value
-                if (invalid == "foreign") assertIs<AuthorizationException>(error) else assertIs<ValidationException>(error)
+                if (invalid ==
+                    "foreign"
+                ) {
+                    assertIs<AuthorizationException>(error)
+                } else {
+                    assertIs<ValidationException>(error)
+                }
                 f.assertNoEffects()
             }
         }

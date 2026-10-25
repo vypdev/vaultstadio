@@ -83,12 +83,14 @@ class StorageHierarchyTest {
             val f = StorageAuthorizationFixture()
             for (index in 0 until depth) {
                 coEvery { f.repository.findById("p$index") } returns item(
-                    id = "p$index", parentId = if (index + 1 < depth) "p${index + 1}" else null,
+                    id = "p$index",
+                    parentId = if (index + 1 < depth) "p${index + 1}" else null,
                 ).right()
             }
             val result = ownedParentPath(f.repository, "p0", ACTOR)
-            if (depth == 128) assertEquals("/p0", assertIs<Either.Right<*>>(result).value)
-            else {
+            if (depth == 128) {
+                assertEquals("/p0", assertIs<Either.Right<*>>(result).value)
+            } else {
                 assertIs<ValidationException>(assertIs<Either.Left<*>>(result).value)
                 coVerify(exactly = 0) { f.repository.findById("p128") }
             }

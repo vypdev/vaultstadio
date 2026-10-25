@@ -27,7 +27,8 @@ class StorageParentAuthorizationTest {
                 runTest {
                     val f = StorageAuthorizationFixture()
                     f.source(parentId = "parent")
-                    coEvery { f.repository.findById("parent") } returns item(owner = FOREIGN, visibility = visibility).right()
+                    coEvery { f.repository.findById("parent") } returns
+                        item(owner = FOREIGN, visibility = visibility).right()
                     assertIs<AuthorizationException>(assertIs<Either.Left<*>>(f.parentWrite(operation)).value)
                     f.assertNoNameLookup()
                     f.assertNoEffects()
@@ -69,7 +70,8 @@ class StorageParentAuthorizationTest {
             runTest {
                 val f = StorageAuthorizationFixture()
                 f.source(parentId = "parent")
-                coEvery { f.repository.findById("parent") } returns item(owner = FOREIGN, type = ItemType.FILE, trashed = true).right()
+                coEvery { f.repository.findById("parent") } returns
+                    item(owner = FOREIGN, type = ItemType.FILE, trashed = true).right()
                 val error = assertIs<AuthorizationException>(assertIs<Either.Left<*>>(f.parentWrite(operation)).value)
                 assertEquals("Access denied", error.message)
                 f.assertNoEffects()

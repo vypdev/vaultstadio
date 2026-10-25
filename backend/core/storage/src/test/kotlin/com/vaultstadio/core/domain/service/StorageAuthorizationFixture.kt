@@ -29,7 +29,9 @@ internal class StorageAuthorizationFixture {
     suspend fun parentWrite(operation: String): Either<StorageException, *> = when (operation) {
         "create" -> service.createFolder(CreateFolderInput("child", "parent", ACTOR))
         "get-or-create" -> service.getOrCreateFolder("child", "parent", ACTOR)
-        "upload" -> service.uploadFile(UploadFileInput("child", "parent", ACTOR, "text/plain", 1, byteArrayOf(1).inputStream()))
+        "upload" -> service.uploadFile(
+            UploadFileInput("child", "parent", ACTOR, "text/plain", 1, byteArrayOf(1).inputStream()),
+        )
         "move" -> service.moveItem(MoveItemInput("source", "parent", userId = ACTOR))
         "copy" -> service.copyItem(CopyItemInput("source", "parent", userId = ACTOR))
         "restore" -> service.restoreItem("source", ACTOR)

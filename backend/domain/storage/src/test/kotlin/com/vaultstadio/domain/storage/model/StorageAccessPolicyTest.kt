@@ -19,9 +19,14 @@ class StorageAccessPolicyTest {
                         DynamicTest.dynamicTest("$visibility owner=$owner $type trashed=$trashed active=$active") {
                             val now = Clock.System.now()
                             val item = StorageItem(
-                                name = "test", path = "/test", ownerId = if (owner) "actor" else "foreign",
-                                type = type, visibility = visibility, isTrashed = trashed,
-                                createdAt = now, updatedAt = now,
+                                name = "test",
+                                path = "/test",
+                                ownerId = if (owner) "actor" else "foreign",
+                                type = type,
+                                visibility = visibility,
+                                isTrashed = trashed,
+                                createdAt = now,
+                                updatedAt = now,
                             )
                             val result = StorageAccessPolicy.requireFolder(item, "actor", active)
                             when {

@@ -25,15 +25,20 @@ import kotlin.test.assertTrue
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StorageLeafDeletionIntegrationTest {
     private val f = StorageIntegrationFixture()
+
     @BeforeAll fun start() = f.start()
+
     @AfterAll fun close() = f.close()
+
     @BeforeEach fun reset() = f.reset()
 
     @Test
     fun `real cascade cannot delete owned or foreign children`() = runBlocking<Unit> {
         connection().use { connection ->
             connection.createStatement().use { statement ->
-                statement.executeQuery("SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname = 'fk_storage_items_parent'").use {
+                statement.executeQuery(
+                    "SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname = 'fk_storage_items_parent'",
+                ).use {
                     assertTrue(it.next())
                     assertTrue(it.getString(1).contains("ON DELETE CASCADE"))
                 }
@@ -85,11 +90,15 @@ class StorageLeafDeletionIntegrationTest {
         connection().use { guard ->
             guard.createStatement().use { statement ->
                 statement.execute("SELECT pg_advisory_lock(730001)")
-                statement.execute("""
+                statement.execute(
+                    """
                     CREATE FUNCTION hold_leaf_delete() RETURNS trigger LANGUAGE plpgsql AS ${'$'}${'$'}
                     BEGIN PERFORM pg_advisory_xact_lock(730001); RETURN OLD; END ${'$'}${'$'}
-                """.trimIndent())
-                statement.execute("CREATE TRIGGER hold_leaf_delete BEFORE DELETE ON storage_items FOR EACH ROW EXECUTE FUNCTION hold_leaf_delete()")
+                    """.trimIndent(),
+                )
+                statement.execute(
+                    "CREATE TRIGGER hold_leaf_delete BEFORE DELETE ON storage_items FOR EACH ROW EXECUTE FUNCTION hold_leaf_delete()",
+                )
             }
             try {
                 val deletion = async(Dispatchers.IO) { f.repository.delete(parent.id) }
@@ -137,14 +146,20 @@ class StorageLeafDeletionIntegrationTest {
         assertEquals(parent, assertIs<Either.Right<*>>(f.repository.findById(parent.id)).value)
     }
 
-    private fun connection(): Connection = DriverManager.getConnection(f.postgres.jdbcUrl, f.postgres.username, f.postgres.password)
+    private fun connection(): Connection = DriverManager.getConnection(
+        f.postgres.jdbcUrl,
+        f.postgres.username,
+        f.postgres.password,
+    )
 
     private fun insertChild(connection: Connection, parentId: String) {
-        connection.prepareStatement("""
+        connection.prepareStatement(
+            """
             INSERT INTO storage_items
             (id,name,path,type,parent_id,owner_id,size,visibility,is_trashed,is_starred,created_at,updated_at,version)
             VALUES (?,?,?,'FOLDER',?,?,0,'PRIVATE',false,false,NOW(),NOW(),1)
-        """.trimIndent()).use {
+            """.trimIndent(),
+        ).use {
             val id = UUID.randomUUID().toString()
             it.setString(1, id)
             it.setString(2, id)
@@ -158,9 +173,14 @@ class StorageLeafDeletionIntegrationTest {
     private suspend fun awaitBlockedQuery(pattern: String) = withTimeout(10000) {
         while (true) {
             val waiting = connection().use { connection ->
-                connection.prepareStatement("SELECT count(*) FROM pg_stat_activity WHERE datname = current_database() AND wait_event_type = 'Lock' AND query ILIKE ?").use { query ->
+                connection.prepareStatement(
+                    "SELECT count(*) FROM pg_stat_activity WHERE datname = current_database() AND wait_event_type = 'Lock' AND query ILIKE ?",
+                ).use { query ->
                     query.setString(1, pattern)
-                    query.executeQuery().use { it.next(); it.getInt(1) > 0 }
+                    query.executeQuery().use {
+                        it.next()
+                        it.getInt(1) > 0
+                    }
                 }
             }
             if (waiting) break

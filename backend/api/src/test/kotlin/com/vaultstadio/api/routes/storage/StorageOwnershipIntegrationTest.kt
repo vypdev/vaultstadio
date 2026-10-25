@@ -34,8 +34,11 @@ import kotlin.test.assertIs
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StorageOwnershipIntegrationTest {
     private val f = StorageIntegrationFixture()
+
     @BeforeAll fun start() = f.start()
+
     @AfterAll fun close() = f.close()
+
     @BeforeEach fun reset() = f.reset()
 
     @TestFactory
@@ -53,13 +56,27 @@ class StorageOwnershipIntegrationTest {
                             contentType(ContentType.Application.Json)
                             setBody("""{"name":"child","parentId":"${parent.id}"}""")
                         } else {
-                            setBody(MultiPartFormDataContent(formData {
-                                append("parentId", parent.id)
-                                append(if (endpoint == "upload-folder") "nested/probe.txt" else "file", byteArrayOf(1, 2, 3), Headers.build {
-                                    append(HttpHeaders.ContentType, "text/plain")
-                                    append(HttpHeaders.ContentDisposition, "filename=probe.txt")
-                                })
-                            }))
+                            setBody(
+                                MultiPartFormDataContent(
+                                    formData {
+                                        append("parentId", parent.id)
+                                        append(
+                                            if (endpoint ==
+                                                "upload-folder"
+                                            ) {
+                                                "nested/probe.txt"
+                                            } else {
+                                                "file"
+                                            },
+                                            byteArrayOf(1, 2, 3),
+                                            Headers.build {
+                                                append(HttpHeaders.ContentType, "text/plain")
+                                                append(HttpHeaders.ContentDisposition, "filename=probe.txt")
+                                            },
+                                        )
+                                    },
+                                ),
+                            )
                         }
                     }
                     val body = response.bodyAsText()
@@ -71,7 +88,12 @@ class StorageOwnershipIntegrationTest {
                         assertFalse(data.getValue("errors").toString() == "[]")
                     } else {
                         assertEquals(HttpStatusCode.Forbidden, response.status, body)
-                        assertEquals("ACCESS_DENIED", Json.parseToJsonElement(body).jsonObject.getValue("error").jsonObject.getValue("code").jsonPrimitive.content)
+                        assertEquals(
+                            "ACCESS_DENIED",
+                            Json.parseToJsonElement(
+                                body,
+                            ).jsonObject.getValue("error").jsonObject.getValue("code").jsonPrimitive.content,
+                        )
                     }
                     assertEquals(1, f.rowCount())
                     assertEquals(0, f.byteFileCount())
@@ -92,19 +114,31 @@ class StorageOwnershipIntegrationTest {
             setBody("""{"name":"child","parentId":"${parent.id}"}""")
         }
         assertEquals(HttpStatusCode.Created, create.status, create.bodyAsText())
-        val childId = Json.parseToJsonElement(create.bodyAsText()).jsonObject.getValue("data").jsonObject.getValue("id").jsonPrimitive.content
+        val childId = Json.parseToJsonElement(
+            create.bodyAsText(),
+        ).jsonObject.getValue("data").jsonObject.getValue("id").jsonPrimitive.content
         val payload = "Owned byte-for-byte round trip"
         val upload = client.post("/api/v1/storage/upload?parentId=$childId") {
             bearerAuth("alice-test-session")
-            setBody(MultiPartFormDataContent(formData {
-                append("file", payload.toByteArray(), Headers.build {
-                    append(HttpHeaders.ContentType, "text/plain")
-                    append(HttpHeaders.ContentDisposition, "filename=probe.txt")
-                })
-            }))
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        append(
+                            "file",
+                            payload.toByteArray(),
+                            Headers.build {
+                                append(HttpHeaders.ContentType, "text/plain")
+                                append(HttpHeaders.ContentDisposition, "filename=probe.txt")
+                            },
+                        )
+                    },
+                ),
+            )
         }
         assertEquals(HttpStatusCode.Created, upload.status, upload.bodyAsText())
-        val fileId = Json.parseToJsonElement(upload.bodyAsText()).jsonObject.getValue("data").jsonObject.getValue("id").jsonPrimitive.content
+        val fileId = Json.parseToJsonElement(
+            upload.bodyAsText(),
+        ).jsonObject.getValue("data").jsonObject.getValue("id").jsonPrimitive.content
         val download = client.get("/api/v1/storage/download/$fileId") { bearerAuth("alice-test-session") }
         assertEquals(HttpStatusCode.OK, download.status)
         assertEquals(payload, download.bodyAsText())

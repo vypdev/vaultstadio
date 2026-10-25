@@ -25,12 +25,26 @@ import kotlin.test.assertIs
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StorageItemAuthorizationIntegrationTest {
     private val f = StorageIntegrationFixture()
+
     @BeforeAll fun start() = f.start()
+
     @AfterAll fun close() = f.close()
 
     @TestFactory
     fun `foreign sources remain forbidden through production routes`() = Visibility.entries.flatMap { visibility ->
-        listOf("read", "download", "list", "breadcrumbs", "rename", "move", "copy", "star", "trash", "restore", "delete").map { operation ->
+        listOf(
+            "read",
+            "download",
+            "list",
+            "breadcrumbs",
+            "rename",
+            "move",
+            "copy",
+            "star",
+            "trash",
+            "restore",
+            "delete",
+        ).map { operation ->
             DynamicTest.dynamicTest("HTTP $operation denies foreign $visibility source") {
                 f.reset()
                 val source = runBlocking { f.seed(visibility = visibility) }

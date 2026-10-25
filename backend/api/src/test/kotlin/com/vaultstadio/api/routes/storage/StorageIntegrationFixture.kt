@@ -64,7 +64,13 @@ internal class StorageIntegrationFixture : AutoCloseable {
         postgres.start()
         Flyway.configure().dataSource(postgres.jdbcUrl, postgres.username, postgres.password)
             .locations("classpath:db/migration").load().migrate()
-        database = Database.connect(postgres.jdbcUrl, driver = "org.postgresql.Driver", user = postgres.username, password = postgres.password)
+        database =
+            Database.connect(
+                postgres.jdbcUrl,
+                driver = "org.postgresql.Driver",
+                user = postgres.username,
+                password = postgres.password,
+            )
     }
 
     fun reset() = runBlocking {
@@ -97,7 +103,9 @@ internal class StorageIntegrationFixture : AutoCloseable {
     }
 
     fun rowCount(): Long = transaction(database) { StorageItemsTable.selectAll().count() }
-    fun byteFileCount(): Long = Files.walk(contentPath).use { paths -> paths.filter { Files.isRegularFile(it) }.count() }
+    fun byteFileCount(): Long = Files.walk(contentPath).use { paths ->
+        paths.filter { Files.isRegularFile(it) }.count()
+    }
 
     fun install(application: Application) = with(application) {
         val users = mockk<UserService>()
@@ -109,7 +117,13 @@ internal class StorageIntegrationFixture : AutoCloseable {
             }
         }
         install(Koin) {
-            modules(module { single { service }; single<UserService> { users } }, applicationStorageModule())
+            modules(
+                module {
+                    single { service }
+                    single<UserService> { users }
+                },
+                applicationStorageModule(),
+            )
         }
         install(ContentNegotiation) { json() }
         configureSecurity()
@@ -132,9 +146,14 @@ internal class StorageIntegrationFixture : AutoCloseable {
     private fun testUser(name: String): User {
         val now = Clock.System.now()
         return User(
-            id = UUID.randomUUID().toString(), email = "$name@audit.invalid", username = name,
-            passwordHash = "unused-session-validation-seam", role = UserRole.USER, status = UserStatus.ACTIVE,
-            createdAt = now, updatedAt = now,
+            id = UUID.randomUUID().toString(),
+            email = "$name@audit.invalid",
+            username = name,
+            passwordHash = "unused-session-validation-seam",
+            role = UserRole.USER,
+            status = UserStatus.ACTIVE,
+            createdAt = now,
+            updatedAt = now,
         )
     }
 }

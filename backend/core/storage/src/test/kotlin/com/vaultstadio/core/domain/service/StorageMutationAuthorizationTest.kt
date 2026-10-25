@@ -14,7 +14,20 @@ import kotlin.test.assertIs
 class StorageMutationAuthorizationTest {
     @TestFactory
     fun `all ordinary item operations deny foreign sources`() = Visibility.entries.flatMap { visibility ->
-        listOf("read", "download", "list", "breadcrumbs", "rename", "move", "copy", "toggle-star", "set-star", "trash", "restore", "delete").map { operation ->
+        listOf(
+            "read",
+            "download",
+            "list",
+            "breadcrumbs",
+            "rename",
+            "move",
+            "copy",
+            "toggle-star",
+            "set-star",
+            "trash",
+            "restore",
+            "delete",
+        ).map { operation ->
             DynamicTest.dynamicTest("$operation denies $visibility foreign source") {
                 runTest {
                     val f = StorageAuthorizationFixture()
