@@ -99,7 +99,7 @@ jobs:
     runs-on:
       group: vypdev
       labels: [self-hosted, macOS, ARM64]
-    timeout-minutes: 45
+    timeout-minutes: 60
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     permissions:
       contents: read
@@ -136,6 +136,8 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.SCAN_IMAGE }}
+          # Isolated caches download the Java DB before the first image scan.
+          timeout: '30m'
           format: 'sarif'
           output: 'trivy-results.sarif'
           cache-dir: ${{ runner.temp }}/trivy-${{ github.run_id }}-${{ github.run_attempt }}
