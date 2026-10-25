@@ -30,7 +30,7 @@ class StorageLeafDeletionIntegrationTest {
     @BeforeEach fun reset() = f.reset()
 
     @Test
-    fun `real cascade cannot delete owned or foreign children`() = runBlocking {
+    fun `real cascade cannot delete owned or foreign children`() = runBlocking<Unit> {
         connection().use { connection ->
             connection.createStatement().use { statement ->
                 statement.executeQuery("SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname = 'fk_storage_items_parent'").use {
@@ -54,7 +54,7 @@ class StorageLeafDeletionIntegrationTest {
     }
 
     @Test
-    fun `empty leaf delete and missing replay succeed`() = runBlocking {
+    fun `empty leaf delete and missing replay succeed`() = runBlocking<Unit> {
         val parent = f.seed()
         assertIs<Either.Right<*>>(f.service.deleteItem(parent.id, f.alice.id))
         assertEquals(0, f.rowCount())
@@ -62,7 +62,7 @@ class StorageLeafDeletionIntegrationTest {
     }
 
     @Test
-    fun `committing child first makes a racing delete fail without cascade`() = runBlocking {
+    fun `committing child first makes a racing delete fail without cascade`() = runBlocking<Unit> {
         val parent = f.seed()
         connection().use { inserting ->
             inserting.autoCommit = false
@@ -80,7 +80,7 @@ class StorageLeafDeletionIntegrationTest {
     }
 
     @Test
-    fun `locking delete first rejects a racing child instead of cascading it`() = runBlocking {
+    fun `locking delete first rejects a racing child instead of cascading it`() = runBlocking<Unit> {
         val parent = f.seed()
         connection().use { guard ->
             guard.createStatement().use { statement ->
@@ -121,7 +121,7 @@ class StorageLeafDeletionIntegrationTest {
     }
 
     @Test
-    fun `SQL failure returns a typed error without changing data`() = runBlocking {
+    fun `SQL failure returns a typed error without changing data`() = runBlocking<Unit> {
         val parent = f.seed()
         connection().use { connection ->
             connection.createStatement().use { statement ->
