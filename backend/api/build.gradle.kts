@@ -89,6 +89,7 @@ dependencies {
 
     // Testing
     testImplementation(libs.bundles.testing)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.bundles.testcontainers)
     testImplementation(libs.ktor.client.content.negotiation)
 }
