@@ -136,7 +136,7 @@ This revision restores the authorization-before-mutation invariant. It is an imp
 | Rename/move/copy/star/trash/restore/delete | Owner; destination/leaf constraints apply | Denied | No write grant |
 | Breadcrumbs | All ancestors owned | Denied without partial metadata | No ancestor grant |
 
-Local verification for this subset: [issue #73 report](../docs/development/verification/STORAGE_OWNERSHIP_73.md), source commit `92a709de9d941e262e7d6f9889618a25d267c8d2`. Remote review/CI/merge and the rest of the baseline remain separate gates.
+Local verification for this subset: [issue #73 report](../docs/development/verification/STORAGE_OWNERSHIP_73.md), source commit `260489a0131419cc1c1231d952681c81d067c802`. Remote review/CI/merge and the rest of the baseline remain separate gates.
 
 No permission switch is configurable. Token-authorized public downloads keep their existing validation and owner-scoped download path; changing sharing semantics is outside this correction.
 

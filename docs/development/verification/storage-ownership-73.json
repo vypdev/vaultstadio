@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "issue": 73,
-  "verifiedSourceCommit": "92a709de9d941e262e7d6f9889618a25d267c8d2",
-  "verifiedAtUtc": "2026-10-25T15:51:49.536867+00:00",
+  "verifiedSourceCommit": "260489a0131419cc1c1231d952681c81d067c802",
+  "verifiedAtUtc": "2026-10-25T16:25:01.116281+00:00",
   "scope": "Storage ownership and atomic leaf deletion; not whole-platform readiness",
   "backendTests": {
-    "tests": 1964,
+    "tests": 1970,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -20,30 +20,30 @@
   "coverage": {
     "allBackendJvmModules": {
       "branch": {
-        "covered": 964,
-        "missed": 4371,
-        "total": 5335,
-        "percent": 18.07
+        "covered": 978,
+        "missed": 4376,
+        "total": 5354,
+        "percent": 18.27
       },
       "line": {
-        "covered": 6358,
+        "covered": 6370,
         "missed": 9628,
-        "total": 15986,
-        "percent": 39.77
+        "total": 15998,
+        "percent": 39.82
       }
     },
     "changedPolicySources": {
       "StorageDeletion.kt": {
         "branch": {
-          "covered": 4,
-          "missed": 0,
-          "total": 4,
-          "percent": 100.0
+          "covered": 8,
+          "missed": 1,
+          "total": 9,
+          "percent": 88.89
         },
         "line": {
-          "covered": 15,
+          "covered": 12,
           "missed": 0,
-          "total": 15,
+          "total": 12,
           "percent": 100.0
         }
       },
@@ -77,15 +77,23 @@
       },
       "StorageLeafDeletion.kt": {
         "branch": {
-          "covered": 5,
-          "missed": 1,
-          "total": 6,
-          "percent": 83.33
+          "covered": 14,
+          "missed": 2,
+          "total": 16,
+          "percent": 87.5
         },
         "line": {
-          "covered": 17,
+          "covered": 27,
           "missed": 0,
-          "total": 17,
+          "total": 27,
+          "percent": 100.0
+        }
+      },
+      "StorageItemMapping.kt": {
+        "line": {
+          "covered": 19,
+          "missed": 0,
+          "total": 19,
           "percent": 100.0
         }
       }
@@ -103,13 +111,25 @@
     "noFqn": "PASS",
     "specificationCatalog": "PASS (16 capabilities)",
     "actionlintCiYaml": "PASS",
-    "apiBuildWithUnfilteredKtlint": "PASS: :api:build -x test, same command as Docker workflow"
+    "apiBuildWithUnfilteredKtlint": "PASS: :api:build with all tests enabled; includes the Docker JAR packaging checks"
   },
   "pending": [
     "Remote CI and Copilot review",
     "Native approval and normal protected-branch merge",
     "Version/collaboration authorization, quotas, client startup and remaining audit roadmap"
   ],
-  "postgresIntegrationTests": 58,
-  "httpProductionRouteTests": 53
+  "integrationTests": {
+    "productionHttp": 53,
+    "postgresLeafDeletion": 5,
+    "postgresAtomicCallbacks": 5,
+    "total": 63
+  },
+  "atomicDeletionCollectedCases": [
+    "missing locked item never invokes the content callback()",
+    "atomic leaf port revalidates ownership before the content callback()",
+    "suspended content callback retains the PostgreSQL item lock()",
+    "content callback failure preserves metadata and returns its typed error()",
+    "cancelled content callback releases the item lock without metadata deletion()"
+  ],
+  "reviewRegression": "Parent/item lock retained across content deletion, using locked owner/key; real byte races, typed callback failure, cancellation, suspended callback lock and delayed provider ordering verified"
 }
