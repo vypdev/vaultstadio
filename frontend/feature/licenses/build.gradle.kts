@@ -1,0 +1,35 @@
+plugins {
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
+}
+
+val libNamespace = "com.vaultstadio.app.feature.licenses"
+
+kotlin {
+    jvm("desktop")
+    android {
+        namespace = libNamespace
+        compileSdk = 36
+        minSdk = 24
+        compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
+    }
+    wasmJs { browser() }
+    iosArm64()
+    iosSimulatorArm64()
+    sourceSets {
+        val commonMain by getting {
+            kotlin.srcDirs("src/main")
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(libs.compose.material.icons.extended)
+                implementation(project(":core:resources"))
+                implementation(libs.decompose)
+            }
+        }
+    }
+}
+afterEvaluate { group = libNamespace }

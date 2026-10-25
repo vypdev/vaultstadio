@@ -85,13 +85,10 @@ compose-resources/
 *.sqlite3
 
 # Docker
-.dockerignore
 docker/storage/
 
-# Local Development Data
-data/
-# Compose App data layer (package com.vaultstadio.app.data) must be committed
-!compose-frontend/composeApp/src/commonMain/kotlin/com/vaultstadio/app/data/
+# Local Development Data (root-level only; frontend/data/ are KMP modules and must be committed)
+backend/api/data/
 
 # Testing
 coverage/
