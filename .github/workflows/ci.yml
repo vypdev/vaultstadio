@@ -220,7 +220,7 @@ jobs:
           echo "Found coverage files: $FILES"
 
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           disable_search: true
           files: ${{ steps.coverage-files.outputs.list }}
