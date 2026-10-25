@@ -118,6 +118,14 @@ Text equivalent: User registers/logs in -> receives token pair -> calls protecte
 | `forbidden` | Identity authenticated but lacks permission | owner | request/adjust access |
 | `revoked` | Credential explicitly invalidated | operator/user | re-authenticate |
 
+### 6.4 Storage resource authorization — issue #73
+
+AUTH-STORAGE-01: authenticated identity MUST NOT imply permission on a different owner's item, parent or ancestor. PRIVATE/PUBLIC/SHARED are metadata, not an implicit write or ordinary-read grant. The owning lifecycle contract and per-operation acceptance matrix are STO-AUTH-01–08 in [SDD-0004](SDD-0004-storage-domain-and-data-lifecycle.md#64-ownership-correction-contract--issue-73).
+
+AUTH-STORAGE-02: authorization MUST run in transport-independent policy before metadata/content effects. HTTP maps the domain error to 403 without exposing owner names or ancestor paths. Tests MUST assert zero forbidden effects and use actual production routing with two distinct actors and the migrated PostgreSQL schema.
+
+This does not change token validation, administrator roles or the separate public-share authorization flow. Version-history and collaboration ownership are still separate follow-up work; #73 alone does not establish whole-platform authorization readiness.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.

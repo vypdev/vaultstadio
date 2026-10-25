@@ -90,6 +90,8 @@ jobs:
         working-directory: backend
         run: |
           ./gradlew :core:test \
+            :domain:storage:test \
+            :core:storage:test \
             :api:test \
             :infrastructure:test \
             :plugins-api:test \
@@ -99,10 +101,18 @@ jobs:
             :plugins:ai-classification:test \
             --continue
 
+      - name: Verify storage authorization coverage
+        working-directory: backend
+        run: |
+          ./gradlew :domain:storage:jacocoTestCoverageVerification \
+            :core:storage:jacocoTestCoverageVerification
+
       - name: Generate backend coverage reports
         working-directory: backend
         run: |
           ./gradlew :core:jacocoTestReport \
+            :domain:storage:jacocoTestReport \
+            :core:storage:jacocoTestReport \
             :api:jacocoTestReport \
             :infrastructure:jacocoTestReport \
             :plugins-api:jacocoTestReport \
@@ -128,6 +138,8 @@ jobs:
           name: jacoco-coverage-backend
           path: |
             backend/core/build/reports/jacoco/test/jacocoTestReport.xml
+            backend/domain/storage/build/reports/jacoco/test/jacocoTestReport.xml
+            backend/core/storage/build/reports/jacoco/test/jacocoTestReport.xml
             backend/api/build/reports/jacoco/test/jacocoTestReport.xml
             backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
             backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml

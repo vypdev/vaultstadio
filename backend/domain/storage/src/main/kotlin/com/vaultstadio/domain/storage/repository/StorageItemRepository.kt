@@ -56,7 +56,19 @@ interface StorageItemRepository {
 
     suspend fun update(item: StorageItem): Either<StorageException, StorageItem>
 
+    /** Delete one leaf atomically against child insertion; never cascade into descendants. */
     suspend fun delete(id: String): Either<StorageException, Unit>
+
+    /**
+     * Revalidate ownership and leaf status under one item lock, then run content deletion
+     * and remove metadata before releasing that lock. A failed callback preserves metadata.
+     * Returns the locked snapshot; callers must not delete a stale preflight storage key.
+     */
+    suspend fun deleteLeaf(
+        id: String,
+        actorId: String,
+        deleteContent: suspend (StorageItem) -> Either<StorageException, Unit>,
+    ): Either<StorageException, StorageItem>
 
     suspend fun query(query: StorageItemQuery): Either<StorageException, PagedResult<StorageItem>>
 

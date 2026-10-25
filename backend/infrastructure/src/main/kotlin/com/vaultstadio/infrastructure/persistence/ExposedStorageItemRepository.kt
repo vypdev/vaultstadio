@@ -8,13 +8,13 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.vaultstadio.domain.common.exception.DatabaseException
+import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.common.pagination.PagedResult
 import com.vaultstadio.domain.common.pagination.SortOrder
 import com.vaultstadio.domain.storage.model.ItemType
 import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.domain.storage.model.StorageQuota
-import com.vaultstadio.domain.storage.model.Visibility
 import com.vaultstadio.domain.storage.repository.SortField
 import com.vaultstadio.domain.storage.repository.StorageItemQuery
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
@@ -24,11 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import org.jetbrains.exposed.v1.core.Op
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.isNull
-import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
@@ -73,7 +71,7 @@ class ExposedStorageItemRepository : StorageItemRepository {
         dbQuery {
             StorageItemsTable.selectAll()
                 .where { StorageItemsTable.id eq id }
-                .map { it.toStorageItem() }
+                .map { it.toStorageItemModel() }
                 .singleOrNull()
         }.right()
     } catch (e: Exception) {
@@ -84,7 +82,7 @@ class ExposedStorageItemRepository : StorageItemRepository {
         dbQuery {
             StorageItemsTable.selectAll()
                 .where { (StorageItemsTable.path eq path) and (StorageItemsTable.ownerId eq ownerId) }
-                .map { it.toStorageItem() }
+                .map { it.toStorageItemModel() }
                 .singleOrNull()
         }.right()
     } catch (e: Exception) {
@@ -115,14 +113,16 @@ class ExposedStorageItemRepository : StorageItemRepository {
         DatabaseException("Failed to update storage item", e).left()
     }
 
-    override suspend fun delete(id: String): Either<StorageException, Unit> = try {
-        dbQuery {
-            StorageItemsTable.deleteWhere { StorageItemsTable.id eq id }
-        }
-        Unit.right()
-    } catch (e: Exception) {
-        DatabaseException("Failed to delete storage item", e).left()
-    }
+    override suspend fun delete(id: String): Either<StorageException, Unit> = deleteStorageLeaf(id).map { Unit }
+
+    override suspend fun deleteLeaf(
+        id: String,
+        actorId: String,
+        deleteContent: suspend (StorageItem) -> Either<StorageException, Unit>,
+    ): Either<StorageException, StorageItem> = deleteStorageLeaf(id, actorId, deleteContent).fold(
+        { it.left() },
+        { item -> item?.right() ?: ItemNotFoundException(itemId = id).left() },
+    )
 
     override suspend fun query(query: StorageItemQuery): Either<StorageException, PagedResult<StorageItem>> = try {
         dbQuery {
@@ -174,13 +174,13 @@ class ExposedStorageItemRepository : StorageItemRepository {
                     )
                     .limit(query.limit)
                     .offset(query.offset.toLong())
-                    .map { it.toStorageItem() }
+                    .map { it.toStorageItemModel() }
                 else -> StorageItemsTable.selectAll()
                     .where { whereClause }
                     .orderBy(orderColumn, exposedSortOrder)
                     .limit(query.limit)
                     .offset(query.offset.toLong())
-                    .map { it.toStorageItem() }
+                    .map { it.toStorageItemModel() }
             }
 
             PagedResult(items, total, query.offset, query.limit)
@@ -199,13 +199,13 @@ class ExposedStorageItemRepository : StorageItemRepository {
                     .where {
                         (StorageItemsTable.ownerId eq ownerId) and (StorageItemsTable.parentId eq parentId)
                     }
-                    .map { it.toStorageItem() }
+                    .map { it.toStorageItemModel() }
             } else {
                 StorageItemsTable.selectAll()
                     .where {
                         (StorageItemsTable.ownerId eq ownerId) and (StorageItemsTable.parentId.isNull())
                     }
-                    .map { it.toStorageItem() }
+                    .map { it.toStorageItemModel() }
             }
             items
         }.right()
@@ -218,13 +218,13 @@ class ExposedStorageItemRepository : StorageItemRepository {
             val ancestors = mutableListOf<StorageItem>()
             var currentItem = StorageItemsTable.selectAll()
                 .where { StorageItemsTable.id eq itemId }
-                .map { it.toStorageItem() }
+                .map { it.toStorageItemModel() }
                 .singleOrNull()
 
             while (currentItem?.parentId != null) {
                 currentItem = StorageItemsTable.selectAll()
                     .where { StorageItemsTable.id eq currentItem!!.parentId!! }
-                    .map { it.toStorageItem() }
+                    .map { it.toStorageItemModel() }
                     .singleOrNull()
 
                 currentItem?.let { ancestors.add(0, it) }
@@ -244,13 +244,13 @@ class ExposedStorageItemRepository : StorageItemRepository {
         dbQuery {
             val item = StorageItemsTable.selectAll()
                 .where { StorageItemsTable.id eq itemId }
-                .map { it.toStorageItem() }
+                .map { it.toStorageItemModel() }
                 .single()
 
             val newPath = if (newParentId != null) {
                 val parent = StorageItemsTable.selectAll()
                     .where { StorageItemsTable.id eq newParentId }
-                    .map { it.toStorageItem() }
+                    .map { it.toStorageItemModel() }
                     .single()
                 "${parent.path}/$newName"
             } else {
@@ -324,24 +324,4 @@ class ExposedStorageItemRepository : StorageItemRepository {
     } catch (e: Exception) {
         DatabaseException("Failed to calculate total size", e).left()
     }
-
-    private fun ResultRow.toStorageItem() = StorageItem(
-        id = this[StorageItemsTable.id],
-        name = this[StorageItemsTable.name],
-        path = this[StorageItemsTable.path],
-        type = ItemType.valueOf(this[StorageItemsTable.type]),
-        parentId = this[StorageItemsTable.parentId],
-        ownerId = this[StorageItemsTable.ownerId],
-        size = this[StorageItemsTable.size],
-        mimeType = this[StorageItemsTable.mimeType],
-        checksum = this[StorageItemsTable.checksum],
-        storageKey = this[StorageItemsTable.storageKey],
-        visibility = Visibility.valueOf(this[StorageItemsTable.visibility]),
-        isTrashed = this[StorageItemsTable.isTrashed],
-        isStarred = this[StorageItemsTable.isStarred],
-        createdAt = this[StorageItemsTable.createdAt],
-        updatedAt = this[StorageItemsTable.updatedAt],
-        trashedAt = this[StorageItemsTable.trashedAt],
-        version = this[StorageItemsTable.version],
-    )
 }

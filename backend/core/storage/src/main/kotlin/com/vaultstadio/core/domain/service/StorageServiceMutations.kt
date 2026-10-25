@@ -55,18 +55,11 @@ internal suspend fun moveItemInternal(
         is Either.Right -> result.value
     }
 
-    val newParentPath = if (input.newParentId != null) {
-        when (val result = getItem(input.newParentId, input.userId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                if (result.value.type != ItemType.FOLDER) {
-                    return ValidationException("Destination must be a folder").left()
-                }
-                result.value.path
-            }
-        }
-    } else {
-        ""
+    val newParentPath = when (
+        val result = ownedParentPath(repository, input.newParentId, input.userId, forbiddenAncestorId = item.id)
+    ) {
+        is Either.Left -> return result
+        is Either.Right -> result.value
     }
 
     val newName = input.newName ?: item.name
@@ -94,18 +87,11 @@ internal suspend fun copyItemInternal(
         is Either.Right -> result.value
     }
 
-    val destParentPath = if (input.destinationParentId != null) {
-        when (val result = getItem(input.destinationParentId, input.userId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                if (result.value.type != ItemType.FOLDER) {
-                    return ValidationException("Destination must be a folder").left()
-                }
-                result.value.path
-            }
-        }
-    } else {
-        ""
+    val destParentPath = when (
+        val result = ownedParentPath(repository, input.destinationParentId, input.userId)
+    ) {
+        is Either.Left -> return result
+        is Either.Right -> result.value
     }
 
     val newName = input.newName ?: "Copy of ${item.name}"
@@ -221,6 +207,11 @@ internal suspend fun restoreItemInternal(
         is Either.Right -> result.value
     }
 
+    when (val result = ownedParentPath(repository, item.parentId, userId)) {
+        is Either.Left -> return result
+        is Either.Right -> Unit
+    }
+
     val restoredItem = item.copy(
         isTrashed = false,
         trashedAt = null,
@@ -232,34 +223,6 @@ internal suspend fun restoreItemInternal(
         if (result.isRight()) {
             val updated = (result as Either.Right).value
             eventBus.publish(FileEvent.Restored(userId = userId, item = updated))
-        }
-    }
-}
-
-internal suspend fun deleteItemInternal(
-    repository: StorageItemRepository,
-    storageBackend: StorageBackend,
-    eventBus: EventBus,
-    getItem: suspend (String, String) -> Either<StorageException, StorageItem>,
-    itemId: String,
-    userId: String,
-): Either<StorageException, Unit> {
-    val item = when (val result = getItem(itemId, userId)) {
-        is Either.Left -> return result
-        is Either.Right -> result.value
-    }
-
-    val itemStorageKey = item.storageKey
-    if (item.type == ItemType.FILE && itemStorageKey != null) {
-        when (val result = storageBackend.delete(itemStorageKey)) {
-            is Either.Left -> return result
-            is Either.Right -> { /* continue */ }
-        }
-    }
-
-    return repository.delete(itemId).also { result ->
-        if (result.isRight()) {
-            eventBus.publish(FileEvent.Deleted(userId = userId, item = item, permanent = true))
         }
     }
 }
