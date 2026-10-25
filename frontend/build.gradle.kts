@@ -5,9 +5,9 @@
  */
 
 plugins {
-    kotlin("jvm") version "2.3.20-Beta1" apply false
-    kotlin("multiplatform") version "2.3.20-Beta1" apply false
-    kotlin("android") version "2.3.20-Beta1" apply false
+    kotlin("jvm") version "2.4.0" apply false
+    kotlin("multiplatform") version "2.4.0" apply false
+    kotlin("android") version "2.4.0" apply false
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.detekt)

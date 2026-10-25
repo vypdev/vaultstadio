@@ -36,6 +36,10 @@ bin/
 *.nar
 .kotlin/
 kotlin-js-store/
+!frontend/kotlin-js-store/
+frontend/kotlin-js-store/**
+!frontend/kotlin-js-store/wasm/
+!frontend/kotlin-js-store/wasm/yarn.lock
 out/
 !gradle-wrapper.jar
 local.properties

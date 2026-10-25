@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "151 production component cases and 23 native web editor contracts passed; compiled web password protection verification pending",
+  "status": "151 production UI cases, 2 image-runtime cases and 23 native web editor contracts passed; final compiled navigation verification pending",
   "activeEntryPoints": [
     "RootContent -> AuthContent",
     "RootContent -> MainContent -> destination Content"
@@ -300,5 +300,6 @@
     "helperGuardCases": 2,
     "totalNewCases": 151
   },
-  "webEditorCaseCount": 23
+  "webEditorCaseCount": 23,
+  "runtimeCompatibilityCaseCount": 2
 }

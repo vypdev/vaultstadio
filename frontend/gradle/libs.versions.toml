@@ -1,6 +1,6 @@
 [versions]
-# Kotlin (2.3.20+ required for Koin Compiler Plugin typed startKoin<T>)
-kotlin = "2.3.20-Beta1"
+# Kotlin (2.4.0+ required for Koin Compiler Plugin typed startKoin<T>)
+kotlin = "2.4.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.10.0"
 kotlinx-datetime = "0.7.1"
@@ -8,9 +8,9 @@ kotlinx-datetime = "0.7.1"
 # Ktor
 ktor = "3.4.0"
 
-# Koin - Dependency Injection (4.2.0-RC1 for Compiler Plugin; annotations same version as koin-core)
-koin = "4.2.0-RC1"
-koin-plugin = "0.3.0"
+# Koin: stable runtime and compiler adapter verified for Kotlin 2.4.0.
+koin = "4.2.2"
+koin-plugin = "1.2.1"
 
 # KSP (deprecated for Koin; kept for other processors if needed)
 ksp = "2.0.21-1.0.27"
@@ -44,7 +44,7 @@ ktlint = "14.0.1"
 
 # Compose Multiplatform (desktop, Android, iOS, Web)
 # With Kotlin 2.x the Compose compiler plugin uses the Kotlin version (see [plugins] compose-compiler).
-compose-plugin = "1.10.1"
+compose-plugin = "1.11.1"
 
 # Android (AGP 9: use com.android.kotlin.multiplatform.library for KMP; Gradle 9.1+ required)
 agp = "9.0.0"
@@ -58,7 +58,7 @@ androidx-test-ext-junit = "1.3.0"
 androidx-test-espresso = "3.6.1"
 
 # Image Loading
-coil = "3.0.3"
+coil = "3.5.0"
 
 # Arrow (Functional Programming)
 arrow = "1.2.4"

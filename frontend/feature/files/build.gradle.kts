@@ -32,8 +32,7 @@ kotlin {
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.decompose)
                 implementation(libs.koin.core)
-                implementation(libs.koin.compose)
-                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.core.viewmodel)
             }
         }
     }
