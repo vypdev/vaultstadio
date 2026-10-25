@@ -162,16 +162,24 @@ jobs:
         run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop --no-build-cache
 
       - name: Run frontend tests (desktop)
-        run: cd frontend && ./gradlew :composeApp:desktopTest --continue --no-build-cache
+        run: |
+          cd frontend
+          ./gradlew :composeApp:desktopTest :data:network:desktopTest :data:network:wasmJsBrowserTest \
+            --continue --no-build-cache
 
       - name: Generate frontend coverage report
-        run: cd frontend && ./gradlew :composeApp:jacocoTestReport --continue --no-build-cache
+        run: |
+          cd frontend
+          ./gradlew :composeApp:jacocoTestReport :data:network:jacocoTestReport \
+            :data:network:verifyInstantSerializerCoverage --continue --no-build-cache
 
       - name: Upload frontend coverage report
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-frontend
-          path: frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          path: |
+            frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+            frontend/data/network/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           retention-days: 1
 
   # Upload coverage to Codecov
