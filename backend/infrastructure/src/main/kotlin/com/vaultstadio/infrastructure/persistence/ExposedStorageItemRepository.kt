@@ -28,7 +28,6 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.isNull
-import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
@@ -115,14 +114,7 @@ class ExposedStorageItemRepository : StorageItemRepository {
         DatabaseException("Failed to update storage item", e).left()
     }
 
-    override suspend fun delete(id: String): Either<StorageException, Unit> = try {
-        dbQuery {
-            StorageItemsTable.deleteWhere { StorageItemsTable.id eq id }
-        }
-        Unit.right()
-    } catch (e: Exception) {
-        DatabaseException("Failed to delete storage item", e).left()
-    }
+    override suspend fun delete(id: String): Either<StorageException, Unit> = deleteStorageLeaf(id)
 
     override suspend fun query(query: StorageItemQuery): Either<StorageException, PagedResult<StorageItem>> = try {
         dbQuery {

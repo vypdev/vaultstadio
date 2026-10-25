@@ -56,6 +56,7 @@ interface StorageItemRepository {
 
     suspend fun update(item: StorageItem): Either<StorageException, StorageItem>
 
+    /** Delete one leaf atomically against child insertion; never cascade into descendants. */
     suspend fun delete(id: String): Either<StorageException, Unit>
 
     suspend fun query(query: StorageItemQuery): Either<StorageException, PagedResult<StorageItem>>

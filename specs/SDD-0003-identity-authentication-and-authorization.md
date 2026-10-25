@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Record user identity, JWT lifecycle, roles, permissions, and protocol-specific authentication boundaries.
-- Related issues/PRs: #73 recorded
+- Related issues/PRs: #73
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 

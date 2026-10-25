@@ -11,11 +11,11 @@ import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
-import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.common.exception.ValidationException
 import com.vaultstadio.domain.storage.model.ItemType
 import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.storage.model.StorageAccessPolicy
 import com.vaultstadio.domain.storage.model.Visibility
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
 import kotlinx.datetime.Clock
@@ -58,20 +58,9 @@ internal suspend fun createFolderInternal(
         return ValidationException("Folder name cannot be empty").left()
     }
 
-    val parentPath = if (input.parentId != null) {
-        when (val result = repository.findById(input.parentId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                val parent = result.value
-                    ?: return ItemNotFoundException("Parent folder not found").left()
-                if (parent.type != ItemType.FOLDER) {
-                    return ValidationException("Parent must be a folder").left()
-                }
-                parent.path
-            }
-        }
-    } else {
-        ""
+    val parentPath = when (val result = ownedParentPath(repository, input.parentId, input.ownerId)) {
+        is Either.Left -> return result
+        is Either.Right -> result.value
     }
 
     val newPath = if (parentPath.isEmpty()) "/${input.name}" else "$parentPath/${input.name}"
@@ -125,20 +114,9 @@ internal suspend fun getOrCreateFolderInternal(
         return ValidationException("Folder name cannot be empty").left()
     }
 
-    val parentPath = if (parentId != null) {
-        when (val result = repository.findById(parentId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                val parent = result.value
-                    ?: return ItemNotFoundException("Parent folder not found").left()
-                if (parent.type != ItemType.FOLDER) {
-                    return ValidationException("Parent must be a folder").left()
-                }
-                parent.path
-            }
-        }
-    } else {
-        ""
+    val parentPath = when (val result = ownedParentPath(repository, parentId, ownerId)) {
+        is Either.Left -> return result
+        is Either.Right -> result.value
     }
 
     val targetPath = if (parentPath.isEmpty()) "/$name" else "$parentPath/$name"
@@ -147,8 +125,9 @@ internal suspend fun getOrCreateFolderInternal(
         is Either.Left -> return result
         is Either.Right -> {
             val existing = result.value
-            if (existing != null && existing.type == ItemType.FOLDER) {
-                return GetOrCreateFolderResult(folder = existing, created = false).right()
+            if (existing != null) {
+                return StorageAccessPolicy.requireFolder(existing, ownerId, active = true)
+                    .map { GetOrCreateFolderResult(folder = it, created = false) }
             }
         }
     }
@@ -193,17 +172,9 @@ internal suspend fun uploadFileInternal(
         return ValidationException("File name cannot be empty").left()
     }
 
-    val parentPath = if (input.parentId != null) {
-        when (val result = repository.findById(input.parentId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                val parent = result.value
-                    ?: return ItemNotFoundException("Parent folder not found").left()
-                parent.path
-            }
-        }
-    } else {
-        ""
+    val parentPath = when (val result = ownedParentPath(repository, input.parentId, input.ownerId)) {
+        is Either.Left -> return result
+        is Either.Right -> result.value
     }
 
     val (finalName, newPath) = when (

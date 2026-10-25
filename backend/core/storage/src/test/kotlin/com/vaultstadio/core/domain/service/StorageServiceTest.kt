@@ -383,11 +383,12 @@ class StorageServiceTest {
 
         @Test
         fun `should return ancestors for item`() = runTest {
-            val item = createTestFile("item-id", "file.txt", "/A/B/file.txt", "user-123")
+            val item = createTestFile("item-id", "file.txt", "/A/B/file.txt", "user-123").copy(parentId = "b-id")
             val ancestorA = createTestFolder("a-id", "A", "/A", "user-123")
-            val ancestorB = createTestFolder("b-id", "B", "/A/B", "user-123")
+            val ancestorB = createTestFolder("b-id", "B", "/A/B", "user-123").copy(parentId = "a-id")
             coEvery { storageItemRepository.findById("item-id") } returns item.right()
-            coEvery { storageItemRepository.getAncestors("item-id") } returns listOf(ancestorA, ancestorB).right()
+            coEvery { storageItemRepository.findById("a-id") } returns ancestorA.right()
+            coEvery { storageItemRepository.findById("b-id") } returns ancestorB.right()
 
             val result = storageService.getBreadcrumbs("item-id", "user-123")
 
@@ -768,6 +769,8 @@ class StorageServiceTest {
             } returns Unit.right()
 
             // When
+            coEvery { storageItemRepository.query(match { it.parentId == item.id && it.filterByParent && it.ownerId == null }) } returns
+                PagedResult<StorageItem>(emptyList(), 0, 0, 1).right()
             val result = storageService.deleteItem("file-id", "user-123")
 
             // Then
@@ -790,6 +793,8 @@ class StorageServiceTest {
             } returns Unit.right()
 
             // When
+            coEvery { storageItemRepository.query(match { it.parentId == folder.id && it.filterByParent && it.ownerId == null }) } returns
+                PagedResult<StorageItem>(emptyList(), 0, 0, 1).right()
             val result = storageService.deleteItem("folder-id", "user-123")
 
             // Then

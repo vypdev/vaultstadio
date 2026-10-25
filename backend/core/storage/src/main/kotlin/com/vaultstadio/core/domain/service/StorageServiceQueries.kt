@@ -7,11 +7,10 @@ package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
 import arrow.core.left
-import arrow.core.right
-import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.domain.storage.model.StorageAccessPolicy
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
 
 /**
@@ -28,10 +27,8 @@ internal suspend fun getItemInternal(
             val item = result.value
             if (item == null) {
                 ItemNotFoundException("Item not found").left()
-            } else if (item.ownerId != userId) {
-                AuthorizationException("Access denied").left()
             } else {
-                item.right()
+                StorageAccessPolicy.requireOwner(item, userId)
             }
         }
     }
