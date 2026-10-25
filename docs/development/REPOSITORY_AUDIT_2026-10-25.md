@@ -18,7 +18,7 @@ El dogfooding utilizó las dos imágenes publicadas de master, verificadas por s
 
 El Mac es ARM. Las imágenes de master solo ofrecían `linux/amd64`; se probaron con emulación. El fallo de arranque desktop se confirmó también de forma nativa en JVM, por lo que no depende de esa emulación.
 
-Se guardaron logs completos, XML de tests, informes HTML/XML de cobertura, capturas y copias de recuperación fuera de Git. En [audits/2026-10-25](audits/2026-10-25/) se versionan únicamente resultados saneados y la captura del fallo web. Los tokens, contraseñas de prueba y dumps no forman parte de la PR.
+Se guardaron logs completos, XML de tests, informes HTML/XML de cobertura, capturas y copias de recuperación fuera de Git. En [audits/2026-10-25](audits/2026-10-25/) se versionan únicamente resultados saneados en texto. La captura binaria permanece en la evidencia local y en el historial de Git; se retiró del diff final porque GitHub no publica su patch y la Action de Copilot exige evidencia completa para evaluar el progreso. Los tokens, contraseñas de prueba y dumps no forman parte de la PR.
 
 ## Resultados ejecutados
 
@@ -150,6 +150,12 @@ python3 scripts/audit/local-api-smoke.py --base-url http://127.0.0.1:8080 --outp
 ```
 
 El directorio de salida debe ser nuevo y estar fuera del repositorio. El runner crea cuentas y archivos sintéticos, guarda la sesión con permisos privados para pruebas adicionales, sanea tokens de los resultados y devuelve código distinto de cero si hay fallos. No es un comando contra producción ni limpia automáticamente los fixtures. Los controles avanzados y de recuperación de esta ejecución están descritos arriba y conservan resultados saneados; la mutación temporal de rol se ejecutó solo tras autorización específica.
+
+La revisión de Copilot detectó el uso implícito de proxies del entorno en el runner. Se corrigió con un opener sin proxies y sin redirecciones. Cuatro tests con servidores loopback verifican que el proxy no recibe peticiones, que una redirección no alcanza otro origen, que se rechaza un destino externo antes de crear la salida y que no se guardan credenciales dentro del repositorio:
+
+```sh
+python3 -m unittest discover -s scripts/audit -p 'test_*.py' -v
+```
 
 ## Cierre de la iteración anterior y conservación
 

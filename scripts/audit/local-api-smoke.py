@@ -35,6 +35,16 @@ run = uuid.uuid4().hex[:10]
 password = 'Audit-local-71-' + run + '-A9'
 content = ('VaultStadio isolated audit ' + run + '\n').encode()
 
+class RejectRedirects(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, request, response, code, message, headers, new_url):
+        raise urllib.error.HTTPError(
+            request.full_url, code, 'Redirects are disabled for isolated audit requests', headers, response,
+        )
+
+# Keep fixture credentials on the explicitly selected loopback origin, regardless
+# of shell proxy variables or redirects returned by the target.
+opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), RejectRedirects())
+
 def http(method, path, actor=None, body=None, raw=None, headers=None):
     h = dict(headers or {})
     if actor:
@@ -44,7 +54,7 @@ def http(method, path, actor=None, body=None, raw=None, headers=None):
         h['Content-Type'] = 'application/json'
     request = urllib.request.Request(BASE + path, data=raw, headers=h, method=method)
     try:
-        response = urllib.request.urlopen(request, timeout=30)
+        response = opener.open(request, timeout=30)
     except urllib.error.HTTPError as error:
         response = error
     data = response.read()

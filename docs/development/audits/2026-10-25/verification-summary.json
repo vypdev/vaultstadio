@@ -567,5 +567,10 @@
   "lint-frontend": {
     "exit_code": 0,
     "elapsed_seconds": 35.11
+  },
+  "audit_runner_boundary_tests": {
+    "tests": 4,
+    "failures": 0,
+    "scope": "loopback transport, environment proxies, redirects and private output boundary"
   }
 }
