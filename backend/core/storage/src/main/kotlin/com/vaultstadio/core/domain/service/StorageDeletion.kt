@@ -1,8 +1,8 @@
 package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
-import arrow.core.right
 import arrow.core.raise.either
+import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.domain.common.exception.StorageException
