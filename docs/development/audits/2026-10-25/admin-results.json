@@ -1,0 +1,78 @@
+{
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "results": [
+    {
+      "name": "admin users",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 3180
+    },
+    {
+      "name": "admin statistics",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 328
+    },
+    {
+      "name": "admin plugins",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 58
+    },
+    {
+      "name": "admin AI providers",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 58
+    },
+    {
+      "name": "AI without configured provider fails closed",
+      "status": 400,
+      "expected": [
+        400,
+        409,
+        422,
+        503
+      ],
+      "passed": true,
+      "response_bytes": 160,
+      "error": {
+        "code": "AI_ERROR",
+        "message": "No active AI provider",
+        "details": null
+      }
+    },
+    {
+      "name": "authorized fixture role restored to USER",
+      "passed": true
+    },
+    {
+      "name": "admin access denied again after restoration",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "passed": true,
+      "response_bytes": 165,
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Admin access required",
+        "details": null
+      }
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define frontend domain/data/feature boundaries, navigation, state ownership, platform entrypoints, and user-facing capability mapping.
-- Related issues/PRs: none recorded
+- Related issues/PRs: #71
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -44,6 +44,12 @@ Frontend documentation mixes current per-screen ViewModels with legacy `AppViewM
 - **Known debt and limitations:** documentation/source mismatches, incomplete external verification, and explicitly named unsupported operations remain debt until closed.
 - **Unknown rationale:** historic reasons for the current structure are unknown unless a source reference states them.
 - **Proposed improvements:** any future change is listed in the implementation sequence and must not be read as implemented behavior.
+
+### 2.5 Audit checkpoint — 2026-10-25
+
+A03/A04 bloquean el arranque web y desktop aunque pasen 1.130 tests desktop y 1.070 Wasm. Android genera APK sin tests unitarios de app; A09 impide compilar la entrada iOS y documenta stubs de plataforma. El soporte debe expresarse por capacidad y destino.
+
+Evidencia parcial de producto en master `615f11adf5272bd1d4626f9571b31e691eeee062`: [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md), [resultados saneados](../docs/development/audits/2026-10-25/verification-summary.json) y [roadmap](../docs/development/AUDIT_ROADMAP_2026-10-25.md), issue #71. Este checkpoint no modifica el estado declarado ni sustituye la verificación original de la baseline.
 
 ## 3. Actors, surfaces, and terminology
 
