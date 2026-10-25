@@ -120,6 +120,12 @@ Text equivalent: Identify asset -> cross trust boundary -> validate identity/inp
 | `accepted` | Risk explicitly accepted with owner/expiry | maintainer | review |
 | `closed` | Evidence proves control | maintainer | monitor |
 
+### 6.4 Accessible input and testing boundary (#80)
+
+Password controls MUST mask values by default across all active dialogs and screens, including profile and password-change paths. Test identifiers and localized accessible names MUST identify the control without containing its current value or a credential. Explicit visibility actions MUST have a meaningful name and reversible state. Disabled/read-only behavior and form validation MUST remain enforced through every supported interaction path.
+
+UI verification uses disposable local accounts and the normal authentication flow. No production session injection, privileged test endpoint, blanket security disablement or persisted real-account credential is permitted. Test fixtures may inject ports into real presentation components to observe callbacks; those tests do not establish server authorization or real device operation. Reports MUST distinguish component tests from actual native/browser proof and keep raw credentials/session material out of repository artifacts.
+
 ## 7. User-facing configuration
 
 Security limits such as token expiry, upload size, rate limits, plugin capabilities, federation domains, AI send policy, and secret sources are bounded and not weakened by arbitrary user input.

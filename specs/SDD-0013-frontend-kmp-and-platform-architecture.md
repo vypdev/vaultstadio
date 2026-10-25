@@ -120,6 +120,22 @@ Text equivalent: Platform entrypoint starts app -> root resolves navigation/sess
 | `ready` | Feature state rendered | user | interact |
 | `failed` | Bounded error state | user | retry/re-authenticate |
 
+### 6.4 Accessible interaction contract (#80)
+
+| ID | Required behavior | Acceptance evidence |
+|---|---|---|
+| A11Y-RUN-01 | Desktop packaging MUST use a reviewed runtime that supports editable accessibility and real automatic text entry. Bytecode compatibility alone is insufficient. | Same application JARs compared across runtimes; generated package runtime identity; autonomous normal login, without seeded sessions. |
+| A11Y-FIELD-01 | Every active editable field MUST expose a stable test identifier and a meaningful localized accessible name, and retain its production value/callback, validation and IME behavior. | Explicit active-route/field inventory; real production component edit, clear and focus cases for each field. |
+| A11Y-STATE-01 | Disabled and read-only controls MUST retain their intended restrictions. A test adapter MUST NOT make them editable or bypass application policy. | Negative component cases, with callback and state assertions. |
+| A11Y-SEC-01 | Password fields MUST remain masked in screenshots and OS/browser accessibility output by default. Visibility controls MUST have localized names and reflect state. | Native/browser masked-output checks and real component visibility/state tests. |
+| A11Y-ACT-01 | Every interactive control type MUST expose its meaningful name, role, state and supported action. Navigation, dialogs, menus, lists, toggles and dropdowns MUST be independently operable. | Per-control-type action/state cases and representative real file/profile/dialog flows. |
+| A11Y-FOCUS-01 | Editing MUST support selection, replacement, deletion, Unicode and focus transfer. Dialog dismissal/reopening MUST restore a usable state. | Positive/negative real-state component cases and native/browser observations; document supported focus recovery when a tool loses activation. |
+| A11Y-EVID-01 | Coverage MUST distinguish production component semantics, actual OS/browser actions and external automation limitations. Static label assertions and replacement widgets do not prove interaction. | At least 24 distinct risk cases plus inventory-derived per-field and per-control-type cases; raw collected results retained privately and sanitized summary published. |
+
+Accessibility belongs to shared presentation and platform composition; it MUST NOT introduce dependencies into domain policy or transport, nor production authentication/test backdoors. New helpers and suites MUST have focused responsibilities. Existing dormant duplicate screens are explicitly inventoried and MUST NOT be mistaken for active-route evidence. Any reactivated field becomes subject to the same contract.
+
+The controlled investigation used identical application JARs: Corretto 17.0.9 exposed non-settable fields and did not accept automatic typing; JetBrains Runtime 21.0.11 exposed editable fields and completed Unicode paste, selection-based clearing, password masking and normal local login without human typing. Runtime version and vendor both differ, so this is evidence for the tested combination, not attribution to a particular upstream bug. Coordinate input remains unavailable in the automation tool; semantic actions are the supported verified path.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
