@@ -3,9 +3,11 @@
 
 version: 2
 updates:
-  # Gradle dependencies
+  # Independent Gradle projects; the repository root has no Gradle build.
   - package-ecosystem: "gradle"
-    directory: "/"
+    directories:
+      - "/backend"
+      - "/frontend"
     target-branch: "develop"
     schedule:
       interval: "weekly"
