@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define files, folders, metadata, ownership, quotas, trash, storage backends, and content lifecycle.
-- Related issues/PRs: none recorded
+- Related issues/PRs: #73 recorded
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -114,6 +114,30 @@ Text equivalent: User authenticates -> lists/creates/moves/uploads item -> metad
 | `deleted` | Metadata and bytes removed per policy | operator | backup/recovery only |
 | `degraded` | Metadata/content operation partially completed | operator | reconcile/retry |
 
+### 6.4 Ownership correction contract — issue #73
+
+This revision restores the authorization-before-mutation invariant. It is an implementation contract for the following subset; the wider baseline is not declared implemented.
+
+| ID | Required behavior | Denied/failure retained state |
+|---|---|---|
+| STO-AUTH-01 | Ordinary authenticated reads and mutations MUST require `item.ownerId == actor.id`, for PRIVATE, PUBLIC and SHARED alike. Visibility is not an access grant. | No metadata, bytes or events change. |
+| STO-AUTH-02 | Create-folder, get-or-create, upload, move, copy and restore MUST resolve an owned, active folder destination and owned, active folder ancestors before name lookup or any effect. Root is the actor's implicit root. | Original hierarchy, stream and backend remain untouched. |
+| STO-AUTH-03 | Foreign destinations MUST return `ACCESS_DENIED`/403 before type, trash state or names are disclosed. Missing destinations return 404; owned invalid/trashed destinations return 400. | No name lookup, metadata write, byte write/copy or event. |
+| STO-AUTH-04 | Get-or-create MUST validate an existing result's ownership, folder type and active state before returning it. | No foreign or trashed folder is returned or replaced. |
+| STO-AUTH-05 | Breadcrumbs MUST authorize each ancestor before returning any ancestor metadata, including historically inconsistent cross-owner hierarchies. | Whole request fails; no partial ancestor list is disclosed. |
+| STO-AUTH-06 | Hierarchy traversal MUST detect cycles, reject more than 128 ancestors, and reject moving an item into itself or a descendant before effects. | Original parent/path/version remain unchanged. |
+| STO-AUTH-07 | Permanent deletion MUST remove a single leaf only. A nonempty folder MUST be rejected atomically against concurrent child insertion, including legacy cross-owner descendants; implicit SQL cascade is not an authorized recursive operation. | Parent, descendants and content remain. Empty-folder and owned-file deletion retain existing behavior. |
+| STO-AUTH-08 | Repository failures MUST retain their typed identity; a failed authorization/preflight MUST invoke no mutating repository, backend or event operation. | Caller can distinguish failure from successful empty results. |
+
+| Surface | Owner | Other authenticated actor | Validated share token |
+|---|---|---|---|
+| Normal metadata/download/list | Allowed by item type | Denied for every visibility | Separate share use case only |
+| Create/get-or-create/upload under parent | Owned active folder chain | Denied before name/content access | No write grant |
+| Rename/move/copy/star/trash/restore/delete | Owner; destination/leaf constraints apply | Denied | No write grant |
+| Breadcrumbs | All ancestors owned | Denied without partial metadata | No ancestor grant |
+
+No permission switch is configurable. Token-authorized public downloads keep their existing validation and owner-scoped download path; changing sharing semantics is outside this correction.
+
 ## 7. User-facing configuration
 
 Storage type, local path, S3 endpoint/region/bucket/credentials, path style, quota, and trash retention are validated with cross-field rules. Storage type controls backend and S3 route registration.
@@ -180,11 +204,15 @@ Existing behavior is preserved for an as-built baseline unless a future revision
 
 For this baseline, the initial rollout is documentation and validation only. Future implementation work MUST state whether it is greenfield, backward-compatible, migratory, or breaking, and MUST define rollback for every irreversible effect.
 
+The #73 correction rejects formerly accepted unauthorized writes and implicit nonempty-folder cascades. It performs no data rewrite or migration. Legacy cross-owner rows remain available for an explicit repair; they MUST NOT be reassigned or deleted automatically. Operators can recover individual owned children before deleting an empty folder. Rolling back the code restores the vulnerability and is not the recommended recovery; retain data and correct forward. Full recursive metadata/content deletion remains lifecycle work beyond this authorization fix.
+
 ## 14. Testing strategy and numeric budget
 
 Minimum risk-derived budget: **Minimum 28 cases: item invariants, ownership, path validation, quota, local backend, S3 backend, create/move/delete/trash/restore, metadata failure, byte failure, consistency, authorization, and cleanup.**
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
+
+For #73, the minimum additional budget is 64 executed cases: all three visibilities across denied parent writes and source mutations; owner success; missing/type/trash destinations; invalid existing get-or-create result; ancestor ownership/cycle/depth; move-cycle prevention; typed failures and zero-effect checks. Real production-route tests MUST use the production use cases/service, local byte adapter, PostgreSQL and the Flyway schema (including its actual cascade), assert status/body and unchanged rows/bytes, and include an owner success control. Pure policy branches target 100% line and branch coverage; aggregate coverage is reported separately without claiming the full platform meets that target.
 
 ## 15. Documentation and discoverability
 
@@ -203,6 +231,13 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given a quota-exceeding upload, when the request is handled, then no partial item is reported as complete.
 3. Given a trashed item, when it is restored, then ownership/path/quota rules are revalidated.
 
+4. Given A's folder and actor B, creating/get-or-creating/uploading beneath it fails for PRIVATE/PUBLIC/SHARED; no name lookup, bytes, row or event is produced (STO-AUTH-01–03,08).
+5. Given an owned source and foreign, trashed or non-folder destination, move/copy/restore fails with original source/version/content retained (STO-AUTH-02–03).
+6. Given an existing get-or-create result that is foreign, trashed or a file, the result fails before mutation (STO-AUTH-04).
+7. Given an owned item with a foreign ancestor, breadcrumbs fail without returning names; cycles and a 129th ancestor fail without effects (STO-AUTH-05–06).
+8. Given a nonempty folder in the real migrated schema, permanent delete fails and both owned/foreign children survive. A child insertion racing an empty-folder delete must not be silently cascaded (STO-AUTH-07).
+9. Given any preflight port failure, its original typed error reaches the caller and no mutation/backend/event is invoked (STO-AUTH-08).
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -212,6 +247,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
+
+Issue #73 evidence targets: domain `StorageAccessPolicy`; core `StorageHierarchy` and storage query/write/mutation helpers; `StorageParentAuthorizationTest`, `StorageMutationAuthorizationTest`, `StorageHierarchyTest`; production-route `StorageOwnershipIntegrationTest` and leaf-delete concurrency adapter tests. Exact paths and measured results are recorded in the linked PR after verification; targets alone do not establish completion.
 
 ## 18. Implementation or maintenance sequence
 

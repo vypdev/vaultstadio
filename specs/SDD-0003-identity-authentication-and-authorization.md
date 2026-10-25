@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Record user identity, JWT lifecycle, roles, permissions, and protocol-specific authentication boundaries.
-- Related issues/PRs: none recorded
+- Related issues/PRs: #73 recorded
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -111,6 +111,14 @@ Text equivalent: User registers/logs in -> receives token pair -> calls protecte
 | `expired` | Token no longer valid | user | refresh/login |
 | `forbidden` | Identity authenticated but lacks permission | owner | request/adjust access |
 | `revoked` | Credential explicitly invalidated | operator/user | re-authenticate |
+
+### 6.4 Storage resource authorization — issue #73
+
+AUTH-STORAGE-01: authenticated identity MUST NOT imply permission on a different owner's item, parent or ancestor. PRIVATE/PUBLIC/SHARED are metadata, not an implicit write or ordinary-read grant. The owning lifecycle contract and per-operation acceptance matrix are STO-AUTH-01–08 in [SDD-0004](SDD-0004-storage-domain-and-data-lifecycle.md#64-ownership-correction-contract--issue-73).
+
+AUTH-STORAGE-02: authorization MUST run in transport-independent policy before metadata/content effects. HTTP maps the domain error to 403 without exposing owner names or ancestor paths. Tests MUST assert zero forbidden effects and use actual production routing with two distinct actors and the migrated PostgreSQL schema.
+
+This does not change token validation, administrator roles or the separate public-share authorization flow. Version-history and collaboration ownership are still separate follow-up work; #73 alone does not establish whole-platform authorization readiness.
 
 ## 7. User-facing configuration
 
