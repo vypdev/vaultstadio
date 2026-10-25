@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>BracesOnWhenStatements:VideoMetadataPlugin.kt$VideoMetadataPlugin$when</ID>
+    <ID>ClassOrdering:VideoMetadataPlugin.kt$VideoMetadataPlugin$override fun getConfigurationSchema()</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeChapter$val end_time: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeChapter$val start_time: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeFormat$val bit_rate: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeFormat$val format_long_name: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeFormat$val format_name: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeFormatTags$val creation_time: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val bit_rate: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val channel_layout: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val codec_long_name: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val codec_name: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val codec_type: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val color_space: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val color_transfer: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val display_aspect_ratio: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val pix_fmt: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val r_frame_rate: String? = null</ID>
+    <ID>ConstructorParameterNaming:VideoMetadataPlugin.kt$FFprobeStream$val sample_rate: String? = null</ID>
+    <ID>CyclomaticComplexMethod:VideoMetadataPlugin.kt$VideoMetadataPlugin$private fun extractVideoStreamInfo( stream: FFprobeStream, itemId: String, list: MutableList&lt;StorageItemMetadata&gt;, now: kotlinx.datetime.Instant )</ID>
+    <ID>CyclomaticComplexMethod:VideoMetadataPlugin.kt$VideoMetadataPlugin$private suspend fun extractAndSaveMetadata(item: StorageItem, file: File)</ID>
+    <ID>ImplicitDefaultLocale:VideoMetadataPlugin.kt$VideoMetadataPlugin$String.format("%.2f", fps)</ID>
+    <ID>ImplicitDefaultLocale:VideoMetadataPlugin.kt$VideoMetadataPlugin$String.format("%d:%02d", minutes, secs)</ID>
+    <ID>ImplicitDefaultLocale:VideoMetadataPlugin.kt$VideoMetadataPlugin$String.format("%d:%02d:%02d", hours, minutes, secs)</ID>
+    <ID>LongMethod:VideoMetadataPlugin.kt$VideoMetadataPlugin$private suspend fun extractAndSaveMetadata(item: StorageItem, file: File)</ID>
+    <ID>MaxLineLength:VideoMetadataPlugin.kt$VideoMetadataPlugin$val tempFile = File.createTempFile("vaultstadio_video_", ".$extension", pluginContext.tempDirectory.toFile())</ID>
+    <ID>SwallowedException:VideoMetadataPlugin.kt$VideoMetadataPlugin$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:VideoMetadataPlugin.kt$VideoMetadataPlugin$e: Exception</ID>
+    <ID>TrailingWhitespace:VideoMetadataPlugin.kt$com.vaultstadio.plugins.video.VideoMetadataPlugin.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -12,6 +12,7 @@ help:
 	@echo "  make install       - Install dependencies"
 	@echo "  make build         - Build all modules"
 	@echo "  make test          - Run all tests"
+	@echo "  make test-coverage - Run tests and generate jacoco reports (backend + frontend)"
 	@echo "  make dev           - Start development servers"
 	@echo "  make clean         - Clean build artifacts"
 	@echo ""
@@ -20,11 +21,15 @@ help:
 	@echo "  make backend-run   - Run backend server"
 	@echo "  make backend-test  - Run backend tests"
 	@echo ""
-	@echo "Frontend:"
-	@echo "  make frontend-web  - Build web frontend"
-	@echo "  make frontend-run  - Run web frontend (dev)"
-	@echo "  make desktop-run   - Run desktop app"
-	@echo "  make android-build - Build Android APK"
+	@echo "Frontend (run from root; frontend is standalone in frontend/):"
+	@echo "  make frontend-web        - Build web frontend (WASM production)"
+	@echo "  make frontend-web-dev    - Build web frontend (WASM development)"
+	@echo "  make frontend-run        - Run web frontend (WASM dev server)"
+	@echo "  make frontend-run-prod   - Run web frontend (WASM production dev server)"
+	@echo "  make desktop-run        - Run desktop app"
+	@echo "  make android-build      - Build Android APK"
+	@echo "  make frontend-test      - Run frontend tests"
+	@echo "  (See also: cd frontend && make help)"
 	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build  - Build Docker images"
@@ -46,58 +51,61 @@ help:
 # ==================== Installation ====================
 
 install:
-	@echo "Installing dependencies..."
-	./gradlew build --refresh-dependencies -x test
+	@echo "Installing dependencies (backend + frontend)..."
+	$(MAKE) -C backend build
+	$(MAKE) -C frontend build
 
 # ==================== Build ====================
 
 build:
-	@echo "Building all modules..."
-	./gradlew build -x test
+	@echo "Building backend (standalone)..."
+	$(MAKE) -C backend build
+	@echo "Building frontend (standalone)..."
+	$(MAKE) -C frontend build
 
 backend-build:
 	@echo "Building backend..."
-	./gradlew :kotlin-backend:api:build -x test
+	$(MAKE) -C backend build
 
 frontend-web:
-	@echo "Building web frontend..."
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
+	@echo "Building web frontend (WASM production)..."
+	$(MAKE) -C frontend frontend-web
+
+frontend-web-dev:
+	@echo "Building web frontend (WASM development)..."
+	$(MAKE) -C frontend frontend-web-dev
 
 android-build:
 	@echo "Building Android APK..."
-	./gradlew :compose-frontend:androidApp:assembleRelease
+	$(MAKE) -C frontend android-build
 
 plugins-build:
 	@echo "Building plugins..."
-	./gradlew :kotlin-backend:plugins:image-metadata:pluginJar
-	./gradlew :kotlin-backend:plugins:video-metadata:pluginJar
+	$(MAKE) -C backend plugins
 
 # ==================== Testing ====================
 
 test:
-	@echo "Running all tests..."
-	./gradlew test
+	@echo "Running backend tests..."
+	$(MAKE) -C backend test
+	@echo "Running frontend tests..."
+	$(MAKE) -C frontend test
 
 backend-test:
 	@echo "Running backend tests..."
-	./gradlew :kotlin-backend:core:test
-	./gradlew :kotlin-backend:api:test
+	$(MAKE) -C backend test
+
+frontend-test:
+	@echo "Running frontend tests..."
+	$(MAKE) -C frontend test
 
 test-coverage:
 	@echo "Running tests with coverage (backend + frontend, same as CI/Codecov)..."
-	./gradlew :kotlin-backend:core:jacocoTestReport \
-		:kotlin-backend:api:jacocoTestReport \
-		:kotlin-backend:infrastructure:jacocoTestReport \
-		:kotlin-backend:plugins-api:jacocoTestReport \
-		:kotlin-backend:plugins:image-metadata:jacocoTestReport \
-		:kotlin-backend:plugins:video-metadata:jacocoTestReport \
-		:kotlin-backend:plugins:fulltext-search:jacocoTestReport \
-		:kotlin-backend:plugins:ai-classification:jacocoTestReport \
-		:compose-frontend:composeApp:jacocoTestReport \
-		--continue
+	$(MAKE) -C backend test-coverage
+	$(MAKE) -C frontend test-coverage
 	@echo "Coverage reports:"
-	@echo "  Backend:  kotlin-backend/*/build/reports/jacoco/test/"
-	@echo "  Frontend: compose-frontend/composeApp/build/reports/jacoco/jacocoTestReport/"
+	@echo "  Backend:  backend/*/build/reports/jacoco/test/"
+	@echo "  Frontend: frontend/composeApp/build/reports/jacoco/jacocoTestReport/"
 	@echo "Validate codecov config: curl -s --data-binary @codecov.yml https://codecov.io/validate"
 
 # ==================== Development ====================
@@ -107,20 +115,24 @@ dev:
 	docker-compose -f docker/docker-compose.yml up -d postgres
 	@echo "Waiting for PostgreSQL..."
 	sleep 5
-	./gradlew :kotlin-backend:api:run &
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+	$(MAKE) -C backend run &
+	$(MAKE) -C frontend frontend-run
 
 backend-run:
 	@echo "Starting backend server..."
-	./gradlew :kotlin-backend:api:run
+	$(MAKE) -C backend run
 
 frontend-run:
-	@echo "Starting web frontend (dev)..."
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserRun
+	@echo "Starting web frontend (WASM dev server)..."
+	$(MAKE) -C frontend frontend-run
+
+frontend-run-prod:
+	@echo "Starting web frontend (WASM production dev server)..."
+	$(MAKE) -C frontend frontend-run-prod
 
 desktop-run:
 	@echo "Starting desktop app..."
-	./gradlew :compose-frontend:composeApp:run
+	$(MAKE) -C frontend desktop-run
 
 # ==================== Docker ====================
 
@@ -152,11 +164,8 @@ docker-push:
 
 clean:
 	@echo "Cleaning build artifacts..."
-	./gradlew clean
-	rm -rf .gradle
-	rm -rf kotlin-backend/*/build
-	rm -rf compose-frontend/*/build
-	rm -rf shared/build
+	$(MAKE) -C backend clean
+	$(MAKE) -C frontend clean 2>/dev/null || true
 
 docker-clean:
 	@echo "Cleaning Docker resources..."
@@ -167,44 +176,43 @@ docker-clean:
 
 release:
 	@echo "Creating release build..."
-	./gradlew clean
-	./gradlew build
-	./gradlew :kotlin-backend:api:shadowJar
-	./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution
-	./gradlew :compose-frontend:androidApp:assembleRelease
-	./gradlew :compose-frontend:composeApp:packageDistributionForCurrentOS
+	$(MAKE) -C backend clean
+	$(MAKE) -C backend build
+	$(MAKE) -C backend release
+	$(MAKE) -C frontend release
 	@echo "Release artifacts created in build directories"
 
 # ==================== Database ====================
 
 db-migrate:
 	@echo "Running database migrations..."
-	./gradlew :kotlin-backend:api:flywayMigrate
+	$(MAKE) -C backend db-migrate
 
 db-clean:
 	@echo "Cleaning database..."
-	./gradlew :kotlin-backend:api:flywayClean
+	$(MAKE) -C backend db-clean
 
 # ==================== Linting & Code Quality ====================
 
 lint:
-	@echo "Running detekt code analysis..."
-	./gradlew detektMain
+	@echo "Running detekt (backend + root)..."
+	$(MAKE) -C backend lint
+	@echo "Run frontend lint from frontend/: cd frontend && make lint (detektDesktopMain)"
 
 lint-baseline:
 	@echo "Generating detekt baseline..."
-	./gradlew detektBaseline
+	$(MAKE) -C backend lint-baseline
 
 lint-report:
 	@echo "Running detekt with HTML report..."
-	./gradlew detektMain --continue
-	@echo "Reports generated in build/reports/detekt/"
+	$(MAKE) -C backend lint-report
+	@echo "Reports generated in backend/build/reports/detekt/"
 
 # ==================== Documentation ====================
 
 docs:
 	@echo "Generating documentation..."
-	./gradlew dokkaHtml
+	$(MAKE) -C backend docs
 
 # ==================== Helm ====================
 

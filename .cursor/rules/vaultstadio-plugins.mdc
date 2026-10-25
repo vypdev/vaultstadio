@@ -44,7 +44,7 @@ ai-classification/→ AIClassificationPlugin.kt
 ## Commands
 
 ```bash
-./gradlew :kotlin-backend:plugins:image-metadata:pluginJar
-./gradlew :kotlin-backend:plugins:video-metadata:pluginJar
+cd backend && ./gradlew :plugins:image-metadata:pluginJar :plugins:video-metadata:pluginJar
+# Or: make plugins-build (from root)
 make plugins-build
 ```
