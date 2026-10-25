@@ -4,6 +4,10 @@
  * Uses this project's own config only: config/detekt/detekt.yml and config/detekt/baseline.xml.
  */
 
+import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.RootPackageJsonTask
+import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnPlugin
+import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnRootExtension
+
 plugins {
     kotlin("jvm") version "2.4.0" apply false
     kotlin("multiplatform") version "2.4.0" apply false
@@ -12,6 +16,19 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+}
+
+// Patch transitive ws for CVE-2026-48779 and CVE-2026-45736; retain strict lock checks.
+val patchedWebSocketVersion = "8.21.3"
+plugins.withType<WasmYarnPlugin> {
+    rootProject.extensions.configure<WasmYarnRootExtension> {
+        resolution("ws", patchedWebSocketVersion)
+    }
+}
+
+// KGP does not track this resolution in the generated root package task inputs.
+tasks.withType<RootPackageJsonTask>().configureEach {
+    inputs.property("patchedWebSocketVersion", patchedWebSocketVersion)
 }
 
 allprojects {
