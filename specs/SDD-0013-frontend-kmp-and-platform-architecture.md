@@ -230,7 +230,7 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
-For #76: BOOT-SER-01/02 → data/network factory tests on JVM/Wasm; BOOT-HTTP-01 → actual Nginx contract probe plus built-artifact browser load; BOOT-UI-01/ISO-01 → isolated GUI dogfooding and runtime evidence. These targets are acceptance work, not completed evidence until executed.
+For #76, executed evidence is recorded in [frontend startup verification](../docs/development/verification/FRONTEND_STARTUP_76.md) and its companion JSON: BOOT-SER-01/02 → 15 production-factory cases on JVM and Wasm; BOOT-HTTP-01 → 4 actual Nginx checks plus built-artifact browser load; BOOT-PKG-01 → generated and launched macOS distributable. BOOT-UI-01 is partially verified: browser login, folder navigation and upload passed; desktop login is visible, but interactive desktop authentication remains unverified because native keyboard automation did not enter text. BOOT-ISO-01 → dedicated browser origin, disposable backend volumes/account and confirmed in-memory desktop preferences. These results do not certify other platforms or complete feature readiness.
 
 ## 18. Implementation or maintenance sequence
 

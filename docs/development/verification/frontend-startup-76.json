@@ -1,0 +1,164 @@
+{
+  "issue": 76,
+  "verifiedSource": "4fcc7782c4a031465cab7c8b25f8ae98e059f3c7",
+  "date": "2026-10-25",
+  "desktop": {
+    "suites": 245,
+    "tests": 1142,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "networkWasm": {
+    "suites": 1,
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "uniqueNewSerializerCases": 15,
+  "serializerCoverage": {
+    "INSTRUCTION": {
+      "missed": 0,
+      "covered": 19
+    },
+    "LINE": {
+      "missed": 0,
+      "covered": 5
+    },
+    "COMPLEXITY": {
+      "missed": 0,
+      "covered": 4
+    },
+    "METHOD": {
+      "missed": 0,
+      "covered": 4
+    },
+    "CLASS": {
+      "missed": 0,
+      "covered": 1
+    }
+  },
+  "compiledDesktopAggregateCoverage": {
+    "INSTRUCTION": {
+      "missed": 188693,
+      "covered": 18074
+    },
+    "BRANCH": {
+      "missed": 12423,
+      "covered": 359
+    },
+    "LINE": {
+      "missed": 16724,
+      "covered": 4024
+    },
+    "COMPLEXITY": {
+      "missed": 12182,
+      "covered": 1406
+    },
+    "METHOD": {
+      "missed": 6602,
+      "covered": 1277
+    },
+    "CLASS": {
+      "missed": 769,
+      "covered": 296
+    }
+  },
+  "nginx": {
+    "passed": true,
+    "checks": [
+      {
+        "case": "wasm-get",
+        "passed": true,
+        "status": 200,
+        "contentTypes": [
+          "application/wasm"
+        ]
+      },
+      {
+        "case": "wasm-head",
+        "passed": true,
+        "status": 200,
+        "contentTypes": [
+          "application/wasm"
+        ]
+      },
+      {
+        "case": "missing-wasm",
+        "passed": true,
+        "status": 404
+      },
+      {
+        "case": "spa-fallback",
+        "passed": true,
+        "status": 200
+      }
+    ],
+    "image": "nginx:alpine",
+    "imageId": "sha256:ef9a6e2b45c23a9693064eb858517632288d5da63bcb9f86c7cef4983290f41e",
+    "configSha256": "6de1abd4700197568e9fddc1ab73e29236177a99e16a9b799a27532fd8d830b7"
+  },
+  "build": {
+    "desktopDistributable": true,
+    "webProduction": true,
+    "detektDesktopMain": true,
+    "networkKtlint": true,
+    "serializerCoverageGate": true
+  },
+  "gui": {
+    "webFreshLoginVisible": true,
+    "webInvalidLoginRejected": true,
+    "webDisposableLoginSucceeded": true,
+    "webCreateFolderAndNavigate": true,
+    "webUploadBytes": 66,
+    "apiDownloadAfterWebUpload": {
+      "passed": true,
+      "source": "real browser upload followed by authenticated API download",
+      "bytes": 66,
+      "sha256": "3a6e85352f08b63b0bb48c7c4d200e80c6cc98ab324f6c9ee98fef924fed34b3",
+      "status": 200,
+      "contentType": "text/plain",
+      "guiDownloadVerified": false,
+      "guiDownloadBlocker": "Details onDownload handler computes URL but does not invoke a download adapter"
+    },
+    "desktopFreshLoginVisible": true,
+    "desktopEmptyFormValidationVisible": true,
+    "desktopMemoryPreferencesConfirmed": true,
+    "desktopInteractiveLoginVerified": false,
+    "desktopLoginLimitation": "Native automation did not enter characters; no authenticated desktop claim. No seeded-session workaround was executed."
+  },
+  "backendRuntime": {
+    "source": "260489a0131419cc1c1231d952681c81d067c802",
+    "distributionSha256": "2e55db1e8f62a012c13d55bc599e449ec21bbc14858231c6e695face3ce693e3"
+  },
+  "artifacts": [
+    {
+      "path": "frontend/composeApp/build/compose/binaries/main/app/VaultStadio.app/Contents/app/composeApp-desktop-1.0.0-SNAPSHOT-6137cbf3f6f475bac73bb26724311d95.jar",
+      "bytes": 1098097,
+      "sha256": "d2e8f693fd7ea871a0c1be0f56b6ee5ebb5f739f9c3dc0f5dec0af6dd872c38b"
+    },
+    {
+      "path": "frontend/composeApp/build/dist/wasmJs/productionExecutable/0c7a3ff214d646587a58.wasm",
+      "bytes": 8642989,
+      "sha256": "69afd1fba0567fc79515d97bac5c0670cfeb180284823f986199637f154a9bbe"
+    },
+    {
+      "path": "frontend/composeApp/build/dist/wasmJs/productionExecutable/21485d553ce392e30060.wasm",
+      "bytes": 7773967,
+      "sha256": "0a2003e90896d18e8a0ce2066fb1daa147ecb8e9ef5771d9f4cf23cf6069be07"
+    },
+    {
+      "path": "frontend/composeApp/build/dist/wasmJs/productionExecutable/index.html",
+      "bytes": 1887,
+      "sha256": "f40717cdd76105037233895a3ec94801f831b7ca269e79be6d483a33e59431db"
+    }
+  ],
+  "limitations": [
+    "No Android, iOS, Windows or Linux runtime verification in this change",
+    "Whole frontend remains low coverage; serializer gate is not whole-module coverage",
+    "GUI details download handler is a confirmed no-op and requires a separate fix",
+    "Action-managed branch synchronization currently lacks Java in its verification job",
+    "Native keyboard login remains unverified"
+  ]
+}
