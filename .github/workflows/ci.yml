@@ -352,6 +352,9 @@ jobs:
       
       - name: Check no FQN in type positions
         run: ./scripts/check-no-fqn.sh
+
+      - name: Test project verification environment
+        run: python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
       
       - name: Run Detekt (backend)
         working-directory: backend
