@@ -53,6 +53,10 @@ Application CI includes both storage test modules, verifies 100% line/branch cov
 
 The complete aggregate uses the [audit init script](https://github.com/vypdev/vaultstadio/blob/a0d18a2fd560d25a5afafdebfd0a2910aa02c7c7/scripts/audit/aggregate-coverage.init.gradle), separately from the two scoped CI gates.
 
+## Reviewed dependency contract
+
+The review claim that `ExposedSQLException` escapes the SQLException catch was checked against the actual resolved dependency. `:infrastructure:dependencyInsight --configuration runtimeClasspath --dependency exposed-core` selects **1.0.0**. `javap` on that artifact declares `org.jetbrains.exposed.v1.exceptions.ExposedSQLException extends java.sql.SQLException`. The existing migrated-PostgreSQL SQL-failure regression returns `DatabaseException` and preserves metadata. The specific catch is retained; coroutine cancellation is not converted into a database result. Evidence and response: [review discussion](https://github.com/vypdev/vaultstadio/pull/75#discussion_r4371532051).
+
 ## Requirement traceability
 
 | SDD-0004 requirement | Implementation | Executed tests |
