@@ -26,7 +26,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -147,7 +147,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -185,16 +185,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download backend coverage reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: jacoco-coverage-backend
           path: coverage-backend
 
       - name: Download frontend coverage report
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: jacoco-coverage-frontend
           path: coverage-frontend
@@ -238,7 +238,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -270,7 +270,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -312,7 +312,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -367,7 +367,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
