@@ -159,7 +159,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
 
       - name: Build frontend (Desktop)
-        run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop --no-build-cache
+        run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop :composeApp:createDistributable --no-build-cache
 
       - name: Run frontend tests (desktop)
         run: |
