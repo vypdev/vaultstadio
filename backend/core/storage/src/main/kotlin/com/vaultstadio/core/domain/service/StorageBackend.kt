@@ -22,4 +22,3 @@ interface StorageBackend {
      */
     suspend fun isAvailable(): Either<StorageException, Boolean>
 }
-

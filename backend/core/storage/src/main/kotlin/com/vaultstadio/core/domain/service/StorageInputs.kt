@@ -51,4 +51,3 @@ data class CopyItemInput(
     val newName: String? = null,
     val userId: String,
 )
-
