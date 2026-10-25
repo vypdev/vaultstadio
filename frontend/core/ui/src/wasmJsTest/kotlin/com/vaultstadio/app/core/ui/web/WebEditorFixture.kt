@@ -24,7 +24,8 @@ internal class WebEditorFixture {
         return input
     }
 
-    fun bridge(label: String = "Password") = ProtectedWebInputBridge(host, label).also { bridges.add(it) }
+    fun bridge(label: String = "Password", editorHost: HTMLElement = host) =
+        ProtectedWebInputBridge(editorHost, label).also { bridges.add(it) }
 
     fun close() {
         bridges.forEach { it.close() }

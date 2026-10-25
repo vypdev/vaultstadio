@@ -54,6 +54,14 @@ git diff --check
 
 The actual-source Detekt tasks matter: typed `detektDesktopMain` tasks can report `NO-SOURCE` for custom shared source directories. The report checker rejects missing reports and findings in the new accessibility/authentication scope. Historical resource-interface debt remains explicit audit work.
 
+The transitive WebSocket security patch also has a bounded local runtime smoke. After the frontend npm installation, run this from the repository root with Node.js:
+
+```sh
+node scripts/dogfood/websocket-runtime-smoke.mjs
+```
+
+It checks the installed version and exercises fragmented Unicode, rejection of an unsupported close-reason type, and a valid typed-array close over loopback. It does not replace application WebSocket authentication or collaboration tests.
+
 ## Meaningful interaction tests
 
 Render the production component with observable state and controlled ports. Perform its supported action and assert the resulting value, callback, validation or navigation state. A copied widget, reimplemented calculation or constant assertion cannot establish production interaction.
