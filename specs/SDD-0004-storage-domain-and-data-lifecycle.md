@@ -126,7 +126,7 @@ This revision restores the authorization-before-mutation invariant. It is an imp
 | STO-AUTH-04 | Get-or-create MUST validate an existing result's ownership, folder type and active state before returning it. | No foreign or trashed folder is returned or replaced. |
 | STO-AUTH-05 | Breadcrumbs MUST authorize each ancestor before returning any ancestor metadata, including historically inconsistent cross-owner hierarchies. | Whole request fails; no partial ancestor list is disclosed. |
 | STO-AUTH-06 | Hierarchy traversal MUST detect cycles, reject more than 128 ancestors, and reject moving an item into itself or a descendant before effects. | Original parent/path/version remain unchanged. |
-| STO-AUTH-07 | Permanent deletion MUST remove a single leaf only. A nonempty folder MUST be rejected atomically against concurrent child insertion, including legacy cross-owner descendants; implicit SQL cascade is not an authorized recursive operation. | Parent, descendants and content remain. Empty-folder and owned-file deletion retain existing behavior. |
+| STO-AUTH-07 | Permanent deletion MUST remove a single leaf only. A nonempty folder MUST be rejected atomically against concurrent child insertion, including legacy cross-owner descendants. The atomic leaf port MUST revalidate the owner and retain its item lock through the content callback and metadata deletion, using the locked storage key; implicit SQL cascade is not an authorized recursive operation. | Parent, descendants and content remain. Empty-folder and owned-file deletion retain existing behavior. |
 | STO-AUTH-08 | Repository failures MUST retain their typed identity; a failed authorization/preflight MUST invoke no mutating repository, backend or event operation. | Caller can distinguish failure from successful empty results. |
 
 | Surface | Owner | Other authenticated actor | Validated share token |
@@ -163,6 +163,8 @@ Configuration MUST define type, recommended default, allowed values, validation,
 Storage domain owns item/value invariants. Application owns use cases and storage ports. Local/S3 adapters own byte operations. API maps requests/responses. Koin is composition only.
 
 A storage port must not expose SDK clients or filesystem primitives to application policy. Local and S3 adapters share semantic contract tests.
+
+For STO-AUTH-07, `deleteLeaf(id, actorId, deleteContent)` is a semantic atomic port: the SQL adapter owns the row lock and transaction, invokes the domain ownership policy on its locked snapshot, rejects non-leaves before invoking the callback, and returns that same snapshot after metadata deletion. Core owns byte deletion inside the callback and publishes success only after the port succeeds. No SQL transaction/client type crosses the port. The per-item lock deliberately remains held during byte I/O to prevent the reviewed check/delete race; slow provider I/O and post-content database commit failure remain reasons to implement a durable compensation/outbox lifecycle in R02, not claims of cross-resource atomicity in this correction.
 
 ### 8.3 Executable architecture constraints
 
@@ -237,7 +239,7 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 5. Given an owned source and foreign, trashed or non-folder destination, move/copy/restore fails with original source/version/content retained (STO-AUTH-02–03).
 6. Given an existing get-or-create result that is foreign, trashed or a file, the result fails before mutation (STO-AUTH-04).
 7. Given an owned item with a foreign ancestor, breadcrumbs fail without returning names; cycles and a 129th ancestor fail without effects (STO-AUTH-05–06).
-8. Given a nonempty folder in the real migrated schema, permanent delete fails and both owned/foreign children survive. A child insertion racing an empty-folder delete must not be silently cascaded (STO-AUTH-07).
+8. Given a nonempty folder in the real migrated schema, permanent delete fails and both owned/foreign children survive. A child insertion racing a file or empty-folder delete must not be silently cascaded; if insertion wins, the original bytes remain (STO-AUTH-07).
 9. Given any preflight port failure, its original typed error reaches the caller and no mutation/backend/event is invoked (STO-AUTH-08).
 
 ## 17. Requirements traceability

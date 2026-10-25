@@ -12,6 +12,7 @@ import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
 import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.common.exception.ValidationException
 import com.vaultstadio.domain.common.pagination.PagedResult
 import com.vaultstadio.domain.common.pagination.SortOrder
@@ -765,12 +766,12 @@ class StorageServiceTest {
             } returns Unit.right()
 
             coEvery {
-                storageItemRepository.delete("file-id")
-            } returns Unit.right()
+                storageItemRepository.deleteLeaf("file-id", "user-123", any())
+            } coAnswers {
+                thirdArg<suspend (StorageItem) -> Either<StorageException, Unit>>().invoke(item).map { item }
+            }
 
             // When
-            coEvery { storageItemRepository.query(match { it.parentId == item.id && it.filterByParent && it.ownerId == null }) } returns
-                PagedResult<StorageItem>(emptyList(), 0, 0, 1).right()
             val result = storageService.deleteItem("file-id", "user-123")
 
             // Then
@@ -789,12 +790,12 @@ class StorageServiceTest {
             } returns folder.right()
 
             coEvery {
-                storageItemRepository.delete("folder-id")
-            } returns Unit.right()
+                storageItemRepository.deleteLeaf("folder-id", "user-123", any())
+            } coAnswers {
+                thirdArg<suspend (StorageItem) -> Either<StorageException, Unit>>().invoke(folder).map { folder }
+            }
 
             // When
-            coEvery { storageItemRepository.query(match { it.parentId == folder.id && it.filterByParent && it.ownerId == null }) } returns
-                PagedResult<StorageItem>(emptyList(), 0, 0, 1).right()
             val result = storageService.deleteItem("folder-id", "user-123")
 
             // Then

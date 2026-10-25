@@ -68,11 +68,11 @@ class StorageLeafDeletionIntegrationTest {
 
     @Test
     fun `committing child first makes a racing delete fail without cascade`() = runBlocking<Unit> {
-        val parent = f.seed()
+        val parent = f.seedStoredFile()
         connection().use { inserting ->
             inserting.autoCommit = false
             insertChild(inserting, parent.id)
-            val deletion = async(Dispatchers.IO) { f.repository.delete(parent.id) }
+            val deletion = async(Dispatchers.IO) { f.service.deleteItem(parent.id, f.alice.id) }
             try {
                 awaitBlockedQuery("%FOR UPDATE%")
                 inserting.commit()
@@ -82,11 +82,14 @@ class StorageLeafDeletionIntegrationTest {
             assertIs<InvalidOperationException>(assertIs<Either.Left<*>>(withTimeout(10000) { deletion.await() }).value)
         }
         assertEquals(2, f.rowCount())
+        assertEquals(1, f.byteFileCount())
+        val retained = f.backend.retrieve(parent.storageKey!!).fold({ throw it }, { it }).use { it.readBytes() }
+        assertEquals("retained", retained.decodeToString())
     }
 
     @Test
     fun `locking delete first rejects a racing child instead of cascading it`() = runBlocking<Unit> {
-        val parent = f.seed()
+        val parent = f.seedStoredFile()
         connection().use { guard ->
             guard.createStatement().use { statement ->
                 statement.execute("SELECT pg_advisory_lock(730001)")
@@ -101,7 +104,7 @@ class StorageLeafDeletionIntegrationTest {
                 )
             }
             try {
-                val deletion = async(Dispatchers.IO) { f.repository.delete(parent.id) }
+                val deletion = async(Dispatchers.IO) { f.service.deleteItem(parent.id, f.alice.id) }
                 awaitBlockedQuery("%DELETE%storage_items%")
                 val insertion = async(Dispatchers.IO) {
                     try {
@@ -127,6 +130,7 @@ class StorageLeafDeletionIntegrationTest {
             }
         }
         assertEquals(0, f.rowCount())
+        assertEquals(0, f.byteFileCount())
     }
 
     @Test

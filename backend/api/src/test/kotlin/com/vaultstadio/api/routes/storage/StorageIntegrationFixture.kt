@@ -102,6 +102,13 @@ internal class StorageIntegrationFixture : AutoCloseable {
         return repository.create(item).fold({ throw it }, { it })
     }
 
+    suspend fun seedStoredFile(content: String = "retained"): StorageItem {
+        val item = seed(type = ItemType.FILE)
+        val bytes = content.toByteArray()
+        val key = backend.store(bytes.inputStream(), bytes.size.toLong(), "text/plain").fold({ throw it }, { it })
+        return repository.update(item.copy(storageKey = key, size = bytes.size.toLong())).fold({ throw it }, { it })
+    }
+
     fun rowCount(): Long = transaction(database) { StorageItemsTable.selectAll().count() }
     fun byteFileCount(): Long = Files.walk(contentPath).use { paths ->
         paths.filter { Files.isRegularFile(it) }.count()

@@ -38,7 +38,18 @@ internal class StorageAuthorizationFixture {
         else -> error("Unknown operation: $operation")
     }
 
+    fun allowLeafDeletion(snapshot: StorageItem) {
+        coEvery { repository.deleteLeaf(snapshot.id, ACTOR, any()) } coAnswers {
+            thirdArg<suspend (StorageItem) -> Either<StorageException, Unit>>().invoke(snapshot).map { snapshot }
+        }
+    }
+
     fun assertNoEffects() {
+        assertNoContentEffects()
+        coVerify(exactly = 0) { repository.deleteLeaf(any(), any(), any()) }
+    }
+
+    fun assertNoContentEffects() {
         coVerify(exactly = 0) {
             repository.create(any())
             repository.update(any())
