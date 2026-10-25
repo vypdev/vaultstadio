@@ -27,6 +27,8 @@ Negative controls were retained: the original serializer failed all 14 then-exis
 
 The first combined build hit an internal Compose/JVM inline-compilation error in generated/incremental state. A clean of the composeApp generated outputs rebuilt the same production source successfully; the subsequent complete published-candidate run also passed. The missing-icon packaging failure was independently reproduced and corrected in source.
 
+The first remote frontend job (`40221813627`, job `121254805611`) then exposed a missing runner prerequisite: Karma could not find Chrome at its default macOS application path. CI now provisions a dedicated browser using the commit-pinned `browser-actions/setup-chrome` action and passes its output as `CHROME_BIN`; the job verifies the executable and records its actual version before running the mandatory tests. This is an environment correction, not a test skip. The new remote run must pass before merge.
+
 ## Real local dogfooding
 
 The production Wasm distribution ran behind the real Nginx configuration on a dedicated loopback origin. A new PostgreSQL database and new local-content volumes held only synthetic data. The backend executable was the separately retained, verified #75 candidate (`260489a0131419cc1c1231d952681c81d067c802`); its standalone distribution SHA256 is recorded in the companion JSON. This is a deliberate combined frontend/backend test, not evidence that #76 contains the storage fix.
