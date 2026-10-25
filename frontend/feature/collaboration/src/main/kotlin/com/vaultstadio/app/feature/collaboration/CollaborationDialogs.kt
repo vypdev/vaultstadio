@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
 import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 
@@ -171,12 +172,16 @@ fun AddCommentDialog(
                 value = commentText,
                 onValueChange = { commentText = it },
                 label = { Text(strings.collaborationComment) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().inputSemantics(
+                    "collaboration.comment",
+                    strings.collaborationComment,
+                ),
                 minLines = 3,
             )
         },
         confirmButton = {
             Button(
+                enabled = commentText.isNotBlank(),
                 onClick = {
                     if (commentText.isNotBlank()) {
                         onAdd(commentText)

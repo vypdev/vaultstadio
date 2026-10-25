@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.ai.model.AIChatMessage
 import com.vaultstadio.app.domain.ai.model.AIModel
 import com.vaultstadio.app.domain.ai.model.AIProviderInfo
@@ -309,7 +310,16 @@ fun AIInputArea(
             OutlinedTextField(
                 value = inputText,
                 onValueChange = onInputChange,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).inputSemantics(
+                    "ai.input",
+                    when (selectedMode) {
+                        AIMode.CHAT -> strings.aiTypePlaceholder
+                        AIMode.DESCRIBE -> strings.aiImageUrlPlaceholder
+                        AIMode.TAG -> strings.aiTagPlaceholder
+                        AIMode.CLASSIFY -> strings.aiClassifyPlaceholder
+                        AIMode.SUMMARIZE -> strings.aiSummarizePlaceholder
+                    },
+                ),
                 placeholder = {
                     Text(
                         when (selectedMode) {
@@ -330,6 +340,7 @@ fun AIInputArea(
                 enabled = inputText.isNotBlank() && !isSending && activeProvider != null,
                 modifier = Modifier
                     .size(48.dp)
+                    .inputSemantics("ai.send", strings.commonSend)
                     .clip(CircleShape)
                     .background(
                         if (inputText.isNotBlank() && !isSending && activeProvider != null) {

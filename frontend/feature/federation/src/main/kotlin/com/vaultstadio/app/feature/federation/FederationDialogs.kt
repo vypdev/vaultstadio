@@ -18,7 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.inputLabel
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.federation.model.FederatedInstance
 
 @Composable
@@ -46,19 +49,26 @@ fun RequestFederationDialog(
                     onValueChange = { domain = it },
                     label = { Text(strings.federationInstanceDomain) },
                     placeholder = { Text(strings.federationInstanceDomainPlaceholder) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "federation.domain",
+                        strings.federationInstanceDomain,
+                    ),
                 )
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(
                     value = message,
                     onValueChange = { message = it },
                     label = { Text(strings.federationMessageOptional) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "federation.message",
+                        strings.federationMessageOptional,
+                    ),
                 )
             }
         },
         confirmButton = {
             Button(
+                enabled = domain.isNotBlank(),
                 onClick = {
                     if (domain.isNotBlank()) {
                         onConfirm(domain, message.takeIf { it.isNotBlank() })
@@ -157,22 +167,31 @@ fun LinkIdentityDialog(
                 OutlinedTextField(
                     value = remoteUserId,
                     onValueChange = { remoteUserId = it },
-                    label = { Text("Remote User ID") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.inputLabel(InputLabel.REMOTE_USER)) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "federation.remote-user",
+                        strings.inputLabel(InputLabel.REMOTE_USER),
+                    ),
                     singleLine = true,
                 )
                 OutlinedTextField(
                     value = remoteInstance,
                     onValueChange = { remoteInstance = it },
-                    label = { Text("Remote Instance (e.g., other.vaultstadio.com)") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.inputLabel(InputLabel.REMOTE_INSTANCE)) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "federation.remote-instance",
+                        strings.inputLabel(InputLabel.REMOTE_INSTANCE),
+                    ),
                     singleLine = true,
                 )
                 OutlinedTextField(
                     value = displayName,
                     onValueChange = { displayName = it },
-                    label = { Text("Display Name") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.inputLabel(InputLabel.DISPLAY_NAME)) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "federation.display-name",
+                        strings.inputLabel(InputLabel.DISPLAY_NAME),
+                    ),
                     singleLine = true,
                 )
             }

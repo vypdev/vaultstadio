@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.feature.files.FilesMode
 
 /**
@@ -42,7 +43,7 @@ fun NewFolderDialog(
                 onValueChange = onFolderNameChange,
                 label = { Text(strings.folderName) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().inputSemantics("files.folder-name", strings.folderName),
             )
         },
         confirmButton = {
@@ -79,9 +80,9 @@ fun RenameDialog(
             OutlinedTextField(
                 value = renameValue,
                 onValueChange = onRenameValueChange,
-                label = { Text("New name") },
+                label = { Text(strings.actionRename) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().inputSemantics("files.rename", strings.actionRename),
             )
         },
         confirmButton = {

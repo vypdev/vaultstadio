@@ -29,6 +29,7 @@ kotlin {
                 implementation(project(":domain:result"))
                 implementation(project(":domain:ai"))
                 implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.decompose)
                 implementation(libs.koin.core)

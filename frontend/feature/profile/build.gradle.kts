@@ -25,6 +25,8 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
+                implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
                 implementation(libs.compose.material.icons.extended)
                 implementation(project(":domain:result"))
                 implementation(project(":domain:auth"))

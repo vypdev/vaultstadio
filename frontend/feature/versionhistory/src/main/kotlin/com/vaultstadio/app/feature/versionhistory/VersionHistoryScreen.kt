@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.strings
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.version.model.FileVersion
 import com.vaultstadio.app.domain.version.model.FileVersionHistory
 import com.vaultstadio.app.domain.version.model.VersionDiff
@@ -198,7 +199,10 @@ fun VersionHistoryScreen(
                         value = restoreComment,
                         onValueChange = { restoreComment = it },
                         label = { Text(strings.versionCommentOptional) },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().inputSemantics(
+                            "versions.restore-comment",
+                            strings.versionCommentOptional,
+                        ),
                     )
                 }
             },
@@ -239,7 +243,10 @@ fun VersionHistoryScreen(
                         onValueChange = { maxVersions = it.filter { c -> c.isDigit() } },
                         label = { Text(strings.versionKeepLast) },
                         placeholder = { Text(strings.versionKeepLastPlaceholder) },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().inputSemantics(
+                            "versions.keep-last",
+                            strings.versionKeepLast,
+                        ),
                     )
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(
@@ -247,7 +254,10 @@ fun VersionHistoryScreen(
                         onValueChange = { maxAgeDays = it.filter { c -> c.isDigit() } },
                         label = { Text(strings.versionDeleteOlderThan) },
                         placeholder = { Text(strings.versionDeleteOlderThanPlaceholder) },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().inputSemantics(
+                            "versions.max-age",
+                            strings.versionDeleteOlderThan,
+                        ),
                     )
                 }
             },

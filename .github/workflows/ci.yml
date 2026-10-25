@@ -164,8 +164,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version-file: frontend/.java-version
+          distribution: jetbrains
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
@@ -184,6 +184,16 @@ jobs:
         with:
           name: jacoco-coverage-frontend
           path: frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          retention-days: 1
+
+      - name: Enforce accessible input coverage
+        run: cd frontend && ./gradlew :core:ui:jacocoTestReport :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache
+
+      - name: Upload accessible input coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-accessibility
+          path: frontend/core/ui/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           retention-days: 1
 
   # Upload coverage to Codecov
@@ -210,6 +220,12 @@ jobs:
         with:
           name: jacoco-coverage-frontend
           path: coverage-frontend
+
+      - name: Download accessible input coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: jacoco-coverage-accessibility
+          path: coverage-accessibility
 
       - name: List coverage files (debug)
         run: |
@@ -350,6 +366,11 @@ jobs:
             "platforms;android-34" \
             "build-tools;34.0.0"
       
+      - name: Verify active frontend interaction inventory
+        run: |
+          python3 scripts/check-frontend-accessibility.py
+          python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py'
+
       - name: Check no FQN in type positions
         run: ./scripts/check-no-fqn.sh
       
@@ -357,6 +378,13 @@ jobs:
         working-directory: backend
         run: ./gradlew detektMain --continue
       
+      - name: Analyze actual accessibility and authentication sources
+        run: |
+          cd frontend
+          ./gradlew :core:ui:detekt :core:resources:detekt :feature:auth:detekt :composeApp:ktlintDesktopTestSourceSetCheck --continue
+          cd ..
+          python3 scripts/check-frontend-accessibility.py --detekt-reports
+
       - name: Run Detekt (frontend)
         working-directory: frontend
         run: ./gradlew detektDesktopMain --continue

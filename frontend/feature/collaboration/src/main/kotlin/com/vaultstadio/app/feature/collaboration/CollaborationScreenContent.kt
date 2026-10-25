@@ -39,7 +39,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vaultstadio.app.core.resources.InputLabel
+import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.inputLabel
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
 import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 import com.vaultstadio.app.domain.collaboration.model.DocumentState
@@ -216,7 +220,9 @@ fun DocumentEditor(
         BasicTextField(
             value = editedContent,
             onValueChange = onContentChange,
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(
+                16.dp,
+            ).inputSemantics("collaboration.document", LocalStrings.current.inputLabel(InputLabel.DOCUMENT_CONTENT)),
             textStyle = TextStyle(
                 fontFamily = FontFamily.Monospace,
                 fontSize = 14.sp,

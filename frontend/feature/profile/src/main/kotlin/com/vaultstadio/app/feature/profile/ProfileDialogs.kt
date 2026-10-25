@@ -17,7 +17,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.resources.InputLabel
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.inputLabel
+import com.vaultstadio.app.core.ui.inputSemantics
 
 @Composable
 fun EditProfileDialog(
@@ -26,6 +31,7 @@ fun EditProfileDialog(
     onSave: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val strings = LocalStrings.current
     var username by remember { mutableStateOf(currentUsername) }
 
     AlertDialog(
@@ -36,8 +42,8 @@ fun EditProfileDialog(
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Username") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.authUsername) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics("profile.username", strings.authUsername),
                     singleLine = true,
                     enabled = !isSaving,
                 )
@@ -67,6 +73,7 @@ fun ChangePasswordDialog(
     onChangePassword: (currentPassword: String, newPassword: String) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val strings = LocalStrings.current
     var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -85,27 +92,39 @@ fun ChangePasswordDialog(
                 OutlinedTextField(
                     value = currentPassword,
                     onValueChange = { currentPassword = it },
-                    label = { Text("Current Password") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.inputLabel(InputLabel.CURRENT_PASSWORD)) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "profile.current-password",
+                        strings.inputLabel(InputLabel.CURRENT_PASSWORD),
+                    ),
                     singleLine = true,
                     enabled = !isSaving,
+                    visualTransformation = PasswordVisualTransformation(),
                 )
                 OutlinedTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    label = { Text("New Password") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.inputLabel(InputLabel.NEW_PASSWORD)) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "profile.new-password",
+                        strings.inputLabel(InputLabel.NEW_PASSWORD),
+                    ),
                     singleLine = true,
                     enabled = !isSaving,
+                    visualTransformation = PasswordVisualTransformation(),
                 )
                 OutlinedTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
-                    label = { Text("Confirm New Password") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.authConfirmPassword) },
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "profile.confirm-password",
+                        strings.authConfirmPassword,
+                    ),
                     singleLine = true,
                     enabled = !isSaving,
                     isError = !passwordsMatch,
+                    visualTransformation = PasswordVisualTransformation(),
                 )
                 if (!passwordsMatch) {
                     Text(

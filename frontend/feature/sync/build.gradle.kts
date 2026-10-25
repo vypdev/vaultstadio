@@ -29,6 +29,7 @@ kotlin {
                 implementation(project(":domain:result"))
                 implementation(project(":domain:sync"))
                 implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.decompose)

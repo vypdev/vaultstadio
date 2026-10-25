@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.core.resources.clear
 import com.vaultstadio.app.core.resources.searchPlaceholder
+import com.vaultstadio.app.core.ui.inputSemantics
 
 @Composable
 internal fun FilesSearchBar(
@@ -67,7 +68,7 @@ internal fun FilesSearchBar(
                 }
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().inputSemantics("files.search", strings.actionSearch),
         )
 
         DropdownMenu(

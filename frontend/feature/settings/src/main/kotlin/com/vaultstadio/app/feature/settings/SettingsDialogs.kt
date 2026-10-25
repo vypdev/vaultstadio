@@ -4,7 +4,6 @@
 
 package com.vaultstadio.app.feature.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,6 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.Language
 import com.vaultstadio.app.core.resources.LocalStrings
@@ -41,13 +42,15 @@ fun ThemeSelectionDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onThemeSelected(theme) }
+                            .selectable(selected = currentTheme == theme, role = Role.RadioButton, onClick = {
+                                onThemeSelected(theme)
+                            })
                             .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         androidx.compose.material3.RadioButton(
                             selected = currentTheme == theme,
-                            onClick = { onThemeSelected(theme) },
+                            onClick = null,
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
@@ -84,13 +87,15 @@ fun LanguageSelectionDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onLanguageSelected(language) }
+                            .selectable(selected = currentLanguage == language, role = Role.RadioButton, onClick = {
+                                onLanguageSelected(language)
+                            })
                             .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         androidx.compose.material3.RadioButton(
                             selected = currentLanguage == language,
-                            onClick = { onLanguageSelected(language) },
+                            onClick = null,
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(text = language.displayName)

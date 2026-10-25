@@ -32,6 +32,7 @@ kotlin {
                 implementation(project(":domain:auth"))
                 implementation(project(":data:collaboration"))
                 implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.decompose)

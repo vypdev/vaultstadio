@@ -38,7 +38,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.inputLabel
+import com.vaultstadio.app.core.ui.inputSemantics
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,8 +130,11 @@ fun ChangePasswordScreen(
                     OutlinedTextField(
                         value = currentPassword,
                         onValueChange = onCurrentPasswordChange,
-                        label = { Text("Current Password") },
-                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(strings.inputLabel(InputLabel.CURRENT_PASSWORD)) },
+                        modifier = Modifier.fillMaxWidth().inputSemantics(
+                            "password.current",
+                            strings.inputLabel(InputLabel.CURRENT_PASSWORD),
+                        ),
                         singleLine = true,
                         visualTransformation =
                         if (showCurrentPassword) {
@@ -145,7 +151,9 @@ fun ChangePasswordScreen(
                                     } else {
                                         Icons.Default.Visibility
                                     },
-                                    contentDescription = "Toggle password visibility",
+                                    contentDescription = strings.inputLabel(
+                                        if (showCurrentPassword) InputLabel.HIDE_PASSWORD else InputLabel.SHOW_PASSWORD,
+                                    ),
                                 )
                             }
                         },
@@ -164,8 +172,11 @@ fun ChangePasswordScreen(
                     OutlinedTextField(
                         value = newPassword,
                         onValueChange = onNewPasswordChange,
-                        label = { Text("New Password") },
-                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(strings.inputLabel(InputLabel.NEW_PASSWORD)) },
+                        modifier = Modifier.fillMaxWidth().inputSemantics(
+                            "password.new",
+                            strings.inputLabel(InputLabel.NEW_PASSWORD),
+                        ),
                         singleLine = true,
                         visualTransformation =
                         if (showNewPassword) {
@@ -182,7 +193,9 @@ fun ChangePasswordScreen(
                                     } else {
                                         Icons.Default.Visibility
                                     },
-                                    contentDescription = "Toggle password visibility",
+                                    contentDescription = strings.inputLabel(
+                                        if (showNewPassword) InputLabel.HIDE_PASSWORD else InputLabel.SHOW_PASSWORD,
+                                    ),
                                 )
                             }
                         },
@@ -200,8 +213,11 @@ fun ChangePasswordScreen(
                     OutlinedTextField(
                         value = confirmPassword,
                         onValueChange = onConfirmPasswordChange,
-                        label = { Text("Confirm New Password") },
-                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(strings.authConfirmPassword) },
+                        modifier = Modifier.fillMaxWidth().inputSemantics(
+                            "password.confirm",
+                            strings.authConfirmPassword,
+                        ),
                         singleLine = true,
                         visualTransformation =
                         if (showConfirmPassword) {
@@ -218,7 +234,9 @@ fun ChangePasswordScreen(
                                     } else {
                                         Icons.Default.Visibility
                                     },
-                                    contentDescription = "Toggle password visibility",
+                                    contentDescription = strings.inputLabel(
+                                        if (showConfirmPassword) InputLabel.HIDE_PASSWORD else InputLabel.SHOW_PASSWORD,
+                                    ),
                                 )
                             }
                         },

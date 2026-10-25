@@ -30,6 +30,7 @@ kotlin {
                 implementation(project(":domain:admin"))
                 implementation(project(":domain:auth"))
                 implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.decompose)
                 implementation(libs.koin.core)

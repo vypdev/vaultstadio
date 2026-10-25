@@ -26,7 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.inputLabel
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.SyncConflict
 import com.vaultstadio.app.domain.sync.model.SyncDevice
@@ -241,9 +244,12 @@ fun RegisterDeviceDialog(
                 OutlinedTextField(
                     value = deviceName,
                     onValueChange = { deviceName = it },
-                    label = { Text("Device Name") },
+                    label = { Text(strings.inputLabel(InputLabel.DEVICE_NAME)) },
                     placeholder = { Text("My Computer") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().inputSemantics(
+                        "sync.device-name",
+                        strings.inputLabel(InputLabel.DEVICE_NAME),
+                    ),
                     singleLine = true,
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
