@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "issue": 73,
-  "verifiedSourceCommit": "348b067df9ec4488017c78aa1338b858e98fc53f",
-  "verifiedAtUtc": "2026-10-25T15:38:30.969440+00:00",
+  "verifiedSourceCommit": "92a709de9d941e262e7d6f9889618a25d267c8d2",
+  "verifiedAtUtc": "2026-10-25T15:51:49.536867+00:00",
   "scope": "Storage ownership and atomic leaf deletion; not whole-platform readiness",
   "backendTests": {
     "tests": 1964,
@@ -102,7 +102,8 @@
     "detektMain": "PASS (preexisting warnings remain)",
     "noFqn": "PASS",
     "specificationCatalog": "PASS (16 capabilities)",
-    "actionlintCiYaml": "PASS"
+    "actionlintCiYaml": "PASS",
+    "apiBuildWithUnfilteredKtlint": "PASS: :api:build -x test, same command as Docker workflow"
   },
   "pending": [
     "Remote CI and Copilot review",

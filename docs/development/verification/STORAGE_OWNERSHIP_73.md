@@ -1,6 +1,6 @@
 # Storage ownership correction — issue #73
 
-Verified source commit: `348b067df9ec4488017c78aa1338b858e98fc53f`, 2026-10-25 UTC. Machine-readable counts: [storage-ownership-73.json](storage-ownership-73.json). This verifies the storage subset of R01; the platform audit remains [#71 / PR #72](https://github.com/vypdev/vaultstadio/pull/72).
+Verified source commit: `92a709de9d941e262e7d6f9889618a25d267c8d2`, 2026-10-25 UTC. Machine-readable counts: [storage-ownership-73.json](storage-ownership-73.json). This verifies the storage subset of R01; the platform audit remains [#71 / PR #72](https://github.com/vypdev/vaultstadio/pull/72).
 
 ## Behavior and compatibility
 
@@ -22,6 +22,7 @@ Permanent delete now removes a leaf only. A nonempty folder returns HTTP 400 / `
 | `StorageDeletion.kt` | 15/15 lines; 4/4 branches |
 | `StorageLeafDeletion.kt` | 17/17 lines; 5/6 branches |
 | Complete backend denominator, no exclusions | 6,358/15,986 lines (39.77%); 964/5,335 branches (18.07%) |
+| Exact Docker workflow JAR build (`:api:build -x test`), including unfiltered API KtLint | Pass after fixing the initial PR formatting failure |
 | Detekt main, no-FQN, SDD catalog, CI Actionlint | Pass; existing Detekt warnings remain |
 
 The unexecuted adapter branch is on the immediate/suspended completion comparison around `newSuspendedTransaction` (line 20, confirmed in bytecode). It is reported, not excluded. This is not a claim of 100% whole-platform coverage.
