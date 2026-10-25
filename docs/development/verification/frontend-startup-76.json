@@ -125,8 +125,12 @@
     "desktopFreshLoginVisible": true,
     "desktopEmptyFormValidationVisible": true,
     "desktopMemoryPreferencesConfirmed": true,
-    "desktopInteractiveLoginVerified": false,
-    "desktopLoginLimitation": "Native automation did not enter characters; no authenticated desktop claim. No seeded-session workaround was executed."
+    "desktopInteractiveLoginVerified": true,
+    "desktopLoginLimitation": "Autonomous native text entry remains unresolved and is tracked in #80. No session-seeding workaround was executed.",
+    "desktopLoginHttpStatus": 200,
+    "desktopFolderNavigationVerified": true,
+    "desktopUploadedFileVisible": true,
+    "desktopLoginInputAssistance": "Maintainer entered disposable values; assistant submitted and verified real native authentication/data/navigation."
   },
   "backendRuntime": {
     "source": "260489a0131419cc1c1231d952681c81d067c802",
@@ -159,6 +163,6 @@
     "Whole frontend remains low coverage; serializer gate is not whole-module coverage",
     "GUI details download handler is a confirmed no-op and requires a separate fix",
     "Action-managed branch synchronization currently lacks Java in its verification job",
-    "Native keyboard login remains unverified"
+    "Autonomous native text entry remains unresolved (#80); actual native login/navigation verified with input assistance"
   ]
 }
