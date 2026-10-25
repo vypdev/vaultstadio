@@ -118,6 +118,10 @@ Text equivalent: Contributor selects backend or frontend root -> loads the match
 | `validated` | Tests and dependency checks pass | maintainer | implemented or revision |
 | `drifted` | Docs and source disagree | maintainer | blocked until reconciled |
 
+### 6.4 Verification composition boundary — issue #79
+
+VFY-JAVA-01, VFY-TOOLS-01, VFY-DOCKER-01, VFY-ENV-01 and VFY-FAIL-01 are owned by the project's verification adapter, specified in [SDD-0014 §6.4](SDD-0014-deployment-operations-and-release.md#64-project-verification-runtime-repair--issue-79). Provisioning belongs in `.github/actions/copilot-verification-setup/`; domain/application code gains no CI-specific imports or environment workaround. Backend and frontend remain standalone builds invoked through their existing Make targets. VFY-TRUST-01 and VFY-LIFE-01 require the supported immutable trusted-main setup flow, separate activation authorization and preservation of remote branch ownership. A passing application CI job does not provision another job's isolated verifier.
+
 ## 7. User-facing configuration
 
 Backend and frontend remain separately invoked. Wrapper versions and JDK requirements are documented in SDD-0014; no root Gradle wrapper is assumed.

@@ -125,6 +125,22 @@ Text equivalent: Operator selects version/config -> validates prerequisites -> b
 | `degraded` | Partial or unhealthy deployment | operator | reconcile/rollback |
 | `released` | Remote artifacts and evidence verified | maintainer | maintain |
 
+### 6.4 Project verification runtime repair — issue #79
+
+The official managed-branch synchronization failed before `make test` because its isolated Linux job lacked Java. This is a project prerequisite repair through the existing project-owned setup extension; it does not change Copilot implementation, generated workflows, approval policy or branch ownership.
+
+| ID | Required behavior | Acceptance target |
+|---|---|---|
+| VFY-JAVA-01 | Provision Java 17 in the same verification job; reject missing, unexecutable or incompatible Java before project checks. | Official setup action, executable/version checks and negative controls. |
+| VFY-TOOLS-01 | Provision SDK platform 36 and a real headless Chrome executable required by frontend configuration/testing. Resolve tool paths explicitly and record actual versions. | Real frontend verification plus missing/unusable tool controls. |
+| VFY-DOCKER-01 | The runner MUST already provide a usable local Docker daemon for PostgreSQL integration tests. Setup MUST fail clearly when unavailable; it MUST NOT grant daemon access, change host permissions or start a remote daemon. | Local endpoint/availability controls and actual migrated-PostgreSQL tests. |
+| VFY-ENV-01 | Additional SDK/browser/Docker configuration MUST reach the existing `make` commands through a trusted runtime directory accepted by the closed setup protocol. Use only private profile output directories; preserve arguments literally and avoid candidate-file changes or credential stores. | Executed wrapper tests, special-character arguments/paths, private output and failure controls. |
+| VFY-FAIL-01 | Setup failures and nonzero verification results MUST propagate. The configured command list remains `make test,make test-coverage,make lint,git diff --check`; no skips or lowered coverage gates are introduced. | Negative setup/command tests and unchanged configuration receipt. Existing Makefile test-selection/fail-open debt remains separately tracked in R04. |
+| VFY-TRUST-01 | Native setup MUST use the reviewed extension from immutable trusted main. Candidate changes MUST NOT activate or replace it. Activation remains disabled until the concrete setup is reviewed, merged to trusted main and separately authorized. | Native setup source receipt and real official sync after authorized activation. |
+| VFY-LIFE-01 | Source work, protections and Action ownership of remote branch synchronization remain intact. Local static tests alone MUST NOT be reported as operational readiness. | Preservation/protection receipts, official sync result and explicit remaining limitations. |
+
+The project-owned extension may provision public language/SDK/browser packages. A local Docker daemon and its existing access are operator prerequisites. SDK and generated command wrappers belong to the isolated profile; vendor-managed tool caches retain their normal lifecycle. No production endpoint, application credential or deployment is needed.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.
@@ -194,6 +210,8 @@ For this baseline, the initial rollout is documentation and validation only. Fut
 ## 14. Testing strategy and numeric budget
 
 Minimum risk-derived budget: **Minimum 26 cases: workflow syntax, referenced paths, toolchain matrix, Compose/Helm render, secret safety, health/readiness, version consistency, artifact naming, migration, rollback, and fail-open policy.**
+
+Issue #79 adds at least 12 independently collected runtime cases before activation. The concrete inventory is: (1) complete toolchain prepares an executable wrapper; (2) missing Java home; (3) missing Java executable; (4) incompatible Java major; (5) missing SDK platform; (6) missing Chrome; (7) unexecutable Chrome; (8) missing Docker CLI; (9) unavailable local daemon; (10) network Docker endpoint rejected; (11) missing runtime-output channel; (12) symlinked output root rejected; (13) arguments and tool paths containing spaces/quotes/shell metacharacters remain literal; (14) real command exit code/stderr propagate; (15) generated directories remain private and source files unchanged. Add actual backend/frontend commands under the prepared environment, plus (16) native trusted-main setup and official synchronization after authorized activation. Unit fixtures do not substitute for the last two operational checks.
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
