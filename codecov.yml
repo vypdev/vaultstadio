@@ -1,5 +1,9 @@
 # Codecov configuration for VaultStadio
 # See https://docs.codecov.com/docs/codecovyml-reference
+#
+# Coverage gate: status.project.default.threshold: 1% means the PR status
+# check will fail if patch coverage (new/changed code) drops by more than 1%.
+# This enforces Phase 5.2 (coverage gate) and keeps regressions visible.
 
 coverage:
   precision: 2
