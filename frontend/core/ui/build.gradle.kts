@@ -3,6 +3,7 @@
  * Controls retain the framework edit actions, focus, enabled state and password semantics.
  */
 
+import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
@@ -24,7 +25,11 @@ kotlin {
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser {
+            testTask { useKarma { useChromeHeadless() } }
+        }
+    }
     iosArm64()
     iosSimulatorArm64()
 
@@ -34,6 +39,9 @@ kotlin {
             dependencies {
                 implementation(compose.ui)
             }
+        }
+        val wasmJsTest by getting {
+            dependencies { implementation(libs.kotlinx.coroutines.test) }
         }
         val commonTest by getting {
             kotlin.srcDirs("src/test")
@@ -90,4 +98,8 @@ tasks.register<JacocoCoverageVerification>("verifyInputSemanticsCoverage") {
             }
         }
     }
+}
+
+tasks.named<Detekt>("detekt") {
+    setSource(files("src/main/kotlin", "src/wasmJsMain/kotlin"))
 }

@@ -10,6 +10,8 @@ package com.vaultstadio.app
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import com.vaultstadio.app.core.resources.Strings
+import com.vaultstadio.app.core.ui.web.GuardWebPasswordInputs
 import com.vaultstadio.app.data.activity.di.activityModule
 import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.ai.di.aiModule
@@ -63,6 +65,7 @@ fun main() {
         )
     }
     ComposeViewport(content = {
+        GuardWebPasswordInputs(Strings.resources.authPassword)
         VaultStadioRoot(config = VaultStadioConfig(apiBaseUrl = apiBaseUrl))
     })
 }

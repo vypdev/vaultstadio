@@ -81,6 +81,7 @@ fun LoginForm(
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
+            autoCorrectEnabled = false,
             imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(
@@ -180,6 +181,7 @@ private fun RegisterPasswordField(viewModel: AuthViewModel, focusManager: FocusM
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
+            autoCorrectEnabled = false,
             imeAction = ImeAction.Next,
         ),
         keyboardActions = KeyboardActions(
@@ -210,6 +212,7 @@ private fun RegisterConfirmationField(viewModel: AuthViewModel, onSubmit: () -> 
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
+            autoCorrectEnabled = false,
             imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(

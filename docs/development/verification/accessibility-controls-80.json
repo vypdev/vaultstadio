@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "shared-component verification passed; packaged startup integration depends on #77",
+  "status": "151 production component cases and 23 native web editor contracts passed; compiled web password protection verification pending",
   "activeEntryPoints": [
     "RootContent -> AuthContent",
     "RootContent -> MainContent -> destination Content"
@@ -299,5 +299,6 @@
     "disabledFieldVariants": 14,
     "helperGuardCases": 2,
     "totalNewCases": 151
-  }
+  },
+  "webEditorCaseCount": 23
 }

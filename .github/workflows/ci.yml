@@ -186,6 +186,21 @@ jobs:
           path: frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           retention-days: 1
 
+      - name: Set up browser for accessibility contracts
+        id: accessibility_browser
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        with:
+          chrome-version: '155.0.8059.84'
+
+      - name: Run native web password editor contracts
+        env:
+          CHROME_BIN: ${{ steps.accessibility_browser.outputs.chrome-path }}
+        run: |
+          test -x "$CHROME_BIN"
+          "$CHROME_BIN" --version
+          cd frontend
+          ./gradlew :core:ui:wasmJsBrowserTest --rerun --continue --no-build-cache
+
       - name: Enforce accessible input coverage
         run: cd frontend && ./gradlew :core:ui:jacocoTestReport :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache
 

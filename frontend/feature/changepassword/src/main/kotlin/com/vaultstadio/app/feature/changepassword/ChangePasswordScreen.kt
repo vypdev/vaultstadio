@@ -159,6 +159,7 @@ fun ChangePasswordScreen(
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
+                            autoCorrectEnabled = false,
                             imeAction = ImeAction.Next,
                         ),
                         keyboardActions = KeyboardActions(
@@ -202,6 +203,7 @@ fun ChangePasswordScreen(
                         supportingText = { Text("At least 8 characters") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
+                            autoCorrectEnabled = false,
                             imeAction = ImeAction.Next,
                         ),
                         keyboardActions = KeyboardActions(
@@ -242,6 +244,7 @@ fun ChangePasswordScreen(
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
+                            autoCorrectEnabled = false,
                             imeAction = ImeAction.Done,
                         ),
                         keyboardActions = KeyboardActions(
