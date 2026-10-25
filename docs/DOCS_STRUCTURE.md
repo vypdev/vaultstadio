@@ -33,6 +33,7 @@ docs/
 │   ├── ARCHITECTURE.md          # Backend and full system
 │   ├── FRONTEND_ARCHITECTURE.md
 │   ├── KNOWN_ISSUES.md
+│   ├── CLEAN_ARCHITECTURE_REVIEW.md  # Clean Architecture alignment and improvements
 │   └── DOCUMENTATION_ANALYSIS.md
 │
 ├── api/                         # REST API and Phase 6 protocols
@@ -42,7 +43,9 @@ docs/
 ├── development/                 # Code quality, AI guidelines, testing
 │   ├── CODE_QUALITY.md
 │   ├── AI_CODING_GUIDELINES.md
-│   └── TESTING.md
+│   ├── TESTING.md
+│   ├── TEST_COVERAGE_ACTION_PLAN.md
+│   └── REPOSITORY_AUDIT.md
 │
 ├── frontend/                    # Compose UI and components
 │   ├── FRONTEND_COMPONENTS.md
@@ -68,6 +71,13 @@ docs/
 │
 └── migration/                   # Version upgrades
     └── MIGRATION.md
+
+specs/                            # Authoritative product and engineering SDDs
+├── README.md                     # SDD standard and validation rules
+├── _template.md                  # New SDD template
+├── catalog.json                  # Machine-readable capability ownership
+├── CATALOG.md                    # Generated human-readable catalog
+└── SDD-*.md                      # Capability and cross-cutting SDDs
 ```
 
 ---
@@ -82,6 +92,7 @@ docs/
 | **Plugin developer** | [plugins/PLUGINS.md](plugins/PLUGINS.md), [plugins/PLUGIN_DEVELOPMENT.md](plugins/PLUGIN_DEVELOPMENT.md) | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md) |
 | **Operator / DevOps** | [getting-started/CONFIGURATION.md](getting-started/CONFIGURATION.md), [operations/DEPLOYMENT.md](operations/DEPLOYMENT.md) | [operations/SECURITY.md](operations/SECURITY.md), [operations/MONITORING.md](operations/MONITORING.md) |
 | **AI assistant** | [INDEX.md](INDEX.md), [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md), [development/AI_CODING_GUIDELINES.md](development/AI_CODING_GUIDELINES.md) | Context rules in `.cursor/rules/`; then architecture or api as needed |
+| **Maintainer** | [../specs/CATALOG.md](../specs/CATALOG.md), [../specs/README.md](../specs/README.md) | Owning SDD, evidence paths, and validation command |
 
 ---
 
@@ -101,3 +112,6 @@ When adding or moving documents:
 - [INDEX.md](INDEX.md) – Full document index and quick navigation
 - [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) – What VaultStadio offers
 - [GLOSSARY.md](GLOSSARY.md) – Term definitions
+- [development/REPOSITORY_AUDIT.md](development/REPOSITORY_AUDIT.md) – Evidence-based repository audit baseline
+- [../specs/README.md](../specs/README.md) – SDD standard and validation rules
+- [../specs/CATALOG.md](../specs/CATALOG.md) – Authoritative SDD catalog

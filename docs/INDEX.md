@@ -14,6 +14,7 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | Get started quickly | [getting-started/QUICK_START.md](getting-started/QUICK_START.md) |
 | Look up a term | [GLOSSARY.md](GLOSSARY.md) |
 | Understand the architecture | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md) |
+| Read the authoritative SDD catalog | [../specs/CATALOG.md](../specs/CATALOG.md) |
 | See API endpoints | [api/API.md](api/API.md) |
 | Deploy to production | [operations/DEPLOYMENT.md](operations/DEPLOYMENT.md) |
 | Develop a plugin | [plugins/PLUGIN_DEVELOPMENT.md](plugins/PLUGIN_DEVELOPMENT.md) |
@@ -38,9 +39,22 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md) | System architecture, module structure, and design decisions | Developers |
 | [architecture/FRONTEND_ARCHITECTURE.md](architecture/FRONTEND_ARCHITECTURE.md) | Compose Multiplatform patterns, ViewModel, navigation | Frontend Devs |
 | [architecture/KNOWN_ISSUES.md](architecture/KNOWN_ISSUES.md) | Documented architectural limitations and technical debt | Developers |
+| [architecture/CLEAN_ARCHITECTURE_REVIEW.md](architecture/CLEAN_ARCHITECTURE_REVIEW.md) | Clean Architecture alignment and improvement points | Developers |
+| [architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md](architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md) | Phased proposal to evolve backend toward Clean Architecture (application module, domain split) | Developers |
+| [architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md](architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md) | Frontend domain/data/feature modules and standalone Gradle builds (backend/frontend) | Developers |
 | [architecture/DOCUMENTATION_ANALYSIS.md](architecture/DOCUMENTATION_ANALYSIS.md) | Suitability of docs for humans and AIs; recommendations | Maintainers |
 | [GLOSSARY.md](GLOSSARY.md) | Terms and definitions | All |
 | [DOCS_STRUCTURE.md](DOCS_STRUCTURE.md) | Directory layout and navigation by role | All |
+
+### Specifications
+
+| Document | Description | Audience |
+|----------|-------------|----------|
+| [../specs/README.md](../specs/README.md) | SDD standard, states, required sections, and validation rules | Maintainers |
+| [../specs/CATALOG.md](../specs/CATALOG.md) | Human-readable capability and SDD catalog | All contributors |
+| [../specs/SDD-0000-architecture-quality-and-product-contract.md](../specs/SDD-0000-architecture-quality-and-product-contract.md) | SDD portfolio ordering and evidence policy | Maintainers |
+| [../specs/SDD-0001-standalone-projects-and-clean-architecture.md](../specs/SDD-0001-standalone-projects-and-clean-architecture.md) | Current backend/frontend architecture baseline | Developers |
+| [../specs/SDD-0002-public-api-and-protocol-contract.md](../specs/SDD-0002-public-api-and-protocol-contract.md) | REST, OpenAPI, WebDAV, S3, and WebSocket contract | API developers |
 
 ### API and integration
 
@@ -58,6 +72,8 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 | [development/WASM_BUNDLE_OPTIMIZATION.md](development/WASM_BUNDLE_OPTIMIZATION.md) | WASM bundle size, lazy loading, and build optimizations | Frontend/Web |
 | [development/AI_CODING_GUIDELINES.md](development/AI_CODING_GUIDELINES.md) | Guidelines for AI-assisted contributions | AI/Developers |
 | [development/TESTING.md](development/TESTING.md) | Test strategy, coverage, and best practices | Developers |
+| [development/TEST_COVERAGE_ACTION_PLAN.md](development/TEST_COVERAGE_ACTION_PLAN.md) | Phased plan for full test coverage | Developers |
+| [development/REPOSITORY_AUDIT.md](development/REPOSITORY_AUDIT.md) | Evidence-based documentation, SDD, CI, and architecture audit baseline | Maintainers |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution process and PR guidelines | Contributors |
 
 ### Plugins
@@ -110,8 +126,8 @@ For AI-assisted development, context-aware rules are in `.cursor/rules/`:
 | `vaultstadio-core.mdc` | Always | Language, structure, coding standards |
 | `vaultstadio-commands.mdc` | Always | Build, run, test, Docker commands |
 | `vaultstadio-quality.mdc` | Always | ktlint, detekt, FQN checks |
-| `vaultstadio-backend.mdc` | `kotlin-backend/**` | Ktor, Koin, API conventions |
-| `vaultstadio-frontend.mdc` | `compose-frontend/**` | Compose MP, ViewModel, expect/actual |
+| `vaultstadio-backend.mdc` | `backend/**` | Ktor, Koin, API conventions |
+| `vaultstadio-frontend.mdc` | `frontend/**` | Compose MP, ViewModel, expect/actual |
 | `vaultstadio-api-reference.mdc` | API/shared files | Endpoint reference |
 | `vaultstadio-plugins.mdc` | `plugins/**` | Plugin development |
 | `vaultstadio-docker-deploy.mdc` | `docker/**`, `helm/**` | Deployment context |
