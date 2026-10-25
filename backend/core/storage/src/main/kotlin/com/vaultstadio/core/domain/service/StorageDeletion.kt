@@ -1,6 +1,7 @@
 package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
+import arrow.core.right
 import arrow.core.raise.either
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.FileEvent
@@ -17,11 +18,11 @@ internal suspend fun deleteItemInternal(
 ): Either<StorageException, Unit> = either {
     getItemInternal(repository, itemId, userId).bind()
     val deleted = repository.deleteLeaf(itemId, userId) { lockedItem ->
-        either {
-            val storageKey = lockedItem.storageKey
-            if (lockedItem.type == ItemType.FILE && storageKey != null) {
-                storageBackend.delete(storageKey).bind()
-            }
+        val storageKey = lockedItem.storageKey
+        if (lockedItem.type == ItemType.FILE && storageKey != null) {
+            storageBackend.delete(storageKey)
+        } else {
+            Unit.right()
         }
     }.bind()
     eventBus.publish(FileEvent.Deleted(userId = userId, item = deleted, permanent = true))
