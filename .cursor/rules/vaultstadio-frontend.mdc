@@ -1,11 +1,11 @@
 ---
 description: VaultStadio frontend – Compose MP, Decompose navigation, per-screen ViewModels
-globs: ["compose-frontend/**/*.kt","compose-frontend/**/*.kts"]
+globs: ["frontend/**/*.kt","frontend/**/*.kts"]
 ---
 
 # VaultStadio – Frontend
 
-Apply when working in `compose-frontend/`. See [docs/architecture/FRONTEND_ARCHITECTURE.md](docs/architecture/FRONTEND_ARCHITECTURE.md), [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md).
+Apply when working in `frontend/`. Frontend is a **standalone** Gradle project (run from `frontend/` or use root `make frontend-*`). See [docs/architecture/FRONTEND_ARCHITECTURE.md](docs/architecture/FRONTEND_ARCHITECTURE.md), [docs/architecture/KNOWN_ISSUES.md](docs/architecture/KNOWN_ISSUES.md).
 
 ## Stack
 
@@ -15,7 +15,7 @@ Apply when working in `compose-frontend/`. See [docs/architecture/FRONTEND_ARCHI
 - **Per-screen ViewModels** (target architecture)
 - **Shared module** for API client and DTOs
 
-## Structure (composeApp/src/commonMain/.../app/)
+## Structure (frontend/composeApp/src/commonMain/.../app/)
 
 ```
 navigation/
@@ -186,11 +186,28 @@ The new architecture is now the **only** implementation:
 
 ## Frontend Commands
 
+Run from **frontend/** directory, or use `make frontend-*` / `make desktop-run` from repo root.
+
 ```bash
-./gradlew :compose-frontend:composeApp:run                    # Desktop
-./gradlew :compose-frontend:composeApp:wasmJsBrowserRun       # Web dev server
-./gradlew :compose-frontend:composeApp:wasmJsBrowserDistribution  # Web production
-./gradlew :compose-frontend:androidApp:assembleRelease        # Android APK
+# Web (WASM) – development dev server
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+# Or from root: make frontend-run
+
+# Web (WASM) – production dev server
+./gradlew :composeApp:wasmJsBrowserProductionRun
+# Or from root: make frontend-run-prod
+
+# Web (WASM) – production bundle (static output)
+./gradlew :composeApp:wasmJsBrowserDistribution
+# Or: make frontend-web
+
+# Desktop
+./gradlew :composeApp:run
+# Or from root: make desktop-run
+
+# Android APK
+./gradlew :androidApp:assembleRelease
+# Or from root: make android-build
 ```
 
 ## Best Practices

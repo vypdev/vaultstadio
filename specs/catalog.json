@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "repository": "vypdev/vaultstadio",
+  "branch": "master",
+  "lastVerified": "2026-09-21",
+  "verifiedCommit": "603d84a2f88297c9e7fd1b7143df3980fb21e24d",
+  "capabilities": [
+    {
+      "id": "architecture-quality-and-product-contract",
+      "title": "Architecture Quality and Product Contract",
+      "status": "Proposed",
+      "scope": "Coordinate the SDD portfolio, architectural ratchets, evidence policy, and ordered remediation of documentation and contract drift.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": null,
+      "specs": [
+        "specs/SDD-0000-architecture-quality-and-product-contract.md"
+      ],
+      "evidence": [
+        "docs/development/REPOSITORY_AUDIT.md",
+        "backend/settings.gradle.kts",
+        "frontend/settings.gradle.kts",
+        "docs/architecture/ARCHITECTURE.md",
+        "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "standalone-projects-and-clean-architecture",
+      "title": "Standalone Projects and Clean Architecture",
+      "status": "As-built baseline",
+      "scope": "Record the verified backend/frontend project topology, dependency direction, composition ownership, and architectural constraints.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0001-standalone-projects-and-clean-architecture.md"
+      ],
+      "evidence": [
+        "backend/settings.gradle.kts",
+        "frontend/settings.gradle.kts",
+        "backend/build.gradle.kts",
+        "frontend/build.gradle.kts",
+        "docs/architecture/ARCHITECTURE.md",
+        "docs/architecture/CLEAN_ARCHITECTURE_REVIEW.md",
+        "docs/architecture/FRONTEND_ARCHITECTURE.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "public-api-and-protocol-contract",
+      "title": "Public API and Protocol Contract",
+      "status": "As-built baseline",
+      "scope": "Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0002-public-api-and-protocol-contract.md"
+      ],
+      "evidence": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Routing.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Swagger.kt",
+        "backend/api/src/main/resources/openapi/documentation.yaml",
+        "docs/api/API.md",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "identity-authentication-and-authorization",
+      "title": "Identity, Authentication and Authorization",
+      "status": "As-built baseline",
+      "scope": "Record user identity, JWT lifecycle, roles, permissions, and protocol-specific authentication boundaries.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0003-identity-authentication-and-authorization.md"
+      ],
+      "evidence": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Security.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/auth/AuthRoutes.kt",
+        "backend/core/auth",
+        "backend/application/auth",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/config/SecurityTest.kt",
+        "docs/operations/SECURITY.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "storage-domain-and-data-lifecycle",
+      "title": "Storage Domain and Data Lifecycle",
+      "status": "As-built baseline",
+      "scope": "Define files, folders, metadata, ownership, quotas, trash, storage backends, and content lifecycle.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0004-storage-domain-and-data-lifecycle.md"
+      ],
+      "evidence": [
+        "backend/domain/storage",
+        "backend/core/storage",
+        "backend/application/storage",
+        "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/storage",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/AppConfig.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
+        "docs/operations/STORAGE_CONFIGURATION.md",
+        "docs/operations/BACKUP_RESTORE.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "upload-and-transfer-protocols",
+      "title": "Upload and Transfer Protocols",
+      "status": "As-built baseline",
+      "scope": "Define normal, chunked, folder, multipart, WebDAV, and S3-compatible transfer lifecycles.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0005-upload-and-transfer-protocols.md"
+      ],
+      "evidence": [
+        "backend/application/chunkedupload",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/ChunkedUploadRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/FolderUploadRoutes.kt",
+        "backend/core/common/src/main/kotlin/com/vaultstadio/core/domain/service/MultipartUploadManager.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/WebDAVRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/S3Routes.kt"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "sharing-and-permissions",
+      "title": "Sharing and Permissions",
+      "status": "As-built baseline",
+      "scope": "Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0006-sharing-and-permissions.md"
+      ],
+      "evidence": [
+        "backend/domain/share",
+        "backend/core/share",
+        "backend/application/share",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareRoutes.kt",
+        "frontend/feature/shares",
+        "frontend/feature/sharedwithme",
+        "docs/api/API.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "version-history-and-recovery",
+      "title": "Version History and Recovery",
+      "status": "As-built baseline",
+      "scope": "Define file versions, history, diffs, restore, retention, deletion, and system recovery boundaries.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0007-version-history-and-recovery.md"
+      ],
+      "evidence": [
+        "backend/domain/version",
+        "backend/core/version",
+        "backend/application/version",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version",
+        "docs/operations/BACKUP_RESTORE.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "device-sync-and-conflicts",
+      "title": "Device Sync and Conflict Resolution",
+      "status": "As-built baseline",
+      "scope": "Define device registration, delta synchronization, conflict detection, replay, deactivation, and recovery.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0008-device-sync-and-conflicts.md"
+      ],
+      "evidence": [
+        "backend/domain/sync",
+        "backend/core/src/main/kotlin/com/vaultstadio/core/domain/model/Sync.kt",
+        "backend/core/sync",
+        "backend/application/sync",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/sync/SyncRoutes.kt",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/SyncRoutesTest.kt",
+        "frontend/domain/sync",
+        "frontend/data/sync",
+        "frontend/feature/sync"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "real-time-collaboration",
+      "title": "Real-Time Collaboration",
+      "status": "As-built baseline",
+      "scope": "Define collaboration sessions, WebSocket lifecycle, presence, operations, OT, comments, reconnect, and participant limits.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0009-real-time-collaboration.md"
+      ],
+      "evidence": [
+        "backend/domain/collaboration",
+        "backend/core/collaboration",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocket.kt",
+        "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationService.kt",
+        "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationOT.kt",
+        "frontend/feature/collaboration"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "federation-and-trust",
+      "title": "Federation and Trust",
+      "status": "Proposed",
+      "scope": "Define cross-instance identity, signed messages, federated shares, activities, trust, key lifecycle, and failure behavior.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": null,
+      "specs": [
+        "specs/SDD-0010-federation-and-trust.md"
+      ],
+      "evidence": [
+        "backend/domain/federation",
+        "backend/core/federation/src/main/kotlin/com/vaultstadio/core/domain/service/FederationCrypto.kt",
+        "backend/core/federation/src/main/kotlin/com/vaultstadio/core/domain/service/FederationService.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/federation/FederationRoutes.kt",
+        "docs/api/PHASE6_ADVANCED_FEATURES.md",
+        "docs/operations/SECURITY.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "plugin-runtime-and-extensibility",
+      "title": "Plugin Runtime and Extensibility",
+      "status": "As-built baseline",
+      "scope": "Define plugin discovery, lifecycle, API, endpoint exposure, configuration, isolation, permissions, and failure containment.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0011-plugin-runtime-and-extensibility.md"
+      ],
+      "evidence": [
+        "backend/plugins-api",
+        "backend/plugins",
+        "backend/application/plugin",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/plugins/PluginManager.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/plugin/PluginRoutes.kt",
+        "docs/plugins/PLUGINS.md",
+        "docs/plugins/PLUGIN_DEVELOPMENT.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "metadata-search-and-ai",
+      "title": "Metadata, Search and AI",
+      "status": "Proposed",
+      "scope": "Define metadata extraction, indexing/search, AI-assisted classification, provider boundaries, privacy, and readiness evidence.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": null,
+      "specs": [
+        "specs/SDD-0012-metadata-search-and-ai.md"
+      ],
+      "evidence": [
+        "backend/domain/metadata",
+        "backend/application/metadata",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/MetadataRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SearchRoutes.kt",
+        "backend/plugins/fulltext-search",
+        "backend/plugins/ai-classification",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/ai/AIRoutes.kt",
+        "docs/plugins/AI_INTEGRATION.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "frontend-kmp-and-platform-architecture",
+      "title": "Frontend KMP and Platform Architecture",
+      "status": "As-built baseline",
+      "scope": "Define frontend domain/data/feature boundaries, navigation, state ownership, platform entrypoints, and user-facing capability mapping.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0013-frontend-kmp-and-platform-architecture.md"
+      ],
+      "evidence": [
+        "frontend/settings.gradle.kts",
+        "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/VaultStadioRoot.kt",
+        "frontend/domain",
+        "frontend/data",
+        "frontend/feature",
+        "docs/architecture/FRONTEND_ARCHITECTURE.md",
+        "docs/architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md",
+        "docs/frontend/FRONTEND_TESTING.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "deployment-operations-and-release",
+      "title": "Deployment, Operations and Release",
+      "status": "As-built baseline",
+      "scope": "Define Docker, Helm, configuration, health, migrations, backup, CI, release, versioning, rollback, and operator evidence.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": "2026-09-20",
+      "specs": [
+        "specs/SDD-0014-deployment-operations-and-release.md"
+      ],
+      "evidence": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/docker.yml",
+        ".github/workflows/security.yml",
+        ".github/workflows/release_workflow.yml",
+        ".github/workflows/hotfix_workflow.yml",
+        "docker/docker-compose.yml",
+        "docker/Dockerfile.backend",
+        "docker/Dockerfile.frontend",
+        "helm/vaultstadio/Chart.yaml",
+        "helm/vaultstadio/values.yaml",
+        "docs/operations/DEPLOYMENT.md",
+        "docs/operations/BACKUP_RESTORE.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    },
+    {
+      "id": "security-privacy-and-threat-model",
+      "title": "Security, Privacy and Threat Model",
+      "status": "Proposed",
+      "scope": "Define cross-cutting threat models, privacy rules, trust boundaries, abuse controls, logging constraints, and security evidence.",
+      "owner": "VaultStadio maintainers",
+      "lastVerified": null,
+      "specs": [
+        "specs/SDD-0015-security-privacy-and-threat-model.md"
+      ],
+      "evidence": [
+        "docs/operations/SECURITY.md",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Security.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/WebDAVRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/S3Routes.kt",
+        "backend/core/federation",
+        "backend/plugins",
+        "docs/plugins/AI_INTEGRATION.md",
+        ".github/workflows/security.yml"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD"
+    }
+  ]
+}
