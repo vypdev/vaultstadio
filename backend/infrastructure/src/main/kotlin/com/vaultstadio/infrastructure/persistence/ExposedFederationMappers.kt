@@ -19,7 +19,7 @@ import com.vaultstadio.infrastructure.persistence.entities.FederatedIdentitiesTa
 import com.vaultstadio.infrastructure.persistence.entities.FederatedInstancesTable
 import com.vaultstadio.infrastructure.persistence.entities.FederatedSharesTable
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 
 private val json = Json { ignoreUnknownKeys = true }
 

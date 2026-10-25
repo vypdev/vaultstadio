@@ -4,8 +4,8 @@
 
 package com.vaultstadio.infrastructure.persistence.entities
 
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.datetime.xTimestamp as timestamp
 
 /**
  * Users table.

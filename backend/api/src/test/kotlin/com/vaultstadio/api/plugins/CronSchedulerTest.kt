@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toDeprecatedInstant
 import kotlinx.datetime.toInstant
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -170,7 +171,7 @@ class CronSchedulerTest {
         fun `should calculate next execution for simple expression`() {
             val cron = CronExpression.parse("0 * * * *")!! // Every hour at minute 0
             val now = LocalDateTime(2024, 6, 15, 14, 30, 0, 0)
-                .toInstant(TimeZone.UTC)
+                .toInstant(TimeZone.UTC).toDeprecatedInstant()
 
             val next = cron.nextExecution(now, TimeZone.UTC)
 
@@ -182,7 +183,7 @@ class CronSchedulerTest {
         fun `should find next execution for every minute`() {
             val cron = CronExpression.parse("* * * * *")!!
             val now = LocalDateTime(2024, 6, 15, 14, 30, 30, 0)
-                .toInstant(TimeZone.UTC)
+                .toInstant(TimeZone.UTC).toDeprecatedInstant()
 
             val next = cron.nextExecution(now, TimeZone.UTC)
 
@@ -194,7 +195,7 @@ class CronSchedulerTest {
         fun `should find next execution for specific time`() {
             val cron = CronExpression.parse("30 15 * * *")!! // Every day at 15:30
             val now = LocalDateTime(2024, 6, 15, 14, 0, 0, 0)
-                .toInstant(TimeZone.UTC)
+                .toInstant(TimeZone.UTC).toDeprecatedInstant()
 
             val next = cron.nextExecution(now, TimeZone.UTC)
 

@@ -25,7 +25,7 @@ jobs:
       labels: [self-hosted, macOS, ARM64]
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Test private credentials with native Docker and a fixture registry
