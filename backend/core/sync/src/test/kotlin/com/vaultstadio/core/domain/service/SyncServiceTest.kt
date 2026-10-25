@@ -387,6 +387,25 @@ class SyncServiceTest {
     }
 
     @Test
+    fun `recordChange should propagate when syncRepository recordChange returns Left`() = runTest {
+        val userId = "user-1"
+        val input = RecordChangeInput(
+            itemId = "item-1",
+            changeType = ChangeType.MODIFY,
+            deviceId = "device-1",
+            newPath = "/new/path.txt",
+            checksum = "abc123",
+        )
+        coEvery { syncRepository.getCurrentCursor(userId) } returns 0L.right()
+        coEvery { syncRepository.recordChange(any()) } returns DatabaseException("db error").left()
+
+        val result = service.recordChange(input, userId)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err -> assertTrue(err is DatabaseException) }
+    }
+
+    @Test
     fun `deactivateDevice should return ItemNotFoundException when device not found`() = runTest {
         val userId = "user-1"
         val deviceId = "unknown-device"
@@ -648,6 +667,27 @@ class SyncServiceTest {
 
         assertTrue(result.isRight())
         result.onRight { total -> assertEquals(13, total) }
+    }
+
+    @Test
+    fun `pruneOldData should propagate when pruneChanges returns Left`() = runTest {
+        coEvery { syncRepository.pruneChanges(any()) } returns DatabaseException("db error").left()
+
+        val result = service.pruneOldData(olderThanDays = 30)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err -> assertTrue(err is DatabaseException) }
+    }
+
+    @Test
+    fun `pruneOldData should propagate when pruneResolvedConflicts returns Left`() = runTest {
+        coEvery { syncRepository.pruneChanges(any()) } returns 5.right()
+        coEvery { syncRepository.pruneResolvedConflicts(any()) } returns DatabaseException("db error").left()
+
+        val result = service.pruneOldData(olderThanDays = 30)
+
+        assertTrue(result.isLeft())
+        result.onLeft { err -> assertTrue(err is DatabaseException) }
     }
 
     @Test

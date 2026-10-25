@@ -213,6 +213,16 @@ class FileVersionServiceTest {
     }
 
     @Test
+    fun `listVersions should propagate when repository returns Left`() = runTest {
+        coEvery { versionRepository.listVersions("item-1", 10, 0) } returns DatabaseException("db error").left()
+
+        val result = service.listVersions("item-1", 10, 0)
+
+        assertTrue(result.isLeft())
+        assertTrue((result as Either.Left).value is DatabaseException)
+    }
+
+    @Test
     fun `getVersionCount should return count`() = runTest {
         coEvery { versionRepository.countVersions("item-1") } returns 5.right()
 

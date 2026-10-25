@@ -175,6 +175,22 @@ class ErrorHandlingTest {
 
             assertEquals(HttpStatusCode.NotFound, status)
         }
+
+        @Test
+        fun `422 Unprocessable Entity should be created correctly`() {
+            val status = HttpStatusCode.UnprocessableEntity
+
+            assertEquals(422, status.value)
+            assertEquals("Unprocessable Entity", status.description)
+        }
+
+        @Test
+        fun `503 Service Unavailable should be created correctly`() {
+            val status = HttpStatusCode.ServiceUnavailable
+
+            assertEquals(503, status.value)
+            assertEquals("Service Unavailable", status.description)
+        }
     }
 
     @Nested
