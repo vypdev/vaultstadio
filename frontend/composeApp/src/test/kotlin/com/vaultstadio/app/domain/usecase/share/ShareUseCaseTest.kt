@@ -1,0 +1,157 @@
+/**
+ * Unit tests for share use cases (CreateShare, GetMyShares, GetSharedWithMe, DeleteShare).
+ * Uses a fake ShareRepository to avoid platform/DI.
+ */
+
+package com.vaultstadio.app.domain.usecase.share
+
+import com.vaultstadio.app.data.share.usecase.CreateShareUseCaseImpl
+import com.vaultstadio.app.data.share.usecase.DeleteShareUseCaseImpl
+import com.vaultstadio.app.data.share.usecase.GetMySharesUseCaseImpl
+import com.vaultstadio.app.data.share.usecase.GetSharedWithMeUseCaseImpl
+import com.vaultstadio.app.domain.result.Result
+import com.vaultstadio.app.domain.share.ShareRepository
+import com.vaultstadio.app.domain.share.model.ShareLink
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+
+private val testInstant = Instant.fromEpochMilliseconds(0L)
+
+private fun testShareLink(
+    id: String = "s1",
+    itemId: String = "item-1",
+    token: String = "tok",
+    url: String = "https://example.com/share/tok",
+) = ShareLink(
+    id = id,
+    itemId = itemId,
+    token = token,
+    url = url,
+    expiresAt = testInstant,
+    hasPassword = false,
+    maxDownloads = null,
+    downloadCount = 0,
+    isActive = true,
+    createdAt = testInstant,
+    createdBy = "user1",
+    sharedWithUsers = emptyList(),
+)
+
+private class FakeShareRepository(
+    var getMySharesResult: Result<List<ShareLink>> = Result.success(emptyList()),
+    var getSharedWithMeResult: Result<List<ShareLink>> = Result.success(emptyList()),
+    var createShareResult: Result<ShareLink> = Result.success(testShareLink()),
+    var deleteShareResult: Result<Unit> = Result.success(Unit),
+) : ShareRepository {
+
+    override suspend fun getMyShares(): Result<List<ShareLink>> = getMySharesResult
+
+    override suspend fun getSharedWithMe(): Result<List<ShareLink>> = getSharedWithMeResult
+
+    override suspend fun createShare(
+        itemId: String,
+        expiresInDays: Int?,
+        password: String?,
+        maxDownloads: Int?,
+    ): Result<ShareLink> = createShareResult
+
+    override suspend fun deleteShare(shareId: String): Result<Unit> = deleteShareResult
+}
+
+class CreateShareUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryCreateShareResult() = runTest {
+        val share = testShareLink(id = "s2", itemId = "item-2")
+        val repo = FakeShareRepository(createShareResult = Result.success(share))
+        val useCase = CreateShareUseCaseImpl(repo)
+        val result = useCase("item-2", null, null, null)
+        assertTrue(result.isSuccess())
+        assertEquals(share, result.getOrNull())
+    }
+
+    @Test
+    fun invoke_withOptionalParams_forwardsToRepository() = runTest {
+        val share = testShareLink(id = "s3", token = "secret-token")
+        val repo = FakeShareRepository(createShareResult = Result.success(share))
+        val useCase = CreateShareUseCaseImpl(repo)
+        val result = useCase("item-3", expiresInDays = 7, password = "pwd", maxDownloads = 10)
+        assertTrue(result.isSuccess())
+        assertEquals("s3", result.getOrNull()?.id)
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeShareRepository(createShareResult = Result.error("FORBIDDEN", "No access"))
+        val useCase = CreateShareUseCaseImpl(repo)
+        val result = useCase("item-1")
+        assertTrue(result.isError())
+        assertNull(result.getOrNull())
+    }
+}
+
+class GetMySharesUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryGetMySharesResult() = runTest {
+        val list = listOf(testShareLink("s1"), testShareLink("s2"))
+        val repo = FakeShareRepository(getMySharesResult = Result.success(list))
+        val useCase = GetMySharesUseCaseImpl(repo)
+        val result = useCase()
+        assertTrue(result.isSuccess())
+        assertEquals(2, result.getOrNull()?.size)
+        assertEquals("s1", result.getOrNull()?.get(0)?.id)
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeShareRepository(getMySharesResult = Result.error("UNAUTHORIZED", "Not logged in"))
+        val useCase = GetMySharesUseCaseImpl(repo)
+        val result = useCase()
+        assertTrue(result.isError())
+    }
+}
+
+class GetSharedWithMeUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryGetSharedWithMeResult() = runTest {
+        val list = listOf(testShareLink("s1"))
+        val repo = FakeShareRepository(getSharedWithMeResult = Result.success(list))
+        val useCase = GetSharedWithMeUseCaseImpl(repo)
+        val result = useCase()
+        assertTrue(result.isSuccess())
+        assertEquals(1, result.getOrNull()?.size)
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeShareRepository(getSharedWithMeResult = Result.networkError("Offline"))
+        val useCase = GetSharedWithMeUseCaseImpl(repo)
+        val result = useCase()
+        assertTrue(result.isError())
+    }
+}
+
+class DeleteShareUseCaseTest {
+
+    @Test
+    fun invoke_returnsRepositoryDeleteShareResult() = runTest {
+        val repo = FakeShareRepository(deleteShareResult = Result.success(Unit))
+        val useCase = DeleteShareUseCaseImpl(repo)
+        val result = useCase("share-id")
+        assertTrue(result.isSuccess())
+    }
+
+    @Test
+    fun invoke_propagatesError() = runTest {
+        val repo = FakeShareRepository(deleteShareResult = Result.error("NOT_FOUND", "Share not found"))
+        val useCase = DeleteShareUseCaseImpl(repo)
+        val result = useCase("missing")
+        assertTrue(result.isError())
+    }
+}
