@@ -62,6 +62,8 @@ dependencies {
     // Ktor Server
     implementation(libs.bundles.ktor.server)
     implementation(libs.ktor.server.openapi)
+    // Ktor 3.4.0 exposes this Swagger API type without exporting its dependency.
+    implementation(libs.ktor.server.routing.openapi)
     implementation(libs.ktor.server.swagger)
 
     // Kotlinx

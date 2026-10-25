@@ -92,6 +92,7 @@ ktor-server-websockets = { module = "io.ktor:ktor-server-websockets-jvm", versio
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi-jvm", version.ref = "ktor" }
+ktor-server-routing-openapi = { module = "io.ktor:ktor-server-routing-openapi-jvm", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger-jvm", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
 ktor-serialization-kotlinx-json-multiplatform = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
