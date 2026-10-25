@@ -136,6 +136,10 @@ jobs:
         uses: ./.github/actions/prepare-docker
         timeout-minutes: 2
 
+      - name: Verify frontend Wasm MIME contract
+        run: python3 scripts/check-frontend-wasm-mime.py
+        timeout-minutes: 3
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
