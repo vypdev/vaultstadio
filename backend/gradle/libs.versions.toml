@@ -1,29 +1,29 @@
 [versions]
 # Kotlin
-kotlin = "2.0.21"
-kotlinx-coroutines = "1.9.0"
-kotlinx-serialization = "1.7.3"
-kotlinx-datetime = "0.6.1"
+kotlin = "2.3.10"
+kotlinx-coroutines = "1.10.2"
+kotlinx-serialization = "1.10.0"
+kotlinx-datetime = "0.7.1-0.6.x-compat"
 
 # Ktor
-ktor = "3.0.2"
+ktor = "3.4.0"
 
 # Koin - Dependency Injection
-koin = "4.0.0"
+koin = "4.1.1"
 koin-annotations = "2.0.1-Beta1"
 
 # KSP (Kotlin Symbol Processing)
 ksp = "2.0.21-1.0.27"
 
 # Database
-exposed = "0.56.0"
+exposed = "1.0.0"
 hikari = "6.0.0"
 postgresql = "42.7.4"
 h2 = "2.3.232"
-flyway = "10.21.0"
+flyway = "12.0.1"
 
 # Storage
-minio = "8.5.13"
+minio = "8.6.0"
 aws-sdk = "1.3.68"
 
 # Redis
@@ -34,8 +34,8 @@ logback = "1.5.12"
 kotlin-logging = "7.0.0"
 
 # Testing
-junit = "5.11.3"
-mockk = "1.13.13"
+junit = "6.0.3"
+mockk = "1.14.9"
 testcontainers = "1.21.4"
 
 # Code Quality
@@ -52,9 +52,9 @@ android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
 androidx-core = "1.13.1"
-androidx-lifecycle = "2.8.7"
+androidx-lifecycle = "2.10.0"
 androidx-activity = "1.9.3"
-androidx-test-ext-junit = "1.2.1"
+androidx-test-ext-junit = "1.3.0"
 androidx-test-espresso = "3.6.1"
 
 # Image Loading
@@ -92,6 +92,7 @@ ktor-server-websockets = { module = "io.ktor:ktor-server-websockets-jvm", versio
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi-jvm", version.ref = "ktor" }
+ktor-server-routing-openapi = { module = "io.ktor:ktor-server-routing-openapi-jvm", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger-jvm", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
 ktor-serialization-kotlinx-json-multiplatform = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
@@ -153,6 +154,7 @@ kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = 
 
 # Testing
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }

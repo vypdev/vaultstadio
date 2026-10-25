@@ -14,6 +14,7 @@ on:
     paths:
       - .github/workflows/docker.yml
       - .github/actions/prepare-docker/**
+      - .github/scripts/test_backend_runtime.sh
       - backend/**
       - frontend/**
       - docker/**
@@ -39,7 +40,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       
       - name: Prepare private Docker client
         uses: ./.github/actions/prepare-docker
@@ -92,10 +93,29 @@ jobs:
           file: ./docker/Dockerfile.backend
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          load: ${{ github.event_name == 'pull_request' }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ github.event_name == 'pull_request' && format('vaultstadio-runtime-test:{0}-{1}', github.run_id, github.run_attempt) || '' }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=vaultstadio-backend
           cache-to: type=gha,mode=max,scope=vaultstadio-backend
+
+      - name: Verify the candidate JRE and application startup
+        if: github.event_name == 'pull_request'
+        timeout-minutes: 8
+        env:
+          CANDIDATE_IMAGE: vaultstadio-runtime-test:${{ github.run_id }}-${{ github.run_attempt }}
+        run: bash .github/scripts/test_backend_runtime.sh "$CANDIDATE_IMAGE"
+
+      - name: Retire this job's local smoke tag
+        if: always() && github.event_name == 'pull_request'
+        env:
+          CANDIDATE_IMAGE: vaultstadio-runtime-test:${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          if docker image inspect "$CANDIDATE_IMAGE" >/dev/null 2>&1; then
+            docker image rm "$CANDIDATE_IMAGE"
+          fi
 
   build-frontend:
     name: Build Frontend Image
@@ -110,7 +130,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       
       - name: Prepare private Docker client
         uses: ./.github/actions/prepare-docker
@@ -180,7 +200,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -198,7 +218,7 @@ jobs:
         run: ./gradlew :api:distZip -x test
       
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             backend/api/build/distributions/*.zip

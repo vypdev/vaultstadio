@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Consolidate dependency maintenance from issue #62 across the standalone backend and frontend builds: Kotlin and kotlinx, Ktor, Exposed, Flyway, Koin, MinIO, AndroidX and testing dependencies.
+- Update Docker builders to Gradle 9.8 with JDK 17 and backend runtime to Temurin JRE 25; verify the candidate runtime against a private PostgreSQL smoke test.
+- Update checkout, Codecov and release Actions while preserving runner routing and verification gates.
+
 ## [2.2.0] - 2026-01-30
 
 ### Added

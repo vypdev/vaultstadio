@@ -23,7 +23,7 @@ import com.vaultstadio.infrastructure.persistence.entities.CommentRepliesTable
 import com.vaultstadio.infrastructure.persistence.entities.DocumentCommentsTable
 import com.vaultstadio.infrastructure.persistence.entities.DocumentStatesTable
 import com.vaultstadio.infrastructure.persistence.entities.UserPresenceTable
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 
 internal fun ResultRow.toCollaborationSession(participants: List<CollaborationParticipant>): CollaborationSession =
     CollaborationSession(
