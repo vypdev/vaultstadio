@@ -309,12 +309,17 @@ jobs:
           fi
           echo "Found coverage files: $FILES"
 
+      - name: Isolate Codecov verification keyring
+        run: bash scripts/ci/prepare_codecov_keyring.sh
+
       - name: Upload to Codecov
         uses: codecov/codecov-action@v7
         with:
           disable_search: true
           files: ${{ steps.coverage-files.outputs.list }}
-          fail_ci_if_error: false
+          version: v11.3.1
+          skip_validation: false
+          fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -433,6 +438,7 @@ jobs:
           python3 scripts/check-frontend-accessibility.py
           python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py'
           python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py'
+          python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py'
 
       - name: Check no FQN in type positions
         run: ./scripts/check-no-fqn.sh
