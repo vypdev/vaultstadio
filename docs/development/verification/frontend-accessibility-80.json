@@ -181,9 +181,7 @@
     "remoteFrontendJob": "failed at Chrome provisioning before browser tests",
     "otherTechnicalJobs": "backend,Android,plugins,lint,SecurityScan,Trivy passed",
     "bootstrapPolicyCases": 12,
-    "actualColdBrowserInstall": "passed on macOS ARM64;155.0.8059.84",
     "actualSameCacheReplay": "failed at upstream root/chrome path despite valid app-bundle executable",
-    "sourceBundleSha256": "64ef3f87734770e613d120b5cf09711c8acecb1425308ce8d9068cd56af81974",
     "actionSyncAttempt": "40295176042;make test failed without Java;aborted and did not push",
     "remoteCorrectionValidation": "pending authorized publication and fresh CI",
     "finalRuntime": "official Chrome for Testing Headless Shell155.0.8059.84",
@@ -195,6 +193,17 @@
     "outerMochaDeadlineSeconds": 60,
     "unchangedCoroutineDeadlineSeconds": 45,
     "unchangedStateWaitSeconds": 10,
-    "nodeInstallerDependency": false
+    "nodeInstallerDependency": false,
+    "rejectedInstallerBundleSha256": "64ef3f87734770e613d120b5cf09711c8acecb1425308ce8d9068cd56af81974",
+    "rejectedFullChromeColdInstall": "passed on macOS ARM64;155.0.8059.84",
+    "finalActualShellInstall": "passed; binary SHA25653ffa0b3a7be5978c922b1150aafa4ee27015cc6bba2cdf0b59c45c2d70cbaf9",
+    "finalBrowserSource": "b0f70393ff714603021591f49e94003d292972f6",
+    "finalFreshBrowserResults": {
+      "tests": 1188,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "finalAsyncFaultControl": "expected assertion failure after actual suspension; original source restored and complete positive suite passed afterward"
   }
 }
