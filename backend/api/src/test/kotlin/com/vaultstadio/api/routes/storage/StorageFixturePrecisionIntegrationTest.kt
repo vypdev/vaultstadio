@@ -35,7 +35,7 @@ class StorageFixturePrecisionIntegrationTest {
     }
 
     @Test
-    fun `byte backed seed retains content and the complete persisted baseline for nanosecond input`() = runBlocking<Unit> {
+    fun `byte seed returns persisted nanosecond baseline and retains content`() = runBlocking<Unit> {
         val content = "retained precision fixture Ω"
         val baseline = fixture.seedStoredFile(content, timestamp = nanosecondTimestamp)
         val persisted = fixture.repository.findById(baseline.id).fold({ throw it }, { assertNotNull(it) })
