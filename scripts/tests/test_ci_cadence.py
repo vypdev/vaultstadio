@@ -1,5 +1,7 @@
 """Regression contracts for PR test completeness, event cost and publishing boundaries."""
 from pathlib import Path
+import json
+import os
 import re
 import shlex
 import subprocess
@@ -175,6 +177,37 @@ class CadenceContractTests(unittest.TestCase):
         inventory = native['jobs']['runner-inventory']
         self.assertFalse(any(s.get('uses') == './.github/actions/copilot-verification-setup' for s in inventory['steps']))
         self.assertNotIn('secrets', ci['jobs']['project-environment'])
+
+    def test_native_provenance_executes_setup_browser_outside_path_with_spaces(self):
+        job = workflow('project_runtime_verification.yml')['jobs']['native-linux']
+        provenance = next(s for s in job['steps'] if s.get('id') == 'provenance')
+        self.assertEqual(provenance['env']['VERIFICATION_CHROME_BIN'], '${{ steps.runtime.outputs.chrome-path }}')
+        setup = next(s for s in job['steps'] if s.get('id') == 'runtime')
+        self.assertEqual(setup['timeout-minutes'], '5')
+        with tempfile.TemporaryDirectory() as raw:
+            directory = Path(raw)
+            tools = directory / 'tools'
+            tools.mkdir()
+            for name, answer in [('git', 'verified-source'), ('java', 'openjdk version 17.0.17')]:
+                command = tools / name
+                command.write_text('#!/bin/sh\nprintf "%s\\n" ' + shlex.quote(answer) + '\n')
+                command.chmod(0o700)
+            browser = directory / 'Chrome for Testing'
+            browser.write_text('#!/bin/sh\nprintf "%s\\n" "Google Chrome for Testing 155.0.8059.84"\n')
+            browser.chmod(0o700)
+            environment = dict(os.environ, PATH=str(tools) + os.pathsep + os.environ['PATH'],
+                               VERIFICATION_SOURCE_SHA='verified-source', VERIFICATION_CHROME_BIN=str(browser),
+                               RUNNER_TEMP=raw, GITHUB_ENV=str(directory / 'environment'))
+            result = subprocess.run(['bash', '-eo', 'pipefail', '-c', provenance['run']],
+                                    env=environment, capture_output=True, text=True, timeout=5)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            record = json.loads((directory / 'verification-evidence/provenance.json').read_text())
+            self.assertIn('155.0.8059.84', record['browser'])
+            self.assertIn('CHROME_BIN=' + str(browser), (directory / 'environment').read_text())
+            environment['VERIFICATION_CHROME_BIN'] = str(directory / 'missing browser')
+            failure = subprocess.run(['bash', '-eo', 'pipefail', '-c', provenance['run']],
+                                     env=environment, capture_output=True, text=True, timeout=5)
+            self.assertNotEqual(failure.returncode, 0)
 
 
 if __name__ == '__main__':

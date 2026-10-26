@@ -92,22 +92,25 @@ jobs:
 
       - name: Execute the candidate project setup
         id: runtime
+        timeout-minutes: 5
         uses: ./.github/actions/copilot-verification-setup
 
       - name: Record actual source and runtime identities
         id: provenance
         shell: bash
+        env:
+          VERIFICATION_CHROME_BIN: ${{ steps.runtime.outputs.chrome-path }}
         run: |
           mkdir -p "$RUNNER_TEMP/verification-evidence"
           python3 - <<'PY'
-          import json, os, platform, shutil, subprocess
+          import json, os, platform, subprocess
           from pathlib import Path
           actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
           if actual != os.environ['VERIFICATION_SOURCE_SHA']:
               raise SystemExit('The checked-out revision differs from the requested candidate')
-          browser = shutil.which('chrome')
-          if not browser:
-              raise SystemExit('The selected Chrome executable is missing from the prepared PATH')
+          browser = os.environ.get('VERIFICATION_CHROME_BIN', '')
+          if not Path(browser).is_absolute() or not Path(browser).is_file() or not os.access(browser, os.X_OK):
+              raise SystemExit('The setup-selected browser executable is missing or unusable')
           record = {
               'source': actual, 'system': platform.system(), 'architecture': platform.machine(),
               'java': subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True),

@@ -1,6 +1,10 @@
 # Project-owned extension. Review on trusted MAIN_BRANCH before separate activation.
 name: Prepare project verification
 description: Prepare isolated JVM, Android SDK and browser prerequisites for existing checks.
+outputs:
+  chrome-path:
+    description: Exact browser executable selected by the project setup
+    value: ${{ steps.chrome.outputs.chrome-path }}
 runs:
   using: composite
   steps:
