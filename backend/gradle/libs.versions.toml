@@ -27,7 +27,7 @@ minio = "8.6.0"
 aws-sdk = "1.3.68"
 
 # Redis
-lettuce = "6.4.0.RELEASE"
+lettuce = "7.9.0.RELEASE"
 
 # Logging
 logback = "1.5.12"
