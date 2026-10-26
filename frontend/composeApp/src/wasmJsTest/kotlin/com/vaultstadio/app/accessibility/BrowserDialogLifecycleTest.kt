@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalComposeUiApi::class)
 
 package com.vaultstadio.app.accessibility
 
@@ -6,6 +6,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.window.ComposeViewport
@@ -62,7 +63,7 @@ class BrowserDialogLifecycleTest {
                     (0 until buttons.length).mapNotNull { buttons.item(it) as? HTMLElement }
                         .singleOrNull { it.textContent?.trim() == "Cancel" }
                 }.click()
-                awaitValue("background semantics after dialog dismissal") {
+                awaitValue<HTMLElement>("background semantics after dialog dismissal") {
                     (shadow.querySelector("[id='dialog-lifecycle-open']") as? HTMLElement)
                         ?.takeIf { shadow.querySelector("[id='profile.username']") == null }
                 }
