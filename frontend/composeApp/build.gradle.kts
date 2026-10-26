@@ -25,7 +25,7 @@ kotlin {
 
     android {
         namespace = "com.vaultstadio.app.shared"
-        compileSdk = 36
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = 24
     }
 

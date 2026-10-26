@@ -167,6 +167,24 @@ jobs:
           java-version-file: frontend/.java-version
           distribution: jetbrains
 
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install \
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
@@ -336,8 +354,8 @@ jobs:
       - name: Install Android SDK components
         run: |
           sdkmanager --install \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
       
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
@@ -378,8 +396,8 @@ jobs:
       - name: Install Android SDK components
         run: |
           sdkmanager --install \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
       
       - name: Verify active frontend interaction inventory
         run: |
