@@ -183,7 +183,7 @@
     "bootstrapPolicyCases": 14,
     "actualSameCacheReplay": "failed at upstream root/chrome path despite valid app-bundle executable",
     "actionSyncAttempt": "40295176042;make test failed without Java;aborted and did not push",
-    "remoteCorrectionValidation": "pending authorized publication and fresh CI",
+    "remoteCorrectionValidation": "cdd8ac3 remote browser installation passed; latest-head complete CI/review still required",
     "finalRuntime": "official Chrome for Testing Headless Shell155.0.8059.84",
     "archiveSha256": {
       "mac-arm64": "7f111980bcb41e908d0fa3e969a625e7777ff683c1fc43fd7759d05ec3ffe52b",
@@ -207,6 +207,124 @@
     "finalAsyncFaultControl": "expected assertion failure after actual suspension; original source restored and complete positive suite passed afterward",
     "tlsCorrection": "runner280792b Python issuer validation failed; native macOS curl keeps normal TLS validation, HTTPS-only redirects, bounded transfers and pinned archive hashes",
     "actualUntrustedCertificateControl": "real loopback TLS server rejected by native curl; no insecure flags or global trust modifications",
-    "nativeTlsDownloadBinarySha256": "53ffa0b3a7be5978c922b1150aafa4ee27015cc6bba2cdf0b59c45c2d70cbaf9"
+    "nativeTlsDownloadBinarySha256": "53ffa0b3a7be5978c922b1150aafa4ee27015cc6bba2cdf0b59c45c2d70cbaf9",
+    "publishedRecoveryCommit": "280792b8288b6c17024839bd82c08c2df67ca2fc",
+    "recoveryAuthorization": "explicit exact-commit/ref recovery; normal fast-forward; no PR81 merge authorization"
+  },
+  "postReviewDesktopRevalidation": {
+    "sourceVerificationCommit": "9c4ff42d28657c1b5e339278a7886a74fbc74185",
+    "testTasks": {
+      "desktopTest": {
+        "suites": 257,
+        "tests": 1315,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "coverage": {
+      "allCompiledDesktopProduction": {
+        "INSTRUCTION": {
+          "covered": 36438,
+          "missed": 137246
+        },
+        "BRANCH": {
+          "covered": 853,
+          "missed": 4655
+        },
+        "LINE": {
+          "covered": 6148,
+          "missed": 14931
+        },
+        "COMPLEXITY": {
+          "covered": 2054,
+          "missed": 8022
+        },
+        "METHOD": {
+          "covered": 1772,
+          "missed": 5751
+        },
+        "CLASS": {
+          "covered": 347,
+          "missed": 651
+        }
+      },
+      "compiledJvmFormModule": {
+        "INSTRUCTION": {
+          "covered": 1260,
+          "missed": 71
+        },
+        "BRANCH": {
+          "covered": 99,
+          "missed": 33
+        },
+        "LINE": {
+          "covered": 192,
+          "missed": 2
+        },
+        "COMPLEXITY": {
+          "covered": 78,
+          "missed": 29
+        },
+        "METHOD": {
+          "covered": 40,
+          "missed": 1
+        },
+        "CLASS": {
+          "covered": 9,
+          "missed": 0
+        }
+      }
+    },
+    "nativePackageJarIdentity": {
+      "matchesRetainedPackage": true,
+      "count": 154
+    },
+    "productionAuthScreenSha256": "f0366e669fae501672f974333418567cdaf3e22d0027b95cd07fad6677456ecc"
+  },
+  "independentBackendRevalidation": {
+    "source": "cdd8ac3f5f3793a859974c3c0945c7b0f239dce6",
+    "fresh_results": {
+      "tests": 1976,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "module_count": 24,
+    "coverage": {
+      "INSTRUCTION": {
+        "covered": 46414,
+        "missed": 100766
+      },
+      "BRANCH": {
+        "covered": 980,
+        "missed": 4374
+      },
+      "LINE": {
+        "covered": 6370,
+        "missed": 9628
+      },
+      "COMPLEXITY": {
+        "covered": 2880,
+        "missed": 5599
+      },
+      "METHOD": {
+        "covered": 2559,
+        "missed": 3004
+      },
+      "CLASS": {
+        "covered": 615,
+        "missed": 856
+      }
+    }
+  },
+  "responsiveReviewCounterexample": {
+    "upstreamIssue": "https://github.com/vypdev/copilot/issues/720",
+    "productionUnchanged": true,
+    "originalCases": 12,
+    "originalFailures": 0,
+    "requiredWidthNegativeControlFailures": 2,
+    "suggestedOrderNegativeControlFailures": 2,
+    "deviceExecution": false
   }
 }
