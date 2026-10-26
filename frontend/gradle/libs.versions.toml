@@ -7,7 +7,7 @@ kotlinx-datetime = "0.7.1"
 kotlinx-io = "0.9.1"
 
 # Ktor
-ktor = "3.4.0"
+ktor = "3.6.0"
 
 # Koin: stable runtime and compiler adapter verified for Kotlin 2.4.20.
 koin = "4.2.2"
