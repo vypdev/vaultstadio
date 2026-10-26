@@ -199,9 +199,10 @@ jobs:
       labels: ${{ fromJSON(inputs.placement == 'macos-arm64' && '["self-hosted","macOS","ARM64"]' || '["self-hosted","codex","Linux"]') }}
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - name: Check out the trusted default branch for diagnostics
+        uses: actions/checkout@v7
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
       - name: Inspect existing prerequisites without installing them
         env:

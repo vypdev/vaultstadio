@@ -41,6 +41,7 @@ runs:
       shell: bash
       env:
         VERIFICATION_ACTION_ROOT: ${{ github.action_path }}
+        VERIFICATION_BROWSER_DOWNLOAD_TIMEOUT_SECONDS: '120'
       run: RUNNER_TEMP="$HOME/.vaultstadio-verification" python3 "$VERIFICATION_ACTION_ROOT/setup-test-browser.py"
 
     - name: Set up Chrome for Linux headless tests

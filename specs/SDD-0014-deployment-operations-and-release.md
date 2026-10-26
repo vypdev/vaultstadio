@@ -198,6 +198,8 @@ Inventory is an information-gathering operation, explicitly separate from runtim
 
 The macOS route reuses the existing project-owned, hash-verified official Headless Shell installer as a shared trusted-action asset. Install below the private profile without consulting or modifying the runner's shared browser cache. The ordinary CI entrypoint delegates to the same implementation; repeated installs must preserve the shared cache and retain separate executable outputs. Linux retains its existing Chrome setup and protected sandbox. Provenance and smoke checks use the exact setup-selected executable, including macOS paths with spaces, rather than assuming a `chrome` PATH alias.
 
+Diagnostic-only inventory checks out the trusted default branch, whose resolved commit is recorded, rather than executing an inventory implementation from the dispatch candidate. Until that helper reaches trusted main, this diagnostic mode must fail instead of falling back to candidate code. Complete candidate verification remains an explicit execution of the operator-selected candidate and records its own pre-setup facts. During composite setup, cap the macOS browser transfer at 120 seconds plus 30 seconds for subprocess termination, within the existing five-minute total setup deadline; ordinary CI retains its separate download budget. Missing/slow prerequisites fail visibly and never cause the total deadline to be increased silently.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.

@@ -26,14 +26,16 @@ def platform_tag():
     return architectures[platform.machine()]
 
 
-def download_archive(url, destination, expected_sha256):
+def download_archive(url, destination, expected_sha256, timeout_seconds=600):
+    if not isinstance(timeout_seconds, int) or not 1 <= timeout_seconds <= 600:
+        raise ValueError("Browser download timeout must be between 1 and 600 seconds")
     # Use macOS trust rather than an independently configured Python/OpenSSL CA path.
     command = ["/usr/bin/curl", "--fail", "--show-error", "--silent", "--location",
                "--proto", "=https", "--proto-redir", "=https", "--tlsv1.2",
-               "--connect-timeout", "30", "--max-time", "600",
+               "--connect-timeout", "30", "--max-time", str(timeout_seconds),
                "--max-filesize", str(MAX_ARCHIVE_BYTES), "--output", str(destination), url]
     try:
-        subprocess.run(command, check=True, timeout=630, stderr=subprocess.PIPE, text=True)
+        subprocess.run(command, check=True, timeout=timeout_seconds + 30, stderr=subprocess.PIPE, text=True)
     except subprocess.CalledProcessError as error:
         raise RuntimeError(f"Browser HTTPS download failed (curl {error.returncode}): {(error.stderr or '').strip()}") from error
     digest = hashlib.sha256()
@@ -81,11 +83,14 @@ def validate_browser(binary, directory):
 
 def install_browser(environment):
     tag = platform_tag()
+    timeout = int(environment.get("VERIFICATION_BROWSER_DOWNLOAD_TIMEOUT_SECONDS", "600"))
+    if not 1 <= timeout <= 600:
+        raise ValueError("Browser download timeout must be between 1 and 600 seconds")
     workspace = Path(tempfile.mkdtemp(prefix="vaultstadio-browser-", dir=environment["RUNNER_TEMP"]))
     url = (f"https://storage.googleapis.com/chrome-for-testing-public/{BROWSER_VERSION}/"
            f"{tag}/chrome-headless-shell-{tag}.zip")
     archive = workspace / "browser.zip"
-    download_archive(url, archive, ARCHIVE_SHA256[tag])
+    download_archive(url, archive, ARCHIVE_SHA256[tag], timeout_seconds=timeout)
     unpacked = workspace / "unpacked"
     unpacked.mkdir()
     extract_archive(archive, unpacked)

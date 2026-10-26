@@ -176,6 +176,9 @@ class CadenceContractTests(unittest.TestCase):
         self.assertIn('DOCKER_HOST=\\nDOCKER_CONTEXT=\\n', preparation)
         inventory = native['jobs']['runner-inventory']
         self.assertFalse(any(s.get('uses') == './.github/actions/copilot-verification-setup' for s in inventory['steps']))
+        checkout = next(s for s in inventory['steps'] if s.get('uses', '').startswith('actions/checkout@'))
+        self.assertEqual(checkout['with']['ref'], '${{ github.event.repository.default_branch }}')
+        self.assertEqual(checkout['with']['persist-credentials'], 'false')
         self.assertNotIn('secrets', ci['jobs']['project-environment'])
 
     def test_native_provenance_executes_setup_browser_outside_path_with_spaces(self):

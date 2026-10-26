@@ -6,7 +6,7 @@ Issue #85 owns operational acceptance of the setup from issue #79. SDD-0014 §6.
 
 The reviewed project composite installs Java 17, Android 37/build tools 36 and Chrome 155.0.8059.84, prepares a private command environment and validates existing local Docker and Linux sandbox access. Its source is in `.github/actions/copilot-verification-setup/`. The optional project prerequisite declaration requires Java 17; Gradle manages the project's additional JavaScript toolchain. SDK and browser validation remain in the project composite.
 
-On macOS, the same project-owned Headless Shell installer serves ordinary CI and trusted setup. It verifies the official archive's existing pinned SHA-256, extracts a fresh owned directory and checks the actual executable/version without using the shared browser cache. Setup places it under its private profile. Linux retains the existing browser Action and protected sandbox. Both expose the exact selected executable to provenance/smoke checks; a PATH alias is not required. The setup step retains the official five-minute setup budget.
+On macOS, the same project-owned Headless Shell installer serves ordinary CI and trusted setup. It verifies the official archive's existing pinned SHA-256, extracts a fresh owned directory and checks the actual executable/version without using the shared browser cache. Setup places it under its private profile and caps the browser transfer at 120 seconds with a 150-second subprocess ceiling; ordinary CI keeps its separate transfer budget. Linux retains the existing browser Action and protected sandbox. Both expose the exact selected executable to provenance/smoke checks; a PATH alias is not required. The setup step retains the official five-minute total budget, and a slow prerequisite remains a failure.
 
 The comment callbacks already use Copilot's native coordinator at `@v3`. The official CLI 3.10.5 preview preserves the existing project action and changed no files, Variables or Secrets. This candidate changes only the supported literal `runs-on` input of the two native comment callbacks to the existing `vypdev` group with `self-hosted/macOS/ARM64` labels. Their events, guards, permissions, named Secrets, coordinator reference and other inputs remain identical. Other Copilot workflows retain their existing routing. Keep the setup CLI runner mode `retain` when preserving these role-specific placements; do not replace the configured main branch to bypass its trust boundary.
 
@@ -19,7 +19,7 @@ Current master `615f11a` contains the intentionally failing project-action start
 PR updates keep the complete application suites. The following manual choices add an environment check; they do not replace the ordinary test producers with skipped jobs or an information-only result:
 
 ```sh
-# Collect read-only facts on the same runner route as official Copilot verification.
+# After the helper reaches trusted main, collect read-only facts on the runner route.
 gh workflow run ci.yml --repo vypdev/vaultstadio --ref <reviewed-ref> -f project_environment=inventory
 
 # Execute the full hosted Linux setup and configured/independent project suites.
@@ -31,6 +31,8 @@ gh workflow run ci.yml --repo vypdev/vaultstadio --ref <reviewed-ref> -f project
 ```
 
 The existing CI entrypoint provides manual access to the project-owned reusable verification workflow, including while a newly introduced standalone workflow has not reached the default branch. Manual dispatch availability must be confirmed by GitHub; creating YAML alone does not establish that it runs.
+
+Diagnostic-only inventory obtains its implementation from the trusted default branch, with credentials persistence disabled and the resolved source SHA recorded. It fails while that branch lacks the helper; it never falls back to the dispatch candidate. The earlier bootstrap inventories were explicit executions of the reviewed candidate. Full candidate verification continues to collect its own pre-setup inventory from the deliberately selected candidate whose setup/tests are being executed.
 
 Inventory uses the existing `vypdev` group and `self-hosted/codex/Linux` route by default; `project_environment_runner=macos-arm64` selects the proposed route. It reports actual runner/OS/architecture, effective UID/container marker, current Java/browser identities, Android 37 presence, standard Docker socket metadata, CLI/daemon availability and protected sandbox metadata. A missing Docker CLI leaves daemon availability unknown; socket presence alone does not certify an accessible daemon. It does not install tools, start Docker, change host permissions or contact remote Docker endpoints. Child processes receive a small non-secret environment; raw command failures, provider output and environment dumps are not published. Docker daemon inspection uses empty private client credentials. The report explicitly states `inventoryOnly=true`, `projectSetupExecuted=false` and `readinessCertified=false`; missing prerequisites remain listed. A successful inventory job means facts were collected, not that setup is ready.
 
