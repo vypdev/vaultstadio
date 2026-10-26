@@ -2,6 +2,17 @@ name: Project runtime verification
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Complete hosted verification or read-only official runner inventory
+        type: choice
+        default: complete
+        options: [complete, inventory]
+  workflow_call:
+    inputs:
+      mode:
+        type: string
+        default: complete
   schedule:
     - cron: '23 3 * * 3'
 
@@ -9,13 +20,13 @@ permissions:
   contents: read
 
 concurrency:
-  group: project-runtime-${{ github.event.pull_request.number || github.ref }}
+  group: project-runtime-${{ github.event.pull_request.number || github.ref }}-${{ inputs.mode || 'complete' }}
   cancel-in-progress: true
 
 jobs:
   native-linux:
     name: Native Linux project verification
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ inputs.mode != 'inventory' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     env:
@@ -167,3 +178,28 @@ jobs:
             frontend/**/build/reports/detekt/*
           retention-days: 14
           if-no-files-found: warn
+
+  runner-inventory:
+    name: Official runner inventory (diagnostic only)
+    if: ${{ inputs.mode == 'inventory' && github.event_name == 'workflow_dispatch' }}
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, codex, Linux]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Inspect existing prerequisites without installing them
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python3 scripts/ci/inspect_verification_runner.py --report "$RUNNER_TEMP/runner-prerequisites.json"
+      - name: Preserve inventory (not a readiness result)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-runner-inventory-${{ github.run_id }}
+          path: ${{ runner.temp }}/runner-prerequisites.json
+          if-no-files-found: error
+          retention-days: 14

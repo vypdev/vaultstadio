@@ -18,7 +18,7 @@ def workflow(name):
 
 
 def steps(document):
-    return [s for job in document['jobs'].values() for s in job['steps']]
+    return [s for job in document['jobs'].values() for s in job.get('steps', [])]
 
 
 class CadenceContractTests(unittest.TestCase):
@@ -51,7 +51,7 @@ class CadenceContractTests(unittest.TestCase):
         for name in ['security.yml', 'project_runtime_verification.yml', 'extended_verification.yml']:
             with self.subTest(workflow=name):
                 events = workflow(name)['on']
-                self.assertEqual(set(events), {'workflow_dispatch', 'schedule'})
+                self.assertEqual(set(events), {'workflow_dispatch', 'schedule'} | ({'workflow_call'} if name == 'project_runtime_verification.yml' else set()))
                 cron = events['schedule'][0]['cron'].split()
                 self.assertEqual(cron[2:4], ['*', '*'])
                 self.assertRegex(cron[4], r'^[0-6]$')
@@ -94,7 +94,7 @@ class CadenceContractTests(unittest.TestCase):
         guard = "github.event.pull_request.head.repo.full_name == github.repository"
         for name in ['ci.yml', 'secret_scanning.yml', 'docker_client_contract.yml']:
             for job in workflow(name)['jobs'].values():
-                if isinstance(job['runs-on'], dict):
+                if isinstance(job.get('runs-on'), dict):
                     self.assertIn(guard, job['if'])
 
     def test_coverage_gates_and_raw_results_remain_required(self):
@@ -128,6 +128,21 @@ class CadenceContractTests(unittest.TestCase):
         smoke = next(s for s in backend if 'test_backend_runtime.sh' in s.get('run', ''))
         self.assertEqual(smoke['if'], "github.event_name == 'workflow_dispatch'")
         self.assertFalse(any('./gradlew' in s.get('run', '') for s in backend))
+
+    def test_manual_environment_verification_cannot_replace_pr_tests(self):
+        ci = workflow('ci.yml')
+        scope = ci['on']['workflow_dispatch']['inputs']['project_environment']
+        self.assertEqual(scope['default'], 'none')
+        self.assertEqual(set(scope['options']), {'none', 'complete', 'inventory'})
+        call = ci['jobs']['project-environment']
+        self.assertIn("github.event_name == 'workflow_dispatch'", call['if'])
+        self.assertEqual(call['uses'], './.github/workflows/project_runtime_verification.yml')
+        self.assertNotIn('secrets', call)
+        for name in ['backend', 'frontend', 'quality']:
+            self.assertNotIn('project_environment', ci['jobs'][name].get('if', ''))
+        native = workflow('project_runtime_verification.yml')
+        self.assertIn("inputs.mode != 'inventory'", native['jobs']['native-linux']['if'])
+        self.assertIn("github.event_name == 'workflow_dispatch'", native['jobs']['runner-inventory']['if'])
 
     def test_modified_application_workflows_use_major_actions(self):
         for name in ['ci.yml', 'security.yml', 'docker.yml', 'secret_scanning.yml',
