@@ -34,12 +34,21 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
     sourceSets {
-        commonMain.dependencies {
-            implementation(project(":core:ui"))
-            implementation(compose.material3)
-            implementation(compose.foundation)
+        val commonMain by getting {
+            dependencies {
+                implementation(project(":core:ui"))
+                implementation(compose.material3)
+                implementation(compose.foundation)
+            }
         }
         commonTest.dependencies { implementation(kotlin("test")) }
         wasmJsTest.dependencies { implementation(libs.kotlinx.coroutines.test) }
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
     }
 }

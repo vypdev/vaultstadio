@@ -36,6 +36,8 @@ kotlin {
             dependencies {
                 api(project(":domain:result"))
                 implementation(libs.kotlinx.serialization.json)
+                // 0.9.1 uses the supported Wasm module loader under Kotlin 2.4.20.
+                implementation(libs.kotlinx.io.core)
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json.multiplatform)
