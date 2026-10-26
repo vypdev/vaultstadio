@@ -87,6 +87,14 @@ class VerificationRunnerInventoryTests(unittest.TestCase):
             with self.subTest(mode=mode, owner=owner), patch.object(Path, 'lstat', side_effect=[SimpleNamespace(st_mode=mode, st_uid=owner, st_gid=0), parent]):
                 self.assertEqual(inventory.sandbox_status(Path('/fixture/helper'))['protected'], expected)
 
+    def test_socket_metadata_is_not_mistaken_for_a_verified_docker_daemon(self):
+        for mode, present in [(stat.S_IFSOCK | 0o660, True), (stat.S_IFREG | 0o660, False),
+                              (stat.S_IFLNK | 0o777, False)]:
+            with self.subTest(mode=mode), patch.object(Path, 'lstat', return_value=SimpleNamespace(st_mode=mode)), patch.object(inventory.os, 'access', return_value=False):
+                result = inventory.socket_inventory()
+                self.assertEqual(result, {'present': present, 'accessible': False})
+        self.assertIsNone(inventory.docker_status(None, {})['daemon'])
+
     def test_empty_android_jar_is_missing_without_installing_anything(self):
         with tempfile.TemporaryDirectory() as raw:
             jar = Path(raw) / 'platforms/android-37.0/android.jar'

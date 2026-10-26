@@ -32,7 +32,7 @@ def version(binary, arguments, pattern, environment):
 
 def docker_status(binary, environment):
     if not binary:
-        return {'cli': False, 'localEndpoint': False, 'daemon': False, 'version': None}
+        return {'cli': False, 'localEndpoint': None, 'daemon': None, 'version': None}
     endpoint = environment.get('DOCKER_HOST', '')
     if not endpoint:
         code, text = command([binary, 'context', 'inspect', '--format', '{{.Endpoints.docker.Host}}'], environment)
@@ -63,6 +63,18 @@ def sandbox_status(path=SANDBOX):
     return {'present': True, 'protected': protected}
 
 
+
+def socket_inventory():
+    candidates = [Path('/var/run/docker.sock'), Path(f'/run/user/{os.getuid()}/docker.sock')]
+    for candidate in candidates:
+        try:
+            if stat.S_ISSOCK(candidate.lstat().st_mode):
+                return {'present': True, 'accessible': os.access(candidate, os.R_OK | os.W_OK)}
+        except OSError:
+            continue
+    return {'present': False, 'accessible': False}
+
+
 def inventory(environment):
     # Only non-secret configuration used by read-only local tools is forwarded.
     allowed = ['PATH', 'HOME', 'USER', 'LANG', 'TMPDIR', 'JAVA_HOME', 'ANDROID_HOME',
@@ -88,7 +100,9 @@ def inventory(environment):
                     'linuxSandbox': platform.system() != 'Linux' or sandbox['protected']}
     return {'inventoryOnly': True, 'projectSetupExecuted': False, 'readinessCertified': False,
             'system': platform.system(), 'architecture': platform.machine(),
-            'runner': environment.get('RUNNER_NAME'), 'java': java_info, 'browser': browser_info,
+            'runner': environment.get('RUNNER_NAME'), 'effectiveUid': os.geteuid(),
+            'containerMarkerPresent': Path('/.dockerenv').exists(),
+            'standardDockerSocket': socket_inventory(), 'java': java_info, 'browser': browser_info,
             'android37Present': android, 'docker': docker, 'sandbox': sandbox,
             'missing': [name for name, present in requirements.items() if not present]}
 
