@@ -146,6 +146,8 @@ The official managed-branch synchronization failed before `make test` because it
 
 The project-owned extension may provision public language/SDK/browser packages. A local Docker daemon and its existing access are operator prerequisites. SDK and generated command wrappers belong to the isolated profile; vendor-managed tool caches retain their normal lifecycle. No production endpoint, application credential or deployment is needed.
 
+For VFY-SANDBOX-01, hosted operator provisioning MUST bootstrap Google's published active primary signing fingerprint `EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796` through verified HTTPS and an isolated GPG home. Export only that primary key and its signing subkeys into a source-scoped `Signed-By` keyring; do not modify global trusted keyrings or permit unauthenticated apt downloads. The golden image's installed package does not establish an available authenticated download source. The project composite never invokes this privileged operator provisioning script.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.
