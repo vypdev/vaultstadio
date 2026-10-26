@@ -547,7 +547,10 @@ class StringsTest {
             JapaneseStrings,
         )
         allStrings.forEach { strings ->
-            assertTrue(strings.activityNoActivity.isNotEmpty(), "activityNoActivity should be non-empty for all languages")
+            assertTrue(
+                strings.activityNoActivity.isNotEmpty(),
+                "activityNoActivity should be non-empty for all languages",
+            )
         }
     }
 

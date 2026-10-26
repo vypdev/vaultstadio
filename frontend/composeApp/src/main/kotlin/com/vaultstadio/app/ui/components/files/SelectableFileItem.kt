@@ -10,9 +10,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -39,8 +41,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.ui.theme.FileColor
 import com.vaultstadio.app.ui.theme.FolderColor
@@ -51,6 +56,7 @@ import com.vaultstadio.app.utils.formatRelativeTime
  * List view file/folder item with selection support.
  */
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun SelectableFileListItem(
     item: StorageItem,
     isSelected: Boolean,
@@ -60,7 +66,9 @@ fun SelectableFileListItem(
     onStarClick: () -> Unit,
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onToggleSelection: () -> Unit = onClick,
 ) {
+    val strings = LocalStrings.current
     val backgroundColor = if (isSelected) {
         MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
     } else {
@@ -75,7 +83,11 @@ fun SelectableFileListItem(
                 color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
                 shape = RoundedCornerShape(8.dp),
             )
-            .clickable(onClick = onClick),
+            .combinedClickable(
+                role = Role.Button,
+                onClick = if (isSelectionMode) onToggleSelection else onClick,
+                onLongClick = onLongClick,
+            ),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 2.dp else 1.dp),
@@ -90,7 +102,14 @@ fun SelectableFileListItem(
                 exit = fadeOut() + scaleOut(),
             ) {
                 Row {
-                    SelectionCheckbox(isSelected = isSelected, onClick = onClick)
+                    SelectionCheckbox(
+                        isSelected = isSelected,
+                        onClick = onToggleSelection,
+                        modifier = Modifier.inputSemantics(
+                            "files.selection.${item.id}",
+                            "${strings.actionSelectFiles}: ${item.name}",
+                        ),
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
@@ -188,7 +207,7 @@ private fun SelectionCheckbox(
                 },
                 shape = CircleShape,
             )
-            .clickable(onClick = onClick),
+            .toggleable(value = isSelected, role = Role.Checkbox, onValueChange = { onClick() }),
         contentAlignment = Alignment.Center,
     ) {
         if (isSelected) {

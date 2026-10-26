@@ -1,6 +1,5 @@
 package com.vaultstadio.app.feature.admin
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -17,7 +18,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,9 +28,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
+import com.vaultstadio.app.core.resources.InputLabel
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.inputLabel
 import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.admin.model.UserStatus
 import com.vaultstadio.app.domain.auth.model.UserRole
@@ -75,11 +80,11 @@ fun QuotaEditDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { isUnlimited = !isUnlimited }
+                        .toggleable(value = isUnlimited, role = Role.Checkbox, onValueChange = { isUnlimited = it })
                         .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Checkbox(checked = isUnlimited, onCheckedChange = { isUnlimited = it })
+                    Checkbox(checked = isUnlimited, onCheckedChange = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Unlimited storage")
                 }
@@ -91,12 +96,17 @@ fun QuotaEditDialog(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        OutlinedTextField(
+                        AccessibleTextField(
+                            identifier = "admin.quota",
+                            accessibleName = LocalStrings.current.inputLabel(InputLabel.QUOTA),
+
                             value = quotaValue,
                             onValueChange = { quotaValue = it.filter { c -> c.isDigit() } },
-                            label = { Text("Quota") },
+                            label = { Text(LocalStrings.current.inputLabel(InputLabel.QUOTA)) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(
+                                1f,
+                            ),
                             singleLine = true,
                         )
 
@@ -170,13 +180,16 @@ fun RoleEditDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { selectedRole = role }
+                            .selectable(selected = selectedRole == role, role = Role.RadioButton, onClick = {
+                                selectedRole =
+                                    role
+                            })
                             .padding(vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         RadioButton(
                             selected = selectedRole == role,
-                            onClick = { selectedRole = role },
+                            onClick = null,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
@@ -232,13 +245,16 @@ fun StatusEditDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { selectedStatus = status }
+                            .selectable(selected = selectedStatus == status, role = Role.RadioButton, onClick = {
+                                selectedStatus =
+                                    status
+                            })
                             .padding(vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         RadioButton(
                             selected = selectedStatus == status,
-                            onClick = { selectedStatus = status },
+                            onClick = null,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {

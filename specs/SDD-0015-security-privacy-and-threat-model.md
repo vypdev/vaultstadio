@@ -120,6 +120,14 @@ Text equivalent: Identify asset -> cross trust boundary -> validate identity/inp
 | `accepted` | Risk explicitly accepted with owner/expiry | maintainer | review |
 | `closed` | Evidence proves control | maintainer | monitor |
 
+### 6.4 Accessible input and testing boundary (#80)
+
+Password controls MUST mask values by default across all active dialogs and screens, including profile and password-change paths. Test identifiers and localized accessible names MUST identify the control without containing its current value or a credential. Explicit visibility actions MUST have a meaningful name and reversible state. Disabled/read-only behavior and form validation MUST remain enforced through every supported interaction path.
+
+Wasm credential fields MUST use app-owned native HTML inputs with `type=password` by default through the public platform form boundary. A keyboard hint, CSS-only concealment or a masked canvas with an exposed editor does not establish protection. Read the value only to deliver the user edit to its bound production callback; never log it, seed a session or inspect another editor. Explicit visibility actions may reveal the field and MUST be reversible. Preserve selection, IME, controlled values and disabled/read-only restrictions. Remove element listeners and pending frame callbacks on release; disposal MUST NOT unmask a connected buffer. The retired framework-editor observer remains historical investigation evidence, not a dependency of the current secure path. Actual browser accessibility evidence and native DOM/widget contracts are required in addition to shared component semantics.
+
+UI verification uses disposable local accounts and the normal authentication flow. No production session injection, privileged test endpoint, blanket security disablement or persisted real-account credential is permitted. Test fixtures may inject ports into real presentation components to observe callbacks; those tests do not establish server authorization or real device operation. Reports MUST distinguish component tests from actual native/browser proof and keep raw credentials/session material out of repository artifacts.
+
 ## 7. User-facing configuration
 
 Security limits such as token expiry, upload size, rate limits, plugin capabilities, federation domains, AI send policy, and secret sources are bounded and not weakened by arbitrary user input.

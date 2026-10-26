@@ -164,26 +164,92 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version-file: frontend/.java-version
+          distribution: jetbrains
+
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install \
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
       - name: Build frontend (Desktop)
-        run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop --no-build-cache
+        run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop :composeApp:createDistributable --no-build-cache
+
+      - name: Install and verify the job-owned browser
+        id: chrome
+        run: python3 scripts/ci/setup_test_browser.py
 
       - name: Run frontend tests (desktop)
-        run: cd frontend && ./gradlew :composeApp:desktopTest --continue --no-build-cache
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          test -x "$CHROME_BIN"
+          "$CHROME_BIN" --version
+          cd frontend
+          ./gradlew :composeApp:desktopTest :data:network:desktopTest :data:network:wasmJsBrowserTest \
+            --continue --no-build-cache
 
       - name: Generate frontend coverage report
-        run: cd frontend && ./gradlew :composeApp:jacocoTestReport --continue --no-build-cache
+        run: |
+          cd frontend
+          ./gradlew :composeApp:jacocoTestReport :data:network:jacocoTestReport \
+            :data:network:verifyInstantSerializerCoverage --continue --no-build-cache
 
       - name: Upload frontend coverage report
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-frontend
-          path: frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          path: |
+            frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+            frontend/data/network/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          retention-days: 1
+
+      - name: Run complete frontend desktop suites
+        run: cd frontend && ./gradlew desktopTest --continue --no-build-cache
+
+      - name: Report form module coverage
+        run: cd frontend && ./gradlew :core:form:jacocoTestReport --continue --no-build-cache
+
+      - name: Upload form module coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-form
+          path: frontend/core/form/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          retention-days: 1
+
+      - name: Run browser accessibility and dialog lifecycle contracts
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          test -x "$CHROME_BIN"
+          "$CHROME_BIN" --version
+          cd frontend
+          ./gradlew wasmJsBrowserTest --rerun --continue --no-build-cache
+
+      - name: Enforce accessible input coverage
+        run: cd frontend && ./gradlew :core:ui:jacocoTestReport :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache
+
+      - name: Upload accessible input coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-accessibility
+          path: frontend/core/ui/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           retention-days: 1
 
   # Upload coverage to Codecov
@@ -211,6 +277,18 @@ jobs:
           name: jacoco-coverage-frontend
           path: coverage-frontend
 
+      - name: Download accessible input coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: jacoco-coverage-accessibility
+          path: coverage-accessibility
+
+      - name: Download form module coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: jacoco-coverage-form
+          path: coverage-form
+
       - name: List coverage files (debug)
         run: |
           echo "=== coverage-backend ==="
@@ -231,12 +309,17 @@ jobs:
           fi
           echo "Found coverage files: $FILES"
 
+      - name: Isolate Codecov verification keyring
+        run: bash scripts/ci/prepare_codecov_keyring.sh
+
       - name: Upload to Codecov
         uses: codecov/codecov-action@v7
         with:
           disable_search: true
           files: ${{ steps.coverage-files.outputs.list }}
-          fail_ci_if_error: false
+          version: v11.3.1
+          skip_validation: false
+          fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -305,8 +388,8 @@ jobs:
       - name: Install Android SDK components
         run: |
           sdkmanager --install \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
       
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
@@ -347,9 +430,16 @@ jobs:
       - name: Install Android SDK components
         run: |
           sdkmanager --install \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
       
+      - name: Verify active frontend interaction inventory
+        run: |
+          python3 scripts/check-frontend-accessibility.py
+          python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py'
+          python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py'
+          python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py'
+
       - name: Check no FQN in type positions
         run: ./scripts/check-no-fqn.sh
 
@@ -360,6 +450,14 @@ jobs:
         working-directory: backend
         run: ./gradlew detektMain --continue
       
+      - name: Analyze actual accessibility and authentication sources
+        run: |
+          cd frontend
+          ./gradlew :core:ui:detekt :core:form:detekt :core:resources:detekt :feature:auth:detekt \
+            :composeApp:ktlintDesktopTestSourceSetCheck :composeApp:ktlintWasmJsTestSourceSetCheck --continue
+          cd ..
+          python3 scripts/check-frontend-accessibility.py --detekt-reports
+
       - name: Run Detekt (frontend)
         working-directory: frontend
         run: ./gradlew detektDesktopMain --continue

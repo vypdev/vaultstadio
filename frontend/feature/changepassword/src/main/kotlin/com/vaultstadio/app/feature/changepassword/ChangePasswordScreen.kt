@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -24,7 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,11 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.PasswordTextField
+import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.inputLabel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,18 +121,13 @@ fun ChangePasswordScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
 
-                    OutlinedTextField(
+                    PasswordTextField(
                         value = currentPassword,
                         onValueChange = onCurrentPasswordChange,
-                        label = { Text("Current Password") },
+                        identifier = "password.current",
+                        label = strings.inputLabel(InputLabel.CURRENT_PASSWORD),
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        visualTransformation =
-                        if (showCurrentPassword) {
-                            VisualTransformation.None
-                        } else {
-                            PasswordVisualTransformation()
-                        },
+                        passwordVisible = showCurrentPassword,
                         trailingIcon = {
                             IconButton(onClick = onToggleCurrentPasswordVisibility) {
                                 Icon(
@@ -145,34 +137,26 @@ fun ChangePasswordScreen(
                                     } else {
                                         Icons.Default.Visibility
                                     },
-                                    contentDescription = "Toggle password visibility",
+                                    contentDescription = strings.inputLabel(
+                                        if (showCurrentPassword) InputLabel.HIDE_PASSWORD else InputLabel.SHOW_PASSWORD,
+                                    ),
                                 )
                             }
                         },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                        ),
+                        imeAction = ImeAction.Next,
+                        onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
                         enabled = !isLoading,
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    OutlinedTextField(
+                    PasswordTextField(
                         value = newPassword,
                         onValueChange = onNewPasswordChange,
-                        label = { Text("New Password") },
+                        identifier = "password.new",
+                        label = strings.inputLabel(InputLabel.NEW_PASSWORD),
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        visualTransformation =
-                        if (showNewPassword) {
-                            VisualTransformation.None
-                        } else {
-                            PasswordVisualTransformation()
-                        },
+                        passwordVisible = showNewPassword,
                         trailingIcon = {
                             IconButton(onClick = onToggleNewPasswordVisibility) {
                                 Icon(
@@ -182,33 +166,25 @@ fun ChangePasswordScreen(
                                     } else {
                                         Icons.Default.Visibility
                                     },
-                                    contentDescription = "Toggle password visibility",
+                                    contentDescription = strings.inputLabel(
+                                        if (showNewPassword) InputLabel.HIDE_PASSWORD else InputLabel.SHOW_PASSWORD,
+                                    ),
                                 )
                             }
                         },
                         supportingText = { Text("At least 8 characters") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                        ),
+                        imeAction = ImeAction.Next,
+                        onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
                         enabled = !isLoading,
                     )
 
-                    OutlinedTextField(
+                    PasswordTextField(
                         value = confirmPassword,
                         onValueChange = onConfirmPasswordChange,
-                        label = { Text("Confirm New Password") },
+                        identifier = "password.confirm",
+                        label = strings.authConfirmPassword,
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        visualTransformation =
-                        if (showConfirmPassword) {
-                            VisualTransformation.None
-                        } else {
-                            PasswordVisualTransformation()
-                        },
+                        passwordVisible = showConfirmPassword,
                         trailingIcon = {
                             IconButton(onClick = onToggleConfirmPasswordVisibility) {
                                 Icon(
@@ -218,20 +194,17 @@ fun ChangePasswordScreen(
                                     } else {
                                         Icons.Default.Visibility
                                     },
-                                    contentDescription = "Toggle password visibility",
+                                    contentDescription = strings.inputLabel(
+                                        if (showConfirmPassword) InputLabel.HIDE_PASSWORD else InputLabel.SHOW_PASSWORD,
+                                    ),
                                 )
                             }
                         },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                                onChangePassword()
-                            },
-                        ),
+                        imeAction = ImeAction.Done,
+                        onImeAction = {
+                            focusManager.clearFocus()
+                            onChangePassword()
+                        },
                         enabled = !isLoading,
                     )
                 }

@@ -103,6 +103,51 @@ Text equivalent: Platform entrypoint starts app -> root resolves navigation/sess
 3. Adapters perform bounded external I/O and map provider results to semantic facts.
 4. The presentation surface reports completed facts, current state, next action, and safe evidence.
 
+### 6.1.1 Accessible interaction contract (#80)
+
+| ID | Required behavior | Acceptance evidence |
+|---|---|---|
+| A11Y-RUN-01 | Desktop packaging MUST use a reviewed runtime that supports editable accessibility and real automatic text entry. Bytecode compatibility alone is insufficient. | Same application JARs compared across runtimes; generated package runtime identity; autonomous normal login, without seeded sessions. |
+| A11Y-FIELD-01 | Every active editable field MUST expose a stable test identifier and a meaningful localized accessible name, and retain its production value/callback, validation and IME behavior. | Explicit active-route/field inventory; real production component edit, clear and focus cases for each field. |
+| A11Y-STATE-01 | Disabled and read-only controls MUST retain their intended restrictions. A test adapter MUST NOT make them editable or bypass application policy. | Negative component cases, with callback and state assertions. |
+| A11Y-SEC-01 | Password fields MUST remain masked in screenshots and OS/browser accessibility output by default. Visibility controls MUST have localized names and reflect state. | Native/browser masked-output checks and real component visibility/state tests. |
+| A11Y-ACT-01 | Every interactive control type MUST expose its meaningful name, role, state and supported action. Navigation, dialogs, menus, lists, toggles and dropdowns MUST be independently operable. | Per-control-type action/state cases and representative real file/profile/dialog flows. |
+| A11Y-FOCUS-01 | Editing MUST support selection, replacement, deletion, Unicode and focus transfer. Dialog dismissal/reopening MUST restore a usable state. | Positive/negative real-state component cases and native/browser observations; document supported focus recovery when a tool loses activation. |
+| A11Y-LAYOUT-01 | Authentication fields and actions MUST fit the available horizontal viewport while retaining a bounded form width on larger screens. Preferred dimensions MUST respect parent constraints. | Measure unclipped production-control bounds on narrow and wide layouts, exercise editing/validation, and demonstrate that an overflowing layout fails the regression. |
+| A11Y-EVID-01 | Coverage MUST distinguish production component semantics, actual OS/browser actions and external automation limitations. Static label assertions and replacement widgets do not prove interaction. | At least 24 distinct risk cases plus inventory-derived per-field and per-control-type cases; raw collected results retained privately and sanitized summary published. |
+
+All 29 maintained field declarations MUST use the shared `:core:form` presentation boundary. Wasm renders real owned HTML input/textarea controls through public `HtmlElementView`; desktop/Android/iOS retain their Material/Basic Compose renderer. The adapter MUST preserve production callbacks, controlled value, selection, Unicode, IME, validation, disabled/read-only restrictions, localized names, placeholders, typography and disposal. No framework backing-editor mutation, swallowed rendering exception, token seeding or production authentication backdoor is permitted. Features depend on this presentation boundary; domain and transport acquire no accessibility dependency.
+
+The nine secret declarations MUST default to native `type=password` on Wasm and masked rendering on other platforms. Explicit visibility controls MUST update native protection and their localized action name together. Actual native editing must update the production model; changing only a semantic mirror is failed evidence. DOM tests MUST exercise the owned control, rejection reconciliation, caret, IME, stale callbacks, Enter/default behavior, multiline sizing and listener/frame cleanup. Actual Compose widget tests MUST cover production-dialog editing, validation and repeated dismissal/reopening, plus protected input and multiline behavior.
+
+Plain Enter in a multiline Web control MUST preserve native newline handling even when an IME callback is supplied. Only editable single-line controls may consume unmodified, non-composing Enter to invoke that callback. A composition session MUST prevent submission even when an individual keyboard event omits its composition flag. Web startup MUST replace the initial loading content with the initialized Compose viewport; verify the framework startup contract and the actual packaged page before inferring missing cleanup from host markup alone.
+
+Web semantics MUST survive normal login/logout, destination changes, menus and repeated dialog dismissal/reopening. The current candidate uses the following reviewed pins; root declarations and the catalog MUST agree:
+
+| Boundary | Current candidate | Acceptance/remaining limit |
+|---|---|---|
+| UI/compiler | Compose 1.13.0-beta01, Kotlin 2.4.20 | Multiple semantic owners restore the background after dialog dismissal. This is prerelease software; merge requires explicit maintainer risk acceptance. |
+| Injection | Koin 4.2.2/compiler 1.2.1 | Compile safety stays enabled; annotation-bearing storage compiles on JVM/Wasm and normal app wiring/login must work. |
+| Images | Coil 3.6.3; resolved Skiko 0.156.0 | Coil targets Skiko 0.150.1: warning remains visible. Actual valid PNG and invalid-byte pipeline cases pass; other image formats are not certified. No force/exclusion/warning suppression. |
+| Android/build | compile SDK 37, AGP 9.1.1, Gradle 9.3.1 with official distribution SHA | All selected debug APK variants must compile. Minimum/target SDK behavior is unchanged. Provision the required SDK; compile is not device execution. |
+| Network Wasm loader | kotlinx-io 0.9.1 explicitly at network boundary | Independent data/auth modules must load and pass, not rely on an accidental app-level newer transitive dependency. |
+| WebSocket test tooling | ws 8.21.3, supported regenerated Wasm lock | Installed version, bounded fragmented-Unicode/invalid-close/valid-close loopback contracts, root browser suites and unchanged scanner severity must pass. |
+| Native packaging | JetBrains Runtime 21.0.11, JVM bytecode17 | Check exact vendor/version before packaging. Compare app JAR identity and exercise real automatic input/login with isolated preferences. |
+
+These pins follow the [official Compose beta release](https://github.com/JetBrains/compose-multiplatform/releases/tag/v1.13.0-beta01), [Koin compatibility matrix](https://insert-koin.io/docs/setup/compiler-plugin/), [Coil changelog](https://coil-kt.github.io/coil/changelog/), [Android compatibility matrix](https://developer.android.com/build/releases/about-agp), [kotlinx-io loader change](https://github.com/Kotlin/kotlinx-io/blob/master/CHANGELOG.md#091) and [ws security advisories](https://github.com/websockets/ws/security). The investigated stable Compose versions fixed the earlier node-ID error but lost semantic owners after dialog close; the beta's framework editor then failed privacy/selection. The owned native controls and multiple-owner upstream implementation are both required for this candidate. The initial compatibility observer and its 30 cases are retired, preserved in Git history, and excluded from current counts. Keep an explicitly owned ComposeViewport; no private framework state may be changed. Historical failures, exact results and rollback identities belong in the verification report.
+
+The inventory MUST distinguish maintained declarations from routed journeys: the three retained `profile.*password` dialog fields have no current caller, while the dedicated Change Password screen is routed. They retain component tests but are not claimed as routed GUI proof. Dormant duplicate screens outside maintained feature trees are separate architecture debt; any reactivated field acquires this contract. Inventory consistency alone does not prove runtime reachability.
+
+Application CI MUST execute complete root desktop and Wasm test selections, including pure resource/auth/network and form-model suites. The affected Compose modules must use supported executable Wasm test configuration so Skiko is bundled, without disabling prerequisites or dropping suites. The app browser runner MUST allow the existing bounded 45-second coroutine contract to complete; a 60-second outer Mocha deadline may replace its conflicting default two-second deadline. Retain inner ten-second state waits, every assertion and failure propagation; never disable timeouts or convert late failures into success. Record actual timings and recheck a deliberately failing asynchronous assertion. Chrome provisioning MUST use an execution-owned tool cache without deleting/repairing another job's shared cache; installation failure remains a failed check. GitHub ignores workflow overrides of reserved RUNNER_* variables, so assigning RUNNER_TOOL_CACHE through GITHUB_ENV does not establish isolation. Use the official Chrome for Testing Headless Shell155.0.8059.84 artifact in an execution-owned directory, with a reviewed archive SHA256 for each supported macOS architecture. Use the native macOS HTTPS client with its normal OS trust store when the runner Python CA configuration is incomplete. TLS verification and HTTPS-only redirects MUST remain enabled; never change the global trust store or use insecure download flags. Verify the full archive before safe bounded extraction, preserve required executable modes, reject traversal/symlink/duplicate entries and verify the actual executable/version and directory containment before publishing its path. Download once and reuse that path for all browser steps. This CI runtime is distinct from actual GUI dogfooding; full Chrome widget timeouts remain rejected evidence rather than silent successes. Preserve integrity, timeout and negative-input controls; do not mutate the shared cache or skip browser contracts. The Wasm-only Docker build must satisfy its own prerequisites.
+
+Publish separate coverage for all compiled JVM form classes, combining actual app component execution and model-suite execution. Missing execution data or classes MUST fail closed. Preserve the existing core-UI helper gate and full audit production denominator. DOM/widget case counts are not JVM line coverage; compiler changes to branch denominators MUST be disclosed. Keep strict locks, scanner severity, configuration-cache validation, Copilot, branch protections and runtime-setup activation unchanged. Shared iOS sources must be wired and compile on the selected Apple targets without claiming whole-app iOS readiness.
+
+Coverage publication MUST verify the uploader's signature and checksum before executing it. Use an execution-owned private GPG home rather than the runner's shared keyring; never repair its locks, kill shared agents or disable verification. Pin the reviewed uploader version and enable failure propagation for import, signature, checksum and upload errors. A successful upload after a reported verification failure is rejected evidence. Verify isolated directory permissions and noninterference, actual official signed artifacts, and negative controls that stop execution after validation fails.
+
+Acceptance requires representative real packaged Web and native login, Unicode selection/replacement/clear with model validation, folder persistence, menu dismissal and repeated dialog reopening without reload recovery. Native/browser secret output must remain protected in the exercised paths. Same-JAR Corretto17/JBR21 investigation supports the tested vendor/version combination; both changed, so no isolated upstream cause is claimed. Automation's app-selector timeout and occasional capture failures remain tool limitations, distinct from field-editing success. Other operating systems and business journeys require their own evidence.
+
+For #80, [frontend accessibility verification](../docs/development/verification/FRONTEND_ACCESSIBILITY_80.md) and its companion JSON record 29 declaration contracts, actual Wasm controls/widgets, complete desktop/browser selections, exact package identities and assistant-operated local Web/native journeys. The candidate has passed those local checks, while prerelease merge acceptance, remote CI/review and broader platform readiness remain separate decisions.
+
 ### 6.2 Alternative, duplicate, stale, and partial paths
 
 - Duplicate requests MUST be idempotent or return an explicit duplicate outcome.
@@ -119,6 +164,21 @@ Text equivalent: Platform entrypoint starts app -> root resolves navigation/sess
 | `loading` | Feature request active | user | wait/cancel |
 | `ready` | Feature state rendered | user | interact |
 | `failed` | Bounded error state | user | retry/re-authenticate |
+
+### 6.4 Client startup correction — issue #76
+
+This is an implementation contract for R03's confirmed startup blockers, not an assertion that every platform capability is operational.
+
+| ID | Required behavior | Acceptance/evidence |
+|---|---|---|
+| BOOT-SER-01 | The actual production `HttpClientFactory` Json/contextual module MUST initialize with the current dependencies without a descriptor-name collision. Custom and built-in Instant serialization MUST coexist. | Production-factory DTO tests on desktop JVM and Wasm; actual Koin app startup. |
+| BOOT-SER-02 | Contextual Instant MUST retain ISO-8601 string encoding, UTC normalization and nanosecond precision, including nested and nullable DTOs. Invalid or missing required values MUST fail rather than silently become valid timestamps. | Wire-level round trips and malformed/type/required-field cases using the production Json instance. |
+| BOOT-HTTP-01 | A successful `.wasm` response from the actual Nginx configuration MUST contain exactly one Content-Type value, `application/wasm`. A missing Wasm asset MUST return 404 rather than successful SPA HTML. | Real Nginx GET/HEAD/missing-asset/SPA fallback regression; real built web artifact in a browser. |
+| BOOT-UI-01 | Fresh web and desktop app starts MUST reach a visible usable login surface without serialization/Koin initialization failure. Local login MUST be exercised against a disposable backend account. | Browser/native GUI evidence and logs; HTTP 200 HTML alone does not satisfy acceptance. |
+| BOOT-PKG-01 | Desktop packaging MUST succeed from versioned inputs. Missing optional branding assets MUST NOT be configured as mandatory files; the platform packaging default icon is acceptable until real assets are versioned. | Execute `:composeApp:createDistributable` and launch the generated application on this machine. Other desktop OS packages remain unverified until built and launched there. |
+| BOOT-ISO-01 | Verification MUST isolate browser storage, desktop preferences and backend test data. No production credential or real user's preferences may be replaced. | Dedicated local origin, in-memory/temporary desktop preferences, disposable account/database/content. |
+
+Serialization stays in the data/network adapter; domain/features gain no Ktor or serialization workaround. Nginx owns transport MIME mapping. Existing dependencies, Copilot configuration and wire schemas are preserved. If a subsequent URL/feature failure is uncovered, record and fix it under its owning contract rather than claim the full platform is ready.
 
 ## 7. User-facing configuration
 
@@ -192,6 +252,8 @@ Minimum risk-derived budget: **Minimum 30 cases: domain policy, data mapping, au
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #76 the additional floor is 12 independently collected serialization cases, run on JVM and Wasm and reported as repeated platform executions; cover factory initialization, built-in coexistence, epoch/pre-epoch, offset/nanoseconds, nested/nullable values, unknown fields and malformed/missing/wrong-type values. Add four real Nginx checks (GET, HEAD, missing Wasm, SPA route) and actual web/desktop startup/login evidence. A test that only asserts a descriptor constant does not establish startup. Record the exact built artifact, source revision, commands, collected cases and remaining limitations.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -218,6 +280,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
+
+For #76, executed evidence is recorded in [frontend startup verification](../docs/development/verification/FRONTEND_STARTUP_76.md) and its companion JSON: BOOT-SER-01/02 → 15 production-factory cases on JVM and Wasm; BOOT-HTTP-01 → 4 actual Nginx checks plus built-artifact browser load; BOOT-PKG-01 → generated and launched macOS distributable. BOOT-UI-01 is verified for the exercised local startup/login path: browser login, folder navigation and upload passed; the maintainer entered the disposable desktop credentials, then the assistant submitted and verified native HTTP 200, My Files and folder/file navigation. Autonomous text entry is separately unresolved under #80. BOOT-ISO-01 → dedicated browser origin, disposable backend volumes/account and confirmed in-memory desktop preferences. These results do not certify other platforms or complete feature readiness.
 
 ## 18. Implementation or maintenance sequence
 

@@ -11,11 +11,14 @@ kotlin {
     jvm("desktop")
     android {
         namespace = libNamespace
-        compileSdk = 36
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
     iosArm64()
     iosSimulatorArm64()
     sourceSets {
@@ -32,8 +35,7 @@ kotlin {
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.decompose)
                 implementation(libs.koin.core)
-                implementation(libs.koin.compose)
-                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.core.viewmodel)
             }
         }
     }
