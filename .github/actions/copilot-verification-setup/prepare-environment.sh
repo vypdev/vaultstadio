@@ -25,10 +25,8 @@ esac
 [[ -n "${ANDROID_HOME:-}" && "$ANDROID_HOME" == /* && -s "$ANDROID_HOME/platforms/android-37.0/android.jar" ]] || verification_fail 'Android SDK platform 37.0 is required'
 [[ -n "${CHROME_BIN:-}" && "$CHROME_BIN" == /* && -f "$CHROME_BIN" && -x "$CHROME_BIN" ]] || verification_fail 'an executable Chrome browser is required'
 verification_chrome_version=$("$CHROME_BIN" --version 2>&1) || verification_fail 'Chrome could not start'
-case "$verification_chrome_version" in
-    'Google Chrome 155.0.8059.84'|'Google Chrome for Testing 155.0.8059.84'|'Chromium 155.0.8059.84') ;;
-    *) verification_fail 'Chrome version 155.0.8059.84 is required' ;;
-esac
+verification_chrome_identity='^(Google Chrome( for Testing)?|Chromium) 155\.0\.8059\.84[[:space:]]*$'
+[[ "$verification_chrome_version" =~ $verification_chrome_identity ]] || verification_fail 'Chrome version 155.0.8059.84 is required'
 
 verification_make=$(command -v make) || verification_fail 'make is required'
 [[ "$verification_make" == /* && -x "$verification_make" ]] || verification_fail 'make must resolve to an executable path'

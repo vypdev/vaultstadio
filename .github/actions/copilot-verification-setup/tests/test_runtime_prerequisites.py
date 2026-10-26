@@ -63,6 +63,29 @@ class RuntimePrerequisitesTest(unittest.TestCase):
         self.fixture.environment["_VF_CHROME_VERSION"] = "Google Chrome 155.0.8059.840"
         self.rejected("Chrome version 155.0.8059.84")
 
+    def test_official_linux_browser_version_terminator_is_accepted(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Google Chrome for Testing 155.0.8059.84 \n"
+        result = self.fixture.prepare()
+        self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_plain_google_chrome_identity_is_accepted(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Google Chrome 155.0.8059.84"
+        result = self.fixture.prepare()
+        self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_chromium_identity_is_accepted(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Chromium 155.0.8059.84"
+        result = self.fixture.prepare()
+        self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_unexpected_nonwhitespace_browser_output_is_rejected(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Google Chrome 155.0.8059.84\nunexpected output"
+        self.rejected("Chrome version 155.0.8059.84")
+
+    def test_unknown_browser_identity_is_rejected(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Unrecognized Browser 155.0.8059.84"
+        self.rejected("Chrome version 155.0.8059.84")
+
     def test_missing_docker_cli(self):
         (self.fixture.bin / "docker").unlink()
         self.rejected("Docker CLI")

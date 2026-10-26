@@ -11,7 +11,7 @@ The project owns `.github/actions/copilot-verification-setup/` and its assets.
 Copilot implementation, generated workflows, protection, lifecycle and configured
 verification commands remain unchanged.
 
-External Action references use official major tags: `actions/setup-java@v4`,
+External Action references use official major tags: `actions/setup-java@v5`,
 `android-actions/setup-android@v3` and `browser-actions/setup-chrome@v2`.
 Do not replace these tags with commit SHAs. Resolved source hashes may be recorded
 separately as evidence; they are not Action version selectors.
@@ -26,19 +26,39 @@ The private `make` adapter preserves literal arguments and real exit status.
 
 | Check | Observed result | Scope |
 |---|---|---|
-| Runtime tests on macOS ARM64 | 25 pass | Executed fixtures for prerequisites, private output, argument/exit propagation and credential removal |
-| Same tests in Linux container | 25 pass | Existing Python image, network disabled, read-only action source, temporary socket fixtures; no host Docker socket mounted |
+| Runtime tests on macOS ARM64 | 30 pass | Executed fixtures for prerequisites, private output, argument/exit propagation and credential removal |
+| Same tests in Linux container | 30 pass | Existing Python image, network disabled, read-only action source, temporary socket fixtures; no host Docker socket mounted |
 | Real native preflight | Pass | Corretto 17.0.9, actual Android 37.0 JAR, actual Chrome 155.0.8059.84, existing local Docker and real GNU Make 3.81 |
 | Existing project script controls | 43 pass | Includes actual loopback TLS rejection; not product test coverage |
 | Specification catalog | 16 capabilities pass | Format/catalog checks |
 | Workflow syntax and whitespace | Pass | Actionlint for the consumer CI; `git diff --check` |
-| Action reference inventory | No commit-SHA `uses:` found | All 31 checked GitHub YAML files; official v4/v3/v2 tags exist |
+| Action reference inventory | No commit-SHA `uses:` found | All 31 checked GitHub YAML files; official v5/v3/v2 tags exist |
 
 The initial sandboxed fixture run could not create its temporary sockets; the
 subsequent permitted execution passed. No assertion was disabled to obtain that
 result. The real native preflight executed `make --version`, not project suites.
 The separate complete product campaigns recorded for #80 must not be attributed
 to this setup candidate.
+
+Actual Linux composite execution installed Temurin 17.0.21+9, SDK37.0, build
+tools36.0.0 and Chrome155.0.8059.84. It exposed a real preflight defect: the official
+browser prints a trailing space before its newline (`...155.0.8059.84 \n`). The
+original exact-string comparison rejected it with78. The captured process exited0
+with empty stderr. One regression failed among30 controls before the fix; all30
+pass afterward on macOS and Linux. The corrected comparison permits a trailing
+whitespace terminator while retaining complete identity/version validation and
+rejecting non-whitespace additions, unknown identities and version suffixes.
+
+The actual `setup-java@v4` run also reported its own deprecation; this candidate
+uses the official supported major `@v5`, whose Node24 runtime is compatible with
+the installed runner. Its project verification remains subject to the real Linux
+campaign; fixture tests do not execute provider JavaScript.
+
+One earlier Linux attempt was interrupted when OrbStack stopped. It is retained
+as an infrastructure failure, not a successful setup. Only the three existing
+owned dogfooding containers were restarted afterward; normal API login, folder
+read, and the66-byte download with its original SHA-256 all passed. No container
+or volume was recreated for that recovery.
 
 Reproduce the deterministic controls from the repository root:
 
