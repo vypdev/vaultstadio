@@ -5,7 +5,7 @@ from pathlib import Path
 import platform
 import stat
 
-SANDBOX = Path("/opt/google/chrome/chrome-sandbox")
+SANDBOX = Path("/opt/vaultstadio-verification-sandbox/chrome-sandbox")
 
 
 def validate_sandbox(metadata):

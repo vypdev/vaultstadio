@@ -94,23 +94,28 @@ The same run's complete Wasm selection failed before browser test cases ran:
 Chrome reported `No usable sandbox` on Ubuntu24.04. No Wasm case count is claimed
 for that run. Following Chromium's
 [documented sandbox-helper option](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md),
-the candidate selects only the existing `/opt/google/chrome/chrome-sandbox`,
+the candidate selects only the operator-provisioned
+`/opt/vaultstadio-verification-sandbox/chrome-sandbox`,
 checks root ownership, regular-file type, setuid/executable mode and absence of
 group/world write access, then forwards `CHROME_DEVEL_SANDBOX` through the private
-command adapter. It does not install a setuid file or change host security policy.
+command adapter. The composite does not install a setuid file or change host security policy.
 The native workflow requires actual sandboxed headless DOM rendering before the
 complete browser suites. Actual helper availability, startup and Wasm results
 remain pending in the corrected campaign.
 
 At `2976e86`, the next hosted run rejected the existing helper because its mode
 allowed group/world writes. This is a failed prerequisite, not an application
-test result. The ordinary hosted workflow now reinstalls `google-chrome-stable`
-through apt's existing signed repository before executing candidate scripts,
-and records its package version and helper metadata/digest. It does not elevate
-a writable helper with chmod/chown. The composite still requires an already
+test result. At `1617e81`, reinstalling the system package still left that helper
+with mode777, so validation rejected it again. The ordinary hosted workflow now
+downloads `google-chrome-stable` through apt's existing signed repository into a
+private root-owned directory, extracts it there and installs only the protected
+package helper into a fresh root-owned namespace with mode4755. It records the
+package version and helper metadata/digest and retires the private extraction.
+No existing writable helper is promoted. The composite still requires an already
 correct operator-provisioned helper, changes no host permissions/security policy
 and fails when that prerequisite is absent or unsafe. This does not install or
-alter Chrome on the developer's machine or an official self-hosted runner.
+alter Chrome on the developer's machine or an official self-hosted runner. An
+operator must provision the documented helper before future official activation.
 
 Reproduce the deterministic controls from the repository root:
 
