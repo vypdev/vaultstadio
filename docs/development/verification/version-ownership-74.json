@@ -2,59 +2,212 @@
   "schemaVersion": 1,
   "issue": 74,
   "sourceIdentity": "Git blob hashes in sourceInputs; final commit and remote CI recorded in the linked PR",
-  "sourceInputs": {
-    "backend/api/build.gradle.kts": "4c6ee07ee51b7ba7af0ebde000b86854b632ab87fb725fd7f2356a6a1acd4749",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt": "e2727a723b4c5662fecad9068f0c6bea9178aa7449a7d06e3a4b870a1a4d5024",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt": "ad9cd99964dc4084d299e8f3f31138e657721ffed94f3f2695e1569aee91a182",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/ApplyRetentionPolicyUseCaseTest.kt": "185ecfef16c874985c639de669dbff154b80e17ccbdd87355d7f2ea4b7196288",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/CompareVersionsUseCaseTest.kt": "34dbc9462ad1076ba9609e5e20691d6a56371a00fe89e76c49c58bde35dfe8d3",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/DeleteVersionUseCaseTest.kt": "f866096eabcaa040f084cdf75ca2916220834caa64da04726d02bc7a3469c4f4",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionHistoryUseCaseTest.kt": "ca785ec866c4ab0f0067abaaab725706e2ff1765f76b92547a2374b9cd2f33db",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionUseCaseTest.kt": "96482a1c36fc581f25385f9df6ac9e2599fbf5e2130dfe18c90ace739ebcd097",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/RestoreVersionUseCaseTest.kt": "875d1918d081cd7cf12eb51bcaa32654400ef6c9dfacc1d372c1d4f3d00acf03",
-    "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/ApplyRetentionPolicyUseCase.kt": "196d48308b1db9ade5b8272a24854c1ae1410a14fbc06097c6d0b063fe4fe97e",
-    "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/CompareVersionsUseCase.kt": "fc1eade439b4e3d27afc65f11109cd6dc97655ee69a607aa846faecfd4a6e32b",
-    "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/GetVersionHistoryUseCase.kt": "1a22bd9f7cf7bb651a4f7367d8c6a4a79ef6dab42081c5ade8b2ed19d4c830de",
-    "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/GetVersionUseCase.kt": "f65d6e9a3e46bd8e5c956c198197ba58cf32771d6b0f5d3d0e67c7bae252e2b5",
-    "backend/core/version/build.gradle.kts": "69db893652cc6c0ca9f72f6ba246b99d72ae9c17b109aff6763d8d02adb587c5",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/FileVersionService.kt": "b9ac7062a75934c2f2f45a859aa814e67e8c5cc1cda833db9c3477f3ae35cf46",
-    "backend/infrastructure/build.gradle.kts": "1c39ebd9c9a4fc9f7fcb5838684d8d84ca36486819ba2456a4cb1b8363ba7fda",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/config/VersionModule.kt": "250d8fe49f2bf6dd638afa5467cc5b6ff73605c8ca23f6672a674f46b73bed4a",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionDetailRoutes.kt": "525f9fea361114622fcd113efb9fd7f41ce2316c58f911e6a6013a2b502db3e1",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionDtos.kt": "530f71df068c91b1afe5079a9eb12d76748b8aeaa1dbabd6c8c320608e6176ea",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionErrors.kt": "3fcce9d009fcc2d9b6c43fd1f1971755eec31dee82366548dc155c4fd7484713",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionHistoryRoutes.kt": "8e3df5ccaebb06f782fa527f5b2bb4735c36c1cb97fd5360ce50777824368e97",
-    "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionMutationRoutes.kt": "1db0ba5e1855329172aa35ea1feda2b90cd4e80657b69ce9774951c0e6044a39",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionHttpBoundaryTest.kt": "ba4b7024465912d434a09208a1a5e5129746f3e0ec83ba71c30362329294275f",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionIntegrationFixture.kt": "a19e97c1b838d5a01ec1d38121130724ca2b5902d8474d1bf5e95c568c11428a",
-    "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionOwnershipHttpTest.kt": "7701485c3374e143047f0205ddb9af12db666c6e3307fb1299d7bed38a411eda",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionAccess.kt": "f6a779fbefbc7caa279d53b717e52efc49ef3510eee332e2079740ae34ce7bc2",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionDiffGenerator.kt": "93220aab4664647834fa8895b5ab9037010e53ad29c010a408654a7aa52b378a",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionInputs.kt": "7a6cb88e2f3108cb87bed794704e5be1a1cbb50f4d56765e97261b536be8b5bf",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionLineDiff.kt": "c153fb53519bf044acc5876478cae0b8980480e2cd8054944a7b2246e0934981",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionMutations.kt": "d2bc826e3a652cee1a261144f2ef0e29d3af186a7557c1f4be92968961696697",
-    "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionReads.kt": "f1b48263cef14960ee5380c8e052929cc3de99b12af2d95537d585c3ee59d8c8",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionAuthorizationFaultTest.kt": "575ed7983c4375d03c709cc7547c203913708e30fe61e3c8f6ac314602f19251",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionBindingFaultTest.kt": "222a1917bce09f92d4331335f8d9ba9f841449f478b410212e593f9f19c65480",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionComparisonRegressionTest.kt": "3a453c748da9666bb1f8f8c8901ed5e1c4fe34b20e7675d4e258b127a1ea2d02",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionCreationRegressionTest.kt": "ab021df7a985f707c17bc01af819def86f14c4cc9ba7d09e632cdffd5acc082e",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionDetailRegressionTest.kt": "b6852a05fc165bdcd6ba264f3ced8c85d2c90427f82346dee4e3a2346941ebac",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionDiffSemanticsTest.kt": "18d8f2beb29f4e012741234b7dc58f8d3924fce3dae7f45f0df25511fa1b2817",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionHistoryRegressionTest.kt": "2d9e440b098ddaf6ff38da75fa08c4fa57a97bdf59b908bbd9c94c250d8d93d2",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionMutationRegressionTest.kt": "bb7f7786c713a5e6563460462eb2850ccd3731f4139e70738afb0929a8c19db5",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionOwnershipMatrixTest.kt": "b218fb8729f62620da8c6b4d2ae7a740f95a3b4f2c9c8fd6142b78bad9cb09cd",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionProviderFailureTest.kt": "c00f546ee39d3f7ae8c5dc3c17c6182a899fc9fd876934d9200d752c9ce095bc",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRegressionFixture.kt": "2e80d7f9dce81774cc81b2cde8efcd038c16d29333ecea1c9672d50e76928b25",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetainedContentTest.kt": "98356a6004299ada5bef9b78aae6e3bcbc3e6f7e8694429e95af950017f00e61",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetentionRegressionTest.kt": "58e905afb2c8d8cbec3ad3aa9cfd278d929ddc99c6920f7ed9d35f4a92116850",
-    "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionServiceFixture.kt": "2aecc4de099d8e8d1ae9c3720e56fd41892e932e4cd093bd9757ccc4a61690fc",
-    "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionContentReferenceRepository.kt": "9b5612ddd0a446db0e9b2cc367a6d88b20b0bf017a4061754317139d35841a28",
-    "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionItemScopeRepository.kt": "bc3517b642f819162f40de2aedc9b0e8d745664e733325801b6a735fcfc9a0bd",
-    "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionContentReferenceRepository.kt": "f32d02ec197d16297cd27e55ae6191d6d9ff22f86c79c245fdeb485f6ad93b74",
-    "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionItemScopeRepository.kt": "e2cdc7bf0002681380f8ae2c534bb0dc553749fe908e93952b9b1cde39d1eff2",
-    "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionContentReferenceAdapterTest.kt": "71763f1113350687a199b915ecbd1dd6c47de49630975799eb41b34095bda919",
-    "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionScopeAdapterTest.kt": "349df942335f3909971e594d4dd74af28a0602b502775bca652a2ffa286da783"
-  },
+  "sourceInputs": [
+    {
+      "path": "backend/api/build.gradle.kts",
+      "sha256": "4c6ee07ee51b7ba7af0ebde000b86854b632ab87fb725fd7f2356a6a1acd4749"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
+      "sha256": "e2727a723b4c5662fecad9068f0c6bea9178aa7449a7d06e3a4b870a1a4d5024"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt",
+      "sha256": "ad9cd99964dc4084d299e8f3f31138e657721ffed94f3f2695e1569aee91a182"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/ApplyRetentionPolicyUseCaseTest.kt",
+      "sha256": "185ecfef16c874985c639de669dbff154b80e17ccbdd87355d7f2ea4b7196288"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/CompareVersionsUseCaseTest.kt",
+      "sha256": "34dbc9462ad1076ba9609e5e20691d6a56371a00fe89e76c49c58bde35dfe8d3"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/DeleteVersionUseCaseTest.kt",
+      "sha256": "f866096eabcaa040f084cdf75ca2916220834caa64da04726d02bc7a3469c4f4"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionHistoryUseCaseTest.kt",
+      "sha256": "ca785ec866c4ab0f0067abaaab725706e2ff1765f76b92547a2374b9cd2f33db"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionUseCaseTest.kt",
+      "sha256": "96482a1c36fc581f25385f9df6ac9e2599fbf5e2130dfe18c90ace739ebcd097"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/RestoreVersionUseCaseTest.kt",
+      "sha256": "875d1918d081cd7cf12eb51bcaa32654400ef6c9dfacc1d372c1d4f3d00acf03"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/ApplyRetentionPolicyUseCase.kt",
+      "sha256": "196d48308b1db9ade5b8272a24854c1ae1410a14fbc06097c6d0b063fe4fe97e"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/CompareVersionsUseCase.kt",
+      "sha256": "fc1eade439b4e3d27afc65f11109cd6dc97655ee69a607aa846faecfd4a6e32b"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/GetVersionHistoryUseCase.kt",
+      "sha256": "1a22bd9f7cf7bb651a4f7367d8c6a4a79ef6dab42081c5ade8b2ed19d4c830de"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/GetVersionUseCase.kt",
+      "sha256": "f65d6e9a3e46bd8e5c956c198197ba58cf32771d6b0f5d3d0e67c7bae252e2b5"
+    },
+    {
+      "path": "backend/core/version/build.gradle.kts",
+      "sha256": "69db893652cc6c0ca9f72f6ba246b99d72ae9c17b109aff6763d8d02adb587c5"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/FileVersionService.kt",
+      "sha256": "b9ac7062a75934c2f2f45a859aa814e67e8c5cc1cda833db9c3477f3ae35cf46"
+    },
+    {
+      "path": "backend/infrastructure/build.gradle.kts",
+      "sha256": "1c39ebd9c9a4fc9f7fcb5838684d8d84ca36486819ba2456a4cb1b8363ba7fda"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/VersionModule.kt",
+      "sha256": "250d8fe49f2bf6dd638afa5467cc5b6ff73605c8ca23f6672a674f46b73bed4a"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionDetailRoutes.kt",
+      "sha256": "525f9fea361114622fcd113efb9fd7f41ce2316c58f911e6a6013a2b502db3e1"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionDtos.kt",
+      "sha256": "530f71df068c91b1afe5079a9eb12d76748b8aeaa1dbabd6c8c320608e6176ea"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionErrors.kt",
+      "sha256": "3fcce9d009fcc2d9b6c43fd1f1971755eec31dee82366548dc155c4fd7484713"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionHistoryRoutes.kt",
+      "sha256": "8e3df5ccaebb06f782fa527f5b2bb4735c36c1cb97fd5360ce50777824368e97"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionMutationRoutes.kt",
+      "sha256": "1db0ba5e1855329172aa35ea1feda2b90cd4e80657b69ce9774951c0e6044a39"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionHttpBoundaryTest.kt",
+      "sha256": "ba4b7024465912d434a09208a1a5e5129746f3e0ec83ba71c30362329294275f"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionIntegrationFixture.kt",
+      "sha256": "a19e97c1b838d5a01ec1d38121130724ca2b5902d8474d1bf5e95c568c11428a"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionOwnershipHttpTest.kt",
+      "sha256": "7701485c3374e143047f0205ddb9af12db666c6e3307fb1299d7bed38a411eda"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionAccess.kt",
+      "sha256": "f6a779fbefbc7caa279d53b717e52efc49ef3510eee332e2079740ae34ce7bc2"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionDiffGenerator.kt",
+      "sha256": "93220aab4664647834fa8895b5ab9037010e53ad29c010a408654a7aa52b378a"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionInputs.kt",
+      "sha256": "7a6cb88e2f3108cb87bed794704e5be1a1cbb50f4d56765e97261b536be8b5bf"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionLineDiff.kt",
+      "sha256": "c153fb53519bf044acc5876478cae0b8980480e2cd8054944a7b2246e0934981"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionMutations.kt",
+      "sha256": "d2bc826e3a652cee1a261144f2ef0e29d3af186a7557c1f4be92968961696697"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionReads.kt",
+      "sha256": "f1b48263cef14960ee5380c8e052929cc3de99b12af2d95537d585c3ee59d8c8"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionAuthorizationFaultTest.kt",
+      "sha256": "575ed7983c4375d03c709cc7547c203913708e30fe61e3c8f6ac314602f19251"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionBindingFaultTest.kt",
+      "sha256": "222a1917bce09f92d4331335f8d9ba9f841449f478b410212e593f9f19c65480"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionComparisonRegressionTest.kt",
+      "sha256": "3a453c748da9666bb1f8f8c8901ed5e1c4fe34b20e7675d4e258b127a1ea2d02"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionCreationRegressionTest.kt",
+      "sha256": "ab021df7a985f707c17bc01af819def86f14c4cc9ba7d09e632cdffd5acc082e"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionDetailRegressionTest.kt",
+      "sha256": "b6852a05fc165bdcd6ba264f3ced8c85d2c90427f82346dee4e3a2346941ebac"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionDiffSemanticsTest.kt",
+      "sha256": "18d8f2beb29f4e012741234b7dc58f8d3924fce3dae7f45f0df25511fa1b2817"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionHistoryRegressionTest.kt",
+      "sha256": "2d9e440b098ddaf6ff38da75fa08c4fa57a97bdf59b908bbd9c94c250d8d93d2"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionMutationRegressionTest.kt",
+      "sha256": "bb7f7786c713a5e6563460462eb2850ccd3731f4139e70738afb0929a8c19db5"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionOwnershipMatrixTest.kt",
+      "sha256": "b218fb8729f62620da8c6b4d2ae7a740f95a3b4f2c9c8fd6142b78bad9cb09cd"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionProviderFailureTest.kt",
+      "sha256": "c00f546ee39d3f7ae8c5dc3c17c6182a899fc9fd876934d9200d752c9ce095bc"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRegressionFixture.kt",
+      "sha256": "2e80d7f9dce81774cc81b2cde8efcd038c16d29333ecea1c9672d50e76928b25"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetainedContentTest.kt",
+      "sha256": "98356a6004299ada5bef9b78aae6e3bcbc3e6f7e8694429e95af950017f00e61"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetentionRegressionTest.kt",
+      "sha256": "58e905afb2c8d8cbec3ad3aa9cfd278d929ddc99c6920f7ed9d35f4a92116850"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionServiceFixture.kt",
+      "sha256": "2aecc4de099d8e8d1ae9c3720e56fd41892e932e4cd093bd9757ccc4a61690fc"
+    },
+    {
+      "path": "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionContentReferenceRepository.kt",
+      "sha256": "9b5612ddd0a446db0e9b2cc367a6d88b20b0bf017a4061754317139d35841a28"
+    },
+    {
+      "path": "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionItemScopeRepository.kt",
+      "sha256": "bc3517b642f819162f40de2aedc9b0e8d745664e733325801b6a735fcfc9a0bd"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionContentReferenceRepository.kt",
+      "sha256": "f32d02ec197d16297cd27e55ae6191d6d9ff22f86c79c245fdeb485f6ad93b74"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionItemScopeRepository.kt",
+      "sha256": "e2cdc7bf0002681380f8ae2c534bb0dc553749fe908e93952b9b1cde39d1eff2"
+    },
+    {
+      "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionContentReferenceAdapterTest.kt",
+      "sha256": "71763f1113350687a199b915ecbd1dd6c47de49630975799eb41b34095bda919"
+    },
+    {
+      "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionScopeAdapterTest.kt",
+      "sha256": "349df942335f3909971e594d4dd74af28a0602b502775bca652a2ffa286da783"
+    }
+  ],
   "localRun": {
     "utcDate": "2026-10-26",
     "java": "Corretto 17.0.9",
@@ -598,5 +751,95 @@
     "No claim of complete platform coverage; infrastructure coverage from selected adapter cases is not global coverage.",
     "Sequential reference guard only; concurrent content lifecycle and canonical restore remain #109.",
     "Remote CI, Copilot review and protected-branch adoption are separate acceptance steps."
-  ]
+  ],
+  "packagedDogfood": {
+    "head": "e3b5ce2b1455d210e12619214e4e13374488146d",
+    "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
+    "packageFilesVerified": 237,
+    "requestCount": 15,
+    "requests": [
+      {
+        "case": "login-owner",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "case": "login-unrelated",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "case": "owner-metadata-before",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "owner-download-before",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "owner-history",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "anonymous-history",
+        "method": "GET",
+        "status": 401
+      },
+      {
+        "case": "unrelated-storage-item",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-history",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-detail",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-download-metadata",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-compare",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-restore",
+        "method": "POST",
+        "status": 403
+      },
+      {
+        "case": "unrelated-cleanup",
+        "method": "POST",
+        "status": 403
+      },
+      {
+        "case": "owner-metadata-after",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "owner-download-after",
+        "method": "GET",
+        "status": 200
+      }
+    ],
+    "foreignSurfacesDenied": 7,
+    "ownerMetadataUnchanged": true,
+    "ownerBytesUnchanged": true,
+    "contentSha256": "92ed1e3eb223867f9f458e4f2187cafb962f2c02e3f3a32d032ce5c4f47367e1",
+    "allExistingStorageAndPluginBytesUnchanged": true,
+    "postgresAndFrontendContainersUnchanged": true,
+    "scope": "actual mounted packaged backend against preserved local disposable accounts, PostgreSQL and content; version-row effect matrices remain integrated-test evidence"
+  }
 }
