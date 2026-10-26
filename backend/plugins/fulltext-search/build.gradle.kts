@@ -37,8 +37,8 @@ dependencies {
     implementation("org.apache.lucene:lucene-highlighter:$luceneVersion")
 
     // Apache Tika for content extraction (PDF, DOCX, etc.)
-    implementation("org.apache.tika:tika-core:2.9.2")
-    implementation("org.apache.tika:tika-parsers-standard-package:2.9.2")
+    implementation("org.apache.tika:tika-core:4.1.0")
+    implementation("org.apache.tika:tika-parsers-standard-package:4.1.0")
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
