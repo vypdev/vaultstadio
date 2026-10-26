@@ -180,11 +180,21 @@
     "remoteDesktopCompilation": "passed;221 tasks executed",
     "remoteFrontendJob": "failed at Chrome provisioning before browser tests",
     "otherTechnicalJobs": "backend,Android,plugins,lint,SecurityScan,Trivy passed",
-    "bootstrapPolicyCases": 10,
+    "bootstrapPolicyCases": 12,
     "actualColdBrowserInstall": "passed on macOS ARM64;155.0.8059.84",
     "actualSameCacheReplay": "failed at upstream root/chrome path despite valid app-bundle executable",
     "sourceBundleSha256": "64ef3f87734770e613d120b5cf09711c8acecb1425308ce8d9068cd56af81974",
     "actionSyncAttempt": "40295176042;make test failed without Java;aborted and did not push",
-    "remoteCorrectionValidation": "pending authorized publication and fresh CI"
+    "remoteCorrectionValidation": "pending authorized publication and fresh CI",
+    "finalRuntime": "official Chrome for Testing Headless Shell155.0.8059.84",
+    "archiveSha256": {
+      "mac-arm64": "7f111980bcb41e908d0fa3e969a625e7777ff683c1fc43fd7759d05ec3ffe52b",
+      "mac-x64": "3c5bf34eb8daa874e8b50edf900eab618b74c1b9596e596340278eeba4ff1ae1"
+    },
+    "rejectedFullChromeComposedWidgetCases": "four timed out at2s outer deadline; with60s outer each failed retained10s state waits; no success claimed",
+    "outerMochaDeadlineSeconds": 60,
+    "unchangedCoroutineDeadlineSeconds": 45,
+    "unchangedStateWaitSeconds": 10,
+    "nodeInstallerDependency": false
   }
 }

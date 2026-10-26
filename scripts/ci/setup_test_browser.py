@@ -1,89 +1,91 @@
 #!/usr/bin/env python3
-"""Run the pinned upstream installer once with a genuinely private child cache."""
+"""Install a pinned official headless browser without consulting a shared cache."""
 import hashlib
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import platform
 import re
-import shutil
+import stat
 import subprocess
 import tempfile
+import time
 import urllib.request
+import zipfile
 
 BROWSER_VERSION = "155.0.8059.84"
-BUNDLE_REVISION = "48ad923757ca74d66703209fe939badbdf80f2f4"
-BUNDLE_SHA256 = "64ef3f87734770e613d120b5cf09711c8acecb1425308ce8d9068cd56af81974"
-BUNDLE_URL = f"https://raw.githubusercontent.com/browser-actions/setup-chrome/{BUNDLE_REVISION}/index.js"
-MAX_BUNDLE_BYTES = 2 * 1024 * 1024
+ARCHIVE_SHA256 = {
+    "mac-arm64": "7f111980bcb41e908d0fa3e969a625e7777ff683c1fc43fd7759d05ec3ffe52b",
+    "mac-x64": "3c5bf34eb8daa874e8b50edf900eab618b74c1b9596e596340278eeba4ff1ae1",
+}
+MAX_ARCHIVE_BYTES = 250 * 1024 * 1024
+MAX_UNPACKED_BYTES = 512 * 1024 * 1024
 
 
-def save_verified_bundle(content, destination):
-    if len(content) > MAX_BUNDLE_BYTES or hashlib.sha256(content).hexdigest() != BUNDLE_SHA256:
-        raise ValueError("The official browser installer failed its pinned integrity check")
-    destination.write_bytes(content)
+def platform_tag():
+    architectures = {"arm64": "mac-arm64", "aarch64": "mac-arm64", "x86_64": "mac-x64"}
+    if platform.system() != "Darwin" or platform.machine() not in architectures:
+        raise ValueError("The browser installer supports the macOS CI architecture matrix only")
+    return architectures[platform.machine()]
 
 
-def read_outputs(path):
-    lines = path.read_text().splitlines()
-    result = {}
-    index = 0
-    while index < len(lines):
-        line = lines[index]
-        index += 1
-        if "<<" in line:
-            name, delimiter = line.split("<<", 1)
-            start = index
-            while index < len(lines) and lines[index] != delimiter:
-                index += 1
-            if not delimiter or index == len(lines):
-                raise ValueError("Incomplete browser installer output")
-            value = "\n".join(lines[start:index])
-            index += 1
-        elif "=" in line:
-            name, value = line.split("=", 1)
-        else:
-            raise ValueError("Malformed browser installer output")
-        if name not in {"chrome-path", "chrome-version"} or name in result or not value:
-            raise ValueError("Unexpected, duplicate or empty browser installer output")
-        result[name] = value
-    if set(result) != {"chrome-path", "chrome-version"}:
-        raise ValueError("Missing browser executable or version output")
-    return result
+def download_archive(url, destination, expected_sha256):
+    digest = hashlib.sha256()
+    total = 0
+    started = time.monotonic()
+    with urllib.request.urlopen(url, timeout=30) as response, destination.open("wb") as output:
+        while chunk := response.read(1024 * 1024):
+            total += len(chunk)
+            if total > MAX_ARCHIVE_BYTES or time.monotonic() - started > 600:
+                raise ValueError("Browser download exceeded its size or time budget")
+            digest.update(chunk)
+            output.write(chunk)
+    if digest.hexdigest() != expected_sha256:
+        raise ValueError("The official browser archive failed its pinned integrity check")
 
 
-def validate_browser(outputs, cache):
-    if outputs["chrome-version"] != BROWSER_VERSION:
-        raise ValueError("The installer returned an unexpected browser version")
-    binary = Path(outputs["chrome-path"]).resolve(strict=True)
-    if not binary.is_relative_to(cache.resolve()) or not binary.is_file() or not os.access(binary, os.X_OK):
-        raise ValueError("The browser executable is outside the owned cache or is not executable")
+def extract_archive(archive, destination):
+    with zipfile.ZipFile(archive) as bundle:
+        entries = bundle.infolist()
+        if not entries or sum(entry.file_size for entry in entries) > MAX_UNPACKED_BYTES:
+            raise ValueError("Empty or oversized browser archive")
+        names = set()
+        for entry in entries:
+            name = PurePosixPath(entry.filename)
+            mode = entry.external_attr >> 16
+            if (name.is_absolute() or ".." in name.parts or "\\" in entry.filename or
+                    not name.parts or name in names or
+                    stat.S_IFMT(mode) not in {0, stat.S_IFREG, stat.S_IFDIR}):
+                raise ValueError("Unsafe, duplicate or non-regular browser archive entry")
+            names.add(name)
+        bundle.extractall(destination)
+        for entry in entries:
+            target = destination / entry.filename
+            if not entry.is_dir():
+                target.chmod((entry.external_attr >> 16) & 0o777 or 0o644)
+
+
+def validate_browser(binary, directory):
+    binary = binary.resolve(strict=True)
+    if not binary.is_relative_to(directory.resolve()) or not binary.is_file() or not os.access(binary, os.X_OK):
+        raise ValueError("Browser is outside the owned directory or is not executable")
     version = subprocess.check_output([str(binary), "--version"], text=True, timeout=30).strip()
     if not re.fullmatch(r"(?:Chromium|Google Chrome(?: for Testing)?) " + re.escape(BROWSER_VERSION), version):
-        raise ValueError("The actual executable reported an unexpected browser version")
+        raise ValueError("The actual browser reported an unexpected version")
     return binary
 
 
 def install_browser(environment):
-    node = shutil.which("node", path=environment.get("PATH"))
-    if not node or not re.fullmatch(r"v24\.\d+\.\d+", subprocess.check_output([node, "--version"], text=True, timeout=15).strip()):
-        raise ValueError("Node.js24 is required for the pinned official browser installer")
+    tag = platform_tag()
     workspace = Path(tempfile.mkdtemp(prefix="vaultstadio-browser-", dir=environment["RUNNER_TEMP"]))
-    cache = workspace / "tool-cache"
-    download = workspace / "downloads"
-    cache.mkdir()
-    download.mkdir()
-    bundle = workspace / "setup-chrome.mjs"
-    with urllib.request.urlopen(BUNDLE_URL, timeout=30) as response:
-        save_verified_bundle(response.read(MAX_BUNDLE_BYTES + 1), bundle)
-    child = dict(environment, RUNNER_TOOL_CACHE=str(cache), RUNNER_TEMP=str(download),
-                 GITHUB_OUTPUT=str(workspace / "outputs"), GITHUB_PATH=str(workspace / "paths"))
-    Path(child["GITHUB_OUTPUT"]).touch()
-    Path(child["GITHUB_PATH"]).touch()
-    child.update({"INPUT_CHROME-VERSION": BROWSER_VERSION, "INPUT_INSTALL-DEPENDENCIES": "false",
-                  "INPUT_INSTALL-CHROMEDRIVER": "false", "INPUT_NO-SUDO": "true"})
-    subprocess.run([node, str(bundle)], env=child, check=True, timeout=600)
-    outputs = read_outputs(workspace / "outputs")
-    binary = validate_browser(outputs, cache)
-    return binary, workspace
+    url = (f"https://storage.googleapis.com/chrome-for-testing-public/{BROWSER_VERSION}/"
+           f"{tag}/chrome-headless-shell-{tag}.zip")
+    archive = workspace / "browser.zip"
+    download_archive(url, archive, ARCHIVE_SHA256[tag])
+    unpacked = workspace / "unpacked"
+    unpacked.mkdir()
+    extract_archive(archive, unpacked)
+    binary = unpacked / f"chrome-headless-shell-{tag}" / "chrome-headless-shell"
+    return validate_browser(binary, workspace), workspace
 
 
 def main():
@@ -92,7 +94,7 @@ def main():
     binary, workspace = install_browser(environment)
     with destination.open("a") as output:
         output.write(f"chrome-path={binary}\nchrome-version={BROWSER_VERSION}\n")
-    print(f"Verified browser {BROWSER_VERSION} in owned directory {workspace.name}")
+    print(f"Verified Headless Shell {BROWSER_VERSION} in owned directory {workspace.name}")
 
 
 if __name__ == "__main__":
