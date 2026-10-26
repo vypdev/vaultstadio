@@ -224,6 +224,8 @@ The budget is a floor, not a substitute for covering every normative requirement
 
 For #73, the minimum additional budget is 64 executed cases: all three visibilities across denied parent writes and source mutations; owner success; missing/type/trash destinations; invalid existing get-or-create result; ancestor ownership/cycle/depth; move-cycle prevention; typed failures and zero-effect checks. Real production-route tests MUST use the production use cases/service, local byte adapter, PostgreSQL and the Flyway schema (including its actual cascade), assert status/body and unchanged rows/bytes, and include an owner success control. Pure policy branches target 100% line and branch coverage; aggregate coverage is reported separately without claiming the full platform meets that target.
 
+VFY-DBTIME-01 in SDD-0014 requires complete persisted fixture baselines and two explicit nanosecond-input regressions. PostgreSQL timestamps have microsecond resolution; the fixture MUST read back the adapter's persisted representation before asserting that a denied or failed operation changed no metadata. These tests retain exact full-row equality, including timestamps, and do not alter production persistence semantics.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
