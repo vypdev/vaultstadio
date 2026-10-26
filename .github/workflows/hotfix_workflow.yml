@@ -96,7 +96,7 @@ jobs:
           persist-credentials: true
       # Add project-specific version, build, validation, smoke-test and generated-file steps here.
       - name: Commit prepared hotfix files
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@v11
         with:
           add: './'
           committer_name: GitHub Actions
