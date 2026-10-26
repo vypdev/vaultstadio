@@ -66,7 +66,13 @@ jobs:
         run: |
           profile=$(mktemp -d "$RUNNER_TEMP/vaultstadio-verification.XXXXXX")
           chmod 700 "$profile"
-          printf 'HOME=%s\n' "$profile" >> "$GITHUB_ENV"
+          {
+            printf 'HOME=%s\n' "$profile"
+            printf 'GRADLE_USER_HOME=%s/.gradle\n' "$profile"
+            printf 'DOCKER_CONFIG=%s/.docker\n' "$profile"
+            printf 'TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock\n'
+            printf 'DOCKER_TLS_VERIFY=\nDOCKER_CERT_PATH=\nDOCKER_AUTH_CONFIG=\n'
+          } >> "$GITHUB_ENV"
           # Runner-owned temporary files are retired after all native post steps.
 
       - name: Execute the candidate project setup
