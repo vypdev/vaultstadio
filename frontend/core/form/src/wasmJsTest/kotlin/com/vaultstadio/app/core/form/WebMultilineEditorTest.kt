@@ -67,6 +67,18 @@ class WebMultilineEditorTest {
         assertFalse(event.defaultPrevented)
     }
 
+    @Test fun multilineEnterKeepsItsNativeDefaultEvenWithAnImeAction() {
+        var submissions = 0
+        editor.update(spec(onImeAction = { submissions++ }))
+        val event = KeyboardEvent("keydown", KeyboardEventInit(key = "Enter", cancelable = true))
+        textarea.dispatchEvent(event)
+        assertFalse(event.defaultPrevented, "Textarea must keep native newline handling")
+        assertEquals(0, submissions)
+        // Synthetic keydown does not perform native insertion; check the separate input callback.
+        edit("first\nsecond\nthird")
+        assertEquals(listOf("first\nsecond\nthird"), changes)
+    }
+
     @Test fun composingEnterNeverInvokesTheActionEvenWithoutItsEventFlag() {
         var submissions = 0
         editor.update(spec(onImeAction = { submissions++ }))

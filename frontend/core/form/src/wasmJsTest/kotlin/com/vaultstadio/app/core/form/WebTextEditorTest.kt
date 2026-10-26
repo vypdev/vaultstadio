@@ -153,6 +153,19 @@ class WebTextEditorTest {
         assertEquals(0, submissions)
     }
 
+    @Test fun singleLineCompositionSessionBlocksEnterWithoutTheKeyboardCompositionFlag() {
+        input.dispatchEvent(Event("compositionstart"))
+        val composing = KeyboardEvent("keydown", KeyboardEventInit(key = "Enter", cancelable = true))
+        input.dispatchEvent(composing)
+        assertFalse(composing.defaultPrevented)
+        assertEquals(0, submissions)
+        input.dispatchEvent(Event("compositionend"))
+        val committed = KeyboardEvent("keydown", KeyboardEventInit(key = "Enter", cancelable = true))
+        input.dispatchEvent(committed)
+        assertTrue(committed.defaultPrevented)
+        assertEquals(1, submissions)
+    }
+
     @Test fun disabledAndReadOnlyEditorsNeverSubmit() {
         editor.update(spec(enabled = false))
         input.dispatchEvent(KeyboardEvent("keydown", KeyboardEventInit(key = "Enter")))
