@@ -120,6 +120,8 @@ All 29 maintained field declarations MUST use the shared `:core:form` presentati
 
 The nine secret declarations MUST default to native `type=password` on Wasm and masked rendering on other platforms. Explicit visibility controls MUST update native protection and their localized action name together. Actual native editing must update the production model; changing only a semantic mirror is failed evidence. DOM tests MUST exercise the owned control, rejection reconciliation, caret, IME, stale callbacks, Enter/default behavior, multiline sizing and listener/frame cleanup. Actual Compose widget tests MUST cover production-dialog editing, validation and repeated dismissal/reopening, plus protected input and multiline behavior.
 
+Plain Enter in a multiline Web control MUST preserve native newline handling even when an IME callback is supplied. Only editable single-line controls may consume unmodified, non-composing Enter to invoke that callback. A composition session MUST prevent submission even when an individual keyboard event omits its composition flag. Web startup MUST replace the initial loading content with the initialized Compose viewport; verify the framework startup contract and the actual packaged page before inferring missing cleanup from host markup alone.
+
 Web semantics MUST survive normal login/logout, destination changes, menus and repeated dialog dismissal/reopening. The current candidate uses the following reviewed pins; root declarations and the catalog MUST agree:
 
 | Boundary | Current candidate | Acceptance/remaining limit |
