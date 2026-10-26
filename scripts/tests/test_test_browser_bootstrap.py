@@ -1,11 +1,14 @@
 """Failure controls use fixture executables, not a real-browser readiness claim."""
 import hashlib
 import importlib.util
-import io
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
 from pathlib import Path
 import stat
+import ssl
+import subprocess
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -40,6 +43,21 @@ class BrowserBootstrapTest(unittest.TestCase):
         path.chmod(0o700)
         return path
 
+    def curl_response(self, content):
+        actual_run = subprocess.run
+
+        def run(command, **options):
+            if command[0] != "/usr/bin/curl":
+                return actual_run(command, **options)
+            self.assertNotIn("--insecure", command)
+            self.assertEqual("=https", command[command.index("--proto-redir") + 1])
+            self.assertEqual("600", command[command.index("--max-time") + 1])
+            self.assertEqual(630, options["timeout"])
+            Path(command[command.index("--output") + 1]).write_bytes(content)
+            return subprocess.CompletedProcess(command, 0)
+
+        return patch.object(bootstrap.subprocess, "run", side_effect=run)
+
     def test_supported_architectures_are_explicit(self):
         for architecture, expected in [("arm64", "mac-arm64"), ("x86_64", "mac-x64")]:
             with patch.object(bootstrap.platform, "system", return_value="Darwin"):
@@ -53,21 +71,53 @@ class BrowserBootstrapTest(unittest.TestCase):
 
     def test_downloaded_bytes_must_match_the_pinned_digest(self):
         content = b"actual response fixture"
-        with patch.object(bootstrap.urllib.request, "urlopen", return_value=io.BytesIO(content)):
+        with self.curl_response(content):
             bootstrap.download_archive("https://fixture.invalid", self.root / "ok", hashlib.sha256(content).hexdigest())
         self.assertEqual(content, (self.root / "ok").read_bytes())
-        with patch.object(bootstrap.urllib.request, "urlopen", return_value=io.BytesIO(content)):
+        with self.curl_response(content):
             with self.assertRaisesRegex(ValueError, "integrity"):
                 bootstrap.download_archive("https://fixture.invalid", self.root / "bad", "0" * 64)
 
-    def test_download_size_and_time_limits_fail_closed(self):
-        for size, elapsed in [(0, 1), (100, 601)]:
-            with self.subTest(size=size, elapsed=elapsed):
-                with patch.object(bootstrap, "MAX_ARCHIVE_BYTES", size):
-                    with patch.object(bootstrap.time, "monotonic", side_effect=[0, elapsed]):
-                        with patch.object(bootstrap.urllib.request, "urlopen", return_value=io.BytesIO(b"x")):
-                            with self.assertRaisesRegex(ValueError, "budget"):
-                                bootstrap.download_archive("https://fixture.invalid", self.root / "over", "0" * 64)
+    def test_download_size_and_transport_time_budgets_fail_closed(self):
+        with patch.object(bootstrap, "MAX_ARCHIVE_BYTES", 0), self.curl_response(b"x"):
+            with self.assertRaisesRegex(ValueError, "budget"):
+                bootstrap.download_archive("https://fixture.invalid", self.root / "over", "0" * 64)
+
+    def test_transport_certificate_failure_is_not_hidden_by_hash_handling(self):
+        failure = subprocess.CalledProcessError(60, ["curl"], stderr="SSL certificate problem")
+        with patch.object(bootstrap.subprocess, "run", side_effect=failure):
+            with self.assertRaisesRegex(RuntimeError, "curl 60.*SSL certificate"):
+                bootstrap.download_archive("https://fixture.invalid", self.root / "absent", "0" * 64)
+        self.assertFalse((self.root / "absent").exists())
+
+    def test_native_https_rejects_an_actual_untrusted_certificate(self):
+        key, certificate = self.root / "key.pem", self.root / "certificate.pem"
+        subprocess.run(["/usr/bin/openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
+                        "-days", "1", "-subj", "/CN=localhost", "-keyout", str(key),
+                        "-out", str(certificate)], check=True, stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL, timeout=30)
+
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b"fixture")
+
+        server = HTTPServer(("127.0.0.1", 0), Handler)
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(certificate, key)
+        server.socket = context.wrap_socket(server.socket, server_side=True)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            with patch.dict(os.environ, {"NO_PROXY": "127.0.0.1", "no_proxy": "127.0.0.1"}):
+                with self.assertRaisesRegex(RuntimeError, "curl 60"):
+                    bootstrap.download_archive(f"https://127.0.0.1:{server.server_port}/",
+                                               self.root / "rejected", hashlib.sha256(b"fixture").hexdigest())
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
 
     def test_safe_extraction_preserves_executable_mode(self):
         archive = self.archive([("bin/browser", b"fixture", stat.S_IFREG | 0o755)])
@@ -127,7 +177,7 @@ class BrowserBootstrapTest(unittest.TestCase):
         environment = dict(os.environ, RUNNER_TEMP=str(self.root), RUNNER_TOOL_CACHE=str(shared))
         with patch.object(bootstrap, "platform_tag", return_value="mac-arm64"):
             with patch.dict(bootstrap.ARCHIVE_SHA256, {"mac-arm64": hashlib.sha256(content).hexdigest()}):
-                with patch.object(bootstrap.urllib.request, "urlopen", return_value=io.BytesIO(content)):
+                with self.curl_response(content):
                     binary, workspace = bootstrap.install_browser(environment)
         self.assertTrue(binary.is_file())
         self.assertTrue(binary.is_relative_to(workspace.resolve()))

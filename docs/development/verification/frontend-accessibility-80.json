@@ -180,7 +180,7 @@
     "remoteDesktopCompilation": "passed;221 tasks executed",
     "remoteFrontendJob": "failed at Chrome provisioning before browser tests",
     "otherTechnicalJobs": "backend,Android,plugins,lint,SecurityScan,Trivy passed",
-    "bootstrapPolicyCases": 12,
+    "bootstrapPolicyCases": 14,
     "actualSameCacheReplay": "failed at upstream root/chrome path despite valid app-bundle executable",
     "actionSyncAttempt": "40295176042;make test failed without Java;aborted and did not push",
     "remoteCorrectionValidation": "pending authorized publication and fresh CI",
@@ -204,6 +204,9 @@
       "errors": 0,
       "skipped": 0
     },
-    "finalAsyncFaultControl": "expected assertion failure after actual suspension; original source restored and complete positive suite passed afterward"
+    "finalAsyncFaultControl": "expected assertion failure after actual suspension; original source restored and complete positive suite passed afterward",
+    "tlsCorrection": "runner280792b Python issuer validation failed; native macOS curl keeps normal TLS validation, HTTPS-only redirects, bounded transfers and pinned archive hashes",
+    "actualUntrustedCertificateControl": "real loopback TLS server rejected by native curl; no insecure flags or global trust modifications",
+    "nativeTlsDownloadBinarySha256": "53ffa0b3a7be5978c922b1150aafa4ee27015cc6bba2cdf0b59c45c2d70cbaf9"
   }
 }

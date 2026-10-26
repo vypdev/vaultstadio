@@ -8,8 +8,6 @@ import re
 import stat
 import subprocess
 import tempfile
-import time
-import urllib.request
 import zipfile
 
 BROWSER_VERSION = "155.0.8059.84"
@@ -29,16 +27,23 @@ def platform_tag():
 
 
 def download_archive(url, destination, expected_sha256):
+    # Use macOS trust rather than an independently configured Python/OpenSSL CA path.
+    command = ["/usr/bin/curl", "--fail", "--show-error", "--silent", "--location",
+               "--proto", "=https", "--proto-redir", "=https", "--tlsv1.2",
+               "--connect-timeout", "30", "--max-time", "600",
+               "--max-filesize", str(MAX_ARCHIVE_BYTES), "--output", str(destination), url]
+    try:
+        subprocess.run(command, check=True, timeout=630, stderr=subprocess.PIPE, text=True)
+    except subprocess.CalledProcessError as error:
+        raise RuntimeError(f"Browser HTTPS download failed (curl {error.returncode}): {(error.stderr or '').strip()}") from error
     digest = hashlib.sha256()
     total = 0
-    started = time.monotonic()
-    with urllib.request.urlopen(url, timeout=30) as response, destination.open("wb") as output:
-        while chunk := response.read(1024 * 1024):
+    with destination.open("rb") as downloaded:
+        while chunk := downloaded.read(1024 * 1024):
             total += len(chunk)
-            if total > MAX_ARCHIVE_BYTES or time.monotonic() - started > 600:
-                raise ValueError("Browser download exceeded its size or time budget")
+            if total > MAX_ARCHIVE_BYTES:
+                raise ValueError("Browser download exceeded its size budget")
             digest.update(chunk)
-            output.write(chunk)
     if digest.hexdigest() != expected_sha256:
         raise ValueError("The official browser archive failed its pinned integrity check")
 
