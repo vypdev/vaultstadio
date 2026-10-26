@@ -1,0 +1,178 @@
+{
+  "sourceVerificationCommit": "e38a3881644914d9bd544c9ddbce507c2bcbddfe",
+  "testTasks": {
+    "desktopTest": {
+      "suites": 256,
+      "tests": 1303,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "suites": 252,
+      "tests": 1188,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "coverage": {
+    "allCompiledDesktopProduction": {
+      "INSTRUCTION": {
+        "covered": 36434,
+        "missed": 137250
+      },
+      "BRANCH": {
+        "covered": 852,
+        "missed": 4656
+      },
+      "LINE": {
+        "covered": 6148,
+        "missed": 14931
+      },
+      "COMPLEXITY": {
+        "covered": 2052,
+        "missed": 8024
+      },
+      "METHOD": {
+        "covered": 1771,
+        "missed": 5752
+      },
+      "CLASS": {
+        "covered": 347,
+        "missed": 651
+      }
+    },
+    "compiledJvmAccessibilityHelper": {
+      "INSTRUCTION": {
+        "covered": 47,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 8,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 3,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 6,
+        "missed": 0
+      },
+      "METHOD": {
+        "covered": 2,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "compiledJvmFormModule": {
+      "INSTRUCTION": {
+        "covered": 1260,
+        "missed": 71
+      },
+      "BRANCH": {
+        "covered": 99,
+        "missed": 33
+      },
+      "LINE": {
+        "covered": 192,
+        "missed": 2
+      },
+      "COMPLEXITY": {
+        "covered": 78,
+        "missed": 29
+      },
+      "METHOD": {
+        "covered": 40,
+        "missed": 1
+      },
+      "CLASS": {
+        "covered": 9,
+        "missed": 0
+      }
+    }
+  },
+  "nativePackageJarIdentity": {
+    "matchesRetainedPackage": true,
+    "actualLaunchEvidence": "separate GUI receipt required",
+    "count": 154
+  },
+  "scope": "issue80; maintained presentation inputs; local verification merge, not a whole-platform readiness certificate",
+  "managedImplementationCommit": "e132ea3f19a6f3d6919e58b438b3a3c84973a4c5",
+  "verificationBaseCommit": "af97326397ee979294359c03edebc6439be97262",
+  "toolchain": {
+    "compose": "1.13.0-beta01",
+    "kotlin": "2.4.20",
+    "koin": "4.2.2",
+    "koinCompiler": "1.2.1",
+    "coil": "3.6.3",
+    "kotlinxIo": "0.9.1",
+    "ws": "8.21.3",
+    "gradle": "9.3.1",
+    "agp": "9.1.1",
+    "compileSdk": "37",
+    "desktopRuntime": "JetBrains Runtime 21.0.11; bytecode17"
+  },
+  "webAssetSha256": {
+    "composeApp.js.map": "bcc7e0c83903d8e1f8f8b68108e673f0173404c013af51f3e6d3d2884901f50c",
+    "index.html": "b36b3ab076116942668f4c9bf958a2ef72a0d3a85fc785487684b0092e1bb71d",
+    "composeApp.js": "a5be99f9d82c8c9a58f62d2911116fc28e6be6b8d588a4ec5531ce35a2bf44b0",
+    "1407c3f13017820c5331.wasm": "dfe736a97d83e66f5d5a24d6010e4da74c480175b76e4d07e634c3fbffa4151b",
+    "composeApp.js.LICENSE.txt": "85a703daf937b69e6a45c75947dcea43f4026a835b84a7ea4300843217311baf",
+    "f0723f483592844db0a7.wasm": "da14cf90f3af94f14f76daeeb620a47ca320296c856ae6be37b59fbdfc1641ae"
+  },
+  "gui": {
+    "verifiedAtUtc": "2026-10-26T08:20:39.985546+00:00",
+    "source": "e38a3881644914d9bd544c9ddbce507c2bcbddfe",
+    "webFolderPersisted": true,
+    "desktopFolderPersisted": true,
+    "existingFileBytes": 66,
+    "existingFileSha256": "3a6e85352f08b63b0bb48c7c4d200e80c6cc98ab324f6c9ee98fef924fed34b3",
+    "uiAuthentication": "normal existing-credential login in each GUI; separate API-only token for readback; no injection",
+    "web": [
+      "normal existing-credential login with Enter",
+      "protected password output",
+      "profile select/clear -> Save disabled",
+      "Unicode input -> Save enabled",
+      "cancel/reopen twice without reload",
+      "password-route native type/password and focus, no credential change",
+      "folder create and menu select/dismiss; subsequent navigation",
+      "search field typing/clearing stayed responsive; unrelated returned names recorded as unresolved product search debt"
+    ],
+    "desktop": [
+      "original non-seeded in-memory preferences factory",
+      "normal assistant-typed existing-credential login with Enter",
+      "protected password output",
+      "profile select/clear -> Save disabled",
+      "Unicode paste -> Save enabled",
+      "cancel/reopen and original unchanged model",
+      "folder create and navigate to actual empty child"
+    ]
+  },
+  "focusedBrowserCases": {
+    "nativeAdapterAndModel": 39,
+    "realComposedAppWidgets": 4
+  },
+  "desktopComponentCases": {
+    "productionInteractions": 151,
+    "coilImagePipeline": 2
+  },
+  "excludedHistoricalBridgeCases": 30,
+  "limitations": [
+    "Compose beta prerelease requires maintainer risk acceptance",
+    "Coil targets Skiko0.150.1, resolved Compose Skiko0.156.0; warning preserved, only two image pipeline cases verified",
+    "JVM aggregate includes untested legacy classes; not maximum whole-project coverage",
+    "Kotlin compiler migration changes branch denominator; no like-for-like branch increase claimed",
+    "Android three debug APK variants compiled, not device dogfood",
+    "New form module compiled for two Apple targets, not whole iOS app",
+    "No new-password submission, release, deployment or setup79 activation",
+    "All29 declarations covered by component inventory;3 retained inactive dialog password fields are not routed GUI proof",
+    "Browser GUI covers representative journeys, not every feature/business flow",
+    "Native app selector stalled despite requested timeout; later bound-handle actions worked; screen-capture failures recovered with fresh observations",
+    "Live search for Web final returned unrelated names; input acceptance passed, search correctness is unaccepted follow-up"
+  ]
+}

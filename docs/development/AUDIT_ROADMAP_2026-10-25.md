@@ -78,3 +78,9 @@ La base medida es backend 37,68 % líneas / 15,94 % ramas y frontend 19,32 % / 2
 La issue debe registrar el contrato y los límites que cambian, su SDD, el inventario de casos y la migración/rollback cuando haya datos persistidos. La PR debe contener una reproducción del fallo anterior, pruebas del comportamiento corregido, casos negativos y evidencia del artefacto que se va a usar. La revisión de Copilot y todos los checks aplicables deben quedar resueltos antes de promover la entrega.
 
 Tras publicar, verificar que el checkout local y su ref remoto apuntan al mismo commit, que cada mejora previa sigue en historial y que no queda WIP fuera de la PR. Las promociones a `develop`/`master`, despliegues y cambios de ciclo de vida requieren la autorización correspondiente; la Action conserva la propiedad de las ramas gestionadas. No cerrar una capacidad como `Implemented` mientras existan decisiones de readiness o escenarios de aceptación fallidos.
+
+## Evidencia adicional de #80 — 2026-10-26
+
+Los 29 campos mantenidos tienen contratos de interacción; el candidato supera 1.303 casos desktop y 1.188 Wasm, con dogfooding autónomo de login, edición y carpetas en Web/macOS. Véase [informe de accesibilidad](verification/FRONTEND_ACCESSIBILITY_80.md). La cobertura JVM completa sigue en 29,17% de líneas; no se considera cerrada R04 ni la plataforma lista.
+
+R03/SDD-0012 conserva un hallazgo adicional: la búsqueda real `Web final` devuelve nombres no relacionados después de estabilizarse. El campo permite escribir/borrar, pero falta verificar y corregir el filtrado, sugerencias y contrato API con casos de nombres coincidentes/no coincidentes, aislamiento por propietario, Unicode, paginación y cancelación de respuestas antiguas. No mezclar esta reparación semántica con el adaptador de entrada de #80.

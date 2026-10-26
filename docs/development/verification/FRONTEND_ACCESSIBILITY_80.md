@@ -1,0 +1,92 @@
+# Frontend input and accessibility verification — issue #80
+
+The local candidate supports assistant-operated text entry on the exercised Web and macOS paths. All 29 maintained field declarations use the platform form boundary. This is scoped input verification, not whole-platform readiness or merge approval. Contract: [SDD-0013 §6.1.1](../../../specs/SDD-0013-frontend-kmp-and-platform-architecture.md). Machine-readable results: [frontend-accessibility-80.json](frontend-accessibility-80.json).
+
+## Source and artifact identity
+
+- Managed implementation: `e132ea3f19a6f3d6919e58b438b3a3c84973a4c5`.
+- Local verification merge: `e38a3881644914d9bd544c9ddbce507c2bcbddfe`, with develop `af97326397ee979294359c03edebc6439be97262` (#77). This local-only merge models the PR integration; it does not synchronize the Action-owned remote branch.
+- Full verification: 2026-10-26 02:19:36–02:20:18 UTC, exit 0. Fresh desktop/browser execution was forced; package/compile tasks could reuse matching outputs. Configuration cache stored successfully.
+- Actual macOS app: all **154 production JARs** match the verified distributable. The only audit packaging additions are the original non-seeded in-memory preferences provider and class-load evidence. Its loaded provider path/hash were checked before authentication. No token injection or production auth changes.
+- Actual Web: immutable copy of the verified production distribution; served index returned HTTP 200 with matching SHA. All six asset hashes are in the JSON.
+- Local GUI persistence readback: 2026-10-26 08:20:39 UTC. Backend is the previously verified #75 storage candidate in the dedicated disposable dogfood environment; this does not certify unimplemented backend roadmap items.
+
+## Current implementation and compatibility decision
+
+`:core:form` owns presentation adaptation, with small files separating specification, native control ownership, metadata, styling, reconciliation, measurement and renderer. Wasm uses actual HTML input/textarea elements through public `HtmlElementView`; other targets retain Material/Basic Compose fields. Features retain their production state/callbacks and domain/data dependency direction. No framework editor discovery, semantic-mirror mutation, swallowed rendering exception or auth backdoor remains.
+
+Pins: Compose **1.13.0-beta01**, Kotlin **2.4.20**, Koin **4.2.2/compiler1.2.1**, Coil **3.6.3**, kotlinx-io **0.9.1**, ws **8.21.3**, Gradle **9.3.1**, AGP **9.1.1**, compile SDK **37**. Native packaging requires JetBrains Runtime **21.0.11**; bytecode remains JVM17. Android minimum/target behavior is unchanged.
+
+**Maintainer decision required:** Compose is prerelease. Coil targets Skiko0.150.1 while Compose resolves0.156.0; the compatibility warning remains visible. Two actual Coil pipeline cases (valid synthetic PNG and invalid bytes) pass, but do not certify all image formats. No dependency forcing, exclusions, warning suppression, scanner weakening, Copilot edits or protection changes are used. The retained stable verification commit is `76c341f42ea5cf0d7d6ea4931f6fdda3d4734ecf`; it reproduces dialog-owner loss and is a source rollback reference, not a fully accepted functional fallback.
+
+## Executed contracts
+
+| Scope | Collected result | Meaning |
+|---|---:|---|
+| Complete desktop selection | 1,303 cases; 0 failures/errors/skips | All collected desktop modules, not just app tests |
+| Complete Wasm browser selection | 1,188 cases; 0 failures/errors/skips | Independent pure data/auth modules and actual browser compositions included |
+| Production component interaction suite | 151 cases | 29×edit/clear/focus, 41 distinct controls, seven locale, 14 disabled and two primitive cases |
+| Actual Coil pipeline | 2 cases | Valid PNG and invalid bytes with the resolved runtime |
+| Native browser adapter/model | 39 cases | 21 editor, nine multiline, four layout/measurement, five common model cases |
+| Real composed browser widget | 4 cases | Production profile validation/open/cancel/reopen, secure reveal/remask/dispose, sequential Unicode/caret, Basic multiline selection |
+| Inventory checker | 21 cases | Failures for missing/mismatched declarations/cases, protected-renderer contract and lint evidence |
+| Installed ws loopback | 3 cases | Fragmented Unicode echo, rejected invalid typed-array close and valid close |
+
+Rows overlap the complete platform selections and MUST NOT be summed as unique tests. Five common model cases execute on both platforms. The 30 retired framework-bridge cases are historical, excluded from these current counts.
+
+The [field inventory](accessibility-controls-80.json) covers **29 maintained declarations**, including three inactive password fields in the retained Profile ChangePasswordDialog. The routed Change Password screen is a separate component. Dormant legacy duplicate screens are outside this maintained inventory; static consistency does not prove route reachability.
+
+The asynchronous browser runner was fault-tested with a deliberate failed assertion after suspension: the selected test and Gradle build failed. The source was restored byte-for-byte. An earlier invalid control failed before Gradle and is explicitly excluded from evidence. This prevents counting asynchronous tests that silently fail outside the runner.
+
+## Actual GUI dogfooding
+
+The assistant entered existing disposable credentials and submitted normal login with Enter in both Web and macOS. No human typing or seeded UI session was used. Password accessibility output did not expose the credential. On Web, the three routed change-password controls were inspected as `type=password`, with keyboard focus traversal; no new credential was entered or submitted.
+
+Both actual apps completed profile selection/clear (Save disabled), Unicode replacement (Save enabled), cancellation, restored original value and reopening. Web completed two edit/cancel cycles without reload recovery, then continued navigation and sort-menu selection/dismissal. Native profile reopening and folder navigation also worked.
+
+The assistant created separate Unicode-named folders from Web and desktop. Both were independently read back through authenticated local API calls, using a separate API-only login token. The existing synthetic file still contained 66 bytes with SHA256 `3a6e85352f08b63b0bb48c7c4d200e80c6cc98ab324f6c9ee98fef924fed34b3`. The desktop then opened its new empty folder. Original screenshots and sanitized GUI receipt are retained with the private verification evidence.
+
+The search field also accepted typing/clearing without rendering errors. However, the live query `Web final` returned unrelated names after settling. Search correctness remains an unresolved product defect; this is not counted as a successful search journey. It is retained under R03/SDD-0012 for a focused follow-up.
+
+The application selector stalled despite its requested timeout, and two native capture attempts returned capture errors; fresh observations recovered and subsequent bound-handle actions worked. These tool defects remain distinct from the now-successful field operations. Coordinate input was not needed for the accepted native journeys.
+
+## Coverage with explicit denominators
+
+| Compiled JVM production scope | Lines | Branches |
+|---|---:|---:|
+| New complete form module, no class exclusions | 192/194 = **98.97%** | 99/132 = **75.00%** |
+| Existing narrow input-semantics helper | 3/3 = **100%** | 8/8 = **100%** |
+| All compiled desktop production, including untested legacy classes | 6,148/21,079 = **29.17%** | 852/5,508 = **15.47%** |
+
+Form coverage combines real app component interactions with model tests. Missing/nonempty execution data and compiled classes are checked before report generation. The existing helper's 100% gate is preserved; it never meant 100% of core UI or the product. Wasm native code has actual DOM/widget cases, not JVM line coverage. Kotlin2.4.20 changed the compiled branch denominator from the previous toolchain; no like-for-like branch-coverage improvement is claimed. Whole-project coverage remains substantial roadmap work.
+
+## Reproduction and gates
+
+Use the reviewed JBR21 runtime, provision Android platform37.0/build-tools36.0.0 and an executable Chrome installation. From `frontend/`:
+
+```sh
+./gradlew desktopTest --rerun wasmJsBrowserTest --rerun --continue --no-build-cache
+./gradlew :core:form:jacocoTestReport :core:ui:verifyInputSemanticsCoverage :data:network:verifyInstantSerializerCoverage
+./gradlew :composeApp:createDistributable :composeApp:wasmJsBrowserDistribution :androidApp:assembleDebug
+./gradlew :core:form:compileKotlinIosArm64 :core:form:compileKotlinIosSimulatorArm64
+./gradlew :core:ui:detekt :core:form:detekt :feature:auth:detekt :core:resources:detekt
+./gradlew :composeApp:ktlintDesktopTestSourceSetCheck :composeApp:ktlintWasmJsTestSourceSetCheck
+```
+
+For the diagnostic aggregate, pass `-I ../scripts/audit/aggregate-coverage.init.gradle` and select fresh `desktopTest` before `auditJacocoAggregate` in the same invocation. Run the inventory/unit checks, specification validator, no-FQN check and Actionlint from the repository root. The final campaign selected all these Gradle tasks together; the private receipt retains the complete command and original XML. CI now selects complete desktop/browser suites, publishes form coverage, and isolates its Chrome tool cache instead of trusting the broken shared cached executable.
+
+All three Android debug APK variants were generated. The new form module compiled for iosArm64 and iosSimulatorArm64. Neither proves execution on an Android/iOS device or that the pre-existing full iOS app is operational. Remote CI/Copilot review and approval must still be evaluated on the published head. Runtime setup #79 remains disabled; no deployment/release is authorized by these checks.
+
+## Rejected candidates and retained diagnostics
+
+| Observation | Rejected approach / correction |
+|---|---|
+| Same JARs: Corretto17 lacked automatic editable input; JBR21 worked | Pin the actually verified runtime combination; version and vendor both differ, so no isolated cause is asserted |
+| Compose1.10.1 node-ID exception after normal login | Upstream stable fix removed that error, then real modal dismissal exposed single-owner loss in1.11.1/1.12.2 |
+| Beta multi-owner dialogs worked, but password became unprotected contenteditable | Native owned password controls; privacy regression retained |
+| Beta nonsecret select/replace exceeded DOM child length and cancelled the frame clock | All maintained fields now own native input/textarea; a filled accessibility mirror with unchanged model was explicitly rejected |
+| Independent network/auth Wasm failed on bare import.meta from kotlinx-io0.8.2 | Explicit network-boundary0.9.1 and complete independent suites |
+| Shared CI Chrome cache had no executable | Execution-owned cache; no shared-cache deletion or disabled test |
+| First full native run passed tests but failed configuration-cache storage | Coverage input guard now reads declared task inputs; final complete run exited0 with cache stored |
+
+Broader open work is tracked in the [audit roadmap](../AUDIT_ROADMAP_2026-10-25.md), especially authorization, downloads, complete platform support and legacy test/architecture debt. This increment does not mark those capabilities ready.
