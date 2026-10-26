@@ -1,14 +1,21 @@
 # VaultStadio CI Pipeline
-# Runs on every push and pull request
+# Complete fresh test suites on every PR update; heavy checks are scheduled separately.
 # Runners: shared self-hosted Linux/macOS; Docker/Testcontainers on Apple Silicon
 
 name: CI
 
 on:
-  push:
-    branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: application-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
   JAVA_VERSION: '17'
@@ -24,6 +31,8 @@ jobs:
       group: vypdev
       labels: [self-hosted, macOS, ARM64]
     
+    timeout-minutes: 35
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -38,7 +47,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           project-root: backend
-          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
+          cache-read-only: false
       
       - name: Prepare private Docker client
         uses: ./.github/actions/prepare-docker
@@ -77,29 +86,9 @@ jobs:
             docker info || exit 1
           fi
       
-      - name: Build backend modules
+      - name: Run complete backend suites
         working-directory: backend
-        run: |
-          ./gradlew :core:build \
-            :plugins-api:build \
-            :infrastructure:build \
-            :api:build \
-            -x test
-      
-      - name: Run backend tests
-        working-directory: backend
-        run: |
-          ./gradlew :core:test \
-            :domain:storage:test \
-            :core:storage:test \
-            :api:test \
-            :infrastructure:test \
-            :plugins-api:test \
-            :plugins:image-metadata:test \
-            :plugins:video-metadata:test \
-            :plugins:fulltext-search:test \
-            :plugins:ai-classification:test \
-            --continue
+        run: ./gradlew test --rerun --continue --build-cache
 
       - name: Verify storage authorization coverage
         working-directory: backend
@@ -109,18 +98,7 @@ jobs:
 
       - name: Generate backend coverage reports
         working-directory: backend
-        run: |
-          ./gradlew :core:jacocoTestReport \
-            :domain:storage:jacocoTestReport \
-            :core:storage:jacocoTestReport \
-            :api:jacocoTestReport \
-            :infrastructure:jacocoTestReport \
-            :plugins-api:jacocoTestReport \
-            :plugins:image-metadata:jacocoTestReport \
-            :plugins:video-metadata:jacocoTestReport \
-            :plugins:fulltext-search:jacocoTestReport \
-            :plugins:ai-classification:jacocoTestReport \
-            --continue
+        run: ./gradlew jacocoTestReport --continue --build-cache
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -130,23 +108,15 @@ jobs:
           path: |
             backend/**/build/reports/tests/
             backend/**/build/test-results/
+          if-no-files-found: error
           retention-days: 7
 
       - name: Upload backend coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-backend
-          path: |
-            backend/core/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/domain/storage/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/core/storage/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/api/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml
+          path: backend/**/build/reports/jacoco/**/*.xml
+          if-no-files-found: error
           retention-days: 1
 
   # Build the frontend (standalone project in frontend/)
@@ -156,6 +126,8 @@ jobs:
     runs-on:
       group: vypdev
       labels: [self-hosted, macOS, X64]
+
+    timeout-minutes: 35
 
     steps:
       - name: Checkout code
@@ -187,79 +159,59 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
-
-      - name: Build frontend (Desktop)
-        run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop :composeApp:createDistributable --no-build-cache
+        with:
+          cache-read-only: false
 
       - name: Install and verify the job-owned browser
         id: chrome
         run: python3 scripts/ci/setup_test_browser.py
 
-      - name: Run frontend tests (desktop)
+      - name: Run complete frontend desktop suites
+        working-directory: frontend
+        run: ./gradlew desktopTest --rerun --continue --build-cache
+
+      - name: Run complete frontend browser suites
+        working-directory: frontend
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: |
           test -x "$CHROME_BIN"
           "$CHROME_BIN" --version
-          cd frontend
-          ./gradlew :composeApp:desktopTest :data:network:desktopTest :data:network:wasmJsBrowserTest \
-            --continue --no-build-cache
+          ./gradlew wasmJsBrowserTest --rerun --continue --build-cache
 
-      - name: Generate frontend coverage report
+      - name: Generate frontend coverage and enforce existing gates
+        working-directory: frontend
         run: |
-          cd frontend
-          ./gradlew :composeApp:jacocoTestReport :data:network:jacocoTestReport \
-            :data:network:verifyInstantSerializerCoverage --continue --no-build-cache
+          ./gradlew jacocoTestReport :data:network:verifyInstantSerializerCoverage \
+            :core:ui:verifyInputSemanticsCoverage --continue --build-cache
 
-      - name: Upload frontend coverage report
+      - name: Upload frontend test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-results
+          path: |
+            frontend/**/build/reports/tests/
+            frontend/**/build/test-results/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload frontend coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-frontend
-          path: |
-            frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
-            frontend/data/network/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
-          retention-days: 1
-
-      - name: Run complete frontend desktop suites
-        run: cd frontend && ./gradlew desktopTest --continue --no-build-cache
-
-      - name: Report form module coverage
-        run: cd frontend && ./gradlew :core:form:jacocoTestReport --continue --no-build-cache
-
-      - name: Upload form module coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-coverage-form
-          path: frontend/core/form/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
-          retention-days: 1
-
-      - name: Run browser accessibility and dialog lifecycle contracts
-        env:
-          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
-        run: |
-          test -x "$CHROME_BIN"
-          "$CHROME_BIN" --version
-          cd frontend
-          ./gradlew wasmJsBrowserTest --rerun --continue --no-build-cache
-
-      - name: Enforce accessible input coverage
-        run: cd frontend && ./gradlew :core:ui:jacocoTestReport :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache
-
-      - name: Upload accessible input coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-coverage-accessibility
-          path: frontend/core/ui/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          path: frontend/**/build/reports/jacoco/**/*.xml
+          if-no-files-found: error
           retention-days: 1
 
   # Upload coverage to Codecov
   coverage:
     name: Coverage (Codecov)
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
+    runs-on: ubuntu-24.04
     needs: [backend, frontend]
+
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -276,27 +228,6 @@ jobs:
         with:
           name: jacoco-coverage-frontend
           path: coverage-frontend
-
-      - name: Download accessible input coverage
-        uses: actions/download-artifact@v7
-        with:
-          name: jacoco-coverage-accessibility
-          path: coverage-accessibility
-
-      - name: Download form module coverage
-        uses: actions/download-artifact@v7
-        with:
-          name: jacoco-coverage-form
-          path: coverage-form
-
-      - name: List coverage files (debug)
-        run: |
-          echo "=== coverage-backend ==="
-          find coverage-backend -type f 2>/dev/null || true
-          echo "=== coverage-frontend ==="
-          find coverage-frontend -type f 2>/dev/null || true
-          echo "=== all jacocoTestReport.xml in workspace ==="
-          find . -name 'jacocoTestReport.xml' -type f 2>/dev/null || true
 
       - name: Discover coverage files for Codecov
         id: coverage-files
@@ -323,178 +254,29 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  # Build plugins
-  plugins:
-    name: Plugins Build
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
+  quality:
+    name: Source & Workflow Contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+          persist-credentials: false
+      - uses: actions/setup-python@v6
         with:
-          project-root: backend
-      
-      - name: Build plugins
-        working-directory: backend
-        run: |
-          ./gradlew :plugins:image-metadata:build \
-            :plugins:video-metadata:build \
-            :plugins:fulltext-search:build \
-            :plugins:ai-classification:build \
-            -x test
-
-  # Build Android app
-  android:
-    name: Android Build
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Isolate Android SDK for this job
-        shell: bash
-        run: |
-          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
-          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
-      
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install \
-            "platforms;android-37.0" \
-            "build-tools;36.0.0"
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-      
-      - name: Build Android APK (debug)
-        run: cd frontend && ./gradlew :androidApp:assembleDevDebug
-
-  # Code quality checks (no root Gradle; backend and frontend are standalone)
-  lint:
-    name: Lint & Code Quality
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Isolate Android SDK for this job
-        shell: bash
-        run: |
-          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
-          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
-      
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install \
-            "platforms;android-37.0" \
-            "build-tools;36.0.0"
-      
-      - name: Verify active frontend interaction inventory
+          python-version: '3.13'
+      - name: Install workflow parser
+        run: python3 -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
+      - name: Verify source and workflow contracts
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
         run: |
           python3 scripts/check-frontend-accessibility.py
-          python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py'
-          python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py'
-          python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py'
-
-      - name: Check no FQN in type positions
-        run: ./scripts/check-no-fqn.sh
-
-      - name: Test project verification environment
-        run: python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
-      
-      - name: Run Detekt (backend)
-        working-directory: backend
-        run: ./gradlew detektMain --continue
-      
-      - name: Analyze actual accessibility and authentication sources
-        run: |
-          cd frontend
-          ./gradlew :core:ui:detekt :core:form:detekt :core:resources:detekt :feature:auth:detekt \
-            :composeApp:ktlintDesktopTestSourceSetCheck :composeApp:ktlintWasmJsTestSourceSetCheck --continue
-          cd ..
-          python3 scripts/check-frontend-accessibility.py --detekt-reports
-
-      - name: Run Detekt (frontend)
-        working-directory: frontend
-        run: ./gradlew detektDesktopMain --continue
-      
-      - name: Upload Detekt report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: detekt-report
-          path: '**/build/reports/detekt/'
-          retention-days: 7
-
-  # Security scanning
-  security:
-    name: Security Scan
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-        continue-on-error: true
-      
-      - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with: 
-          sarif_file: 'trivy-results.sarif'
-        continue-on-error: true
+          python3 scripts/check-frontend-wasm-mime.py
+          python3 scripts/validate-specification-catalog.py
+          bash scripts/check-no-fqn.sh
+          python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
+          python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v

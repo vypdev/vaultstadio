@@ -6,15 +6,14 @@ on:
       - '.github/actions/prepare-docker/**'
       - '.github/scripts/tests/test_docker_client.py'
       - '.github/workflows/docker_client_contract.yml'
-  push:
-    branches: [master, develop]
-    paths:
-      - '.github/actions/prepare-docker/**'
-      - '.github/scripts/tests/test_docker_client.py'
-      - '.github/workflows/docker_client_contract.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: docker-client-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   credentials:

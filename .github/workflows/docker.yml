@@ -1,25 +1,21 @@
 # VaultStadio Docker Build and Publish
-# Builds and pushes Docker images on releases and main/master branch
+# Manual candidate builds; version-tag pushes retain image/release publication
 # Docker jobs: Apple Silicon runners in group vypdev; images remain linux/amd64.
 
 name: Docker Build
 
 on:
   push:
-    branches: [main, master]
     tags:
       - 'v*'
-  pull_request:
-    branches: [main, master, develop]
-    paths:
-      - .github/workflows/docker.yml
-      - .github/actions/prepare-docker/**
-      - .github/scripts/test_backend_runtime.sh
-      - backend/**
-      - frontend/**
-      - docker/**
-      - .dockerignore
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'workflow_dispatch' }}
 
 env:
   REGISTRY: ghcr.io
@@ -32,7 +28,6 @@ jobs:
     runs-on:
       group: vypdev
       labels: [self-hosted, macOS, ARM64]
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     timeout-minutes: 45
     permissions:
       contents: read
@@ -46,28 +41,13 @@ jobs:
         uses: ./.github/actions/prepare-docker
         timeout-minutes: 2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          project-root: backend
-      
-      - name: Build backend JAR
-        working-directory: backend
-        run: ./gradlew :api:build -x test
-      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
       
       - name: Log in to Container Registry
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -92,24 +72,24 @@ jobs:
           context: .
           file: ./docker/Dockerfile.backend
           platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
-          load: ${{ github.event_name == 'pull_request' }}
+          push: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+          load: ${{ github.event_name == 'workflow_dispatch' }}
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ github.event_name == 'pull_request' && format('vaultstadio-runtime-test:{0}-{1}', github.run_id, github.run_attempt) || '' }}
+            ${{ github.event_name == 'workflow_dispatch' && format('vaultstadio-runtime-test:{0}-{1}', github.run_id, github.run_attempt) || '' }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=vaultstadio-backend
           cache-to: type=gha,mode=max,scope=vaultstadio-backend
 
       - name: Verify the candidate JRE and application startup
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'workflow_dispatch'
         timeout-minutes: 8
         env:
           CANDIDATE_IMAGE: vaultstadio-runtime-test:${{ github.run_id }}-${{ github.run_attempt }}
         run: bash .github/scripts/test_backend_runtime.sh "$CANDIDATE_IMAGE"
 
       - name: Retire this job's local smoke tag
-        if: always() && github.event_name == 'pull_request'
+        if: always() && github.event_name == 'workflow_dispatch'
         env:
           CANDIDATE_IMAGE: vaultstadio-runtime-test:${{ github.run_id }}-${{ github.run_attempt }}
         run: |
@@ -122,7 +102,6 @@ jobs:
     runs-on:
       group: vypdev
       labels: [self-hosted, macOS, ARM64]
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     timeout-minutes: 45
     permissions:
       contents: read
@@ -151,7 +130,6 @@ jobs:
       
       - name: Build frontend (Web)
         run: cd frontend && ./gradlew :composeApp:wasmJsBrowserProductionWebpack
-        continue-on-error: true
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -159,7 +137,7 @@ jobs:
           driver: docker-container
       
       - name: Log in to Container Registry
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -184,12 +162,11 @@ jobs:
           context: .
           file: ./docker/Dockerfile.frontend
           platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=vaultstadio-frontend
           cache-to: type=gha,mode=max,scope=vaultstadio-frontend
-        continue-on-error: ${{ github.event_name != 'pull_request' }}
 
   # Create release artifacts
   release:
@@ -198,7 +175,7 @@ jobs:
       group: vypdev
       labels: [self-hosted, macOS, X64]
     needs: [build-backend, build-frontend]
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
     

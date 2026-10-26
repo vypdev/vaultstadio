@@ -1,16 +1,9 @@
 name: Project runtime verification
 
 on:
-  pull_request:
-    branches: [develop, master]
-    paths:
-      - '.github/actions/copilot-verification-setup/**'
-      - '.github/workflows/project_runtime_verification.yml'
-      - 'backend/**'
-      - 'frontend/**'
-      - 'Makefile'
-      - 'scripts/ci/provision_browser_sandbox.sh'
   workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 3'
 
 permissions:
   contents: read

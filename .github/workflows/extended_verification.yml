@@ -1,0 +1,130 @@
+name: Extended verification
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '31 3 * * 5'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: extended-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  JAVA_VERSION: '17'
+  JAVA_DISTRIBUTION: temurin
+  GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx4g'
+
+jobs:
+  lint:
+    name: Lint & Code Quality
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
+    
+    timeout-minutes: 35
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+      
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install \
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
+      
+      - name: Run Detekt (backend)
+        working-directory: backend
+        run: ./gradlew detektMain --continue
+      
+      - name: Analyze actual accessibility and authentication sources
+        run: |
+          cd frontend
+          ./gradlew :core:ui:detekt :core:form:detekt :core:resources:detekt :feature:auth:detekt \
+            :composeApp:ktlintDesktopTestSourceSetCheck :composeApp:ktlintWasmJsTestSourceSetCheck --continue
+          cd ..
+          python3 scripts/check-frontend-accessibility.py --detekt-reports
+
+      - name: Run Detekt (frontend)
+        working-directory: frontend
+        run: ./gradlew detektDesktopMain --continue
+      
+      - name: Upload Detekt report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: detekt-report
+          path: '**/build/reports/detekt/'
+          retention-days: 7
+
+
+  packaging:
+    name: Desktop & Android Packaging
+    runs-on:
+      group: vypdev
+      labels: [self-hosted, macOS, X64]
+
+    timeout-minutes: 35
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version-file: frontend/.java-version
+          distribution: jetbrains
+
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install \
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Build desktop distribution and Android debug APK
+        working-directory: frontend
+        run: ./gradlew :composeApp:createDistributable :androidApp:assembleDevDebug --build-cache
+      - name: Preserve packaging outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-android-packaging
+          path: |
+            frontend/composeApp/build/compose/binaries/main/app/
+            frontend/androidApp/build/outputs/apk/**/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
