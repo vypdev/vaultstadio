@@ -34,6 +34,9 @@ The private `make` adapter preserves literal arguments and real exit status.
 | Specification catalog | 16 capabilities pass | Format/catalog checks |
 | Workflow syntax and whitespace | Pass | Actionlint for the consumer CI; `git diff --check` |
 | Action reference inventory | No commit-SHA `uses:` found | All 32 checked GitHub YAML files; official v5/v3/v2 tags exist |
+| Complete hosted backend at `6f4cb15` | 1978 pass; zero failures/errors/skips | Fresh PostgreSQL-backed and other backend suites across every applicable root task |
+| Complete hosted desktop at `6f4cb15` | 1315 pass; zero failures/errors/skips | Complete root desktop selection on Linux |
+| Complete hosted Wasm at `6f4cb15` | 1191 pass; zero failures/errors/skips | Real Chrome155 with sandbox; complete root browser selection |
 
 The initial sandboxed fixture run could not create its temporary sockets; the
 subsequent permitted execution passed. No assertion was disabled to obtain that
@@ -87,8 +90,9 @@ timestamps. PostgreSQL16 documents
 The fixture now reads the full persisted baseline after create/update; every
 existing full-row authorization/deletion assertion is retained. Two additional
 real-PostgreSQL cases use explicit `.123456789Z` inputs and retain exact equality
-of every persisted field, plus the byte-backed content checks. Their execution
-and the corrected complete backend campaign remain pending.
+of every persisted field, plus the byte-backed content checks. The corrected
+complete hosted campaign described below passes both cases and the existing
+unchanged-state assertions.
 
 The same run's complete Wasm selection failed before browser test cases ran:
 Chrome reported `No usable sandbox` on Ubuntu24.04. No Wasm case count is claimed
@@ -100,8 +104,8 @@ checks root ownership, regular-file type, setuid/executable mode and absence of
 group/world write access, then forwards `CHROME_DEVEL_SANDBOX` through the private
 command adapter. The composite does not install a setuid file or change host security policy.
 The native workflow requires actual sandboxed headless DOM rendering before the
-complete browser suites. Actual helper availability, startup and Wasm results
-remain pending in the corrected campaign.
+complete browser suites. Actual helper availability, startup and all1191 Wasm
+cases pass in the corrected hosted campaign described below.
 
 At `2976e86`, the next hosted run rejected the existing helper because its mode
 allowed group/world writes. This is a failed prerequisite, not an application
@@ -140,6 +144,32 @@ against the actual vendor key. It returned78 with the expected diagnostic before
 creating any installation namespace. Both disposable Ubuntu containers were
 removed after their checks; neither changed the developer's keyring or daemon.
 
+## Complete corrected hosted campaign
+
+[Run40340751805](https://github.com/vypdev/vaultstadio/actions/runs/40340751805),
+job121634472890, completed successfully at source
+`6f4cb15f386f40852c03705940789037de568247`. The actual provenance records Temurin
+17.0.20.1+1 and Chrome for Testing155.0.8059.84 on Linuxx86_64. Signed operator
+provisioning, all39 runtime controls, the candidate composite, actual sandboxed
+DOM rendering, all four configured commands, all three complete root suite
+selections, unchanged tracked source and native post steps passed.
+
+I downloaded the original artifact12659773146, verified its SHA256
+`6e05b74849f0707d7b6eaaf9627386c60cf6c1668e2a55e1b728fe465488e427`,
+checked its source provenance and parsed all1026 fresh JUnit XML files. The table
+above reports each platform separately; these are4484 executions across three
+targets, not4484 distinct cross-platform behaviors or a whole-product coverage
+percentage. Raw XML, provenance, DOM smoke and the complete original log are
+retained in the audit evidence. This resolves the observed56 precision failures
+and the Ubuntu sandbox startup failure without dropping assertions or suites.
+
+The ordinary application CI at that revision found one new test display name
+over120 characters. A follow-up shortens only that name. Its backend ktlint check
+and both real-PostgreSQL precision regressions pass locally. The final follow-up
+revision still requires its own application CI and complete hosted campaign;
+inspect PR83 and the issue79 checkpoint for current-revision results. No completed
+run at an earlier source substitutes for those final checks.
+
 Reproduce the deterministic controls from the repository root:
 
 ```sh
@@ -151,15 +181,14 @@ git diff --check
 
 ## Outstanding operational gates
 
-1. Obtain review of the actual setup and a successful complete corrected Linux
-   campaign. Actual installation is verified by run40331134114, but its backend
-   fixture and browser startup failures block readiness. Retain actual sandboxed
-   startup and fresh backend/desktop/Wasm reports; fixture controls alone cannot
-   certify those application suites.
+1. Obtain review of the actual setup and green application/complete hosted CI on
+   the final follow-up revision. Run40340751805 establishes the complete corrected
+   Linux campaign at6f4cb15; current-revision checks remain mandatory.
 2. Merge the reviewed extension and compatible consumer prerequisites onto the
-   configured trusted main (`master`). Verify the installed generated workflows
-   support the trusted setup input; use the supported installer for any required
-   workflow update. Do not hand-edit generated Copilot files.
+   configured trusted main (`master`). The four installed generated callers
+   already expose `verification-setup` and remain unchanged. Provision the
+   documented operator sandbox prerequisite on the official Linux runners before
+   activation; the successful hosted job does not provision a different runner.
 3. Obtain separate explicit maintainer authorization to enable the repository
    variable `VERIFICATION_SETUP=true`. A merge or PR review does not authorize
    activation.
