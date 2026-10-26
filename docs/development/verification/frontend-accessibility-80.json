@@ -174,5 +174,17 @@
     "Browser GUI covers representative journeys, not every feature/business flow",
     "Native app selector stalled despite requested timeout; later bound-handle actions worked; screen-capture failures recovered with fresh observations",
     "Live search for Web final returned unrelated names; input acceptance passed, search correctness is unaccepted follow-up"
-  ]
+  ],
+  "ciBootstrapCorrection": {
+    "publishedHead": "5dc08b1db1e33b545e4bdc3f6dd7c42ebc9fcb5b",
+    "remoteDesktopCompilation": "passed;221 tasks executed",
+    "remoteFrontendJob": "failed at Chrome provisioning before browser tests",
+    "otherTechnicalJobs": "backend,Android,plugins,lint,SecurityScan,Trivy passed",
+    "bootstrapPolicyCases": 10,
+    "actualColdBrowserInstall": "passed on macOS ARM64;155.0.8059.84",
+    "actualSameCacheReplay": "failed at upstream root/chrome path despite valid app-bundle executable",
+    "sourceBundleSha256": "64ef3f87734770e613d120b5cf09711c8acecb1425308ce8d9068cd56af81974",
+    "actionSyncAttempt": "40295176042;make test failed without Java;aborted and did not push",
+    "remoteCorrectionValidation": "pending authorized publication and fresh CI"
+  }
 }

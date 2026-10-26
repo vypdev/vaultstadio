@@ -161,13 +161,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - name: Allocate execution-owned tool cache
-        shell: bash
-        run: |
-          set -euo pipefail
-          tool_cache="$(mktemp -d "$RUNNER_TEMP/vaultstadio-tools.XXXXXX")"
-          echo "RUNNER_TOOL_CACHE=$tool_cache" >> "$GITHUB_ENV"
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -198,11 +191,14 @@ jobs:
       - name: Build frontend (Desktop)
         run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop :composeApp:createDistributable --no-build-cache
 
-      - name: Set up Chrome for Wasm tests
-        id: chrome
-        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+      - name: Set up Node for the pinned browser installer
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          chrome-version: '155.0.8059.84'
+          node-version: '24'
+
+      - name: Install and verify the job-owned browser
+        id: chrome
+        run: python3 scripts/ci/setup_test_browser.py
 
       - name: Run frontend tests (desktop)
         env:
@@ -242,15 +238,9 @@ jobs:
           path: frontend/core/form/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           retention-days: 1
 
-      - name: Set up browser for accessibility contracts
-        id: accessibility_browser
-        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
-        with:
-          chrome-version: '155.0.8059.84'
-
       - name: Run browser accessibility and dialog lifecycle contracts
         env:
-          CHROME_BIN: ${{ steps.accessibility_browser.outputs.chrome-path }}
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: |
           test -x "$CHROME_BIN"
           "$CHROME_BIN" --version
@@ -447,6 +437,7 @@ jobs:
         run: |
           python3 scripts/check-frontend-accessibility.py
           python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py'
+          python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py'
 
       - name: Check no FQN in type positions
         run: ./scripts/check-no-fqn.sh
