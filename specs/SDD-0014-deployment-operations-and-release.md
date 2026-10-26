@@ -196,6 +196,8 @@ The Linux inventories at 649c13c and ebcf8cc found no Java/browser/Android/Docke
 
 Inventory is an information-gathering operation, explicitly separate from runtime installation and readiness. Complete product suites and the configured Make commands remain independently measured. The known local entrypoint/reporting gaps remain owned by issue #84; their suppression is not repaired or accepted by this rollout.
 
+The macOS route reuses the existing project-owned, hash-verified official Headless Shell installer as a shared trusted-action asset. Install below the private profile without consulting or modifying the runner's shared browser cache. The ordinary CI entrypoint delegates to the same implementation; repeated installs must preserve the shared cache and retain separate executable outputs. Linux retains its existing Chrome setup and protected sandbox. Provenance and smoke checks use the exact setup-selected executable, including macOS paths with spaces, rather than assuming a `chrome` PATH alias.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.

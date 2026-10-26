@@ -13,7 +13,7 @@ import unittest
 from unittest.mock import patch
 import zipfile
 
-SOURCE = Path(__file__).resolve().parents[1] / "ci/setup_test_browser.py"
+SOURCE = Path(__file__).resolve().parents[2] / ".github/actions/copilot-verification-setup/setup-test-browser.py"
 SPEC = importlib.util.spec_from_file_location("test_browser_bootstrap", SOURCE)
 bootstrap = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(bootstrap)
@@ -165,7 +165,7 @@ class BrowserBootstrapTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "not executable"):
             bootstrap.validate_browser(binary, self.owned)
 
-    def test_full_installation_ignores_shared_cache_and_retains_the_executable(self):
+    def test_repeated_installation_ignores_shared_cache_and_retains_the_executables(self):
         archive = self.archive([("chrome-headless-shell-mac-arm64/chrome-headless-shell",
                                  b"#!/bin/sh\necho 'Google Chrome for Testing 155.0.8059.84'\n",
                                  stat.S_IFREG | 0o755)])
@@ -179,7 +179,11 @@ class BrowserBootstrapTest(unittest.TestCase):
             with patch.dict(bootstrap.ARCHIVE_SHA256, {"mac-arm64": hashlib.sha256(content).hexdigest()}):
                 with self.curl_response(content):
                     binary, workspace = bootstrap.install_browser(environment)
+                    second, second_workspace = bootstrap.install_browser(environment)
         self.assertTrue(binary.is_file())
+        self.assertTrue(second.is_file())
+        self.assertNotEqual(workspace, second_workspace)
+        self.assertTrue(second.is_relative_to(second_workspace.resolve()))
         self.assertTrue(binary.is_relative_to(workspace.resolve()))
         self.assertEqual(b"original", marker.read_bytes())
         self.assertEqual([marker], list(shared.iterdir()))
