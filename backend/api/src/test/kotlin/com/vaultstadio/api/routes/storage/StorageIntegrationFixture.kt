@@ -32,6 +32,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.deleteAll
@@ -91,23 +92,29 @@ internal class StorageIntegrationFixture : AutoCloseable {
         parentId: String? = null,
         type: ItemType = ItemType.FOLDER,
         trashed: Boolean = false,
+        timestamp: Instant = Clock.System.now(),
     ): StorageItem {
         val id = UUID.randomUUID().toString()
-        val now = Clock.System.now()
         val item = StorageItem(
             id = id, name = id, path = "/$id", type = type, ownerId = owner.id,
             visibility = visibility, parentId = parentId, isTrashed = trashed,
-            createdAt = now, updatedAt = now,
+            createdAt = timestamp, updatedAt = timestamp,
         )
-        return repository.create(item).fold({ throw it }, { it })
+        repository.create(item).fold({ throw it }, {})
+        return persisted(id)
     }
 
-    suspend fun seedStoredFile(content: String = "retained"): StorageItem {
-        val item = seed(type = ItemType.FILE)
+    suspend fun seedStoredFile(content: String = "retained", timestamp: Instant = Clock.System.now()): StorageItem {
+        val item = seed(type = ItemType.FILE, timestamp = timestamp)
         val bytes = content.toByteArray()
         val key = backend.store(bytes.inputStream(), bytes.size.toLong(), "text/plain").fold({ throw it }, { it })
-        return repository.update(item.copy(storageKey = key, size = bytes.size.toLong())).fold({ throw it }, { it })
+        repository.update(item.copy(storageKey = key, size = bytes.size.toLong())).fold({ throw it }, {})
+        return persisted(item.id)
     }
+
+    // PostgreSQL's representation, including timestamp precision, is the unchanged-state baseline.
+    private suspend fun persisted(id: String): StorageItem =
+        repository.findById(id).fold({ throw it }, { checkNotNull(it) { "Seeded storage item is missing: $id" } })
 
     fun rowCount(): Long = transaction(database) { StorageItemsTable.selectAll().count() }
     fun byteFileCount(): Long = Files.walk(contentPath).use { paths ->
