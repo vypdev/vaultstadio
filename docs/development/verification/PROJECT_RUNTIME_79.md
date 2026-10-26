@@ -54,11 +54,26 @@ uses the official supported major `@v5`, whose Node24 runtime is compatible with
 the installed runner. Its project verification remains subject to the real Linux
 campaign; fixture tests do not execute provider JavaScript.
 
-One earlier Linux attempt was interrupted when OrbStack stopped. It is retained
-as an infrastructure failure, not a successful setup. Only the three existing
-owned dogfooding containers were restarted afterward; normal API login, folder
-read, and the66-byte download with its original SHA-256 all passed. No container
-or volume was recreated for that recovery.
+Two emulated Linux attempts were interrupted when OrbStack stopped. Its host
+log identifies `StorageFull` / `No space left on device`, followed by block I/O
+errors. The corrected composite passed actual provisioning before the later
+interruption; complete project suites were not verified. The20 partial XML files
+and clean source diff were retained. Only owned emulation resources and the now
+accepted #80 build outputs were retired, with all1558 tracked source hashes
+unchanged and1734 evidence files preserved in a verified archive. Current GUI
+packages and rollback artifacts remain available. These are infrastructure
+failures, not successful complete campaigns.
+
+The ordinary `Project runtime verification` workflow exercises the candidate
+setup on hosted Ubuntu24.04, independently of Copilot activation. It requires
+12GiB of initial storage headroom, uses a private job-owned HOME, runs the four
+configured commands and complete backend/desktop/Wasm selections, checks source
+integrity and uploads raw reports even when a command fails. Supplementary
+Gradle invocations explicitly receive the selected browser. The private profile
+is under [runner.temp](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#runner-context),
+which GitHub clears at job boundaries when the runner owns the files; setup post
+steps therefore finish before the runner retires the profile. This hosted job
+does not certify the self-hosted trusted-main Copilot protocol.
 
 Reproduce the deterministic controls from the repository root:
 

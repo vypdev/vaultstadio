@@ -1,0 +1,152 @@
+name: Project runtime verification
+
+on:
+  pull_request:
+    branches: [develop, master]
+    paths:
+      - '.github/actions/copilot-verification-setup/**'
+      - '.github/workflows/project_runtime_verification.yml'
+      - 'backend/**'
+      - 'frontend/**'
+      - 'Makefile'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-runtime-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native-linux:
+    name: Native Linux project verification
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.workers.max=2 -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false'
+      VERIFICATION_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Check out the exact candidate
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.VERIFICATION_SOURCE_SHA }}
+          persist-credentials: false
+
+      - name: Check storage headroom before provisioning
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+          minimum = 12 * 1024 ** 3
+          for label, path in [('workspace', os.environ['GITHUB_WORKSPACE']), ('temporary', os.environ['RUNNER_TEMP'])]:
+              available = shutil.disk_usage(path).free
+              print(f'{label}: {available / 1024 ** 3:.2f} GiB available; minimum 12 GiB')
+              if available < minimum:
+                  raise SystemExit(f'Insufficient storage for native verification on {label}')
+          PY
+
+      - name: Run runtime adapter controls on native Linux
+        run: python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
+
+      - name: Resolve the existing local Docker endpoint
+        shell: bash
+        run: |
+          endpoint=$(docker context inspect --format '{{.Endpoints.docker.Host}}')
+          case "$endpoint" in
+            unix:///*) ;;
+            *) echo 'Native verification requires an existing local Unix Docker socket.' >&2; exit 1 ;;
+          esac
+          docker --host "$endpoint" info --format 'Existing Docker server: {{.ServerVersion}}'
+          printf 'DOCKER_HOST=%s\nDOCKER_CONTEXT=\n' "$endpoint" >> "$GITHUB_ENV"
+
+      - name: Create the job-owned verification profile
+        shell: bash
+        run: |
+          profile=$(mktemp -d "$RUNNER_TEMP/vaultstadio-verification.XXXXXX")
+          chmod 700 "$profile"
+          printf 'HOME=%s\n' "$profile" >> "$GITHUB_ENV"
+          # Runner-owned temporary files are retired after all native post steps.
+
+      - name: Execute the candidate project setup
+        id: runtime
+        uses: ./.github/actions/copilot-verification-setup
+
+      - name: Record actual source and runtime identities
+        id: provenance
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/verification-evidence"
+          python3 - <<'PY'
+          import json, os, platform, shutil, subprocess
+          from pathlib import Path
+          actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          if actual != os.environ['VERIFICATION_SOURCE_SHA']:
+              raise SystemExit('The checked-out revision differs from the requested candidate')
+          browser = shutil.which('chrome')
+          if not browser:
+              raise SystemExit('The selected Chrome executable is missing from the prepared PATH')
+          record = {
+              'source': actual, 'system': platform.system(), 'architecture': platform.machine(),
+              'java': subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True),
+              'browser': subprocess.check_output([browser, '--version'], text=True),
+              'scope': 'candidate setup on hosted Ubuntu; official trusted-main Copilot verification remains separate',
+          }
+          output = Path(os.environ['RUNNER_TEMP']) / 'verification-evidence/provenance.json'
+          output.write_text(json.dumps(record, indent=2) + '\n')
+          with Path(os.environ['GITHUB_ENV']).open('a') as environment:
+              environment.write(f'CHROME_BIN={browser}\n')
+          print(json.dumps(record, indent=2))
+          PY
+
+      - name: Run configured make test
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        run: make test
+
+      - name: Run configured make test-coverage
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        run: make test-coverage
+
+      - name: Run configured make lint
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        run: make lint
+
+      - name: Run configured git diff --check
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        run: git diff --check
+
+      - name: Run complete backend suites independently
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        working-directory: backend
+        run: ./gradlew test --continue --rerun-tasks --no-daemon
+
+      - name: Run complete desktop suites independently
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        working-directory: frontend
+        run: ./gradlew desktopTest --continue --rerun-tasks --no-daemon
+
+      - name: Run complete browser suites without Make suppression
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        working-directory: frontend
+        run: ./gradlew wasmJsBrowserTest --continue --rerun-tasks --no-daemon
+
+      - name: Require unchanged tracked source after verification
+        if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
+        run: git diff --exit-code
+
+      - name: Preserve raw results and source provenance
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-linux-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/verification-evidence
+            backend/**/build/test-results/**/*.xml
+            frontend/**/build/test-results/**/*.xml
+            backend/**/build/reports/jacoco/**/*.xml
+            frontend/**/build/reports/jacoco/**/*.xml
+            backend/**/build/reports/detekt/*
+            frontend/**/build/reports/detekt/*
+          retention-days: 14
+          if-no-files-found: warn
