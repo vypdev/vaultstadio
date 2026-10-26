@@ -18,10 +18,11 @@ val verifyFormCoverageInputs = tasks.register("verifyFormCoverageInputs") {
     inputs.files(interactionExecution, modelExecution)
     inputs.dir(formClasses)
     doLast {
-        check(listOf(interactionExecution.get(), modelExecution.get()).all { it.asFile.length() > 0 }) {
+        val executions = inputs.files.files.filter { it.extension == "exec" }
+        check(executions.size == 2 && executions.all { it.length() > 0 }) {
             "Both real component interactions and form-model execution data are required"
         }
-        check(formClasses.get().asFileTree.any { it.isFile && it.extension == "class" }) {
+        check(inputs.files.files.any { it.isFile && it.extension == "class" }) {
             "Compiled JVM form production classes are required"
         }
     }
