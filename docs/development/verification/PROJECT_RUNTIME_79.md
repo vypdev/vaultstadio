@@ -102,6 +102,16 @@ The native workflow requires actual sandboxed headless DOM rendering before the
 complete browser suites. Actual helper availability, startup and Wasm results
 remain pending in the corrected campaign.
 
+At `2976e86`, the next hosted run rejected the existing helper because its mode
+allowed group/world writes. This is a failed prerequisite, not an application
+test result. The ordinary hosted workflow now reinstalls `google-chrome-stable`
+through apt's existing signed repository before executing candidate scripts,
+and records its package version and helper metadata/digest. It does not elevate
+a writable helper with chmod/chown. The composite still requires an already
+correct operator-provisioned helper, changes no host permissions/security policy
+and fails when that prerequisite is absent or unsafe. This does not install or
+alter Chrome on the developer's machine or an official self-hosted runner.
+
 Reproduce the deterministic controls from the repository root:
 
 ```sh

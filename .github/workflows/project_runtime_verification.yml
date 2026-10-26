@@ -47,6 +47,16 @@ jobs:
                   raise SystemExit(f'Insufficient storage for native verification on {label}')
           PY
 
+      - name: Provision the hosted runner browser sandbox from its signed package
+        shell: bash
+        run: |
+          # Reinstall through apt trust: never elevate a runner-writable binary with chmod.
+          sudo apt-get update
+          sudo apt-get install --reinstall --no-install-recommends -y google-chrome-stable
+          dpkg-query --show --showformat='${Package} ${Version}\n' google-chrome-stable
+          stat --format='Sandbox owner=%u group=%g mode=%a' /opt/google/chrome/chrome-sandbox
+          sha256sum /opt/google/chrome/chrome-sandbox
+
       - name: Run runtime adapter controls on native Linux
         run: python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
 
