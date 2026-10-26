@@ -326,5 +326,83 @@
     "requiredWidthNegativeControlFailures": 2,
     "suggestedOrderNegativeControlFailures": 2,
     "deviceExecution": false
+  },
+  "schemaNote": "Root source/testTasks/coverage describe the original e38 baseline. postReviewDesktopRevalidation and postImeBrowserRevalidation describe the later complete target selections; do not sum repeated campaigns.",
+  "postImeBrowserRevalidation": {
+    "source": "537e82e06435fad241d5ba7e4c6ea1d002633612",
+    "suites": 253,
+    "tests": 1191,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "focused": {
+      "TEST-wasmJsBrowserTest.com.vaultstadio.app.accessibility.BrowserViewportStartupTest.xml": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-wasmJsBrowserTest.com.vaultstadio.app.core.form.WebTextEditorTest.xml": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-wasmJsBrowserTest.com.vaultstadio.app.core.form.WebMultilineEditorTest.xml": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "complexConditionDiagnostics": 0,
+    "formAdapterCases": 41,
+    "composedBrowserCases": 5,
+    "quality": "selected actual-source ktlint and Detekt completed; existing unrelated compiler/webpack warnings retained"
+  },
+  "finalWebArtifact": {
+    "source": "537e82e06435fad241d5ba7e4c6ea1d002633612",
+    "assetSha256": {
+      "1407c3f13017820c5331.wasm": "dfe736a97d83e66f5d5a24d6010e4da74c480175b76e4d07e634c3fbffa4151b",
+      "c3ba91ccfb6d9380d932.wasm": "a9a18e5d2e79e856462c13d8a8f436f407f599685c5ca3ae363c821db75ca1bf",
+      "composeApp.js": "2871532d0721a331d41a709c5ed40ae064b8b36e91b36935d059bb1d32a6a5f0",
+      "composeApp.js.LICENSE.txt": "85a703daf937b69e6a45c75947dcea43f4026a835b84a7ea4300843217311baf",
+      "composeApp.js.map": "bcc7e0c83903d8e1f8f8b68108e673f0173404c013af51f3e6d3d2884901f50c",
+      "index.html": "b36b3ab076116942668f4c9bf958a2ef72a0d3a85fc785487684b0092e1bb71d"
+    },
+    "servedAssetsMatch": true,
+    "gui": {
+      "source": "537e82e06435fad241d5ba7e4c6ea1d002633612",
+      "verifiedAtUtc": "2026-10-26T10:13:59.873Z",
+      "normalExistingCredentialLoginWithEnter": true,
+      "passwordType": "password",
+      "credentialVisibleInAx": false,
+      "profileClearDisablesSave": true,
+      "unicodeEnablesSave": true,
+      "cancelReopenOriginalVisuallyConfirmed": true,
+      "persistentProfileWrite": false,
+      "navigationAfterReopen": true,
+      "existingFolderOpened": true,
+      "folderClickMethod": "AX click rejected as covered by CANVAS on two fresh states; successful visible coordinate double-click",
+      "domValueComparison": "unavailable due input-value redaction; initial false comparisons discarded, original restored confirmed from saved screenshot"
+    }
+  },
+  "runtimeReviewCounterexamples": {
+    "sdkOfficialCatalogContainsAndroid37Point0": true,
+    "proposedBare37AbsentAtObservation": "2026-10-26",
+    "viewportClearsInitialLoadingContent": true,
+    "upstreamIssues": [
+      "https://github.com/vypdev/copilot/issues/721",
+      "https://github.com/vypdev/copilot/issues/722"
+    ]
+  },
+  "priorTechnicalCi": {
+    "source": "cdd8ac3f5f3793a859974c3c0945c7b0f239dce6",
+    "ciRun": 40300565272,
+    "allSevenJobs": "success",
+    "dockerRun": 40300565249,
+    "images": "success",
+    "release": "skipped",
+    "latestHeadStillRequiresCi": true
   }
 }

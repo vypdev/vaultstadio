@@ -9,6 +9,7 @@ The local candidate supports assistant-operated text entry on the exercised Web 
 - Full verification: 2026-10-26 02:19:36–02:20:18 UTC, exit 0. Fresh desktop/browser execution was forced; package/compile tasks could reuse matching outputs. Configuration cache stored successfully.
 - Actual macOS app: all **154 production JARs** match the verified distributable. The only audit packaging additions are the original non-seeded in-memory preferences provider and class-load evidence. Its loaded provider path/hash were checked before authentication. No token injection or production auth changes.
 - Actual Web: immutable copy of the verified production distribution; served index returned HTTP 200 with matching SHA. All six asset hashes are in the JSON.
+- Post-review verification: desktop `9c4ff42d28657c1b5e339278a7886a74fbc74185`; final Wasm/production Web `537e82e06435fad241d5ba7e4c6ea1d002633612`. The final Web copy was served and exercised again; all six HTTP asset digests match. The later sections record exact results and the companion JSON preserves the original campaign separately from these rechecks.
 - Local GUI persistence readback: 2026-10-26 08:20:39 UTC. Backend is the previously verified #75 storage candidate in the dedicated disposable dogfood environment; this does not certify unimplemented backend roadmap items.
 
 ## Current implementation and compatibility decision
@@ -23,12 +24,12 @@ Pins: Compose **1.13.0-beta01**, Kotlin **2.4.20**, Koin **4.2.2/compiler1.2.1**
 
 | Scope | Collected result | Meaning |
 |---|---:|---|
-| Complete desktop selection | 1,303 cases; 0 failures/errors/skips | All collected desktop modules, not just app tests |
-| Complete Wasm browser selection | 1,188 cases; 0 failures/errors/skips | Independent pure data/auth modules and actual browser compositions included |
-| Production component interaction suite | 151 cases | 29×edit/clear/focus, 41 distinct controls, seven locale, 14 disabled and two primitive cases |
+| Complete desktop selection | 1,315 cases; 0 failures/errors/skips | All collected desktop modules, not just app tests; latest responsive recheck |
+| Complete Wasm browser selection | 1,191 cases; 0 failures/errors/skips | Independent pure data/auth modules and actual browser compositions included; latest IME/startup recheck |
+| Production component interaction suite | 151 initial cases + 12 responsive cases | 29×edit/clear/focus, 41 distinct controls, seven locale, 14 disabled, two primitive and production auth layout cases |
 | Actual Coil pipeline | 2 cases | Valid PNG and invalid bytes with the resolved runtime |
-| Native browser adapter/model | 39 cases | 21 editor, nine multiline, four layout/measurement, five common model cases |
-| Real composed browser widget | 4 cases | Production profile validation/open/cancel/reopen, secure reveal/remask/dispose, sequential Unicode/caret, Basic multiline selection |
+| Native browser adapter/model | 41 cases | 22 editor, ten multiline, four layout/measurement, five common model cases |
+| Real composed browser widget | 5 cases | Production profile validation/open/cancel/reopen, secure reveal/remask/dispose, sequential Unicode/caret, Basic multiline selection and viewport startup |
 | Inventory checker | 21 cases | Failures for missing/mismatched declarations/cases, protected-renderer contract and lint evidence |
 | Installed ws loopback | 3 cases | Fragmented Unicode echo, rejected invalid typed-array close and valid close |
 
@@ -56,7 +57,7 @@ The application selector stalled despite its requested timeout, and two native c
 |---|---:|---:|
 | New complete form module, no class exclusions | 192/194 = **98.97%** | 99/132 = **75.00%** |
 | Existing narrow input-semantics helper | 3/3 = **100%** | 8/8 = **100%** |
-| All compiled desktop production, including untested legacy classes | 6,148/21,079 = **29.17%** | 852/5,508 = **15.47%** |
+| All compiled desktop production, including untested legacy classes | 6,148/21,079 = **29.17%** | 853/5,508 = **15.49%** |
 
 Form coverage combines real app component interactions with model tests. Missing/nonempty execution data and compiled classes are checked before report generation. The existing helper's 100% gate is preserved; it never meant 100% of core UI or the product. Wasm native code has actual DOM/widget cases, not JVM line coverage. Kotlin2.4.20 changed the compiled branch denominator from the previous toolchain; no like-for-like branch-coverage improvement is claimed. Whole-project coverage remains substantial roadmap work.
 
@@ -128,3 +129,18 @@ The original production file was restored byte-for-byte after each completed bui
 The restored complete root desktop run on `9c4ff42d28657c1b5e339278a7886a74fbc74185` passed **1,315 tests** in257 fresh XML suites, zero failures/errors/skips, with packaging, form/helper coverage gates, auth Detekt and desktop-test ktlint. UTC2026-10-26 09:47:18–09:48:00, exit0. All154 packaged production JAR hashes match the retained GUI-verified package. The12 new cases extend the earlier1,303 desktop selection; the separate1,188-case browser run is unchanged. Current desktop aggregate coverage is6,148/21,079 lines and853/5,508 branches; the complete form module remains192/194 lines and99/132 branches. Raw positive and negative XML and execution receipts are retained privately.
 
 A separate complete backend `test --rerun`, both storage coverage gates and diagnostic aggregate passed on `cdd8ac3`: **1,976 tests** across24 modules with tests, zero failures/errors/skips, UTC2026-10-26 09:37:26–09:39:33. The selection covers all backend test tasks; modules without test sources do not contribute cases. All compiled backend production coverage is6,370/15,998 lines (**39.82%**) and980/5,354 branches (**18.30%**), without exclusions. This independent local result does not substitute for latest-head remote CI or establish whole-platform readiness.
+
+## IME correction, startup and SDK review evidence
+
+The next review correctly found that a multiline textarea with an IME callback consumed plain Enter. The added regression failed before the fix (one failure among41 form browser cases). The editor now invokes IME actions only for editable single-line controls outside composition. A second regression proves that a single-line composition session blocks Enter even if the key event omits its composition flag, then allows ordinary Enter after composition ends. Synthetic keydown checks default prevention; the separate input event checks delivered newline text, without claiming synthetic events perform browser-native insertion.
+
+Final source `537e82e06435fad241d5ba7e4c6ea1d002633612` passed the complete **1,191-case Wasm selection** in253 fresh suites, zero failures/errors/skips, UTC2026-10-26 10:03:48–10:08:43, exit0. Production Web packaging and selected actual-source ktlint/Detekt also complete. The initial fix emitted a Detekt complexity diagnostic despite Gradle returning0; the final availability predicate removes that diagnostic without suppressions or gate changes. Legacy compiler/webpack warnings remain visible. The41 form cases include22 editor, ten multiline, four measurement and five model cases; the five real composition cases include the new viewport startup regression.
+
+Two other findings were disproven against primary sources and executed evidence:
+
+- [vypdev/copilot#721](https://github.com/vypdev/copilot/issues/721): Google's [official SDK catalog](https://dl.google.com/android/repository/repository2-3.xml), retrieved2026-10-26, contains `platforms;android-37.0`; the proposed bare `platforms;android-37` is absent. The actual isolated Android installation/build succeeds. Keep the verified package ID.
+- [vypdev/copilot#722](https://github.com/vypdev/copilot/issues/722): exact [Compose1.13.0-beta01 sources](https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui/1.13.0-beta01/ui-1.13.0-beta01-sources.jar) call `clearNodeChildren` inside `ComposeViewport` initialization, removing the initial loader. The new real framework startup case verifies removal after exported content appears. Actual packaged-page DOM also has no loading element and only the Compose component inside its viewport. Keep framework-owned cleanup.
+
+The final six-asset Web distribution was served byte-for-byte and exercised again through normal UI actions: logout, assistant-typed existing credentials, Enter login, masked password output, profile clear/Unicode with disabled/enabled Save, cancel/reopen with the original value visually confirmed, and subsequent file navigation. No profile save or credential change was submitted. Input values are redacted by the observation interface, so direct DOM-value comparisons were discarded; original-value restoration is supported by the retained screenshot and exact model-value component assertions. The folder's AX-targeted double-click was rejected as covered by canvas on two fresh states; a visible coordinate double-click opened the existing folder. This automation limitation is recorded, not presented as a successful AX action. No reload was used to recover dialog editing.
+
+[CI40300565272 on `cdd8ac3`](https://github.com/vypdev/vaultstadio/actions/runs/40300565272) completed all seven technical jobs successfully, including frontend browser contracts on x64, backend, Android, plugins, lint, security and coverage. [Docker40300565249](https://github.com/vypdev/vaultstadio/actions/runs/40300565249) also passed; release was correctly skipped. These are prior-head results. Fresh technical CI, review and maintainer compatibility/approval decisions remain required for the newly published IME correction.
