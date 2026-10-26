@@ -404,5 +404,70 @@
     "images": "success",
     "release": "skipped",
     "latestHeadStillRequiresCi": true
+  },
+  "coverageUploaderCorrection": {
+    "implementationCommit": "e4e0dcfb41a687b8642f9de5eb33c9e260c9e518",
+    "rejectedPriorHead": "063c8c1315d79b867c6dc5f3fdb9f6ad22a8707e",
+    "priorCiConclusion": "success",
+    "priorSignatureVerificationAccepted": false,
+    "privateGpgHome": true,
+    "version": "v11.3.1",
+    "failCiIfError": true,
+    "skipValidation": false,
+    "keyringUnitCases": 8,
+    "totalScriptUnitCases": 43,
+    "officialWrapperControls": [
+      {
+        "label": "legacy-import-failure",
+        "exit": 0,
+        "cliExecuted": true,
+        "strictFlagPassed": false
+      },
+      {
+        "label": "strict-import-failure",
+        "exit": 1,
+        "cliExecuted": false,
+        "strictFlagPassed": null
+      },
+      {
+        "label": "strict-signature-failure",
+        "exit": 1,
+        "cliExecuted": false,
+        "strictFlagPassed": null
+      },
+      {
+        "label": "strict-checksum-failure",
+        "exit": 1,
+        "cliExecuted": false,
+        "strictFlagPassed": null
+      },
+      {
+        "label": "strict-upload-failure",
+        "exit": 1,
+        "cliExecuted": true,
+        "strictFlagPassed": true
+      },
+      {
+        "label": "strict-positive",
+        "exit": 0,
+        "cliExecuted": true,
+        "strictFlagPassed": true
+      }
+    ],
+    "realArtifactVerification": {
+      "version": "v11.3.1",
+      "binarySha256": "ffb2b821551076b69d3267508b2d5dc10925c821c436521f2216f5ead62cb138",
+      "signerFingerprint": "27034E7FDB850E0BBC2C62FF806BB28AED779869",
+      "realImportExit": 0,
+      "realSignatureExit": 0,
+      "checksumMatchesSignedManifest": true,
+      "versionExecutionExit": 0,
+      "tamperedManifestGpgExit": 1,
+      "tamperedManifestBadSignature": true,
+      "tamperedBinaryChecksumRejected": true,
+      "tamperedBinaryExecuted": false,
+      "scope": "official Codecov macos artifact; public key only; private GNUPGHOME; no actual coverage upload or credentials"
+    },
+    "newRemoteConfigurationAcceptance": "pending fresh CI; product/UI code unchanged"
   }
 }
