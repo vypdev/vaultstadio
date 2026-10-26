@@ -224,7 +224,7 @@ jobs:
           test -x "$CHROME_BIN"
           "$CHROME_BIN" --version
           cd frontend
-          ./gradlew :core:ui:wasmJsBrowserTest :composeApp:wasmJsBrowserTest --rerun --continue --no-build-cache
+          ./gradlew wasmJsBrowserTest --rerun --continue --no-build-cache
 
       - name: Enforce accessible input coverage
         run: cd frontend && ./gradlew :core:ui:jacocoTestReport :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache

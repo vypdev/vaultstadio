@@ -27,9 +27,8 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.PasswordTextField
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.confirmPassword
 import com.vaultstadio.app.core.resources.email
@@ -65,29 +64,19 @@ fun LoginForm(
         enabled = !viewModel.isLoading,
     )
 
-    OutlinedTextField(
+    PasswordTextField(
         value = viewModel.loginPassword,
         onValueChange = { viewModel.updateLoginPassword(it) },
-        label = { Text(strings.password) },
+        identifier = "auth.login.password",
+        label = strings.password,
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
         trailingIcon = {
             PasswordVisibilityToggle(passwordVisible) { passwordVisible = !passwordVisible }
         },
-        visualTransformation = if (passwordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            autoCorrectEnabled = false,
-            imeAction = ImeAction.Done,
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { onSubmit() },
-        ),
-        modifier = Modifier.fillMaxWidth().inputSemantics("auth.login.password", strings.password),
+        passwordVisible = passwordVisible,
+        imeAction = ImeAction.Done,
+        onImeAction = { onSubmit() },
+        modifier = Modifier.fillMaxWidth(),
         enabled = !viewModel.isLoading,
     )
 
@@ -165,29 +154,19 @@ private fun RegisterIdentityFields(viewModel: AuthViewModel, focusManager: Focus
 private fun RegisterPasswordField(viewModel: AuthViewModel, focusManager: FocusManager) {
     val strings = LocalStrings.current
     var passwordVisible by remember { mutableStateOf(false) }
-    OutlinedTextField(
+    PasswordTextField(
         value = viewModel.registerPassword,
         onValueChange = { viewModel.updateRegisterPassword(it) },
-        label = { Text(strings.password) },
+        identifier = "auth.register.password",
+        label = strings.password,
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
         trailingIcon = {
             PasswordVisibilityToggle(passwordVisible) { passwordVisible = !passwordVisible }
         },
-        visualTransformation = if (passwordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            autoCorrectEnabled = false,
-            imeAction = ImeAction.Next,
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-        ),
-        modifier = Modifier.fillMaxWidth().inputSemantics("auth.register.password", strings.password),
+        passwordVisible = passwordVisible,
+        imeAction = ImeAction.Next,
+        onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+        modifier = Modifier.fillMaxWidth(),
         enabled = !viewModel.isLoading,
     )
 }
@@ -196,29 +175,19 @@ private fun RegisterPasswordField(viewModel: AuthViewModel, focusManager: FocusM
 private fun RegisterConfirmationField(viewModel: AuthViewModel, onSubmit: () -> Unit) {
     val strings = LocalStrings.current
     var confirmPasswordVisible by remember { mutableStateOf(false) }
-    OutlinedTextField(
+    PasswordTextField(
         value = viewModel.registerConfirmPassword,
         onValueChange = { viewModel.updateRegisterConfirmPassword(it) },
-        label = { Text(strings.confirmPassword) },
+        identifier = "auth.register.confirm-password",
+        label = strings.confirmPassword,
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
         trailingIcon = {
             PasswordVisibilityToggle(confirmPasswordVisible) { confirmPasswordVisible = !confirmPasswordVisible }
         },
-        visualTransformation = if (confirmPasswordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            autoCorrectEnabled = false,
-            imeAction = ImeAction.Done,
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { onSubmit() },
-        ),
-        modifier = Modifier.fillMaxWidth().inputSemantics("auth.register.confirm-password", strings.confirmPassword),
+        passwordVisible = confirmPasswordVisible,
+        imeAction = ImeAction.Done,
+        onImeAction = { onSubmit() },
+        modifier = Modifier.fillMaxWidth(),
         enabled = !viewModel.isLoading,
     )
 }

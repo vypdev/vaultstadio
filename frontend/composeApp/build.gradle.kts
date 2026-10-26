@@ -158,6 +158,10 @@ kotlin {
             }
         }
 
+        val wasmJsTest by getting {
+            dependencies { implementation(project(":core:form")) }
+        }
+
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.android)

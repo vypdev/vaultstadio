@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,9 +17,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.PasswordTextField
 import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.inputLabel
@@ -91,45 +89,33 @@ fun ChangePasswordDialog(
         title = { Text("Change Password") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(
+                PasswordTextField(
                     value = currentPassword,
                     onValueChange = { currentPassword = it },
-                    label = { Text(strings.inputLabel(InputLabel.CURRENT_PASSWORD)) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "profile.current-password",
-                        strings.inputLabel(InputLabel.CURRENT_PASSWORD),
-                    ),
-                    singleLine = true,
+                    identifier = "profile.current-password",
+                    label = strings.inputLabel(InputLabel.CURRENT_PASSWORD),
+                    modifier = Modifier.fillMaxWidth(),
                     enabled = !isSaving,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+
                 )
-                OutlinedTextField(
+                PasswordTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    label = { Text(strings.inputLabel(InputLabel.NEW_PASSWORD)) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "profile.new-password",
-                        strings.inputLabel(InputLabel.NEW_PASSWORD),
-                    ),
-                    singleLine = true,
+                    identifier = "profile.new-password",
+                    label = strings.inputLabel(InputLabel.NEW_PASSWORD),
+                    modifier = Modifier.fillMaxWidth(),
                     enabled = !isSaving,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+
                 )
-                OutlinedTextField(
+                PasswordTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
-                    label = { Text(strings.authConfirmPassword) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "profile.confirm-password",
-                        strings.authConfirmPassword,
-                    ),
-                    singleLine = true,
+                    identifier = "profile.confirm-password",
+                    label = strings.authConfirmPassword,
+                    modifier = Modifier.fillMaxWidth(),
                     enabled = !isSaving,
                     isError = !passwordsMatch,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+
                 )
                 if (!passwordsMatch) {
                     Text(

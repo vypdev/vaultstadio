@@ -29,6 +29,16 @@ class AccessibilityInventoryTest(unittest.TestCase):
     def test_complete_source_matches_inventory(self):
         self.assertEqual(1, verify_inventory(self.root))
 
+    def test_secure_field_requires_the_native_password_component(self):
+        self.write_inventory([{"id": "demo.name", "source": self.source.relative_to(self.root).as_posix(), "secure": True}])
+        with self.assertRaisesRegex(ValueError, "bypasses the platform password"):
+            verify_inventory(self.root)
+
+    def test_secure_component_identifier_matches_the_inventory(self):
+        self.source.write_text('PasswordTextField(identifier = "demo.name", value = value, label = label)')
+        self.write_inventory([{"id": "demo.name", "source": self.source.relative_to(self.root).as_posix(), "secure": True}])
+        self.assertEqual(1, verify_inventory(self.root))
+
     def test_new_unlabeled_field_fails(self):
         self.source.write_text(self.source.read_text() + '\nBasicTextField(value = text)')
         with self.assertRaisesRegex(ValueError, "no unique accessible identifier"):
@@ -80,7 +90,7 @@ class AccessibilityInventoryTest(unittest.TestCase):
             verify_inventory(self.root)
 
     def clean_reports(self):
-        for module in ["feature/auth", "core/ui", "core/resources"]:
+        for module in ["feature/auth", "core/ui", "core/form", "core/resources"]:
             path = self.root / "frontend" / module / "build/reports/detekt/detekt.xml"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("<checkstyle />")
@@ -91,7 +101,7 @@ class AccessibilityInventoryTest(unittest.TestCase):
 
     def test_clean_actual_source_reports_pass(self):
         self.clean_reports()
-        self.assertEqual(3, verify_detekt_reports(self.root))
+        self.assertEqual(4, verify_detekt_reports(self.root))
 
     def test_authentication_finding_cannot_be_ignored(self):
         self.clean_reports()

@@ -3,8 +3,8 @@ import json
 import re
 from pathlib import Path
 
-FIELD_CALL = re.compile(r"\b(?:OutlinedTextField|BasicTextField)\s*\(")
-FIELD_ID = re.compile(r'\.inputSemantics\(\s*"([a-z0-9.-]+)"\s*,')
+FIELD_CALL = re.compile(r"\b(?:OutlinedTextField|BasicTextField|PasswordTextField)\s*\(")
+FIELD_ID = re.compile(r'(?:\.inputSemantics\(\s*|\bidentifier\s*=\s*)"([a-z0-9.-]+)"\s*,')
 
 
 def call_body(source, start):
@@ -34,6 +34,7 @@ def verify_inventory(root):
     if len(expected) != len(fields) or inventory["fieldCount"] != len(fields):
         raise ValueError("Duplicate identifiers or inconsistent field inventory count")
     actual = {}
+    secure = {field["id"] for field in fields if field.get("secure")}
     roots = [root / "frontend/feature", root / "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/feature"]
     for source_root in roots:
         for path in sorted(source_root.rglob("*.kt")):
@@ -46,6 +47,8 @@ def verify_inventory(root):
                 if len(identifiers) != 1:
                     raise ValueError(f"A production text field has no unique accessible identifier: {relative}")
                 identifier = identifiers[0]
+                if identifier in secure and not call.group().startswith("PasswordTextField"):
+                    raise ValueError(f"A secure field bypasses the platform password component: {identifier}")
                 if identifier in actual:
                     raise ValueError(f"Duplicate production input identifier: {identifier}")
                 actual[identifier] = relative
@@ -73,7 +76,7 @@ def verify_detekt_reports(root):
     """Require actual source reports and no findings in the new accessibility scope."""
     import xml.etree.ElementTree as element_tree
     root = Path(root)
-    scopes = {"feature/auth": None, "core/ui": None, "core/resources": {"InputLabel.kt"}}
+    scopes = {"feature/auth": None, "core/ui": None, "core/form": None, "core/resources": {"InputLabel.kt"}}
     for module, selected_names in scopes.items():
         path = root / "frontend" / module / "build/reports/detekt/detekt.xml"
         if not path.is_file():

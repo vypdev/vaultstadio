@@ -14,7 +14,10 @@ kotlin {
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
     iosArm64()
     iosSimulatorArm64()
     sourceSets {

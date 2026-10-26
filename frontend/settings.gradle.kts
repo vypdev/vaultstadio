@@ -44,6 +44,7 @@ include(":domain:upload")
 // Core (shared resources)
 include(":core:resources")
 include(":core:ui")
+include(":core:form")
 
 // Data (by area)
 include(":data:network")
