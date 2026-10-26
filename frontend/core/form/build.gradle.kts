@@ -1,10 +1,43 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.gradle.testing.jacoco.tasks.JacocoReport
 
 plugins {
+    jacoco
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.android.kotlin.multiplatform.library)
+}
+
+val interactionExecution = project(":composeApp").layout.buildDirectory.file("jacoco/desktopTest.exec")
+val modelExecution = layout.buildDirectory.file("jacoco/desktopTest.exec")
+val formClasses = layout.buildDirectory.dir("classes/kotlin/desktop/main")
+val verifyFormCoverageInputs = tasks.register("verifyFormCoverageInputs") {
+    group = "verification"
+    dependsOn(":composeApp:desktopTest", "desktopTest")
+    inputs.files(interactionExecution, modelExecution)
+    inputs.dir(formClasses)
+    doLast {
+        check(listOf(interactionExecution.get(), modelExecution.get()).all { it.asFile.length() > 0 }) {
+            "Both real component interactions and form-model execution data are required"
+        }
+        check(formClasses.get().asFileTree.any { it.isFile && it.extension == "class" }) {
+            "Compiled JVM form production classes are required"
+        }
+    }
+}
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn(verifyFormCoverageInputs)
+    executionData.from(interactionExecution, modelExecution)
+    classDirectories.from(formClasses)
+    sourceDirectories.from(
+        kotlin.sourceSets.getByName("commonMain").kotlin.srcDirs,
+        kotlin.sourceSets.getByName("desktopMain").kotlin.srcDirs,
+    )
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 tasks.named<Detekt>("detekt") {

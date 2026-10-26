@@ -211,6 +211,19 @@ jobs:
           path: frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           retention-days: 1
 
+      - name: Run complete frontend desktop suites
+        run: cd frontend && ./gradlew desktopTest --continue --no-build-cache
+
+      - name: Report form module coverage
+        run: cd frontend && ./gradlew :core:form:jacocoTestReport --continue --no-build-cache
+
+      - name: Upload form module coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-form
+          path: frontend/core/form/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          retention-days: 1
+
       - name: Set up browser for accessibility contracts
         id: accessibility_browser
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
@@ -266,6 +279,12 @@ jobs:
         with:
           name: jacoco-coverage-accessibility
           path: coverage-accessibility
+
+      - name: Download form module coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: jacoco-coverage-form
+          path: coverage-form
 
       - name: List coverage files (debug)
         run: |
@@ -421,7 +440,8 @@ jobs:
       - name: Analyze actual accessibility and authentication sources
         run: |
           cd frontend
-          ./gradlew :core:ui:detekt :core:resources:detekt :feature:auth:detekt :composeApp:ktlintDesktopTestSourceSetCheck --continue
+          ./gradlew :core:ui:detekt :core:form:detekt :core:resources:detekt :feature:auth:detekt \
+            :composeApp:ktlintDesktopTestSourceSetCheck :composeApp:ktlintWasmJsTestSourceSetCheck --continue
           cd ..
           python3 scripts/check-frontend-accessibility.py --detekt-reports
 
