@@ -29,14 +29,12 @@ import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.model.FederationCapability
 import com.vaultstadio.core.domain.repository.CollaborationRepository
 import com.vaultstadio.core.domain.repository.FederationRepository
-import com.vaultstadio.core.domain.repository.FileVersionRepository
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.repository.SyncRepository
 import com.vaultstadio.core.domain.service.ActivityLogger
 import com.vaultstadio.core.domain.service.CollaborationService
 import com.vaultstadio.core.domain.service.FederationCryptoService
 import com.vaultstadio.core.domain.service.FederationService
-import com.vaultstadio.core.domain.service.FileVersionService
 import com.vaultstadio.core.domain.service.InMemoryLockManager
 import com.vaultstadio.core.domain.service.InMemoryMultipartUploadManager
 import com.vaultstadio.core.domain.service.InstanceConfig
@@ -60,7 +58,6 @@ import com.vaultstadio.infrastructure.persistence.ExposedActivityRepository
 import com.vaultstadio.infrastructure.persistence.ExposedApiKeyRepository
 import com.vaultstadio.infrastructure.persistence.ExposedCollaborationRepository
 import com.vaultstadio.infrastructure.persistence.ExposedFederationRepository
-import com.vaultstadio.infrastructure.persistence.ExposedFileVersionRepository
 import com.vaultstadio.infrastructure.persistence.ExposedMetadataRepository
 import com.vaultstadio.infrastructure.persistence.ExposedSessionRepository
 import com.vaultstadio.infrastructure.persistence.ExposedShareRepository
@@ -155,7 +152,7 @@ fun coreModule(config: AppConfig) = module {
             }
             StorageType.S3, StorageType.MINIO -> {
                 val s3Config = config.storage.s3
-                    ?: throw IllegalStateException("S3 configuration required for ${config.storage.type} storage")
+                    ?: error("S3 configuration required for ${config.storage.type} storage")
                 val storageConfig = S3StorageConfig(
                     bucket = s3Config.bucket,
                     region = s3Config.region,
@@ -200,7 +197,6 @@ val repositoryModule = module {
     single<ApiKeyRepository> { ExposedApiKeyRepository() }
 
     // Phase 6: Advanced Features repositories
-    single<FileVersionRepository> { ExposedFileVersionRepository() }
     single<SyncRepository> { ExposedSyncRepository() }
     single<FederationRepository> { ExposedFederationRepository() }
     single<CollaborationRepository> { ExposedCollaborationRepository() }
@@ -210,6 +206,8 @@ val repositoryModule = module {
  * Service module.
  */
 val serviceModule = module {
+    includes(versionServicesModule())
+
     // Core services
     single {
         StorageService(
@@ -257,15 +255,6 @@ val serviceModule = module {
     single { S3Operations(get(), get()) }
 
     // Phase 6: Advanced Features services
-
-    // File Versioning Service
-    single {
-        FileVersionService(
-            versionRepository = get(),
-            itemRepository = get(),
-            storageBackend = get(),
-        )
-    }
 
     // Sync Service
     single {

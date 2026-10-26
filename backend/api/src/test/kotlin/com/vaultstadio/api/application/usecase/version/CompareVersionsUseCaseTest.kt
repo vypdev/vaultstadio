@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class CompareVersionsUseCaseTest {
 
@@ -32,9 +33,9 @@ class CompareVersionsUseCaseTest {
             isBinary = false,
             patches = emptyList(),
         )
-        coEvery { fileVersionService.compareVersions("item-1", 1, 2) } returns Either.Right(diff)
+        coEvery { fileVersionService.compareVersions("item-1", 1, 2, "user-1") } returns Either.Right(diff)
 
-        val result = useCase("item-1", 1, 2)
+        val result = useCase("item-1", 1, 2, "user-1")
 
         assertTrue(result.isRight())
         val right = result as Either.Right<VersionDiff>
@@ -45,12 +46,12 @@ class CompareVersionsUseCaseTest {
 
     @Test
     fun invokeReturnsLeftWhenFileVersionServiceReturnsLeft() = runTest {
-        coEvery { fileVersionService.compareVersions(any(), any(), any()) } returns
+        coEvery { fileVersionService.compareVersions(any(), any(), any(), "user-1") } returns
             Either.Left(ItemNotFoundException(itemId = "item-1"))
 
-        val result = useCase("item-1", 1, 2)
+        val result = useCase("item-1", 1, 2, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
+        assertIs<ItemNotFoundException>(assertIs<Either.Left<*>>(result).value)
     }
 }

@@ -17,6 +17,7 @@ import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class RestoreVersionUseCaseTest {
 
@@ -65,6 +66,6 @@ class RestoreVersionUseCaseTest {
         val result = useCase(input, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
+        assertIs<ItemNotFoundException>(assertIs<Either.Left<*>>(result).value)
     }
 }

@@ -16,6 +16,7 @@ interface ApplyRetentionPolicyUseCase {
     suspend operator fun invoke(
         itemId: String,
         policy: VersionRetentionPolicy,
+        userId: String,
     ): Either<StorageException, List<String>>
 }
 
@@ -26,6 +27,7 @@ class ApplyRetentionPolicyUseCaseImpl(
     override suspend fun invoke(
         itemId: String,
         policy: VersionRetentionPolicy,
+        userId: String,
     ): Either<StorageException, List<String>> =
-        fileVersionService.applyRetentionPolicy(itemId, policy)
+        fileVersionService.applyRetentionPolicy(itemId, userId, policy)
 }
