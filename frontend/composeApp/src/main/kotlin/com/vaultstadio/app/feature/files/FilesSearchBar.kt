@@ -19,16 +19,15 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.core.resources.clear
 import com.vaultstadio.app.core.resources.searchPlaceholder
-import com.vaultstadio.app.core.ui.inputSemantics
 
 @Composable
 internal fun FilesSearchBar(
@@ -46,10 +45,13 @@ internal fun FilesSearchBar(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
-        OutlinedTextField(
+        AccessibleTextField(
+            identifier = "files.search",
+            accessibleName = strings.actionSearch,
+
             value = searchQuery,
             onValueChange = onQueryChange,
-            placeholder = { Text(strings.searchPlaceholder) },
+            placeholder = strings.searchPlaceholder,
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             trailingIcon = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -68,7 +70,7 @@ internal fun FilesSearchBar(
                 }
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth().inputSemantics("files.search", strings.actionSearch),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         DropdownMenu(

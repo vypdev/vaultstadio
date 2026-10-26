@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "Presentation and editor contracts passed on the retained stable candidate; prerelease modal lifecycle correction under verification.",
+  "status": "Native password editor/widget cases and real protected login passed; general native editing and full acceptance remain under verification.",
   "activeEntryPoints": [
     "RootContent -> AuthContent",
     "RootContent -> MainContent -> destination Content"
@@ -309,5 +309,6 @@
     "profile.new-password",
     "profile.confirm-password"
   ],
-  "retainedInactiveReason": "ChangePasswordDialog has no current caller; these fields retain component tests. The active profile route navigates to the dedicated change-password screen."
+  "retainedInactiveReason": "ChangePasswordDialog has no current caller; these fields retain component tests. The active profile route navigates to the dedicated change-password screen.",
+  "nativeRendererRequired": true
 }

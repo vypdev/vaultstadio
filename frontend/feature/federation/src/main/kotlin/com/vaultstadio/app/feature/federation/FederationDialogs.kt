@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -18,10 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.core.resources.inputLabel
-import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.federation.model.FederatedInstance
 
 @Composable
@@ -44,25 +43,25 @@ fun RequestFederationDialog(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(16.dp))
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "federation.domain",
+                    accessibleName = strings.federationInstanceDomain,
+
                     value = domain,
                     onValueChange = { domain = it },
                     label = { Text(strings.federationInstanceDomain) },
-                    placeholder = { Text(strings.federationInstanceDomainPlaceholder) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "federation.domain",
-                        strings.federationInstanceDomain,
-                    ),
+                    placeholder = strings.federationInstanceDomainPlaceholder,
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(Modifier.height(8.dp))
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "federation.message",
+                    accessibleName = strings.federationMessageOptional,
+
                     value = message,
                     onValueChange = { message = it },
                     label = { Text(strings.federationMessageOptional) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "federation.message",
-                        strings.federationMessageOptional,
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
@@ -164,34 +163,34 @@ fun LinkIdentityDialog(
         title = { Text("Link Federated Identity") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "federation.remote-user",
+                    accessibleName = strings.inputLabel(InputLabel.REMOTE_USER),
+
                     value = remoteUserId,
                     onValueChange = { remoteUserId = it },
                     label = { Text(strings.inputLabel(InputLabel.REMOTE_USER)) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "federation.remote-user",
-                        strings.inputLabel(InputLabel.REMOTE_USER),
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "federation.remote-instance",
+                    accessibleName = strings.inputLabel(InputLabel.REMOTE_INSTANCE),
+
                     value = remoteInstance,
                     onValueChange = { remoteInstance = it },
                     label = { Text(strings.inputLabel(InputLabel.REMOTE_INSTANCE)) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "federation.remote-instance",
-                        strings.inputLabel(InputLabel.REMOTE_INSTANCE),
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "federation.display-name",
+                    accessibleName = strings.inputLabel(InputLabel.DISPLAY_NAME),
+
                     value = displayName,
                     onValueChange = { displayName = it },
                     label = { Text(strings.inputLabel(InputLabel.DISPLAY_NAME)) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "federation.display-name",
-                        strings.inputLabel(InputLabel.DISPLAY_NAME),
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
             }

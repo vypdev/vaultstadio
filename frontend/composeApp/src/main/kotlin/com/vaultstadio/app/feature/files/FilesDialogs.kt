@@ -13,14 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.StringResources
-import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.feature.files.FilesMode
 
 /**
@@ -38,12 +37,15 @@ fun NewFolderDialog(
         onDismissRequest = onDismiss,
         title = { Text(strings.actionCreateFolder) },
         text = {
-            OutlinedTextField(
+            AccessibleTextField(
+                identifier = "files.folder-name",
+                accessibleName = strings.folderName,
+
                 value = folderName,
                 onValueChange = onFolderNameChange,
                 label = { Text(strings.folderName) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().inputSemantics("files.folder-name", strings.folderName),
+                modifier = Modifier.fillMaxWidth(),
             )
         },
         confirmButton = {
@@ -77,12 +79,15 @@ fun RenameDialog(
         onDismissRequest = onDismiss,
         title = { Text(strings.actionRename) },
         text = {
-            OutlinedTextField(
+            AccessibleTextField(
+                identifier = "files.rename",
+                accessibleName = strings.actionRename,
+
                 value = renameValue,
                 onValueChange = onRenameValueChange,
                 label = { Text(strings.actionRename) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().inputSemantics("files.rename", strings.actionRename),
+                modifier = Modifier.fillMaxWidth(),
             )
         },
         confirmButton = {

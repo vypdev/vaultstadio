@@ -8,7 +8,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -18,11 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.form.PasswordTextField
 import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.inputLabel
-import com.vaultstadio.app.core.ui.inputSemantics
 
 @Composable
 fun EditProfileDialog(
@@ -39,11 +38,14 @@ fun EditProfileDialog(
         title = { Text("Edit Profile") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "profile.username",
+                    accessibleName = strings.authUsername,
+
                     value = username,
                     onValueChange = { username = it },
                     label = { Text(strings.authUsername) },
-                    modifier = Modifier.fillMaxWidth().inputSemantics("profile.username", strings.authUsername),
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     enabled = !isSaving,
                 )

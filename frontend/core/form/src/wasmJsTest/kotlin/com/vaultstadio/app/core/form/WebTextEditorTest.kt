@@ -1,6 +1,8 @@
 package com.vaultstadio.app.core.form
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import kotlinx.browser.document
 import org.w3c.dom.EventInit
 import org.w3c.dom.HTMLInputElement
@@ -14,15 +16,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class WebPasswordEditorTest {
+class WebTextEditorTest {
     private lateinit var input: HTMLInputElement
-    private lateinit var editor: WebPasswordEditor
+    private lateinit var editor: WebTextEditor
     private val changes = mutableListOf<String>()
     private var submissions = 0
 
     @BeforeTest fun prepare() {
         input = document.createElement("input") as HTMLInputElement
-        editor = WebPasswordEditor(input, spec())
+        editor = WebTextEditor(input, spec())
         document.body!!.appendChild(input)
     }
 
@@ -137,7 +139,7 @@ class WebPasswordEditorTest {
     }
 
     @Test fun missingImeCallbackRetainsNativeDefaultHandling() {
-        editor.update(PasswordFieldSpec("fixture", {}, "test.password", "Password"))
+        editor.update(TextFieldSpec("fixture", {}, "test.password", "Password"))
         val event = KeyboardEvent("keydown", KeyboardEventInit(key = "Enter", cancelable = true))
         input.dispatchEvent(event)
         assertFalse(event.defaultPrevented)
@@ -190,5 +192,21 @@ class WebPasswordEditorTest {
         visible: Boolean = false,
         ime: ImeAction = ImeAction.Done,
         onChange: (String) -> Unit = { changes += it },
-    ) = PasswordFieldSpec(value, onChange, identifier, label, enabled, readOnly, error, visible, ime) { submissions++ }
+    ) = TextFieldSpec(
+        value = value,
+        onValueChange = onChange,
+        identifier = identifier,
+        label = label,
+        enabled = enabled,
+        readOnly = readOnly,
+        isError = error,
+        passwordVisible = visible,
+        isPassword = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            autoCorrectEnabled = false,
+            imeAction = ime,
+        ),
+        onImeAction = { submissions++ },
+    )
 }

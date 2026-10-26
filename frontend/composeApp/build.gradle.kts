@@ -61,6 +61,7 @@ kotlin {
                 implementation(project(":domain:upload"))
                 implementation(project(":core:resources"))
                 implementation(project(":core:ui"))
+                implementation(project(":core:form"))
                 implementation(project(":feature:auth"))
                 implementation(project(":feature:settings"))
                 implementation(project(":feature:profile"))

@@ -41,9 +41,6 @@ kotlin {
                 implementation(compose.ui)
             }
         }
-        val wasmJsTest by getting {
-            dependencies { implementation(libs.kotlinx.coroutines.test) }
-        }
         val commonTest by getting {
             kotlin.srcDirs("src/test")
             dependencies {

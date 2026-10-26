@@ -18,7 +18,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,10 +32,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.inputLabel
-import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.admin.model.AdminUser
 import com.vaultstadio.app.domain.admin.model.UserStatus
 import com.vaultstadio.app.domain.auth.model.UserRole
@@ -97,14 +96,17 @@ fun QuotaEditDialog(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        OutlinedTextField(
+                        AccessibleTextField(
+                            identifier = "admin.quota",
+                            accessibleName = LocalStrings.current.inputLabel(InputLabel.QUOTA),
+
                             value = quotaValue,
                             onValueChange = { quotaValue = it.filter { c -> c.isDigit() } },
                             label = { Text(LocalStrings.current.inputLabel(InputLabel.QUOTA)) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier.weight(
                                 1f,
-                            ).inputSemantics("admin.quota", LocalStrings.current.inputLabel(InputLabel.QUOTA)),
+                            ),
                             singleLine = true,
                         )
 

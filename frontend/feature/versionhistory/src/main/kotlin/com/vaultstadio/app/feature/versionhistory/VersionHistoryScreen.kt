@@ -24,7 +24,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,8 +37,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.strings
-import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.version.model.FileVersion
 import com.vaultstadio.app.domain.version.model.FileVersionHistory
 import com.vaultstadio.app.domain.version.model.VersionDiff
@@ -195,14 +194,14 @@ fun VersionHistoryScreen(
                         strings.versionRestoreDesc.replace("%d", version.versionNumber.toString()),
                     )
                     Spacer(Modifier.height(16.dp))
-                    OutlinedTextField(
+                    AccessibleTextField(
+                        identifier = "versions.restore-comment",
+                        accessibleName = strings.versionCommentOptional,
+
                         value = restoreComment,
                         onValueChange = { restoreComment = it },
                         label = { Text(strings.versionCommentOptional) },
-                        modifier = Modifier.fillMaxWidth().inputSemantics(
-                            "versions.restore-comment",
-                            strings.versionCommentOptional,
-                        ),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             },
@@ -238,26 +237,26 @@ fun VersionHistoryScreen(
                 Column {
                     Text(strings.versionCleanupDesc)
                     Spacer(Modifier.height(16.dp))
-                    OutlinedTextField(
+                    AccessibleTextField(
+                        identifier = "versions.keep-last",
+                        accessibleName = strings.versionKeepLast,
+
                         value = maxVersions,
                         onValueChange = { maxVersions = it.filter { c -> c.isDigit() } },
                         label = { Text(strings.versionKeepLast) },
-                        placeholder = { Text(strings.versionKeepLastPlaceholder) },
-                        modifier = Modifier.fillMaxWidth().inputSemantics(
-                            "versions.keep-last",
-                            strings.versionKeepLast,
-                        ),
+                        placeholder = strings.versionKeepLastPlaceholder,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                     Spacer(Modifier.height(8.dp))
-                    OutlinedTextField(
+                    AccessibleTextField(
+                        identifier = "versions.max-age",
+                        accessibleName = strings.versionDeleteOlderThan,
+
                         value = maxAgeDays,
                         onValueChange = { maxAgeDays = it.filter { c -> c.isDigit() } },
                         label = { Text(strings.versionDeleteOlderThan) },
-                        placeholder = { Text(strings.versionDeleteOlderThanPlaceholder) },
-                        modifier = Modifier.fillMaxWidth().inputSemantics(
-                            "versions.max-age",
-                            strings.versionDeleteOlderThan,
-                        ),
+                        placeholder = strings.versionDeleteOlderThanPlaceholder,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             },

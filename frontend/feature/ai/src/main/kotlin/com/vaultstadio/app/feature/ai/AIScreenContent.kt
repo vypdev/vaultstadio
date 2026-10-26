@@ -35,7 +35,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.ai.model.AIChatMessage
@@ -307,29 +307,25 @@ fun AIInputArea(
                 .padding(16.dp),
             verticalAlignment = Alignment.Bottom,
         ) {
-            OutlinedTextField(
+            AccessibleTextField(
+                identifier = "ai.input",
+                accessibleName = when (selectedMode) {
+                    AIMode.CHAT -> strings.aiTypePlaceholder
+                    AIMode.DESCRIBE -> strings.aiImageUrlPlaceholder
+                    AIMode.TAG -> strings.aiTagPlaceholder
+                    AIMode.CLASSIFY -> strings.aiClassifyPlaceholder
+                    AIMode.SUMMARIZE -> strings.aiSummarizePlaceholder
+                },
+
                 value = inputText,
                 onValueChange = onInputChange,
-                modifier = Modifier.weight(1f).inputSemantics(
-                    "ai.input",
-                    when (selectedMode) {
-                        AIMode.CHAT -> strings.aiTypePlaceholder
-                        AIMode.DESCRIBE -> strings.aiImageUrlPlaceholder
-                        AIMode.TAG -> strings.aiTagPlaceholder
-                        AIMode.CLASSIFY -> strings.aiClassifyPlaceholder
-                        AIMode.SUMMARIZE -> strings.aiSummarizePlaceholder
-                    },
-                ),
-                placeholder = {
-                    Text(
-                        when (selectedMode) {
-                            AIMode.CHAT -> strings.aiTypePlaceholder
-                            AIMode.DESCRIBE -> strings.aiImageUrlPlaceholder
-                            AIMode.TAG -> strings.aiTagPlaceholder
-                            AIMode.CLASSIFY -> strings.aiClassifyPlaceholder
-                            AIMode.SUMMARIZE -> strings.aiSummarizePlaceholder
-                        },
-                    )
+                modifier = Modifier.weight(1f),
+                placeholder = when (selectedMode) {
+                    AIMode.CHAT -> strings.aiTypePlaceholder
+                    AIMode.DESCRIBE -> strings.aiImageUrlPlaceholder
+                    AIMode.TAG -> strings.aiTagPlaceholder
+                    AIMode.CLASSIFY -> strings.aiClassifyPlaceholder
+                    AIMode.SUMMARIZE -> strings.aiSummarizePlaceholder
                 },
                 maxLines = 5,
                 shape = RoundedCornerShape(24.dp),

@@ -39,6 +39,20 @@ class AccessibilityInventoryTest(unittest.TestCase):
         self.write_inventory([{"id": "demo.name", "source": self.source.relative_to(self.root).as_posix(), "secure": True}])
         self.assertEqual(1, verify_inventory(self.root))
 
+    def test_native_renderer_policy_rejects_a_direct_framework_field(self):
+        data = json.loads(self.inventory.read_text())
+        data["nativeRendererRequired"] = True
+        self.inventory.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, "bypasses the platform form"):
+            verify_inventory(self.root)
+
+    def test_native_basic_component_is_inventoried(self):
+        self.source.write_text('AccessibleBasicTextField(identifier = "demo.name", value = value, accessibleName = label)')
+        data = json.loads(self.inventory.read_text())
+        data["nativeRendererRequired"] = True
+        self.inventory.write_text(json.dumps(data))
+        self.assertEqual(1, verify_inventory(self.root))
+
     def test_new_unlabeled_field_fails(self):
         self.source.write_text(self.source.read_text() + '\nBasicTextField(value = text)')
         with self.assertRaisesRegex(ValueError, "no unique accessible identifier"):

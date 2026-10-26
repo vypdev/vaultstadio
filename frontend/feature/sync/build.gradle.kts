@@ -33,6 +33,7 @@ kotlin {
                 implementation(project(":domain:sync"))
                 implementation(project(":core:resources"))
                 implementation(project(":core:ui"))
+                implementation(project(":core:form"))
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.decompose)

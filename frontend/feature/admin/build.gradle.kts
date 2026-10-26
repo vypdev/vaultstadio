@@ -34,6 +34,7 @@ kotlin {
                 implementation(project(":domain:auth"))
                 implementation(project(":core:resources"))
                 implementation(project(":core:ui"))
+                implementation(project(":core:form"))
                 implementation(libs.jetbrains.lifecycle.viewmodel)
                 implementation(libs.decompose)
                 implementation(libs.koin.core)

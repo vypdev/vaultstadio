@@ -3,7 +3,7 @@ import json
 import re
 from pathlib import Path
 
-FIELD_CALL = re.compile(r"\b(?:OutlinedTextField|BasicTextField|PasswordTextField)\s*\(")
+FIELD_CALL = re.compile(r"\b(?:OutlinedTextField|BasicTextField|PasswordTextField|AccessibleTextField|AccessibleBasicTextField)\s*\(")
 FIELD_ID = re.compile(r'(?:\.inputSemantics\(\s*|\bidentifier\s*=\s*)"([a-z0-9.-]+)"\s*,')
 
 
@@ -34,6 +34,7 @@ def verify_inventory(root):
     if len(expected) != len(fields) or inventory["fieldCount"] != len(fields):
         raise ValueError("Duplicate identifiers or inconsistent field inventory count")
     actual = {}
+    native_required = inventory.get("nativeRendererRequired", False)
     secure = {field["id"] for field in fields if field.get("secure")}
     roots = [root / "frontend/feature", root / "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/feature"]
     for source_root in roots:
@@ -47,6 +48,8 @@ def verify_inventory(root):
                 if len(identifiers) != 1:
                     raise ValueError(f"A production text field has no unique accessible identifier: {relative}")
                 identifier = identifiers[0]
+                if native_required and call.group().startswith(("OutlinedTextField", "BasicTextField")):
+                    raise ValueError(f"A field bypasses the platform form component: {identifier}")
                 if identifier in secure and not call.group().startswith("PasswordTextField"):
                     raise ValueError(f"A secure field bypasses the platform password component: {identifier}")
                 if identifier in actual:

@@ -9,8 +9,7 @@ The frontend is a standalone Gradle build in `frontend/`. Its interaction contra
 | `frontend/composeApp/src/test/kotlin/` | Shared app, model, repository and use-case tests; inspect each case before classifying its integration scope |
 | `frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/accessibility/` | Real production Compose component editing, focus, actions, state, localization and image-runtime contracts |
 | `frontend/composeApp/src/wasmJsTest/kotlin/` | Real Compose viewport and production dialog dismissal/reopening regression |
-| `frontend/core/form/src/wasmJsTest/kotlin/` | Native password editor restrictions, metadata, state, selection, IME and disposal contracts |
-| `frontend/core/ui/src/wasmJsTest/kotlin/` | Native DOM editor protection, observer lifetime, selection, events and shadow-root contracts |
+| `frontend/core/form/src/wasmJsTest/kotlin/` | Native input/textarea restrictions, metadata, controlled state, selection, IME, layout and disposal contracts |
 | `frontend/data/network/src/test/kotlin/` | Production client JSON factory and wire-format contracts |
 | `frontend/core/resources/src/test/kotlin/` | Shared translation/resource contracts |
 | `frontend/data/auth/src/test/kotlin/` | Authentication adapter/use-case contracts |
@@ -78,7 +77,7 @@ Component semantics do not prove that a native tool or browser can interact with
 
 Verify typing, Unicode, selection/replacement, deletion, focus transfer, login, file navigation and dialog cancellation/reopening. After login/logout and destination changes, verify that the accessible tree remains populated. A visible canvas alone does not establish operability.
 
-For browser password fields, inspect the real focused editor. The candidate PasswordTextField uses an actual native HTML input in the owned viewport's interop layer, with controlled state and public HtmlElementView lifecycle. The retained stable adapter protects the older framework input inside its shadow root; that check cannot certify the candidate's new contenteditable framework editor. A keyboard hint is insufficient: the native type must be `password`, default accessible output must be protected, and editing must reach the production callback. Keep credentials/session material out of public evidence.
+For browser password fields, inspect the real focused editor. The three platform form components use actual HTML input/textarea elements through the public HtmlElementView API, with controlled state and release handling. Their native fields replace the unstable framework editor for all 29 inventoried declarations. The retired compatibility bridge remains in Git history; its 30 historical cases are excluded from current results. A keyboard hint is insufficient: the native type must be `password`, default accessible output must be protected, and editing must reach the production callback. Keep credentials/session material out of public evidence.
 
 Isolate desktop preferences with the test-only [in-memory provider](../../scripts/dogfood/java/com/vaultstadio/audit/InMemoryPreferencesFactory.java) and confirm its marker before normal login. This does not establish production disk persistence. Do not seed a session or bypass authentication.
 
@@ -86,7 +85,7 @@ Record supported interaction methods and external tool limitations. Semantic foc
 
 ## Coverage and CI
 
-The `:core:ui:verifyInputSemanticsCoverage` gate requires execution data and compiled JVM helper classes, then enforces 100% lines and branches for that small scope. It does not measure Wasm DOM code, every feature or the whole frontend. Real-DOM and real-widget contracts verify the separate `:core:form` Wasm password adapter; its compiled JVM renderer belongs in the full production coverage denominator.
+The `:core:ui:verifyInputSemanticsCoverage` gate requires execution data and compiled JVM helper classes, then enforces 100% lines and branches for that small scope. It does not measure Wasm DOM code, every feature or the whole frontend. Real-DOM and real-widget contracts verify the separate `:core:form` Wasm adapter; its compiled JVM renderer belongs in the full production coverage denominator.
 
 For aggregates, report included modules, class directories, execution inputs, exclusions and uncovered lines/branches. Preserve existing gates while reviewing denominator changes. The [audit roadmap](../development/AUDIT_ROADMAP_2026-10-25.md) tracks broader coverage, legacy tests and unverified platforms.
 

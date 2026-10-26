@@ -1,8 +1,11 @@
 package com.vaultstadio.app.core.form
 
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 
 /** A controlled secure field with a platform-owned editor and application-owned callbacks. */
 @Composable
@@ -22,36 +25,31 @@ fun PasswordTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
 ) {
-    val field = PasswordFieldSpec(
-        value, onValueChange, identifier, label, enabled, readOnly,
-        isError, passwordVisible, imeAction, onImeAction,
+    val field = TextFieldSpec(
+        value = value,
+        onValueChange = onValueChange,
+        identifier = identifier,
+        label = label,
+        enabled = enabled,
+        readOnly = readOnly,
+        isError = isError,
+        passwordVisible = passwordVisible,
+        isPassword = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            autoCorrectEnabled = false,
+            imeAction = imeAction,
+        ),
+        onImeAction = onImeAction,
     )
-    PlatformPasswordField(field, modifier, leadingIcon, trailingIcon, supportingText)
+    PlatformTextField(
+        field,
+        modifier,
+        TextFieldContent(
+            label = { Text(label) },
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            supportingText = supportingText,
+        ),
+    )
 }
-
-internal class PasswordFieldSpec(
-    val value: String,
-    val onValueChange: (String) -> Unit,
-    val identifier: String,
-    val label: String,
-    val enabled: Boolean = true,
-    val readOnly: Boolean = false,
-    val isError: Boolean = false,
-    val passwordVisible: Boolean = false,
-    val imeAction: ImeAction = ImeAction.Default,
-    val onImeAction: (() -> Unit)? = null,
-) {
-    init {
-        require(identifier.isNotBlank())
-        require(label.isNotBlank())
-    }
-}
-
-@Composable
-internal expect fun PlatformPasswordField(
-    field: PasswordFieldSpec,
-    modifier: Modifier,
-    leadingIcon: @Composable (() -> Unit)?,
-    trailingIcon: @Composable (() -> Unit)?,
-    supportingText: @Composable (() -> Unit)?,
-)

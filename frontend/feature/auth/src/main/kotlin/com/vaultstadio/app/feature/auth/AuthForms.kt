@@ -7,7 +7,6 @@ package com.vaultstadio.app.feature.auth
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -15,7 +14,6 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +26,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.form.PasswordTextField
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.confirmPassword
@@ -36,7 +35,6 @@ import com.vaultstadio.app.core.resources.login
 import com.vaultstadio.app.core.resources.password
 import com.vaultstadio.app.core.resources.register
 import com.vaultstadio.app.core.resources.username
-import com.vaultstadio.app.core.ui.inputSemantics
 
 @Composable
 fun LoginForm(
@@ -47,7 +45,10 @@ fun LoginForm(
     val strings = LocalStrings.current
     var passwordVisible by remember { mutableStateOf(false) }
 
-    OutlinedTextField(
+    AccessibleTextField(
+        identifier = "auth.login.email",
+        accessibleName = strings.email,
+
         value = viewModel.loginEmail,
         onValueChange = { viewModel.updateLoginEmail(it) },
         label = { Text(strings.email) },
@@ -57,10 +58,8 @@ fun LoginForm(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
         ),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-        ),
-        modifier = Modifier.fillMaxWidth().inputSemantics("auth.login.email", strings.email),
+        onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+        modifier = Modifier.fillMaxWidth(),
         enabled = !viewModel.isLoading,
     )
 
@@ -116,7 +115,10 @@ fun RegisterForm(
 @Composable
 private fun RegisterIdentityFields(viewModel: AuthViewModel, focusManager: FocusManager) {
     val strings = LocalStrings.current
-    OutlinedTextField(
+    AccessibleTextField(
+        identifier = "auth.register.email",
+        accessibleName = strings.email,
+
         value = viewModel.registerEmail,
         onValueChange = { viewModel.updateRegisterEmail(it) },
         label = { Text(strings.email) },
@@ -126,14 +128,15 @@ private fun RegisterIdentityFields(viewModel: AuthViewModel, focusManager: Focus
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
         ),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-        ),
-        modifier = Modifier.fillMaxWidth().inputSemantics("auth.register.email", strings.email),
+        onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+        modifier = Modifier.fillMaxWidth(),
         enabled = !viewModel.isLoading,
     )
 
-    OutlinedTextField(
+    AccessibleTextField(
+        identifier = "auth.register.username",
+        accessibleName = strings.username,
+
         value = viewModel.registerUsername,
         onValueChange = { viewModel.updateRegisterUsername(it) },
         label = { Text(strings.username) },
@@ -142,10 +145,8 @@ private fun RegisterIdentityFields(viewModel: AuthViewModel, focusManager: Focus
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next,
         ),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-        ),
-        modifier = Modifier.fillMaxWidth().inputSemantics("auth.register.username", strings.username),
+        onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+        modifier = Modifier.fillMaxWidth(),
         enabled = !viewModel.isLoading,
     )
 }

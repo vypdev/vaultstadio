@@ -15,7 +15,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -26,10 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.InputLabel
 import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.core.resources.inputLabel
-import com.vaultstadio.app.core.ui.inputSemantics
 import com.vaultstadio.app.domain.sync.model.ConflictResolution
 import com.vaultstadio.app.domain.sync.model.SyncConflict
 import com.vaultstadio.app.domain.sync.model.SyncDevice
@@ -241,15 +240,15 @@ fun RegisterDeviceDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text("Register this device to sync your files across all your devices.")
-                OutlinedTextField(
+                AccessibleTextField(
+                    identifier = "sync.device-name",
+                    accessibleName = strings.inputLabel(InputLabel.DEVICE_NAME),
+
                     value = deviceName,
                     onValueChange = { deviceName = it },
                     label = { Text(strings.inputLabel(InputLabel.DEVICE_NAME)) },
-                    placeholder = { Text("My Computer") },
-                    modifier = Modifier.fillMaxWidth().inputSemantics(
-                        "sync.device-name",
-                        strings.inputLabel(InputLabel.DEVICE_NAME),
-                    ),
+                    placeholder = "My Computer",
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -17,10 +17,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.w3c.dom.EventInit
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.ShadowRoot
+import org.w3c.dom.events.Event
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 
 /** Exercises actual exported semantics across production dialog owner creation/removal. */
@@ -55,9 +58,20 @@ class BrowserDialogLifecycleTest {
                     shadow.querySelector("[id='dialog-lifecycle-open']") as? HTMLElement
                 }.click()
                 val field = awaitValue("production profile field") {
-                    shadow.querySelector("[id='profile.username']") as? HTMLElement
+                    viewport.querySelector("[id='profile.username']") as? HTMLInputElement
                 }
-                assertTrue(field.textContent.orEmpty().contains("fixture-name"))
+                assertEquals("fixture-name", field.value)
+                field.focus()
+                field.value = ""
+                field.dispatchEvent(Event("input", EventInit(bubbles = true)))
+                awaitValue("Save disabled by actual empty state") {
+                    dialogButton(shadow, "Save")?.takeIf { it.getAttribute("aria-disabled") == "true" }
+                }
+                field.value = "edición ñ"
+                field.dispatchEvent(Event("input", EventInit(bubbles = true)))
+                awaitValue("Save enabled after actual Unicode replacement") {
+                    dialogButton(shadow, "Save")?.takeIf { it.getAttribute("aria-disabled") != "true" }
+                }
                 awaitValue("production Cancel action") {
                     val buttons = shadow.querySelectorAll("[role='button']")
                     (0 until buttons.length).mapNotNull { buttons.item(it) as? HTMLElement }
@@ -65,13 +79,19 @@ class BrowserDialogLifecycleTest {
                 }.click()
                 awaitValue<HTMLElement>("background semantics after dialog dismissal") {
                     (shadow.querySelector("[id='dialog-lifecycle-open']") as? HTMLElement)
-                        ?.takeIf { shadow.querySelector("[id='profile.username']") == null }
+                        ?.takeIf { viewport.querySelector("[id='profile.username']") == null }
                 }
             }
         } finally {
             dialogOpen.value = false
             viewport.remove()
         }
+    }
+
+    private fun dialogButton(shadow: ShadowRoot, name: String): HTMLElement? {
+        val buttons = shadow.querySelectorAll("[role='button']")
+        return (0 until buttons.length).mapNotNull { buttons.item(it) as? HTMLElement }
+            .singleOrNull { it.textContent?.trim() == name }
     }
 
     private fun frameworkShadow(viewport: HTMLElement): ShadowRoot? {
