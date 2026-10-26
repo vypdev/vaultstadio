@@ -9,6 +9,7 @@ on:
       - 'backend/**'
       - 'frontend/**'
       - 'Makefile'
+      - 'scripts/ci/provision_browser_sandbox.sh'
   workflow_dispatch:
 
 permissions:
@@ -49,28 +50,7 @@ jobs:
 
       - name: Provision the hosted runner browser sandbox from its signed package
         shell: bash
-        run: |
-          # Extract authenticated package bytes under root ownership, outside candidate reach.
-          sudo apt-get update
-          sudo bash -s <<'ROOT'
-          set -euo pipefail
-          package_root=$(mktemp -d /var/tmp/vaultstadio-sandbox-package.XXXXXX)
-          trap 'rm -rf -- "$package_root"' EXIT
-          cd "$package_root"
-          apt-get download google-chrome-stable
-          shopt -s nullglob
-          packages=(google-chrome-stable_*_amd64.deb)
-          [[ ${#packages[@]} == 1 ]]
-          dpkg-deb --field "${packages[0]}" Package Version
-          dpkg-deb --extract "${packages[0]}" "$package_root/extracted"
-          target=/opt/vaultstadio-verification-sandbox
-          [[ ! -e "$target" && ! -L "$target" ]]
-          install -d -o root -g root -m 0755 "$target"
-          install -o root -g root -m 4755 \
-            "$package_root/extracted/opt/google/chrome/chrome-sandbox" "$target/chrome-sandbox"
-          stat --format='Sandbox owner=%u group=%g mode=%a' "$target/chrome-sandbox"
-          sha256sum "$target/chrome-sandbox"
-          ROOT
+        run: sudo bash scripts/ci/provision_browser_sandbox.sh
 
       - name: Run runtime adapter controls on native Linux
         run: python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v

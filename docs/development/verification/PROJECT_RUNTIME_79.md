@@ -27,7 +27,7 @@ The private `make` adapter preserves literal arguments and real exit status.
 | Check | Observed result | Scope |
 |---|---|---|
 | Runtime tests on macOS ARM64 | 30 pass | Executed fixtures for prerequisites, private output, argument/exit propagation and credential removal |
-| Updated runtime and sandbox controls on macOS ARM64 | 39 pass | Adds helper metadata/output rejection and literal sandbox-environment propagation; actual Linux browser startup remains a separate gate |
+| Updated runtime and sandbox controls on macOS ARM64 and native hosted Linux | 39 pass on each | Adds helper metadata/output rejection and literal sandbox-environment propagation; actual Linux browser startup remains a separate gate |
 | Same tests in Linux container | 30 pass | Existing Python image, network disabled, read-only action source, temporary socket fixtures; no host Docker socket mounted |
 | Real native preflight | Pass | Corretto 17.0.9, actual Android 37.0 JAR, actual Chrome 155.0.8059.84, existing local Docker and real GNU Make 3.81 |
 | Existing project script controls | 43 pass | Includes actual loopback TLS rejection; not product test coverage |
@@ -107,7 +107,7 @@ At `2976e86`, the next hosted run rejected the existing helper because its mode
 allowed group/world writes. This is a failed prerequisite, not an application
 test result. At `1617e81`, reinstalling the system package still left that helper
 with mode777, so validation rejected it again. The ordinary hosted workflow now
-downloads `google-chrome-stable` through apt's existing signed repository into a
+downloads `google-chrome-stable` through a dedicated authenticated apt source into a
 private root-owned directory, extracts it there and installs only the protected
 package helper into a fresh root-owned namespace with mode4755. It records the
 package version and helper metadata/digest and retires the private extraction.
@@ -116,6 +116,29 @@ correct operator-provisioned helper, changes no host permissions/security policy
 and fails when that prerequisite is absent or unsafe. This does not install or
 alter Chrome on the developer's machine or an official self-hosted runner. An
 operator must provision the documented helper before future official activation.
+
+The base image has no configured Google download source, so the hosted operator
+script prepares a source-scoped keyring using Google's
+[published active primary fingerprint](https://www.google.com/linuxrepositories/),
+`EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796`. HTTPS remains verified. The key bundle
+must contain only that primary and its subkeys; GPG reads/dearmors public material
+in an isolated temporary home without importing into a user keyring. Apt uses a
+dedicated `Signed-By` source and fresh lists with update errors fatal. No global
+trusted keyring or unauthenticated-download option is used.
+
+An actual isolated Ubuntu24.04 container executed this exact operator script,
+verified the signed index and downloaded the real Google package156.0.8078.47-1.
+It installed the helper with owner0/group0/mode4755. A second invocation returned78
+without replacing the namespace or changing the helper digest. The container was
+removed afterward; it had no Docker socket or application data mounted. This
+proves package provisioning and the replacement guard, not Chrome155 startup or
+the complete native product campaign. The helper's protocol compatibility is
+still checked by actual sandboxed Chrome155 startup in hosted CI.
+
+A separate real-GPG negative control requested an unapproved primary fingerprint
+against the actual vendor key. It returned78 with the expected diagnostic before
+creating any installation namespace. Both disposable Ubuntu containers were
+removed after their checks; neither changed the developer's keyring or daemon.
 
 Reproduce the deterministic controls from the repository root:
 
