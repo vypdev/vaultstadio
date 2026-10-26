@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Comment
@@ -39,7 +38,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vaultstadio.app.core.form.AccessibleBasicTextField
+import com.vaultstadio.app.core.resources.InputLabel
+import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.inputLabel
 import com.vaultstadio.app.domain.collaboration.model.CollaborationSession
 import com.vaultstadio.app.domain.collaboration.model.DocumentComment
 import com.vaultstadio.app.domain.collaboration.model.DocumentState
@@ -213,10 +216,15 @@ fun DocumentEditor(
                 }
             }
         }
-        BasicTextField(
+        AccessibleBasicTextField(
+            identifier = "collaboration.document",
+            accessibleName = LocalStrings.current.inputLabel(InputLabel.DOCUMENT_CONTENT),
+
             value = editedContent,
             onValueChange = onContentChange,
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(
+                16.dp,
+            ),
             textStyle = TextStyle(
                 fontFamily = FontFamily.Monospace,
                 fontSize = 14.sp,

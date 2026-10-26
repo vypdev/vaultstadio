@@ -20,7 +20,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.form.AccessibleTextField
 import com.vaultstadio.app.core.resources.StringResources
 import com.vaultstadio.app.domain.collaboration.model.CollaborationParticipant
 import com.vaultstadio.app.domain.collaboration.model.DocumentComment
@@ -167,7 +167,10 @@ fun AddCommentDialog(
         onDismissRequest = onDismiss,
         title = { Text(strings.collaborationAddComment) },
         text = {
-            OutlinedTextField(
+            AccessibleTextField(
+                identifier = "collaboration.comment",
+                accessibleName = strings.collaborationComment,
+
                 value = commentText,
                 onValueChange = { commentText = it },
                 label = { Text(strings.collaborationComment) },
@@ -177,6 +180,7 @@ fun AddCommentDialog(
         },
         confirmButton = {
             Button(
+                enabled = commentText.isNotBlank(),
                 onClick = {
                     if (commentText.isNotBlank()) {
                         onAdd(commentText)

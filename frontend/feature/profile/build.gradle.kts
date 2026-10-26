@@ -11,11 +11,14 @@ kotlin {
     jvm("desktop")
     android {
         namespace = libNamespace
-        compileSdk = 36
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = 24
         compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
     iosArm64()
     iosSimulatorArm64()
     sourceSets {
@@ -25,6 +28,9 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
+                implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
+                implementation(project(":core:form"))
                 implementation(libs.compose.material.icons.extended)
                 implementation(project(":domain:result"))
                 implementation(project(":domain:auth"))

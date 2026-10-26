@@ -23,13 +23,15 @@ kotlin {
     jvm("desktop")
     android {
         namespace = libNamespace
-        compileSdk = 36
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = 24
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+    }
     iosArm64()
     iosSimulatorArm64()
 
@@ -39,6 +41,8 @@ kotlin {
             dependencies {
                 api(project(":domain:result"))
                 implementation(libs.kotlinx.serialization.json)
+                // 0.9.1 uses the supported Wasm module loader under Kotlin 2.4.20.
+                implementation(libs.kotlinx.io.core)
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json.multiplatform)

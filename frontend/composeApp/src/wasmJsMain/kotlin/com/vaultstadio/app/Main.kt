@@ -43,6 +43,8 @@ import com.vaultstadio.app.feature.sync.di.featureSyncModule
 import com.vaultstadio.app.feature.versionhistory.di.featureVersionHistoryModule
 import org.koin.core.context.startKoin
 
+private const val VIEWPORT_CONTAINER_ID = "ComposeTarget"
+
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     // Default API URL; can be made configurable via host page (e.g. window.__VAULTSTADIO_API_URL__)
@@ -62,7 +64,7 @@ fun main() {
                 storageModule + metadataModule + syncModule + federationModule + versionModule,
         )
     }
-    ComposeViewport(content = {
+    ComposeViewport(viewportContainerId = VIEWPORT_CONTAINER_ID, content = {
         VaultStadioRoot(config = VaultStadioConfig(apiBaseUrl = apiBaseUrl))
     })
 }
