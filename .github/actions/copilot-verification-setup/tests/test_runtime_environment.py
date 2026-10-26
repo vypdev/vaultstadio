@@ -20,6 +20,7 @@ class RuntimeEnvironmentTest(unittest.TestCase):
         data = self.fixture.captured()
         self.assertEqual(["test-coverage"], data["arguments"])
         environment = data["environment"]
+        self.assertEqual(str(self.fixture.java), environment["JAVA_HOME"])
         self.assertEqual(str(self.fixture.sdk), environment["ANDROID_HOME"])
         self.assertEqual(str(self.fixture.sdk), environment["ANDROID_SDK_ROOT"])
         self.assertEqual(str(self.fixture.chrome), environment["CHROME_BIN"])

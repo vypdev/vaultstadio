@@ -22,8 +22,13 @@ case "$verification_java_version" in
     *'version "17.'*|*'version "17"'*) ;;
     *) verification_fail 'Java major version 17 is required' ;;
 esac
-[[ -n "${ANDROID_HOME:-}" && "$ANDROID_HOME" == /* && -s "$ANDROID_HOME/platforms/android-36/android.jar" ]] || verification_fail 'Android SDK platform 36 is required'
+[[ -n "${ANDROID_HOME:-}" && "$ANDROID_HOME" == /* && -s "$ANDROID_HOME/platforms/android-37.0/android.jar" ]] || verification_fail 'Android SDK platform 37.0 is required'
 [[ -n "${CHROME_BIN:-}" && "$CHROME_BIN" == /* && -f "$CHROME_BIN" && -x "$CHROME_BIN" ]] || verification_fail 'an executable Chrome browser is required'
+verification_chrome_version=$("$CHROME_BIN" --version 2>&1) || verification_fail 'Chrome could not start'
+case "$verification_chrome_version" in
+    'Google Chrome 155.0.8059.84'|'Google Chrome for Testing 155.0.8059.84'|'Chromium 155.0.8059.84') ;;
+    *) verification_fail 'Chrome version 155.0.8059.84 is required' ;;
+esac
 
 verification_make=$(command -v make) || verification_fail 'make is required'
 [[ "$verification_make" == /* && -x "$verification_make" ]] || verification_fail 'make must resolve to an executable path'
@@ -46,6 +51,7 @@ verification_tools=$(mktemp -d "$verification_root/commands.XXXXXX")
 verification_wrapper="$verification_tools/make"
 {
     printf '#!/usr/bin/env bash\nset -euo pipefail\n'
+    printf 'export JAVA_HOME=%q\n' "$JAVA_HOME"
     printf 'export ANDROID_HOME=%q\n' "$ANDROID_HOME"
     printf 'export ANDROID_SDK_ROOT=%q\n' "$ANDROID_HOME"
     printf 'export CHROME_BIN=%q\n' "$CHROME_BIN"
@@ -59,4 +65,5 @@ verification_wrapper="$verification_tools/make"
 } > "$verification_wrapper"
 chmod 700 "$verification_wrapper"
 printf '%s\n' "$verification_tools" >> "$GITHUB_PATH"
+printf '%s\n' 'Verified Java 17, Android platform 37.0 and Chrome 155.0.8059.84.'
 printf '%s\n' 'Project verification runtime prepared; official native verification is still required.'

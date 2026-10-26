@@ -31,7 +31,17 @@ class RuntimePrerequisitesTest(unittest.TestCase):
 
     def test_missing_sdk_platform(self):
         self.fixture.jar.unlink()
-        self.rejected("Android SDK platform 36")
+        self.rejected("Android SDK platform 37.0")
+
+    def test_empty_sdk_platform(self):
+        self.fixture.jar.write_bytes(b"")
+        self.rejected("Android SDK platform 37.0")
+
+    def test_legacy_sdk_does_not_satisfy_current_compile_platform(self):
+        legacy = self.fixture.sdk / "platforms/android-36/android.jar"
+        legacy.parent.mkdir(parents=True)
+        self.fixture.jar.rename(legacy)
+        self.rejected("Android SDK platform 37.0")
 
     def test_missing_chrome(self):
         self.fixture.environment.pop("CHROME_BIN")
@@ -40,6 +50,18 @@ class RuntimePrerequisitesTest(unittest.TestCase):
     def test_unexecutable_chrome(self):
         self.fixture.chrome.chmod(0o600)
         self.rejected("Chrome browser")
+
+    def test_browser_with_missing_runtime_libraries_is_rejected(self):
+        self.fixture.environment["_VF_CHROME_EXIT"] = "127"
+        self.rejected("Chrome could not start")
+
+    def test_incompatible_browser_version_is_rejected(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Google Chrome 156.0.0.0"
+        self.rejected("Chrome version 155.0.8059.84")
+
+    def test_browser_version_suffix_is_rejected(self):
+        self.fixture.environment["_VF_CHROME_VERSION"] = "Google Chrome 155.0.8059.840"
+        self.rejected("Chrome version 155.0.8059.84")
 
     def test_missing_docker_cli(self):
         (self.fixture.bin / "docker").unlink()

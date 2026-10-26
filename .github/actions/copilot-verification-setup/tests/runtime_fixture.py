@@ -27,11 +27,14 @@ printf 'openjdk version "%s"\\n' "${_VF_JAVA_VERSION:-17.0.0}"
 exit "${_VF_JAVA_EXIT:-0}"
 """)
         self.sdk = self.root / "sdk ' $(literal)"
-        self.jar = self.sdk / "platforms/android-36/android.jar"
+        self.jar = self.sdk / "platforms/android-37.0/android.jar"
         self.jar.parent.mkdir(parents=True)
         self.jar.write_bytes(b"fixture; never used to compile application code")
         self.chrome = self.root / "chrome ' $(literal)"
-        self.executable(self.chrome, "#!/bin/bash\nexit 0\n")
+        self.executable(self.chrome, """#!/bin/bash
+printf '%s\\n' "${_VF_CHROME_VERSION:-Google Chrome for Testing 155.0.8059.84}"
+exit "${_VF_CHROME_EXIT:-0}"
+""")
         self.executable(self.bin / "docker", f"#!{sys.executable}\n" + """
 import os,sys
 sys.exit(int(os.environ.get('_VF_DOCKER_EXIT','0')))
@@ -39,7 +42,7 @@ sys.exit(int(os.environ.get('_VF_DOCKER_EXIT','0')))
         self.executable(self.bin / "make", f"#!{sys.executable}\n" + """
 import json,os,sys
 from pathlib import Path
-keys = ['HOME','ANDROID_HOME','ANDROID_SDK_ROOT','CHROME_BIN','DOCKER_HOST',
+keys = ['HOME','JAVA_HOME','ANDROID_HOME','ANDROID_SDK_ROOT','CHROME_BIN','DOCKER_HOST',
         'DOCKER_CONFIG','DOCKER_CONTEXT','GRADLE_USER_HOME',
         'DOCKER_TLS_VERIFY','DOCKER_CERT_PATH','DOCKER_AUTH_CONFIG']
 Path(os.environ['_VF_CAPTURE']).write_text(json.dumps({
