@@ -25,7 +25,7 @@ internal class WebTextEditor(
     }
     private val onKey: (Event) -> Unit = { event ->
         val key = event as KeyboardEvent
-        if (canEdit && field.singleLine && !reconciliation.isComposing && key.isPlainEnter()) {
+        if (canInvokeImeAction && key.isPlainEnter()) {
             field.onImeAction?.let { action ->
                 key.preventDefault()
                 action()
@@ -34,6 +34,7 @@ internal class WebTextEditor(
     }
 
     private val canEdit get() = !closed && field.enabled && !field.readOnly
+    private val canInvokeImeAction get() = canEdit && field.singleLine && !reconciliation.isComposing
     private val onCompositionStart: (Event) -> Unit = { reconciliation.compositionStarted() }
     private val onCompositionEnd: (Event) -> Unit = { reconciliation.compositionEnded() }
 
