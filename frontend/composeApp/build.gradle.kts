@@ -244,15 +244,7 @@ compose.desktop {
             packageName = "VaultStadio"
             packageVersion = "1.0.0"
 
-            macOS {
-                iconFile.set(project.file("icons/icon.icns"))
-            }
-            windows {
-                iconFile.set(project.file("icons/icon.ico"))
-            }
-            linux {
-                iconFile.set(project.file("icons/icon.png"))
-            }
+            // Use jpackage's default icon until platform branding assets are versioned.
         }
     }
 }

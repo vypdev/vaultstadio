@@ -160,6 +160,21 @@ For #80, [frontend accessibility verification](../docs/development/verification/
 | `ready` | Feature state rendered | user | interact |
 | `failed` | Bounded error state | user | retry/re-authenticate |
 
+### 6.4 Client startup correction — issue #76
+
+This is an implementation contract for R03's confirmed startup blockers, not an assertion that every platform capability is operational.
+
+| ID | Required behavior | Acceptance/evidence |
+|---|---|---|
+| BOOT-SER-01 | The actual production `HttpClientFactory` Json/contextual module MUST initialize with the current dependencies without a descriptor-name collision. Custom and built-in Instant serialization MUST coexist. | Production-factory DTO tests on desktop JVM and Wasm; actual Koin app startup. |
+| BOOT-SER-02 | Contextual Instant MUST retain ISO-8601 string encoding, UTC normalization and nanosecond precision, including nested and nullable DTOs. Invalid or missing required values MUST fail rather than silently become valid timestamps. | Wire-level round trips and malformed/type/required-field cases using the production Json instance. |
+| BOOT-HTTP-01 | A successful `.wasm` response from the actual Nginx configuration MUST contain exactly one Content-Type value, `application/wasm`. A missing Wasm asset MUST return 404 rather than successful SPA HTML. | Real Nginx GET/HEAD/missing-asset/SPA fallback regression; real built web artifact in a browser. |
+| BOOT-UI-01 | Fresh web and desktop app starts MUST reach a visible usable login surface without serialization/Koin initialization failure. Local login MUST be exercised against a disposable backend account. | Browser/native GUI evidence and logs; HTTP 200 HTML alone does not satisfy acceptance. |
+| BOOT-PKG-01 | Desktop packaging MUST succeed from versioned inputs. Missing optional branding assets MUST NOT be configured as mandatory files; the platform packaging default icon is acceptable until real assets are versioned. | Execute `:composeApp:createDistributable` and launch the generated application on this machine. Other desktop OS packages remain unverified until built and launched there. |
+| BOOT-ISO-01 | Verification MUST isolate browser storage, desktop preferences and backend test data. No production credential or real user's preferences may be replaced. | Dedicated local origin, in-memory/temporary desktop preferences, disposable account/database/content. |
+
+Serialization stays in the data/network adapter; domain/features gain no Ktor or serialization workaround. Nginx owns transport MIME mapping. Existing dependencies, Copilot configuration and wire schemas are preserved. If a subsequent URL/feature failure is uncovered, record and fix it under its owning contract rather than claim the full platform is ready.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
@@ -232,6 +247,8 @@ Minimum risk-derived budget: **Minimum 30 cases: domain policy, data mapping, au
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #76 the additional floor is 12 independently collected serialization cases, run on JVM and Wasm and reported as repeated platform executions; cover factory initialization, built-in coexistence, epoch/pre-epoch, offset/nanoseconds, nested/nullable values, unknown fields and malformed/missing/wrong-type values. Add four real Nginx checks (GET, HEAD, missing Wasm, SPA route) and actual web/desktop startup/login evidence. A test that only asserts a descriptor constant does not establish startup. Record the exact built artifact, source revision, commands, collected cases and remaining limitations.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -258,6 +275,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
+
+For #76, executed evidence is recorded in [frontend startup verification](../docs/development/verification/FRONTEND_STARTUP_76.md) and its companion JSON: BOOT-SER-01/02 → 15 production-factory cases on JVM and Wasm; BOOT-HTTP-01 → 4 actual Nginx checks plus built-artifact browser load; BOOT-PKG-01 → generated and launched macOS distributable. BOOT-UI-01 is verified for the exercised local startup/login path: browser login, folder navigation and upload passed; the maintainer entered the disposable desktop credentials, then the assistant submitted and verified native HTTP 200, My Files and folder/file navigation. Autonomous text entry is separately unresolved under #80. BOOT-ISO-01 → dedicated browser origin, disposable backend volumes/account and confirmed in-memory desktop preferences. These results do not certify other platforms or complete feature readiness.
 
 ## 18. Implementation or maintenance sequence
 

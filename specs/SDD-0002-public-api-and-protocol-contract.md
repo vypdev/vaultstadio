@@ -117,6 +117,10 @@ Text equivalent: Client discovers contract -> authenticates -> calls bounded pro
 | `invalid` | Request violates schema | client | repair request |
 | `unavailable` | Dependency cannot serve request | operator/client | bounded retry |
 
+### 6.4 Client bootstrap transport — issue #76
+
+The owning frontend startup contract is BOOT-SER-01/02 and BOOT-HTTP-01 in [SDD-0013](SDD-0013-frontend-kmp-and-platform-architecture.md#64-client-startup-correction--issue-76). Client-side serializer descriptor identity MUST NOT change the public ISO-8601 JSON wire values. Serving a Wasm artifact MUST use one correct MIME header; missing assets retain their HTTP error status. Public API routes, authentication and versioning are not changed by this bootstrap repair.
+
 ## 7. User-facing configuration
 
 Swagger path, API version prefix, protocol enablement, authentication mode, and route limits are explicit configuration contracts. Unknown or malformed values fail closed.
