@@ -4,6 +4,12 @@ description: Prepare isolated JVM, Android SDK and browser prerequisites for exi
 runs:
   using: composite
   steps:
+    - name: Resolve an existing local Docker endpoint with private credentials
+      shell: bash
+      env:
+        VERIFICATION_ACTION_ROOT: ${{ github.action_path }}
+      run: python3 "$VERIFICATION_ACTION_ROOT/prepare-docker-endpoint.py"
+
     - name: Set up Java 17
       uses: actions/setup-java@v5
       with:

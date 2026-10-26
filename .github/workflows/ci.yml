@@ -15,6 +15,11 @@ on:
         type: choice
         default: none
         options: [none, complete, inventory]
+      project_environment_runner:
+        description: Placement for the additional manual environment check
+        type: choice
+        default: hosted-linux
+        options: [hosted-linux, macos-arm64]
 
 permissions:
   contents: read
@@ -294,3 +299,4 @@ jobs:
     uses: ./.github/workflows/project_runtime_verification.yml
     with:
       mode: ${{ inputs.project_environment == 'inventory' && 'inventory' || 'complete' }}
+      placement: ${{ inputs.project_environment_runner || 'hosted-linux' }}

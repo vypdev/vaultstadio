@@ -12,7 +12,7 @@ jobs:
       checks: write
       contents: read
     with:
-      runs-on: '{"group":"vypdev","labels":["self-hosted","codex","Linux"]}'
+      runs-on: '{"group":"vypdev","labels":["self-hosted","macOS","ARM64"]}'
     secrets:
       PAT: ${{ secrets.PAT }}
       OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}

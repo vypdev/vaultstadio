@@ -155,6 +155,27 @@ class CadenceContractTests(unittest.TestCase):
                         continue
                     self.assertRegex(uses, r'^[^@]+@v\d+$')
 
+    def test_candidate_runtime_placement_does_not_change_weekly_or_pr_cost(self):
+        ci = workflow('ci.yml')
+        placement = ci['on']['workflow_dispatch']['inputs']['project_environment_runner']
+        self.assertEqual(placement['default'], 'hosted-linux')
+        self.assertEqual(set(placement['options']), {'hosted-linux', 'macos-arm64'})
+        native = workflow('project_runtime_verification.yml')
+        self.assertEqual(native['on']['workflow_call']['inputs']['placement']['default'], 'hosted-linux')
+        job = native['jobs']['native-linux']
+        self.assertIn("inputs.placement == 'macos-arm64'", job['runs-on'])
+        self.assertIn("|| '\"ubuntu-24.04\"'", job['runs-on'])
+        sandbox = next(s for s in job['steps'] if 'provision_browser_sandbox.sh' in s.get('run', ''))
+        self.assertEqual(sandbox['if'], "runner.os == 'Linux'")
+        setup_index = next(i for i, s in enumerate(job['steps']) if s.get('uses') == './.github/actions/copilot-verification-setup')
+        preparation = '\n'.join(s.get('run', '') for s in job['steps'][:setup_index])
+        self.assertIn('inspect_verification_runner.py', preparation)
+        self.assertIn('HOME=%s', preparation)
+        self.assertIn('DOCKER_HOST=\\nDOCKER_CONTEXT=\\n', preparation)
+        inventory = native['jobs']['runner-inventory']
+        self.assertFalse(any(s.get('uses') == './.github/actions/copilot-verification-setup' for s in inventory['steps']))
+        self.assertNotIn('secrets', ci['jobs']['project-environment'])
+
 
 if __name__ == '__main__':
     unittest.main()
