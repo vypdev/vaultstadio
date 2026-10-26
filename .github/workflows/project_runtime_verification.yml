@@ -106,6 +106,19 @@ jobs:
           print(json.dumps(record, indent=2))
           PY
 
+      - name: Require actual sandboxed headless startup
+        shell: bash
+        run: |
+          timeout 45 "$CHROME_BIN" --headless --disable-gpu --dump-dom \
+            'data:text/html,<title>vaultstadio-sandbox-smoke</title>' > "$RUNNER_TEMP/verification-evidence/browser-smoke.html"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          html = (Path(os.environ['RUNNER_TEMP']) / 'verification-evidence/browser-smoke.html').read_text()
+          if '<title>vaultstadio-sandbox-smoke</title>' not in html:
+              raise SystemExit('The sandboxed browser did not render the expected DOM')
+          PY
+
       - name: Run configured make test
         if: ${{ !cancelled() && steps.provenance.outcome == 'success' }}
         run: make test

@@ -53,6 +53,7 @@ verification_wrapper="$verification_tools/make"
     printf 'export ANDROID_HOME=%q\n' "$ANDROID_HOME"
     printf 'export ANDROID_SDK_ROOT=%q\n' "$ANDROID_HOME"
     printf 'export CHROME_BIN=%q\n' "$CHROME_BIN"
+    printf 'export CHROME_DEVEL_SANDBOX=%q\n' "${CHROME_DEVEL_SANDBOX:-}"
     printf 'export DOCKER_HOST=%q\n' "$verification_docker_host"
     printf 'export DOCKER_CONFIG=%q\n' "$HOME/.docker"
     printf 'export DOCKER_CONTEXT=\n'

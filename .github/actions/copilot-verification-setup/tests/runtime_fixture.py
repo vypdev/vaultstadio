@@ -42,7 +42,7 @@ sys.exit(int(os.environ.get('_VF_DOCKER_EXIT','0')))
         self.executable(self.bin / "make", f"#!{sys.executable}\n" + """
 import json,os,sys
 from pathlib import Path
-keys = ['HOME','JAVA_HOME','ANDROID_HOME','ANDROID_SDK_ROOT','CHROME_BIN','DOCKER_HOST',
+keys = ['HOME','JAVA_HOME','ANDROID_HOME','ANDROID_SDK_ROOT','CHROME_BIN','CHROME_DEVEL_SANDBOX','DOCKER_HOST',
         'DOCKER_CONFIG','DOCKER_CONTEXT','GRADLE_USER_HOME',
         'DOCKER_TLS_VERIFY','DOCKER_CERT_PATH','DOCKER_AUTH_CONFIG']
 Path(os.environ['_VF_CAPTURE']).write_text(json.dumps({

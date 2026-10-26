@@ -28,6 +28,17 @@ class RuntimeEnvironmentTest(unittest.TestCase):
         self.assertEqual(str(self.fixture.home / ".docker"), environment["DOCKER_CONFIG"])
         self.assertEqual(str(self.fixture.home / ".gradle"), environment["GRADLE_USER_HOME"])
 
+    def test_sandbox_helper_survives_closed_command_environment_literally(self):
+        marker = self.fixture.root / "must-not-exist"
+        helper = str(self.fixture.root / f"sandbox ' $(touch {marker})")
+        self.fixture.environment["CHROME_DEVEL_SANDBOX"] = helper
+        self.prepare()
+        self.fixture.environment.pop("CHROME_DEVEL_SANDBOX")
+        result = self.fixture.run_make("test")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(helper, self.fixture.captured()["environment"]["CHROME_DEVEL_SANDBOX"])
+        self.assertFalse(marker.exists())
+
     def test_arguments_remain_literal_without_command_substitution(self):
         self.prepare()
         marker = self.fixture.root / "must-not-exist"

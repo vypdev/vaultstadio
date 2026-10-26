@@ -32,6 +32,12 @@ runs:
         chrome-version: '155.0.8059.84'
         install-dependencies: 'true'
 
+    - name: Select the existing browser sandbox
+      shell: bash
+      env:
+        VERIFICATION_ACTION_ROOT: ${{ github.action_path }}
+      run: python3 "$VERIFICATION_ACTION_ROOT/configure-browser-sandbox.py"
+
     - name: Prepare the project command environment
       shell: bash
       env:

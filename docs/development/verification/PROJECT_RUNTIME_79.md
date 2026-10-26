@@ -6,7 +6,7 @@ Fixture tests and a native preflight do not certify the official Linux verifier.
 ## Contract and source boundary
 
 [SDD-0014 §6.4](../../../specs/SDD-0014-deployment-operations-and-release.md#64-project-verification-runtime-repair--issue-79)
-defines VFY-JAVA/TOOLS/DOCKER/ENV/FAIL/TRUST/LIFE/ACTION-01.
+defines the VFY runtime, persisted-fixture and browser-sandbox requirements.
 The project owns `.github/actions/copilot-verification-setup/` and its assets.
 Copilot implementation, generated workflows, protection, lifecycle and configured
 verification commands remain unchanged.
@@ -27,12 +27,13 @@ The private `make` adapter preserves literal arguments and real exit status.
 | Check | Observed result | Scope |
 |---|---|---|
 | Runtime tests on macOS ARM64 | 30 pass | Executed fixtures for prerequisites, private output, argument/exit propagation and credential removal |
+| Updated runtime and sandbox controls on macOS ARM64 | 39 pass | Adds helper metadata/output rejection and literal sandbox-environment propagation; actual Linux browser startup remains a separate gate |
 | Same tests in Linux container | 30 pass | Existing Python image, network disabled, read-only action source, temporary socket fixtures; no host Docker socket mounted |
 | Real native preflight | Pass | Corretto 17.0.9, actual Android 37.0 JAR, actual Chrome 155.0.8059.84, existing local Docker and real GNU Make 3.81 |
 | Existing project script controls | 43 pass | Includes actual loopback TLS rejection; not product test coverage |
 | Specification catalog | 16 capabilities pass | Format/catalog checks |
 | Workflow syntax and whitespace | Pass | Actionlint for the consumer CI; `git diff --check` |
-| Action reference inventory | No commit-SHA `uses:` found | All 31 checked GitHub YAML files; official v5/v3/v2 tags exist |
+| Action reference inventory | No commit-SHA `uses:` found | All 32 checked GitHub YAML files; official v5/v3/v2 tags exist |
 
 The initial sandboxed fixture run could not create its temporary sockets; the
 subsequent permitted execution passed. No assertion was disabled to obtain that
@@ -75,6 +76,32 @@ which GitHub clears at job boundaries when the runner owns the files; setup post
 steps therefore finish before the runner retires the profile. This hosted job
 does not certify the self-hosted trusted-main Copilot protocol.
 
+The first complete hosted campaign at `5b5e445`,
+[run40331134114](https://github.com/vypdev/vaultstadio/actions/runs/40331134114),
+successfully provisioned the actual toolchain and ran the configured and complete
+suite selections. Its fresh reports contain1976 backend tests with56 failures and
+1315 desktop tests with zero failures. All56 backend failures compare identical
+complete storage items except for nanosecond input versus persisted microsecond
+timestamps. PostgreSQL16 documents
+[microsecond timestamp resolution](https://www.postgresql.org/docs/16/datatype-datetime.html).
+The fixture now reads the full persisted baseline after create/update; every
+existing full-row authorization/deletion assertion is retained. Two additional
+real-PostgreSQL cases use explicit `.123456789Z` inputs and retain exact equality
+of every persisted field, plus the byte-backed content checks. Their execution
+and the corrected complete backend campaign remain pending.
+
+The same run's complete Wasm selection failed before browser test cases ran:
+Chrome reported `No usable sandbox` on Ubuntu24.04. No Wasm case count is claimed
+for that run. Following Chromium's
+[documented sandbox-helper option](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md),
+the candidate selects only the existing `/opt/google/chrome/chrome-sandbox`,
+checks root ownership, regular-file type, setuid/executable mode and absence of
+group/world write access, then forwards `CHROME_DEVEL_SANDBOX` through the private
+command adapter. It does not install a setuid file or change host security policy.
+The native workflow requires actual sandboxed headless DOM rendering before the
+complete browser suites. Actual helper availability, startup and Wasm results
+remain pending in the corrected campaign.
+
 Reproduce the deterministic controls from the repository root:
 
 ```sh
@@ -86,10 +113,11 @@ git diff --check
 
 ## Outstanding operational gates
 
-1. Obtain review of the actual setup and retain real backend/frontend execution
-   under its prepared environment. Linux package installation and the exact
-   browser returned by the Action remain unverified by the fixture campaign.
-   A browser version check alone does not prove its UI contracts pass.
+1. Obtain review of the actual setup and a successful complete corrected Linux
+   campaign. Actual installation is verified by run40331134114, but its backend
+   fixture and browser startup failures block readiness. Retain actual sandboxed
+   startup and fresh backend/desktop/Wasm reports; fixture controls alone cannot
+   certify those application suites.
 2. Merge the reviewed extension and compatible consumer prerequisites onto the
    configured trusted main (`master`). Verify the installed generated workflows
    support the trusted setup input; use the supported installer for any required
