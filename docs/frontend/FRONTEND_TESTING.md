@@ -8,6 +8,7 @@ The frontend is a standalone Gradle build in `frontend/`. Its interaction contra
 |---|---|
 | `frontend/composeApp/src/test/kotlin/` | Shared app, model, repository and use-case tests; inspect each case before classifying its integration scope |
 | `frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/accessibility/` | Real production Compose component editing, focus, actions, state, localization and image-runtime contracts |
+| `frontend/composeApp/src/wasmJsTest/kotlin/` | Real Compose viewport and production dialog dismissal/reopening regression |
 | `frontend/core/ui/src/wasmJsTest/kotlin/` | Native DOM editor protection, observer lifetime, selection, events and shadow-root contracts |
 | `frontend/data/network/src/test/kotlin/` | Production client JSON factory and wire-format contracts |
 | `frontend/core/resources/src/test/kotlin/` | Shared translation/resource contracts |
@@ -66,7 +67,7 @@ It checks the installed version and exercises fragmented Unicode, rejection of a
 
 Render the production component with observable state and controlled ports. Perform its supported action and assert the resulting value, callback, validation or navigation state. A copied widget, reimplemented calculation or constant assertion cannot establish production interaction.
 
-The [active control inventory](../development/verification/accessibility-controls-80.json) follows the real root/destination graph. Every active field needs edit, clear and focus cases. Secure fields need masked output; disabled/read-only fields need negative cases. Controls need their own state/action evidence: checkboxes, switches, radios, menus, dropdowns, tabs, file selection/opening and dialog dismissal/reopening. Locale variants verify names and reversible visibility actions in all seven languages.
+The [maintained control inventory](../development/verification/accessibility-controls-80.json) records production feature fields, including three explicitly marked retained password-dialog fields without a current caller. Static checking verifies declarations and test cases, not runtime reachability. Every maintained field needs edit, clear and focus cases. Secure fields need masked output; disabled/read-only fields need negative cases. Controls need their own state/action evidence: checkboxes, switches, radios, menus, dropdowns, tabs, file selection/opening and dialog dismissal/reopening. Locale variants verify names and reversible visibility actions in all seven languages.
 
 Keep suites and fixtures focused. Inject ports to control external effects while preserving production values, callbacks, edit semantics and validation. Domain policy stays free from Compose, DOM and transport dependencies.
 

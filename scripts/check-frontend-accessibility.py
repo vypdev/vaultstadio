@@ -11,4 +11,4 @@ if __name__ == "__main__":
     if options.detekt_reports:
         verify_detekt_reports(Path(__file__).resolve().parents[1])
     count = verify_inventory(Path(__file__).resolve().parents[1])
-    print(f"Accessible input inventory verified: {count} active production fields")
+    print(f"Accessible input inventory verified: {count} inventoried production fields")

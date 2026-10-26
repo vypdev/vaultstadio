@@ -161,6 +161,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Allocate execution-owned tool cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          tool_cache="$(mktemp -d "$RUNNER_TEMP/vaultstadio-tools.XXXXXX")"
+          echo "RUNNER_TOOL_CACHE=$tool_cache" >> "$GITHUB_ENV"
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -210,14 +217,14 @@ jobs:
         with:
           chrome-version: '155.0.8059.84'
 
-      - name: Run native web password editor contracts
+      - name: Run browser accessibility and dialog lifecycle contracts
         env:
           CHROME_BIN: ${{ steps.accessibility_browser.outputs.chrome-path }}
         run: |
           test -x "$CHROME_BIN"
           "$CHROME_BIN" --version
           cd frontend
-          ./gradlew :core:ui:wasmJsBrowserTest --rerun --continue --no-build-cache
+          ./gradlew :core:ui:wasmJsBrowserTest :composeApp:wasmJsBrowserTest --rerun --continue --no-build-cache
 
       - name: Enforce accessible input coverage
         run: cd frontend && ./gradlew :core:ui:jacocoTestReport :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache

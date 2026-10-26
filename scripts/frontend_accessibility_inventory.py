@@ -1,4 +1,4 @@
-"""Check active production text fields against the reviewed interaction inventory."""
+"""Check maintained production text fields against the reviewed interaction inventory."""
 import json
 import re
 from pathlib import Path

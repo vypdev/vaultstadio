@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "151 production presentation cases, 2 image-runtime cases and 30 native web editor contracts passed; final owned-viewport browser proof pending",
+  "status": "Presentation and editor contracts passed on the retained stable candidate; prerelease modal lifecycle correction under verification.",
   "activeEntryPoints": [
     "RootContent -> AuthContent",
     "RootContent -> MainContent -> destination Content"
@@ -302,5 +302,12 @@
   },
   "webEditorCaseCount": 30,
   "runtimeCompatibilityCaseCount": 2,
-  "webSocketRuntimeCaseCount": 3
+  "webSocketRuntimeCaseCount": 3,
+  "scope": "Maintained production feature components; static declaration/case consistency does not establish runtime reachability.",
+  "retainedInactiveFields": [
+    "profile.current-password",
+    "profile.new-password",
+    "profile.confirm-password"
+  ],
+  "retainedInactiveReason": "ChangePasswordDialog has no current caller; these fields retain component tests. The active profile route navigates to the dedicated change-password screen."
 }
