@@ -141,6 +141,8 @@ Publish separate coverage for all compiled JVM form classes, combining actual ap
 
 Acceptance requires representative real packaged Web and native login, Unicode selection/replacement/clear with model validation, folder persistence, menu dismissal and repeated dialog reopening without reload recovery. Native/browser secret output must remain protected in the exercised paths. Same-JAR Corretto17/JBR21 investigation supports the tested vendor/version combination; both changed, so no isolated upstream cause is claimed. Automation's app-selector timeout and occasional capture failures remain tool limitations, distinct from field-editing success. Other operating systems and business journeys require their own evidence.
 
+For #80, [frontend accessibility verification](../docs/development/verification/FRONTEND_ACCESSIBILITY_80.md) and its companion JSON record 29 declaration contracts, actual Wasm controls/widgets, complete desktop/browser selections, exact package identities and assistant-operated local Web/native journeys. The candidate has passed those local checks, while prerelease merge acceptance, remote CI/review and broader platform readiness remain separate decisions.
+
 ### 6.2 Alternative, duplicate, stale, and partial paths
 
 - Duplicate requests MUST be idempotent or return an explicit duplicate outcome.
@@ -256,8 +258,6 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
-
-For #80, [frontend accessibility verification](../docs/development/verification/FRONTEND_ACCESSIBILITY_80.md) and its companion JSON record 29 declaration contracts, actual Wasm controls/widgets, complete desktop/browser selections, exact package identities and assistant-operated local Web/native journeys. The candidate has passed those local checks, while prerelease merge acceptance, remote CI/review and broader platform readiness remain separate decisions.
 
 ## 18. Implementation or maintenance sequence
 
