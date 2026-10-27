@@ -10,7 +10,7 @@ from pathlib import Path
 
 from discovery import REPOSITORY, VerificationError, owned_output, source_identity
 from reports import integers, xml_document
-from state import execution_context, read_json, write_json
+from state import execution_context, now, read_json, write_json
 
 
 def summary(xml: Path, data: Path, repository: Path = REPOSITORY) -> dict:
@@ -57,7 +57,11 @@ def start(directory: Path) -> None:
             path.unlink()
     write_json(
         directory / "source.json",
-        {"source": source_identity(), "context": execution_context()},
+        {
+            "source": source_identity(),
+            "context": execution_context(),
+            "startedUtc": now(),
+        },
     )
 
 
@@ -79,6 +83,7 @@ def finish(directory: Path) -> None:
             **origin,
             "summary": report,
             "pythonVersion": platform.python_version(),
+            "finishedUtc": now(),
             "success": True,
         },
     )
@@ -94,6 +99,8 @@ def verified_input(directory: Path, source: dict) -> Path:
         raise VerificationError(
             "Python/JVM coverage source identities differ or tooling failed"
         )
+    if receipt["context"].get("GITHUB_RUN_ID") != execution_context()["GITHUB_RUN_ID"]:
+        raise VerificationError("Python coverage belongs to another workflow run")
     report = directory / "coverage.xml"
     if receipt["summary"] != summary(report, directory / "coverage.json"):
         raise VerificationError("Python coverage receipt/report changed")

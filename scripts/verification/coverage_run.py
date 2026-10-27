@@ -80,6 +80,7 @@ def generate(root: Path, model: dict) -> int:
     result = {
         "schemaVersion": 1,
         "source": receipt["source"],
+        "context": receipt["context"],
         "suite": suite,
         "testStartedUtc": receipt["startedUtc"],
         "generatedUtc": now(),

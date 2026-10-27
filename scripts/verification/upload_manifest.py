@@ -8,6 +8,7 @@ from pathlib import Path
 
 from discovery import VerificationError
 from reports import coverage
+from state import execution_context
 from tooling_report import verified_input
 
 
@@ -37,6 +38,14 @@ def inputs(directories: list[Path]) -> list[str]:
         raise VerificationError(
             "Canonical coverage root populations are reversed or missing"
         )
+    # Successful producers from an earlier attempt of this same workflow run remain
+    # valid for an upload-only retry; a different workflow run is not reusable.
+    expected_run = execution_context()["GITHUB_RUN_ID"]
+    if any(
+        record.get("context", {}).get("GITHUB_RUN_ID") != expected_run
+        for record in records
+    ):
+        raise VerificationError("Coverage belongs to another workflow run")
     if records[0]["source"] != records[1]["source"]:
         raise VerificationError(
             "Backend/frontend coverage certify different source identities"

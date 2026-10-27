@@ -57,7 +57,7 @@ class ToolingCoverageContracts(unittest.TestCase):
             directory.mkdir()
             xml = directory/'coverage.xml'
             xml.write_text('<report><package name="p"><class name="p/C">'+counter+'</class></package>'+counter+'</report>')
-            record = {'success': True, 'source': python['source'], 'suite': suite, 'summary': coverage(xml)}
+            record = {'success': True, 'source': python['source'], 'suite': suite, 'summary': coverage(xml), 'context': python['context']}
             (directory/'coverage.json').write_text(json.dumps(record))
             directories.append(directory)
         output = self.root/'build/output'

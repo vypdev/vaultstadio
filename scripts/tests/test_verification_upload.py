@@ -10,6 +10,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'verification'))
 from discovery import VerificationError
 from reports import coverage
+from state import execution_context
 from upload_manifest import inputs
 
 
@@ -25,7 +26,7 @@ class UploadContracts(unittest.TestCase):
             directory.mkdir()
             path = directory/'coverage.xml'
             path.write_text('<report><package name="p"><class name="p/C">'+counter+'</class></package>'+counter+'</report>')
-            record = {'success': True, 'source': {'head': 'same-source'}, 'summary': coverage(path), 'suite': suite}
+            record = {'success': True, 'source': {'head': 'same-source'}, 'summary': coverage(path), 'suite': suite, 'context': execution_context()}
             (directory/'coverage.json').write_text(json.dumps(record))
             self.records.append(record)
 
@@ -58,6 +59,15 @@ class UploadContracts(unittest.TestCase):
         self.change(1, source={'head': 'other-source'})
         with self.assertRaises(VerificationError):
             inputs(self.directories)
+
+    def test_other_workflow_run_rejected(self):
+        self.change(0, context={'GITHUB_RUN_ID': 'different-run'})
+        with self.assertRaises(VerificationError):
+            inputs(self.directories)
+
+    def test_successful_earlier_attempt_of_same_run_remains_reusable(self):
+        self.change(0, context={**execution_context(), 'GITHUB_RUN_ATTEMPT': 'earlier'})
+        self.assertEqual(len(inputs(self.directories)), 2)
 
     def test_failed_receipt_rejected(self):
         self.change(0, success=False)
