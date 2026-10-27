@@ -177,6 +177,8 @@ class VersionOwnershipHttpTest {
                     },
                 )
                 assertEquals(null, assertIs<Either.Right<*>>(f.repository.findById(f.old.id)).value)
+                assertEquals(false, assertIs<Either.Right<*>>(f.storage.backend.exists(f.old.storageKey)).value)
+                assertEquals(true, assertIs<Either.Right<*>>(f.storage.backend.exists(f.latest.storageKey)).value)
             }
         }
     }

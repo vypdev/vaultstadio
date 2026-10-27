@@ -94,25 +94,32 @@ internal class VersionMutations(
     ): Either<StorageException, List<String>> =
         reads.list(item, Int.MAX_VALUE, 0).flatMap { rows ->
             versions.applyRetentionPolicy(item.id, policy).flatMap { ids ->
-                if (ids.any { id -> rows.none { it.id == id } }) scopeMismatch().left() else ids.right()
+                if (ids.any { id -> rows.none { it.id == id } }) {
+                    scopeMismatch().left()
+                } else {
+                    val deletedRows = rows.filter { it.id in ids }
+                    unreferencedRows(deletedRows).flatMap { deleteContent(it) }.map { ids }
+                }
             }
         }
 
     suspend fun cleanup(item: StorageItem): Either<StorageException, Int> =
         reads.list(item, Int.MAX_VALUE, 0).flatMap { rows ->
-            unreferencedRows(rows).flatMap deletion@{ removable ->
-                for (row in removable) {
-                    val deleted = storage.delete(row.storageKey)
-                    if (deleted is Either.Left) return@deletion deleted
-                }
-                versions.deleteAllForItem(item.id)
+            unreferencedRows(rows).flatMap { removable ->
+                deleteContent(removable).flatMap { versions.deleteAllForItem(item.id) }
             }
         }
 
     private suspend fun deleteUnreferencedContent(row: FileVersion): Either<StorageException, Unit> =
-        unreferencedRows(listOf(row)).flatMap { removable ->
-            if (removable.isEmpty()) Unit.right() else storage.delete(row.storageKey)
+        unreferencedRows(listOf(row)).flatMap { deleteContent(it) }
+
+    private suspend fun deleteContent(rows: List<FileVersion>): Either<StorageException, Unit> {
+        for (row in rows.distinctBy { it.storageKey }) {
+            val result = storage.delete(row.storageKey)
+            if (result is Either.Left) return result
         }
+        return Unit.right()
+    }
 
     private suspend fun unreferencedRows(rows: List<FileVersion>): Either<StorageException, List<FileVersion>> {
         val removable = mutableListOf<FileVersion>()

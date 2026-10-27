@@ -1,6 +1,6 @@
 # Version ownership and retained content — issue #74
 
-Contract: [SDD-0007 §6.4](../../../specs/SDD-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) and [SDD-0003 §6.5](../../../specs/SDD-0003-identity-authentication-and-authorization.md#65-historical-file-authorization--issue-74). Local verification: 2026-10-26 UTC, Java 17.0.9. The [machine-readable receipt](version-ownership-74.json) records exact source hashes and collected test names; the linked PR records the final commit and remote results.
+Contract: [SDD-0007 §6.4](../../../specs/SDD-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) and [SDD-0003 §6.5](../../../specs/SDD-0003-identity-authentication-and-authorization.md#65-historical-file-authorization--issue-74). Local verification: 2026-10-27 UTC (review follow-up), Java 17.0.9. The [machine-readable receipt](version-ownership-74.json) records exact source hashes and collected test names; the linked PR records the final commit and remote results.
 
 ## Behavior and compatibility
 
@@ -20,16 +20,16 @@ The version-download endpoint still returns metadata. Restoring a version create
 
 | Scope | Executed cases | Failures / errors / skips |
 |---|---:|---:|
-| Complete core/version suite | 187 | 0 / 0 / 0 |
-| Version use cases and actual HTTP composition | 138 | 0 / 0 / 0 |
+| Complete core/version suite | 196 | 0 / 0 / 0 |
+| Version use cases and actual HTTP composition | 139 | 0 / 0 / 0 |
 | Real PostgreSQL scope/reference adapters | 8 | 0 / 0 / 0 |
-| Total selected affected suites | **333** | **0 / 0 / 0** |
+| Total selected affected suites | **343** | **0 / 0 / 0** |
 
 The 72 service matrix executions cover twelve operations × three visibilities × owner/unrelated caller. The 91 HTTP executions cover seven surfaces × three visibilities × owner/unrelated/shared recipient/nonowner admin, plus seven anonymous cases. These are matrix executions, not 163 unique product features. Additional cases cover missing actors/items, stale/mixed row identities, SQL failures, cancellation, stream read/close failures, Unicode diff semantics, latest-version constraints and retained-content sequences.
 
 HTTP fixtures use production routing, use cases, version DI, migrated PostgreSQL and local file bytes; only session-token validation is replaced with disposable actor identities. Rejected requests compare actual row snapshots and byte hashes. Adapter tests use minimal tables that make accidental full-row projection fail. Two original destructive-content assertions were observed failing before the guard and passing afterward.
 
-The complete core/version report, without exclusions, covers **267/267 lines and 92/92 branches**. Both new SQL adapters cover **7/7 lines each**; JaCoCo reports no branches for these adapter classes. This is scoped evidence, not 100% whole-platform coverage. Eight other backend core modules still lack standard XML coverage reports; see [#84](https://github.com/vypdev/vaultstadio/issues/84).
+The complete core/version report, without exclusions, covers **271/271 lines and 90/90 branches**. Both new SQL adapters cover **7/7 lines each**; JaCoCo reports no branches for these adapter classes. This is scoped evidence, not 100% whole-platform coverage. Eight other backend core modules still lack standard XML coverage reports; see [#84](https://github.com/vypdev/vaultstadio/issues/84).
 
 Changed Kotlin sources in all five affected modules passed strict Detekt using the existing configuration with only `build.maxIssues` changed locally from `-1` to `0`, existing baseline unchanged, and an asserted exact changed-file selection. Changed-file ktlint passed. No repository baseline, quality threshold or required check was weakened. Repository-wide legacy Detekt adoption remains separate debt: its current unlimited issue budget can make a green task advisory.
 
@@ -45,7 +45,7 @@ With Java 17 and Docker, from `backend/`:
   --continue --no-parallel --max-workers=2 --build-cache --no-daemon
 ```
 
-A complete backend run and the independent desktop/browser suites remain the PR CI's responsibility. The earlier full-backend checkpoint passed 2,226 cases before the final content-guard and stream tests; it is not substituted for final-head results. Raw final selected-suite XML, coverage, exact inputs, strict-quality logs and the original two failing XML assertions are retained as verification evidence.
+A complete backend run and the independent desktop/browser suites remain the PR CI's responsibility. The initial PR CI on `e49c8d8` passed 2,240 backend + 1,315 desktop + 1,191 browser executions (4,746 total), zero failures/errors/skips, with an identical merge-preview/candidate tree. The retention review follow-up requires its own final-head CI. Raw final selected-suite XML, coverage, exact inputs, strict-quality logs and the original two failing XML assertions are retained as verification evidence.
 
 ## Traceability and rollout
 
@@ -64,3 +64,11 @@ No schema migration, data reassignment or automatic purge is performed. Consumer
 The application distribution built from `e3b5ce2` was mounted read-only on the existing non-root Java runtime in the owned local Docker project. All 237 mounted files matched the host package manifest. Fifteen actual HTTP requests reused the preserved disposable owner/unrelated accounts and existing PostgreSQL data: both logins and owner history/download succeed, anonymous history returns401, and seven foreign item/history/detail/download-metadata/diff/restore/cleanup surfaces return403. Owner metadata and downloaded bytes remain identical. Every existing storage/plugin file hash is unchanged, and the PostgreSQL/frontend containers and named volumes were preserved. The previous distribution/configuration and a pre-change database backup remain available for rollback. This is local API/package evidence, not a new complete GUI or historical byte-restoration certification.
 
 The first PR secret scan correctly blocked an unreviewed detector match. Private redacted investigation identified the public SHA256 of `VersionAccess.kt` in the source-input receipt. It was independently recomputed from source bytes. The exact original immutable commit/path/line is recorded as a reviewed non-secret using the existing mechanism; no rule/path-wide exception was added. The receipt now puts path and digest in separate fields to avoid an incidental credential-shaped same-line expression. Full reachable-history scans still include the original occurrence and report reviewed matches separately.
+
+## Retention review follow-up
+
+Copilot identified that metadata retention left unreferenced historical blobs behind. One actual failing assertion reproduced this before the service change. Retention now retains the bound pre-deletion rows, validates returned IDs, checks references for every removed row before any blob deletion and deletes each unreferenced key once. Nine new service cases cover reclamation, current/retained-version references, duplicate keys, empty policy, policy failure, reference failure, storage failure and a late reference failure. A new real HTTP sequence restores history and applies retention while both retained-version and canonical-file bytes remain readable; all three owner visibility controls also assert physical reclamation of the unreferenced old blob.
+
+The 343 selected cases pass (196 core,139 API,8 SQL adapters). Strict API quality passed in that campaign; one test-only wrapping violation was then formatted, followed by a fresh strict core pass and196 core tests. Production/API/adapter inputs were unchanged during that formatting correction. Whole core/version coverage is271/271 lines and90/90 branches, without exclusions.
+
+The metadata-first repository port can commit row deletion before a later reference/provider error. Such errors remain typed failures, never successful cleanup; reference preflight preserves all bytes on query failure, but there is no durable rollback/outbox or atomic cross-provider transaction. Concurrent mutation, compensation and recovery of that partial state remain #109. This limitation is tested and explicit.
