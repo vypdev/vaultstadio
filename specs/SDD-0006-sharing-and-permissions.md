@@ -301,7 +301,9 @@ including empty/truncated or extra provider bytes, not a successful complete tra
   Native attachment streaming avoids buffering the full file in browser JavaScript.
 - Generated links point to that view URL using the configured API origin, retaining token case.
   Legacy machine paths remain stable; the former password query interface is intentionally removed.
-- Public responses use no-store and no-referrer. The page inserts filenames using textContent;
+- Public responses use no-store. Machine responses/assets use no-referrer; the native form page
+  uses strict-origin, disclosing only the origin and never the capability path in Referer.
+  The page inserts filenames using textContent;
   no token/password is written to console, analytics, browser storage, or server request logs.
 - Missing/invalid resource is 404; revoked, expired and limit-exhausted links are 410;
   missing/wrong password is 403 with a stable safe code; invalid request is 400; unexpected
@@ -366,3 +368,17 @@ Tests cover direct/proxied hosts, explicit/default ports, IPv6, invalid origins 
 and opening the generated view URL through the actual local frontend proxy. Frontend copied links
 continue using the configured API origin. Rollback retains the old static distribution/configuration
 alongside the backend package; no account, content or database volume is recreated.
+
+
+### 21.8 Pre-code browser refinement — native form Origin
+
+Packaged browser dogfood found the native POST blocked with 403 while metadata fetch and
+HTTP downloads passed. A real `Origin: null` POST reproduces the rejection; a same-origin
+POST succeeds. Fetch specifies that no-referrer changes the Origin of navigate-mode POSTs
+to null: https://fetch.spec.whatwg.org/#append-a-request-origin-header . Before repairing
+this boundary, the page contract selects strict-origin in both response header and HTML
+meta. It preserves the actual Origin for same-origin form submissions and sends no token
+path/query in Referer. Machine responses and static assets retain no-referrer. Do not
+allow null origins, broaden the CORS allowlist or buffer native downloads in JavaScript.
+Verify header/meta consistency, allowed-origin form success and null/foreign-origin denial,
+then repeat actual browser download and compare the downloaded bytes and filename.
