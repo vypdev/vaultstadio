@@ -122,6 +122,14 @@ Text equivalent: Contributor selects backend or frontend root -> loads the match
 
 VFY-JAVA-01, VFY-TOOLS-01, VFY-DOCKER-01, VFY-ENV-01 and VFY-FAIL-01 are owned by the project's verification adapter, specified in [SDD-0014 §6.4](SDD-0014-deployment-operations-and-release.md#64-project-verification-runtime-repair--issue-79). Provisioning belongs in `.github/actions/copilot-verification-setup/`; domain/application code gains no CI-specific imports or environment workaround. Backend and frontend remain standalone builds invoked through their existing Make targets. VFY-TRUST-01 and VFY-LIFE-01 require the supported immutable trusted-main setup flow, separate activation authorization and preservation of remote branch ownership. A passing application CI job does not provision another job's isolated verifier.
 
+### 6.5 Complete verification composition — issue #84
+
+R04-ROOT-01 and R04-DISC-01 require independent backend/frontend wrappers and live Gradle module/task/source discovery. Repository Make and shell entrypoints compose their results without importing application code or maintaining divergent module lists. A new applicable module MUST enter the default suite automatically; an unsupported destination MUST be identified explicitly rather than silently certified.
+
+Verification adapters own process execution, report parsing and source-bound receipts. Gradle owns the actual task/source/class model; the reporting policy MUST NOT infer module completeness from report files left on disk. Preserve the existing dependency direction and module production boundaries. Tooling responsibilities MUST remain focused: discovery, process orchestration, result reconciliation and coverage composition are separate concerns. The complete failure, freshness and denominator contract is [SDD-0014 §6.8](SDD-0014-deployment-operations-and-release.md#68-complete-verification-and-truthful-evidence--issue-84).
+
+This is the pre-implementation contract at `816e6732b7fd605a2852745420ad7d2c75bf1474`; it does not certify the pending #84 implementation. Preserve original source drafts, the active local package/data and one runnable rollback throughout negative controls.
+
 ## 7. User-facing configuration
 
 Backend and frontend remain separately invoked. Wrapper versions and JDK requirements are documented in SDD-0014; no root Gradle wrapper is assumed.
