@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #90
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -242,3 +242,95 @@ Define permission vocabulary -> inventory route behavior -> add policy tests -> 
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+
+## 21. Revision R05 — public file access (#90, pre-implementation contract)
+
+Status: implementation planned on the Action-linked issue branch. This revision supersedes
+historical metadata counter increments and password-in-query behavior; it is not completion evidence.
+Internal recipient permissions, folder traversal, canonical collaboration persistence (#112), and
+history grants remain outside #90. The portfolio capability remains partial.
+
+### 21.1 Authority and information
+
+A public token grants metadata and download of exactly one current, non-trashed FILE. Its creator
+must still own that item. It never authenticates a user or grants listing, mutation, versions, or
+collaboration. PRIVATE/SHARED/PUBLIC and ADMIN do not change this decision. Missing item, folder,
+changed ownership, missing content key, negative size, malformed counter/limit, inactive link, expiry
+at or before the decision clock, and exhausted limits fail closed. Tokens remain case sensitive.
+
+Metadata returns a serializable public DTO containing only filename, byte size, MIME type,
+password-required flag and optional expiry. It exposes no item/owner IDs, paths, content keys,
+hashes of passwords, or recipient lists. Repeated successful metadata reads and every denied
+read leave counters and persisted state unchanged. Password checking precedes protected metadata.
+
+### 21.2 Admission and streaming
+
+Domain owns pure access policy, safe semantic information, credential, clock, content and atomic
+access ports. A focused application service depends only on domain modules. Infrastructure owns
+BCrypt, Exposed/PostgreSQL and StorageBackend adapters. Transport owns serialization and headers.
+No download uses a creator ID as authenticated user identity.
+
+Information is inspected under item-then-share locks. Downloads first inspect an authorized
+snapshot, open the provider stream and prepare at most one bounded prefix, then atomically recheck
+the exact item/content identity and password hash, current ownership, link state, expiry and limit
+under those same locks. The clock is read after lock acquisition. A successful admission increments
+the counter once in the same transaction. Concurrent contenders for one remaining allowance admit
+exactly one. Provider/preparation failure, pre-admission cancellation, stale authority/content,
+password change, database failure and denied admission close owned streams and consume no allowance.
+
+The counter measures **admitted download attempts**, not proof that a browser saved a file. After
+admission commits, late provider I/O, disconnect or cancellation can leave partial bytes and a
+consumed allowance. The server closes the stream, does not send a second success/error body or
+silently retry, and retains that count. Revocation cannot retract already admitted bytes. Large
+files stream with bounded memory; empty files are valid. Content length mismatch is an error,
+including empty/truncated or extra provider bytes, not a successful complete transfer.
+
+### 21.3 HTTP and human journey
+
+- `GET /api/v1/share/{token}` returns typed metadata, without login.
+- `GET /api/v1/share/{token}/download` streams admitted bytes as an attachment.
+- Machine credentials use `X-Share-Password`; a `password` query parameter is rejected (400).
+- `GET /api/v1/share/{token}/view` serves an accessible public page outside the authenticated SPA.
+- The public page reads metadata and submits a native POST form to
+  `/api/v1/share/{token}/view/download`; the password travels only in the request body/header.
+  Native attachment streaming avoids buffering the full file in browser JavaScript.
+- Generated links point to that view URL using the configured API origin, retaining token case.
+  Legacy machine paths remain stable; the former password query interface is intentionally removed.
+- Public responses use no-store and no-referrer. The page inserts filenames using textContent;
+  no token/password is written to console, analytics, browser storage, or server request logs.
+- Missing/invalid resource is 404; revoked, expired and limit-exhausted links are 410;
+  missing/wrong password is 403 with a stable safe code; invalid request is 400; unexpected
+  provider/database failures are safe 500 responses without raw exceptions or credentials.
+- The page has labelled password, load and download controls, visible loading/success/denial,
+  an accessible status region and explicit retry. A denial preserves the entered form locally
+  without echoing its password in HTML responses or URLs; it never claims a completed download.
+
+### 21.4 Creation and migration
+
+New public shares require an active owned FILE with a content key. Default expiry remains seven
+ days; explicit null keeps existing deliberate non-expiring links. Numeric expiry is 1..365 days;
+maxDownloads is null or 1..Int.MAX_VALUE. A password is null or 1..72 UTF-8 bytes, matching BCrypt's
+input bound. Existing valid rows and download counts need no migration. Invalid legacy rows are
+denied rather than repaired by access. Generic share lifecycle updates must not overwrite counters
+with a stale caller snapshot. Rollback restores the previous executable package without deleting
+rows or content; it also restores the known legacy public-access defects, so requires an operator
+maintenance window rather than claiming equivalent security.
+
+### 21.5 Verification budget and acceptance
+
+Retain the 2,740 backend cases and the desktop/browser baseline (1,315/1,191), accounting separately
+for moved legacy cases and intentional corrected expectations. Add at least **100 genuine #90 cases**:
+30 pure policy/input boundaries, 20 orchestration/resource/failure cases, 30 actual HTTP/production-DI
+cases against migrated PostgreSQL and local bytes, and 20 atomic SQL/concurrency/rollback cases.
+These are risk floors, not a quota to fill with getters or duplicated assertions. All normative
+branches need an explicit case, including equality at expiry, lock waits, stale passwords/content,
+last-allowance concurrency, SQL/provider/cancellation failures, unknown fields and hostile filenames.
+
+New public-page logic and URL generation require automated tests included in existing CI, plus
+actual anonymous browser dogfood for plain/protected download, bad password, invalid/revoked/expired
+link, retry, and native attachment byte verification. Record safe raw test inventory, actual commit,
+coverage denominators, failures found and fixed, and browser limitations. Target complete line/branch
+coverage of new pure access decisions; report uncovered branches honestly without new exclusions or
+lowered existing gates. Run architecture, strict changed-source lint, specification catalog, secret
+scan and full app CI on the final revision. Evidence is added only after executing these checks.
