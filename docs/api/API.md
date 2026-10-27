@@ -929,6 +929,10 @@ Information/password/network errors offer explicit retry. The download uses a na
 at `/api/v1/share/{token}/view/download`, keeping the password in the body and streaming large
 attachments without a JavaScript Blob. Metadata errors preserve local inputs; a POST denial shows
 a retry page with an empty password field. The page reports a download request, never a saved file.
+The page uses `Referrer-Policy: strict-origin` (also in its HTML meta) so a same-origin native
+form keeps its Origin without sending the token path/query in Referer. Machine responses and
+assets retain no-referrer. The bundled proxy redacts public paths and omits query/Referer from
+access logs; public upstream errors retain their redacted access status without raw request diagnostics.
 
 | Public outcome | HTTP | Stable code |
 |---|---:|---|

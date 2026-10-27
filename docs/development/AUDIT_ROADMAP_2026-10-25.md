@@ -112,3 +112,10 @@ R01c incorpora además el límite inclusivo del historial, reproducido antes del
 ### R01c adoption — PR #113
 
 La excepción autorizada integró el headb7522dd en developeac7185. La [CI automática40470296193](https://github.com/vypdev/vaultstadio/actions/runs/40470296193) pasa5246 ejecuciones (2740backend,1315desktop,1191browser), todas sin fallos/errores/omisiones. El checkout de integración057c4b2 conserva el árbol0ee6b067 del merge. [#89 está cerrada con evidencia final](https://github.com/vypdev/vaultstadio/issues/89#issuecomment-6437095881), protecciones intactas y master615f11a. El recorrido completo de colaboración sigue en#112; no se declara funcional por cerrar la autorización. Continúan#90 y#91; no se promueve master con sus fallos pendientes.
+
+
+## R05 checkpoint — issue #90
+
+El [candidato03aa855 y su evidencia](verification/PUBLIC_SHARE_ACCESS_90.md) completan el acceso público a archivos:2981backend+1316desktop+1192browser=5489 casos sin fallos/errores/omisiones;241 casos backend nuevos y11 escenarios migrados conservados. Metadatos no consumen descargas, SQL admite una sola transferencia para el último cupo y el navegador descarga bytes y nombres Unicode correctos sin ayuda manual. El dogfooding detectó y corrigió también el Origin null del formulario y la fuga del token en los logs del proxy. Los cinco tests reales de Nginx se añaden al job existente, sin build ni workflow nuevo.
+
+Cobertura global parcial:8558/16755 líneas y1823/6001 ramas, sin exclusiones nuevas; política28/28líneas y70/70ramas, servicio36/36 y19/20. Permanecen pendientes CI/revisión/adopción de la PR vinculada a#90 y el hito#91. Los permisos internos/heredados y de carpetas conservan su alcance propio;#109/#112/#111/#82 y el resto del roadmap siguen abiertos. No se promueve master ni se declara operativa toda la plataforma con este checkpoint.

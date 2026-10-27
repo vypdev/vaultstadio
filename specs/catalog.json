@@ -144,7 +144,7 @@
       "status": "As-built baseline",
       "scope": "Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-27",
       "specs": [
         "specs/SDD-0006-sharing-and-permissions.md"
       ],
@@ -157,9 +157,13 @@
         "frontend/feature/sharedwithme",
         "docs/api/API.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "backend/core/share-access",
+        "docs/development/verification/PUBLIC_SHARE_ACCESS_90.md",
+        "docs/development/verification/public-share-access-90.json",
+        "docs/development/verification/public-share-access-90-cases.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "R05 public file access verified locally at03aa855; final PR CI/review/adoption remain separate. The portfolio is partial: internal recipients, folder/inherited permissions and shared-with-me remain unverified product scope."
     },
     {
       "id": "version-history-and-recovery",
@@ -232,7 +236,7 @@
         "docs/development/verification/collaboration-authorization-89.json",
         "docs/development/verification/collaboration-authorization-89-cases.json"
       ],
-      "openDecisions": "R01c candidate locally verified; final-head CI/review/adoption pending. Whole R14 remains incomplete: issue112 owns client/server protocol, cold bootstrap, canonical saves, replay and durable grants."
+      "openDecisions": "R01c adopted in PR113/developeac7185, post-merge CI40470296193 all5246 executions green. Whole R14 remains incomplete: issue112 owns client/server protocol, cold bootstrap, canonical saves, replay and durable grants."
     },
     {
       "id": "federation-and-trust",

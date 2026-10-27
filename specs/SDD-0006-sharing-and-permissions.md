@@ -1,9 +1,9 @@
 # Sharing and Permissions
 
 - Status: As-built baseline
-- Date: 2026-09-21
+- Date: 2026-10-27
 - Catalog capability ID: `sharing-and-permissions`
-- Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
+- Last verified: R05 at `03aa8552424d703db127be1d97e08c066598168d` (2026-10-27 UTC); wider sharing portfolio remains partial
 - Owners: VaultStadio maintainers
 - Scope: Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.
 - Related issues/PRs: #71, #90
@@ -246,7 +246,7 @@ Define permission vocabulary -> inventory route behavior -> add policy tests -> 
 
 ## 21. Revision R05 — public file access (#90, pre-implementation contract)
 
-Status: implementation planned on the Action-linked issue branch. This revision supersedes
+Status: implemented and verified locally on the Action-linked issue branch at03aa855; final PR CI, review and adoption remain pending. The sharing portfolio remains Partial. This revision supersedes
 historical metadata counter increments and password-in-query behavior; it is not completion evidence.
 Internal recipient permissions, folder traversal, canonical collaboration persistence (#112), and
 history grants remain outside #90. The portfolio capability remains partial.
@@ -393,3 +393,8 @@ or Referer; its failures remain observable through redacted access statuses. Oth
 their error diagnostics. A real isolated Nginx test must exercise public metadata/view/download,
 encoded paths, query/Referer markers, an upstream transport failure and preserved Host ports. Use
 the existing application contract job for these bounded tests; add no workflow or heavy build.
+
+
+### 21.10 Executed checkpoint
+
+[Source-bound R05 verification](../docs/development/verification/PUBLIC_SHARE_ACCESS_90.md):2981backend,1316desktop and1192browser cases, all without failures/errors/skips;241 new backend cases, with11 migrated legacy cases excluded from that count. Pure policy covers28/28lines and70/70branches; orchestration36/36lines and19/20branches. Full denominators, native download hashes,42-request real HTTP campaign, five real Nginx tests, observed failures and remaining product/rollout scope are recorded in the linked receipt. No portfolio-wide100% or master adoption is claimed.
