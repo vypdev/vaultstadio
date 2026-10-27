@@ -291,3 +291,9 @@ Freeze message/schema inventory -> test OT/state semantics -> test WebSocket lif
 ### R01c local verification checkpoint — 2026-10-27
 
 The complete backend gate passes2697 cases with zero failures/errors/skips;442 new cases fulfill the pre-code391 floor. The [receipt](../docs/development/verification/collaboration-authorization-89.json) retains denominators and collected IDs. Packaged loopback checks28 HTTP requests, nine native owner frames, foreign close1008, retained membership denial and unchanged prior bytes. Working-state seeding is explicit; bootstrap, canonical editing and the full client journey remain#112. Final-head remote CI/review/adoption remain pending.
+
+### R01c snapshot-integrity addendum — before follow-up code
+
+Persisting an existing working snapshot must not introduce lost edits: a state read before a concurrent document commit may not overwrite that newer state or decrease its version. A stale snapshot must return a typed conflict/client failure and preserve the later committed content. The persistence adapter must atomically compare the expected snapshot; its ordinary bootstrap/upsert port is not the save boundary. This does not certify general OT convergence or canonical byte saving.
+
+Add five executions before implementing this follow-up: one real lock-wait save race, plus exact-current, changed-current, deleted-current and SQL-failure snapshot adapter cases. Preserve all442 existing new cases; the follow-up target is447 new cases. Keep current bytes and working rows intact on rejected saves. Record the actual red race and final outcomes separately.
