@@ -8,6 +8,7 @@ import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.network.BaseApi
 import com.vaultstadio.app.data.network.dto.common.ApiResponseDTO
 import com.vaultstadio.app.data.network.dto.common.PaginatedResponseDTO
+import com.vaultstadio.app.data.network.rethrowTransportCancellation
 import com.vaultstadio.app.data.storage.dto.BatchCopyRequestDTO
 import com.vaultstadio.app.data.storage.dto.BatchDeleteRequestDTO
 import com.vaultstadio.app.data.storage.dto.BatchMoveRequestDTO
@@ -35,7 +36,6 @@ import io.ktor.client.request.header
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
-import kotlinx.coroutines.CancellationException
 import org.koin.core.annotation.Single
 
 @Single
@@ -169,9 +169,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: CancellationException) {
-            throw e
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Chunk upload failed")
         }
     }
@@ -231,9 +230,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: CancellationException) {
-            throw e
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload failed")
         }
     }
@@ -282,9 +280,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_ERROR", "Upload failed: ${response.status}")
             }
-        } catch (e: CancellationException) {
-            throw e
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload error")
         }
     }
@@ -298,9 +295,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: CancellationException) {
-            throw e
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Download failed")
         }
     }

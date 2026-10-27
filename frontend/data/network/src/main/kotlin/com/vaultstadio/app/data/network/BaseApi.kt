@@ -3,9 +3,6 @@ package com.vaultstadio.app.data.network
 import com.vaultstadio.app.data.network.dto.common.ApiResponseDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.network.sockets.ConnectTimeoutException
-import io.ktor.client.network.sockets.SocketTimeoutException
-import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.parameter
 import io.ktor.client.request.request
@@ -14,9 +11,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.isSuccess
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
 
 /** Reified wrappers supply codecs; one executed path owns cancellation and response semantics. */
 abstract class BaseApi(protected val client: HttpClient) {
@@ -127,7 +121,7 @@ abstract class BaseApi(protected val client: HttpClient) {
             }
         }
     } catch (error: Exception) {
-        propagateCancellation(error)
+        rethrowTransportCancellation(error)
         ApiResult.NetworkError(error.message ?: "Network error")
     }
 
@@ -138,25 +132,7 @@ abstract class BaseApi(protected val client: HttpClient) {
             envelope.error?.message ?: response.status.description,
         )
     } catch (error: Exception) {
-        propagateCancellation(error)
+        rethrowTransportCancellation(error)
         ApiResult.Error("HTTP_${response.status.value}", response.status.description)
-    }
-
-    private suspend fun propagateCancellation(error: Exception) {
-        currentCoroutineContext().ensureActive()
-        if (error is CancellationException) throw error
-        val causes = mutableSetOf<Throwable>()
-        var next: Throwable? = error
-        while (next != null && causes.add(next)) next = next.cause
-        // Ktor wraps its request/connection deadlines as IO failures; caller cancellation stays control flow.
-        if (causes.any {
-                it is HttpRequestTimeoutException ||
-                    it is ConnectTimeoutException ||
-                    it is SocketTimeoutException
-            }
-        ) {
-            return
-        }
-        causes.filterIsInstance<CancellationException>().firstOrNull()?.let { throw it }
     }
 }
