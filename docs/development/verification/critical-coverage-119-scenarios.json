@@ -88,7 +88,7 @@
     {
       "id": "AUTH119-11",
       "requirement": "AUTH119-HTTP",
-      "risk": "refresh rotates both tokens and persists one session",
+      "risk": "refresh rotates both tokens and persists one session, admitting only one concurrent use of the old credential",
       "status": "planned",
       "tests": [],
       "evidence": null
@@ -96,7 +96,7 @@
     {
       "id": "AUTH119-12",
       "requirement": "AUTH119-HTTP",
-      "risk": "old access and refresh tokens reject after rotation",
+      "risk": "old access/refresh tokens reject after rotation; logout while refresh is pending cannot produce unpersisted credentials",
       "status": "planned",
       "tests": [],
       "evidence": null

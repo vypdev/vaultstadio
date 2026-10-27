@@ -148,6 +148,8 @@ AUTH119-01–22 in [the pre-code scenario inventory](../docs/development/verific
 
 The supported registration email shape has one `@`, a nonblank local part and a dotted domain with nonempty labels; whitespace is rejected. Preserve accepted plus-tags, mixed case and existing lowercase storage. This is a bounded application-input rule, not full RFC mailbox verification. Malformed JSON responses use a stable generic client-error message without echoing credentials or serializer internals.
 
+AUTH119-11/12 includes concurrent reuse: one refresh credential may commit at most one rotation. Compare the expected old refresh hash atomically with the persisted session identity before replacing credentials; a missing/revoked or already-rotated session is an authentication failure, never a successful unpersisted credential pair. The semantic repository port owns that conditional mutation; SQL details remain in infrastructure. Verify two real concurrent HTTP requests after both have read the same original row, and a refresh held across logout, with bounded deterministic barriers and actual SQL state. Sequential rotation alone does not prove this property.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.
