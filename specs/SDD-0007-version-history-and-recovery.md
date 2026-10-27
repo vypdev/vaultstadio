@@ -273,7 +273,7 @@ Define version invariants -> reconcile route behavior -> add restore failure tes
 
 Review checkpoint (before follow-up implementation, 2026-10-26/27 UTC): Copilot identified missing retention blob reclamation in PR #110. VER-CONTENT-02 adds the focused contract and at least nine non-overlapping retention/reference/error cases; complete concurrency/compensation remains #109. The earlier passing CI is historical until the follow-up candidate has its own results.
 
-Retention follow-up local result: the nine new core cases and one new real HTTP sequence pass alongside the complete affected selection (343 cases, zero failures/errors/skips). Updated core/API strict checks pass without a new baseline; the published follow-up still requires fresh remote CI and review.
+Historical retention checkpoint `0fbb0af`: the nine new core cases and one new real HTTP sequence pass alongside the complete affected selection (343 cases, zero failures/errors/skips). Updated core/API strict checks pass without a new baseline; the published follow-up still requires fresh remote CI and review.
 
 Cleanup-batch follow-up contract (before code): reference liveness must ignore every version ID removed by the authorized full-history purge, not only the row currently inspected. Deduplicate keys after complete scope binding and preflight all remaining-reference queries before content/metadata deletion. Add at least five executions: restored/shared-key purge, full-set SQL exclusion, external-version retention, empty exclusion and real HTTP purge preserving canonical bytes. Historical orphan repair, concurrent GC and durable compensation remain R07.
 
