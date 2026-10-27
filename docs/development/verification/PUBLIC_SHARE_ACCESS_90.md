@@ -1,6 +1,6 @@
 # Public file access — issue #90
 
-Contract: [SDD-0006§21](../../../specs/SDD-0006-sharing-and-permissions.md#21-revision-r05--public-file-access-90-pre-implementation-contract). Contract revisions were committed before their implementation: f22cbed, 283fd81, 2ed57b0, bf2dfdb and f5e9edb. The verified implementation is **03aa8552424d703db127be1d97e08c066598168d**, based on develop eac7185. Verification date: 2026-10-27 UTC. The [receipt](public-share-access-90.json) links a separate, hash-bound [case inventory](public-share-access-90-cases.json). Remote final-head CI, Copilot review and adoption remain separate acceptance steps.
+Contract: [SDD-0006§21](../../../specs/SDD-0006-sharing-and-permissions.md#21-revision-r05--public-file-access-90-pre-implementation-contract). Contract revisions were committed before their implementation: f22cbed, 283fd81, 2ed57b0, bf2dfdb and f5e9edb. The verified implementation is **03aa8552424d703db127be1d97e08c066598168d**, based on develop eac7185. Verification date: 2026-10-27 UTC. The [receipt](public-share-access-90.json) links separate, hash-bound [case inventory](public-share-access-90-cases.json) and [coverage/source detail](public-share-access-90-coverage.json). Remote final-head CI, Copilot review and adoption remain separate acceptance steps.
 
 ## Executed behavior and compatibility
 

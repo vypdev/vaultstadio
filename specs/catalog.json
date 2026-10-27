@@ -161,7 +161,8 @@
         "backend/core/share-access",
         "docs/development/verification/PUBLIC_SHARE_ACCESS_90.md",
         "docs/development/verification/public-share-access-90.json",
-        "docs/development/verification/public-share-access-90-cases.json"
+        "docs/development/verification/public-share-access-90-cases.json",
+        "docs/development/verification/public-share-access-90-coverage.json"
       ],
       "openDecisions": "R05 public file access verified locally at03aa855; final PR CI/review/adoption remain separate. The portfolio is partial: internal recipients, folder/inherited permissions and shared-with-me remain unverified product scope."
     },
