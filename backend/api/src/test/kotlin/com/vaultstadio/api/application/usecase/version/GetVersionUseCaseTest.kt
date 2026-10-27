@@ -14,9 +14,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class GetVersionUseCaseTest {
 
@@ -36,25 +35,21 @@ class GetVersionUseCaseTest {
             createdAt = now,
             isLatest = true,
         )
-        coEvery { fileVersionService.getVersion("item-1", 1) } returns Either.Right(version)
+        coEvery { fileVersionService.getVersion("item-1", 1, "user-1") } returns Either.Right(version)
 
-        val result = useCase("item-1", 1)
+        val result = useCase("item-1", 1, "user-1")
 
-        assertTrue(result.isRight())
-        val right = result as Either.Right<FileVersion>
-        assertNotNull(right.value)
-        assertEquals(1, right.value!!.versionNumber)
-        assertEquals("item-1", right.value!!.itemId)
+        val actual = assertIs<Either.Right<FileVersion>>(result).value
+        assertEquals(version, actual)
     }
 
     @Test
     fun invokeReturnsLeftWhenFileVersionServiceReturnsLeft() = runTest {
-        coEvery { fileVersionService.getVersion(any(), any()) } returns
+        coEvery { fileVersionService.getVersion(any(), any(), "user-1") } returns
             Either.Left(ItemNotFoundException(itemId = "item-1"))
 
-        val result = useCase("item-1", 1)
+        val result = useCase("item-1", 1, "user-1")
 
-        assertTrue(result.isLeft())
-        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
+        assertIs<ItemNotFoundException>(assertIs<Either.Left<*>>(result).value)
     }
 }

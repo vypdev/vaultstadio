@@ -126,6 +126,14 @@ AUTH-STORAGE-02: authorization MUST run in transport-independent policy before m
 
 This does not change token validation, administrator roles or the separate public-share authorization flow. Version-history and collaboration ownership are still separate follow-up work; #73 alone does not establish whole-platform authorization readiness.
 
+### 6.5 Historical file authorization — issue #74
+
+R01b contract, proposed before implementation on 2026-10-26: apply the owning [version-history contract](SDD-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) before version metadata, names, counts, keys, bytes or effects. Authentication identifies the caller; every application operation still requires its explicit actor and current canonical item-owner decision. PUBLIC/SHARED, download links, sharedWithUsers, version createdBy and a nonowner ADMIN role do not confer version-history or mutation grants. Do not retain an actor-less/internal default that restores the bypass.
+
+Version-ID-only operations use the minimal item-scope semantic port before the owner decision; complete version lookup follows authorization and must bind to the authorized item and requested identity. An anonymous request stops at authentication. A cross-user rejection preserves all rows/content/events and exposes no resource metadata. Typed repository/provider failures remain distinct from forbidden/not-found outcomes at HTTP mapping.
+
+Traceability: VER-OWNER-01, VER-GRANT-01, VER-SCOPE-01, VER-BIND-01, VER-EFFECTS-01, VER-ERROR-01 and VER-ARCH-01 in SDD-0007; 72 service and91 HTTP matrix executions plus non-overlapping error/state risks. Local implementation evidence (348 affected-suite cases, no failures/errors/skips) is recorded in [VERSION_OWNERSHIP_74.md](../docs/development/verification/VERSION_OWNERSHIP_74.md); remote review/adoption remain separate. Reuse the reviewed storage owner policy after normal parent integration; this contract does not expand download shares into collaboration/history grants or declare the broader product ready.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.

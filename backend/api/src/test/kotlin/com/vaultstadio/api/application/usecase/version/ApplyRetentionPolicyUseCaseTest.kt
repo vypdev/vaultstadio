@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class ApplyRetentionPolicyUseCaseTest {
 
@@ -30,10 +31,10 @@ class ApplyRetentionPolicyUseCaseTest {
             excludePatterns = emptyList(),
         )
         val deletedIds = listOf("version-1", "version-2")
-        coEvery { fileVersionService.applyRetentionPolicy("item-1", policy) } returns
+        coEvery { fileVersionService.applyRetentionPolicy("item-1", "user-1", policy) } returns
             Either.Right(deletedIds)
 
-        val result = useCase("item-1", policy)
+        val result = useCase("item-1", policy, "user-1")
 
         assertTrue(result.isRight())
         val right = result as Either.Right<List<String>>
@@ -44,12 +45,12 @@ class ApplyRetentionPolicyUseCaseTest {
     @Test
     fun invokeReturnsLeftWhenFileVersionServiceReturnsLeft() = runTest {
         val policy = VersionRetentionPolicy()
-        coEvery { fileVersionService.applyRetentionPolicy(any(), any()) } returns
+        coEvery { fileVersionService.applyRetentionPolicy(any(), "user-1", any()) } returns
             Either.Left(ItemNotFoundException(itemId = "item-1"))
 
-        val result = useCase("item-1", policy)
+        val result = useCase("item-1", policy, "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
+        assertIs<ItemNotFoundException>(assertIs<Either.Left<*>>(result).value)
     }
 }

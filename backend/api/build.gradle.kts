@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":infrastructure"))
     implementation(project(":domain:common"))
     implementation(project(":domain:storage"))
+    implementation(project(":domain:version"))
     implementation(project(":domain:auth"))
     implementation(project(":domain:share"))
     implementation(project(":domain:activity"))
