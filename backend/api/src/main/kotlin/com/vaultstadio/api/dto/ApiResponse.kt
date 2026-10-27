@@ -257,7 +257,7 @@ fun ShareLink.toResponse(baseUrl: String) = ShareResponse(
     id = id,
     itemId = itemId,
     token = token,
-    url = "$baseUrl/share/$token",
+    url = "${baseUrl.trimEnd('/')}/api/v1/share/$token/view",
     expiresAt = expiresAt,
     createdBy = createdBy,
     sharedWithUsers = sharedWithUsers,
@@ -379,7 +379,9 @@ object AnySerializer : KSerializer<Any?> {
         val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return when (element) {
-            is JsonNull -> null
+            is JsonNull -> {
+                null
+            }
             is JsonPrimitive -> {
                 if (element.isString) {
                     element.content
@@ -391,7 +393,9 @@ object AnySerializer : KSerializer<Any?> {
                         ?: element.content
                 }
             }
-            else -> element.toString()
+            else -> {
+                element.toString()
+            }
         }
     }
 }

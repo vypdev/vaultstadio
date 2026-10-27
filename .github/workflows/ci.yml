@@ -276,6 +276,14 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Test anonymous public share page
+        run: node --test scripts/tests/public-share.test.mjs
+      - name: Test public share proxy privacy and origin
+        run: python3 -m unittest discover -s scripts/tests -p 'test_share_proxy.py' -v
       - name: Install workflow parser
         run: python3 -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
       - name: Verify source and workflow contracts
@@ -290,6 +298,7 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_share_architecture.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_verification_runner_inventory.py' -v
           python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
 

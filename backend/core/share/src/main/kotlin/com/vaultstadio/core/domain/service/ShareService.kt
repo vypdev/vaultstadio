@@ -8,24 +8,24 @@ package com.vaultstadio.core.domain.service
 
 import arrow.core.Either
 import arrow.core.left
+import arrow.core.raise.either
+import arrow.core.raise.ensure
 import arrow.core.right
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.event.ShareEvent
 import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import com.vaultstadio.domain.common.exception.StorageException
+import com.vaultstadio.domain.common.exception.ValidationException
+import com.vaultstadio.domain.share.access.PublicSharePolicy
 import com.vaultstadio.domain.share.model.ShareLink
 import com.vaultstadio.domain.share.repository.ShareRepository
-import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
-import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.datetime.Clock
 import java.security.SecureRandom
 import java.util.Base64
 import java.util.UUID
 import kotlin.time.Duration.Companion.days
-
-private val logger = KotlinLogging.logger {}
 
 /**
  * Input for creating a share link.
@@ -36,16 +36,6 @@ data class CreateShareInput(
     val expirationDays: Int? = 7,
     val password: String? = null,
     val maxDownloads: Int? = null,
-)
-
-/**
- * Input for accessing a share.
- */
-data class AccessShareInput(
-    val token: String,
-    val password: String? = null,
-    val ipAddress: String? = null,
-    val userAgent: String? = null,
 )
 
 /**
@@ -63,113 +53,42 @@ class ShareService(
     /**
      * Creates a new share link for an item.
      */
-    suspend fun createShare(input: CreateShareInput): Either<StorageException, ShareLink> {
-        logger.info { "Creating share for item ${input.itemId}" }
-
-        // Verify item exists and user owns it
-        val item = when (val result = storageItemRepository.findById(input.itemId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                val found = result.value
-                    ?: return ItemNotFoundException("Item not found").left()
-                found
-            }
+    suspend fun createShare(input: CreateShareInput): Either<StorageException, ShareLink> = either {
+        ensure(PublicSharePolicy.validCreation(input.expirationDays, input.maxDownloads, input.password)) {
+            ValidationException(message = "Invalid share expiry, download limit or password length")
         }
-
-        if (item.ownerId != input.userId) {
-            return AuthorizationException("Only the owner can share this item").left()
-        }
-
+        val item = storageItemRepository.findById(input.itemId).bind()
+            ?: raise(ItemNotFoundException(message = "Item not found"))
+        ensure(item.ownerId == input.userId) { AuthorizationException(message = "Only the owner can share this item") }
         val now = Clock.System.now()
-        val token = generateShareToken()
-        val hashedPassword = input.password?.let { passwordHasher.hash(it) }
-        val expiresAt = input.expirationDays?.let { now + it.days }
-
         val share = ShareLink(
             id = UUID.randomUUID().toString(),
-            itemId = input.itemId,
-            token = token,
+            itemId = item.id,
+            token = generateShareToken(),
             createdBy = input.userId,
-            expiresAt = expiresAt,
-            password = hashedPassword,
-            maxDownloads = input.maxDownloads,
-            downloadCount = 0,
-            isActive = true,
             createdAt = now,
+            expiresAt = input.expirationDays?.let { now + it.days },
+            maxDownloads = input.maxDownloads,
         )
-
-        return shareRepository.create(share).also { result ->
-            if (result.isRight()) {
-                val created = (result as Either.Right).value
-                eventBus.publish(ShareEvent.Created(userId = input.userId, share = created, item = item))
-            }
+        ensure(PublicSharePolicy.itemFailure(share, item) == null) {
+            ValidationException(message = "Only an active stored file can be shared")
         }
-    }
-
-    /**
-     * Accesses a shared item by token.
-     */
-    suspend fun accessShare(input: AccessShareInput): Either<StorageException, Pair<ShareLink, StorageItem>> {
-        // Find share by token
-        val share = when (val result = shareRepository.findByToken(input.token)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                val found = result.value
-                    ?: return ItemNotFoundException("Share not found").left()
-                found
-            }
-        }
-
-        // Check if share is active
-        if (!share.isActive) {
-            return AuthorizationException("Share is no longer active").left()
-        }
-
-        // Check expiration
-        val expiresAt = share.expiresAt
-        if (expiresAt != null && expiresAt < Clock.System.now()) {
-            return AuthorizationException("Share has expired").left()
-        }
-
-        // Check download limit
-        val maxDownloads = share.maxDownloads
-        if (maxDownloads != null && share.downloadCount >= maxDownloads) {
-            return AuthorizationException("Download limit reached").left()
-        }
-
-        // Check password
-        val sharePassword = share.password
-        if (sharePassword != null) {
-            if (input.password == null) {
-                return AuthorizationException("Password required").left()
-            }
-            if (!passwordHasher.verify(input.password, sharePassword)) {
-                return AuthorizationException("Invalid password").left()
-            }
-        }
-
-        // Get the item
-        val item = when (val result = storageItemRepository.findById(share.itemId)) {
-            is Either.Left -> return result
-            is Either.Right -> {
-                val found = result.value
-                    ?: return ItemNotFoundException("Shared item not found").left()
-                found
-            }
-        }
-
-        // Increment download count
-        shareRepository.incrementDownloadCount(share.id)
-
-        return Pair(share, item).right()
+        val created = shareRepository.create(
+            share.copy(
+                password = input.password?.let {
+                    passwordHasher.hash(it)
+                },
+            ),
+        ).bind()
+        eventBus.publish(ShareEvent.Created(userId = input.userId, share = created, item = item))
+        created
     }
 
     /**
      * Gets shares created by a user.
      */
-    suspend fun getSharesByUser(userId: String, activeOnly: Boolean = true): Either<StorageException, List<ShareLink>> {
-        return shareRepository.findByCreatedBy(userId, activeOnly)
-    }
+    suspend fun getSharesByUser(userId: String, activeOnly: Boolean = true): Either<StorageException, List<ShareLink>> =
+        shareRepository.findByCreatedBy(userId, activeOnly)
 
     /**
      * Gets shares that have been shared with a specific user.
@@ -177,9 +96,7 @@ class ShareService(
     suspend fun getSharesSharedWithUser(
         userId: String,
         activeOnly: Boolean = true,
-    ): Either<StorageException, List<ShareLink>> {
-        return shareRepository.findSharedWithUser(userId, activeOnly)
-    }
+    ): Either<StorageException, List<ShareLink>> = shareRepository.findSharedWithUser(userId, activeOnly)
 
     /**
      * Gets shares for an item.
@@ -187,7 +104,9 @@ class ShareService(
     suspend fun getSharesByItem(itemId: String, userId: String): Either<StorageException, List<ShareLink>> {
         // Verify user owns the item
         val item = when (val result = storageItemRepository.findById(itemId)) {
-            is Either.Left -> return result
+            is Either.Left -> {
+                return result
+            }
             is Either.Right -> {
                 val found = result.value
                     ?: return ItemNotFoundException("Item not found").left()
@@ -207,7 +126,9 @@ class ShareService(
      */
     suspend fun getShare(shareId: String): Either<StorageException, ShareLink> {
         return when (val result = shareRepository.findById(shareId)) {
-            is Either.Left -> result
+            is Either.Left -> {
+                result
+            }
             is Either.Right -> {
                 val share = result.value
                 if (share == null) {
@@ -224,8 +145,12 @@ class ShareService(
      */
     suspend fun deleteShare(shareId: String, userId: String): Either<StorageException, Unit> {
         val share = when (val result = getShare(shareId)) {
-            is Either.Left -> return result
-            is Either.Right -> result.value
+            is Either.Left -> {
+                return result
+            }
+            is Either.Right -> {
+                result.value
+            }
         }
 
         if (share.createdBy != userId) {
@@ -244,8 +169,12 @@ class ShareService(
      */
     suspend fun deactivateShare(shareId: String, userId: String): Either<StorageException, ShareLink> {
         val share = when (val result = getShare(shareId)) {
-            is Either.Left -> return result
-            is Either.Right -> result.value
+            is Either.Left -> {
+                return result
+            }
+            is Either.Right -> {
+                result.value
+            }
         }
 
         if (share.createdBy != userId) {

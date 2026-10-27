@@ -123,7 +123,7 @@ private fun Application.configureBackgroundJobs() {
 /**
  * Configures CORS based on server configuration.
  */
-private fun Application.configureCors(serverConfig: HttpServerConfig) {
+internal fun Application.configureCors(serverConfig: HttpServerConfig) {
     install(CORS) {
         // Configure allowed origins
         if (serverConfig.corsAllowedOrigins.contains("*")) {
@@ -137,6 +137,7 @@ private fun Application.configureCors(serverConfig: HttpServerConfig) {
         // Allowed headers
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
+        allowHeader("X-Share-Password")
         allowHeader(HttpHeaders.Accept)
         allowHeader(HttpHeaders.Origin)
         allowHeader(HttpHeaders.AccessControlRequestMethod)

@@ -1,65 +1,36 @@
-/**
- * AccessShareUseCase unit tests.
- */
-
 package com.vaultstadio.api.application.usecase.share
 
 import arrow.core.Either
 import com.vaultstadio.application.usecase.share.AccessShareUseCaseImpl
-import com.vaultstadio.core.domain.service.AccessShareInput
-import com.vaultstadio.core.domain.service.ShareService
-import com.vaultstadio.domain.common.exception.ItemNotFoundException
-import com.vaultstadio.domain.share.model.ShareLink
-import com.vaultstadio.domain.storage.model.ItemType
-import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.core.share.access.PublicShareService
+import com.vaultstadio.domain.share.access.AccessShareInput
+import com.vaultstadio.domain.share.access.PublicShareFailure
+import com.vaultstadio.domain.share.access.PublicShareInfo
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
+/** Same two legacy wrapper cases, corrected from private Pair to public semantic metadata. */
 class AccessShareUseCaseTest {
-
-    private val shareService: ShareService = mockk()
-    private val useCase = AccessShareUseCaseImpl(shareService)
+    private val service: PublicShareService = mockk()
+    private val useCase = AccessShareUseCaseImpl(service)
 
     @Test
-    fun invokeReturnsPairWhenServiceSucceeds() = runTest {
-        val now = Clock.System.now()
-        val share = ShareLink(
-            id = "s1",
-            itemId = "item-1",
-            token = "t1",
-            createdBy = "user-1",
-            createdAt = now,
-        )
-        val item = StorageItem(
-            id = "item-1",
-            name = "f",
-            path = "/f",
-            type = ItemType.FILE,
-            ownerId = "user-1",
-            createdAt = now,
-            updatedAt = now,
-        )
-        val input = AccessShareInput(token = "t1")
-        coEvery { shareService.accessShare(input) } returns Either.Right(Pair(share, item))
-
-        val result = useCase(input)
-
-        assertTrue(result.isRight())
-        val pair = (result as Either.Right<Pair<ShareLink, StorageItem>>).value
-        assertTrue(pair.first.id == "s1" && pair.second.id == "item-1")
+    fun invokeReturnsInformationWhenServiceSucceeds() = runTest {
+        val input = AccessShareInput("t1")
+        val info = PublicShareInfo("file", 1, null, false, null)
+        coEvery { service.information(input) } returns Either.Right(info)
+        assertEquals(Either.Right(info), useCase(input))
+        coVerify(exactly = 1) { service.information(input) }
     }
 
     @Test
     fun invokeReturnsLeftWhenServiceFails() = runTest {
-        val input = AccessShareInput(token = "bad")
-        coEvery { shareService.accessShare(input) } returns Either.Left(ItemNotFoundException(itemId = "share"))
-
-        val result = useCase(input)
-
-        assertTrue(result.isLeft())
+        val input = AccessShareInput("bad")
+        coEvery { service.information(input) } returns Either.Left(PublicShareFailure.NOT_FOUND)
+        assertEquals(Either.Left(PublicShareFailure.NOT_FOUND), useCase(input))
     }
 }
