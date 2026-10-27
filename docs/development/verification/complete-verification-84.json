@@ -1,0 +1,377 @@
+{
+  "issue": 84,
+  "status": "locally-verified-awaiting-final-pr-ci-and-review",
+  "productSource": "a40445c9ad0543263a44a00dbb84ac18e4fe071e",
+  "toolingMeasuredSource": "c8ebf066f40f3849bc3d75f0403a6f864750967a",
+  "suites": {
+    "backend": {
+      "totals": {
+        "tests": 3249,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedTasks": 44,
+      "noTestSources": 18,
+      "rawXml": 580
+    },
+    "desktop": {
+      "totals": {
+        "tests": 1324,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedTasks": 52,
+      "noTestSources": 47,
+      "rawXml": 258
+    },
+    "browser": {
+      "totals": {
+        "tests": 1200,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedTasks": 52,
+      "noTestSources": 47,
+      "rawXml": 254
+    }
+  },
+  "jvmCoverage": {
+    "backend": {
+      "summary": {
+        "classes": 2177,
+        "sha256": "daeae88e346b596fdf5a3c91e650bc73cad55d6ed93788976b470e0f6f323ae2",
+        "line": {
+          "missed": 7919,
+          "covered": 8958
+        },
+        "branch": {
+          "missed": 4108,
+          "covered": 1934
+        },
+        "instruction": {
+          "missed": 85159,
+          "covered": 70386
+        }
+      },
+      "productionModules": 44,
+      "compiledClassInputs": 2450
+    },
+    "frontend": {
+      "summary": {
+        "classes": 1644,
+        "sha256": "6d907864c023f55d64a2b041cf8cc663d059625458ab08a64378b8a0afb65926",
+        "line": {
+          "missed": 14926,
+          "covered": 6153
+        },
+        "branch": {
+          "missed": 4655,
+          "covered": 853
+        },
+        "instruction": {
+          "missed": 137196,
+          "covered": 36497
+        }
+      },
+      "productionModules": 52,
+      "compiledClassInputs": 1891
+    }
+  },
+  "toolingCoverage": {
+    "scope": "Python verifier adapters only; excludes tests and does not quantify Gradle init or platform coverage",
+    "tests": 131,
+    "existingInventoryCases": 9,
+    "totals": {
+      "covered_lines": 584,
+      "num_statements": 595,
+      "percent_covered": 97.2909305064782,
+      "percent_covered_display": "97",
+      "missing_lines": 11,
+      "excluded_lines": 0,
+      "percent_statements_covered": 98.15126050420169,
+      "percent_statements_covered_display": "98",
+      "num_branches": 254,
+      "num_partial_branches": 10,
+      "covered_branches": 242,
+      "missing_branches": 12,
+      "percent_branches_covered": 95.2755905511811,
+      "percent_branches_covered_display": "95"
+    }
+  },
+  "negativeProduct": {
+    "backend": {
+      "tests": 3250,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "makeExit": 2
+    },
+    "desktop": {
+      "tests": 1324,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "tests": 1201,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "makeExit": 2
+    },
+    "temporarySourcesRestored": true
+  },
+  "rawProductArchiveSha256": "8d900a42fa86b879c7946a6a65e65864f061db195699141685451229918a8dbc",
+  "controls": [
+    {
+      "id": "R04-01",
+      "risk": "live backend inventory",
+      "evidence": "44 actual JVM tasks and modules",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-02",
+      "risk": "live desktop inventory",
+      "evidence": "52 actual desktop tasks",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-03",
+      "risk": "live browser inventory",
+      "evidence": "52 actual Wasm browser tasks",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-04",
+      "risk": "new JVM module",
+      "evidence": "real Gradle8.10/JUnit fixture:3\u21924 tasks, new failed case makes red",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-05",
+      "risk": "new KMP module",
+      "evidence": "real Gradle9.3.1/Kotlin2.4.20:1\u21922 cases in both destinations",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-06",
+      "risk": "extra platforms",
+      "evidence": "53 iOS simulator and3 Android flavor tasks explicitly unverified",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-07",
+      "risk": "omitted product module red",
+      "evidence": "core:ai deliberate assertion:3250 cases,1 failure, Make exit2",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-08",
+      "risk": "independent suites continue",
+      "evidence": "remaining backend module suites run after the failed core:ai task",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-09",
+      "risk": "asynchronous Wasm red",
+      "evidence": "1201 browser cases,1 deliberate async failure",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-10",
+      "risk": "frontend Make propagation",
+      "evidence": "real frontend Make exit2 after browser failure",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-11",
+      "risk": "desktop failure continuation",
+      "evidence": "CLI process control:desktop exit42, browser still runs",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-12",
+      "risk": "root continuation",
+      "evidence": "CLI process control:backend fails, frontend still runs, final nonzero",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-13",
+      "risk": "shell entrypoint",
+      "evidence": "real shell entrypoint tested from another directory; failure and unknown flags retained",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-14",
+      "risk": "original diagnostics",
+      "evidence": "actual negative Make logs and separate process stdout/stderr retained",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-15",
+      "risk": "missing Java",
+      "evidence": "native setup controls and actual isolated Gradle runtime control",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-16",
+      "risk": "missing browser",
+      "evidence": "native setup controls and actual isolated Karma runtime control",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-17",
+      "risk": "unknown flags",
+      "evidence": "CLI and shell reject partial/unknown selection before execution",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-18",
+      "risk": "stale XML",
+      "evidence": "owned current task XML reset; required fresh completion markers",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-19",
+      "risk": "retired XML",
+      "evidence": "real failed retired-module XML retained but excluded from restored one-case JVM result",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-20",
+      "risk": "missing XML",
+      "evidence": "zero-exit producer without required results is red",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-21",
+      "risk": "no-source accounting",
+      "evidence": "18 backend and47 per frontend destination have no test sources; never passed cases",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-22",
+      "risk": "skipped cases",
+      "evidence": "separate skip count; skips cannot produce complete success",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-23",
+      "risk": "malformed evidence",
+      "evidence": "XML/negative/inconsistent/entity/size and completion-marker controls",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-24",
+      "risk": "raw reconciliation",
+      "evidence": "1092 current product XML reconcile to5773 cases",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-25",
+      "risk": "duplicate collection",
+      "evidence": "duplicate cases rejected; same case in distinct tasks stays distinct",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-26",
+      "risk": "partial failure",
+      "evidence": "failed/partial receipts retain diagnostics and do not publish green",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-27",
+      "risk": "identity binding",
+      "evidence": "source HEAD/tree/dirty digest, actual JVM launcher, command and byte identities",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-28",
+      "risk": "reuse invalidation",
+      "evidence": "changed source/classes/exec/task inventory/context rejected",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-29",
+      "risk": "cross-module coverage",
+      "evidence": "real consumer test covers producer class",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-30",
+      "risk": "untested code retained",
+      "evidence": "real untested fixture class retains missed lines; current full production populations included",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-31",
+      "risk": "all main outputs",
+      "evidence": "44 backend and52 desktop production modules, actual class/source directories",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-32",
+      "risk": "missing coverage inputs",
+      "evidence": "missing/mutated class/exec and empty production population controls",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-33",
+      "risk": "counter semantics",
+      "evidence": "source-file line dedup; class/source/root branch/instruction reconciliation",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-34",
+      "risk": "denominator disclosure",
+      "evidence": "full JVM fractions and compiled-input/XML-class distinction published",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-35",
+      "risk": "platform/population separation",
+      "evidence": "Wasm executions, JVM metrics and Python tooling metrics kept distinct",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-36",
+      "risk": "real coverage gate red",
+      "evidence": "temporary >=101% gate fails, original unchanged gate passes afterward",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-37",
+      "risk": "strict upload",
+      "evidence": "existing keyring/signature/checksum policy plus canonical hash/source/run consistency controls",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-38",
+      "risk": "actual lint",
+      "evidence": "both real typed selectors pass; deliberate lint failure red, original restored green; legacy advisory debt disclosed",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-39",
+      "risk": "CI cadence",
+      "evidence": "13 cadence controls; full PR suites, fork/concurrency guards, no duplicate tooling test execution",
+      "state": "local-control"
+    },
+    {
+      "id": "R04-40",
+      "risk": "final adoption",
+      "evidence": "local complete runs passed; final-ref PR CI/Copilot/adoption remain pending",
+      "state": "pending-final-ci"
+    }
+  ],
+  "limits": [
+    "No whole-platform readiness claim",
+    "Android/iOS/device verification remains separate",
+    "Coverage targets and legacy lint baseline unchanged",
+    "Master/protections/Copilot/setup activation unchanged",
+    "Final source-bound CI and Copilot review still required"
+  ]
+}

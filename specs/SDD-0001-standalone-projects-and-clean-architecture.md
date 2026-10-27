@@ -130,6 +130,8 @@ Verification adapters own process execution, report parsing and source-bound rec
 
 This is the pre-implementation contract at `816e6732b7fd605a2852745420ad7d2c75bf1474`; it does not certify the pending #84 implementation. Preserve original source drafts, the active local package/data and one runnable rollback throughout negative controls.
 
+Local R04 checkpoint (2026-10-27): complete product execution and failure controls are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). This verifies the declared local scope only; final PR CI, Copilot review and adoption remain pending. JVM, Wasm and Python populations and mobile limitations remain separate.
+
 ## 7. User-facing configuration
 
 Backend and frontend remain separately invoked. Wrapper versions and JDK requirements are documented in SDD-0014; no root Gradle wrapper is assumed.

@@ -224,6 +224,8 @@ R04-TOOL-01 is specified before its CI implementation: the existing quality job 
 
 Global coverage thresholds and a strict global legacy lint migration remain separate proposals. The #84 implementation must measure the full denominator honestly; passing tests do not establish 100% coverage. Copilot implementation/generated workflows, branch lifecycle ownership, protections, `VERIFICATION_SETUP=false` and master promotion remain outside this repair. Action versions remain major tags.
 
+Local R04 checkpoint (2026-10-27): complete product execution and failure controls are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). This verifies the declared local scope only; final PR CI, Copilot review and adoption remain pending. JVM, Wasm and Python populations and mobile limitations remain separate.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.

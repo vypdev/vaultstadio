@@ -87,10 +87,12 @@ def owned_output(root: Path, value: str) -> Path:
 
 
 def discover(root: Path) -> dict:
+    path = owned_output(root, str(root / "build/verification/inventory.json"))
+    if path.is_file():
+        path.unlink()
     code = gradle(root, ["verificationInventory", "--rerun"])
     if code:
         raise VerificationError(f"Gradle inventory failed ({code}) in {root.name}")
-    path = owned_output(root, str(root / "build/verification/inventory.json"))
     try:
         model = json.loads(path.read_text())
         if model["schemaVersion"] != 1 or model["root"] != str(root):

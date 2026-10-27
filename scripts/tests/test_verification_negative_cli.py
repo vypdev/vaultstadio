@@ -5,7 +5,7 @@ import subprocess
 import sys
 import unittest
 
-from verification_fixture import create
+from verification_fixture import add_module, create
 
 
 class NegativeProducerContracts(unittest.TestCase):
@@ -17,6 +17,12 @@ class NegativeProducerContracts(unittest.TestCase):
         return subprocess.run([sys.executable, 'scripts/verification/run.py', operation, '--root', 'backend',
                                *(['--reuse-tests'] if operation == 'coverage' else [])], cwd=self.root,
                               env={**os.environ, **environment}, check=False, capture_output=True, text=True)
+
+    def test_zero_exit_stale_inventory_cannot_omit_new_module(self):
+        self.assertEqual(self.call().returncode, 0)
+        add_module(self.root, 'backend', 'moduleNew')
+        result = self.call(FIXTURE_SKIP_INVENTORY='1')
+        self.assertNotEqual(result.returncode, 0, 'stale inventory silently omitted the new module')
 
     def test_empty_inventory_rejected(self):
         self.assertNotEqual(self.call(FIXTURE_MODEL='empty').returncode, 0)

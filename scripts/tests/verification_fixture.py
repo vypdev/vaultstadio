@@ -26,6 +26,7 @@ def inventory():
  return dict(schemaVersion=1,root=str(root),tasks=tasks,production=[dict(project=':module1',sources=[str(root/'module1/src/main')],classes=[str(root/'module1/build/classes')])])
 model=inventory()
 if 'verificationInventory'in args:
+ if os.environ.get('FIXTURE_SKIP_INVENTORY'):sys.exit(0)
  if os.environ.get('FIXTURE_FAIL_INVENTORY'):
   print('inventory-original-failure',file=sys.stderr);sys.exit(42)
  mode=os.environ.get('FIXTURE_MODEL')
