@@ -8,6 +8,8 @@ package com.vaultstadio.app.data.network
 
 import com.vaultstadio.app.data.network.serialization.InstantIso8601Serializer
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -58,7 +60,14 @@ object HttpClientFactory {
     fun create(
         config: ApiClientConfig,
         tokenProvider: TokenProvider,
-    ): HttpClient = HttpClient {
+        engine: HttpClientEngine? = null,
+    ): HttpClient = if (engine == null) {
+        HttpClient { configure(config, tokenProvider) }
+    } else {
+        HttpClient(engine) { configure(config, tokenProvider) }
+    }
+
+    private fun HttpClientConfig<*>.configure(config: ApiClientConfig, tokenProvider: TokenProvider) {
         install(ContentNegotiation) {
             json(json)
         }

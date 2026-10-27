@@ -17,6 +17,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.CancellationException
 
 /**
  * Base class for API implementations.
@@ -80,6 +81,8 @@ abstract class BaseApi(protected val client: HttpClient) {
             } else {
                 handleErrorResponse(response)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Network error")
         }
@@ -102,7 +105,7 @@ abstract class BaseApi(protected val client: HttpClient) {
                 val apiResponse = response.body<ApiResponseDTO<T>>()
                 if (apiResponse.success && apiResponse.data != null) {
                     ApiResult.Success(apiResponse.data)
-                } else if (apiResponse.success) {
+                } else if (apiResponse.success && T::class == Unit::class) {
                     @Suppress("UNCHECKED_CAST")
                     ApiResult.Success(Unit as T)
                 } else {
@@ -114,6 +117,8 @@ abstract class BaseApi(protected val client: HttpClient) {
             } else {
                 handleErrorResponse(response)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Network error")
         }
@@ -149,6 +154,8 @@ abstract class BaseApi(protected val client: HttpClient) {
             } else {
                 handleErrorResponse(response)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Network error")
         }
@@ -163,6 +170,8 @@ abstract class BaseApi(protected val client: HttpClient) {
                 errorResponse.error?.code ?: "HTTP_${response.status.value}",
                 errorResponse.error?.message ?: response.status.description,
             )
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.Error("HTTP_${response.status.value}", response.status.description)
         }
