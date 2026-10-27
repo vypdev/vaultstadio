@@ -158,6 +158,8 @@ Domain owns validated REST selections, with limit1..1000/offset0..Int.MAX_VALUE;
 
 Pre-implementation contract (2026-10-27), CLIENT119-STORAGE: exercise the existing authenticated read/transfer/mutation/trash routes with production services, migrated PostgreSQL and owned temporary content. Verify returned identifiers and bytes, current rows/content after success, and zero forbidden effects after rejection. Client request-adapter tests must preserve each method, path, query, typed payload, multipart bytes and failure without claiming that an unimplemented server protocol is operational. Cancellation remains control flow; absent required payload/failed I/O cannot become an empty or Unit success.
 
+Incoming body consumption is part of transfer cancellation semantics, including successful HTTP responses whose Ktor body channel fails with a wrapped cancellation. File/folder/chunk uploads and binary download must use the same transport cancellation policy as BaseApi. Preserve caller cancellation even when wrapped; actual request/connect/socket deadlines remain network failures. Test both kinds independently. This refinement follows four executed negative body-channel controls before implementation.
+
 STO119-01–20 in [the scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) cover these boundaries. Existing S3/WebDAV, authenticated UI download, search, version recovery and advanced-capability debts retain their own issues; this increment must neither exclude them from canonical coverage nor certify their readiness using a transport fixture.
 
 ## 7. User-facing configuration

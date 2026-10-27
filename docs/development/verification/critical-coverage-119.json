@@ -1563,7 +1563,7 @@
       "sha256": "5898c3ec06a5106c37820ee58fd87e84dd00b1e1a500b73f667c393846354017"
     }
   ],
-  "status": "Local verification complete on tested implementation; final-ref PR CI, Copilot review and adoption are separate acceptance steps",
+  "status": "6081-case checkpoint superseded by incoming-body cancellation refinement; final candidate verification pending",
   "limits": [
     "Common tests repeat on desktop and Wasm. Case counts are not unique scenarios.",
     "MockEngine verifies transport semantics; domain ports verify state ownership. Neither certifies the rendered packaged application.",

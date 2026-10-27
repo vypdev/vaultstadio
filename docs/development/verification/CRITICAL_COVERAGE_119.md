@@ -1,6 +1,6 @@
 # Critical backend and desktop coverage — issue #119
 
-The tested implementation is `92404e45e596e7832e7bfb59d9d5b2fb697054fe`. Local complete verification passed; final-ref PR CI, Copilot review and adoption remain separate steps. The [machine results](critical-coverage-119.json) and [98 risk families mapped to actual tests](critical-coverage-119-scenarios.json) distinguish executed cases, repeated platforms and outstanding capabilities. Documentation commits after this implementation must leave production and tests unchanged; PR CI verifies its own final ref.
+This is the preserved 6,081-case checkpoint at `92404e45e596e7832e7bfb59d9d5b2fb697054fe`. A later private incoming-body probe reproduced four transfer-cancellation failures; shared cancellation refinement and new full-candidate acceptance are in progress. Local complete verification passed; final-ref PR CI, Copilot review and adoption remain separate steps. The [machine results](critical-coverage-119.json) and [98 risk families mapped to actual tests](critical-coverage-119-scenarios.json) distinguish executed cases, repeated platforms and outstanding capabilities. Documentation commits after this implementation must leave production and tests unchanged; PR CI verifies its own final ref.
 
 ## Scope and repairs
 

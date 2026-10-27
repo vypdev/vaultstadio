@@ -204,6 +204,8 @@ Multipart transfers preserve the actual Content-Type/boundary, original bytes an
 
 BaseApi's reified wrappers supply serialization information while one shared execution path owns transport failure, cancellation and response/error mapping. Apply the Unit-versus-required-payload rule consistently to no-body, body and form commands. Measure ordinary executed behavior without exclusions or reflective invocation of inline implementation stubs. A default-preserving logger seam may capture the actual HTTP plugin output; bearer headers and public-share capability paths must not reveal credentials. Exercise an actual configured timeout and body-decoding cancellation independently from an ordinary connection failure.
 
+A shared data-network cancellation classifier owns caller-context and wrapped-cause handling for BaseApi and every manual multipart/binary StorageApi adapter. The shared policy must be executable on JVM and Wasm and preserve Ktor transport deadlines as network errors. Controlled incoming-body cancellation tests must cover all four manual adapters, rather than only engine request entry. The production engine, domain ports and public response schemas remain unchanged.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.

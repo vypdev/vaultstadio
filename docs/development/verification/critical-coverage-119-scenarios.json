@@ -1,6 +1,6 @@
 {
   "issue": 119,
-  "status": "local-verification-complete; final PR CI and Copilot review pending",
+  "status": "refinement-in-progress: incoming-body transfer cancellation",
   "baseline": "dcd7eab411bdeb94e601bdee0ffac6319cb78a26",
   "baselineCi": 40531576901,
   "counting": "Scenarios are acceptance risks, not executed tests. Parameter variants and repeated platform executions must be reported separately.",
@@ -680,7 +680,7 @@
       "id": "STO119-16",
       "requirement": "CLIENT119-STORAGE",
       "risk": "cancellation propagates through upload/download adapters",
-      "status": "verified",
+      "status": "refinement-in-progress",
       "tests": [
         "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119ChunkCancellationRemainsControlFlow",
         "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119DownloadCancellationRemainsControlFlow",
