@@ -60,37 +60,42 @@ class CadenceContractTests(unittest.TestCase):
                 schedules.append(tuple(cron))
         self.assertEqual(len(schedules), len(set(schedules)))
 
-    def test_root_test_selectors_rerun_suites_without_recompiling_every_dependency(self):
+    def test_complete_discovery_entrypoints_keep_each_suite_required(self):
         ci = workflow('ci.yml')
-        for job, task, directory in [('backend', 'test', 'backend'), ('frontend', 'desktopTest', 'frontend'), ('frontend', 'wasmJsBrowserTest', 'frontend')]:
-            with self.subTest(task=task):
-                commands = [s for s in ci['jobs'][job]['steps'] if re.search(r'\./gradlew\s+' + task + r'\b', s.get('run', ''))]
+        expected = [('backend', 'backend', None), ('frontend', 'frontend', 'desktop'), ('frontend', 'frontend', 'browser')]
+        for job, directory, suite in expected:
+            with self.subTest(job=job, suite=suite):
+                commands = [step for step in ci['jobs'][job]['steps']
+                            if 'verification/run.py test --root ' + directory in step.get('run', '')
+                            and (suite is None or '--suite ' + suite in step['run'])]
                 self.assertEqual(len(commands), 1)
                 step = commands[0]
                 self.assertEqual(step['working-directory'], directory)
-                tokens = shlex.split(step['run'])
-                self.assertIn('--rerun', tokens)
-                self.assertNotIn('--rerun-tasks', tokens)
-                self.assertNotIn('--tests', tokens)
                 self.assertNotIn('continue-on-error', step)
-                self.assertIn('--continue', tokens)
+                self.assertNotIn('--tests', step['run'])
+                self.assertNotIn('--rerun-tasks', step['run'])
+                self.assertNotRegex(step['run'], r'--(skip|exclude|module)')
+        # Actual module expansion and test-only rerun are exercised by the disposable CLI producer.
 
     def test_failed_test_command_cannot_be_reported_as_success(self):
+        count = 0
         for job in ['backend', 'frontend']:
             for step in workflow('ci.yml')['jobs'][job]['steps']:
-                if not re.search(r'\./gradlew (test|desktopTest|wasmJsBrowserTest)\b', step.get('run', '')):
+                if 'verification/run.py test ' not in step.get('run', ''):
                     continue
+                count += 1
                 with self.subTest(job=job, step=step['name']), tempfile.TemporaryDirectory() as raw:
-                    directory = Path(raw)
-                    wrapper = directory / 'gradlew'
-                    wrapper.write_text('#!/bin/sh\nexit 42\n')
-                    wrapper.chmod(0o700)
-                    command = step['run']
-                    # Exercise the actual workflow command, including its browser preflight.
-                    result = subprocess.run(['bash', '-eo', 'pipefail', '-c', command], cwd=directory,
+                    repository = Path(raw)
+                    directory = repository / step['working-directory']
+                    directory.mkdir()
+                    helper = repository / 'scripts/verification/run.py'
+                    helper.parent.mkdir(parents=True)
+                    helper.write_text('import sys\nsys.exit(42)\n')
+                    result = subprocess.run(['bash', '-eo', 'pipefail', '-c', step['run']], cwd=directory,
                                             env={'PATH': '/usr/bin:/bin', 'CHROME_BIN': '/usr/bin/true'},
                                             capture_output=True, text=True, timeout=5)
                     self.assertEqual(result.returncode, 42)
+        self.assertEqual(count, 3)
 
     def test_shared_runners_reject_fork_source(self):
         guard = "github.event.pull_request.head.repo.full_name == github.repository"

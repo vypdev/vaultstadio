@@ -1,0 +1,111 @@
+import groovy.json.JsonOutput
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.testing.AbstractTestTask
+import org.gradle.api.tasks.testing.Test
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
+// Verification adapter only: each project retains its own wrapper and settings.
+abstract class VerificationInventory extends DefaultTask {
+    @Input abstract org.gradle.api.provider.Property<String> getPayload()
+    @OutputFile abstract org.gradle.api.file.RegularFileProperty getDestination()
+    @TaskAction void writeInventory() {
+        def file = destination.get().asFile
+        file.parentFile.mkdirs()
+        file.text = payload.get() + '\n'
+    }
+}
+
+gradle.beforeProject { project -> project.pluginManager.apply('jacoco') }
+
+gradle.projectsEvaluated {
+    def root = gradle.rootProject
+    def output = new File(root.buildDir, 'verification')
+    def tasks = []
+    def populations = []
+    root.allprojects.each { project ->
+        def kotlin = project.extensions.findByName('kotlin')
+        def targets = kotlin != null && kotlin.metaClass.hasProperty(kotlin, 'targets') ? kotlin.targets : []
+        def sourceSets = project.extensions.findByType(SourceSetContainer)
+        def jvmMain = sourceSets?.findByName('main')
+        if (jvmMain != null) {
+            populations.add([project: project.path, sources: jvmMain.allSource.srcDirs,
+                classes: jvmMain.output.classesDirs, compile: project.tasks.named(jvmMain.classesTaskName)])
+        }
+        targets.findAll { it.platformType.toString() == 'jvm' }.each { target ->
+            def main = target.compilations.findByName('main')
+            populations.add([project: project.path, sources: main.allKotlinSourceSets.collectMany { it.kotlin.srcDirs },
+                classes: main.output.classesDirs, compile: main.compileTaskProvider])
+        }
+        project.tasks.withType(AbstractTestTask).toList().each { task ->
+            def target = targets.toList().sort { -it.name.length() }.find { task.name.startsWith(it.name) }
+            def platform = target?.platformType?.toString()
+            def suite = 'additional'
+            def testSources = []
+            if (task instanceof Test && !task.class.name.contains('AndroidUnitTest')) {
+                suite = platform == 'jvm' ? 'desktop' : 'backend'
+                testSources = platform == 'jvm' ? target.compilations.findByName('test').allKotlinSourceSets.collectMany { it.kotlin.srcDirs } : sourceSets?.findByName('test')?.allSource?.srcDirs ?: []
+            } else if (platform == 'wasm' && task.name.endsWith('BrowserTest')) {
+                suite = 'browser'
+                testSources = target.compilations.findByName('test').allKotlinSourceSets.collectMany { it.kotlin.srcDirs }
+            }
+            def token = java.security.MessageDigest.getInstance('SHA-256').digest(task.path.getBytes('UTF-8')).encodeHex().toString()
+            def marker = new File(output, 'task-events/' + token + '.json')
+            def xml = task.reports.junitXml.outputLocation.get().asFile
+            def jacoco = task.extensions.findByType(JacocoTaskExtension)
+            if (suite != 'additional') {
+                task.reports.junitXml.required = true
+                if (task instanceof Test) {
+                    task.systemProperty('user.home', new File(output, 'test-home/' + token).absolutePath)
+                }
+                def markerPath = marker.absolutePath
+                def taskPath = task.path
+                task.doLast { actualTask ->
+                    def file = new File(markerPath)
+                    file.parentFile.mkdirs()
+                    def runtime = actualTask instanceof Test ? [java: actualTask.javaLauncher.get().metadata.languageVersion.toString(),
+                        vendor: actualTask.javaLauncher.get().metadata.vendor,
+                        runtimeVersion: actualTask.javaLauncher.get().metadata.javaRuntimeVersion,
+                        executable: actualTask.javaLauncher.get().executablePath.asFile.absolutePath] : [kind: 'Wasm browser; actual browser identity in JUnit suite names and command logs']
+                    file.text = JsonOutput.toJson([task: taskPath, completed: true, runtime: runtime]) + '\n'
+                }
+            }
+            tasks.add([path: task.path, suite: suite, project: project.path,
+                directory: project.projectDir.absolutePath,
+                sources: testSources.collect { it.absolutePath }.unique().sort(),
+                xml: xml.absolutePath, marker: marker.absolutePath,
+                execution: jacoco?.destinationFile?.absolutePath,
+                testHome: new File(output, 'test-home/' + token).absolutePath])
+        }
+    }
+    def populationRows = populations.collect { entry ->
+        [project: entry.project, sources: entry.sources.collect { it.absolutePath }.unique().sort(),
+            classes: entry.classes.files.collect { it.absolutePath }.sort()]
+    }
+    root.tasks.register('verificationInventory', VerificationInventory) {
+        payload.set(JsonOutput.prettyPrint(JsonOutput.toJson([schemaVersion: 1, root: root.projectDir.absolutePath,
+            tasks: tasks.sort { it.path }, production: populationRows])))
+        destination.set(new File(output, 'inventory.json'))
+        outputs.upToDateWhen { false }
+    }
+    root.tasks.register('verificationCoverage', JacocoReport) {
+        group = 'verification'
+        description = 'All production JVM classes against matching cross-module test execution.'
+        populations.each { entry ->
+            dependsOn(entry.compile)
+            sourceDirectories.from(entry.sources)
+            classDirectories.from(entry.classes)
+        }
+        executionData.from(tasks.findAll { it.suite in ['backend', 'desktop'] }.collect { it.execution }.findAll { it != null })
+        reports {
+            xml.required = true
+            html.required = true
+            xml.outputLocation.set(new File(output, 'coverage/coverage.xml'))
+            html.outputLocation.set(new File(output, 'coverage/html'))
+        }
+    }
+}

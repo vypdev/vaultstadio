@@ -1,5 +1,7 @@
 # Test Coverage Action Plan
 
+> Historical phased plan. Root names, module counts and qualitative coverage labels below are not current execution evidence. Use [the current testing guide](TESTING.md) for complete commands, canonical coverage populations and limits; verify an exact source-bound receipt before accepting a result.
+
 This document defines a phased plan to achieve full test coverage across VaultStadio. It complements [TESTING.md](TESTING.md) (strategy, running tests, untestable components) and aligns with [CODE_QUALITY.md](CODE_QUALITY.md) and [AI_CODING_GUIDELINES.md](AI_CODING_GUIDELINES.md).
 
 **Last updated**: 2026-02-22

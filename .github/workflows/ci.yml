@@ -99,17 +99,19 @@ jobs:
       
       - name: Run complete backend suites
         working-directory: backend
-        run: ./gradlew test --rerun --continue --build-cache
+        run: python3 ../scripts/verification/run.py test --root backend
 
       - name: Verify storage authorization coverage
         working-directory: backend
         run: |
-          ./gradlew :domain:storage:jacocoTestCoverageVerification \
+          ./gradlew --init-script ../scripts/verification/model.gradle :domain:storage:jacocoTestCoverageVerification \
             :core:storage:jacocoTestCoverageVerification
 
       - name: Generate backend coverage reports
         working-directory: backend
-        run: ./gradlew jacocoTestReport --continue --build-cache
+        run: |
+          ./gradlew --init-script ../scripts/verification/model.gradle jacocoTestReport --continue --build-cache
+          python3 ../scripts/verification/run.py coverage --root backend --reuse-tests
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -119,6 +121,7 @@ jobs:
           path: |
             backend/**/build/reports/tests/
             backend/**/build/test-results/
+            backend/build/verification/
           if-no-files-found: error
           retention-days: 7
 
@@ -126,7 +129,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-backend
-          path: backend/**/build/reports/jacoco/**/*.xml
+          path: |
+            backend/build/verification/coverage/coverage.xml
+            backend/build/verification/coverage.json
           if-no-files-found: error
           retention-days: 1
 
@@ -179,7 +184,7 @@ jobs:
 
       - name: Run complete frontend desktop suites
         working-directory: frontend
-        run: ./gradlew desktopTest --rerun --continue --build-cache
+        run: python3 ../scripts/verification/run.py test --root frontend --suite desktop
 
       - name: Run complete frontend browser suites
         working-directory: frontend
@@ -188,13 +193,14 @@ jobs:
         run: |
           test -x "$CHROME_BIN"
           "$CHROME_BIN" --version
-          ./gradlew wasmJsBrowserTest --rerun --continue --build-cache
+          python3 ../scripts/verification/run.py test --root frontend --suite browser
 
       - name: Generate frontend coverage and enforce existing gates
         working-directory: frontend
         run: |
-          ./gradlew jacocoTestReport :data:network:verifyInstantSerializerCoverage \
+          ./gradlew --init-script ../scripts/verification/model.gradle jacocoTestReport :data:network:verifyInstantSerializerCoverage \
             :core:ui:verifyInputSemanticsCoverage --continue --build-cache
+          python3 ../scripts/verification/run.py coverage --root frontend --reuse-tests
 
       - name: Upload frontend test results
         if: always()
@@ -204,6 +210,7 @@ jobs:
           path: |
             frontend/**/build/reports/tests/
             frontend/**/build/test-results/
+            frontend/build/verification/
           if-no-files-found: error
           retention-days: 7
 
@@ -211,7 +218,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-frontend
-          path: frontend/**/build/reports/jacoco/**/*.xml
+          path: |
+            frontend/build/verification/coverage/coverage.xml
+            frontend/build/verification/coverage.json
           if-no-files-found: error
           retention-days: 1
 
@@ -243,13 +252,8 @@ jobs:
       - name: Discover coverage files for Codecov
         id: coverage-files
         run: |
-          FILES=$(find . -name 'jacocoTestReport.xml' -type f 2>/dev/null | tr '\n' ',' | sed 's/,$//')
-          echo "list=$FILES" >> "$GITHUB_OUTPUT"
-          if [ -z "$FILES" ]; then
-            echo "No jacocoTestReport.xml found"
-            exit 1
-          fi
-          echo "Found coverage files: $FILES"
+          python3 scripts/verification/upload_manifest.py \
+            --backend coverage-backend --frontend coverage-frontend --output "$GITHUB_OUTPUT"
 
       - name: Isolate Codecov verification keyring
         run: bash scripts/ci/prepare_codecov_keyring.sh
@@ -300,7 +304,7 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_share_architecture.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_selection_architecture.py' -v
-          python3 -m unittest discover -s scripts/tests -p 'test_verification_runner_inventory.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_verification_*.py' -v
           python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
 
   project-environment:

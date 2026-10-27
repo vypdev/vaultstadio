@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Select exactly two source-bound canonical reports for the existing strict uploader."""
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+from discovery import VerificationError
+from reports import coverage
+
+
+def inputs(directories: list[Path]) -> list[str]:
+    records, selected = [], []
+    for directory in directories:
+        reports = sorted(directory.rglob("coverage.xml"))
+        receipts = sorted(directory.rglob("coverage.json"))
+        if len(reports) != 1 or len(receipts) != 1:
+            raise VerificationError(
+                f"Expected exactly one canonical report/receipt in {directory}"
+            )
+        report, receipt = reports[0], receipts[0]
+        if report.is_symlink() or receipt.is_symlink():
+            raise VerificationError("Symlinked canonical coverage input")
+        record = json.loads(receipt.read_text())
+        if record.get("success") is not True or record["summary"] != coverage(report):
+            raise VerificationError(f"Coverage summary/receipt mismatch in {directory}")
+        if (
+            record["summary"]["sha256"]
+            != hashlib.sha256(report.read_bytes()).hexdigest()
+        ):
+            raise VerificationError(f"Changed canonical coverage in {directory}")
+        records.append(record)
+        selected.append(str(report))
+    if records[0]["suite"] != "backend" or records[1]["suite"] != "desktop":
+        raise VerificationError(
+            "Canonical coverage root populations are reversed or missing"
+        )
+    if records[0]["source"] != records[1]["source"]:
+        raise VerificationError(
+            "Backend/frontend coverage certify different source identities"
+        )
+    return selected
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--backend", type=Path, required=True)
+    parser.add_argument("--frontend", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    selected = inputs([args.backend, args.frontend])
+    if any("\n" in path or "," in path for path in selected):
+        raise VerificationError("Invalid coverage output-channel path")
+    with args.output.open("a") as output:
+        output.write("list=" + ",".join(selected) + "\n")
+    print("Canonical JVM coverage inputs:", *selected)
+
+
+if __name__ == "__main__":
+    main()
