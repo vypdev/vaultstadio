@@ -28,7 +28,12 @@ internal class CollaborationDocuments(
         repository.getDocumentState(item).flatMap { state ->
             bind(item, state).flatMap { bound ->
                 if (bound == null) return@flatMap missingCollaborationResource().left()
-                repository.applyOperation(item, transformCollaborationOperation(operation, bound)).flatMap { updated ->
+                repository.applyOperation(
+                    item,
+                    transformCollaborationOperation(operation, bound),
+                    actor,
+                    bound,
+                ).flatMap { updated ->
                     if (updated.itemId != item) collaborationScopeFailure().left() else updated.right()
                 }
             }
@@ -47,7 +52,7 @@ internal class CollaborationDocuments(
         if (it == null) {
             missingCollaborationResource().left()
         } else {
-            repository.saveDocumentState(it).flatMap { row ->
+            repository.saveExistingSnapshot(it, actor).flatMap { row ->
                 if (row.itemId != item) collaborationScopeFailure().left() else row.right()
             }
         }

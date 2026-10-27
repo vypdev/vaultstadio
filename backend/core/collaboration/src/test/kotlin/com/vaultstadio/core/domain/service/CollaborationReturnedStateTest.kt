@@ -61,9 +61,9 @@ class CollaborationReturnedStateTest {
 
     private fun arrange(f: CollaborationServiceFixture, case: String) {
         when (case) {
-            "apply-item" -> coEvery { f.repository.applyOperation(any(), any()) } returns
+            "apply-item" -> coEvery { f.repository.applyOperation(any(), any(), any(), any()) } returns
                 f.state.copy(itemId = "foreign").right()
-            "save-item" -> coEvery { f.repository.saveDocumentState(any()) } returns
+            "save-item" -> coEvery { f.repository.saveExistingSnapshot(any(), any()) } returns
                 f.state.copy(itemId = "foreign").right()
             "cursor-id", "cursor-user" -> coEvery { f.membership.update(any(), any(), any(), any(), any()) } answers {
                 val row = arg<CollaborationParticipant>(2)
@@ -81,28 +81,29 @@ class CollaborationReturnedStateTest {
 
     private fun arrangeComments(f: CollaborationServiceFixture, case: String) {
         when (case) {
-            "created-user", "created-item", "created-id" -> coEvery { f.repository.createComment(any()) } answers {
-                val row = firstArg<DocumentComment>()
-                when (case) {
-                    "created-user" -> row.copy(userId = "foreign")
-                    "created-item" -> row.copy(itemId = "foreign")
-                    else -> row.copy(id = "foreign")
-                }.right()
-            }
+            "created-user", "created-item", "created-id" -> coEvery { f.repository.createComment(any(), any()) } answers
+                {
+                    val row = firstArg<DocumentComment>()
+                    when (case) {
+                        "created-user" -> row.copy(userId = "foreign")
+                        "created-item" -> row.copy(itemId = "foreign")
+                        else -> row.copy(id = "foreign")
+                    }.right()
+                }
             "comment-list-parent" -> coEvery { f.repository.getCommentsForItem(any(), any()) } returns
                 listOf(f.comment.copy(itemId = "foreign")).right()
             "comment-list-duplicate" -> coEvery { f.repository.getCommentsForItem(any(), any()) } returns
                 listOf(f.comment, f.comment).right()
-            "resolved-item" -> coEvery { f.repository.resolveComment(any(), any()) } returns
+            "resolved-item" -> coEvery { f.repository.resolveComment(any(), any(), any(), any()) } returns
                 f.comment.copy(itemId = "foreign").right()
-            "resolved-id" -> coEvery { f.repository.resolveComment(any(), any()) } returns
+            "resolved-id" -> coEvery { f.repository.resolveComment(any(), any(), any(), any()) } returns
                 f.comment.copy(id = "foreign").right()
             "reply-duplicate", "reply-missing", "reply-user", "reply-content", "reply-parent" -> arrangeReply(f, case)
         }
     }
 
     private fun arrangeReply(f: CollaborationServiceFixture, case: String) {
-        coEvery { f.repository.addReply(any(), any()) } answers {
+        coEvery { f.repository.addReply(any(), any(), any(), any()) } answers {
             val reply = secondArg<CommentReply>()
             val returned = when (case) {
                 "reply-duplicate" -> listOf(reply, reply)

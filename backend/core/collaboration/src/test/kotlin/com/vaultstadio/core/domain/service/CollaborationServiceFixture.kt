@@ -88,16 +88,17 @@ internal class CollaborationServiceFixture {
             { arg<CollaborationParticipant>(2).right() }
         coEvery { membership.closeExpiredForOwner(any(), any()) } returns 0.right()
         coEvery { repository.getDocumentState(any()) } returns state.right()
-        coEvery { repository.applyOperation(any(), any()) } returns
+        coEvery { repository.applyOperation(any(), any(), any(), any()) } returns
             state.copy(version = 2, content = "afterbefore").right()
         coEvery { repository.getOperationsSince(any(), any()) } returns listOf(operation).right()
-        coEvery { repository.saveDocumentState(any()) } answers { firstArg<DocumentState>().right() }
-        coEvery { repository.createComment(any()) } answers { firstArg<DocumentComment>().right() }
+        coEvery { repository.saveExistingSnapshot(any(), any()) } answers { firstArg<DocumentState>().right() }
+        coEvery { repository.createComment(any(), any()) } answers { firstArg<DocumentComment>().right() }
         coEvery { repository.getCommentsForItem(any(), any()) } returns listOf(comment).right()
         coEvery { repository.findComment(any()) } returns comment.right()
-        coEvery { repository.resolveComment(any(), any()) } returns comment.copy(resolvedAt = now).right()
-        coEvery { repository.addReply(any(), any()) } answers { comment.copy(replies = listOf(secondArg())).right() }
-        coEvery { repository.deleteComment(any()) } returns Unit.right()
+        coEvery { repository.resolveComment(any(), any(), any(), any()) } returns comment.copy(resolvedAt = now).right()
+        coEvery { repository.addReply(any(), any(), any(), any()) } answers
+            { comment.copy(replies = listOf(secondArg())).right() }
+        coEvery { repository.deleteComment(any(), any(), any()) } returns Unit.right()
         coEvery { repository.setOffline(any()) } returns Unit.right()
         coEvery { repository.updatePresence(any()) } answers { firstArg<UserPresence>().right() }
         every { repository.streamOperations(any()) } returns flowOf(operation)

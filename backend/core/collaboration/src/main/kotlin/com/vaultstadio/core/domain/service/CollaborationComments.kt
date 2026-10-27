@@ -35,7 +35,7 @@ internal class CollaborationComments(
                 createdAt = now,
                 updatedAt = now,
             )
-            repository.createComment(comment).flatMap { row ->
+            repository.createComment(comment, actor).flatMap { row ->
                 if (row.userId != actor) collaborationScopeFailure().left() else bind(input.itemId, comment.id, row)
             }
         }
@@ -53,7 +53,7 @@ internal class CollaborationComments(
 
     suspend fun resolve(item: String, id: String, actor: String): Either<StorageException, DocumentComment> =
         access.comment(item, id, actor).flatMap {
-            repository.resolveComment(id, Clock.System.now()).flatMap { row -> bind(item, id, row) }
+            repository.resolveComment(id, Clock.System.now(), item, actor).flatMap { row -> bind(item, id, row) }
         }
 
     suspend fun reply(
@@ -69,7 +69,7 @@ internal class CollaborationComments(
                 content = content,
                 createdAt = Clock.System.now(),
             )
-            repository.addReply(id, reply).flatMap { row ->
+            repository.addReply(id, reply, item, actor).flatMap { row ->
                 if (row.replies.singleOrNull { it.id == reply.id }?.let {
                         it.userId == actor && it.content == content
                     } != true
@@ -83,7 +83,7 @@ internal class CollaborationComments(
 
     suspend fun delete(item: String, id: String, actor: String): Either<StorageException, Unit> =
         access.comment(item, id, actor).flatMap {
-            if (it.userId != actor) AuthorizationException().left() else repository.deleteComment(id)
+            if (it.userId != actor) AuthorizationException().left() else repository.deleteComment(id, item, actor)
         }
 
     private fun bind(item: String, id: String, row: DocumentComment): Either<StorageException, DocumentComment> =

@@ -5,6 +5,8 @@ import arrow.core.right
 import com.vaultstadio.core.domain.model.CollaborationOperation
 import com.vaultstadio.core.domain.model.DocumentState
 import com.vaultstadio.core.domain.repository.CollaborationDocumentsRepository
+import com.vaultstadio.domain.common.exception.AuthorizationException
+import com.vaultstadio.domain.common.exception.DatabaseException
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.infrastructure.persistence.entities.CollaborationOperationsTable
 import com.vaultstadio.infrastructure.persistence.entities.DocumentStatesTable
@@ -18,6 +20,20 @@ import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.jdbc.selectAll
 
 internal class ExposedCollaborationDocuments : CollaborationDocumentsRepository {
+    override suspend fun saveExistingSnapshot(
+        expected: DocumentState,
+        actorId: String,
+    ): Either<StorageException, DocumentState> = collaborationRepositoryCall(
+        "Failed to persist collaboration snapshot",
+    ) {
+        collaborationDbQuery {
+            lockCollaborationItem(expected.itemId, actorId)
+            requireCollaborationSnapshot(expected)
+            // This boundary acknowledges an already-persisted working snapshot, never a canonical byte commit.
+            expected
+        }.right()
+    }
+
     override suspend fun getDocumentState(itemId: String): Either<StorageException, DocumentState?> {
         return collaborationRepositoryCall("Failed to get document state") {
             collaborationDbQuery {
@@ -43,37 +59,24 @@ internal class ExposedCollaborationDocuments : CollaborationDocumentsRepository 
     override suspend fun applyOperation(
         itemId: String,
         operation: CollaborationOperation,
-    ): Either<StorageException, DocumentState> {
-        return collaborationRepositoryCall("Failed to apply operation") {
-            collaborationDbQuery {
-                insertCollaborationOperation(itemId, operation)
-
-                // Get current state and apply operation
-                val currentState = DocumentStatesTable.selectAll()
-                    .where { DocumentStatesTable.itemId eq itemId }
-                    .map { it.toDocumentState() }
-                    .singleOrNull()
-
-                val newContent = if (currentState != null) {
-                    applyOperationToContent(currentState.content, operation)
-                } else {
-                    ""
-                }
-
-                val newVersion = (currentState?.version ?: 0) + 1
-                val newState = DocumentState(
-                    itemId = itemId,
-                    version = newVersion,
-                    content = newContent,
-                    operations = emptyList(),
-                    lastModified = Clock.System.now(),
-                )
-
-                persistCollaborationDocument(newState, currentState != null)
-
-                newState
-            }.right()
-        }
+        actorId: String,
+        expected: DocumentState,
+    ): Either<StorageException, DocumentState> = collaborationRepositoryCall("Failed to apply operation") {
+        collaborationDbQuery {
+            lockCollaborationItem(itemId, actorId)
+            if (operation.userId != actorId) throw AuthorizationException()
+            if (expected.itemId != itemId) throw DatabaseException("Inconsistent document snapshot scope")
+            val current = requireCollaborationSnapshot(expected)
+            val updated = current.copy(
+                version = current.version + 1,
+                content = applyOperationToContent(current.content, operation),
+                operations = emptyList(),
+                lastModified = Clock.System.now(),
+            )
+            insertCollaborationOperation(itemId, operation)
+            persistCollaborationDocument(updated, true)
+            updated
+        }.right()
     }
 
     override suspend fun getOperationsSince(

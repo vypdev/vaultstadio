@@ -8,6 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface CollaborationDocumentsRepository {
     /**
+     * Persist only the exact already-read working snapshot. Atomically reject a changed/missing row;
+     * never recreate it or overwrite an intervening commit. Bootstrap remains a distinct capability.
+     */
+    suspend fun saveExistingSnapshot(
+        expected: DocumentState,
+        actorId: String,
+    ): Either<StorageException, DocumentState>
+
+    /**
      * Get or create document state.
      *
      * @param itemId Storage item ID
@@ -24,7 +33,8 @@ interface CollaborationDocumentsRepository {
     suspend fun saveDocumentState(state: DocumentState): Either<StorageException, DocumentState>
 
     /**
-     * Apply an operation to a document.
+     * Apply an operation under an authoritative item-owner lock, then a document lock.
+     * Reject changed expected state before any operation insert; never recreate a missing document.
      *
      * @param itemId Storage item ID
      * @param operation The operation to apply
@@ -33,6 +43,8 @@ interface CollaborationDocumentsRepository {
     suspend fun applyOperation(
         itemId: String,
         operation: CollaborationOperation,
+        actorId: String,
+        expected: DocumentState,
     ): Either<StorageException, DocumentState>
 
     /**

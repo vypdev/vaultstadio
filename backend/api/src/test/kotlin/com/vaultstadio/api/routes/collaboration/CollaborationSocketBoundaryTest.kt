@@ -44,6 +44,7 @@ class CollaborationSocketBoundaryTest {
             "revoked-recipient",
             "quoted-JSON",
             "malformed-frame",
+            "unknown-top-level-field",
         ],
     )
     fun `real sockets enforce identities errors delivery and lifecycle`(case: String) {
@@ -69,6 +70,7 @@ class CollaborationSocketBoundaryTest {
                     "revoked-recipient" -> revokedRecipient(s)
                     "quoted-JSON" -> quotedJson(s)
                     "malformed-frame" -> malformed(s)
+                    "unknown-top-level-field" -> unknownField(s)
                     else -> error("Unenumerated socket boundary")
                 }
             } finally {
@@ -106,7 +108,6 @@ class CollaborationSocketBoundaryTest {
 
     private suspend fun operationActor(s: CollaborationSocketFixture) {
         val socket = s.joined(s.first)
-        val before = f.snapshot()
         socket.send(
             Frame.Text(
                 """
@@ -117,12 +118,11 @@ class CollaborationSocketBoundaryTest {
                     .trimIndent(),
             ),
         )
-        assertEquals(400, socket.packet().code())
-        assertEquals(before, f.snapshot())
-        socket.sendMessage(
-            WebSocketMessage("operation", operation = OperationData("INSERT", 0, "valid", baseVersion = 1)),
-        )
         assertEquals("ack_operation", socket.packet().type())
+        assertEquals(
+            "forgedowned text\n",
+            f.repository.getDocumentState(f.item.id).fold({ throw it }, { checkNotNull(it).content }),
+        )
         assertEquals(
             listOf(f.storage.alice.id),
             transaction {
@@ -225,6 +225,14 @@ class CollaborationSocketBoundaryTest {
         val event = two.packet()
         assertEquals("operation", event.type())
         assertEquals(text, event.getValue("operation").jsonObject.getValue("text").jsonPrimitive.content)
+    }
+
+    private suspend fun unknownField(s: CollaborationSocketFixture) {
+        val socket = s.joined(s.first)
+        val before = f.snapshot()
+        socket.send(Frame.Text("""{"type":"ping","futureExtension":{"supported":true}}"""))
+        assertEquals("pong", socket.packet().type())
+        assertEquals(before, f.snapshot())
     }
 
     private suspend fun malformed(s: CollaborationSocketFixture) {

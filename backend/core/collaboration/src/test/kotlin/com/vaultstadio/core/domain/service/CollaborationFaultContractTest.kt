@@ -203,7 +203,7 @@ class CollaborationFaultContractTest {
         }
         "typed-save-failure" -> {
             coEvery {
-                f.repository.saveDocumentState(any())
+                f.repository.saveExistingSnapshot(any(), any())
             } returns DatabaseException("provider key").left()
             DatabaseException::class
         }

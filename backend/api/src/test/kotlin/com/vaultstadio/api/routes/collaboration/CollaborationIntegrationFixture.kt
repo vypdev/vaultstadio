@@ -115,6 +115,7 @@ internal class CollaborationIntegrationFixture : AutoCloseable {
             createdAt = item.createdAt,
             updatedAt = item.updatedAt,
         ),
+        storage.alice.id,
     ).fold({ throw it }, { it })
 
     fun snapshot(): List<Any> {
@@ -132,7 +133,10 @@ internal class CollaborationIntegrationFixture : AutoCloseable {
         return (listOf(StorageItemsTable) + tables).map { rows(it) } + listOf(bytes)
     }
 
-    fun install(application: Application) = with(application) {
+    fun install(
+        application: Application,
+        itemReads: StorageItemRepository = storage.repository,
+    ) = with(application) {
         val users = mockk<UserService>()
         coEvery { users.validateSession(any()) } answers {
             when (firstArg<String>()) {
@@ -150,7 +154,7 @@ internal class CollaborationIntegrationFixture : AutoCloseable {
                 module {
                     single<UserService> { users }
                     single<StorageBackend> { storage.backend }
-                    single<StorageItemRepository> { storage.repository }
+                    single<StorageItemRepository> { itemReads }
                     single<EventBus> { storage.events }
                 },
             )

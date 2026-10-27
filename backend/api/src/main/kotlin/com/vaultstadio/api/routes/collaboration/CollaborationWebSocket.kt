@@ -15,6 +15,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
+private val collaborationMessageJson = Json { ignoreUnknownKeys = true }
+
 fun Route.collaborationWebSocket(service: CollaborationService) {
     authenticate("auth-bearer") {
         webSocket("/api/v1/collaboration/ws/{sessionId}") {
@@ -47,7 +49,7 @@ private suspend fun DefaultWebSocketServerSession.serve(connection: Collaboratio
 
 private suspend fun CollaborationSocketConnection.receive(text: String) {
     try {
-        command(Json.decodeFromString<WebSocketMessage>(text))
+        command(collaborationMessageJson.decodeFromString<WebSocketMessage>(text))
     } catch (error: CancellationException) {
         throw error
     } catch (error: StorageException) {

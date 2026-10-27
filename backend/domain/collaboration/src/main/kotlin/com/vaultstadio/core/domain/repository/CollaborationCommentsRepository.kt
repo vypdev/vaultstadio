@@ -7,6 +7,7 @@ import com.vaultstadio.domain.common.exception.StorageException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 
+/** Mutations recheck the canonical owner under an item lock, then bind/lock any existing comment. */
 interface CollaborationCommentsRepository {
     /**
      * Create a comment.
@@ -14,7 +15,7 @@ interface CollaborationCommentsRepository {
      * @param comment The comment to create
      * @return The created comment
      */
-    suspend fun createComment(comment: DocumentComment): Either<StorageException, DocumentComment>
+    suspend fun createComment(comment: DocumentComment, actorId: String): Either<StorageException, DocumentComment>
 
     /**
      * Find a comment by ID.
@@ -42,7 +43,7 @@ interface CollaborationCommentsRepository {
      * @param comment Updated comment
      * @return The updated comment
      */
-    suspend fun updateComment(comment: DocumentComment): Either<StorageException, DocumentComment>
+    suspend fun updateComment(comment: DocumentComment, actorId: String): Either<StorageException, DocumentComment>
 
     /**
      * Resolve a comment.
@@ -54,6 +55,8 @@ interface CollaborationCommentsRepository {
     suspend fun resolveComment(
         commentId: String,
         resolvedAt: Instant,
+        itemId: String,
+        actorId: String,
     ): Either<StorageException, DocumentComment>
 
     /**
@@ -66,6 +69,8 @@ interface CollaborationCommentsRepository {
     suspend fun addReply(
         commentId: String,
         reply: CommentReply,
+        itemId: String,
+        actorId: String,
     ): Either<StorageException, DocumentComment>
 
     /**
@@ -74,7 +79,7 @@ interface CollaborationCommentsRepository {
      * @param commentId Comment ID
      * @return Unit on success
      */
-    suspend fun deleteComment(commentId: String): Either<StorageException, Unit>
+    suspend fun deleteComment(commentId: String, itemId: String, actorId: String): Either<StorageException, Unit>
 
     /**
      * Stream comments for an item.
