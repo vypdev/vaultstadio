@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Select exactly two source-bound canonical reports for the existing strict uploader."""
+"""Select source-bound canonical JVM reports and optional verification tooling coverage."""
 
 import argparse
 import hashlib
@@ -8,6 +8,7 @@ from pathlib import Path
 
 from discovery import VerificationError
 from reports import coverage
+from tooling_report import verified_input
 
 
 def inputs(directories: list[Path]) -> list[str]:
@@ -48,8 +49,16 @@ def main() -> None:
     parser.add_argument("--backend", type=Path, required=True)
     parser.add_argument("--frontend", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--python",
+        type=Path,
+        help="Require same-source Python verification coverage too",
+    )
     args = parser.parse_args()
     selected = inputs([args.backend, args.frontend])
+    if args.python:
+        receipt = json.loads(next(args.backend.rglob("coverage.json")).read_text())
+        selected.append(str(verified_input(args.python, receipt["source"])))
     if any("\n" in path or "," in path for path in selected):
         raise VerificationError("Invalid coverage output-channel path")
     with args.output.open("a") as output:

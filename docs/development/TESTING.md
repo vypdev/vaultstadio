@@ -67,6 +67,12 @@ Reuse fails if required results are absent/failed, the CI run/job or selected ta
 
 Existing storage authorization, serializer, helper and form gates remain required in CI, as do their focused report populations. The CI artifact uploader retains raw per-module results and canonical receipts; Codecov receives exactly one validated canonical XML per root. Its signed/checksummed CLI, isolated GPG keyring, strict validation and upload-error behavior are unchanged. `codecov.yml` configures an automatic **project** target with a 1% threshold; this is not a promise of patch coverage or 100% global coverage. A new global quality policy needs its own reviewed decision.
 
+## Verification tooling coverage
+
+The existing hosted quality job measures its Python verifier tests once with coverage.py 7.17.0, including real CLI subprocesses. `scripts/verification/coverage.ini` aliases disposable copied entrypoints back to the corresponding repository source. CI sets an absolute `COVERAGE_FILE` so child processes cannot lose their data when temporary fixtures are retired.
+
+`tooling_report.py start/finish` records the original source/context, rejects source drift and reconciles Cobertura/JSON totals and the complete Python file population. It publishes `build/verification/python/coverage.xml`, `coverage.json` and `receipt.json`. The existing Codecov job requires the same source identity for these files and both canonical JVM reports; missing, altered or mixed-source evidence fails selection. This is a separate tooling population with its own denominator, rather than JVM coverage or a claim about all platform code. The Gradle init adapter is exercised by real Gradle controls; these Python percentages do not quantify its line coverage. No global target or threshold changes.
+
 ## Results and failure investigation
 
 Each root writes `build/verification/inventory.json`, `<suite>.json` and a separate `runs/<suite>-<id>/receipt.json` with copied XML. It also retains original Gradle command/stdout/stderr files under `build/verification/commands/`. Receipts identify source HEAD/tree/dirty digest, task selection, actual JVM launcher metadata, raw totals, separate failures/errors/skips and JVM execution/class hashes. Browser identity remains in the actual runner logs and JUnit descriptions. Tasks without test sources are labeled separately; their actual Gradle `NO-SOURCE`/skip diagnostics remain in the logs and never become passed cases.

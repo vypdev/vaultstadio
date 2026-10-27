@@ -243,7 +243,7 @@ jobs:
     name: Coverage (Codecov)
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-24.04
-    needs: [backend, frontend]
+    needs: [backend, frontend, quality]
 
     timeout-minutes: 10
 
@@ -263,11 +263,17 @@ jobs:
           name: jacoco-coverage-frontend
           path: coverage-frontend
 
+      - name: Download verification tooling coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: verification-tooling-coverage
+          path: coverage-python
+
       - name: Discover coverage files for Codecov
         id: coverage-files
         run: |
           python3 scripts/verification/upload_manifest.py \
-            --backend coverage-backend --frontend coverage-frontend --output "$GITHUB_OUTPUT"
+            --backend coverage-backend --frontend coverage-frontend --python coverage-python --output "$GITHUB_OUTPUT"
 
       - name: Isolate Codecov verification keyring
         run: bash scripts/ci/prepare_codecov_keyring.sh
@@ -304,9 +310,13 @@ jobs:
         run: python3 -m unittest discover -s scripts/tests -p 'test_share_proxy.py' -v
       - name: Install workflow parser
         run: python3 -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
+      - name: Install verification coverage tool
+        run: python3 -m pip --isolated install --index-url https://pypi.org/simple coverage==7.17.0
       - name: Verify source and workflow contracts
         env:
           PYTHONDONTWRITEBYTECODE: '1'
+          COVERAGE_RCFILE: ${{ github.workspace }}/scripts/verification/coverage.ini
+          COVERAGE_FILE: ${{ github.workspace }}/build/verification/python/.coverage
         run: |
           python3 scripts/check-frontend-accessibility.py
           python3 scripts/check-frontend-wasm-mime.py
@@ -318,8 +328,26 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_share_architecture.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_selection_architecture.py' -v
-          python3 -m unittest discover -s scripts/tests -p 'test_verification_*.py' -v
+          python3 scripts/verification/tooling_report.py start
+          python3 -m coverage erase
+          python3 -m coverage run -m unittest discover -s scripts/tests -p 'test_verification_*.py' -v
+          python3 -m coverage combine
+          python3 -m coverage xml -o build/verification/python/coverage.xml
+          python3 -m coverage json -o build/verification/python/coverage.json
+          python3 scripts/verification/tooling_report.py finish
           python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
+      - name: Upload verification tooling coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-tooling-coverage
+          path: |
+            build/verification/python/coverage.xml
+            build/verification/python/coverage.json
+            build/verification/python/receipt.json
+            build/verification/python/source.json
+          if-no-files-found: error
+          retention-days: 1
 
   project-environment:
     name: Explicit project environment verification

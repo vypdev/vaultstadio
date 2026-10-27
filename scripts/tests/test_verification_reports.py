@@ -146,10 +146,15 @@ class CoverageContracts(unittest.TestCase):
             coverage(self.path)
 
     def test_shared_source_lines_are_counted_once(self):
-        self.path.write_text('<report><package name="p">\n<class name="p/A" sourcefilename="Shared.kt"><counter type="LINE" missed="0" covered="1"/></class>\n<class name="p/B" sourcefilename="Shared.kt"><counter type="LINE" missed="0" covered="1"/></class>\n<sourcefile name="Shared.kt"><counter type="LINE" missed="0" covered="1"/><counter type="INSTRUCTION" missed="0" covered="2"/></sourcefile>\n</package><counter type="LINE" missed="0" covered="1"/><counter type="INSTRUCTION" missed="0" covered="2"/></report>')
+        self.path.write_text('<report><package name="p">\n<class name="p/A" sourcefilename="Shared.kt"><counter type="LINE" missed="0" covered="1"/><counter type="INSTRUCTION" missed="0" covered="1"/></class>\n<class name="p/B" sourcefilename="Shared.kt"><counter type="LINE" missed="0" covered="1"/><counter type="INSTRUCTION" missed="0" covered="1"/></class>\n<sourcefile name="Shared.kt"><counter type="LINE" missed="0" covered="1"/><counter type="INSTRUCTION" missed="0" covered="2"/></sourcefile>\n</package><counter type="LINE" missed="0" covered="1"/><counter type="INSTRUCTION" missed="0" covered="2"/></report>')
         result = coverage(self.path)
         self.assertEqual(result['classes'], 2)
         self.assertEqual(result['line'], {'missed': 0, 'covered': 1})
+
+    def test_class_branches_cannot_disappear_from_source_and_root(self):
+        self.path.write_text('<report><package name="p"><class name="p/C" sourcefilename="C.kt"><counter type="BRANCH" missed="1" covered="1"/></class><sourcefile name="C.kt"><counter type="LINE" missed="0" covered="1"/></sourcefile></package><counter type="LINE" missed="0" covered="1"/></report>')
+        with self.assertRaises(VerificationError):
+            coverage(self.path)
 
     def test_missing_referenced_source_file_rejected(self):
         self.xml()

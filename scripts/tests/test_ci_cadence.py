@@ -97,6 +97,22 @@ class CadenceContractTests(unittest.TestCase):
                     self.assertEqual(result.returncode, 42)
         self.assertEqual(count, 3)
 
+    def test_tooling_coverage_measures_the_existing_tests_once(self):
+        ci = workflow('ci.yml')
+        job = ci['jobs']['quality']
+        commands = '\n'.join(step.get('run', '') for step in job['steps'])
+        self.assertEqual(commands.count("-p 'test_verification_*.py'"), 1)
+        self.assertEqual(commands.count('coverage run '), 1)
+        self.assertLess(commands.index('tooling_report.py start'), commands.index('coverage run '))
+        self.assertLess(commands.index('coverage run '), commands.index('tooling_report.py finish'))
+        self.assertNotIn('--fail-under', commands)
+        self.assertIn('quality', ci['jobs']['coverage']['needs'])
+        upload = next(step for step in job['steps'] if step.get('with', {}).get('name') == 'verification-tooling-coverage')
+        self.assertEqual(upload['if'], 'always()')
+        self.assertEqual(upload['with']['if-no-files-found'], 'error')
+        selection = next(step for step in ci['jobs']['coverage']['steps'] if step.get('id') == 'coverage-files')
+        self.assertIn('--python coverage-python', selection['run'])
+
     def test_shared_runners_reject_fork_source(self):
         guard = "github.event.pull_request.head.repo.full_name == github.repository"
         for name in ['ci.yml', 'secret_scanning.yml', 'docker_client_contract.yml']:

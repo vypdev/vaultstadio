@@ -157,7 +157,24 @@ def coverage(path: Path) -> dict:
             for counter in element.findall("counter")
             if counter.get("type") == kind
         ]
+        class_counters = [
+            counter
+            for element in classes
+            for counter in element.findall("counter")
+            if counter.get("type") == kind
+        ]
+        class_totals = {
+            key: sum(
+                integers(counter, ("missed", "covered"))[key]
+                for counter in class_counters
+            )
+            for key in ("missed", "covered")
+        }
         if kind == "BRANCH" and not counters and not per_class:
+            if any(class_totals.values()):
+                raise VerificationError(
+                    "Class branch coverage is missing from source/root counters"
+                )
             result["branch"] = {"missed": 0, "covered": 0}
             continue
         if len(counters) != 1:
