@@ -134,6 +134,12 @@ Version-ID-only operations use the minimal item-scope semantic port before the o
 
 Traceability: VER-OWNER-01, VER-GRANT-01, VER-SCOPE-01, VER-BIND-01, VER-EFFECTS-01, VER-ERROR-01 and VER-ARCH-01 in SDD-0007; 72 service and91 HTTP matrix executions plus non-overlapping error/state risks. Local implementation evidence (348 affected-suite cases, no failures/errors/skips) is recorded in [VERSION_OWNERSHIP_74.md](../docs/development/verification/VERSION_OWNERSHIP_74.md); remote review/adoption remain separate. Reuse the reviewed storage owner policy after normal parent integration; this contract does not expand download shares into collaboration/history grants or declare the broader product ready.
 
+### 6.6 Collaboration actor and resource authorization — issue #89
+
+Proposal before code: apply [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89) to every REST/socket/application collaboration surface. Current canonical active-file ownership is the available authority; unguarded membership, public/shared metadata, download shares and a nonowner administrator role do not grant editing or state access. Scope ID-only references minimally before loading full state, bind path/session/participant/comment identities, and keep global presence/maintenance self-scoped. Every public application call has an explicit actor; socket checks precede registration/effects and each delivery. The owner retains real positive behavior, including multiple independently bound connections.
+
+The absence of durable nonowner collaboration grants is explicit product debt, not an invented grant or a claim that the whole feature is complete. Numeric inventory391 and migration/compatibility limits belong to the owning SDD. No authentication mechanism, Copilot contract or protection is changed.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.

@@ -146,6 +146,10 @@ Local verification for this subset: [issue #73 report](../docs/development/verif
 
 No permission switch is configurable. Token-authorized public downloads keep their existing validation and owner-scoped download path; changing sharing semantics is outside this correction.
 
+### 6.5 Collaboration access to canonical files — issue #89
+
+R01c reuses StorageAccessPolicy.requireOwner before collaboration metadata or effects, then rejects non-FILE/trashed canonical items. A storage download grant does not confer historical or collaboration permission. Membership admission/leave/update rechecks the current item owner under the canonical item/session lock, while presence references are validated against their canonical resources. The complete scope, risk inventory and explicit missing cold-start/canonical-commit journeys are in [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89); ordinary storage semantics and the reviewed R01 storage deletion boundary remain unchanged.
+
 ## 7. User-facing configuration
 
 Storage type, local path, S3 endpoint/region/bucket/credentials, path style, quota, and trash retention are validated with cross-field rules. Storage type controls backend and S3 route registration.
