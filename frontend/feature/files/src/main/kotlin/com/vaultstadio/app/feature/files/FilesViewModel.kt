@@ -363,7 +363,11 @@ class FilesViewModel(
         viewModelScope.launch {
             items = items.filter { it.id != itemId }
             when (val result = batchMoveUseCase(listOf(itemId), destinationId)) {
-                is Result.Success -> loadItems()
+                is Result.Success -> {
+                    val outcome = result.data.forSelection(setOf(itemId))
+                    if (outcome.error != null) error = outcome.error
+                    loadItems(preserveError = outcome.error != null)
+                }
                 is Result.Error -> {
                     error = result.message
                     loadItems(preserveError = true)

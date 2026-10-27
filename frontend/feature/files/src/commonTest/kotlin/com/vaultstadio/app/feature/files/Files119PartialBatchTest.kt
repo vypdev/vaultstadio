@@ -57,4 +57,35 @@ class Files119PartialBatchTest {
         assertEquals(setOf("a"), vm.selectedItems)
         assertNotNull(vm.error)
     }
+
+    @Test fun file119ContradictorySuccessCountsCannotDiscardAReportedFailure() = files119Test { h ->
+        val vm = h.model()
+        advanceUntilIdle()
+        vm.toggleItemSelection("file119")
+        h.mutation.batchResult = Result.Success(BatchResult(1, 0, listOf(BatchError("file119", "No grant"))))
+        vm.batchMove("target")
+        advanceUntilIdle()
+        assertEquals(setOf("file119"), vm.selectedItems)
+        assertNotNull(vm.error)
+    }
+
+    @Test fun file119PartialSingleMoveRestoresItemsAndRetainsTheProviderCause() = files119Test { h ->
+        val vm = h.model()
+        advanceUntilIdle()
+        h.mutation.batchResult = Result.Success(BatchResult(0, 1, listOf(BatchError("file119", "No grant"))))
+        vm.moveItemToFolder("file119", "target")
+        advanceUntilIdle()
+        assertEquals(listOf("file119"), vm.items.map { it.id })
+        assertEquals("No grant", vm.error)
+    }
+
+    @Test fun file119UncertainSingleMoveNeverClaimsACompletedMutation() = files119Test { h ->
+        val vm = h.model()
+        advanceUntilIdle()
+        h.mutation.batchResult = Result.Success(BatchResult(0, 0))
+        vm.moveItemToFolder("file119", "target")
+        advanceUntilIdle()
+        assertEquals(listOf("file119"), vm.items.map { it.id })
+        assertNotNull(vm.error)
+    }
 }

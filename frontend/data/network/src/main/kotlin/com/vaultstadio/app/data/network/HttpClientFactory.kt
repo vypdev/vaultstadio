@@ -77,7 +77,7 @@ object HttpClientFactory {
 
         install(Logging) {
             level = LogLevel.INFO
-            filter { !it.url.encodedPath.startsWith("/api/v1/shares/") }
+            filter { !it.url.encodedPath.startsWith("/api/v1/share/") }
             sanitizeHeader { it.equals(HttpHeaders.Authorization, ignoreCase = true) }
             if (logger != null) this.logger = logger
         }

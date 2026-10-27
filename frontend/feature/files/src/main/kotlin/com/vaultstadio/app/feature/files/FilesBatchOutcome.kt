@@ -6,7 +6,7 @@ internal data class FilesBatchOutcome(val remaining: Set<String>, val error: Str
 
 /** A successful HTTP envelope can still contain failed or uncertain per-item effects. */
 internal fun BatchResult.forSelection(requested: Set<String>): FilesBatchOutcome {
-    if (failed == 0 && successful == requested.size) return FilesBatchOutcome(emptySet(), null)
+    if (failed == 0 && successful == requested.size && errors.isEmpty()) return FilesBatchOutcome(emptySet(), null)
     val failedIds = errors.map { it.itemId }.toSet()
     val completeFailures = failed > 0 &&
         successful >= 0 &&

@@ -103,6 +103,15 @@ class Network119BoundaryTest {
 
     @Test fun net119PublicShareCapabilityDoesNotAppearInHttpLogs() = runTest {
         val capability = "owned-ephemeral-share-capability"
-        assertFalse(captured("/api/v1/shares/$capability/download").any { capability in it })
+        assertFalse(captured("/api/v1/share/$capability/download").any { capability in it })
+    }
+
+    @Test fun net119PublicMetadataAndPasswordQueriesRemainPrivate() = runTest {
+        val capability = "owned-ephemeral-share-capability"
+        val password = "owned-ephemeral-query-password"
+        for (suffix in listOf("", "/view", "/view/download")) {
+            val messages = captured("/api/v1/share/$capability$suffix?password=$password")
+            assertFalse(messages.any { capability in it || password in it })
+        }
     }
 }
