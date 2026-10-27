@@ -202,6 +202,8 @@ NET119-01–24 and FILE119-01–32 in [the scenario inventory](../docs/developme
 
 Multipart transfers preserve the actual Content-Type/boundary, original bytes and names through the ordinary engine, including folder uploads. Progress is bounded by actual transfer work; preparing a folder body must not announce completed transfer. A missing optional token must not create a literal `Bearer null` credential. Verify both the deterministic engine contracts and an isolated loopback HTTP exchange for the default desktop engine.
 
+BaseApi's reified wrappers supply serialization information while one shared execution path owns transport failure, cancellation and response/error mapping. Apply the Unit-versus-required-payload rule consistently to no-body, body and form commands. Measure ordinary executed behavior without exclusions or reflective invocation of inline implementation stubs. A default-preserving logger seam may capture the actual HTTP plugin output; bearer headers and public-share capability paths must not reveal credentials. Exercise an actual configured timeout and body-decoding cancellation independently from an ordinary connection failure.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
