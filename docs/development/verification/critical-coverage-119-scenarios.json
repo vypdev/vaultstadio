@@ -1,6 +1,6 @@
 {
   "issue": 119,
-  "status": "refinement-in-progress: incoming-body transfer cancellation",
+  "status": "local-verification-complete; final PR CI and Copilot review pending",
   "baseline": "dcd7eab411bdeb94e601bdee0ffac6319cb78a26",
   "baselineCi": 40531576901,
   "counting": "Scenarios are acceptance risks, not executed tests. Parameter variants and repeated platform executions must be reported separately.",
@@ -672,6 +672,7 @@
       "risk": "transport failure does not fabricate an empty download",
       "status": "verified",
       "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt::sto119GenuineRequestDeadlineRemainsANetworkFailure",
         "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119OfflineAndMalformedTransfersRemainFailures"
       ],
       "evidence": "CRITICAL_COVERAGE_119.md"
@@ -680,8 +681,12 @@
       "id": "STO119-16",
       "requirement": "CLIENT119-STORAGE",
       "risk": "cancellation propagates through upload/download adapters",
-      "status": "refinement-in-progress",
+      "status": "verified",
       "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt::sto119ChunkIncomingBodyCancellationRemainsControlFlow",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt::sto119DownloadIncomingBodyCancellationRemainsControlFlow",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt::sto119FolderIncomingBodyCancellationRemainsControlFlow",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt::sto119UploadIncomingBodyCancellationRemainsControlFlow",
         "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119ChunkCancellationRemainsControlFlow",
         "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119DownloadCancellationRemainsControlFlow",
         "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119FolderCancellationRemainsControlFlow",
@@ -1094,6 +1099,6 @@
       ]
     }
   ],
-  "testedImplementation": "92404e45e596e7832e7bfb59d9d5b2fb697054fe",
+  "testedImplementation": "85aca01b02ed5f84d54b9c972c6237e7d1ca77e4",
   "limits": "Risk families map tested examples, not every cross-product of verbs, roles and payloads. NET119-24 constrains owned test transports. FILE119-32 records separate roadmap work. MockEngine tests do not certify client/server URL compatibility or real packaged UI."
 }

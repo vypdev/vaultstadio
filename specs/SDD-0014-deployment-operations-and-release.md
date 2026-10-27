@@ -226,7 +226,7 @@ R04-CI-01 preparation on self-hosted macOS must not depend on GitHub-hosted `/Us
 
 Global coverage thresholds and a strict global legacy lint migration remain separate proposals. The #84 implementation must measure the full denominator honestly; passing tests do not establish 100% coverage. Copilot implementation/generated workflows, branch lifecycle ownership, protections, `VERIFICATION_SETUP=false` and master promotion remain outside this repair. Action versions remain major tags.
 
-Local R04 checkpoint (2026-10-27): complete product execution and failure controls are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). This verifies the declared local scope only; final PR CI, Copilot review and adoption remain pending. JVM, Wasm and Python populations and mobile limitations remain separate.
+R04 verification infrastructure was adopted on develop through PR #118; its local, final CI and post-merge evidence are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). Current critical behavioral coverage continues in [issue #119](../docs/development/verification/CRITICAL_COVERAGE_119.md), with its own final-ref CI/review/adoption steps. JVM, Wasm and Python populations, mobile limitations and whole-platform readiness remain separate.
 
 ### 6.9 Critical behavioral coverage increment — issue #119
 

@@ -1,14 +1,16 @@
 # Critical backend and desktop coverage — issue #119
 
-This is the preserved 6,081-case checkpoint at `92404e45e596e7832e7bfb59d9d5b2fb697054fe`. A later private incoming-body probe reproduced four transfer-cancellation failures; shared cancellation refinement and new full-candidate acceptance are in progress. Local complete verification passed; final-ref PR CI, Copilot review and adoption remain separate steps. The [machine results](critical-coverage-119.json) and [98 risk families mapped to actual tests](critical-coverage-119-scenarios.json) distinguish executed cases, repeated platforms and outstanding capabilities. Documentation commits after this implementation must leave production and tests unchanged; PR CI verifies its own final ref.
+The tested implementation is `85aca01b02ed5f84d54b9c972c6237e7d1ca77e4`. Local complete verification passed; final-ref PR CI, Copilot review and adoption remain separate steps. The [machine results](critical-coverage-119.json) and [98 risk families mapped to actual tests](critical-coverage-119-scenarios.json) distinguish executed cases, repeated platforms and outstanding capabilities. Documentation commits after this implementation must leave production and tests unchanged; PR CI verifies its own final ref.
 
 ## Scope and repairs
 
-The pre-code contracts were committed in `7aad7e5`, `e839345`, `64fe6ba`, `5599f83` and `cd212f8`, using the existing SDD-0003/0004/0013/0014 format. The official Action created the linked #119 branch before implementation. Copilot and its generated files are unchanged.
+The pre-code contracts were committed in `7aad7e5`, `e839345`, `64fe6ba`, `5599f83` `cd212f8` and `6f07a71`, using the existing SDD-0003/0004/0013/0014 format. The official Action created the linked #119 branch before implementation. Copilot and its generated files are unchanged.
 
 Eight empty auth-route tests mounted no production application and contained no behavioral assertions. They are replaced with real handlers, DI, BCrypt, migrated PostgreSQL and owned filesystem bytes. Registration validates the supported email shape; malformed JSON returns a safe 400; inactive identities cannot authorize an old session; failed logout persistence cannot claim success. Refresh uses a conditional SQL update against the previous hash: two concurrent consumers have exactly one winner, and logout during an already-read refresh cannot yield an unpersisted credential pair. Direct SQL controls exercise every session-provider error, expiry cleanup, identity lookup and revocation without fabricated state.
 
 The production HTTP factory accepts an owned engine/logger for testing. Reified wrappers supply codecs to one executed response path; typed missing data cannot masquerade as Unit success, and body/form Unit commands work. Cancellation remains control flow through request and error-body decoding, while a real configured timeout remains a network failure. Tests caught and repaired a JVM protected-receiver regression across modules during that refactor. The logger test uses the actual public `/api/v1/share/{token}` route and metadata/view/download/password-query variants; its earlier plural fixture was corrected before final acceptance.
+
+The data-network cancellation classifier is shared by BaseApi and all four manual transfer adapters. Four additional incoming-body controls reproduced wrapped cancellation becoming NetworkError; the permanent common tests cover all four adapters, plus a real configured transport-deadline control. This refinement supersedes the preserved 6,081-case checkpoint without treating its missing cases as coverage.
 
 Storage tests preserve binary multipart content, relative paths, paging/sort/identity, token rotation and transfer errors. Folder progress follows streamed bytes; cancellation propagates and a missing override cannot manufacture `Bearer null`. A real loopback HTTP server with the default CIO engine verifies multipart Content-Type and bytes independently of MockEngine.
 
@@ -16,7 +18,7 @@ Files state is split into focused request, info-panel and batch-outcome collabor
 
 ## Complete executions and populations
 
-`make test-coverage` completed **6,081 product executions** in 455.03 seconds: **3,296 backend**, **1,455 desktop** and **1,330 Wasm**, all with zero failures, errors and skipped cases. This is an increase of 308 over the adopted #84 baseline; eight placeholder cases were retired. Common cases running on both JVM and Wasm are repeated platform executions, not distinct scenarios. Ninety-six risk families have behavioral examples, NET119-24 verifies the owned test boundary, and FILE119-32 explicitly keeps separate roadmap work.
+`make test-coverage` completed **6,091 product executions** in 580.15 seconds: **3,296 backend**, **1,460 desktop** and **1,335 Wasm**, all with zero failures, errors and skipped cases. This is an increase of 318 over the adopted #84 baseline; eight placeholder cases were retired. Common cases running on both JVM and Wasm are repeated platform executions, not distinct scenarios. Ninety-six risk families have behavioral examples, NET119-24 verifies the owned test boundary, and FILE119-32 explicitly keeps separate roadmap work.
 
 The default inventory still discovers all applicable modules and test tasks rather than a hand-maintained list. Modules without test sources add no passed cases. Android/iOS-specific tests and hardware remain outside this certificate, as documented in [Testing](../TESTING.md). JVM coverage includes every main class output from all 44 backend and 52 desktop modules, including untested code. No source/class exclusions or threshold reductions were introduced. Compiler-generated/inlined inputs and JaCoCo report classes are different populations.
 
@@ -24,7 +26,7 @@ The default inventory still discovers all applicable modules and test tasks rath
 |---|---|---|
 | Backend lines | 8,958 / 16,877 (53.08%) | 9,246 / 16,903 (54.70%) |
 | Backend branches | 1,934 / 6,042 (32.01%) | 1,995 / 6,059 (32.93%) |
-| Desktop JVM lines | 6,153 / 21,079 (29.19%) | 6,955 / 21,172 (32.85%) |
+| Desktop JVM lines | 6,153 / 21,079 (29.19%) | 6,951 / 21,168 (32.84%) |
 | Desktop JVM branches | 853 / 5,508 (15.49%) | 1,180 / 5,622 (20.99%) |
 
 | Focused module | Baseline lines | Current lines | Current branches |
@@ -32,7 +34,7 @@ The default inventory still discovers all applicable modules and test tasks rath
 | backend:core:auth | 199 / 283 (70.32%) | 243 / 289 (84.08%) | 87 / 138 (63.04%) |
 | backend:infrastructure | 1,500 / 3,358 (44.67%) | 1,632 / 3,371 (48.41%) | 336 / 895 (37.54%) |
 | frontend:data:network | 21 / 172 (12.21%) | 141 / 184 (76.63%) | 50 / 72 (69.44%) |
-| frontend:data:storage | 80 / 545 (14.68%) | 285 / 556 (51.26%) | 60 / 82 (73.17%) |
+| frontend:data:storage | 80 / 545 (14.68%) | 281 / 552 (50.91%) | 60 / 82 (73.17%) |
 | frontend:feature:files | 4 / 461 (0.87%) | 480 / 531 (90.40%) | 217 / 256 (84.77%) |
 
 | Critical source (includes its generated/nested classes) | Lines | Branches |
@@ -41,9 +43,10 @@ The default inventory still discovers all applicable modules and test tasks rath
 | UserInputValidation.kt | 8 / 8 (100.00%) | 18 / 18 (100.00%) |
 | AuthRoutes.kt | 76 / 76 (100.00%) | 15 / 34 (44.12%) |
 | ExposedSessionRepository.kt | 125 / 125 (100.00%) | 13 / 24 (54.17%) |
-| BaseApi.kt | 69 / 84 (82.14%) | 34 / 44 (77.27%) |
+| TransportCancellation.kt | 12 / 12 (100.00%) | 13 / 16 (81.25%) |
+| BaseApi.kt | 57 / 72 (79.17%) | 21 / 28 (75.00%) |
 | HttpClientFactory.kt | 43 / 43 (100.00%) | 8 / 8 (100.00%) |
-| StorageApi.kt | 155 / 159 (97.48%) | 60 / 68 (88.24%) |
+| StorageApi.kt | 151 / 155 (97.42%) | 60 / 68 (88.24%) |
 | FilesLoadingCoordinator.kt | 33 / 33 (100.00%) | 18 / 18 (100.00%) |
 | FilesLoader.kt | 108 / 111 (97.30%) | 55 / 62 (88.71%) |
 | FilesBatchOutcome.kt | 15 / 15 (100.00%) | 21 / 26 (80.77%) |
@@ -56,9 +59,11 @@ The verifier's 132 controls pass separately, with 586/597 lines and 244/256 bran
 
 ## Evidence and limitations
 
-Original command output, matching suite receipts, raw JUnit XML, JVM execution inputs and canonical XML are preserved in the final archive, SHA256 `73400ad3a7c19e4275627084dcbfdf8745487a6ab816f7bf3a7f15e2d72057da`. The machine result lists the separate red-phase archive hashes. Those phases preserve source and actual failures before repair; the refactor regression and corrected logger fixture are not mislabeled as baseline product behavior. Tests that directly use domain ports or MockEngine are explicitly distinct from real PostgreSQL/HTTP/bytes tests.
+Original command output, matching suite receipts, raw JUnit XML, JVM execution inputs and canonical XML are preserved in the final archive, SHA256 `81b0960f8f28582c28c1c8f8502a90cfa40ba160a97eca696296d6384ec8a8e0`. The machine result lists the separate red-phase archive hashes. Those phases preserve source and actual failures before repair; the refactor regression and corrected logger fixture are not mislabeled as baseline product behavior. Tests that directly use domain ports or MockEngine are explicitly distinct from real PostgreSQL/HTTP/bytes tests.
 
 The original two detached SDD drafts retain their exact hashes. Normal commits/pushes preserve history on the official managed branch. Existing dogfood data, package 1499c6b and rollback 03aa855 remain intact; read-only health checks returned 200. That old package health is not evidence that these new changes have been GUI-dogfooded. Final-ref CI and its coverage upload must pass independently. Master, protections and VERIFICATION_SETUP=false remain unchanged.
+
+Copilot’s empty-domain-label finding was disproved against the exact compiled validator, including its U+200B counterexample, and the existing real HTTP consecutive-dot regression. [Upstream report #749](https://github.com/vypdev/copilot/issues/749) preserves the details; the thread was resolved on executed evidence without changing the validator or Copilot. This independent four-input control is not added to the product case totals. Native approval remains a separate decision.
 
 ## Remaining work
 

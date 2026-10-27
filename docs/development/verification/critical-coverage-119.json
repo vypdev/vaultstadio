@@ -3,10 +3,10 @@
   "issue": 119,
   "baselineDevelop": "dcd7eab411bdeb94e601bdee0ffac6319cb78a26",
   "testedImplementation": {
-    "head": "92404e45e596e7832e7bfb59d9d5b2fb697054fe",
-    "tree": "0e66f93f44ad6aa2d054171eb9c45dcd84084daf",
+    "head": "85aca01b02ed5f84d54b9c972c6237e7d1ca77e4",
+    "tree": "b1e6adc6a1798b074759719d40e8b48ba14294a1",
     "status": "",
-    "digest": "a22527ecf6a1a59968ba5875055931977c5ef95baa3b4430ee365a3e4d88ca6a"
+    "digest": "9010a575b662422b1a318378424ebac383b6123954a28953bab3abc7d4cd64dd"
   },
   "product": {
     "backend": {
@@ -16,29 +16,29 @@
       "skipped": 0
     },
     "desktop": {
-      "tests": 1455,
+      "tests": 1460,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     },
     "browser": {
-      "tests": 1330,
+      "tests": 1335,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     }
   },
-  "totalProductExecutions": 6081,
+  "totalProductExecutions": 6091,
   "command": [
     "make",
     "test-coverage"
   ],
-  "seconds": 455.03,
+  "seconds": 580.15,
   "canonical": {
     "backend": {
       "summary": {
         "classes": 2180,
-        "sha256": "ddc7008fc68e6bd108228476e74b9a249d555fb0e89ba80c74720984f65f0276",
+        "sha256": "174a1801bd77eb846960a3e490c8e4a69957542d09b3b4cc7acc07834dbef38b",
         "line": {
           "missed": 7657,
           "covered": 9246
@@ -616,11 +616,11 @@
     },
     "frontend": {
       "summary": {
-        "classes": 1771,
-        "sha256": "a672115fd5ca4504032c0b40cc32235b5e07eccc0c01e104be1fb1bede418c8b",
+        "classes": 1772,
+        "sha256": "8bcce537c6084d7417675100cf4bc8c578600b51abd9ae02fbc03c9f5a2d7e1f",
         "line": {
           "missed": 14217,
-          "covered": 6955
+          "covered": 6951
         },
         "branch": {
           "missed": 4442,
@@ -628,7 +628,7 @@
         },
         "instruction": {
           "missed": 132571,
-          "covered": 42206
+          "covered": 42364
         }
       },
       "modules": {
@@ -880,7 +880,7 @@
             "missed": 22
           },
           "instruction": {
-            "covered": 744,
+            "covered": 742,
             "missed": 295
           }
         },
@@ -900,7 +900,7 @@
         },
         ":data:storage": {
           "line": {
-            "covered": 285,
+            "covered": 281,
             "missed": 271
           },
           "branch": {
@@ -908,7 +908,7 @@
             "missed": 22
           },
           "instruction": {
-            "covered": 1456,
+            "covered": 1616,
             "missed": 2428
           }
         },
@@ -1393,17 +1393,31 @@
         "missed": 0
       }
     },
+    "com/vaultstadio/app/data/network/TransportCancellation.kt": {
+      "instruction": {
+        "covered": 61,
+        "missed": 0
+      },
+      "branch": {
+        "covered": 13,
+        "missed": 3
+      },
+      "line": {
+        "covered": 12,
+        "missed": 0
+      }
+    },
     "com/vaultstadio/app/data/network/BaseApi.kt": {
       "instruction": {
-        "covered": 314,
+        "covered": 251,
         "missed": 99
       },
       "branch": {
-        "covered": 34,
-        "missed": 10
+        "covered": 21,
+        "missed": 7
       },
       "line": {
-        "covered": 69,
+        "covered": 57,
         "missed": 15
       }
     },
@@ -1423,7 +1437,7 @@
     },
     "com/vaultstadio/app/data/storage/api/StorageApi.kt": {
       "instruction": {
-        "covered": 875,
+        "covered": 1035,
         "missed": 41
       },
       "branch": {
@@ -1431,7 +1445,7 @@
         "missed": 8
       },
       "line": {
-        "covered": 155,
+        "covered": 151,
         "missed": 4
       }
     },
@@ -1507,7 +1521,7 @@
     }
   },
   "pythonTooling": {
-    "xmlSha256": "9e38184e1030a7691bd710e445c8e310ab4686ff7f274343e7a0ef8d4896f040",
+    "xmlSha256": "d7322330ad1166cf88df86f74cc703b2021043a6004010367df6ab78a16c7364",
     "counters": {
       "lines-valid": 597,
       "lines-covered": 586,
@@ -1529,8 +1543,8 @@
     "toolVersion": "7.17.0"
   },
   "originalsArchive": {
-    "sha256": "73400ad3a7c19e4275627084dcbfdf8745487a6ab816f7bf3a7f15e2d72057da",
-    "bytes": 4243949
+    "sha256": "81b0960f8f28582c28c1c8f8502a90cfa40ba160a97eca696296d6384ec8a8e0",
+    "bytes": 4248484
   },
   "riskInventory": "critical-coverage-119-scenarios.json",
   "negativePhases": [
@@ -1561,17 +1575,30 @@
     {
       "name": "issue119-red-storage",
       "sha256": "5898c3ec06a5106c37820ee58fd87e84dd00b1e1a500b73f667c393846354017"
+    },
+    {
+      "name": "issue119-red-storage-body-cancellation",
+      "sha256": "81a3374d1adb369ed2a149de40da3de35750047a333c7689c409cfcaf28a6b6f"
     }
   ],
-  "status": "6081-case checkpoint superseded by incoming-body cancellation refinement; final candidate verification pending",
+  "status": "Local verification complete on tested implementation; final-ref PR CI, Copilot review and adoption are separate acceptance steps",
   "limits": [
     "Common tests repeat on desktop and Wasm. Case counts are not unique scenarios.",
     "MockEngine verifies transport semantics; domain ports verify state ownership. Neither certifies the rendered packaged application.",
     "Known client download URL mismatch remains #78. Other roadmap issues remain open.",
     "No class exclusions, reduced thresholds, workflow changes, Copilot modifications, protection changes, setup activation or master promotion."
   ],
-  "toolingOriginalsArchiveSha256": "4af0d35398726693e1283d403954627bcef1f2c320a8a1957412d0e6980b52a0",
-  "localCoverageConsumer": "upload_manifest.py accepted all three actual canonical populations at tested implementation",
+  "toolingOriginalsArchiveSha256": "0bb972c596b071e472eae40b2223f39c17963322f05fe9851f098e4c9b0d0ca7",
+  "localCoverageConsumer": "upload_manifest.py accepted three source-matching canonical populations at85aca01",
+  "reviewReconciliation": {
+    "upstream": "https://github.com/vypdev/copilot/issues/749",
+    "reviewedHead": "3d6741cfcd6d53b01e38075e90cdc2caede4e58a",
+    "finding": "UserInputValidation.kt:10:accepts-empty-email-domain-labels",
+    "threadResolvedOnExecutedCounterexample": true,
+    "exactReportedInput": "user@\u200bexample..com",
+    "actualAccepted": false,
+    "control": "Actual compiled validator; three rejected malformed inputs and supported plus-tag positive. Independent control is excluded from product case counts."
+  },
   "testTaskPopulations": {
     "backend": {
       "selected": 44,
@@ -1587,7 +1614,7 @@
         "passed": 7,
         "no-test-sources": 45
       },
-      "rawXmlFiles": 278
+      "rawXmlFiles": 279
     },
     "browser": {
       "selected": 52,
@@ -1595,7 +1622,7 @@
         "passed": 7,
         "no-test-sources": 45
       },
-      "rawXmlFiles": 273
+      "rawXmlFiles": 274
     }
   }
 }
