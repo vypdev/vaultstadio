@@ -1,5 +1,7 @@
 """Regression contracts for PR test completeness, event cost and publishing boundaries."""
 from pathlib import Path
+import json
+import os
 import re
 import shlex
 import subprocess
@@ -18,7 +20,7 @@ def workflow(name):
 
 
 def steps(document):
-    return [s for job in document['jobs'].values() for s in job['steps']]
+    return [s for job in document['jobs'].values() for s in job.get('steps', [])]
 
 
 class CadenceContractTests(unittest.TestCase):
@@ -51,7 +53,7 @@ class CadenceContractTests(unittest.TestCase):
         for name in ['security.yml', 'project_runtime_verification.yml', 'extended_verification.yml']:
             with self.subTest(workflow=name):
                 events = workflow(name)['on']
-                self.assertEqual(set(events), {'workflow_dispatch', 'schedule'})
+                self.assertEqual(set(events), {'workflow_dispatch', 'schedule'} | ({'workflow_call'} if name == 'project_runtime_verification.yml' else set()))
                 cron = events['schedule'][0]['cron'].split()
                 self.assertEqual(cron[2:4], ['*', '*'])
                 self.assertRegex(cron[4], r'^[0-6]$')
@@ -94,7 +96,7 @@ class CadenceContractTests(unittest.TestCase):
         guard = "github.event.pull_request.head.repo.full_name == github.repository"
         for name in ['ci.yml', 'secret_scanning.yml', 'docker_client_contract.yml']:
             for job in workflow(name)['jobs'].values():
-                if isinstance(job['runs-on'], dict):
+                if isinstance(job.get('runs-on'), dict):
                     self.assertIn(guard, job['if'])
 
     def test_coverage_gates_and_raw_results_remain_required(self):
@@ -129,6 +131,21 @@ class CadenceContractTests(unittest.TestCase):
         self.assertEqual(smoke['if'], "github.event_name == 'workflow_dispatch'")
         self.assertFalse(any('./gradlew' in s.get('run', '') for s in backend))
 
+    def test_manual_environment_verification_cannot_replace_pr_tests(self):
+        ci = workflow('ci.yml')
+        scope = ci['on']['workflow_dispatch']['inputs']['project_environment']
+        self.assertEqual(scope['default'], 'none')
+        self.assertEqual(set(scope['options']), {'none', 'complete', 'inventory'})
+        call = ci['jobs']['project-environment']
+        self.assertIn("github.event_name == 'workflow_dispatch'", call['if'])
+        self.assertEqual(call['uses'], './.github/workflows/project_runtime_verification.yml')
+        self.assertNotIn('secrets', call)
+        for name in ['backend', 'frontend', 'quality']:
+            self.assertNotIn('project_environment', ci['jobs'][name].get('if', ''))
+        native = workflow('project_runtime_verification.yml')
+        self.assertIn("inputs.mode != 'inventory'", native['jobs']['native-linux']['if'])
+        self.assertIn("github.event_name == 'workflow_dispatch'", native['jobs']['runner-inventory']['if'])
+
     def test_modified_application_workflows_use_major_actions(self):
         for name in ['ci.yml', 'security.yml', 'docker.yml', 'secret_scanning.yml',
                      'project_runtime_verification.yml', 'extended_verification.yml', 'docker_client_contract.yml']:
@@ -139,6 +156,61 @@ class CadenceContractTests(unittest.TestCase):
                     if uses == 'aquasecurity/trivy-action@master':
                         continue
                     self.assertRegex(uses, r'^[^@]+@v\d+$')
+
+    def test_candidate_runtime_placement_does_not_change_weekly_or_pr_cost(self):
+        ci = workflow('ci.yml')
+        placement = ci['on']['workflow_dispatch']['inputs']['project_environment_runner']
+        self.assertEqual(placement['default'], 'hosted-linux')
+        self.assertEqual(set(placement['options']), {'hosted-linux', 'macos-arm64'})
+        native = workflow('project_runtime_verification.yml')
+        self.assertEqual(native['on']['workflow_call']['inputs']['placement']['default'], 'hosted-linux')
+        job = native['jobs']['native-linux']
+        self.assertIn("inputs.placement == 'macos-arm64'", job['runs-on'])
+        self.assertIn("|| '\"ubuntu-24.04\"'", job['runs-on'])
+        sandbox = next(s for s in job['steps'] if 'provision_browser_sandbox.sh' in s.get('run', ''))
+        self.assertEqual(sandbox['if'], "runner.os == 'Linux'")
+        setup_index = next(i for i, s in enumerate(job['steps']) if s.get('uses') == './.github/actions/copilot-verification-setup')
+        preparation = '\n'.join(s.get('run', '') for s in job['steps'][:setup_index])
+        self.assertIn('inspect_verification_runner.py', preparation)
+        self.assertIn('HOME=%s', preparation)
+        self.assertIn('DOCKER_HOST=\\nDOCKER_CONTEXT=\\n', preparation)
+        inventory = native['jobs']['runner-inventory']
+        self.assertFalse(any(s.get('uses') == './.github/actions/copilot-verification-setup' for s in inventory['steps']))
+        checkout = next(s for s in inventory['steps'] if s.get('uses', '').startswith('actions/checkout@'))
+        self.assertEqual(checkout['with']['ref'], '${{ github.event.repository.default_branch }}')
+        self.assertEqual(checkout['with']['persist-credentials'], 'false')
+        self.assertNotIn('secrets', ci['jobs']['project-environment'])
+
+    def test_native_provenance_executes_setup_browser_outside_path_with_spaces(self):
+        job = workflow('project_runtime_verification.yml')['jobs']['native-linux']
+        provenance = next(s for s in job['steps'] if s.get('id') == 'provenance')
+        self.assertEqual(provenance['env']['VERIFICATION_CHROME_BIN'], '${{ steps.runtime.outputs.chrome-path }}')
+        setup = next(s for s in job['steps'] if s.get('id') == 'runtime')
+        self.assertEqual(setup['timeout-minutes'], '5')
+        with tempfile.TemporaryDirectory() as raw:
+            directory = Path(raw)
+            tools = directory / 'tools'
+            tools.mkdir()
+            for name, answer in [('git', 'verified-source'), ('java', 'openjdk version 17.0.17')]:
+                command = tools / name
+                command.write_text('#!/bin/sh\nprintf "%s\\n" ' + shlex.quote(answer) + '\n')
+                command.chmod(0o700)
+            browser = directory / 'Chrome for Testing'
+            browser.write_text('#!/bin/sh\nprintf "%s\\n" "Google Chrome for Testing 155.0.8059.84"\n')
+            browser.chmod(0o700)
+            environment = dict(os.environ, PATH=str(tools) + os.pathsep + os.environ['PATH'],
+                               VERIFICATION_SOURCE_SHA='verified-source', VERIFICATION_CHROME_BIN=str(browser),
+                               RUNNER_TEMP=raw, GITHUB_ENV=str(directory / 'environment'))
+            result = subprocess.run(['bash', '-eo', 'pipefail', '-c', provenance['run']],
+                                    env=environment, capture_output=True, text=True, timeout=5)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            record = json.loads((directory / 'verification-evidence/provenance.json').read_text())
+            self.assertIn('155.0.8059.84', record['browser'])
+            self.assertIn('CHROME_BIN=' + str(browser), (directory / 'environment').read_text())
+            environment['VERIFICATION_CHROME_BIN'] = str(directory / 'missing browser')
+            failure = subprocess.run(['bash', '-eo', 'pipefail', '-c', provenance['run']],
+                                     env=environment, capture_output=True, text=True, timeout=5)
+            self.assertNotEqual(failure.returncode, 0)
 
 
 if __name__ == '__main__':

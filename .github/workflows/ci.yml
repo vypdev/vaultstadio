@@ -9,6 +9,17 @@ on:
     branches: [main, master, develop]
     types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      project_environment:
+        description: Additional manual environment check (application suites always run)
+        type: choice
+        default: none
+        options: [none, complete, inventory]
+      project_environment_runner:
+        description: Placement for the additional manual environment check
+        type: choice
+        default: hosted-linux
+        options: [hosted-linux, macos-arm64]
 
 permissions:
   contents: read
@@ -279,4 +290,13 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_verification_runner_inventory.py' -v
           python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
+
+  project-environment:
+    name: Explicit project environment verification
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.project_environment == 'complete' || inputs.project_environment == 'inventory') }}
+    uses: ./.github/workflows/project_runtime_verification.yml
+    with:
+      mode: ${{ inputs.project_environment == 'inventory' && 'inventory' || 'complete' }}
+      placement: ${{ inputs.project_environment_runner || 'hosted-linux' }}

@@ -1,9 +1,19 @@
 # Project-owned extension. Review on trusted MAIN_BRANCH before separate activation.
 name: Prepare project verification
 description: Prepare isolated JVM, Android SDK and browser prerequisites for existing checks.
+outputs:
+  chrome-path:
+    description: Exact browser executable selected by the project setup
+    value: ${{ steps.chrome-macos.outputs.chrome-path || steps.chrome-linux.outputs.chrome-path }}
 runs:
   using: composite
   steps:
+    - name: Resolve an existing local Docker endpoint with private credentials
+      shell: bash
+      env:
+        VERIFICATION_ACTION_ROOT: ${{ github.action_path }}
+      run: python3 "$VERIFICATION_ACTION_ROOT/prepare-docker-endpoint.py"
+
     - name: Set up Java 17
       uses: actions/setup-java@v5
       with:
@@ -25,8 +35,18 @@ runs:
         packages: 'platform-tools platforms;android-37.0 build-tools;36.0.0'
         log-accepted-android-sdk-licenses: 'false'
 
-    - name: Set up Chrome for headless tests
-      id: chrome
+    - name: Install the isolated macOS headless browser
+      if: runner.os == 'macOS'
+      id: chrome-macos
+      shell: bash
+      env:
+        VERIFICATION_ACTION_ROOT: ${{ github.action_path }}
+        VERIFICATION_BROWSER_DOWNLOAD_TIMEOUT_SECONDS: '120'
+      run: RUNNER_TEMP="$HOME/.vaultstadio-verification" python3 "$VERIFICATION_ACTION_ROOT/setup-test-browser.py"
+
+    - name: Set up Chrome for Linux headless tests
+      if: runner.os == 'Linux'
+      id: chrome-linux
       uses: browser-actions/setup-chrome@v2
       with:
         chrome-version: '155.0.8059.84'
@@ -41,6 +61,6 @@ runs:
     - name: Prepare the project command environment
       shell: bash
       env:
-        CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        CHROME_BIN: ${{ steps.chrome-macos.outputs.chrome-path || steps.chrome-linux.outputs.chrome-path }}
         VERIFICATION_ACTION_ROOT: ${{ github.action_path }}
       run: bash "$VERIFICATION_ACTION_ROOT/prepare-environment.sh"

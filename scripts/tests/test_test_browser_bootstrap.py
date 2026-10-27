@@ -13,7 +13,7 @@ import unittest
 from unittest.mock import patch
 import zipfile
 
-SOURCE = Path(__file__).resolve().parents[1] / "ci/setup_test_browser.py"
+SOURCE = Path(__file__).resolve().parents[2] / ".github/actions/copilot-verification-setup/setup-test-browser.py"
 SPEC = importlib.util.spec_from_file_location("test_browser_bootstrap", SOURCE)
 bootstrap = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(bootstrap)
@@ -43,7 +43,7 @@ class BrowserBootstrapTest(unittest.TestCase):
         path.chmod(0o700)
         return path
 
-    def curl_response(self, content):
+    def curl_response(self, content, timeout=600):
         actual_run = subprocess.run
 
         def run(command, **options):
@@ -51,8 +51,8 @@ class BrowserBootstrapTest(unittest.TestCase):
                 return actual_run(command, **options)
             self.assertNotIn("--insecure", command)
             self.assertEqual("=https", command[command.index("--proto-redir") + 1])
-            self.assertEqual("600", command[command.index("--max-time") + 1])
-            self.assertEqual(630, options["timeout"])
+            self.assertEqual(str(timeout), command[command.index("--max-time") + 1])
+            self.assertEqual(timeout + 30, options["timeout"])
             Path(command[command.index("--output") + 1]).write_bytes(content)
             return subprocess.CompletedProcess(command, 0)
 
@@ -82,6 +82,20 @@ class BrowserBootstrapTest(unittest.TestCase):
         with patch.object(bootstrap, "MAX_ARCHIVE_BYTES", 0), self.curl_response(b"x"):
             with self.assertRaisesRegex(ValueError, "budget"):
                 bootstrap.download_archive("https://fixture.invalid", self.root / "over", "0" * 64)
+
+    def test_setup_download_uses_the_smaller_budget_and_rejects_invalid_values(self):
+        content = b"scoped transfer"
+        with self.curl_response(content, timeout=120):
+            bootstrap.download_archive("https://fixture.invalid", self.root / "scoped",
+                                       hashlib.sha256(content).hexdigest(), timeout_seconds=120)
+        for value in [0, -1, 601, "120"]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                bootstrap.download_archive("https://fixture.invalid", self.root / "invalid", "0" * 64, value)
+        with patch.object(bootstrap, "platform_tag", return_value="mac-arm64"), patch.object(bootstrap, "download_archive") as download:
+            for value in ["0", "-1", "601", "invalid"]:
+                with self.subTest(value=value), self.assertRaises(ValueError):
+                    bootstrap.install_browser({"VERIFICATION_BROWSER_DOWNLOAD_TIMEOUT_SECONDS": value})
+            download.assert_not_called()
 
     def test_transport_certificate_failure_is_not_hidden_by_hash_handling(self):
         failure = subprocess.CalledProcessError(60, ["curl"], stderr="SSL certificate problem")
@@ -165,7 +179,7 @@ class BrowserBootstrapTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "not executable"):
             bootstrap.validate_browser(binary, self.owned)
 
-    def test_full_installation_ignores_shared_cache_and_retains_the_executable(self):
+    def test_repeated_installation_ignores_shared_cache_and_retains_the_executables(self):
         archive = self.archive([("chrome-headless-shell-mac-arm64/chrome-headless-shell",
                                  b"#!/bin/sh\necho 'Google Chrome for Testing 155.0.8059.84'\n",
                                  stat.S_IFREG | 0o755)])
@@ -179,7 +193,13 @@ class BrowserBootstrapTest(unittest.TestCase):
             with patch.dict(bootstrap.ARCHIVE_SHA256, {"mac-arm64": hashlib.sha256(content).hexdigest()}):
                 with self.curl_response(content):
                     binary, workspace = bootstrap.install_browser(environment)
+                scoped = dict(environment, VERIFICATION_BROWSER_DOWNLOAD_TIMEOUT_SECONDS='120')
+                with self.curl_response(content, timeout=120):
+                    second, second_workspace = bootstrap.install_browser(scoped)
         self.assertTrue(binary.is_file())
+        self.assertTrue(second.is_file())
+        self.assertNotEqual(workspace, second_workspace)
+        self.assertTrue(second.is_relative_to(second_workspace.resolve()))
         self.assertTrue(binary.is_relative_to(workspace.resolve()))
         self.assertEqual(b"original", marker.read_bytes())
         self.assertEqual([marker], list(shared.iterdir()))
