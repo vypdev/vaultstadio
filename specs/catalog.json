@@ -70,7 +70,9 @@
         "docs/development/verification/STORAGE_SELECTION_91.md",
         "docs/development/verification/storage-selection-91.json",
         "docs/development/verification/storage-selection-91-cases.json",
-        "docs/development/verification/storage-selection-91-coverage.json"
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
       "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
     },
@@ -120,7 +122,9 @@
         "docs/development/verification/STORAGE_SELECTION_91.md",
         "docs/development/verification/storage-selection-91.json",
         "docs/development/verification/storage-selection-91-cases.json",
-        "docs/development/verification/storage-selection-91-coverage.json"
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
       "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
     },
@@ -316,7 +320,9 @@
         "docs/development/verification/STORAGE_SELECTION_91.md",
         "docs/development/verification/storage-selection-91.json",
         "docs/development/verification/storage-selection-91-cases.json",
-        "docs/development/verification/storage-selection-91-coverage.json"
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
       "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
     },

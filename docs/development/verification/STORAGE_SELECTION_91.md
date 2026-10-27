@@ -2,6 +2,8 @@
 
 The verified implementation is **1499c6b0437d4a451f9b5cbf1596d1727a2e1c4e**, based on adopted developc9f1ac5. SDD-0002§6.5/6.5.1, SDD-0004§6.6 and SDD-0012§6.4/6.5 were committed before their code, in818a751 and385daf4. Verification date:2026-10-27 UTC. The [receipt](storage-selection-91.json) binds a separate [case inventory](storage-selection-91-cases.json) and [complete coverage/source detail](storage-selection-91-coverage.json). Final PR CI, Copilot review and protected adoption are separate pending acceptance steps.
 
+The [review supplement](STORAGE_SELECTION_91_REVIEW.md) adds two actual PostgreSQL fault controls at63e12a1 without changing production code. Its current inventory is5773, including3249backend; the original-source5771 counts below remain historical evidence for1499c6b.
+
 ## Observed defect and resulting contract
 
 The original native package03aa855 reproduced negative limit→500DATABASE_ERROR; negative offset and malformed/zero limit silently succeeded. Limit1/offset2147483647 returned negative page−2147483648. The original unknown sort already returned400 and remains a required passing behavior.
