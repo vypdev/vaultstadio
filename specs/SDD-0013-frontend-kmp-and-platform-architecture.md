@@ -198,6 +198,8 @@ FilesLoader/FilesViewModel tests use controllable domain ports and a per-test co
 
 NET119-01–24 and FILE119-01–32 in [the scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) are acceptance risks, not a claim of executed cases. Run applicable shared contracts on desktop and Wasm; disclose repeated executions. This does not close native file-picker/download, search-response ordering or mobile readiness issues.
 
+Multipart transfers preserve the actual Content-Type/boundary, original bytes and names through the ordinary engine, including folder uploads. Progress is bounded by actual transfer work; preparing a folder body must not announce completed transfer. A missing optional token must not create a literal `Bearer null` credential. Verify both the deterministic engine contracts and an isolated loopback HTTP exchange for the default desktop engine.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.

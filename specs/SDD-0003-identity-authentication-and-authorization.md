@@ -146,6 +146,8 @@ Pre-implementation contract (2026-10-27), AUTH119-HTTP: replace template route t
 
 AUTH119-01–22 in [the pre-code scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) define the risk budget and must be linked to executed cases and actual retained SQL/session facts. Current code gaps are candidates for red/green reproduction, not assumed fixes. No new auth mechanism, public role grant or protocol support is introduced.
 
+The supported registration email shape has one `@`, a nonblank local part and a dotted domain with nonempty labels; whitespace is rejected. Preserve accepted plus-tags, mixed case and existing lowercase storage. This is a bounded application-input rule, not full RFC mailbox verification. Malformed JSON responses use a stable generic client-error message without echoing credentials or serializer internals.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.
