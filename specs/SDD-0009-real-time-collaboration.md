@@ -297,3 +297,11 @@ The complete backend gate passes2697 cases with zero failures/errors/skips;442 n
 Persisting an existing working snapshot must not introduce lost edits: a state read before a concurrent document commit may not overwrite that newer state or decrease its version. A stale snapshot must return a typed conflict/client failure and preserve the later committed content. The persistence adapter must atomically compare the expected snapshot; its ordinary bootstrap/upsert port is not the save boundary. This does not certify general OT convergence or canonical byte saving.
 
 Add five executions before implementing this follow-up: one real lock-wait save race, plus exact-current, changed-current, deleted-current and SQL-failure snapshot adapter cases. Preserve all442 existing new cases; the follow-up target is447 new cases. Keep current bytes and working rows intact on rejected saves. Record the actual red race and final outcomes separately.
+
+### R01c review-boundary addendum — before review corrections
+
+The canonical owner, FILE kind and non-trashed state must be revalidated under the item row lock in the same SQL transaction as document operation/snapshot writes. Lock item before document. Operation identity must be bound to the actor; an already-read transformed operation must reject a changed document snapshot without inserting its operation row. Ownership transfer, trashing or item deletion after the application precheck cannot retain write access. Preserve cancellation and typed provider failures.
+
+WebSocket decoding must preserve the previous ignore-unknown-fields contract, including nested operation extensions. Ignored identity-looking fields never override the authenticated actor or the connection-bound item/participant. Malformed JSON and unknown commands still fail safely.
+
+Add actual stale-precheck apply/save regressions and an unknown-field socket regression before changing those implementations. Complete adapter coverage includes changed/missing snapshots, mismatched actors, lost ownership, trashed/folder/missing items, rollback after operation insert, and concurrent version conflict; maintain the existing full inventory rather than replace it. Report the final collected count and real coverage denominators after reconciliation.
