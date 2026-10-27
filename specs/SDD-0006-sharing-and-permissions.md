@@ -382,3 +382,14 @@ path/query in Referer. Machine responses and static assets retain no-referrer. D
 allow null origins, broaden the CORS allowlist or buffer native downloads in JavaScript.
 Verify header/meta consistency, allowed-origin form success and null/foreign-origin denial,
 then repeat actual browser download and compare the downloaded bytes and filename.
+
+### 21.9 Pre-code proxy privacy refinement
+
+Actual packaged Nginx access logs retain the capability even when application logging is redacted.
+Before repairing the proxy, require a redacted public-share path in its access format, omission of
+query strings and Referer, and retention of method/status/byte-count operational evidence. Raw
+upstream diagnostics for the public capability location must not reintroduce the original request
+or Referer; its failures remain observable through redacted access statuses. Other locations retain
+their error diagnostics. A real isolated Nginx test must exercise public metadata/view/download,
+encoded paths, query/Referer markers, an upstream transport failure and preserved Host ports. Use
+the existing application contract job for these bounded tests; add no workflow or heavy build.
