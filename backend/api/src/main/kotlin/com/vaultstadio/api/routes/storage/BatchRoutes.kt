@@ -11,28 +11,20 @@ import com.vaultstadio.api.dto.ApiError
 import com.vaultstadio.api.dto.ApiResponse
 import com.vaultstadio.application.usecase.storage.CopyItemUseCase
 import com.vaultstadio.application.usecase.storage.DeleteItemUseCase
-import com.vaultstadio.application.usecase.storage.DownloadFileUseCase
 import com.vaultstadio.application.usecase.storage.GetTrashItemsUseCase
 import com.vaultstadio.application.usecase.storage.MoveItemUseCase
 import com.vaultstadio.application.usecase.storage.SetStarUseCase
 import com.vaultstadio.application.usecase.storage.TrashItemUseCase
 import com.vaultstadio.core.domain.service.CopyItemInput
 import com.vaultstadio.core.domain.service.MoveItemInput
-import io.ktor.http.ContentDisposition
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.request.receive
-import io.ktor.server.response.header
 import io.ktor.server.response.respond
-import io.ktor.server.response.respondOutputStream
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import kotlinx.serialization.Serializable
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 import org.koin.ktor.ext.get as koinGet
 
 /**
@@ -301,56 +293,7 @@ fun Route.batchRoutes() {
             )
         }
 
-        // Download multiple items as ZIP
-        post("/download-zip") {
-            val downloadFileUseCase: DownloadFileUseCase = call.application.koinGet()
-            val user = call.user!!
-            val request = call.receive<DownloadZipRequest>()
-
-            if (request.itemIds.isEmpty()) {
-                call.respond(
-                    HttpStatusCode.BadRequest,
-                    ApiResponse<Unit>(
-                        success = false,
-                        error = ApiError("EMPTY_LIST", "No items provided"),
-                    ),
-                )
-                return@post
-            }
-
-            // Set response headers for ZIP download
-            call.response.header(
-                HttpHeaders.ContentDisposition,
-                ContentDisposition.Attachment.withParameter(
-                    ContentDisposition.Parameters.FileName,
-                    "download-${System.currentTimeMillis()}.zip",
-                ).toString(),
-            )
-
-            call.respondOutputStream(
-                contentType = ContentType.Application.Zip,
-            ) {
-                ZipOutputStream(this).use { zipOut ->
-                    request.itemIds.forEach { itemId ->
-                        try {
-                            downloadFileUseCase(itemId, user.id).fold(
-                                { /* Skip failed items */ },
-                                { (item, stream) ->
-                                    // Add file to ZIP
-                                    val entry = ZipEntry(item.name)
-                                    entry.size = item.size
-                                    zipOut.putNextEntry(entry)
-                                    stream.copyTo(zipOut)
-                                    zipOut.closeEntry()
-                                },
-                            )
-                        } catch (e: Exception) {
-                            // Skip failed items
-                        }
-                    }
-                }
-            }
-        }
+        archiveDownloadRoutes()
 
         // Empty trash
         post("/empty-trash") {

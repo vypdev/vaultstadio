@@ -151,6 +151,8 @@ fun MainContent(
                     onSetMinimized = uploadManager::setMinimized,
                     onDismiss = uploadManager::dismissCompleted,
                     onCancelItem = uploadManager::cancelUpload,
+                    onRetryItem = { uploadManager.retryUpload(it) },
+                    canRetryItem = uploadManager::canRetry,
                 )
             }
         }

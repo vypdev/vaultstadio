@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,6 +61,13 @@ fun FilesContent(
     component: FilesComponent,
     modifier: Modifier = Modifier,
 ) {
+    key(component) { FilesDownloadHost { FilesScreenContent(component, modifier) } }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
+    val downloads = LocalFileDownloads.current
     val viewModel: FilesViewModel = koinViewModel { parametersOf(component.mode) }
     val strings = LocalStrings.current
 
@@ -145,7 +153,6 @@ fun FilesContent(
             UploadAction.Files -> {
                 val files = openFilePicker(multiple = true, accept = "*/*")
                 val entries = files
-                    .filter { it.data.isNotEmpty() }
                     .map { f -> UploadQueueEntry.WithData(f.name, f.size, f.mimeType, f.data) }
                 if (entries.isNotEmpty()) manager.addEntries(entries, parentId)
             }
@@ -283,9 +290,7 @@ fun FilesContent(
                         },
                         onDownloadZip = if (component.mode != FilesMode.TRASH) {
                             {
-                                // Get the ZIP download URL for selected items
-                                val zipUrl = viewModel.getDownloadZipUrl()
-                                // Platform-specific download handling
+                                downloads.archive(viewModel.selectedItems.toList())
                             }
                         } else {
                             null
@@ -392,10 +397,7 @@ fun FilesContent(
                     onShare = { dialogState = dialogState.copy(showShareDialog = true) },
                     onDownload = {
                         viewModel.selectedInfoItem?.let { item ->
-                            val url = viewModel.getDownloadUrl(item.id)
-                            // Platform-specific download handling will open this URL
-                            // For web, this triggers browser download
-                            // For desktop/mobile, handled via platform code
+                            downloads.item(item.id)
                         }
                     },
                     onStar = { viewModel.toggleStar(currentItem) },

@@ -16,6 +16,7 @@ import com.vaultstadio.app.data.storage.usecase.BatchStarUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.CopyItemUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.CreateFolderUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.DeleteItemUseCaseImpl
+import com.vaultstadio.app.data.storage.usecase.DownloadArchiveUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.DownloadFileUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.EmptyTrashUseCaseImpl
 import com.vaultstadio.app.data.storage.usecase.GetBreadcrumbsUseCaseImpl
@@ -39,6 +40,7 @@ import com.vaultstadio.app.domain.storage.usecase.BatchStarUseCase
 import com.vaultstadio.app.domain.storage.usecase.CopyItemUseCase
 import com.vaultstadio.app.domain.storage.usecase.CreateFolderUseCase
 import com.vaultstadio.app.domain.storage.usecase.DeleteItemUseCase
+import com.vaultstadio.app.domain.storage.usecase.DownloadArchiveUseCase
 import com.vaultstadio.app.domain.storage.usecase.DownloadFileUseCase
 import com.vaultstadio.app.domain.storage.usecase.EmptyTrashUseCase
 import com.vaultstadio.app.domain.storage.usecase.GetBreadcrumbsUseCase
@@ -83,5 +85,6 @@ val storageModule = module {
     factory<BatchCopyUseCase> { BatchCopyUseCaseImpl(get()) }
     factory<BatchStarUseCase> { BatchStarUseCaseImpl(get()) }
     factory<UploadFileUseCase> { UploadFileUseCaseImpl(get()) }
+    factory<DownloadArchiveUseCase> { DownloadArchiveUseCaseImpl(get()) }
     factory<DownloadFileUseCase> { DownloadFileUseCaseImpl(get()) }
 }

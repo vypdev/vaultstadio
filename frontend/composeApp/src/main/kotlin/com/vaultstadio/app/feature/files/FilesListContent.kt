@@ -104,6 +104,7 @@ private fun FilesListItem(
     onContextMenuForId: (String?) -> Unit,
     callbacks: FilesGridContextMenuCallbacks,
 ) {
+    val downloads = LocalFileDownloads.current
     Box {
         SelectableFileListItem(
             item = item,
@@ -161,7 +162,7 @@ private fun FilesListItem(
                     },
                     onDownload = {
                         onContextMenuForId(null)
-                        viewModel.getDownloadUrl(item.id)
+                        downloads.item(item.id)
                     },
                     onStar = {
                         onContextMenuForId(null)

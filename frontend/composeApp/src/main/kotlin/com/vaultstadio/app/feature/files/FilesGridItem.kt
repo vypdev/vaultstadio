@@ -45,6 +45,7 @@ internal fun FilesGridItemWithDrag(
     dropTargetBounds: MutableMap<String, Rect>,
     callbacks: FilesGridContextMenuCallbacks,
 ) {
+    val downloads = LocalFileDownloads.current
     val isFolder = item.type == ItemType.FOLDER
     val canDrag = mode == FilesMode.ALL && !viewModel.isSelectionMode
     val isDragging = draggedItemId == item.id
@@ -170,7 +171,7 @@ internal fun FilesGridItemWithDrag(
                     },
                     onDownload = {
                         onContextMenuForId(null)
-                        viewModel.getDownloadUrl(item.id)
+                        downloads.item(item.id)
                     },
                     onStar = {
                         onContextMenuForId(null)
