@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "issue": 89,
-  "verifiedImplementationCommit": "f35140d99c103b6826e1df005e224663fc4f0aee",
-  "count": 480,
+  "verifiedImplementationCommit": "a29139cf86526b3843411969aeafee2174f4a7d0",
+  "count": 485,
   "cases": [
     {
       "class": "com.vaultstadio.api.routes.collaboration.Collaboration89RedHttpTest",
@@ -965,6 +965,22 @@
       "case": "C89-RACE \"transferred-owner\""
     },
     {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationOperationHistoryTest",
+      "case": "C89-HISTORY since 0"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationOperationHistoryTest",
+      "case": "C89-HISTORY since 1"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationOperationHistoryTest",
+      "case": "C89-HISTORY since 2"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationOperationHistoryTest",
+      "case": "C89-HISTORY since 3"
+    },
+    {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationSnapshotPersistenceTest",
       "case": "C89-SNAPSHOT \"changed-current\""
     },
@@ -1111,6 +1127,10 @@
     {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
       "case": "cold file has no fake collaboration snapshot or saved acknowledgement()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.version.VersionSqlTraceTest",
+      "case": "C89-TRACE SQL boundaries exclude fixture reads without hiding real protected queries()"
     },
     {
       "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",

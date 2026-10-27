@@ -2,19 +2,19 @@
   "schemaVersion": 2,
   "issue": 89,
   "contractCommit": "0e8535f2ce8b16b93ce16b4982dfb2bf2680ecc1",
-  "implementationCommit": "f35140d99c103b6826e1df005e224663fc4f0aee",
+  "implementationCommit": "a29139cf86526b3843411969aeafee2174f4a7d0",
   "baseDevelop": "03638226aaa339bc83aeb4363d390367fb561903",
   "verificationDateUtc": "2026-10-27",
   "completeBackendGate": {
-    "tests": 2735,
+    "tests": 2740,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "rawXmlFiles": 552,
+    "rawXmlFiles": 554,
     "unchangedTasksMayBeUpToDate": true,
     "explicitPrivateTestHomeReuse": true
   },
-  "newCollectedCases": 480,
+  "newCollectedCases": 485,
   "preCodeRiskFloor": 391,
   "retainedOriginalCases": {
     "apiDtos35": 35,
@@ -38,7 +38,9 @@
     "snapshotPersistence": 5,
     "staleWriteAuthority": 6,
     "documentWriteContracts": 14,
-    "commentWriteContracts": 12
+    "commentWriteContracts": 12,
+    "inclusiveOperationHistory": 4,
+    "sqlTraceIsolation": 1
   },
   "wholeCoreCollaborationAggregate": {
     "LINE": {
@@ -387,6 +389,10 @@
       "sha256": "d8ebb5c77e1082f8c33524f546d919292761a892b734eb48be44fe72e5d146ec"
     },
     {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationOperationHistoryTest.kt",
+      "sha256": "47c19c62f0f46cbf13b23c1fad50c5596801e68cdac0b7a5139285efc793294b"
+    },
+    {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSnapshotPersistenceTest.kt",
       "sha256": "b0b544735f279ff7646ec347eb47e1588e21a8bfa44ff762c22dbd49552eb085"
     },
@@ -409,6 +415,18 @@
     {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWorkingStateBoundaryTest.kt",
       "sha256": "69055781f5e68312a485048f8b5861c3e86ec39897bed07ee523b44cd69a0a9c"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionOwnershipHttpTest.kt",
+      "sha256": "0fef588eff3a06e523466fcd7698a52e26f3d17f2de8eca27b3e4b2730bbfa9e"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionSqlTrace.kt",
+      "sha256": "c03afdb11aec8a83dabb88641c4d29d355049cf54704c4d8a12b5a2dbf9f738a"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionSqlTraceTest.kt",
+      "sha256": "abf39f03e53de2e64a161f5bbf7c3f8f6417e8db78703bd65598fe0502cb6f98"
     },
     {
       "path": "backend/core/build.gradle.kts",
@@ -468,7 +486,7 @@
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationReturnedStateTest.kt",
-      "sha256": "14e4e13fcc586c770c603e92fbdff127633702a20ded54f78752d2667b58312c"
+      "sha256": "994e2000595ec383c3e053788e27d7c3c96068ac5fc0f0d2fb4aebb9e981ad1e"
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationServiceFixture.kt",
@@ -512,7 +530,7 @@
     },
     {
       "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationDocumentsRepository.kt",
-      "sha256": "cf81d714ec83a0df522f3f6f839fb8fe0a4e29e89c35c821529b5f13a30c30a5"
+      "sha256": "5d454d0e62851f8a2515c4d9ada34cb37bbab61713a5bc3c91f878f7693a7d65"
     },
     {
       "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationParticipantsRepository.kt",
@@ -572,7 +590,7 @@
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationDocuments.kt",
-      "sha256": "ab9d9207a42ff5e2208d91914f3e41ea924dbe0ccf153b8930a74b05eb6a2534"
+      "sha256": "f301a4b51db126a96fbcd3b505c9038957f3bb417d436b026a317cb66b74ee9a"
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationMembershipRepository.kt",
@@ -600,7 +618,7 @@
     }
   ],
   "quality": {
-    "changedKotlinPaths": 73,
+    "changedKotlinPaths": 77,
     "detektMaxIssues": 0,
     "baselineUnchanged": true,
     "ktlintChangedSelectionPass": true,
@@ -612,14 +630,15 @@
     "liveSessionRebindingStatusAndState": 2
   },
   "packagedLoopback": {
-    "source": "b0c60a6c0fb9a8c13b502d49968468e136f3612a",
+    "source": "a29139cf86526b3843411969aeafee2174f4a7d0",
     "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
     "packageFilesVerified": 237,
-    "requestCount": 40,
+    "requestCount": 35,
     "nativeOwnerFrames": 9,
     "nativeForeignClose": 1008,
     "legacyForeignMembershipStillDenied": true,
     "deniedDatabaseStateUnchanged": true,
+    "deniedStateSha256": "df765e204245ac4e8de59199d01b7aad93b2cef366660400c83323c14908c702",
     "existingStorageAndPluginBytesUnchanged": true,
     "postgresAndFrontendContainersUnchanged": true,
     "twoOwnerDevicesAndStaleDisconnectVerified": true,
@@ -629,24 +648,26 @@
     "coldStateAndSaveReturn404": true,
     "commentReplyIdentityVerified": true,
     "ownerResolveAndDeleteVerified": true,
+    "inclusiveOperationLookupVerified": true,
     "unknownTopLevelAndNestedSocketFieldsAccepted": true,
     "ignoredSocketUserIdCannotForgeActor": true,
-    "harnessResponseContractRecovered": true,
-    "harnessCorrection": "resolve returns a message acknowledgment and delete204; direct SQL verifies resolution and reply/comment deletion. Original HTTP journal/native frames preserved and resumed without replaying the document operation.",
-    "scope": "Actual loopback packaged backend; explicit working-state seed. Whole UI/bootstrap/canonical editing/replay remain112."
+    "scope": "actual loopback packaged backend; explicit working-state seed; whole UI journey/bootstrapping/canonical editing/replay remain issue112"
   },
   "rawEvidence": {
-    "finalBackendArchive": "issue89-atomic-writes-reconciled-final-reports.zip",
-    "finalBackendArchiveSha256": "fdfb4520e413c6b97d83a306cbff3cd981aebdb3c3aa43c617689c3c5d997b7d",
+    "finalBackendArchive": "issue89-history-and-sql-observation-final-reports.zip",
+    "finalBackendArchiveSha256": "b684b9293a32249433f3f17593bc45a9e0495a15f26ba315bcb359035f2bd9c4",
     "initialJoinRed": "issue89-red-http-reports.zip",
     "sessionRebindingRed": "issue89-socket-rebinding-red.zip",
-    "nativeSocketFrames": "issue89-atomic-packaged-socket-owner.json",
-    "packagedResults": "issue89-atomic-packaged-dogfood-results.json",
+    "nativeSocketFrames": "issue89-history-packaged-socket-owner.json",
+    "packagedResults": "issue89-history-packaged-dogfood-results.json",
     "snapshotRaceRed": "issue89-snapshot-race-red.zip",
     "reviewBoundariesRed": "issue89-review-boundaries-red.zip",
-    "commentTransferRed": "issue89-comment-transfers-red.zip"
+    "commentTransferRed": "issue89-comment-transfers-red.zip",
+    "inclusiveHistoryRed": "issue89-history-boundary-red.zip",
+    "sqlObservationFailure": "issue89-inclusive-history-first-reports.zip",
+    "sqlObservationTargetedPass": "issue89-sql-boundary-targeted.zip"
   },
-  "remoteCiReviewAdoption": "Final follow-up head pending; prior head5203all0 is historical. New exact-head CI/review/adoption required.",
+  "remoteCiReviewAdoption": "External final-head CI/review/adoption are tracked in PR113; this local receipt does not establish them. Prior bfdfb95 technical CI5241all0 is historical.",
   "remainingProductWork": [
     {
       "issue": 112,
@@ -696,35 +717,37 @@
     "remoteNewHeadVerification": "pending; no synthetic passing assessment or control change"
   },
   "originalImplementationCommit": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
-  "productionImplementationCommit": "b0c60a6c0fb9a8c13b502d49968468e136f3612a",
+  "productionImplementationCommit": "a29139cf86526b3843411969aeafee2174f4a7d0",
   "followupContractCommits": [
     "d0c9e945e6a5d5f9550635ea8599d14eddd8004b",
     "84c0dbb83f810a190b0f88c6db366a83928c6d3f",
-    "6df1d51b32bb97d22168d9d610e9b7542c381cb7"
+    "6df1d51b32bb97d22168d9d610e9b7542c381cb7",
+    "e7bb3b1def9076b66beb1fa165062b86358acef7",
+    "d8721b8412d2f17054376e2e02767dbae9af60f5"
   ],
   "wholeBackendAggregate": {
     "INSTRUCTION": {
-      "covered": 63215,
+      "covered": 63345,
       "total": 151424
     },
     "BRANCH": {
-      "covered": 1555,
+      "covered": 1560,
       "total": 5712
     },
     "LINE": {
-      "covered": 8042,
+      "covered": 8065,
       "total": 16414
     },
     "COMPLEXITY": {
-      "covered": 3615,
+      "covered": 3619,
       "total": 8961
     },
     "METHOD": {
-      "covered": 3126,
+      "covered": 3129,
       "total": 5863
     },
     "CLASS": {
-      "covered": 789,
+      "covered": 790,
       "total": 1575
     }
   },
@@ -905,7 +928,7 @@
     },
     "ExposedCollaborationDocuments.kt": {
       "INSTRUCTION": {
-        "covered": 347,
+        "covered": 351,
         "total": 402
       },
       "BRANCH": {
@@ -1038,13 +1061,14 @@
     "lostSnapshotRace": 1,
     "staleDocumentAuthority": 2,
     "unknownSocketExtension": 1,
-    "staleCommentAuthority": 4
+    "staleCommentAuthority": 4,
+    "inclusiveOperationHistory": 2
   },
   "previousPackagedLoopback": {
-    "source": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+    "source": "b0c60a6c0fb9a8c13b502d49968468e136f3612a",
     "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
     "packageFilesVerified": 237,
-    "requestCount": 28,
+    "requestCount": 40,
     "nativeOwnerFrames": 9,
     "nativeForeignClose": 1008,
     "legacyForeignMembershipStillDenied": true,
@@ -1057,17 +1081,20 @@
     "canonicalBytesRemainOriginal": true,
     "coldStateAndSaveReturn404": true,
     "commentReplyIdentityVerified": true,
-    "harnessResponseAdapterRecovered": true,
-    "nativeOwnerTranscriptCapturedInPriorSuccessfulPhase": true,
-    "scope": "actual loopback packaged backend; explicit working-state seed; whole UI/bootstrapping/canonical edit/replay remain issue112"
+    "ownerResolveAndDeleteVerified": true,
+    "unknownTopLevelAndNestedSocketFieldsAccepted": true,
+    "ignoredSocketUserIdCannotForgeActor": true,
+    "harnessResponseContractRecovered": true,
+    "harnessCorrection": "resolve returns a message acknowledgment and delete204; direct SQL verifies resolution and reply/comment deletion. Original HTTP journal/native frames preserved and resumed without replaying the document operation.",
+    "scope": "Actual loopback packaged backend; explicit working-state seed. Whole UI/bootstrap/canonical editing/replay remain112."
   },
   "priorRemoteTechnicalCi": {
-    "head": "c07383b5dd8ffe6343ae94dc75cb8519bcf4083d",
-    "run": 40438483823,
-    "backend": 2697,
+    "head": "bfdfb95c77453559e9da73c3cddce62886fc55a1",
+    "run": 40442498110,
+    "backend": 2735,
     "desktop": 1315,
     "browser": 1191,
-    "total": 5203,
+    "total": 5241,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
@@ -1076,8 +1103,21 @@
   "packagedProductionSourcesIdenticalToVerifiedRevision": true,
   "collectedNewTestsFile": {
     "path": "collaboration-authorization-89-cases.json",
-    "sha256": "7b709c6826f7bf3fc2758d2af09f3f155f5e36f5eb486d4c682ce7a1471d92e4",
-    "count": 480
+    "sha256": "2f29aa75896621b84089aedb82458d1beaa58349b4cc81217bdd76f002d7593b",
+    "count": 485
   },
-  "inventoryRepresentation": "Lossless standalone collected-case inventory, separated from source/coverage/operational receipt for reviewability and complete immutable provider patches."
+  "inventoryRepresentation": "Lossless standalone collected-case inventory, separated from source/coverage/operational receipt for reviewability and complete immutable provider patches.",
+  "previousVerificationCommit": "f35140d99c103b6826e1df005e224663fc4f0aee",
+  "sqlObservationRepair": {
+    "capturedFixtureSelectExcludedWithDatabaseMarkers": true,
+    "protectedSqlAssertionsPreserved": true,
+    "targetedCases": 120,
+    "fullReadPositiveControlAndMinimalProjectionVerified": true
+  },
+  "indirectParticipantFaultProof": {
+    "case": "C89-RETURN \"participant-scope-failure\"",
+    "indirectProjectionCoVerifiedExactlyOnce": true,
+    "productionFlowUnchanged": true,
+    "upstreamIssue": 738
+  }
 }

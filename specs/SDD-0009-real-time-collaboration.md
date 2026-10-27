@@ -121,7 +121,7 @@ Text equivalent: User opens document -> joins session -> receives snapshot/prese
 
 ### 6.4 Collaboration authorization repair — issue #89
 
-Contract accepted before code on 2026-10-27 (`0e8535f`); locally verified follow-up `f35140d` (production source `b0c60a6`, initial implementation `7bb140e`). R01c closes the observed cross-user admission and all equivalent REST/WebSocket/application bypasses. The repository has no implemented durable read/edit/comment collaboration grant source: download tokens, sharedWithUsers, visibility and previously unguarded membership are not grants. Current canonical file ownership is the authoritative decision for this increment; supported nonowner collaboration remains incomplete until a separately reviewed durable grant lifecycle exists. Do not simulate collaboration by denying the owner's valid flows.
+Contract accepted before code on 2026-10-27 (`0e8535f`); locally verified follow-up `a29139c` (initial implementation `7bb140e`). R01c closes the observed cross-user admission and all equivalent REST/WebSocket/application bypasses. The repository has no implemented durable read/edit/comment collaboration grant source: download tokens, sharedWithUsers, visibility and previously unguarded membership are not grants. Current canonical file ownership is the authoritative decision for this increment; supported nonowner collaboration remains incomplete until a separately reviewed durable grant lifecycle exists. Do not simulate collaboration by denying the owner's valid flows.
 
 | ID | Required behavior | Verification |
 |---|---|---|
@@ -261,7 +261,7 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
-| C89-ACTOR/OWNER/SCOPE/BIND/MEMBER/ATOMIC/PRESENCE/STREAM/WS/ERROR/STATE/MAINT/ARCH | R01c domain/application and adapters |480 new collected cases plus preserved regressions; [local evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md), final-head CI/review/adoption pending |issue#89 and§6.4 |
+| C89-ACTOR/OWNER/SCOPE/BIND/MEMBER/ATOMIC/PRESENCE/STREAM/WS/ERROR/STATE/MAINT/ARCH | R01c domain/application and adapters |485 new collected cases plus preserved regressions; [local evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md), final-head CI/review/adoption pending |issue#89 and§6.4 |
 
 ## 18. Implementation or maintenance sequence
 
@@ -321,3 +321,9 @@ An owner requesting stored operations since document version N must include oper
 ### Verification observability addendum — before test-infrastructure correction
 
 The complete history follow-up reproduced one preexisting version-HTTP SQL-observation failure: HTTP403 and unchanged protected state pass, but an unscoped full-table SELECT from fixture snapshot preparation arrives in the asynchronously collected Docker log window. Keep the prohibition on foreign full-state reads. Replace time/offset-based log slicing with unique start/end markers executed on the real PostgreSQL instance and await each boundary before slicing. Add one actual database test proving prior/subsequent fixture reads are excluded while an in-window minimal projection remains observable. No retry-to-green, assertion removal or product authorization change is acceptable. The delivered increment then contains485 new cases and2740 backend cases, including this cross-boundary verification repair related to#84.
+
+### R01c current verification checkpoint — history and SQL observation
+
+Source a29139c passes2740 complete backend executions, including485 new collected cases, with zero failures/errors/skips and strict changed-source quality. Actual since0/1/2/3 history fixtures,91 existing version-HTTP controls with fenced SQL, a full-read/minimal-projection observability control, and the indirect participant-call assertion pass. The prior2739-case run with fixture-log contamination is retained as failed evidence. Core collaboration remains382/395lines and183/207branches including unchanged OT; whole backend covers8065/16414lines and1560/5712branches with no exclusions.
+
+The exact packaged source completes35 fresh HTTP requests and nine native owner frames, foreign close1008, inclusive-history lookup, authenticated actor binding and actual owner comment lifecycle, preserving prior bytes and containers. The linked schemaVersion2 receipt and485-case inventory retain exact identities. [PR#113](https://github.com/vypdev/vaultstadio/pull/113) owns external final-head CI/review/adoption; the prior bfdfb95 remote CI5241all0 is historical. R14 remains#112.
