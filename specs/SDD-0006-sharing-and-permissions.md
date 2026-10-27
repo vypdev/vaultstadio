@@ -349,3 +349,20 @@ Base64url of strict UTF-8 for the machine header. Creation and access reject unp
 rather than silently changing a password. Tests must include ASCII, whitespace, plus/percent,
 non-Latin-1, multibyte byte limits, malformed encodings and actual BCrypt verification. This changes
 only the new unpublished header contract; token paths and the body-form journey remain unchanged.
+
+
+### 21.7 Pre-code link-origin refinement — reverse proxy ports
+
+A fresh request through the existing loopback frontend at port18086 generated an API link at
+`http://127.0.0.1` without its port. Before changing that adapter, this contract requires preserving
+the complete public authority, including explicit non-default ports and bracketed IPv6. The owner
+HTTP adapter uses the request Host authority or the existing proxy-provided forwarded authority,
+with a single validated http/https origin and no user-info, path, query or fragment. It validates
+the link base before a create mutation. The bundled Nginx proxy preserves the incoming Host port
+and supplies the forwarded authority; operators retain responsibility for stripping untrusted
+forwarded headers at their trusted edge. This repair does not introduce a new proxy trust model.
+
+Tests cover direct/proxied hosts, explicit/default ports, IPv6, invalid origins before creation,
+and opening the generated view URL through the actual local frontend proxy. Frontend copied links
+continue using the configured API origin. Rollback retains the old static distribution/configuration
+alongside the backend package; no account, content or database volume is recreated.
