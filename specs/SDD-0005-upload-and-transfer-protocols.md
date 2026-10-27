@@ -119,6 +119,35 @@ Text equivalent: Client starts transfer -> sends parts/method requests -> server
 | `expired` | Retention deadline passed | operator | cleanup/retry from new session |
 | `failed` | Validation/dependency failure | client/operator | retry or inspect |
 
+### 6.4 Rendered upload/download integrity — issue #78
+
+Pre-code contract (2026-10-27), TRANS78: a normal UI-selected zero-byte file is valid content,
+not a failed read or a silently discarded queue item. Preserve valid names, media type, exact
+bytes and chosen parent through production picker, queue, multipart upload, listing and download.
+A nonempty file whose picker returned no bytes must not become a fabricated empty upload.
+Failed upload remains a visible failed queue entry, is not announced as completion and can be
+retried explicitly. Cancellation stops owned reads/network work and releases progress/resources;
+no automatic retry may duplicate committed content. Chunked/folder protocol redesign is separate.
+
+A download proceeds idle -> fetching -> choosing/saving -> handed-to-browser or saved, canceled,
+or failed. One active operation owns its result; duplicate clicks cannot dispatch duplicate
+transfers and cancellation/disposal cannot later invoke a save. A request/body failure never saves
+an error document as user content. Browser initiation is not proof of a completed OS disk write;
+the actual download file and its SHA256 are inspected in acceptance evidence. Native chooser
+cancellation performs no write. Desktop writes use an owned temporary sibling and atomic publish,
+with handles/temp files cleaned on success, cancellation and failure; existing content is retained
+until the selected publication succeeds. Resource limits are the explicit32MiB client /24MiB
+archive-input /32MiB archive-output /256 entries /16 levels in SDD-0002 section6.6.
+
+At least60 new deterministic cases cover16 HTTP/transport,12 operation/state,12 archive,
+12 platform-save/cleanup and8 upload boundaries. Add12 separately recorded actual callback and
+rendered browser/native scenarios. The identified inventory is the
+[pre-code transfer plan](../docs/development/verification/authenticated-transfers-78-plan.json).
+Risk families can map to several tests; repeated JVM/Wasm executions are not distinct scenarios.
+Retain red-phase evidence and original XML, then execute complete backend/desktop/Wasm suites,
+canonical full-population coverage, existing gates/lint/contracts and Copilot review on the final
+source. State mobile, native OS and large-file limits precisely; compilation is not runtime proof.
+
 ## 7. User-facing configuration
 
 Maximum file/chunk/session sizes, session TTL, allowed methods, WebDAV auth requirement, S3 route enablement, and checksum policy are bounded configuration.

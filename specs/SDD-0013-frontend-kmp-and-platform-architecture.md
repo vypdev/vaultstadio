@@ -206,6 +206,38 @@ BaseApi's reified wrappers supply serialization information while one shared exe
 
 A shared data-network cancellation classifier owns caller-context and wrapped-cause handling for BaseApi and every manual multipart/binary StorageApi adapter. The shared policy must be executable on JVM and Wasm and preserve Ktor transport deadlines as network errors. Controlled incoming-body cancellation tests must cover all four manual adapters, rather than only engine request entry. The production engine, domain ports and public response schemas remain unchanged.
 
+### 6.7 Focused authenticated downloads — issue #78
+
+Pre-code contract on Action branch #78 (baseline `15574b9`). Details, grid menu, list menu and
+selection-ZIP controls MUST dispatch the same focused download operation, not compute an unused
+URL. Folders dispatch their bounded recursive archive. Keep FilesContent/FilesViewModel from
+growing: application/feature state owns ordering, busy/error/cancel/retry; domain owns neutral
+transfer/save ports and bounds; data owns Ktor/bytes/auth; composition owns browser/AWT/filesystem.
+No Ktor, browser, AWT, file or DI policy is added to domain decisions. Existing default engines,
+normal login and current session token lookup remain in use; no seeded authentication backdoor.
+
+Success preserves valid original Unicode names and bytes, including empty content. Reject unsafe
+or ambiguous save/archive path names instead of interpreting them as local paths. Credential-free
+URL helpers cannot contain tokens or duplicate the configured API prefix; authenticated downloads
+use the header-bearing data operation exclusively. Show localized bounded impact/recovery text,
+not raw provider exceptions, private paths, content or session identifiers. The operation must
+retain a recoverable terminal outcome and release busy state after failure/cancel; screen/session
+disposal cancels owned work before later bytes can reach a save callback.
+
+Web uses a binary Blob/object URL rather than a base64 data URL or external navigation, removing
+owned anchors and revoking URLs/timers after handoff, failure and disposal with a bounded grace
+period. Desktop uses a real native save chooser with explicit saved/canceled/failure outcomes and
+atomic owned-file cleanup. Existing Android/iOS placeholders must not claim success: unsupported
+saving returns an explicit capability outcome; no device readiness is inferred. The existing
+profile-export callback remains compatible with the platform boundary.
+
+Use actual production callbacks/component tests and a normal-login production package for the
+browser binary/UTF-8/empty upload-download and ZIP byte/hash journeys. Native chooser acceptance
+requires real interaction on this machine as well as deterministic filesystem tests. Preserve the
+current dataset, both detached SDD drafts, existing package and runnable rollback before installing
+a candidate. See SDD-0002 section6.6, SDD-0005 section6.4 and the identified transfer plan. The wider
+preview/search/origin/mobile portfolio remains separately tracked; this does not certify it.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
