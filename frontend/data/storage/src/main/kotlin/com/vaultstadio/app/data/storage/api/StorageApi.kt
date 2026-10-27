@@ -35,6 +35,7 @@ import io.ktor.client.request.header
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.CancellationException
 import org.koin.core.annotation.Single
 
 @Single
@@ -168,6 +169,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Chunk upload failed")
         }
@@ -228,6 +231,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Upload failed")
         }
@@ -244,7 +249,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                 url = "/api/v1/storage/upload-folder",
                 formData = formData {
                     parentId?.let { append("parentId", it) }
-                    files.forEachIndexed { index, file ->
+                    files.forEach { file ->
                         append(
                             file.relativePath,
                             file.data,
@@ -253,11 +258,14 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                                 append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
                             },
                         )
-                        onProgress((index + 1).toFloat() / files.size)
                     }
                 },
             ) {
-                header(HttpHeaders.Authorization, "Bearer ${tokenProvider()}")
+                tokenProvider()?.let { header(HttpHeaders.Authorization, "Bearer $it") }
+                onUpload { bytesSentTotal, contentLength ->
+                    val total = contentLength ?: 0L
+                    if (total > 0) onProgress(bytesSentTotal.toFloat() / total.toFloat())
+                }
             }
 
             if (response.status.isSuccess()) {
@@ -274,6 +282,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_ERROR", "Upload failed: ${response.status}")
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Upload error")
         }
@@ -288,6 +298,8 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             ApiResult.NetworkError(e.message ?: "Download failed")
         }
