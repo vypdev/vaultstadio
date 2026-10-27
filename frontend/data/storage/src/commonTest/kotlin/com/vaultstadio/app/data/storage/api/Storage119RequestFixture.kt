@@ -28,7 +28,10 @@ internal suspend fun storage119Request(
         assertEquals(query, request.url.parameters.names().associateWith { request.url.parameters[it]!! })
         assertEquals("Bearer ephemeral119", request.headers[HttpHeaders.Authorization])
         if (body != null) {
-            assertEquals(Json.parseToJsonElement(body), Json.parseToJsonElement(request.body.toByteArray().decodeToString()))
+            assertEquals(
+                Json.parseToJsonElement(body),
+                Json.parseToJsonElement(request.body.toByteArray().decodeToString()),
+            )
         }
         respond(response, headers = headersOf(HttpHeaders.ContentType, "application/json"))
     }

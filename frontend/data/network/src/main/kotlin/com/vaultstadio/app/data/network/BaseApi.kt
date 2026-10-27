@@ -1,14 +1,11 @@
-/**
- * Base API class
- *
- * Provides common HTTP request functionality for all API classes.
- */
-
 package com.vaultstadio.app.data.network
 
 import com.vaultstadio.app.data.network.dto.common.ApiResponseDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.network.sockets.SocketTimeoutException
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.parameter
 import io.ktor.client.request.request
@@ -18,74 +15,52 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 
-/**
- * Base class for API implementations.
- */
+/** Reified wrappers supply codecs; one executed path owns cancellation and response semantics. */
 abstract class BaseApi(protected val client: HttpClient) {
-
-    protected suspend inline fun <reified T> get(
-        path: String,
-        params: Map<String, String> = emptyMap(),
-    ): ApiResult<T> = requestNoBody(HttpMethod.Get, path, params)
-
+    protected suspend inline fun <reified T> get(path: String, params: Map<String, String> = emptyMap()): ApiResult<T> =
+        requestNoBody(HttpMethod.Get, path, params)
     protected suspend inline fun <reified T, reified B> post(
         path: String,
         body: B,
     ): ApiResult<T> = request(HttpMethod.Post, path, body)
-
     protected suspend inline fun <reified T> postNoBody(
         path: String,
     ): ApiResult<T> = requestNoBody(HttpMethod.Post, path)
-
     protected suspend inline fun <reified T, reified B> patch(
         path: String,
         body: B,
     ): ApiResult<T> = request(HttpMethod.Patch, path, body)
-
-    protected suspend inline fun <reified T> delete(
-        path: String,
-    ): ApiResult<T> = requestNoBody(HttpMethod.Delete, path)
-
+    protected suspend inline fun <reified T> delete(path: String): ApiResult<T> = requestNoBody(HttpMethod.Delete, path)
     protected suspend inline fun <reified T> deleteWithParams(
         path: String,
         params: Map<String, String> = emptyMap(),
-    ): ApiResult<T> = requestNoBody(HttpMethod.Delete, path, params)
+    ): ApiResult<T> =
+        requestNoBody(HttpMethod.Delete, path, params)
 
     protected suspend inline fun <reified T> postForm(
         path: String,
         formParams: Map<String, String>,
     ): ApiResult<T> {
-        return try {
-            val response = client.request(path) {
-                method = HttpMethod.Post
-                setBody(
-                    FormDataContent(
-                        Parameters.build {
-                            formParams.forEach { (key, value) -> append(key, value) }
-                        },
-                    ),
-                )
-            }
-
-            if (response.status.isSuccess()) {
-                val apiResponse = response.body<ApiResponseDTO<T>>()
-                if (apiResponse.success && apiResponse.data != null) {
-                    ApiResult.Success(apiResponse.data)
-                } else {
-                    ApiResult.Error(
-                        apiResponse.error?.code ?: "UNKNOWN_ERROR",
-                        apiResponse.error?.message ?: "Unknown error",
+        val transport = client
+        return executeRequest(
+            request = {
+                transport.request(path) {
+                    method = HttpMethod.Post
+                    setBody(
+                        FormDataContent(
+                            Parameters.build {
+                                formParams.forEach { (key, value) -> append(key, value) }
+                            },
+                        ),
                     )
                 }
-            } else {
-                handleErrorResponse(response)
-            }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            ApiResult.NetworkError(e.message ?: "Network error")
-        }
+            },
+            decode = { it.body<ApiResponseDTO<T>>() },
+            unitResult = T::class == Unit::class,
+        )
     }
 
     protected suspend inline fun <reified T> requestNoBody(
@@ -93,35 +68,17 @@ abstract class BaseApi(protected val client: HttpClient) {
         path: String,
         params: Map<String, String> = emptyMap(),
     ): ApiResult<T> {
-        return try {
-            val response = client.request(path) {
-                this.method = method
-                params.forEach { (key, value) ->
-                    parameter(key, value)
+        val transport = client
+        return executeRequest(
+            request = {
+                transport.request(path) {
+                    this.method = method
+                    params.forEach { (key, value) -> parameter(key, value) }
                 }
-            }
-
-            if (response.status.isSuccess()) {
-                val apiResponse = response.body<ApiResponseDTO<T>>()
-                if (apiResponse.success && apiResponse.data != null) {
-                    ApiResult.Success(apiResponse.data)
-                } else if (apiResponse.success && T::class == Unit::class) {
-                    @Suppress("UNCHECKED_CAST")
-                    ApiResult.Success(Unit as T)
-                } else {
-                    ApiResult.Error(
-                        apiResponse.error?.code ?: "UNKNOWN_ERROR",
-                        apiResponse.error?.message ?: "Unknown error",
-                    )
-                }
-            } else {
-                handleErrorResponse(response)
-            }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            ApiResult.NetworkError(e.message ?: "Network error")
-        }
+            },
+            decode = { it.body<ApiResponseDTO<T>>() },
+            unitResult = T::class == Unit::class,
+        )
     }
 
     protected suspend inline fun <reified T, reified B> request(
@@ -130,50 +87,76 @@ abstract class BaseApi(protected val client: HttpClient) {
         body: B? = null,
         params: Map<String, String> = emptyMap(),
     ): ApiResult<T> {
-        return try {
-            val response = client.request(path) {
-                this.method = method
-                params.forEach { (key, value) ->
-                    parameter(key, value)
+        val transport = client
+        return executeRequest(
+            request = {
+                transport.request(path) {
+                    this.method = method
+                    params.forEach { (key, value) -> parameter(key, value) }
+                    body?.let { setBody(it) }
                 }
-                body?.let {
-                    setBody(it)
-                }
-            }
-
-            if (response.status.isSuccess()) {
-                val apiResponse = response.body<ApiResponseDTO<T>>()
-                if (apiResponse.success && apiResponse.data != null) {
-                    ApiResult.Success(apiResponse.data)
-                } else {
-                    ApiResult.Error(
-                        apiResponse.error?.code ?: "UNKNOWN_ERROR",
-                        apiResponse.error?.message ?: "Unknown error",
-                    )
-                }
-            } else {
-                handleErrorResponse(response)
-            }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            ApiResult.NetworkError(e.message ?: "Network error")
-        }
+            },
+            decode = { it.body<ApiResponseDTO<T>>() },
+            unitResult = T::class == Unit::class,
+        )
     }
 
-    protected suspend inline fun <reified T> handleErrorResponse(
-        response: HttpResponse,
-    ): ApiResult<T> {
-        return try {
-            val errorResponse = response.body<ApiResponseDTO<Unit>>()
-            ApiResult.Error(
-                errorResponse.error?.code ?: "HTTP_${response.status.value}",
-                errorResponse.error?.message ?: response.status.description,
-            )
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            ApiResult.Error("HTTP_${response.status.value}", response.status.description)
+    @PublishedApi
+    internal suspend fun <T> executeRequest(
+        request: suspend () -> HttpResponse,
+        decode: suspend (HttpResponse) -> ApiResponseDTO<T>,
+        unitResult: Boolean,
+    ): ApiResult<T> = try {
+        val response = request()
+        if (!response.status.isSuccess()) {
+            handleErrorResponse(response)
+        } else {
+            val envelope = decode(response)
+            val data = envelope.data
+            when {
+                !envelope.success -> ApiResult.Error(
+                    envelope.error?.code ?: "UNKNOWN_ERROR",
+                    envelope.error?.message ?: "Unknown error",
+                )
+                data != null -> ApiResult.Success(data)
+                unitResult -> {
+                    @Suppress("UNCHECKED_CAST")
+                    ApiResult.Success(Unit as T)
+                }
+                else -> ApiResult.Error("UNKNOWN_ERROR", "Missing response data")
+            }
         }
+    } catch (error: Exception) {
+        propagateCancellation(error)
+        ApiResult.NetworkError(error.message ?: "Network error")
+    }
+
+    private suspend fun handleErrorResponse(response: HttpResponse): ApiResult<Nothing> = try {
+        val envelope = response.body<ApiResponseDTO<Unit>>()
+        ApiResult.Error(
+            envelope.error?.code ?: "HTTP_${response.status.value}",
+            envelope.error?.message ?: response.status.description,
+        )
+    } catch (error: Exception) {
+        propagateCancellation(error)
+        ApiResult.Error("HTTP_${response.status.value}", response.status.description)
+    }
+
+    private suspend fun propagateCancellation(error: Exception) {
+        currentCoroutineContext().ensureActive()
+        if (error is CancellationException) throw error
+        val causes = mutableSetOf<Throwable>()
+        var next: Throwable? = error
+        while (next != null && causes.add(next)) next = next.cause
+        // Ktor wraps its request/connection deadlines as IO failures; caller cancellation stays control flow.
+        if (causes.any {
+                it is HttpRequestTimeoutException ||
+                    it is ConnectTimeoutException ||
+                    it is SocketTimeoutException
+            }
+        ) {
+            return
+        }
+        causes.filterIsInstance<CancellationException>().firstOrNull()?.let { throw it }
     }
 }

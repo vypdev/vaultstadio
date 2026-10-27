@@ -14,10 +14,12 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -61,19 +63,23 @@ object HttpClientFactory {
         config: ApiClientConfig,
         tokenProvider: TokenProvider,
         engine: HttpClientEngine? = null,
+        logger: Logger? = null,
     ): HttpClient = if (engine == null) {
-        HttpClient { configure(config, tokenProvider) }
+        HttpClient { configure(config, tokenProvider, logger) }
     } else {
-        HttpClient(engine) { configure(config, tokenProvider) }
+        HttpClient(engine) { configure(config, tokenProvider, logger) }
     }
 
-    private fun HttpClientConfig<*>.configure(config: ApiClientConfig, tokenProvider: TokenProvider) {
+    private fun HttpClientConfig<*>.configure(config: ApiClientConfig, tokenProvider: TokenProvider, logger: Logger?) {
         install(ContentNegotiation) {
             json(json)
         }
 
         install(Logging) {
             level = LogLevel.INFO
+            filter { !it.url.encodedPath.startsWith("/api/v1/shares/") }
+            sanitizeHeader { it.equals(HttpHeaders.Authorization, ignoreCase = true) }
+            if (logger != null) this.logger = logger
         }
 
         install(HttpTimeout) {

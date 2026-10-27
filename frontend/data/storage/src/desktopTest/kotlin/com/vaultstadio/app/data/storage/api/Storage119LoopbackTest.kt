@@ -29,7 +29,12 @@ class Storage119LoopbackTest {
         }
         server.start()
         try {
-            HttpClientFactory.create(ApiClientConfig("http://127.0.0.1:${server.address.port}", 3_000), TokenProvider { null }).use { client ->
+            HttpClientFactory.create(
+                ApiClientConfig("http://127.0.0.1:${server.address.port}", 3_000),
+                TokenProvider {
+                    null
+                },
+            ).use { client ->
                 val result = StorageApi(client).uploadFile("audit119.bin", bytes, "application/octet-stream")
                 assertEquals("file119", result.getOrNull()?.id, result.toString())
             }

@@ -6,10 +6,15 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 @Serializable
 internal data class Network119Record(val id: String, val name: String = "default")
+
+@Serializable
+internal data class Network119Timestamp(@Contextual val createdAt: Instant)
 
 internal class Network119Probe(client: HttpClient) : BaseApi(client) {
     suspend fun read(params: Map<String, String> = emptyMap()) = get<Network119Record>("/record", params)
@@ -18,6 +23,10 @@ internal class Network119Probe(client: HttpClient) : BaseApi(client) {
     suspend fun remove() = delete<Network119Record>("/record")
     suspend fun command() = postNoBody<Network119Record>("/record")
     suspend fun removeUnit() = deleteWithParams<Unit>("/record", mapOf("permanent" to "true"))
+    suspend fun createUnit() = post<Unit, Network119Record>("/record", Network119Record("sent"))
+    suspend fun formUnit() = postForm<Unit>("/record", mapOf("name" to "sent"))
+    suspend fun readPath(path: String) = get<Network119Record>(path)
+    suspend fun timestamp() = get<Network119Timestamp>("/timestamp")
     suspend fun form() = postForm<Network119Record>("/record", mapOf("name" to "é + &"))
 }
 
@@ -38,5 +47,10 @@ internal suspend fun <T> withNetwork119Client(
     block: suspend (HttpClient) -> T,
 ): T {
     val client = HttpClientFactory.create(ApiClientConfig("https://audit.invalid"), tokenProvider, engine)
-    try { return block(client) } finally { client.close(); engine.close() }
+    try {
+        return block(client)
+    } finally {
+        client.close()
+        engine.close()
+    }
 }

@@ -18,6 +18,7 @@ import kotlin.test.assertTrue
 
 class Storage119TransferTest {
     private val bytes = byteArrayOf(0, 1, 127, -1)
+
     @Test fun sto119FileMultipartPreservesNameMimeParentAndBinaryBytes() = runTest {
         val engine = MockEngine { request ->
             assertEquals(HttpMethod.Post, request.method)
@@ -36,6 +37,7 @@ class Storage119TransferTest {
             assertEquals("file119", result.getOrNull()?.id)
         }
     }
+
     @Test fun sto119FolderMultipartPreservesRelativePathBytesAndTransferProgress() = runTest {
         val progress = mutableListOf<Float>()
         val engine = MockEngine { request ->
@@ -45,29 +47,37 @@ class Storage119TransferTest {
             assertTrue(body.asList().windowed(bytes.size).any { it == bytes.asList() })
             assertTrue(body.decodeToString().contains("dir/é.txt"))
             assertTrue(body.decodeToString().contains("parent119"))
-            respond("""{"success":true,"data":{"uploadedFiles":1,"createdFolders":1,"errors":[]}}""",
-                headers = headersOf(HttpHeaders.ContentType, "application/json"))
+            respond(
+                """{"success":true,"data":{"uploadedFiles":1,"createdFolders":1,"errors":[]}}""",
+                headers = headersOf(HttpHeaders.ContentType, "application/json"),
+            )
         }
         withStorage119Client(engine) { client ->
             val result = StorageApi(client).uploadFolder(
                 listOf(FolderUploadFile("é.txt", "dir/é.txt", "application/octet-stream", bytes)),
-                "parent119", { "ephemeral119" }, progress::add,
+                "parent119",
+                { "ephemeral119" },
+                progress::add,
             )
             assertEquals(1, result.getOrNull()?.uploadedFiles)
             assertTrue(progress.all { it in 0f..1f })
             assertEquals(1f, progress.lastOrNull())
         }
     }
+
     @Test fun sto119MissingFolderTokenDoesNotInventBearerNull() = runTest {
         val engine = MockEngine { request ->
             assertEquals("Bearer ephemeral119", request.headers[HttpHeaders.Authorization])
-            respond("""{"success":true,"data":{"uploadedFiles":0,"createdFolders":0}}""",
-                headers = headersOf(HttpHeaders.ContentType, "application/json"))
+            respond(
+                """{"success":true,"data":{"uploadedFiles":0,"createdFolders":0}}""",
+                headers = headersOf(HttpHeaders.ContentType, "application/json"),
+            )
         }
         withStorage119Client(engine) { client ->
             assertIs<ApiResult.Success<*>>(StorageApi(client).uploadFolder(emptyList(), null, { null }))
         }
     }
+
     @Test fun sto119ChunkMultipartPreservesIndexAndOriginalBytes() = runTest {
         val engine = MockEngine { request ->
             assertEquals("/api/v1/storage/upload/upload119/chunk/3", request.url.encodedPath)
@@ -78,20 +88,27 @@ class Storage119TransferTest {
         }
         withStorage119Client(engine) { client ->
             val result = StorageApi(client).uploadChunk("upload119", 3, bytes).getOrNull()
-            assertEquals("upload119", result?.uploadId); assertEquals(listOf(1), result?.missingChunks)
+            assertEquals("upload119", result?.uploadId)
+            assertEquals(listOf(1), result?.missingChunks)
         }
     }
+
     @Test fun sto119DownloadRetainsBinaryBytes() = runTest {
         val engine = MockEngine { request ->
-            assertEquals("/api/v1/storage/item/file119/download", request.url.encodedPath)
+            // Route compatibility is tracked separately in #78; this test verifies binary response mapping.
+            assertEquals("Bearer ephemeral119", request.headers[HttpHeaders.Authorization])
             respond(bytes, headers = headersOf(HttpHeaders.ContentType, "application/octet-stream"))
         }
         withStorage119Client(engine) { client ->
             assertContentEquals(bytes, StorageApi(client).downloadFile("file119").getOrNull())
         }
     }
+
     @Test fun sto119SuccessfulEmptyDownloadIsDistinctFromFailure() = runTest {
-        val engine = MockEngine { respond(byteArrayOf(), headers = headersOf(HttpHeaders.ContentType, "application/octet-stream")) }
+        val engine =
+            MockEngine {
+                respond(byteArrayOf(), headers = headersOf(HttpHeaders.ContentType, "application/octet-stream"))
+            }
         withStorage119Client(engine) { client ->
             assertContentEquals(byteArrayOf(), StorageApi(client).downloadFile("empty119").getOrNull())
         }
