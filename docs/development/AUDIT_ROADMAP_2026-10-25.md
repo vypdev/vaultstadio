@@ -123,3 +123,10 @@ Cobertura global parcial:8558/16755 líneas y1823/6001 ramas, sin exclusiones nu
 ### R05 adoption — PR #114
 
 La excepción autorizada integra4e6d707 en developc9f1ac5. La [CI posterior40493531498](https://github.com/vypdev/vaultstadio/actions/runs/40493531498) confirma5489ejecuciones, sin fallos/errores/omisiones y con el mismo árbol9a49fbe1; protecciones intactas. R05/#90 queda adoptado. Se inicia#91 exclusivamente en su rama publicada por Copilot sobre ese padre; siguen abiertos el resto del roadmap, la aceptación global y master.
+
+
+## R11 selection checkpoint — issue #91
+
+El [candidato1499c6b](verification/STORAGE_SELECTION_91.md) valida paginación/orden antes de acceder a datos, conserva errores del proveedor y calcula metadatos int64 sin desbordamiento. Pasan3247backend+1324desktop+1200browser=5771ejecuciones, sin fallos/errores/omisiones;266casos backend nuevos y8KMP por plataforma, con cobertura global8958/16877líneas y1934/6042ramas sin exclusiones nuevas. Navegador real: login autónomo, ordenación,400visible por inyección local delimitada y recuperación200conRefresh; datos y reversión03aa855 preservados. Quedan pendientes CI/revisión/adopción de su PR.
+
+La inspección amplía el backlog sin mezclar implementaciones: [#115](https://github.com/vypdev/vaultstadio/issues/115) posee filtros avanzados antes de paginar, cuentas globales y búsqueda real de contenido; [#116](https://github.com/vypdev/vaultstadio/issues/116) posee el origen de API Web fijado a localhost. #82 conserva nombre/prefijo; #84 cobertura global; #109/#112/#111 sus hitos propios. La plataforma completa y master no quedan certificados por este checkpoint.

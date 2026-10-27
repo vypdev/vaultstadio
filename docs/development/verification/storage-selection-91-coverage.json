@@ -1,0 +1,1439 @@
+{
+  "source": "1499c6b0437d4a451f9b5cbf1596d1727a2e1c4e",
+  "scope": "Diagnostic aggregate of all compiled backend production classes against all selected execution data, including API and changed legacy infrastructure; no new exclusions",
+  "wholeBackend": {
+    "INSTRUCTION": {
+      "covered": 70386,
+      "missed": 85159
+    },
+    "BRANCH": {
+      "covered": 1934,
+      "missed": 4108
+    },
+    "LINE": {
+      "covered": 8958,
+      "missed": 7919
+    },
+    "COMPLEXITY": {
+      "covered": 4040,
+      "missed": 5280
+    },
+    "METHOD": {
+      "covered": 3399,
+      "missed": 2645
+    },
+    "CLASS": {
+      "covered": 881,
+      "missed": 758
+    }
+  },
+  "changedProductionSources": [
+    {
+      "source": "com/vaultstadio/api/routes/metadata/SearchDateBounds.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 15,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 1,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 3,
+          "missed": 0
+        },
+        "METHOD": {
+          "covered": 3,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/SearchRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 22,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 7,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 2,
+          "missed": 0
+        },
+        "METHOD": {
+          "covered": 2,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/BasicSearchRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 311,
+          "missed": 313
+        },
+        "BRANCH": {
+          "covered": 8,
+          "missed": 14
+        },
+        "LINE": {
+          "covered": 49,
+          "missed": 6
+        },
+        "COMPLEXITY": {
+          "covered": 5,
+          "missed": 14
+        },
+        "METHOD": {
+          "covered": 5,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 3,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 29,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 32,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 35,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 46,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 49,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 68,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 74,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 82,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/AdvancedSearchFilters.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 124,
+          "missed": 83
+        },
+        "BRANCH": {
+          "covered": 11,
+          "missed": 13
+        },
+        "LINE": {
+          "covered": 13,
+          "missed": 2
+        },
+        "COMPLEXITY": {
+          "covered": 6,
+          "missed": 9
+        },
+        "METHOD": {
+          "covered": 3,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 23,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 24,
+          "covered": 0,
+          "missed": 4
+        },
+        {
+          "line": 26,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 27,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 28,
+          "covered": 3,
+          "missed": 1
+        },
+        {
+          "line": 29,
+          "covered": 3,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/MetadataSearchRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 351,
+          "missed": 275
+        },
+        "BRANCH": {
+          "covered": 13,
+          "missed": 11
+        },
+        "LINE": {
+          "covered": 42,
+          "missed": 6
+        },
+        "COMPLEXITY": {
+          "covered": 6,
+          "missed": 11
+        },
+        "METHOD": {
+          "covered": 3,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 2,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 23,
+          "covered": 1,
+          "missed": 5
+        },
+        {
+          "line": 32,
+          "covered": 3,
+          "missed": 3
+        },
+        {
+          "line": 44,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 46,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 56,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/SearchModels.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 121,
+          "missed": 211
+        },
+        "LINE": {
+          "covered": 18,
+          "missed": 18
+        },
+        "COMPLEXITY": {
+          "covered": 13,
+          "missed": 24
+        },
+        "METHOD": {
+          "covered": 13,
+          "missed": 24
+        },
+        "CLASS": {
+          "covered": 4,
+          "missed": 4
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/AdvancedSearchRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 252,
+          "missed": 191
+        },
+        "BRANCH": {
+          "covered": 6,
+          "missed": 9
+        },
+        "LINE": {
+          "covered": 28,
+          "missed": 4
+        },
+        "COMPLEXITY": {
+          "covered": 4,
+          "missed": 9
+        },
+        "METHOD": {
+          "covered": 3,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 2,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 22,
+          "covered": 1,
+          "missed": 6
+        },
+        {
+          "line": 25,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 44,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 46,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/metadata/SuggestionRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 155,
+          "missed": 148
+        },
+        "BRANCH": {
+          "covered": 5,
+          "missed": 6
+        },
+        "LINE": {
+          "covered": 19,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 3,
+          "missed": 6
+        },
+        "METHOD": {
+          "covered": 2,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 2,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 17,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 20,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 32,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/dto/ApiResponse.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 1792,
+          "missed": 174
+        },
+        "BRANCH": {
+          "covered": 2,
+          "missed": 22
+        },
+        "LINE": {
+          "covered": 257,
+          "missed": 24
+        },
+        "COMPLEXITY": {
+          "covered": 175,
+          "missed": 33
+        },
+        "METHOD": {
+          "covered": 174,
+          "missed": 22
+        },
+        "CLASS": {
+          "covered": 38,
+          "missed": 14
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 369,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 370,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 371,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 372,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 382,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 385,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 386,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 389,
+          "covered": 0,
+          "missed": 8
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/core/domain/service/StorageService.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 679,
+          "missed": 107
+        },
+        "BRANCH": {
+          "covered": 21,
+          "missed": 22
+        },
+        "LINE": {
+          "covered": 57,
+          "missed": 6
+        },
+        "COMPLEXITY": {
+          "covered": 30,
+          "missed": 25
+        },
+        "METHOD": {
+          "covered": 27,
+          "missed": 3
+        },
+        "CLASS": {
+          "covered": 8,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 92,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 108,
+          "covered": 2,
+          "missed": 3
+        },
+        {
+          "line": 118,
+          "covered": 2,
+          "missed": 3
+        },
+        {
+          "line": 124,
+          "covered": 2,
+          "missed": 3
+        },
+        {
+          "line": 130,
+          "covered": 2,
+          "missed": 3
+        },
+        {
+          "line": 136,
+          "covered": 2,
+          "missed": 3
+        },
+        {
+          "line": 142,
+          "covered": 2,
+          "missed": 3
+        },
+        {
+          "line": 148,
+          "covered": 2,
+          "missed": 3
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/core/domain/service/StorageSelections.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 387,
+          "missed": 0
+        },
+        "BRANCH": {
+          "covered": 4,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 40,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 6,
+          "missed": 0
+        },
+        "METHOD": {
+          "covered": 4,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/domain/storage/model/StorageSelection.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 107,
+          "missed": 0
+        },
+        "BRANCH": {
+          "covered": 6,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 10,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 11,
+          "missed": 0
+        },
+        "METHOD": {
+          "covered": 8,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 4,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageMutationRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 498,
+          "missed": 667
+        },
+        "BRANCH": {
+          "covered": 10,
+          "missed": 24
+        },
+        "LINE": {
+          "covered": 63,
+          "missed": 20
+        },
+        "COMPLEXITY": {
+          "covered": 11,
+          "missed": 24
+        },
+        "METHOD": {
+          "covered": 11,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 6,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 38,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 49,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 63,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 69,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 83,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 96,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 110,
+          "covered": 1,
+          "missed": 4
+        },
+        {
+          "line": 123,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 137,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 142,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 24,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 8,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 2,
+          "missed": 0
+        },
+        "METHOD": {
+          "covered": 2,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageTransferRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 568,
+          "missed": 299
+        },
+        "BRANCH": {
+          "covered": 20,
+          "missed": 22
+        },
+        "LINE": {
+          "covered": 71,
+          "missed": 6
+        },
+        "COMPLEXITY": {
+          "covered": 15,
+          "missed": 22
+        },
+        "METHOD": {
+          "covered": 13,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 6,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 36,
+          "covered": 1,
+          "missed": 5
+        },
+        {
+          "line": 39,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 45,
+          "covered": 2,
+          "missed": 2
+        },
+        {
+          "line": 65,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 79,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 84,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 94,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 95,
+          "covered": 3,
+          "missed": 1
+        },
+        {
+          "line": 98,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 121,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 124,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 125,
+          "covered": 2,
+          "missed": 2
+        },
+        {
+          "line": 128,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 130,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageListingRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 308,
+          "missed": 193
+        },
+        "BRANCH": {
+          "covered": 6,
+          "missed": 8
+        },
+        "LINE": {
+          "covered": 41,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 4,
+          "missed": 8
+        },
+        "METHOD": {
+          "covered": 3,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 3,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 19,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 35,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 55,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 60,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageSelectionParameters.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 392,
+          "missed": 127
+        },
+        "BRANCH": {
+          "covered": 53,
+          "missed": 9
+        },
+        "LINE": {
+          "covered": 42,
+          "missed": 14
+        },
+        "COMPLEXITY": {
+          "covered": 44,
+          "missed": 7
+        },
+        "METHOD": {
+          "covered": 19,
+          "missed": 1
+        },
+        "CLASS": {
+          "covered": 3,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 70,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 71,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 72,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 88,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 99,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 104,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageTrashRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 229,
+          "missed": 350
+        },
+        "BRANCH": {
+          "covered": 9,
+          "missed": 11
+        },
+        "LINE": {
+          "covered": 22,
+          "missed": 14
+        },
+        "COMPLEXITY": {
+          "covered": 7,
+          "missed": 11
+        },
+        "METHOD": {
+          "covered": 5,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 3,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 25,
+          "covered": 1,
+          "missed": 5
+        },
+        {
+          "line": 33,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 43,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 58,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 63,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/api/routes/storage/StorageReadRoutes.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 212,
+          "missed": 557
+        },
+        "BRANCH": {
+          "covered": 4,
+          "missed": 20
+        },
+        "LINE": {
+          "covered": 28,
+          "missed": 29
+        },
+        "COMPLEXITY": {
+          "covered": 7,
+          "missed": 18
+        },
+        "METHOD": {
+          "covered": 7,
+          "missed": 2
+        },
+        "CLASS": {
+          "covered": 3,
+          "missed": 2
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 26,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 31,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 45,
+          "covered": 0,
+          "missed": 4
+        },
+        {
+          "line": 49,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 66,
+          "covered": 0,
+          "missed": 4
+        },
+        {
+          "line": 70,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 87,
+          "covered": 1,
+          "missed": 3
+        },
+        {
+          "line": 92,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/infrastructure/persistence/StorageDatabaseResult.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 61,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 13,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 1,
+          "missed": 0
+        },
+        "METHOD": {
+          "covered": 1,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    },
+    {
+      "source": "com/vaultstadio/infrastructure/persistence/StorageItemSelection.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 322,
+          "missed": 9
+        },
+        "BRANCH": {
+          "covered": 20,
+          "missed": 3
+        },
+        "LINE": {
+          "covered": 52,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 17,
+          "missed": 3
+        },
+        "METHOD": {
+          "covered": 7,
+          "missed": 0
+        },
+        "CLASS": {
+          "covered": 3,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 22,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 69,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 81,
+          "covered": 1,
+          "missed": 1
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/infrastructure/persistence/ExposedStorageItemRepository.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 525,
+          "missed": 793
+        },
+        "BRANCH": {
+          "covered": 9,
+          "missed": 33
+        },
+        "LINE": {
+          "covered": 71,
+          "missed": 97
+        },
+        "COMPLEXITY": {
+          "covered": 25,
+          "missed": 54
+        },
+        "METHOD": {
+          "covered": 23,
+          "missed": 35
+        },
+        "CLASS": {
+          "covered": 10,
+          "missed": 14
+        }
+      },
+      "uncoveredBranches": [
+        {
+          "line": 38,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 65,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 79,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 90,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 119,
+          "covered": 3,
+          "missed": 1
+        },
+        {
+          "line": 129,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 130,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 152,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 159,
+          "covered": 0,
+          "missed": 4
+        },
+        {
+          "line": 165,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 177,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 183,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 209,
+          "covered": 1,
+          "missed": 1
+        },
+        {
+          "line": 219,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 222,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 247,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 255,
+          "covered": 0,
+          "missed": 2
+        },
+        {
+          "line": 258,
+          "covered": 0,
+          "missed": 2
+        }
+      ]
+    },
+    {
+      "source": "com/vaultstadio/domain/common/pagination/PagedResult.kt",
+      "counters": {
+        "INSTRUCTION": {
+          "covered": 83,
+          "missed": 3
+        },
+        "BRANCH": {
+          "covered": 8,
+          "missed": 0
+        },
+        "LINE": {
+          "covered": 9,
+          "missed": 0
+        },
+        "COMPLEXITY": {
+          "covered": 11,
+          "missed": 1
+        },
+        "METHOD": {
+          "covered": 7,
+          "missed": 1
+        },
+        "CLASS": {
+          "covered": 1,
+          "missed": 0
+        }
+      },
+      "uncoveredBranches": []
+    }
+  ],
+  "testedKotlinInputs": [
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/dto/ApiResponse.kt",
+      "sha256": "b2e7d494fe337eb5ce90dbec5463312593f6d6339ec7a6bf444ad17a6374dfa8"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/AdvancedSearchFilters.kt",
+      "sha256": "305181614a9fc25645254491a9543fd99dc4c37ab9f398b4bd8db5a801e962f9"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/AdvancedSearchRoutes.kt",
+      "sha256": "7439c6d352578ccdd41e07e9c17d5f6a4f7682bd86be9aa333dac36f98119995"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/BasicSearchRoutes.kt",
+      "sha256": "597c8fbb025bf50788fd2b11c68f818db457becd7072be5c7e87260f899eff12"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/MetadataSearchRoutes.kt",
+      "sha256": "bc5de4e79ece09a2ba47cd70635287d7dddd52aa1adf8ead7a4f300679bfdda6"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SearchDateBounds.kt",
+      "sha256": "7a6b0d52c0c06747f2438de0600e3de5a89b3344ef3452229a8fc40d23889026"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SearchModels.kt",
+      "sha256": "9b66ef49d114d17dbaa09aeb79d27af2b6e5df64b1a50c1f7ba3fbb55acedd12"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SearchRoutes.kt",
+      "sha256": "343161a85b6980027bec3938a07b461f96e2089d5c6a6730dbd557b553fe8854"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SuggestionRoutes.kt",
+      "sha256": "fe30c082b626aafcaec94c4d447fca083db7e69b5863e28e70b9db8ec18a095f"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageListingRoutes.kt",
+      "sha256": "45ed54f16d4262bb6c078946d4861a75e93066016884f8d8df3c4386f702e7fb"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageMutationRoutes.kt",
+      "sha256": "4fff80064810d7b856b826488ffd811088b2447b2139613744edf1230f14b802"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageReadRoutes.kt",
+      "sha256": "1ef3044054512e13dfce67bdab24617685f8c922d7ed549eff756f6bc40d42a7"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageRoutes.kt",
+      "sha256": "1053002d1653525cee34fc08c328d48a9f0c4d9d900043b72abf2445e7298adc"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageSelectionParameters.kt",
+      "sha256": "658f7c7a0fa0617d31efe75a101901a8f870b0fb3a796eae47ddb0456222a1b6"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageTransferRoutes.kt",
+      "sha256": "801beda69c0b6571ad894ad32773b146efc122f3471ee2d62e8469ce01d50d2b"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageTrashRoutes.kt",
+      "sha256": "85e40cf73d35652d5c8791905bb5596082add194a15c7c7c804b2a8028b79ef8"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/dto/ApiResponseTest.kt",
+      "sha256": "1fc2c0469d2e4f6f06b9f8f4105d72258be128102b1115cd103ead7c127d2b41"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionHttpPositiveTest.kt",
+      "sha256": "cf4742785a0d9dbfbab350816c043df1bfd9c1ad3ffa3cff719f89b5e8ec5c60"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionHttpRejectionTest.kt",
+      "sha256": "bd611f83a9d8ea5f9ee093ebc283f194eaec9a8294e63800c50969ad33bacb70"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionIntegrationFixture.kt",
+      "sha256": "2e3127be1d091f3da6df054ebcac5bbb78cbf335776372fbc6af4be25b9088db"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionRouteExtractionTest.kt",
+      "sha256": "2d8d31ba78e0dedf54c31321c6c6b817de80735be1338033aceb25e4e54d3f18"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionSearchBoundaryTest.kt",
+      "sha256": "59c14a7847b2126a87d34055c86e5a61217b0ba4e2cbfd2944612e86b067bde6"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionSqlOrderingTest.kt",
+      "sha256": "4ce13d397a01b6938daa225c5022f1b5d3ffea63f978106963b89434fccd51d6"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/StorageSelectionParametersTest.kt",
+      "sha256": "d564a39b17a6053739fe979191e52943d72f87bf8994d084bfdf772c804fe244"
+    },
+    {
+      "path": "backend/core/storage/src/main/kotlin/com/vaultstadio/core/domain/service/StorageSelections.kt",
+      "sha256": "584141e27ed7a76adc2107bf97d77002d001672c4cf5a91f7d168bf625e3ef4a"
+    },
+    {
+      "path": "backend/core/storage/src/main/kotlin/com/vaultstadio/core/domain/service/StorageService.kt",
+      "sha256": "2958d7f953f58a64694cde7dd19f27601c1b18a9c8dad4db931ebd4814edc6c6"
+    },
+    {
+      "path": "backend/core/storage/src/test/kotlin/com/vaultstadio/core/domain/service/StorageSelectionOrderingTest.kt",
+      "sha256": "90927cb9f247cf0917039e637273c4a20b686728fe69ad51db142181f307c1ef"
+    },
+    {
+      "path": "backend/domain/common/src/main/kotlin/com/vaultstadio/domain/common/pagination/PagedResult.kt",
+      "sha256": "3b2447d8301a7e79aeedd9de73dad0e2c95ac99832208462468c378fd1fab0e8"
+    },
+    {
+      "path": "backend/domain/common/src/test/kotlin/com/vaultstadio/domain/common/pagination/PagedResultTest.kt",
+      "sha256": "d861f7953979d3c2e2dd7ec6dac416fb9c93e032a40fa3f673a81fbf3cd17fe1"
+    },
+    {
+      "path": "backend/domain/common/src/test/kotlin/com/vaultstadio/domain/common/pagination/PaginationOverflowTest.kt",
+      "sha256": "52441fff2e489fd11c300ee2acf92ed9294828816bc1de9b87e275a6153eddba"
+    },
+    {
+      "path": "backend/domain/storage/src/main/kotlin/com/vaultstadio/domain/storage/model/StorageSelection.kt",
+      "sha256": "943d0d938fc10045977d732bff58c73e9483ed601e685bc84c05c177968dd1ea"
+    },
+    {
+      "path": "backend/domain/storage/src/test/kotlin/com/vaultstadio/domain/storage/model/StorageSelectionTest.kt",
+      "sha256": "79111f439dc01e428d6241df178bf759532a5cc4cc092940440c96b3db4d3285"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedStorageItemRepository.kt",
+      "sha256": "297f564a2a5502333a41e954180613ac55eae719262cb42bbce8303b8f541dd8"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageDatabaseResult.kt",
+      "sha256": "0db6c9d16c70ae740941f4d14d539e34c6a437c462048be6b9a3bbfe356f1fde"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageItemSelection.kt",
+      "sha256": "3d7071dc694c29711d26e219a27d382cba7f9a3a23ff56ab7dcf68a00be26c17"
+    },
+    {
+      "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/StorageDatabaseResultTest.kt",
+      "sha256": "42818d2a9b7dde8615131369b18794bdbeedf9ef3c918142c8df2d2bdaea56b8"
+    },
+    {
+      "path": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/domain/storage/StorageModelsTest.kt",
+      "sha256": "74c5eba6e65c6ea0fb10bd87512e2794ac2a496e41adae1179d106849545385b"
+    },
+    {
+      "path": "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/PaginationInt64Test.kt",
+      "sha256": "c94f91cce85c9265551a3189bf1ed65910f44b41a68b5f133d132ab73f819c6c"
+    },
+    {
+      "path": "frontend/data/network/src/main/kotlin/com/vaultstadio/app/data/network/dto/common/ApiResponseDTO.kt",
+      "sha256": "7d178a3832bf77c53219ecd5bb46d08fd394f7fde18e41dbb631e3eab4a96369"
+    },
+    {
+      "path": "frontend/domain/admin/src/main/kotlin/com/vaultstadio/app/domain/admin/model/PaginatedResponse.kt",
+      "sha256": "1c9ac44291696790fe056f1708986599e3d8f300234668ad9d0d185914252534"
+    },
+    {
+      "path": "frontend/domain/storage/src/main/kotlin/com/vaultstadio/app/domain/storage/model/StorageModels.kt",
+      "sha256": "5c4ed0dc7723924b3bae81f6c5a6c7b61980a2610b5ff06902b38b771db81d32"
+    }
+  ],
+  "baselineSha256Unchanged": "78193b8382eaaaf3db2b0184c57e9f8fbb09af99ed9c3d3814d470be8ad6b788",
+  "limitations": [
+    "Inline generic receive wrappers have uncovered declaration probes while production callsites are exercised by real HTTP. No claim that every missing probe is unreachable.",
+    "Nullable owner/trash raw SQL protocol branches and a suspend transaction branch remain uncovered in the selected SQL source.",
+    "Whole backend remains partial; broader coverage and architectural debt remain #84."
+  ]
+}
