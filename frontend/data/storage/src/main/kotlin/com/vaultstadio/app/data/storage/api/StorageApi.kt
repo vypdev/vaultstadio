@@ -8,6 +8,7 @@ import com.vaultstadio.app.data.network.ApiResult
 import com.vaultstadio.app.data.network.BaseApi
 import com.vaultstadio.app.data.network.dto.common.ApiResponseDTO
 import com.vaultstadio.app.data.network.dto.common.PaginatedResponseDTO
+import com.vaultstadio.app.data.network.rethrowTransportCancellation
 import com.vaultstadio.app.data.storage.dto.BatchCopyRequestDTO
 import com.vaultstadio.app.data.storage.dto.BatchDeleteRequestDTO
 import com.vaultstadio.app.data.storage.dto.BatchMoveRequestDTO
@@ -169,6 +170,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Chunk upload failed")
         }
     }
@@ -229,6 +231,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload failed")
         }
     }
@@ -244,7 +247,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                 url = "/api/v1/storage/upload-folder",
                 formData = formData {
                     parentId?.let { append("parentId", it) }
-                    files.forEachIndexed { index, file ->
+                    files.forEach { file ->
                         append(
                             file.relativePath,
                             file.data,
@@ -253,11 +256,14 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                                 append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
                             },
                         )
-                        onProgress((index + 1).toFloat() / files.size)
                     }
                 },
             ) {
-                header(HttpHeaders.Authorization, "Bearer ${tokenProvider()}")
+                tokenProvider()?.let { header(HttpHeaders.Authorization, "Bearer $it") }
+                onUpload { bytesSentTotal, contentLength ->
+                    val total = contentLength ?: 0L
+                    if (total > 0) onProgress(bytesSentTotal.toFloat() / total.toFloat())
+                }
             }
 
             if (response.status.isSuccess()) {
@@ -275,6 +281,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                 ApiResult.Error("HTTP_ERROR", "Upload failed: ${response.status}")
             }
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload error")
         }
     }
@@ -289,6 +296,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
         } catch (e: Exception) {
+            rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Download failed")
         }
     }

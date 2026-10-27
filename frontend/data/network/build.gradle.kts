@@ -41,6 +41,7 @@ kotlin {
             dependencies {
                 api(project(":domain:result"))
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
                 // 0.9.1 uses the supported Wasm module loader under Kotlin 2.4.20.
                 implementation(libs.kotlinx.io.core)
                 implementation(libs.ktor.client.core)
@@ -52,6 +53,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.ktor.client.mock)
             }
         }
         val desktopMain by getting {

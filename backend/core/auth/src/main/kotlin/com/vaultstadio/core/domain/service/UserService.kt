@@ -111,11 +111,11 @@ class UserService(
      * Registers a new user.
      */
     suspend fun register(input: RegisterUserInput): Either<StorageException, User> {
-        if (!isValidEmail(input.email)) {
+        if (!UserInputValidation.email(input.email)) {
             return ValidationException("Invalid email format").left()
         }
 
-        if (!isStrongPassword(input.password)) {
+        if (!UserInputValidation.password(input.password)) {
             return ValidationException("Password must be at least 8 characters with letters and numbers").left()
         }
 
@@ -264,9 +264,9 @@ class UserService(
             lastActivityAt = now,
         )
 
-        when (val result = sessionRepository.update(updatedSession)) {
+        when (val result = sessionRepository.rotate(updatedSession, refreshTokenHash)) {
             is Either.Left -> return result
-            is Either.Right -> { /* continue */ }
+            is Either.Right -> if (!result.value) return AuthenticationException("Invalid refresh token").left()
         }
 
         logger.debug { "Session refreshed for user ${user.id}" }
@@ -306,6 +306,10 @@ class UserService(
                     ?: return AuthenticationException("User not found").left()
                 found
             }
+        }
+
+        if (user.status != UserStatus.ACTIVE) {
+            return AuthorizationException("Account is not active").left()
         }
 
         sessionRepository.updateLastActivity(session.id)
@@ -409,7 +413,7 @@ class UserService(
             return AuthenticationException("Current password is incorrect").left()
         }
 
-        if (!isStrongPassword(newPassword)) {
+        if (!UserInputValidation.password(newPassword)) {
             return ValidationException("Password must be at least 8 characters with letters and numbers").left()
         }
 
@@ -537,16 +541,6 @@ class UserService(
                 }
             }
         }
-    }
-
-    private fun isValidEmail(email: String): Boolean {
-        return email.contains("@") && email.contains(".")
-    }
-
-    private fun isStrongPassword(password: String): Boolean {
-        return password.length >= 8 &&
-            password.any { it.isLetter() } &&
-            password.any { it.isDigit() }
     }
 
     private fun generateSecureToken(): String {

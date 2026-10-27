@@ -140,6 +140,16 @@ Accepted pre-code contract, locally verified in7bb140e: apply [SDD-0009§6.4](SD
 
 The absence of durable nonowner collaboration grants is explicit product debt, not an invented grant or a claim that the whole feature is complete. Numeric inventory391 and migration/compatibility limits belong to the owning SDD. No authentication mechanism, Copilot contract or protection is changed.
 
+### 6.7 Critical authentication coverage contract — issue #119
+
+Pre-implementation contract (2026-10-27), AUTH119-HTTP: replace template route tests with production AuthRoutes, application DI/use cases, real UserService/BCrypt, migrated isolated PostgreSQL and current persisted user/session assertions. Validate registration, login, current identity, rotation, expiry, revocation, inactive-account rejection and bounded provider/request errors. Store only token hashes; never publish real credentials. An inactive current identity MUST NOT authorize through an already-issued session. Logout may remain idempotent for absent/unknown sessions, but a failed revocation MUST NOT be reported as completed. Invalid/missing JSON is a client-input failure, not an internal success or unhandled server error.
+
+AUTH119-01–22 in [the pre-code scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) define the risk budget and must be linked to executed cases and actual retained SQL/session facts. Current code gaps are candidates for red/green reproduction, not assumed fixes. No new auth mechanism, public role grant or protocol support is introduced.
+
+The supported registration email shape has one `@`, a nonblank local part and a dotted domain with nonempty labels; whitespace is rejected. Preserve accepted plus-tags, mixed case and existing lowercase storage. This is a bounded application-input rule, not full RFC mailbox verification. Malformed JSON responses use a stable generic client-error message without echoing credentials or serializer internals.
+
+AUTH119-11/12 includes concurrent reuse: one refresh credential may commit at most one rotation. Compare the expected old refresh hash atomically with the persisted session identity before replacing credentials; a missing/revoked or already-rotated session is an authentication failure, never a successful unpersisted credential pair. The semantic repository port owns that conditional mutation; SQL details remain in infrastructure. Verify two real concurrent HTTP requests after both have read the same original row, and a refresh held across logout, with bounded deterministic barriers and actual SQL state. Sequential rotation alone does not prove this property.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.

@@ -154,6 +154,14 @@ R01c reuses StorageAccessPolicy.requireOwner before collaboration metadata or ef
 
 Domain owns validated REST selections, with limit1..1000/offset0..Int.MAX_VALUE; core checks before any parent/storage query. Preserve ownership/parent/trash constraints and typed failures. SQL adds id ASC after the requested primary and existing TYPE/name ordering. Shared PagedResult computes exact Long metadata without overflow; raw protocol query/limit<=0 compatibility is retained. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
 
+### 6.7 Critical authenticated file-journey coverage — issue #119
+
+Pre-implementation contract (2026-10-27), CLIENT119-STORAGE: exercise the existing authenticated read/transfer/mutation/trash routes with production services, migrated PostgreSQL and owned temporary content. Verify returned identifiers and bytes, current rows/content after success, and zero forbidden effects after rejection. Client request-adapter tests must preserve each method, path, query, typed payload, multipart bytes and failure without claiming that an unimplemented server protocol is operational. Cancellation remains control flow; absent required payload/failed I/O cannot become an empty or Unit success.
+
+Incoming body consumption is part of transfer cancellation semantics, including successful HTTP responses whose Ktor body channel fails with a wrapped cancellation. File/folder/chunk uploads and binary download must use the same transport cancellation policy as BaseApi. Preserve caller cancellation even when wrapped; actual request/connect/socket deadlines remain network failures. Test both kinds independently. This refinement follows four executed negative body-channel controls before implementation.
+
+STO119-01–20 in [the scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) cover these boundaries. Existing S3/WebDAV, authenticated UI download, search, version recovery and advanced-capability debts retain their own issues; this increment must neither exclude them from canonical coverage nor certify their readiness using a transport fixture.
+
 ## 7. User-facing configuration
 
 Storage type, local path, S3 endpoint/region/bucket/credentials, path style, quota, and trash retention are validated with cross-field rules. Storage type controls backend and S3 route registration.

@@ -11,6 +11,9 @@ interface SessionRepository {
     suspend fun findByRefreshTokenHash(refreshTokenHash: String): Either<StorageException, UserSession?>
     suspend fun findByUserId(userId: String): Either<StorageException, List<UserSession>>
     suspend fun update(session: UserSession): Either<StorageException, UserSession>
+
+    /** Commit a credential replacement only while the expected previous credential still owns this session. */
+    suspend fun rotate(session: UserSession, expectedRefreshTokenHash: String): Either<StorageException, Boolean>
     suspend fun delete(id: String): Either<StorageException, Unit>
     suspend fun deleteByUserId(userId: String): Either<StorageException, Unit>
     suspend fun deleteExpired(): Either<StorageException, Int>
