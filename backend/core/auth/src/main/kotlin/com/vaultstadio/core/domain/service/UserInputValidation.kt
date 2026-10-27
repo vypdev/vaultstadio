@@ -11,5 +11,6 @@ internal object UserInputValidation {
     }
 
     fun password(value: String): Boolean = value.length >= 8 &&
-        value.any { it.isLetter() } && value.any { it.isDigit() }
+        value.any { it.isLetter() } &&
+        value.any { it.isDigit() }
 }

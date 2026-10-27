@@ -264,9 +264,9 @@ class UserService(
             lastActivityAt = now,
         )
 
-        when (val result = sessionRepository.update(updatedSession)) {
+        when (val result = sessionRepository.rotate(updatedSession, refreshTokenHash)) {
             is Either.Left -> return result
-            is Either.Right -> { /* continue */ }
+            is Either.Right -> if (!result.value) return AuthenticationException("Invalid refresh token").left()
         }
 
         logger.debug { "Session refreshed for user ${user.id}" }
