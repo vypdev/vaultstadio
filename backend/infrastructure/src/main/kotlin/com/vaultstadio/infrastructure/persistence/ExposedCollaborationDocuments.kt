@@ -16,7 +16,7 @@ import kotlinx.datetime.Clock
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.core.greaterEq
 import org.jetbrains.exposed.v1.jdbc.selectAll
 
 internal class ExposedCollaborationDocuments : CollaborationDocumentsRepository {
@@ -88,7 +88,7 @@ internal class ExposedCollaborationDocuments : CollaborationDocumentsRepository 
                 CollaborationOperationsTable.selectAll()
                     .where {
                         CollaborationOperationsTable.itemId eq itemId and
-                            (CollaborationOperationsTable.baseVersion greater sinceVersion)
+                            (CollaborationOperationsTable.baseVersion greaterEq sinceVersion)
                     }
                     .orderBy(CollaborationOperationsTable.baseVersion, SortOrder.ASC)
                     .map { it.toCollaborationOperation() }

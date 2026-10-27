@@ -48,7 +48,7 @@ interface CollaborationDocumentsRepository {
     ): Either<StorageException, DocumentState>
 
     /**
-     * Get operations since a version.
+     * Get stored operations with baseVersion >= the requested document version; include its next operation.
      *
      * @param itemId Storage item ID
      * @param sinceVersion Get operations after this version

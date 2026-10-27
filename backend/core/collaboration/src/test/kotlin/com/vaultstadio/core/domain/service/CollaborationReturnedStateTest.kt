@@ -10,6 +10,7 @@ import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.DatabaseException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
 import io.mockk.coEvery
+import io.mockk.coVerify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -49,6 +50,10 @@ class CollaborationReturnedStateTest {
         val f = CollaborationServiceFixture()
         arrange(f, case)
         val result = invoke(f, case)
+        if (case == "participant-scope-failure") {
+            // getSession binds each returned participant through the minimal participant-session projection.
+            coVerify(exactly = 1) { f.scopes.participantSession(f.participant.id) }
+        }
         when (case) {
             "cleanup-positive" -> assertIs<Either.Right<*>>(result)
             "cleanup-blank", "blank-session-actor", "participant-expected-item" ->
