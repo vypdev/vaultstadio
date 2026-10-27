@@ -2,7 +2,6 @@
 from pathlib import Path
 import json
 import os
-import re
 import shlex
 import subprocess
 import tempfile
@@ -112,6 +111,34 @@ class CadenceContractTests(unittest.TestCase):
         self.assertEqual(upload['with']['if-no-files-found'], 'error')
         selection = next(step for step in ci['jobs']['coverage']['steps'] if step.get('id') == 'coverage-files')
         self.assertIn('--python coverage-python', selection['run'])
+
+    def test_self_hosted_python_uses_job_temporary_install_and_checks_version(self):
+        ci = workflow('ci.yml')
+        for name in ['backend', 'frontend']:
+            job_steps = ci['jobs'][name]['steps']
+            setup = next(step for step in job_steps if step.get('name') == 'Set up verification Python')
+            self.assertEqual(setup['uses'], 'astral-sh/setup-uv@v7')
+            self.assertEqual(setup['with']['python-version'], '3.13')
+            self.assertRegex(setup['with']['checksum'], r'^[0-9a-f]{64}$')
+            self.assertEqual(setup['with']['enable-cache'], 'false')
+            self.assertEqual(setup['with']['activate-environment'], 'true')
+            self.assertTrue(setup['with']['venv-path'].startswith('${{ runner.temp }}/'))
+            for variable in ['UV_PYTHON_INSTALL_DIR', 'UV_CACHE_DIR']:
+                self.assertTrue(setup['env'][variable].startswith('${{ runner.temp }}/'))
+            self.assertEqual(setup['env']['UV_PYTHON_PREFERENCE'], 'only-managed')
+            check = next(step for step in job_steps if step.get('name') == 'Verify isolated Python')
+            first_test = next(step for step in job_steps if 'verification/run.py test ' in step.get('run', ''))
+            self.assertLess(job_steps.index(setup), job_steps.index(check))
+            self.assertLess(job_steps.index(check), job_steps.index(first_test))
+            with tempfile.TemporaryDirectory() as raw:
+                tools = Path(raw)
+                interpreter = tools / 'python3'
+                interpreter.write_text('#!/bin/sh\nexec ' + shlex.quote(os.sys.executable) + ' "$@"\n')
+                interpreter.chmod(0o700)
+                result = subprocess.run(['/bin/bash', '-eo', 'pipefail', '-c', check['run']],
+                                        env={'PATH': raw}, capture_output=True, text=True, timeout=5)
+                expected = 0 if os.sys.version_info[:2] == (3, 13) else 1
+                self.assertEqual(result.returncode, expected)
 
     def test_shared_runners_reject_fork_source(self):
         guard = "github.event.pull_request.head.repo.full_name == github.repository"

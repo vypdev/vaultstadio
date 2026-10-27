@@ -55,9 +55,21 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
       
       - name: Set up verification Python
-        uses: actions/setup-python@v6
+        uses: astral-sh/setup-uv@v7
         with:
+          version: '0.11.29'
+          checksum: '61c04acc52a33ef0f331e494bdfbedcdb6c26c6970c022ed3699e5860f8930e3'
           python-version: '3.13'
+          activate-environment: true
+          venv-path: ${{ runner.temp }}/verification-python
+          enable-cache: false
+        env:
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/verification-python-runtime
+          UV_CACHE_DIR: ${{ runner.temp }}/verification-uv-cache
+          UV_PYTHON_PREFERENCE: only-managed
+
+      - name: Verify isolated Python
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 13), sys.version; print(sys.executable, sys.version)'
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
@@ -181,9 +193,21 @@ jobs:
             "build-tools;36.0.0"
 
       - name: Set up verification Python
-        uses: actions/setup-python@v6
+        uses: astral-sh/setup-uv@v7
         with:
+          version: '0.11.29'
+          checksum: 'c4c4de482da9ccdd076dc4fb5cfe7b740609029385c72f58606be3153602387d'
           python-version: '3.13'
+          activate-environment: true
+          venv-path: ${{ runner.temp }}/verification-python
+          enable-cache: false
+        env:
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/verification-python-runtime
+          UV_CACHE_DIR: ${{ runner.temp }}/verification-uv-cache
+          UV_PYTHON_PREFERENCE: only-managed
+
+      - name: Verify isolated Python
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 13), sys.version; print(sys.executable, sys.version)'
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
