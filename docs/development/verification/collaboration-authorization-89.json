@@ -1,0 +1,2273 @@
+{
+  "schemaVersion": 1,
+  "issue": 89,
+  "contractCommit": "0e8535f2ce8b16b93ce16b4982dfb2bf2680ecc1",
+  "implementationCommit": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+  "baseDevelop": "03638226aaa339bc83aeb4363d390367fb561903",
+  "verificationDateUtc": "2026-10-27",
+  "completeBackendGate": {
+    "tests": 2697,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rawXmlFiles": 548,
+    "unchangedTasksMayBeUpToDate": true
+  },
+  "newCollectedCases": 442,
+  "preCodeRiskFloor": 391,
+  "retainedOriginalCases": {
+    "apiDtos35": 35,
+    "models11": 11,
+    "service12": 12
+  },
+  "riskGroups": {
+    "service": 108,
+    "http": 195,
+    "presence": 18,
+    "websocket": 24,
+    "minimalSql": 12,
+    "membershipAndExpiry": 11,
+    "faults": 24,
+    "admissionResults": 9,
+    "returnedState": 24,
+    "streamAndPresenceLifecycle": 8,
+    "scopeBinding": 7,
+    "initialJoinRegression": 1,
+    "missingWorkingState": 1
+  },
+  "wholeCoreCollaborationAggregate": {
+    "LINE": {
+      "covered": 377,
+      "total": 390
+    },
+    "BRANCH": {
+      "covered": 183,
+      "total": 207
+    }
+  },
+  "coreCollaborationAggregateBySource": {
+    "CollaborationAccess.kt": {
+      "BRANCH": {
+        "covered": 54,
+        "total": 54
+      },
+      "LINE": {
+        "covered": 75,
+        "total": 75
+      }
+    },
+    "CollaborationService.kt": {
+      "BRANCH": {
+        "covered": 2,
+        "total": 2
+      },
+      "LINE": {
+        "covered": 53,
+        "total": 53
+      }
+    },
+    "CollaborationOT.kt": {
+      "BRANCH": {
+        "covered": 14,
+        "total": 28
+      },
+      "LINE": {
+        "covered": 21,
+        "total": 34
+      }
+    },
+    "CollaborationSessions.kt": {
+      "BRANCH": {
+        "covered": 30,
+        "total": 30
+      },
+      "LINE": {
+        "covered": 70,
+        "total": 70
+      }
+    },
+    "CollaborationInputs.kt": {
+      "LINE": {
+        "covered": 11,
+        "total": 11
+      }
+    },
+    "CollaborationStreams.kt": {
+      "BRANCH": {
+        "covered": 16,
+        "total": 23
+      },
+      "LINE": {
+        "covered": 24,
+        "total": 24
+      }
+    },
+    "CollaborationComments.kt": {
+      "BRANCH": {
+        "covered": 25,
+        "total": 26
+      },
+      "LINE": {
+        "covered": 57,
+        "total": 57
+      }
+    },
+    "CollaborationDocuments.kt": {
+      "BRANCH": {
+        "covered": 14,
+        "total": 14
+      },
+      "LINE": {
+        "covered": 31,
+        "total": 31
+      }
+    },
+    "CollaborationPresence.kt": {
+      "BRANCH": {
+        "covered": 28,
+        "total": 30
+      },
+      "LINE": {
+        "covered": 35,
+        "total": 35
+      }
+    }
+  },
+  "coverageScope": "All production sources in core/collaboration including unchanged OT, aggregated across backend execution data; no exclusions. Not whole-platform 100%.",
+  "compileClasspathProjects": [
+    "domain:collaboration",
+    "domain:common",
+    "domain:storage"
+  ],
+  "compatibleModelClassesHaveSingleDomainJarOwner": true,
+  "sourceInputs": [
+    {
+      "path": "backend/api/build.gradle.kts",
+      "sha256": "316b2c59ea93d6d9bfe578fff6a0d4aea82274f21b077c928decfd3cd166f40d"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/CollaborationModule.kt",
+      "sha256": "71d57aabd1368b4e9fc1089b4faf0dbf7861f11568a992fcbbc3ebe68fa55afe"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
+      "sha256": "76b1be9e4b3e909be37d6c72957062ac2310603fcac4c6c4f619b7c991965203"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/middleware/ErrorHandling.kt",
+      "sha256": "e2b66547247f75c4be572b172c3bcfbcf6837e07799c311ac9ed31dab44874c5"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationCommentRoutes.kt",
+      "sha256": "c4dc446cfe7d6bb72a8582294caa5a55abef85d7344ca55b603495e6e469959d"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationDocumentRoutes.kt",
+      "sha256": "1a7163cf0e28c2c208c922aee1cb198056ed9b6d1fdb44c3c8a8a127b055f740"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationErrors.kt",
+      "sha256": "6a09911ccdc0e1384f64ce7b217fd499a86e03e17f5a19d56bfa152c701aafba"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationOperationMapping.kt",
+      "sha256": "4299cff4bf677bb2189ebe7b3335afba628c88c502fe9e24b6c98a61d7388801"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationPresenceRoutes.kt",
+      "sha256": "9b4c9e2f7bfb7f9286071bfa38d14623cde8a18dbacb92c52b53b5628fd99169"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationRoutes.kt",
+      "sha256": "3ddad6f4cef69bdf5a525756f6c40d75942c1be91a8b1d68d5497954a181f00f"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSessionRoutes.kt",
+      "sha256": "9c793c117e47a59734582f86d5305191b6cb5add789bf5afea3f94583cb5400b"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketCommands.kt",
+      "sha256": "4e49cffd620c63dd19ee33e811c98587fae95da8b83d9addac15c7c71bbd225a"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketConnection.kt",
+      "sha256": "12677144debb7a0038b1be4241b6ed81bba0d7194d4f9fdae3b3ca1837c13951"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketMessages.kt",
+      "sha256": "510749bfa461a147663519caf492ed19440c71096a6f61dcf6b9f0ee9849fa95"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocket.kt",
+      "sha256": "bad89323ce67a15a0171062a47df72fc7abea8e144e50c0bcde9025f79d0e562"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocketManager.kt",
+      "sha256": "84e3c394b79922f95fcc76e7c077c1675c9534514044f960343bf50bf8c7d92a"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/Collaboration89RedHttpTest.kt",
+      "sha256": "bab083b58e35ed8cd8cdb9f7dd9b7463b4bdf3fc2b68a68e34258e7f87baabf8"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationAnonymousSocketTest.kt",
+      "sha256": "d962fdb71b5347126abbdeb501228e1b19cd9f35642e1a8eeae62537208744a6"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationHttpMatrixTest.kt",
+      "sha256": "f1a4e550db50141a9938fbd932d1a1c778ce96b2c47b08fd713be9ede00e9b52"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationIntegrationFixture.kt",
+      "sha256": "1a758b0c54b491d8300df4a3ff79bb2158abf08648101e6e8c25dfd1031893d8"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationMembershipRaceTest.kt",
+      "sha256": "d8ebb5c77e1082f8c33524f546d919292761a892b734eb48be44fe72e5d146ec"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketBoundaryTest.kt",
+      "sha256": "8e0dff2dfb0287cae5f183b808fe3b95b2e9270118f6808e1143d43d8665ac2c"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketFixture.kt",
+      "sha256": "53e6f12ec82035fb871faa4d0631a75b2ef8164c975e7dff59f4487195277406"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketHandshakeTest.kt",
+      "sha256": "67ad12af11b9fcad48db055f4af7086f8a7257b200ab9cfa475c7d842acd9746"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketScopeRebindingTest.kt",
+      "sha256": "fd1f963a8259db04d6faf701ff5ffcd087d781e0d935d8405002155dc5d142b5"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWorkingStateBoundaryTest.kt",
+      "sha256": "69055781f5e68312a485048f8b5861c3e86ec39897bed07ee523b44cd69a0a9c"
+    },
+    {
+      "path": "backend/core/build.gradle.kts",
+      "sha256": "f8decd48b4129cf949ef7f987bf7280c05e1decbb57a625aee855a30dbd0aab6"
+    },
+    {
+      "path": "backend/core/collaboration/build.gradle.kts",
+      "sha256": "58e6b9a1727e0e5ce9e260580b2ad714b5c7b2f7a3c4f1540b2dd42111ae5558"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationAccess.kt",
+      "sha256": "7e1a401195a1bb28dc9faaa1a0ee60ca1946b8f7f8c49b45228654556e273393"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationComments.kt",
+      "sha256": "dd20571b35f26ea40f974d8000392f2ddfd9546c96d31f5d618d2e7ae013214a"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationDocuments.kt",
+      "sha256": "b37a198aaae4f4ad41949252830d3ca27f8316a871d445972842a4230aa96768"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationInputs.kt",
+      "sha256": "284bbc2eba923f10d03e6a0e903da6e8c28a9c060a5d178d6fa1636cb86be2cf"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationPresence.kt",
+      "sha256": "8d562142feb2cea77e0f783bfa0116789ba33ddc2b7a2d818e711d98f3f108b3"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationService.kt",
+      "sha256": "60d0ddee84be21ebec8b889341e8db45c396fe9b759d53e4124eca2dbb694321"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationSessions.kt",
+      "sha256": "c7c431ef4a245261e3f90577543324bba19254c6c88b5410a098b6315cc8353d"
+    },
+    {
+      "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationStreams.kt",
+      "sha256": "72b6d18f6064b353c38497bb82beeed70c088498253bceca1e76e4679f4d0df0"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationAdmissionContractTest.kt",
+      "sha256": "fbf2fc1536bc87c8e7b119f7c3c5f0e000ed2444f25015784e27b2a1c846f2b0"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationFaultContractTest.kt",
+      "sha256": "36852bf9d7aec91266c52dda314153a59222d48a6e629741b70213281c94909a"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationOwnershipMatrixTest.kt",
+      "sha256": "788a51e8f845eef1aad6920558891a273c0f2f549fe6aa00772f324a02025037"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationPresenceContractTest.kt",
+      "sha256": "a2bba267ec0cf7f278dce60afd3376cf9f3c640a7d6de975a24fa38920da673a"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationReturnedStateTest.kt",
+      "sha256": "1cd8cc7bc30a067ddc248696672349d09039d4869980aaf56e350dc6ff5640a4"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationServiceFixture.kt",
+      "sha256": "b63b52033ee3a5fb63d122a98be7dead1286ce4e9c7eaa48cc7097969cb1a410"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationServiceTest.kt",
+      "sha256": "b3faf8c36de8198f297377406182ce71018966f9fd5997e2679733cf22f398f9"
+    },
+    {
+      "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationStreamLifecycleTest.kt",
+      "sha256": "cbdcb479f7e349508f918adddbd67b18ca9d74fde68547ff4267b0a507306fcc"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/model/CollaborationComments.kt",
+      "sha256": "9704b3ba0fa63aaaddba9aadaa841aeb41ba18de3c41bfc0c026ab542c68d43c"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/model/CollaborationEvent.kt",
+      "sha256": "a9261eb4b14e63b3c55f55fbd1f21982994d758384e1dff981f96b78cdb25164"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/model/CollaborationOperation.kt",
+      "sha256": "60bb5eb2055b3922803146d8bc3e4335e146d70dfa22c87ef5353069c0cc5d9f"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/model/CollaborationPresence.kt",
+      "sha256": "67c32082e1f387f6f3919588d097a084825987af62b70258aedee5ef7f470bb0"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/model/CollaborationSessionModels.kt",
+      "sha256": "04eb53f3cdbf9a7fd8f432c1eac7e267fac0e1e61faca011e025bb2d703d6418"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/model/DocumentState.kt",
+      "sha256": "913a44928c7efc8eff8a8a819ed38355c5b0021fafa5e0f96d92835baeb81c30"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationCommentsRepository.kt",
+      "sha256": "588ba64eacffd409bc9828cdcabb48fcb8c2c61e3dfaaba3592ba0328b67dc8b"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationDocumentsRepository.kt",
+      "sha256": "4c135ed0917060269d804e89333b6fb515233b3a61a16cf25c7bc18804c17534"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationParticipantsRepository.kt",
+      "sha256": "361c2c7bb9f9e628af85a70f21928f2d13479439fff8785549cec9de8e404df6"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationPresenceRepository.kt",
+      "sha256": "5333aac4e310cb5a206fa899bad2ac1be45dc94195aee4bb6f18d90ac1a356ff"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationRepository.kt",
+      "sha256": "d2d301648ba60d5fda26bb168d839163e9a7beca921257aa8f81a50751c5102a"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationSessionsRepository.kt",
+      "sha256": "ce0ef398e858ae4ea5693c8206ca728b9dd2c75c8bcc596a3b05448bad16c71f"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/domain/collaboration/repository/CollaborationMembershipRepository.kt",
+      "sha256": "66d9e7fd49f081ac8b1a4cf0cead1077daf2318aa078d455df17efdc4f1297e7"
+    },
+    {
+      "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/domain/collaboration/repository/CollaborationScopeRepository.kt",
+      "sha256": "4760bdc10714c6c3c349e8f580288da339fbe50d5dc242e855447e121b71c627"
+    },
+    {
+      "path": "backend/domain/collaboration/src/test/kotlin/com/vaultstadio/core/domain/model/CollaborationTest.kt",
+      "sha256": "089bc6f7ff15962b4bad85b940c9d675be31e6c4d2331c68ff75078b0c06caac"
+    },
+    {
+      "path": "backend/infrastructure/build.gradle.kts",
+      "sha256": "a5c133a46d00eb1f2b1894b22a022afa77b2b0c3b102505754bf97d9e4e9a77f"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationDatabase.kt",
+      "sha256": "9284ee6e9a64866fe949c94146361cb799532a2697f7f00c2c508a9bc6495818"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationDocumentSql.kt",
+      "sha256": "b5cf9e2a2f01de5dec56a279683d1cdc24d9119a5a68eadcdbaba9502695a072"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationMembershipSql.kt",
+      "sha256": "5f8f5bcd43f68bd254f31431e67a9fff4ebcec42e5da303259ab54ecfb3e97ae"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationComments.kt",
+      "sha256": "4ec6bfa0af7cc4e6f8d005dfe9b43e47af81d81fbff484fde4c199562e12c4ff"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationDocuments.kt",
+      "sha256": "8d16edfd9680969e6c253162ffad855f5a7cfdc40878cf7955384f67d5ee6071"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationMembershipRepository.kt",
+      "sha256": "cbc504c1b5fc555bcae993293d16487dd80e9de0971e1422e52a0db56d458f5f"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationPresence.kt",
+      "sha256": "04bb0385a23b13401fc0dba4d7e767c3f3b36d5c73fddef4819309dec84a06c3"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationRepository.kt",
+      "sha256": "4fd8cf544835b299006523e3c8a3c0ad1e43ca5535730877e1b6ad2eb7c7d8ad"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationScopeRepository.kt",
+      "sha256": "893fd7947b871e328e45a71b57ae770ec4dde7fe37b4d2752d98d3446d744883"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationSessions.kt",
+      "sha256": "845020823e8c67052cfe620b39548870672895cf2341d428c2be5246c0b800c3"
+    },
+    {
+      "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationScopeAdapterTest.kt",
+      "sha256": "97d0ecc6ac7b89346182e93d7ac68cd97e24be1d806f57e816a5c1d417372312"
+    }
+  ],
+  "quality": {
+    "changedKotlinPaths": 67,
+    "detektMaxIssues": 0,
+    "baselineUnchanged": true,
+    "ktlintChangedSelectionPass": true,
+    "repositoryFqnCheckPass": true,
+    "specificationCatalogCapabilities": 16
+  },
+  "actualRedAssertions": {
+    "foreignJoinStatusAndState": 2,
+    "liveSessionRebindingStatusAndState": 2
+  },
+  "packagedLoopback": {
+    "source": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+    "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
+    "packageFilesVerified": 237,
+    "requestCount": 28,
+    "nativeOwnerFrames": 9,
+    "nativeForeignClose": 1008,
+    "legacyForeignMembershipStillDenied": true,
+    "deniedDatabaseStateUnchanged": true,
+    "existingStorageAndPluginBytesUnchanged": true,
+    "postgresAndFrontendContainersUnchanged": true,
+    "twoOwnerDevicesAndStaleDisconnectVerified": true,
+    "workingStateSeedExplicit": true,
+    "workingStateEditedAndSnapshotPersisted": true,
+    "canonicalBytesRemainOriginal": true,
+    "coldStateAndSaveReturn404": true,
+    "commentReplyIdentityVerified": true,
+    "harnessResponseAdapterRecovered": true,
+    "nativeOwnerTranscriptCapturedInPriorSuccessfulPhase": true,
+    "scope": "actual loopback packaged backend; explicit working-state seed; whole UI/bootstrapping/canonical edit/replay remain issue112"
+  },
+  "rawEvidence": {
+    "finalBackendArchive": "issue89-domain-isolation-final-reports.zip",
+    "finalBackendArchiveSha256": "603f584830a31cdba5682b04e27c9c5de8ed414315eb1387bc890d731f25d064",
+    "initialJoinRed": "issue89-red-http-reports.zip",
+    "sessionRebindingRed": "issue89-socket-rebinding-red.zip",
+    "nativeSocketFrames": "issue89-packaged-socket-owner.json",
+    "packagedResults": "issue89-packaged-dogfood-results.json"
+  },
+  "remoteCiReviewAdoption": "pending; exact final-head results must be recorded in linked PR before adoption",
+  "remainingProductWork": [
+    {
+      "issue": 112,
+      "scope": "R14 client/server protocol, bootstrap, canonical saves, replay/delivery and durable grants"
+    },
+    {
+      "issue": 90,
+      "scope": "Typed public-share journey"
+    },
+    {
+      "issue": 91,
+      "scope": "Storage pagination and sorting"
+    },
+    {
+      "issue": 109,
+      "scope": "Recoverable version content lifecycle"
+    },
+    {
+      "issue": 111,
+      "scope": "Trusted-master setup activation"
+    }
+  ],
+  "collectedNewTests": [
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.Collaboration89RedHttpTest",
+      "case": "foreign join is forbidden and cannot persist membership()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationAnonymousSocketTest",
+      "case": "C89-WS anonymous native handshake returns 401 without registration or state effects()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"apply\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"comments\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"createComment\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"cursor\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"delete\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"document\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"join\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"leave\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"operations\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"participants\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"reply\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"resolve\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"save\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"selection\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PRIVATE \"anonymous\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
+      "case": "C89-HTTP \"session\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"cancellation\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"concurrent-admissions\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"concurrent-leaves\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"cursor-after-leave\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"foreign-participant\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"join-before-leave\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"leave-before-join\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"owner-change-while-waiting-for-item-lock\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"owner-scoped-expiry\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"sql-rollback\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationMembershipRaceTest",
+      "case": "C89-RACE \"transferred-owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"foreign-participant\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"left-participant\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"malformed-frame\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"operation-actor\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"other-owned-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"provider-failure-no-broadcast\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"quoted-JSON\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"revoked-recipient\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"revoked-sender\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"stale-disconnect\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"two-owner-connections\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PRIVATE \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PRIVATE \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PRIVATE \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PUBLIC \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PUBLIC \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PUBLIC \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake SHARED \"admin\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake SHARED \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake SHARED \"shared\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
+      "case": "C89-WS handshake SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketScopeRebindingTest",
+      "case": "C89-BIND live session rebinding cannot redirect an already bound socket()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "C89-BIND comment parent \"delete\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "C89-BIND comment parent \"replies\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "C89-BIND comment parent \"resolve\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "C89-BIND legacy membership PRIVATE"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "C89-BIND legacy membership PUBLIC"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "C89-BIND legacy membership SHARED"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationWorkingStateBoundaryTest",
+      "case": "cold file has no fake collaboration snapshot or saved acknowledgement()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"blank-existing-id\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"duplicate-existing-participant\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"expired-existing\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"unbound-returned-participant\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"unplanned-success\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"wrong-existing-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"wrong-returned-participant\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"wrong-returned-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationAdmissionContractTest",
+      "case": "C89-ADMISSION \"wrong-returned-user\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"blank-actor\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"closed-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"duplicate-participants\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"expired-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"folder-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"foreign-participant\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"forged-operation-actor\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"item-provider\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"missing-comment\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"missing-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"missing-save\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"missing-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"scope-provider\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"stream-revocation\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"trashed-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"typed-save-failure\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-comment-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-comment-parent\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-comment-row\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-document\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-participant-scope\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationFaultContractTest",
+      "case": "C89-FAULT \"wrong-session-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"apply\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"apply\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"apply\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"apply\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"apply\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"apply\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"authorizeParticipant\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"authorizeParticipant\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"authorizeParticipant\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"authorizeParticipant\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"authorizeParticipant\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"authorizeParticipant\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"comments\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"comments\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"comments\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"comments\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"comments\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"comments\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"createComment\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"createComment\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"createComment\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"createComment\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"createComment\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"createComment\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"cursor\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"cursor\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"cursor\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"cursor\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"cursor\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"cursor\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"delete\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"delete\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"delete\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"delete\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"delete\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"delete\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"document\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"document\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"document\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"document\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"document\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"document\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"join\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"join\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"join\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"join\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"join\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"join\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"leave\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"leave\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"leave\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"leave\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"leave\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"leave\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"operations\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"operations\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"operations\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"operations\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"operations\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"operations\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"participants\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"participants\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"participants\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"participants\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"participants\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"participants\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"reply\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"reply\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"reply\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"reply\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"reply\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"reply\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"resolve\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"resolve\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"resolve\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"resolve\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"resolve\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"resolve\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"save\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"save\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"save\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"save\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"save\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"save\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"selection\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"selection\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"selection\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"selection\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"selection\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"selection\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"session\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"session\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"session\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"session\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"session\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"session\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamComments\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamComments\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamComments\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamComments\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamComments\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamComments\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamOperations\" PRIVATE \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamOperations\" PRIVATE \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamOperations\" PUBLIC \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamOperations\" PUBLIC \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamOperations\" SHARED \"unrelated\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationOwnershipMatrixTest",
+      "case": "C89-SVC \"streamOperations\" SHARED \"user-1\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"offline-blank\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"offline-self\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-empty\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-foreign\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-foreign-document\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-foreign-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-mixed\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-self\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-wrong-key\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"read-wrong-user\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"subscribe-foreign\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"subscribe-foreign-pointer\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"subscribe-self\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"subscribe-wrong-user\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"update-cross-bound-pointers\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"update-owned-document\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"update-owned-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationPresenceContractTest",
+      "case": "C89-PRES \"update-self\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"apply-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"blank-session-actor\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"cleanup-blank\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"cleanup-negative\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"cleanup-positive\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"comment-list-duplicate\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"comment-list-parent\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"created-id\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"created-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"created-user\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"cursor-id\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"cursor-user\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"missing-full-comment\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"missing-full-session\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"participant-expected-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"participant-scope-failure\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"reply-content\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"reply-duplicate\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"reply-missing\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"reply-parent\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"reply-user\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"resolved-id\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"resolved-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationReturnedStateTest",
+      "case": "C89-RETURN \"save-item\""
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "comment stream rechecks ownership before collection and does not touch provider when revoked()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "comment stream validates each returned parent before exposing it()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "empty presence subscription cannot expose even self and does not initialize provider()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "metadata checks and comment delivery may suspend without losing actor scope()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "operation provider cancellation retains exact control flow()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "operation stream checks ownership again before every delivery()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "presence may bind an owned active session without an optional document pointer()"
+    },
+    {
+      "class": "com.vaultstadio.core.domain.service.CollaborationStreamLifecycleTest",
+      "case": "typed comment provider failure remains the original failure()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"comment\" SQL-failure"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"comment\" cancellation"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"comment\" missing"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"comment\" positive"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"participant\" SQL-failure"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"participant\" cancellation"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"participant\" missing"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"participant\" positive"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"session\" SQL-failure"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"session\" cancellation"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"session\" missing"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.persistence.CollaborationScopeAdapterTest",
+      "case": "C89-SQL \"session\" positive"
+    }
+  ],
+  "backendAggregateAllCompiledProduction": {
+    "BRANCH": {
+      "covered": 1533,
+      "total": 5702
+    },
+    "LINE": {
+      "covered": 8008,
+      "total": 16391
+    }
+  }
+}

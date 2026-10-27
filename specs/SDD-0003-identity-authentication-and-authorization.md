@@ -136,7 +136,7 @@ Traceability: VER-OWNER-01, VER-GRANT-01, VER-SCOPE-01, VER-BIND-01, VER-EFFECTS
 
 ### 6.6 Collaboration actor and resource authorization — issue #89
 
-Proposal before code: apply [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89) to every REST/socket/application collaboration surface. Current canonical active-file ownership is the available authority; unguarded membership, public/shared metadata, download shares and a nonowner administrator role do not grant editing or state access. Scope ID-only references minimally before loading full state, bind path/session/participant/comment identities, and keep global presence/maintenance self-scoped. Every public application call has an explicit actor; socket checks precede registration/effects and each delivery. The owner retains real positive behavior, including multiple independently bound connections.
+Accepted pre-code contract, locally verified in7bb140e: apply [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89) to every REST/socket/application collaboration surface. Current canonical active-file ownership is the available authority; unguarded membership, public/shared metadata, download shares and a nonowner administrator role do not grant editing or state access. Scope ID-only references minimally before loading full state, bind path/session/participant/comment identities, and keep global presence/maintenance self-scoped. Every public application call has an explicit actor; socket checks precede registration/effects and each delivery. The owner retains real positive behavior, including multiple independently bound connections.
 
 The absence of durable nonowner collaboration grants is explicit product debt, not an invented grant or a claim that the whole feature is complete. Numeric inventory391 and migration/compatibility limits belong to the owning SDD. No authentication mechanism, Copilot contract or protection is changed.
 
@@ -263,3 +263,5 @@ Inventory identity flows -> define auth matrix -> reconcile config/security docs
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+R01c evidence: [collaboration verification](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md),442 new cases within the2697-case backend gate. Socket authorization also binds the expected item of an open connection. The client/editor journey remains#112; final-head CI/review/adoption are separate.

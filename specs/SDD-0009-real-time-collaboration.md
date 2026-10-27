@@ -121,7 +121,7 @@ Text equivalent: User opens document -> joins session -> receives snapshot/prese
 
 ### 6.4 Collaboration authorization repair — issue #89
 
-Contract proposal dated 2026-10-27, before implementation. R01c closes the observed cross-user admission and all equivalent REST/WebSocket/application bypasses. The repository has no implemented durable read/edit/comment collaboration grant source: download tokens, sharedWithUsers, visibility and previously unguarded membership are not grants. Current canonical file ownership is the authoritative decision for this increment; supported nonowner collaboration remains incomplete until a separately reviewed durable grant lifecycle exists. Do not simulate collaboration by denying the owner's valid flows.
+Contract accepted before code on 2026-10-27 (`0e8535f`); locally verified implementation source `7bb140e`. R01c closes the observed cross-user admission and all equivalent REST/WebSocket/application bypasses. The repository has no implemented durable read/edit/comment collaboration grant source: download tokens, sharedWithUsers, visibility and previously unguarded membership are not grants. Current canonical file ownership is the authoritative decision for this increment; supported nonowner collaboration remains incomplete until a separately reviewed durable grant lifecycle exists. Do not simulate collaboration by denying the owner's valid flows.
 
 | ID | Required behavior | Verification |
 |---|---|---|
@@ -141,7 +141,7 @@ Contract proposal dated 2026-10-27, before implementation. R01c closes the obser
 
 A denial preserves full item/session/participant/document/operation/comment/reply/presence/share rows, physical file hashes, counters and successful broadcasts. Only minimal scope reads needed for the decision are permitted before rejection. A forged historical membership cannot become a lasting grant after this repair.
 
-The WebSocket delivery guarantee is checked at authorization/delivery boundaries, not a distributed atomic transaction across a database and a remote client. Explicit global self-presence remains account-level last-write state, not a claim of per-device presence ownership; disconnect does not implicitly clear another connection's/global presence. General durable cross-instance real-time delivery, OT/replay correctness, cold document initialization and canonical file commit remain R14 and require their own acceptance. Keep these limits visible even when the access matrix passes.
+The WebSocket delivery guarantee is checked at authorization/delivery boundaries, not a distributed atomic transaction across a database and a remote client. Explicit global self-presence remains account-level last-write state, not a claim of per-device presence ownership; disconnect does not implicitly clear another connection's/global presence. General durable cross-instance real-time delivery, OT/replay correctness, cold document initialization and canonical file commit remain R14 and require their own acceptance. Keep these limits visible even when the access matrix passes. [#112](https://github.com/vypdev/vaultstadio/issues/112) owns the concrete R14 follow-up, including the existing frontend/server route, authentication and message mismatch.
 
 ## 7. User-facing configuration
 
@@ -261,7 +261,7 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
-| C89-ACTOR/OWNER/SCOPE/BIND/MEMBER/ATOMIC/PRESENCE/STREAM/WS/ERROR/STATE/MAINT/ARCH | R01c domain/application and adapters |391-case floor plus preserved regressions; implementation/evidence pending |issue#89 and§6.4 |
+| C89-ACTOR/OWNER/SCOPE/BIND/MEMBER/ATOMIC/PRESENCE/STREAM/WS/ERROR/STATE/MAINT/ARCH | R01c domain/application and adapters |442 new collected cases plus preserved regressions; [local evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md), final-head CI/review/adoption pending |issue#89 and§6.4 |
 
 ## 18. Implementation or maintenance sequence
 
@@ -287,3 +287,7 @@ Freeze message/schema inventory -> test OT/state semantics -> test WebSocket lif
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+### R01c local verification checkpoint — 2026-10-27
+
+The complete backend gate passes2697 cases with zero failures/errors/skips;442 new cases fulfill the pre-code391 floor. The [receipt](../docs/development/verification/collaboration-authorization-89.json) retains denominators and collected IDs. Packaged loopback checks28 HTTP requests, nine native owner frames, foreign close1008, retained membership denial and unchanged prior bytes. Working-state seeding is explicit; bootstrap, canonical editing and the full client journey remain#112. Final-head remote CI/review/adoption remain pending.
