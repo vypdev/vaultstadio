@@ -27,12 +27,10 @@ import com.vaultstadio.core.ai.AIService
 import com.vaultstadio.core.ai.AIServiceImpl
 import com.vaultstadio.core.domain.event.EventBus
 import com.vaultstadio.core.domain.model.FederationCapability
-import com.vaultstadio.core.domain.repository.CollaborationRepository
 import com.vaultstadio.core.domain.repository.FederationRepository
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.repository.SyncRepository
 import com.vaultstadio.core.domain.service.ActivityLogger
-import com.vaultstadio.core.domain.service.CollaborationService
 import com.vaultstadio.core.domain.service.FederationCryptoService
 import com.vaultstadio.core.domain.service.FederationService
 import com.vaultstadio.core.domain.service.InMemoryLockManager
@@ -56,7 +54,6 @@ import com.vaultstadio.domain.share.repository.ShareRepository
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
 import com.vaultstadio.infrastructure.persistence.ExposedActivityRepository
 import com.vaultstadio.infrastructure.persistence.ExposedApiKeyRepository
-import com.vaultstadio.infrastructure.persistence.ExposedCollaborationRepository
 import com.vaultstadio.infrastructure.persistence.ExposedFederationRepository
 import com.vaultstadio.infrastructure.persistence.ExposedMetadataRepository
 import com.vaultstadio.infrastructure.persistence.ExposedSessionRepository
@@ -199,14 +196,13 @@ val repositoryModule = module {
     // Phase 6: Advanced Features repositories
     single<SyncRepository> { ExposedSyncRepository() }
     single<FederationRepository> { ExposedFederationRepository() }
-    single<CollaborationRepository> { ExposedCollaborationRepository() }
 }
 
 /**
  * Service module.
  */
 val serviceModule = module {
-    includes(versionServicesModule())
+    includes(versionServicesModule(), collaborationServicesModule())
 
     // Core services
     single {
@@ -313,13 +309,6 @@ val serviceModule = module {
         FederationService(
             federationRepository = get(),
             instanceConfig = instanceConfig,
-        )
-    }
-
-    // Collaboration Service
-    single {
-        CollaborationService(
-            collaborationRepository = get(),
         )
     }
 
