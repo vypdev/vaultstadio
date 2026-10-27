@@ -2,7 +2,6 @@
 from pathlib import Path
 import json
 import os
-import re
 import shlex
 import subprocess
 import tempfile
@@ -60,37 +59,86 @@ class CadenceContractTests(unittest.TestCase):
                 schedules.append(tuple(cron))
         self.assertEqual(len(schedules), len(set(schedules)))
 
-    def test_root_test_selectors_rerun_suites_without_recompiling_every_dependency(self):
+    def test_complete_discovery_entrypoints_keep_each_suite_required(self):
         ci = workflow('ci.yml')
-        for job, task, directory in [('backend', 'test', 'backend'), ('frontend', 'desktopTest', 'frontend'), ('frontend', 'wasmJsBrowserTest', 'frontend')]:
-            with self.subTest(task=task):
-                commands = [s for s in ci['jobs'][job]['steps'] if re.search(r'\./gradlew\s+' + task + r'\b', s.get('run', ''))]
+        expected = [('backend', 'backend', None), ('frontend', 'frontend', 'desktop'), ('frontend', 'frontend', 'browser')]
+        for job, directory, suite in expected:
+            with self.subTest(job=job, suite=suite):
+                commands = [step for step in ci['jobs'][job]['steps']
+                            if 'verification/run.py test --root ' + directory in step.get('run', '')
+                            and (suite is None or '--suite ' + suite in step['run'])]
                 self.assertEqual(len(commands), 1)
                 step = commands[0]
                 self.assertEqual(step['working-directory'], directory)
-                tokens = shlex.split(step['run'])
-                self.assertIn('--rerun', tokens)
-                self.assertNotIn('--rerun-tasks', tokens)
-                self.assertNotIn('--tests', tokens)
                 self.assertNotIn('continue-on-error', step)
-                self.assertIn('--continue', tokens)
+                self.assertNotIn('--tests', step['run'])
+                self.assertNotIn('--rerun-tasks', step['run'])
+                self.assertNotRegex(step['run'], r'--(skip|exclude|module)')
+        # Actual module expansion and test-only rerun are exercised by the disposable CLI producer.
 
     def test_failed_test_command_cannot_be_reported_as_success(self):
+        count = 0
         for job in ['backend', 'frontend']:
             for step in workflow('ci.yml')['jobs'][job]['steps']:
-                if not re.search(r'\./gradlew (test|desktopTest|wasmJsBrowserTest)\b', step.get('run', '')):
+                if 'verification/run.py test ' not in step.get('run', ''):
                     continue
+                count += 1
                 with self.subTest(job=job, step=step['name']), tempfile.TemporaryDirectory() as raw:
-                    directory = Path(raw)
-                    wrapper = directory / 'gradlew'
-                    wrapper.write_text('#!/bin/sh\nexit 42\n')
-                    wrapper.chmod(0o700)
-                    command = step['run']
-                    # Exercise the actual workflow command, including its browser preflight.
-                    result = subprocess.run(['bash', '-eo', 'pipefail', '-c', command], cwd=directory,
+                    repository = Path(raw)
+                    directory = repository / step['working-directory']
+                    directory.mkdir()
+                    helper = repository / 'scripts/verification/run.py'
+                    helper.parent.mkdir(parents=True)
+                    helper.write_text('import sys\nsys.exit(42)\n')
+                    result = subprocess.run(['bash', '-eo', 'pipefail', '-c', step['run']], cwd=directory,
                                             env={'PATH': '/usr/bin:/bin', 'CHROME_BIN': '/usr/bin/true'},
                                             capture_output=True, text=True, timeout=5)
                     self.assertEqual(result.returncode, 42)
+        self.assertEqual(count, 3)
+
+    def test_tooling_coverage_measures_the_existing_tests_once(self):
+        ci = workflow('ci.yml')
+        job = ci['jobs']['quality']
+        commands = '\n'.join(step.get('run', '') for step in job['steps'])
+        self.assertEqual(commands.count("-p 'test_verification_*.py'"), 1)
+        self.assertEqual(commands.count('coverage run '), 1)
+        self.assertLess(commands.index('tooling_report.py start'), commands.index('coverage run '))
+        self.assertLess(commands.index('coverage run '), commands.index('tooling_report.py finish'))
+        self.assertNotIn('--fail-under', commands)
+        self.assertIn('quality', ci['jobs']['coverage']['needs'])
+        upload = next(step for step in job['steps'] if step.get('with', {}).get('name') == 'verification-tooling-coverage')
+        self.assertEqual(upload['if'], 'always()')
+        self.assertEqual(upload['with']['if-no-files-found'], 'error')
+        selection = next(step for step in ci['jobs']['coverage']['steps'] if step.get('id') == 'coverage-files')
+        self.assertIn('--python coverage-python', selection['run'])
+
+    def test_self_hosted_python_uses_job_temporary_install_and_checks_version(self):
+        ci = workflow('ci.yml')
+        for name in ['backend', 'frontend']:
+            job_steps = ci['jobs'][name]['steps']
+            setup = next(step for step in job_steps if step.get('name') == 'Set up verification Python')
+            self.assertEqual(setup['uses'], 'astral-sh/setup-uv@v7')
+            self.assertEqual(setup['with']['python-version'], '3.13')
+            self.assertRegex(setup['with']['checksum'], r'^[0-9a-f]{64}$')
+            self.assertEqual(setup['with']['enable-cache'], 'false')
+            self.assertEqual(setup['with']['activate-environment'], 'true')
+            self.assertTrue(setup['with']['venv-path'].startswith('${{ runner.temp }}/'))
+            for variable in ['UV_PYTHON_INSTALL_DIR', 'UV_CACHE_DIR']:
+                self.assertTrue(setup['env'][variable].startswith('${{ runner.temp }}/'))
+            self.assertEqual(setup['env']['UV_PYTHON_PREFERENCE'], 'only-managed')
+            check = next(step for step in job_steps if step.get('name') == 'Verify isolated Python')
+            first_test = next(step for step in job_steps if 'verification/run.py test ' in step.get('run', ''))
+            self.assertLess(job_steps.index(setup), job_steps.index(check))
+            self.assertLess(job_steps.index(check), job_steps.index(first_test))
+            with tempfile.TemporaryDirectory() as raw:
+                tools = Path(raw)
+                interpreter = tools / 'python3'
+                interpreter.write_text('#!/bin/sh\nexec ' + shlex.quote(os.sys.executable) + ' "$@"\n')
+                interpreter.chmod(0o700)
+                result = subprocess.run(['/bin/bash', '-eo', 'pipefail', '-c', check['run']],
+                                        env={'PATH': raw}, capture_output=True, text=True, timeout=5)
+                expected = 0 if os.sys.version_info[:2] == (3, 13) else 1
+                self.assertEqual(result.returncode, expected)
 
     def test_shared_runners_reject_fork_source(self):
         guard = "github.event.pull_request.head.repo.full_name == github.repository"

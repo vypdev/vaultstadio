@@ -54,6 +54,23 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
       
+      - name: Set up verification Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: '0.11.29'
+          checksum: '61c04acc52a33ef0f331e494bdfbedcdb6c26c6970c022ed3699e5860f8930e3'
+          python-version: '3.13'
+          activate-environment: true
+          venv-path: ${{ runner.temp }}/verification-python
+          enable-cache: false
+        env:
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/verification-python-runtime
+          UV_CACHE_DIR: ${{ runner.temp }}/verification-uv-cache
+          UV_PYTHON_PREFERENCE: only-managed
+
+      - name: Verify isolated Python
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 13), sys.version; print(sys.executable, sys.version)'
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
@@ -99,17 +116,19 @@ jobs:
       
       - name: Run complete backend suites
         working-directory: backend
-        run: ./gradlew test --rerun --continue --build-cache
+        run: python3 ../scripts/verification/run.py test --root backend
 
       - name: Verify storage authorization coverage
         working-directory: backend
         run: |
-          ./gradlew :domain:storage:jacocoTestCoverageVerification \
+          ./gradlew --init-script ../scripts/verification/model.gradle :domain:storage:jacocoTestCoverageVerification \
             :core:storage:jacocoTestCoverageVerification
 
       - name: Generate backend coverage reports
         working-directory: backend
-        run: ./gradlew jacocoTestReport --continue --build-cache
+        run: |
+          ./gradlew --init-script ../scripts/verification/model.gradle jacocoTestReport --continue --build-cache
+          python3 ../scripts/verification/run.py coverage --root backend --reuse-tests
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -119,6 +138,9 @@ jobs:
           path: |
             backend/**/build/reports/tests/
             backend/**/build/test-results/
+            backend/build/verification/*.json
+            backend/build/verification/commands/
+            backend/build/verification/runs/
           if-no-files-found: error
           retention-days: 7
 
@@ -126,7 +148,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-backend
-          path: backend/**/build/reports/jacoco/**/*.xml
+          path: |
+            backend/build/verification/coverage/coverage.xml
+            backend/build/verification/coverage.json
           if-no-files-found: error
           retention-days: 1
 
@@ -168,6 +192,23 @@ jobs:
             "platforms;android-37.0" \
             "build-tools;36.0.0"
 
+      - name: Set up verification Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: '0.11.29'
+          checksum: 'c4c4de482da9ccdd076dc4fb5cfe7b740609029385c72f58606be3153602387d'
+          python-version: '3.13'
+          activate-environment: true
+          venv-path: ${{ runner.temp }}/verification-python
+          enable-cache: false
+        env:
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/verification-python-runtime
+          UV_CACHE_DIR: ${{ runner.temp }}/verification-uv-cache
+          UV_PYTHON_PREFERENCE: only-managed
+
+      - name: Verify isolated Python
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 13), sys.version; print(sys.executable, sys.version)'
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
@@ -179,7 +220,7 @@ jobs:
 
       - name: Run complete frontend desktop suites
         working-directory: frontend
-        run: ./gradlew desktopTest --rerun --continue --build-cache
+        run: python3 ../scripts/verification/run.py test --root frontend --suite desktop
 
       - name: Run complete frontend browser suites
         working-directory: frontend
@@ -188,13 +229,14 @@ jobs:
         run: |
           test -x "$CHROME_BIN"
           "$CHROME_BIN" --version
-          ./gradlew wasmJsBrowserTest --rerun --continue --build-cache
+          python3 ../scripts/verification/run.py test --root frontend --suite browser
 
       - name: Generate frontend coverage and enforce existing gates
         working-directory: frontend
         run: |
-          ./gradlew jacocoTestReport :data:network:verifyInstantSerializerCoverage \
+          ./gradlew --init-script ../scripts/verification/model.gradle jacocoTestReport :data:network:verifyInstantSerializerCoverage \
             :core:ui:verifyInputSemanticsCoverage --continue --build-cache
+          python3 ../scripts/verification/run.py coverage --root frontend --reuse-tests
 
       - name: Upload frontend test results
         if: always()
@@ -204,6 +246,9 @@ jobs:
           path: |
             frontend/**/build/reports/tests/
             frontend/**/build/test-results/
+            frontend/build/verification/*.json
+            frontend/build/verification/commands/
+            frontend/build/verification/runs/
           if-no-files-found: error
           retention-days: 7
 
@@ -211,7 +256,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-frontend
-          path: frontend/**/build/reports/jacoco/**/*.xml
+          path: |
+            frontend/build/verification/coverage/coverage.xml
+            frontend/build/verification/coverage.json
           if-no-files-found: error
           retention-days: 1
 
@@ -220,7 +267,7 @@ jobs:
     name: Coverage (Codecov)
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-24.04
-    needs: [backend, frontend]
+    needs: [backend, frontend, quality]
 
     timeout-minutes: 10
 
@@ -240,16 +287,17 @@ jobs:
           name: jacoco-coverage-frontend
           path: coverage-frontend
 
+      - name: Download verification tooling coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: verification-tooling-coverage
+          path: coverage-python
+
       - name: Discover coverage files for Codecov
         id: coverage-files
         run: |
-          FILES=$(find . -name 'jacocoTestReport.xml' -type f 2>/dev/null | tr '\n' ',' | sed 's/,$//')
-          echo "list=$FILES" >> "$GITHUB_OUTPUT"
-          if [ -z "$FILES" ]; then
-            echo "No jacocoTestReport.xml found"
-            exit 1
-          fi
-          echo "Found coverage files: $FILES"
+          python3 scripts/verification/upload_manifest.py \
+            --backend coverage-backend --frontend coverage-frontend --python coverage-python --output "$GITHUB_OUTPUT"
 
       - name: Isolate Codecov verification keyring
         run: bash scripts/ci/prepare_codecov_keyring.sh
@@ -286,9 +334,13 @@ jobs:
         run: python3 -m unittest discover -s scripts/tests -p 'test_share_proxy.py' -v
       - name: Install workflow parser
         run: python3 -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
+      - name: Install verification coverage tool
+        run: python3 -m pip --isolated install --index-url https://pypi.org/simple coverage==7.17.0
       - name: Verify source and workflow contracts
         env:
           PYTHONDONTWRITEBYTECODE: '1'
+          COVERAGE_RCFILE: ${{ github.workspace }}/scripts/verification/coverage.ini
+          COVERAGE_FILE: ${{ github.workspace }}/build/verification/python/.coverage
         run: |
           python3 scripts/check-frontend-accessibility.py
           python3 scripts/check-frontend-wasm-mime.py
@@ -300,8 +352,26 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_share_architecture.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_selection_architecture.py' -v
-          python3 -m unittest discover -s scripts/tests -p 'test_verification_runner_inventory.py' -v
+          python3 scripts/verification/tooling_report.py start
+          python3 -m coverage erase
+          python3 -m coverage run -m unittest discover -s scripts/tests -p 'test_verification_*.py' -v
+          python3 -m coverage combine
+          python3 -m coverage xml -o build/verification/python/coverage.xml
+          python3 -m coverage json -o build/verification/python/coverage.json
+          python3 scripts/verification/tooling_report.py finish
           python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
+      - name: Upload verification tooling coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-tooling-coverage
+          path: |
+            build/verification/python/coverage.xml
+            build/verification/python/coverage.json
+            build/verification/python/receipt.json
+            build/verification/python/source.json
+          if-no-files-found: error
+          retention-days: 1
 
   project-environment:
     name: Explicit project environment verification

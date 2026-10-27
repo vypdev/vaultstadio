@@ -88,15 +88,10 @@ ios-build:
 # ==================== Testing ====================
 
 test:
-	@echo "Running frontend tests..."
-	./gradlew :composeApp:desktopTest --continue
-	./gradlew :composeApp:wasmJsBrowserTest --continue 2>/dev/null || true
+	python3 ../scripts/verification/run.py test --root frontend
 
 test-coverage:
-	@echo "Running frontend tests with coverage..."
-	./gradlew :composeApp:desktopTest
-	./gradlew :composeApp:jacocoTestReport
-	@echo "Report: composeApp/build/reports/jacoco/jacocoTestReport/html/index.html"
+	python3 ../scripts/verification/run.py coverage --root frontend
 
 # ==================== Lint ====================
 

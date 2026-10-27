@@ -180,6 +180,16 @@ This is an implementation contract for R03's confirmed startup blockers, not an 
 
 Serialization stays in the data/network adapter; domain/features gain no Ktor or serialization workaround. Nginx owns transport MIME mapping. Existing dependencies, Copilot configuration and wire schemas are preserved. If a subsequent URL/feature failure is uncovered, record and fix it under its owning contract rather than claim the full platform is ready.
 
+### 6.5 Complete platform verification — issue #84
+
+The default frontend verification MUST execute every configured desktop JVM and Wasm browser module, including pure domain/resource/auth/network and form suites. Discover expected tasks from the live Gradle model and compare results to that inventory; do not restrict execution to `composeApp`. New modules using supported targets MUST enter without editing a module allowlist. Additional target conventions MUST be discovered and either supported explicitly or rejected with an actionable scope diagnostic.
+
+At the pre-implementation source `816e6732b7fd605a2852745420ad7d2c75bf1474`, configuration-only inventory declares 52 desktop and 52 Wasm browser test tasks, plus 53 iOS simulator and three Android flavor unit tasks. These are declared tasks, not executed case counts. Default JVM/Wasm execution MUST NOT certify Android/iOS compilation, device integration or whole-app readiness; their actual verification remains separately stated.
+
+R04-FAIL-01 requires original browser/compiler/runtime diagnostics and final nonzero status after any failed applicable suite, including asynchronous browser assertions. Independent suites may continue collecting evidence, but the final outcome MUST remain failed. R04-COV-01/02 require all current JVM main compilation classes/source sets against matching cross-module execution data, including untested modules. Wasm case counts are not JVM line/branch coverage. Preserve the existing serializer, input helper and form coverage input/gate contracts. The owning freshness, counting, CI and risk-derived test budget are [SDD-0014 §6.8 and §14](SDD-0014-deployment-operations-and-release.md#68-complete-verification-and-truthful-evidence--issue-84).
+
+Local R04 checkpoint (2026-10-27): complete product execution and failure controls are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). This verifies the declared local scope only; final PR CI, Copilot review and adoption remain pending. JVM, Wasm and Python populations and mobile limitations remain separate.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.

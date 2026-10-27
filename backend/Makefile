@@ -29,18 +29,10 @@ run:
 	./gradlew :api:run
 
 test:
-	./gradlew :core:test :api:test
+	python3 ../scripts/verification/run.py test --root backend
 
 test-coverage:
-	./gradlew :core:jacocoTestReport \
-		:api:jacocoTestReport \
-		:infrastructure:jacocoTestReport \
-		:plugins-api:jacocoTestReport \
-		:plugins:image-metadata:jacocoTestReport \
-		:plugins:video-metadata:jacocoTestReport \
-		:plugins:fulltext-search:jacocoTestReport \
-		:plugins:ai-classification:jacocoTestReport \
-		--continue
+	python3 ../scripts/verification/run.py coverage --root backend
 
 plugins:
 	./gradlew :plugins:image-metadata:pluginJar :plugins:video-metadata:pluginJar
