@@ -127,6 +127,23 @@ def coverage(path: Path) -> dict:
     names = [element.attrib["name"] for element in classes]
     if len(names) != len(set(names)):
         raise VerificationError("Duplicate production classes in canonical coverage")
+    # JaCoCo packages aggregate source files plus classes lacking SourceFile metadata.
+    # Shared source lines must be counted once, rather than once per nested class.
+    aggregate_nodes = []
+    for package in document.findall(".//package"):
+        files = package.findall("sourcefile")
+        filenames = [file.get("name") for file in files]
+        if len(filenames) != len(set(filenames)) or any(not name for name in filenames):
+            raise VerificationError("Duplicate/unnamed coverage source file")
+        aggregate_nodes.extend(files)
+        for element in package.findall("class"):
+            filename = element.get("sourcefilename")
+            if filename is None:
+                aggregate_nodes.append(element)
+            elif filename not in filenames:
+                raise VerificationError(
+                    "Class refers to an absent coverage source file"
+                )
     result = {"classes": len(classes), "sha256": digest}
     for kind in ("LINE", "BRANCH", "INSTRUCTION"):
         counters = [
@@ -136,7 +153,7 @@ def coverage(path: Path) -> dict:
         ]
         per_class = [
             counter
-            for element in classes
+            for element in aggregate_nodes
             for counter in element.findall("counter")
             if counter.get("type") == kind
         ]
@@ -155,7 +172,9 @@ def coverage(path: Path) -> dict:
             for key in ("missed", "covered")
         }
         if summed != total:
-            raise VerificationError(f"Class/root coverage counters disagree: {kind}")
+            raise VerificationError(
+                f"Source/class/root coverage counters disagree: {kind}"
+            )
         result[kind.lower()] = total
     if sum(result["line"].values()) == 0:
         raise VerificationError("Empty production line denominator")

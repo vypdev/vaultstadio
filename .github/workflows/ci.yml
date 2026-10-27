@@ -54,6 +54,11 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
       
+      - name: Set up verification Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
@@ -121,7 +126,9 @@ jobs:
           path: |
             backend/**/build/reports/tests/
             backend/**/build/test-results/
-            backend/build/verification/
+            backend/build/verification/*.json
+            backend/build/verification/commands/
+            backend/build/verification/runs/
           if-no-files-found: error
           retention-days: 7
 
@@ -173,6 +180,11 @@ jobs:
             "platforms;android-37.0" \
             "build-tools;36.0.0"
 
+      - name: Set up verification Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
@@ -210,7 +222,9 @@ jobs:
           path: |
             frontend/**/build/reports/tests/
             frontend/**/build/test-results/
-            frontend/build/verification/
+            frontend/build/verification/*.json
+            frontend/build/verification/commands/
+            frontend/build/verification/runs/
           if-no-files-found: error
           retention-days: 7
 

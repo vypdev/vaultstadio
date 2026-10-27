@@ -52,6 +52,8 @@ This runs the complete suites and then composes canonical JVM reports using all 
 | Backend | `backend/build/verification/coverage/coverage.xml` | `backend/build/verification/coverage/html/index.html` | `backend/build/verification/coverage.json` |
 | Frontend desktop JVM | `frontend/build/verification/coverage/coverage.xml` | `frontend/build/verification/coverage/html/index.html` | `frontend/build/verification/coverage.json` |
 
+JaCoCo reconciles package/root counters from source files plus classes without source-file metadata. Lines shared by nested classes count once at source-file level; summing their class line counters would duplicate them. See the [official counter semantics](https://www.jacoco.org/jacoco/trunk/doc/counters.html).
+
 Wasm cases are executions, not JVM line/branch coverage. A valid branch-free class has zero branches; it does not have a fabricated percentage. Percentages from older partial module reports use different populations and must not be described as a testing improvement or regression without reconciling their denominators.
 
 CI runs tests once and explicitly reuses their matching source-bound results for coverage:
