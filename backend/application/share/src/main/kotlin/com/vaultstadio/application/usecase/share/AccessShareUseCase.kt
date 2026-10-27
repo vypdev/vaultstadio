@@ -1,23 +1,16 @@
-/**
- * Access Share Use Case
- *
- * Validates token/password and returns share + item for public share access.
- */
-
 package com.vaultstadio.application.usecase.share
 
 import arrow.core.Either
-import com.vaultstadio.core.domain.service.AccessShareInput
-import com.vaultstadio.core.domain.service.ShareService
-import com.vaultstadio.domain.common.exception.StorageException
-import com.vaultstadio.domain.share.model.ShareLink
-import com.vaultstadio.domain.storage.model.StorageItem
+import com.vaultstadio.core.share.access.PublicShareService
+import com.vaultstadio.domain.share.access.AccessShareInput
+import com.vaultstadio.domain.share.access.PublicShareFailure
+import com.vaultstadio.domain.share.access.PublicShareInfo
 
 interface AccessShareUseCase {
-    suspend operator fun invoke(input: AccessShareInput): Either<StorageException, Pair<ShareLink, StorageItem>>
+    suspend operator fun invoke(input: AccessShareInput): Either<PublicShareFailure, PublicShareInfo>
 }
 
-class AccessShareUseCaseImpl(private val shareService: ShareService) : AccessShareUseCase {
-    override suspend fun invoke(input: AccessShareInput): Either<StorageException, Pair<ShareLink, StorageItem>> =
-        shareService.accessShare(input)
+class AccessShareUseCaseImpl(private val service: PublicShareService) : AccessShareUseCase {
+    override suspend fun invoke(input: AccessShareInput): Either<PublicShareFailure, PublicShareInfo> =
+        service.information(input)
 }

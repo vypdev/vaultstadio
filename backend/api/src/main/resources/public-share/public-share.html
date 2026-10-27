@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Shared file · VaultStadio</title>
+  <link rel="stylesheet" href="/api/v1/share-assets/public-share.css">
+  <script type="module" src="/api/v1/share-assets/public-share.mjs"></script>
+</head>
+<body>
+<main>
+  <h1>Shared file</h1>
+  <p id="status" role="status" aria-live="polite">{{ERROR}}</p>
+  <dl id="details" hidden><dt>Filename</dt><dd id="filename"></dd><dt>Size</dt><dd id="size"></dd></dl>
+  <form id="share-form" method="post" autocomplete="off">
+    <label for="password">Link password (if required)</label>
+    <input id="password" name="password" type="password" autocomplete="off" maxlength="72">
+    <div class="actions">
+      <button id="load" type="button">Load file information</button>
+      <button id="download" type="submit" disabled>Download file</button>
+    </div>
+  </form>
+  <p>No account is needed. Loading information does not consume a download.</p>
+  <p>A download allowance is used when the server admits the transfer. If it is interrupted,
+     the allowance may already be used. Check the file before trying again.</p>
+  <noscript>Enable JavaScript to load the link and check its password.</noscript>
+</main>
+</body>
+</html>

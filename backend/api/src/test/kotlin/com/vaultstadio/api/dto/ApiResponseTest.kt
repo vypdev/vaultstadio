@@ -240,7 +240,7 @@ class ShareLinkToResponseTest {
         assertEquals("share-1", response.id)
         assertEquals("item-1", response.itemId)
         assertEquals("abc123", response.token)
-        assertEquals("https://api.example.com/share/abc123", response.url)
+        assertEquals("https://api.example.com/api/v1/share/abc123/view", response.url)
         assertEquals(5, response.maxDownloads)
         assertEquals(0, response.downloadCount)
         assertFalse(response.hasPassword)
@@ -258,7 +258,7 @@ class ShareLinkToResponseTest {
         )
         val response = share.toResponse("https://api.test")
         assertTrue(response.hasPassword)
-        assertEquals("https://api.test/share/tok", response.url)
+        assertEquals("https://api.test/api/v1/share/tok/view", response.url)
     }
 }
 

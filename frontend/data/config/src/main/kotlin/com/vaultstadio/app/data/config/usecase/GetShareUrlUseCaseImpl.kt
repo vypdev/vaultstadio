@@ -11,5 +11,5 @@ class GetShareUrlUseCaseImpl(
     private val configRepository: ConfigRepository,
 ) : GetShareUrlUseCase {
     override fun invoke(token: String): String =
-        "${configRepository.getApiBaseUrl()}/share/$token"
+        "${configRepository.getApiBaseUrl().trimEnd('/')}/api/v1/share/$token/view"
 }

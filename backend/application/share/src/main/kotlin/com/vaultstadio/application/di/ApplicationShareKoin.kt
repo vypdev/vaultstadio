@@ -6,6 +6,8 @@ import com.vaultstadio.application.usecase.share.CreateShareUseCase
 import com.vaultstadio.application.usecase.share.CreateShareUseCaseImpl
 import com.vaultstadio.application.usecase.share.DeleteShareUseCase
 import com.vaultstadio.application.usecase.share.DeleteShareUseCaseImpl
+import com.vaultstadio.application.usecase.share.DownloadPublicShareUseCase
+import com.vaultstadio.application.usecase.share.DownloadPublicShareUseCaseImpl
 import com.vaultstadio.application.usecase.share.GetShareUseCase
 import com.vaultstadio.application.usecase.share.GetShareUseCaseImpl
 import com.vaultstadio.application.usecase.share.GetSharesByItemUseCase
@@ -21,6 +23,7 @@ fun applicationShareModule() = module {
     single<GetSharesSharedWithUserUseCase> { GetSharesSharedWithUserUseCaseImpl(get()) }
     single<CreateShareUseCase> { CreateShareUseCaseImpl(get()) }
     single<AccessShareUseCase> { AccessShareUseCaseImpl(get()) }
+    single<DownloadPublicShareUseCase> { DownloadPublicShareUseCaseImpl(get()) }
     single<GetSharesByItemUseCase> { GetSharesByItemUseCaseImpl(get()) }
     single<GetShareUseCase> { GetShareUseCaseImpl(get()) }
     single<DeleteShareUseCase> { DeleteShareUseCaseImpl(get()) }

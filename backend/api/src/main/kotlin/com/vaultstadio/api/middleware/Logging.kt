@@ -22,9 +22,12 @@ fun Application.configureLogging() {
         format { call ->
             val status = call.response.status()
             val httpMethod = call.request.httpMethod.value
-            val path = call.request.path()
+            val path = redactSharePath(call.request.path())
 
             "$httpMethod $path -> $status"
         }
     }
 }
+
+internal fun redactSharePath(path: String): String =
+    path.replace(Regex("(/api/v1/share/)[^/]+"), "$1[redacted]")

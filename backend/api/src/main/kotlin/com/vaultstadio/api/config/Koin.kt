@@ -202,7 +202,7 @@ val repositoryModule = module {
  * Service module.
  */
 val serviceModule = module {
-    includes(versionServicesModule(), collaborationServicesModule())
+    includes(versionServicesModule(), collaborationServicesModule(), shareAccessServicesModule())
 
     // Core services
     single {

@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":core:common"))
     implementation(project(":core:share"))
+    implementation(project(":core:share-access"))
     implementation(project(":domain:common"))
     implementation(project(":domain:storage"))
     implementation(project(":domain:share"))

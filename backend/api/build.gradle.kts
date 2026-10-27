@@ -32,6 +32,7 @@ dependencies {
     implementation(project(":core:auth"))
     implementation(project(":core:storage"))
     implementation(project(":core:share"))
+    implementation(project(":core:share-access"))
     implementation(project(":core:activity"))
     implementation(project(":core:version"))
     implementation(project(":core:sync"))
