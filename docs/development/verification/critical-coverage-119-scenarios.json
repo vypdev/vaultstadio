@@ -1,6 +1,6 @@
 {
   "issue": 119,
-  "status": "pre-implementation-contract",
+  "status": "local-verification-complete; final PR CI and Copilot review pending",
   "baseline": "dcd7eab411bdeb94e601bdee0ffac6319cb78a26",
   "baselineCi": 40531576901,
   "counting": "Scenarios are acceptance risks, not executed tests. Parameter variants and repeated platform executions must be reported separately.",
@@ -9,785 +9,1091 @@
       "id": "AUTH119-01",
       "requirement": "AUTH119-HTTP",
       "risk": "valid registration persists a BCrypt hash and USER identity without a session",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-01 public registration cannot request administrator role",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-01 real registration hashes password and persists USER without session",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-01 registration normalizes email while retaining identity",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-01 supported plus tag and minimum password remain valid"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-02",
       "requirement": "AUTH119-HTTP",
       "risk": "duplicate email and username reject without extra users",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-02 duplicate email creates no second user",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-02 duplicate username creates no second user"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-03",
       "requirement": "AUTH119-HTTP",
       "risk": "invalid email and weak password reject without effects",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-03 invalid email has zero persisted effects",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-03 password boundary rejects weak input without effects"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-04",
       "requirement": "AUTH119-HTTP",
       "risk": "malformed and missing required JSON fields are client errors",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-04 malformed request is a client error",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-04 missing login and refresh fields cannot mutate session state"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-05",
       "requirement": "AUTH119-HTTP",
       "risk": "valid login returns opaque token pair and only hashes in SQL",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-05 login returns opaque tokens and SQL retains only their hashes"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-06",
       "requirement": "AUTH119-HTTP",
       "risk": "login captures client metadata without exposing password",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-06 login records actual client metadata and returns current identity"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-07",
       "requirement": "AUTH119-HTTP",
       "risk": "wrong password and unknown email reject without sessions",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-07 wrong password and unknown identity have the same safe outcome"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-08",
       "requirement": "AUTH119-HTTP",
       "risk": "inactive users cannot login",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-08 inactive identity cannot login or create a session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-09",
       "requirement": "AUTH119-HTTP",
       "risk": "anonymous and invalid bearer cannot read identity",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-09 invalid and absent bearer cannot reveal an identity"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-10",
       "requirement": "AUTH119-HTTP",
       "risk": "valid bearer resolves the current persisted identity",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RefreshRaceTest.kt::AUTH119-11 one old refresh credential has exactly one concurrent winner",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RotationRepositoryTest.kt::AUTH119-11 conditional rotation commits both hashes while preserving session metadata",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-06 login records actual client metadata and returns current identity",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-11 rotation invalidates both old credentials and persists one session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-11",
       "requirement": "AUTH119-HTTP",
       "risk": "refresh rotates both tokens and persists one session, admitting only one concurrent use of the old credential",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RefreshRaceTest.kt::AUTH119-11 one old refresh credential has exactly one concurrent winner",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RotationRepositoryTest.kt::AUTH119-11 conditional rotation commits both hashes while preserving session metadata",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-11 rotation invalidates both old credentials and persists one session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-12",
       "requirement": "AUTH119-HTTP",
       "risk": "old access/refresh tokens reject after rotation; logout while refresh is pending cannot produce unpersisted credentials",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RefreshRaceTest.kt::AUTH119-11 one old refresh credential has exactly one concurrent winner",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RefreshRaceTest.kt::AUTH119-12 refresh held across logout cannot claim an unpersisted session",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RotationRepositoryTest.kt::AUTH119-11 conditional rotation commits both hashes while preserving session metadata",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RotationRepositoryTest.kt::AUTH119-12 absent session cannot be recreated through conditional rotation",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RotationRepositoryTest.kt::AUTH119-12 wrong expected credential leaves every session field unchanged",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-11 rotation invalidates both old credentials and persists one session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-13",
       "requirement": "AUTH119-HTTP",
       "risk": "unknown and expired refresh reject with explicit state",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-13 expired refresh cannot rotate and cleans the expired session",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-13 unknown refresh cannot create a session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-14",
       "requirement": "AUTH119-HTTP",
       "risk": "inactive users cannot refresh",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-14 deactivated user cannot refresh the previously issued session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-15",
       "requirement": "AUTH119-HTTP",
       "risk": "revoked tokens reject protected reads",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-16 logout revokes the actual SQL session and protected access"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-16",
       "requirement": "AUTH119-HTTP",
       "risk": "logout revokes an existing session",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-16 logout revokes the actual SQL session and protected access"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-17",
       "requirement": "AUTH119-HTTP",
       "risk": "logout without a session remains idempotent",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-17 anonymous and unknown-session logout remain idempotent"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-18",
       "requirement": "AUTH119-HTTP",
       "risk": "logout provider failure cannot claim completed revocation",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-18 failed SQL revocation must not return completed logout"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-19",
       "requirement": "AUTH119-HTTP",
       "risk": "user/session provider errors retain safe HTTP failure",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-19 failed session persistence does not return login credentials",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RotationRepositoryTest.kt::AUTH119-19 conditional rotation preserves a real SQL failure and unchanged state",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionPersistenceTest.kt::AUTH119-19 every session provider fault remains a database error without fabricated state",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionPersistenceTest.kt::AUTH119-19 persisted session reads updates and account revocation preserve identity boundaries"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-20",
       "requirement": "AUTH119-HTTP",
       "risk": "account deactivation prevents an existing session from authorizing",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-20 deactivated current user cannot authorize an existing session"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-21",
       "requirement": "AUTH119-HTTP",
       "risk": "session expiry rejects and cleans up the expired row",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FailureTest.kt::AUTH119-21 expired session cannot authorize and its row is cleaned",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionPersistenceTest.kt::AUTH119-21 expiry cleanup removes only expired sessions and preserves active credentials"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "AUTH119-22",
       "requirement": "AUTH119-HTTP",
       "risk": "register/login/session responses never contain hash or password",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119RegistrationTest.kt::AUTH119-22 registration response never echoes plaintext or hashes",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-05 login returns opaque tokens and SQL retains only their hashes",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119SessionsTest.kt::AUTH119-06 login records actual client metadata and returns current identity"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-01",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "factory uses the configured base URL and shared production JSON",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119MethodsAndEncodedQueryReachTheProductionEngine",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119ConfiguredProductionSerializerDecodesContextualTimestamp"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-02",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "token is read per request including rotation/removal",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119BearerIsReadPerRequestIncludingRemoval"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-03",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "success payload deserializes contextual timestamps",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119ConfiguredProductionSerializerDecodesContextualTimestamp"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-04",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "get and delete preserve query parameter encoding",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119MethodsAndEncodedQueryReachTheProductionEngine"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-05",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "post and patch serialize request bodies",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119PostAndPatchSerializeActualBody"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-06",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "form bodies preserve Unicode and reserved characters",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119FormEncodingDoesNotAlterReservedCharacters"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-07",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "no-body request sends no invented payload",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119BodylessCommandsNeverInventAnEntity"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-08",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "successful Unit result accepts null data",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119BodyCommandAcceptsAnExplicitUnitResultWithoutData",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119FormCommandAcceptsAnExplicitUnitResultWithoutData",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119UnitCommandAcceptsNoData"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-09",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "required typed result rejects null data",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119BodyAndFormRequireTypedData",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119MissingTypedPayloadIsNotUnitSuccess",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119NullTypedPayloadIsNotUnitSuccess"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-10",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "unsuccessful envelope preserves typed error",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119SemanticErrorRetainsCodeAndMessage"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-11",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "missing envelope error uses bounded fallback",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119AbsentErrorUsesBoundedFallback"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-12",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "non-2xx JSON error preserves code and message",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119HttpErrorRetainsSemanticEnvelope"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-13",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "non-JSON error uses HTTP status rather than raw body",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119ErrorWithoutDetailsRetainsHttpStatus",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119NonJsonErrorDoesNotExposeResponseBody"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-14",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "malformed success body fails visibly",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResponsesTest.kt::net119MalformedSuccessRemainsFailure"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-15",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "connection failure remains a network error",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119OrdinaryTransportFailureIsStillNetworkError"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-16",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "timeout is bounded and remains a network error",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119ConfiguredTimeoutBoundsAnUnresponsiveTransport"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-17",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "cancelled get remains coroutine cancellation",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119CommandCancellationPropagates",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119DeleteCancellationPropagates",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119GetCancellationPropagates"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-18",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "cancelled body request remains coroutine cancellation",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119PatchCancellationPropagates",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119PostCancellationPropagates"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-19",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "cancelled form request remains coroutine cancellation",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119CancellationTest.kt::net119FormCancellationPropagates"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-20",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "cancelled error decoding remains coroutine cancellation",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119CancellationDuringHttpErrorDecodingIsNotAnErrorEnvelope"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-21",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "all public request verbs reach the actual engine",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119BodylessCommandsNeverInventAnEntity",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119MethodsAndEncodedQueryReachTheProductionEngine"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-22",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "ApiResult map and failure variants preserve semantics",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResultTest.kt::net119FailuresNeverRunSuccessTransforms",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119ResultTest.kt::net119SuccessfulMappingUsesActualData"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-23",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "client logs do not expose bearer credentials",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119ActualHttpLoggerDoesNotExposeBearerHeaders",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119PublicMetadataAndPasswordQueriesRemainPrivate",
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt::net119PublicShareCapabilityDoesNotAppearInHttpLogs"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "NET119-24",
       "requirement": "CLIENT119-TRANSPORT",
       "risk": "no test transport escapes to external network",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified-test-boundary",
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119RequestsTest.kt::net119MethodsAndEncodedQueryReachTheProductionEngine",
+        "frontend/data/storage/src/desktopTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119LoopbackTest.kt::sto119DefaultEngineSendsActualMultipartContentTypeAndOriginalBytes"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-01",
       "requirement": "CLIENT119-STORAGE",
       "risk": "root and child folder listing send exact paging and sort parameters",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119ChildPreservesExplicitSortPageAndIdentity",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119RootUsesDefaultSortAndPaging"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-02",
       "requirement": "CLIENT119-STORAGE",
       "risk": "item and breadcrumbs map typed responses",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119BreadcrumbUsesTheItemPath",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119ItemUsesExactIdentityAndRealDeserialization"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-03",
       "requirement": "CLIENT119-STORAGE",
       "risk": "create rename move and copy preserve body and destination",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119CopyRetainsDestinationWithoutInventingRename",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119CreateFolderPreservesNameAndParent",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119MoveRetainsNullRootDestinationAndOptionalName",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119RenameUsesPatchAndNewName",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialCopyRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialMoveRetainsFailedSelectionAndError"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-04",
       "requirement": "CLIENT119-STORAGE",
       "risk": "star trash restore and permanent-delete preserve distinct semantics",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119PermanentDeleteReturnsUnitWithPermanentFlag",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119RestoreUsesOwnCommandPath",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119StarUsesNoBodyCommand",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119MutationTest.kt::sto119TrashIsDistinctFromPermanentDelete"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-05",
       "requirement": "CLIENT119-STORAGE",
       "risk": "recent starred and trash use the correct endpoints",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119RecentPreservesLimit",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119StarredAndTrashRemainDistinctReads"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-06",
       "requirement": "CLIENT119-STORAGE",
       "risk": "search encodes query without changing known server-search scope",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119ListingTest.kt::sto119SearchPreservesUnicodeReservedCharactersAndPage"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-07",
       "requirement": "CLIENT119-STORAGE",
       "risk": "batch delete move copy and star preserve full request shape",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119BatchCopyPreservesDestination",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119BatchDeletePreservesAllIdentitiesAndPermanentFlag",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119BatchMovePreservesNullRoot",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119BatchStarPreservesFalseAndAllIdentities"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-08",
       "requirement": "CLIENT119-STORAGE",
       "risk": "empty trash preserves optional path and empty-body semantics",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119EmptyTrashIsAnExplicitCommand"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-09",
       "requirement": "CLIENT119-STORAGE",
       "risk": "upload file sends original binary bytes name and media type",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt::sto119FileMultipartPreservesNameMimeParentAndBinaryBytes",
+        "frontend/data/storage/src/desktopTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119LoopbackTest.kt::sto119DefaultEngineSendsActualMultipartContentTypeAndOriginalBytes"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-10",
       "requirement": "CLIENT119-STORAGE",
       "risk": "folder upload preserves relative paths and bytes",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt::sto119FolderMultipartPreservesRelativePathBytesAndTransferProgress",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt::sto119MissingFolderTokenDoesNotInventBearerNull"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-11",
       "requirement": "CLIENT119-STORAGE",
       "risk": "chunk-init status chunk complete cancel map their contracts",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119ChunkInitPreservesExactSizesAndParent",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119ChunkStatusReadsActualTransferFields",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BatchChunkTest.kt::sto119CompleteAndCancelHaveDistinctMethodsAndShapes",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt::sto119ChunkMultipartPreservesIndexAndOriginalBytes"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-12",
       "requirement": "CLIENT119-STORAGE",
       "risk": "download returns original bytes including empty content",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt::sto119DownloadRetainsBinaryBytes",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt::sto119SuccessfulEmptyDownloadIsDistinctFromFailure"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-13",
       "requirement": "CLIENT119-STORAGE",
       "risk": "download non-2xx preserves semantic failure",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119FailedDownloadDoesNotReturnAnEmptyFile",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119HttpTransferFailureCannotBecomeSuccess"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-14",
       "requirement": "CLIENT119-STORAGE",
       "risk": "upload and folder-upload provider errors remain failures",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119AbsentErrorDetailsHaveExplicitFallback",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119HttpTransferFailureCannotBecomeSuccess",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119MissingTransferPayloadCannotBecomeSuccess",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119SemanticTransferErrorsCannotBecomeSuccess"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-15",
       "requirement": "CLIENT119-STORAGE",
       "risk": "transport failure does not fabricate an empty download",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt::sto119OfflineAndMalformedTransfersRemainFailures"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-16",
       "requirement": "CLIENT119-STORAGE",
       "risk": "cancellation propagates through upload/download adapters",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119ChunkCancellationRemainsControlFlow",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119DownloadCancellationRemainsControlFlow",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119FolderCancellationRemainsControlFlow",
+        "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt::sto119UploadCancellationRemainsControlFlow"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-17",
       "requirement": "CLIENT119-STORAGE",
       "risk": "actual HTTP owner file journey persists rows and matching bytes",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FileJourneyTest.kt::STO119-17 owner lifecycle returns and preserves actual bytes through rename trash and restore"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-18",
       "requirement": "CLIENT119-STORAGE",
       "risk": "foreign-owner mutations leave rows and bytes unchanged",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FileJourneyTest.kt::STO119-18 real nonowner credentials and nonowner administrator have zero storage effects"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-19",
       "requirement": "CLIENT119-STORAGE",
       "risk": "read transfer mutation and trash malformed inputs fail before effects",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FileJourneyTest.kt::STO119-18 real nonowner credentials and nonowner administrator have zero storage effects",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FileJourneyTest.kt::STO119-19 anonymous requests cannot create folders or bytes",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FileJourneyTest.kt::STO119-19 missing resource and malformed mutation retain rows and bytes"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "STO119-20",
       "requirement": "CLIENT119-STORAGE",
       "risk": "storage HTTP provider failures do not claim mutation success",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Auth119FileJourneyTest.kt::STO119-20 actual SQL failure cannot become an empty listing or created folder"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-01",
       "requirement": "CLIENT119-FILES",
       "risk": "initial root loading exposes loading then correct contents and counts",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119InitialLoadExposesProgressThenServerState"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-02",
       "requirement": "CLIENT119-FILES",
       "risk": "folder loading carries sort paging and breadcrumb identity",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119ChildCombinesAncestorsAndCurrentFolder",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119RootUsesExactSortPageAndHomeScope",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119LoadingUsesRestoredSortingOnTheFirstRequest"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-03",
       "requirement": "CLIENT119-FILES",
       "risk": "recent starred and trash select their own domain ports",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119AllAlternateModesUseTheirOwnPorts",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119ModesAndNavigationDoNotInventFolderPages"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-04",
       "requirement": "CLIENT119-FILES",
       "risk": "logical and network loading errors preserve a retryable state",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119LogicalAndNetworkErrorsRemainExplicit",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119ExplicitRetryRecoversFromBothFailureKinds"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-05",
       "requirement": "CLIENT119-FILES",
       "risk": "explicit retry clears old error after successful recovery",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119ExplicitRetryRecoversFromBothFailureKinds"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-06",
       "requirement": "CLIENT119-FILES",
       "risk": "breadcrumbs success failure and root fallback preserve scope",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119BreadcrumbFailureFallsBackWithoutInventingAncestry",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119ChildCombinesAncestorsAndCurrentFolder",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119StandaloneBreadcrumbsDistinguishFailureAndUnknownName"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-07",
       "requirement": "CLIENT119-FILES",
       "risk": "path resolution handles empty missing file and nested folder segments",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119PathFailureRetainsOnlyResolvedAncestor",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119PathResolutionVisitsNestedFoldersAndStopsBeforeAFile"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-08",
       "requirement": "CLIENT119-FILES",
       "risk": "path resolution follows pagination rather than only first page",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119PathResolutionSearchesLaterPages",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoaderTest.kt::file119PathResolutionTerminatesOnEmptyOrRepeatedPages"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-09",
       "requirement": "CLIENT119-FILES",
       "risk": "load-more appends the next page and stops at hasMore=false",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119LoadMoreAppendsAndStopsWhenServerIsDone"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-10",
       "requirement": "CLIENT119-FILES",
       "risk": "load-more guards duplicate requests and incompatible modes",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119DuplicateLoadMoreCallsShareOnePendingPageRequest",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119LoadMoreAppendsAndStopsWhenServerIsDone",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119ModesAndNavigationDoNotInventFolderPages"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-11",
       "requirement": "CLIENT119-FILES",
       "risk": "load-more errors retain existing items and allow retry",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119LoadMoreFailurePreservesExistingItemsAndAllowsRetry"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-12",
       "requirement": "CLIENT119-FILES",
       "risk": "preferences restore known enum values and ignore unknown values",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PreferencesSelectionTest.kt::file119KnownPreferencesRestoreWithoutWritingThemBack",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PreferencesSelectionTest.kt::file119UnknownPreferencesRetainSupportedDefaults"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-13",
       "requirement": "CLIENT119-FILES",
       "risk": "view-mode changes persist without unintended data effects",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PreferencesSelectionTest.kt::file119ViewChangesPersistWithoutReloading"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-14",
       "requirement": "CLIENT119-FILES",
       "risk": "sort changes reload only for a changed value",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PreferencesSelectionTest.kt::file119SortChangesReloadOnlyWhenValueChanges"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-15",
       "requirement": "CLIENT119-FILES",
       "risk": "folder navigation clears selection and computes parent scope",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119LoadingTest.kt::file119NavigationClearsSelectionAndTracksHomeParentAndFolder"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-16",
       "requirement": "CLIENT119-FILES",
       "risk": "selection toggle select-all clear operate on displayed IDs",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PreferencesSelectionTest.kt::file119SelectionToggleAllAndClearUseDisplayedIdentities"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-17",
       "requirement": "CLIENT119-FILES",
       "risk": "create success callback follows an actual successful mutation",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119CreateCallbackWaitsForActualSuccessThenRefreshes"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-18",
       "requirement": "CLIENT119-FILES",
       "risk": "create logical and network errors never trigger success callback",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119CreateFailuresNeverInvokeSuccessOrDiscardDisplayedFiles"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-19",
       "requirement": "CLIENT119-FILES",
       "risk": "rename star trash restore and permanent-delete use exact identities",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119FailedSingleMutationsKeepErrorAndSkipSuccessRefresh",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119FailedStarPreservesSelectionAndCause",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119SingleMutationsPreserveTheirIdentitiesAndRefreshOnSuccess",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119StarUpdatesTheSelectedInfoItemWithReturnedServerState"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-20",
       "requirement": "CLIENT119-FILES",
       "risk": "empty-trash retains the displayed mode",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119BatchTest.kt::file119EmptyTrashReloadsTheDisplayedMode"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-21",
       "requirement": "CLIENT119-FILES",
       "risk": "batch operations with empty selection have no effects",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119BatchTest.kt::file119EmptySelectionHasNoBatchEffects"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-22",
       "requirement": "CLIENT119-FILES",
       "risk": "batch success clears selection while failure preserves retry context",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119BatchTest.kt::file119BatchFailuresKeepTheRetrySelection",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119BatchTest.kt::file119SuccessfulBatchesPassSelectionAndClearOnlyAfterSuccess",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119ContradictorySuccessCountsCannotDiscardAReportedFailure",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119FailedBatchDoesNotSelectAnUnrequestedIdentityFromAProviderError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119IncompleteFailureDetailsDoNotInventSuccessfulIdentities",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialCopyRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialDeleteRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialMoveRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialStarRetainsFailedSelectionAndError"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-23",
       "requirement": "CLIENT119-FILES",
       "risk": "move optimistic removal restores truthful state on failure",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119BatchTest.kt::file119SuccessfulMoveReconcilesOptimisticRemoval",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119OrderingTest.kt::file119FailedMoveRestoresItemsAndPreservesTheCauseUntilExplicitRetry",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialSingleMoveRestoresItemsAndRetainsTheProviderCause",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119UncertainSingleMoveNeverClaimsACompletedMutation"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-24",
       "requirement": "CLIENT119-FILES",
       "risk": "info panel and activity loading reflect the selected item",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119InfoPanelShowsOnlySelectedItemActivityAndCanClose",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119LateActivityCannotReplaceTheNewSelection",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119LateActivityCannotRepopulateAClosedPanel",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119StarUpdatesTheSelectedInfoItemWithReturnedServerState"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-25",
       "requirement": "CLIENT119-FILES",
       "risk": "share creation exposes success error retry and clearing state",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119ShareErrorsAndClearDoNotEraseFileErrors",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119ShareUsesExactArgumentsAndExposesProgressAndResult"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-26",
       "requirement": "CLIENT119-FILES",
       "risk": "URL methods delegate through semantic config ports",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PreferencesSelectionTest.kt::file119DownloadAndShareUrlsComeFromSemanticPorts"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-27",
       "requirement": "CLIENT119-FILES",
       "risk": "clear-error and share-state operations preserve unrelated state",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119BasicSearchAndExplicitClearPreserveRequestScope",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119ExtraStateTest.kt::file119ShareErrorsAndClearDoNotEraseFileErrors",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119OrderingTest.kt::file119FailedMoveRestoresItemsAndPreservesTheCauseUntilExplicitRetry"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-28",
       "requirement": "CLIENT119-FILES",
       "risk": "loading cancellation releases only its own progress state",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119OrderingTest.kt::file119CancellationReleasesOnlyOwnedLoadingProgress"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-29",
       "requirement": "CLIENT119-FILES",
       "risk": "older folder results cannot replace newer navigation results",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119OrderingTest.kt::file119OlderFolderCannotReplaceNewerNavigationEvenIfProviderIgnoresCancellation"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-30",
       "requirement": "CLIENT119-FILES",
       "risk": "older pagination cannot append into a different folder",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119OrderingTest.kt::file119OlderPageCannotAppendIntoAnotherFolder"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-31",
       "requirement": "CLIENT119-FILES",
       "risk": "failed mutations do not erase their error through automatic refresh",
-      "status": "planned",
-      "tests": [],
-      "evidence": null
+      "status": "verified",
+      "tests": [
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119MutationTest.kt::file119FailedSingleMutationsKeepErrorAndSkipSuccessRefresh",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119OrderingTest.kt::file119FailedMoveRestoresItemsAndPreservesTheCauseUntilExplicitRetry",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialCopyRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialDeleteRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialMoveRetainsFailedSelectionAndError",
+        "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files119PartialBatchTest.kt::file119PartialStarRetainsFailedSelectionAndError"
+      ],
+      "evidence": "CRITICAL_COVERAGE_119.md"
     },
     {
       "id": "FILE119-32",
       "requirement": "CLIENT119-FILES",
       "risk": "existing search and advanced-feature debt remains explicitly separate",
-      "status": "planned",
+      "status": "tracked-separately",
       "tests": [],
-      "evidence": null
+      "evidence": "CRITICAL_COVERAGE_119.md#remaining-work",
+      "issues": [
+        78,
+        82,
+        109,
+        112,
+        115,
+        116
+      ]
     }
-  ]
+  ],
+  "testedImplementation": "92404e45e596e7832e7bfb59d9d5b2fb697054fe",
+  "limits": "Risk families map tested examples, not every cross-product of verbs, roles and payloads. NET119-24 constrains owned test transports. FILE119-32 records separate roadmap work. MockEngine tests do not certify client/server URL compatibility or real packaged UI."
 }

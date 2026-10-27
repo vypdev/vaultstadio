@@ -2,6 +2,8 @@
 
 > Historical phased plan. Root names, module counts and qualitative coverage labels below are not current execution evidence. Use [the current testing guide](TESTING.md) for complete commands, canonical coverage populations and limits; verify an exact source-bound receipt before accepting a result.
 
+> Current measured increment (2026-10-27): [critical backend/desktop coverage #119](verification/CRITICAL_COVERAGE_119.md). The adopted complete verifier is documented in [#84](verification/COMPLETE_VERIFICATION_84.md). The historical module recipes and qualitative tables below must not be used as current execution or coverage evidence.
+
 This document defines a phased plan to achieve full test coverage across VaultStadio. It complements [TESTING.md](TESTING.md) (strategy, running tests, untestable components) and aligns with [CODE_QUALITY.md](CODE_QUALITY.md) and [AI_CODING_GUIDELINES.md](AI_CODING_GUIDELINES.md).
 
 **Last updated**: 2026-02-22

@@ -1,6 +1,6 @@
 {
   "issue": 84,
-  "status": "locally-verified-awaiting-final-pr-ci-and-review",
+  "status": "adopted-on-develop-via-pr118; remaining platform coverage tracked separately",
   "productSource": "a40445c9ad0543263a44a00dbb84ac18e4fe071e",
   "toolingMeasuredSource": "c8ebf066f40f3849bc3d75f0403a6f864750967a",
   "suites": {
@@ -373,5 +373,23 @@
     "Coverage targets and legacy lint baseline unchanged",
     "Master/protections/Copilot/setup activation unchanged",
     "Final source-bound CI and Copilot review still required"
-  ]
+  ],
+  "adoption": {
+    "pullRequest": 118,
+    "reviewedHead": "e774fd6",
+    "develop": "dcd7eab411bdeb94e601bdee0ffac6319cb78a26",
+    "postMergeCi": 40531576901,
+    "postMergeSource": "2361a1926c1696e6923a9be8f32e1a097ac20388",
+    "tree": "607ce09ea8b10fa784053a70914eb82b66b3da58",
+    "product": {
+      "backend": 3249,
+      "desktop": 1324,
+      "browser": 1200,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pythonControls": 132,
+    "issueEvidence": "https://github.com/vypdev/vaultstadio/issues/84#issuecomment-6446358313"
+  }
 }

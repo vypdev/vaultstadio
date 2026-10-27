@@ -1,6 +1,6 @@
 # Complete verification and canonical coverage — issue #84
 
-Local verification is complete for the recorded sources below. Final PR CI, Copilot review and adoption remain pending. This repairs the verification path; it does not certify whole-platform readiness or close the remaining product roadmap.
+Adopted on develop through [PR #118](https://github.com/vypdev/vaultstadio/pull/118), with the authorized merge at `dcd7eab411bdeb94e601bdee0ffac6319cb78a26`. [Post-merge CI 40531576901](https://github.com/vypdev/vaultstadio/actions/runs/40531576901) verifies 5,773 product executions without failures, errors or skips, plus 132 verifier controls; its synthetic integration commit has the same tree 607ce09e. [The issue records final adoption](https://github.com/vypdev/vaultstadio/issues/84#issuecomment-6446358313). The detailed local measurements below retain their historical source identities. This repairs verification infrastructure; broader platform readiness and master promotion remain separate. Critical behavioral coverage continues in [#119](CRITICAL_COVERAGE_119.md).
 
 The pre-code contract is in SDD-0001/0013/0014 (`be76a1d`); the separate Python coverage producer was specified before implementation in `6c7b546`. The machine-readable [results and forty risk controls](complete-verification-84.json) distinguish product executions, process fixtures, real Gradle/Karma controls and source populations.
 
@@ -27,7 +27,7 @@ The dynamic inventory declares 44 backend tasks and 52 tasks per supported front
 
 Canonical JVM inputs include 44 backend and 52 desktop production modules. All 2,450 backend and 1,891 desktop compiled class inputs are recorded with hashes; JaCoCo emits 2,177 and 1,644 report classes respectively after its own compiler/synthetic/non-executable filtering. The adapter supplies all main class outputs and introduces no class/source exclusion. These input/report counts are not interchangeable denominators.
 
-Source-file lines shared by nested classes are consolidated according to [JaCoCo's counter semantics](https://www.jacoco.org/jacoco/trunk/doc/counters.html). Class line counters cannot simply be added. Source/root counters and additive class branch/instruction counters are reconciled; legitimate branch-free code has zero branches. The current source inventory found no package/filename collisions across modules within either root.
+Source-file lines shared by nested classes are consolidated according to [JaCoCo's counter semantics](https://www.jacoco.org/jacoco/trunk/doc/counters.html). Class line counters cannot simply be added. Source/root counters and additive class branch/instruction counters are reconciled; legitimate branch-free code has zero branches. Later module reconciliation identifies two inlined `Comparisons.kt` source lines shared across backend modules; these are held in a separate shared population, never added to both modules. This does not change the canonical root denominator.
 
 The Python population is separate tooling code, rather than JVM or whole-platform coverage. Its existing hosted tests are instrumented once, including real CLI subprocesses, with coverage.py 7.17.0. The signed/checksummed Codecov CLI and global targets remain unchanged. The upload requires canonical reports with matching source and workflow-run identities; a successful producer from an earlier attempt of the same run remains usable for an upload-only retry.
 
@@ -49,6 +49,6 @@ Raw product XML, commands, exec inputs and receipts are preserved in a source-bo
 
 Current workflow syntax, cadence, secret-scanner/keyring and setup contracts, anonymous-share Node/proxy tests, actual Nginx MIME/startup, accessibility inventory and architecture checks pass locally. Full-history Gitleaks8.30.1 and TruffleHog3.99.7 report no new findings; only the existing exactly reviewed non-secret matches remain. Original source drafts, active dogfood data/package and rollback are preserved.
 
-Final-ref CI must execute all producers, validate the three report populations and run Copilot review before adoption. No admin merge exception is implied by the authorized branch recovery. Master, branch protections, Copilot implementation/generated workflows and `VERIFICATION_SETUP=false` remain unchanged.
+That final-ref CI/review and the authorized adoption are recorded above; future changes still need their own producers and review. No admin merge exception is implied by the authorized branch recovery. Master, branch protections, Copilot implementation/generated workflows and `VERIFICATION_SETUP=false` remain unchanged.
 
 Contributor commands and output paths: [Testing guide](../TESTING.md). Outstanding capabilities and test gaps: [audit roadmap](../AUDIT_ROADMAP_2026-10-25.md).
