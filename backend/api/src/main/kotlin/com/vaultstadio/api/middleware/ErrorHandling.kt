@@ -12,6 +12,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
 import io.ktor.server.plugins.statuspages.exception
@@ -49,6 +50,16 @@ private fun StatusPagesConfig.storageErrors() {
 }
 
 private fun StatusPagesConfig.requestErrors() {
+    exception<BadRequestException> { call, _ ->
+        call.respond(
+            HttpStatusCode.BadRequest,
+            ApiResponse<Unit>(
+                success = false,
+                error = ApiError(code = "VALIDATION_ERROR", message = "Invalid request"),
+            ),
+        )
+    }
+
     // Handle authentication exceptions
     exception<AuthenticationException> { call, _ ->
         call.respond(
