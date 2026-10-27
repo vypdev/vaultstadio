@@ -51,7 +51,13 @@ class CollaborationOperationHistoryTest {
         val versions = Json.parseToJsonElement(response.bodyAsText()).jsonArray.map {
             it.jsonObject.getValue("baseVersion").jsonPrimitive.content.toLong()
         }
-        assertEquals(listOf(1L, 2L).filter { it >= since }, versions)
+        val expected = when (since) {
+            0L, 1L -> listOf(1L, 2L)
+            2L -> listOf(2L)
+            3L -> emptyList()
+            else -> error("Unenumerated history boundary")
+        }
+        assertEquals(expected, versions)
         assertEquals(before, f.snapshot())
     }
 }

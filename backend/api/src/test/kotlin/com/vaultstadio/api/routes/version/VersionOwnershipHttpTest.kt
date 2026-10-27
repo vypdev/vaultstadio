@@ -46,9 +46,9 @@ class VersionOwnershipHttpTest {
                     val before = f.snapshot()
                     testApplication {
                         application { f.install(this) }
-                        val sqlStart = f.storage.postgres.logs.length
-                        val response = client.versionRequest(surface, actor)
-                        val sql = f.storage.postgres.logs.drop(sqlStart)
+                        val (response, sql) = VersionSqlTrace(f.storage.postgres).capture {
+                            client.versionRequest(surface, actor)
+                        }
                         verifyAuthenticated(surface, actor, response, sql, before)
                     }
                 }
