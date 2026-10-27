@@ -299,6 +299,7 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_share_architecture.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_selection_architecture.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_verification_runner_inventory.py' -v
           python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
 

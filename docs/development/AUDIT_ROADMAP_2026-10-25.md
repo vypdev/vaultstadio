@@ -119,3 +119,16 @@ La excepción autorizada integró el headb7522dd en developeac7185. La [CI autom
 El [candidato03aa855 y su evidencia](verification/PUBLIC_SHARE_ACCESS_90.md) completan el acceso público a archivos:2981backend+1316desktop+1192browser=5489 casos sin fallos/errores/omisiones;241 casos backend nuevos y11 escenarios migrados conservados. Metadatos no consumen descargas, SQL admite una sola transferencia para el último cupo y el navegador descarga bytes y nombres Unicode correctos sin ayuda manual. El dogfooding detectó y corrigió también el Origin null del formulario y la fuga del token en los logs del proxy. Los cinco tests reales de Nginx se añaden al job existente, sin build ni workflow nuevo.
 
 Cobertura global parcial:8558/16755 líneas y1823/6001 ramas, sin exclusiones nuevas; política28/28líneas y70/70ramas, servicio36/36 y19/20. Permanecen pendientes CI/revisión/adopción de la PR vinculada a#90 y el hito#91. Los permisos internos/heredados y de carpetas conservan su alcance propio;#109/#112/#111/#82 y el resto del roadmap siguen abiertos. No se promueve master ni se declara operativa toda la plataforma con este checkpoint.
+
+### R05 adoption — PR #114
+
+La excepción autorizada integra4e6d707 en developc9f1ac5. La [CI posterior40493531498](https://github.com/vypdev/vaultstadio/actions/runs/40493531498) confirma5489ejecuciones, sin fallos/errores/omisiones y con el mismo árbol9a49fbe1; protecciones intactas. R05/#90 queda adoptado. Se inicia#91 exclusivamente en su rama publicada por Copilot sobre ese padre; siguen abiertos el resto del roadmap, la aceptación global y master.
+
+
+## R11 selection checkpoint — issue #91
+
+El [candidato1499c6b](verification/STORAGE_SELECTION_91.md) valida paginación/orden antes de acceder a datos, conserva errores del proveedor y calcula metadatos int64 sin desbordamiento. Pasan3247backend+1324desktop+1200browser=5771ejecuciones, sin fallos/errores/omisiones;266casos backend nuevos y8KMP por plataforma, con cobertura global8958/16877líneas y1934/6042ramas sin exclusiones nuevas. Navegador real: login autónomo, ordenación,400visible por inyección local delimitada y recuperación200conRefresh; datos y reversión03aa855 preservados. Quedan pendientes CI/revisión/adopción de su PR.
+
+La inspección amplía el backlog sin mezclar implementaciones: [#115](https://github.com/vypdev/vaultstadio/issues/115) posee filtros avanzados antes de paginar, cuentas globales y búsqueda real de contenido; [#116](https://github.com/vypdev/vaultstadio/issues/116) posee el origen de API Web fijado a localhost. #82 conserva nombre/prefijo; #84 cobertura global; #109/#112/#111 sus hitos propios. La plataforma completa y master no quedan certificados por este checkpoint.
+
+El [suplemento de revisión63e12a1](verification/STORAGE_SELECTION_91_REVIEW.md) añade dos fallos PostgreSQL reales y eleva el inventario local a5773(3249backend), todos0, sin cambiar producción. La firma del JAR real contradice el nuevo falso positivo de herencia Exposed; recurrencia documentada en copilot#736. La CI del primer head de117pasa5771; la del nuevo head y la reconciliación de Copilot siguen siendo pasos de aceptación independientes.

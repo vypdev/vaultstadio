@@ -1,0 +1,127 @@
+{
+  "source": "1499c6b0437d4a451f9b5cbf1596d1727a2e1c4e",
+  "base": "c9f1ac505c09c03d6c3eec9d1f4f940e26bdbce0",
+  "preCodeContracts": [
+    "818a751ff00c374adeba65a1a0b395404386435c",
+    "385daf4a728fc2783cb2d600a33d86dd8c02822f"
+  ],
+  "verificationDateUtc": "2026-10-27",
+  "suites": {
+    "backend": {
+      "xmlFiles": 579,
+      "tests": 3247,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktop": {
+      "xmlFiles": 258,
+      "tests": 1324,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "xmlFiles": 254,
+      "tests": 1200,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "totalExecutions": 5771,
+  "newBackendCases": 266,
+  "sharedKmpNewCasesPerPlatform": 8,
+  "rawArchive": {
+    "name": "issue91-source-1499c6b-verification.zip",
+    "sha256": "9aefe0da37145effa9cd78942f80bef4fec2302e7e7ee75c50f7b81cecd1bc15",
+    "bytes": 1798667
+  },
+  "caseInventory": {
+    "name": "storage-selection-91-cases.json",
+    "sha256": "d35851bf452d4fad6f0dd498bdac97e83ffc74a4730b222c32098b2ae75b4be5",
+    "bytes": 18586
+  },
+  "coverageAndSourceDetail": {
+    "name": "storage-selection-91-coverage.json",
+    "sha256": "3779cb9fc50d7a627c9794b1cc04fd7f6b3144d174a358767d4b18aab6d51921",
+    "bytes": 33533
+  },
+  "sourceReconciliation": {
+    "source": "1499c6b0437d4a451f9b5cbf1596d1727a2e1c4e",
+    "codeTree": "7fe14318d25735033aa6acb47dc38981160024f8",
+    "actualExecutionHead": "385daf4a728fc2783cb2d600a33d86dd8c02822f",
+    "workingSourcesCommittedAfterTests": true,
+    "all41TestedKotlinSourceHashesEqualCommittedBlobs": true
+  },
+  "sdk": {
+    "java": "Temurin17.0.21+9",
+    "archiveSha256": "78b08c7f5a0598242d5719c022e19479cb4a3aa45c37c19726a757a469ed1c15",
+    "browser": "official chrome-headless-shell155.0.8059.84"
+  },
+  "retainedNativeFailure": {
+    "name": "issue91-corretto-native-fatal.zip",
+    "sha256": "8320351fa999387014fc107fa36c646973cb9073ffd42c45a344cd3f9a85dec1",
+    "bytes": 336369
+  },
+  "nativeHttp": {
+    "scenarios": 46,
+    "requestsIncludingSetup": 69,
+    "passed": true
+  },
+  "gui": {
+    "loginAutonomous": true,
+    "sortSizeAscending": [
+      "delta.txt",
+      "alpha.txt",
+      "epsilon.txt",
+      "beta.txt",
+      "gamma.txt"
+    ],
+    "invalidSelection": "actual browser400 with safe visible limit validation message; temporary fixture-specific loopback proxy",
+    "recovery": "Refresh after proxy removal; actual backend folder/breadcrumb requests200; five files remain visible",
+    "numericInputNotExposedByGui": true,
+    "screenshots": [
+      {
+        "name": "invalid-selection.png",
+        "sha256": "4edfeee830b99920d86b78127f9dded0d9861d8ef2174558fd7f3d384f9e0ee8",
+        "bytes": 46126
+      },
+      {
+        "name": "recovered-size-order.png",
+        "sha256": "8ad9e9a138bf0dfc4008a1ebc42901c01f12539aa2f10c20defda2175c606f50",
+        "bytes": 43057
+      },
+      {
+        "name": "size-ascending.png",
+        "sha256": "e2b7d0eddce8e1b19c0d8271612fb13bf71dd2502157c5c06d9cee6219c33905",
+        "bytes": 42922
+      }
+    ]
+  },
+  "preservation": {
+    "postgresIdUnchanged": true,
+    "allOriginalStorageAndPluginHashesUnchanged": true,
+    "databaseBackupRetained": true,
+    "currentPackageSource": "1499c6b0437d4a451f9b5cbf1596d1727a2e1c4e",
+    "runnableRollbackSource": "03aa8552424d703db127be1d97e08c066598168d",
+    "originalSddDraftsRetained": true
+  },
+  "followupIssues": [
+    82,
+    84,
+    109,
+    111,
+    112,
+    115,
+    116
+  ],
+  "acceptancePending": [
+    "final PR CI",
+    "Copilot review",
+    "native approval or exact authorized exception",
+    "develop adoption"
+  ],
+  "masterUnchanged": "615f11adf5272bd1d4626f9571b31e691eeee062",
+  "verificationSetup": false
+}

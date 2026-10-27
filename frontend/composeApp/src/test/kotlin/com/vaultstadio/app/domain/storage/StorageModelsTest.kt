@@ -7,9 +7,9 @@ package com.vaultstadio.app.domain.storage
 
 import com.vaultstadio.app.domain.storage.model.BatchError
 import com.vaultstadio.app.domain.storage.model.BatchResult
+import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.domain.storage.model.ChunkedUploadInit
 import com.vaultstadio.app.domain.storage.model.ChunkedUploadStatus
-import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.domain.storage.model.FolderUploadError
 import com.vaultstadio.app.domain.storage.model.FolderUploadFile
 import com.vaultstadio.app.domain.storage.model.FolderUploadResult
@@ -210,9 +210,9 @@ class PaginatedResponseTest {
         )
         assertEquals(2, r.items.size)
         assertEquals(10L, r.total)
-        assertEquals(1, r.page)
+        assertEquals(1L, r.page)
         assertEquals(5, r.pageSize)
-        assertEquals(2, r.totalPages)
+        assertEquals(2L, r.totalPages)
         assertTrue(r.hasMore)
     }
 
@@ -227,7 +227,7 @@ class PaginatedResponseTest {
             hasMore = false,
         )
         assertFalse(r.hasMore)
-        assertEquals(1, r.totalPages)
+        assertEquals(1L, r.totalPages)
     }
 
     @Test
@@ -242,7 +242,7 @@ class PaginatedResponseTest {
         )
         assertTrue(r.items.isEmpty())
         assertEquals(0L, r.total)
-        assertEquals(0, r.totalPages)
+        assertEquals(0L, r.totalPages)
         assertFalse(r.hasMore)
     }
 }

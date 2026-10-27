@@ -83,9 +83,9 @@ class PaginatedResponseTest {
         )
         assertEquals(2, r.items.size)
         assertEquals(10L, r.total)
-        assertEquals(1, r.page)
+        assertEquals(1L, r.page)
         assertEquals(5, r.pageSize)
-        assertEquals(2, r.totalPages)
+        assertEquals(2L, r.totalPages)
         assertTrue(r.hasMore)
     }
 
@@ -100,7 +100,7 @@ class PaginatedResponseTest {
             hasMore = false,
         )
         assertTrue(r.items.isEmpty())
-        assertEquals(0, r.totalPages)
+        assertEquals(0L, r.totalPages)
         assertFalse(r.hasMore)
     }
 }
@@ -118,7 +118,7 @@ class PagedResultToResponseTest {
         val response: PaginatedResponse<Int> = paged.toResponse()
         assertEquals(3, response.items.size)
         assertEquals(10L, response.total)
-        assertEquals(1, response.page)
+        assertEquals(1L, response.page)
         assertEquals(5, response.pageSize)
         assertTrue(response.totalPages >= 1)
         assertTrue(response.hasMore)
@@ -135,7 +135,7 @@ class PagedResultToResponseTest {
         val response: PaginatedResponse<Int> = paged.toResponse()
         assertTrue(response.items.isEmpty())
         assertEquals(0L, response.total)
-        assertEquals(0, response.totalPages)
+        assertEquals(0L, response.totalPages)
         assertFalse(response.hasMore)
     }
 
@@ -150,9 +150,9 @@ class PagedResultToResponseTest {
         val response: PaginatedResponse<Int> = paged.toResponse()
         assertEquals(5, response.items.size)
         assertEquals(25L, response.total)
-        assertEquals(5, response.totalPages)
+        assertEquals(5L, response.totalPages)
         assertTrue(response.hasMore)
-        assertEquals(1, response.page)
+        assertEquals(1L, response.page)
         assertEquals(5, response.pageSize)
     }
 
@@ -165,8 +165,8 @@ class PagedResultToResponseTest {
             limit = 0,
         )
         val response: PaginatedResponse<String> = paged.toResponse()
-        assertEquals(0, response.totalPages)
-        assertEquals(1, response.page)
+        assertEquals(0L, response.totalPages)
+        assertEquals(1L, response.page)
         assertFalse(response.hasMore)
     }
 }

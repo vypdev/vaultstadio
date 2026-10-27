@@ -15,11 +15,9 @@ import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.common.exception.ValidationException
 import com.vaultstadio.domain.common.pagination.PagedResult
-import com.vaultstadio.domain.common.pagination.SortOrder
 import com.vaultstadio.domain.storage.model.ItemType
 import com.vaultstadio.domain.storage.model.StorageItem
 import com.vaultstadio.domain.storage.model.StorageQuota
-import com.vaultstadio.domain.storage.repository.SortField
 import com.vaultstadio.domain.storage.repository.StorageItemQuery
 import com.vaultstadio.domain.storage.repository.StorageItemRepository
 import java.io.InputStream
@@ -68,34 +66,20 @@ class StorageService(
         folderId: String?,
         userId: String,
         query: StorageItemQuery,
-    ): Either<StorageException, PagedResult<StorageItem>> {
-        if (folderId != null) {
-            when (val result = getItem(folderId, userId)) {
-                is Either.Left -> return result
-                is Either.Right -> {
-                    if (result.value.type != ItemType.FOLDER) {
-                        return ValidationException("Not a folder").left()
-                    }
-                }
-            }
-        }
-
-        val adjustedQuery = query.copy(
-            parentId = folderId,
-            ownerId = userId,
-            filterByParent = true,
-        )
-
-        return storageItemRepository.query(adjustedQuery)
-    }
+    ): Either<StorageException, PagedResult<StorageItem>> =
+        listFolderSelection(storageItemRepository, folderId, userId, query)
 
     /**
      * Downloads a file.
      */
     suspend fun downloadFile(itemId: String, userId: String): Either<StorageException, Pair<StorageItem, InputStream>> {
         val item = when (val result = getItem(itemId, userId)) {
-            is Either.Left -> return result
-            is Either.Right -> result.value
+            is Either.Left -> {
+                return result
+            }
+            is Either.Right -> {
+                result.value
+            }
         }
 
         if (item.type != ItemType.FILE) {
@@ -105,7 +89,9 @@ class StorageService(
         val storageKey = item.storageKey ?: return ValidationException("File has no storage key").left()
 
         return when (val result = storageBackend.retrieve(storageKey)) {
-            is Either.Left -> result
+            is Either.Left -> {
+                result
+            }
             is Either.Right -> {
                 eventBus.publish(FileEvent.Downloaded(userId = userId, item = item))
                 Pair(item, result.value).right()
@@ -199,16 +185,8 @@ class StorageService(
     /**
      * Gets recent items.
      */
-    suspend fun getRecentItems(userId: String, limit: Int = 20): Either<StorageException, List<StorageItem>> {
-        val query = StorageItemQuery(
-            ownerId = userId,
-            isTrashed = false,
-            sortField = SortField.UPDATED_AT,
-            sortOrder = SortOrder.DESC,
-            limit = limit,
-        )
-        return storageItemRepository.query(query).map { it.items }
-    }
+    suspend fun getRecentItems(userId: String, limit: Int = 20): Either<StorageException, List<StorageItem>> =
+        recentSelection(storageItemRepository, userId, limit)
 
     /**
      * Gets breadcrumbs (ancestors) for an item.
@@ -224,21 +202,13 @@ class StorageService(
         userId: String,
         limit: Int = 50,
         offset: Int = 0,
-    ): Either<StorageException, PagedResult<StorageItem>> {
-        val searchQuery = StorageItemQuery(
-            ownerId = userId,
-            searchQuery = query,
-            isTrashed = false,
-            limit = limit,
-            offset = offset,
-        )
-        return storageItemRepository.query(searchQuery)
-    }
+    ): Either<StorageException, PagedResult<StorageItem>> =
+        searchSelection(storageItemRepository, query, userId, limit, offset)
 
     /**
      * Gets quota for a user.
      */
-    suspend fun getQuota(userId: String): Either<StorageException, StorageQuota> {
-        return storageItemRepository.getQuota(userId)
-    }
+    suspend fun getQuota(
+        userId: String,
+    ): Either<StorageException, StorageQuota> = storageItemRepository.getQuota(userId)
 }

@@ -6,7 +6,7 @@
 - Last verified: not applicable
 - Owners: VaultStadio maintainers
 - Scope: Define metadata extraction, indexing/search, AI-assisted classification, provider boundaries, privacy, and readiness evidence.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #91
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -119,6 +119,19 @@ Text equivalent: File changes -> metadata is extracted/indexed -> user searches 
 | `stale` | Source changed after index | system | reindex |
 | `processing` | AI/index operation active | user/operator | complete/fail/cancel |
 | `failed` | Derived operation failed | operator/user | retry/inspect |
+
+### 6.4 Storage selection validation — issue #91
+
+Apply the same bounded input contract to basic GET/POST, advanced POST, metadata and suggestions before query/plugin/metadata effects, including short-prefix suggestions. Folder/basic-search totals stay bound to their actual selected dataset. Metadata results remain a bounded authorized projection with one-based page metadata. Advanced post-page filters/full-text fallback/global filtered counts and filename matching are not certified by this validation repair and remain#82/#115; no provider readiness claim changes. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
+
+### 6.5 Truthful unavailable and failure outcomes — issue #91
+
+The pre-code boundary clarification in SDD-0002§6.5.1 rejects invalid provided dates before
+selection and reports unavailable inline content search as501/CONTENT_SEARCH_UNAVAILABLE
+without selecting filename fallback. Metadata resolution filters explicit forbidden/missing
+items, while typed provider failures remain failures. Issue#115 owns the remaining complete
+advanced filtering/count/provider integration;#82 owns literal filename/prefix matching.
+These bounded error outcomes are not a claim that full-text search is implemented.
 
 ## 7. User-facing configuration
 
@@ -243,3 +256,10 @@ Separate metadata/search/AI contracts -> define privacy/provider policy -> add r
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+
+## Scoped verification checkpoint — issue #91
+
+The pre-code selection contract is implemented and locally verified at1499c6b. See the [source-bound report](../docs/development/verification/STORAGE_SELECTION_91.md), case inventory and complete coverage detail:3247backend+1324desktop+1200browser, all failures/errors/skips0;266 genuinely new backend cases plus8 shared KMP cases per platform. Actual packaged browser sort and400/recovery pass with original data/rollback preserved. The unavailable content option is explicit501; full filename/advanced search remains#82/#115, and Web origin configuration#116. Final PR CI, Copilot review and protected adoption remain pending; this checkpoint does not promote the whole capability status or master.
+
+Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.

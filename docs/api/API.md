@@ -227,49 +227,36 @@ Authorization: Bearer <token>
 ```
 
 **Query Parameters:**
+
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|---------|
-| `sort` | string | Sort field (name, size, createdAt, updatedAt) | name |
-| `order` | string | Sort order (asc, desc) | asc |
-| `limit` | int | Items per page | 50 |
-| `offset` | int | Pagination offset | 0 |
+| `sortBy` | string | `name`, `size`, `created_at`, `updated_at`, `type`; ASCII case-insensitive | name |
+| `sortOrder` | string | `asc` or `desc`; ASCII case-insensitive | asc |
+| `limit` | int | Items per page, inclusive range 1..1000 | 100 |
+| `offset` | int | Inclusive range 0..2147483647 | 0 |
 
-**Response:**
+Use these exact parameter names; the old documentation's `sort`/`order` names were not wired aliases. Known selection parameters must occur once. Malformed, empty, signed, whitespace-containing or overflowing query integers return `400 VALIDATION_ERROR`; they are never clamped or silently defaulted. Leading zeroes are accepted. Invalid selection is rejected before parent lookup, selection/count, plugins or byte-provider access. Authentication still runs first.
+
+Sorting always adds item ID ascending as the final tie-breaker. Type sorting retains name ascending before the ID. Listing preserves the authenticated owner, selected parent and nontrashed filter.
+
+**Response** (empty folder; a nonempty `items` array contains storage-item DTOs):
+
 ```json
 {
-  "items": [
-    {
-      "id": "item-uuid",
-      "name": "Documents",
-      "path": "/Documents",
-      "type": "folder",
-      "parentId": null,
-      "size": 0,
-      "mimeType": null,
-      "isStarred": false,
-      "isTrashed": false,
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-01T00:00:00Z"
-    },
-    {
-      "id": "item-uuid-2",
-      "name": "photo.jpg",
-      "path": "/photo.jpg",
-      "type": "file",
-      "parentId": null,
-      "size": 1048576,
-      "mimeType": "image/jpeg",
-      "isStarred": true,
-      "isTrashed": false,
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-01T00:00:00Z"
-    }
-  ],
-  "total": 2,
-  "limit": 50,
-  "offset": 0
+  "success": true,
+  "data": {
+    "items": [],
+    "total": 0,
+    "page": 1,
+    "pageSize": 100,
+    "totalPages": 0,
+    "hasMore": false
+  },
+  "error": null
 }
 ```
+
+See [Pagination](#pagination) for 64-bit page metadata and error semantics.
 
 ### Create Folder
 
@@ -675,19 +662,11 @@ Authorization: Bearer <token>
 | `limit` | int | Results limit |
 | `offset` | int | Pagination offset |
 
-**Response:**
-```json
-{
-  "items": [...],
-  "total": 10,
-  "limit": 50,
-  "offset": 0
-}
-```
+The GET and `POST /api/v1/search` body (`query`, `limit`, `offset`) default to limit50/offset0 and return the same `ApiResponse<PaginatedResponse<StorageItemResponse>>` envelope as folder listing. The selection bounds below apply. A POST limit/offset must be an actual JSON integer, not a string, null, fraction, exponent or overflowing number. GET search does not accept `sortBy`/`sortOrder` selection controls.
+
+Filename/prefix predicate matching is still tracked by [#82](https://github.com/vypdev/vaultstadio/issues/82); a valid selection is not evidence that this search feature is complete.
 
 ### Advanced Search
-
-Search with filters for file type, size, and date range.
 
 ```http
 POST /api/v1/search/advanced
@@ -696,16 +675,20 @@ Content-Type: application/json
 
 {
   "query": "report",
-  "searchContent": true,
-  "fileTypes": ["pdf", "doc"],
+  "searchContent": false,
+  "fileTypes": ["pdf"],
   "minSize": 1024,
   "maxSize": 10485760,
-  "fromDate": "2024-01-01",
-  "toDate": "2024-12-31",
+  "fromDate": "2024-01-01T00:00:00Z",
+  "toDate": "2024-12-31T23:59:59Z",
   "limit": 50,
   "offset": 0
 }
 ```
+
+Numeric bounds and body types are checked before access. Invalid supplied ISO instants return a safe `400 VALIDATION_ERROR` without echoing the supplied date. A valid `searchContent=true` request returns `501 CONTENT_SEARCH_UNAVAILABLE`, without selecting data or invoking a plugin. It no longer returns a successful warning map with an incompatible response shape.
+
+The existing MIME/size/date projection is applied **after** the bounded page is selected. Its `total`/`totalPages` describe that projection, and `hasMore` is false; they are not global filtered counts. Complete predicate-before-pagination search, counts and content indexing are [#115](https://github.com/vypdev/vaultstadio/issues/115). These limitations are explicit until that milestone is implemented and tested.
 
 ### Search Suggestions (Autocomplete)
 
@@ -1173,21 +1156,21 @@ X-RateLimit-Reset: 1609459200
 
 ## Pagination
 
-List endpoints support pagination:
+This contract covers interactive storage folder/recent and search/suggestion/metadata selections. It does not impose REST constructor constraints on raw S3/WebDAV query objects.
 
-```http
-GET /api/v1/storage/folder?limit=20&offset=40
-```
+| Surface | Default limit | Offset | Sort controls |
+|---|---:|---|---|
+| Folder GET |100|0 by default|`sortBy`, `sortOrder`|
+| Basic GET/POST and advanced POST search |50|0 by default|none|
+| Recent GET |20|unsupported|none|
+| Suggestions GET |10|unsupported|none|
+| Metadata GET (`/search/by-metadata?key=...`) |50|unsupported|none|
 
-Response includes pagination info:
-```json
-{
-  "items": [...],
-  "total": 100,
-  "limit": 20,
-  "offset": 40
-}
-```
+Every limit is in1..1000; supported offsets are in0..2147483647. A known unsupported query control returns400 rather than being silently ignored. Suggestions validate even when the prefix is shorter than two characters. Missing parameters use defaults; malformed supplied values do not. Body integer typing and query lexical rules are described above. Typed provider errors retain their own status/code, including `500 DATABASE_ERROR`; they are not converted to validation errors or empty successes.
+
+Folder/basic page envelopes contain `items`, `total`, `page`, `pageSize`, `totalPages`, `hasMore`. `page = floor(offset / limit) + 1`, `totalPages = ceil(total / limit)` (zero for an empty dataset), and `hasMore` uses the returned item count and full selected total. Computation is overflow-safe. `page` and `totalPages` are signed64-bit integers in server and shared client models; for example limit1/offset2147483647 yields page2147483648. Ordinary JSON numeric values and field names remain unchanged. Consumers must support int64 page metadata for these extremes.
+
+Recent and suggestions retain their array envelopes. Metadata search returns a bounded owner-authorized projection: page1, total equal to its returned records, totalPages0/1 and hasMore=false. Foreign/missing items are omitted; a provider failure resolving an item is an explicit error. Global search-filter counts are separate work in#115.
 
 ---
 

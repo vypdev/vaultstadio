@@ -55,7 +55,7 @@
       "status": "As-built baseline",
       "scope": "Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-27",
       "specs": [
         "specs/SDD-0002-public-api-and-protocol-contract.md"
       ],
@@ -66,9 +66,15 @@
         "docs/api/API.md",
         "backend/api/src/test/kotlin/com/vaultstadio/api/routes",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
     },
     {
       "id": "identity-authentication-and-authorization",
@@ -98,7 +104,7 @@
       "status": "As-built baseline",
       "scope": "Define files, folders, metadata, ownership, quotas, trash, storage backends, and content lifecycle.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-27",
       "specs": [
         "specs/SDD-0004-storage-domain-and-data-lifecycle.md"
       ],
@@ -112,9 +118,15 @@
         "docs/operations/STORAGE_CONFIGURATION.md",
         "docs/operations/BACKUP_RESTORE.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
     },
     {
       "id": "upload-and-transfer-protocols",
@@ -164,7 +176,7 @@
         "docs/development/verification/public-share-access-90-cases.json",
         "docs/development/verification/public-share-access-90-coverage.json"
       ],
-      "openDecisions": "R05 public file access verified locally at03aa855; final PR CI/review/adoption remain separate. The portfolio is partial: internal recipients, folder/inherited permissions and shared-with-me remain unverified product scope."
+      "openDecisions": "R05/#90 adopted in PR114/developc9f1ac5, post-merge CI40493531498 all5489 executions green. Portfolio remains partial: internal recipients, folder/inherited permissions and shared-with-me remain separate unverified product scope."
     },
     {
       "id": "version-history-and-recovery",
@@ -290,7 +302,7 @@
       "status": "Proposed",
       "scope": "Define metadata extraction, indexing/search, AI-assisted classification, provider boundaries, privacy, and readiness evidence.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": null,
+      "lastVerified": "2026-10-27",
       "specs": [
         "specs/SDD-0012-metadata-search-and-ai.md"
       ],
@@ -304,9 +316,15 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/ai/AIRoutes.kt",
         "docs/plugins/AI_INTEGRATION.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
     },
     {
       "id": "frontend-kmp-and-platform-architecture",
