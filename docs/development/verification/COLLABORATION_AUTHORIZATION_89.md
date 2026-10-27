@@ -18,7 +18,7 @@ Save persists an **existing collaboration working snapshot**; missing state retu
 
 Models/ports belong to `domain/collaboration`, retaining their qualified names for compatibility. The legacy core jar re-exports that domain module; compiled model classes have exactly one owner. The application module compiles against only domain/common, domain/storage and domain/collaboration project dependencies. It requires no legacy core, HTTP, SQL, DI or logging framework.
 
-The facade delegates to focused access/session/document/comment/presence/stream helpers. Separate SQL adapters implement scope projections and atomic membership; production `CollaborationModule` wires them. HTTP mapping, socket binding, commands and transports are separate. The former670-line persistence facade delegates to focused implementations. Original12 service,35 API DTO/manager and11 model regressions remain collected; the model test moved byte-identically.
+The facade delegates to focused access/session/document/comment/presence/stream helpers. Separate SQL adapters implement scope projections and atomic membership; production `CollaborationModule` wires them. HTTP mapping, socket binding, commands and transports are separate. The former670-line persistence facade delegates to focused implementations. Original12 service,35 API DTO/manager and11 model regressions remain collected; the initial model-test move was byte-identical; its later ownership header leaves all executable assertions unchanged.
 
 ## Executed verification
 
@@ -72,3 +72,9 @@ From `backend/`, with Java17 and Docker:
 ```
 
 Final-head CI/Copilot review, protected-branch adoption and master promotion remain pending. A reviewed rollback restores the prior authorization risk. No deployment, tag, release or master merge is established by this local evidence.
+
+## Immutable comparison follow-up
+
+GitHub reports the original model-test move as renamed with0additions/deletions/changes and no patch; the exact old/new blobs are both028d97dcf4ad24ac1ec94fea892494def1912c48. Copilot Commit correctly retains progress but rejects that representation as missing evidence (run40437333668/job121969044688, validation.evidence-unavailable). The specific pure-rename reproduction was added to [upstream#726](https://github.com/vypdev/copilot/issues/726#issuecomment-6432187474).
+
+The domain ownership is now explicit in the test header, giving GitHub a real textual delta. Everything from the package directive onward, including the original eleven assertions, is byte-identical. Those11 cases and strict domain quality pass after the note. No production behavior, Copilot control, exclusion, approval policy or synthetic success was introduced. The first head's technical CI passed; its incomplete evidence assessment is not represented as a successful Copilot review. The new pinned comparison and final-head CI/review must still be checked.

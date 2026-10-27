@@ -375,7 +375,7 @@
     },
     {
       "path": "backend/domain/collaboration/src/test/kotlin/com/vaultstadio/core/domain/model/CollaborationTest.kt",
-      "sha256": "089bc6f7ff15962b4bad85b940c9d675be31e6c4d2331c68ff75078b0c06caac"
+      "sha256": "c15220b8f6ab553c44924331065eaefb53173e12c1f781a83d9a6a1c5d2e7be4"
     },
     {
       "path": "backend/infrastructure/build.gradle.kts",
@@ -2269,5 +2269,21 @@
       "covered": 8008,
       "total": 16391
     }
+  },
+  "providerEvidenceFollowup": {
+    "previousHead": "23eab7db59ad0ec2819c34d3ad74bc79bdddae9f",
+    "comparison": "03638226aaa339bc83aeb4363d390367fb561903...23eab7db59ad0ec2819c34d3ad74bc79bdddae9f",
+    "reason": "GitHub correctly omits a text patch for the identical model-test rename; Copilot progress rejects it as evidence-unavailable.",
+    "identicalBeforeAndAfterBlob": "028d97dcf4ad24ac1ec94fea892494def1912c48",
+    "upstream": "https://github.com/vypdev/copilot/issues/726#issuecomment-6432187474",
+    "change": "Clarify domain ownership in the moved test header. Everything from the package directive onward remains byte-identical; no production or executable-test changes.",
+    "localModelTests": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "strictDomainQualityPass": true,
+    "remoteNewHeadVerification": "pending; no synthetic passing assessment or control change"
   }
 }
