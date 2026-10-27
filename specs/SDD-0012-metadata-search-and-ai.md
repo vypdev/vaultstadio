@@ -6,7 +6,7 @@
 - Last verified: not applicable
 - Owners: VaultStadio maintainers
 - Scope: Define metadata extraction, indexing/search, AI-assisted classification, provider boundaries, privacy, and readiness evidence.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #91
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -119,6 +119,10 @@ Text equivalent: File changes -> metadata is extracted/indexed -> user searches 
 | `stale` | Source changed after index | system | reindex |
 | `processing` | AI/index operation active | user/operator | complete/fail/cancel |
 | `failed` | Derived operation failed | operator/user | retry/inspect |
+
+### 6.4 Storage selection validation — issue #91
+
+Apply the same bounded input contract to basic GET/POST, advanced POST, metadata and suggestions before query/plugin/metadata effects, including short-prefix suggestions. Folder/basic-search totals stay bound to their actual selected dataset. Metadata results remain a bounded authorized projection with one-based page metadata. Advanced post-page filters/full-text fallback/global filtered counts and filename matching are not certified by this validation repair and remain#82; no provider readiness claim changes. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
 
 ## 7. User-facing configuration
 

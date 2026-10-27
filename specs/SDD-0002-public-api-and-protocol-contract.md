@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #91
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -120,6 +120,52 @@ Text equivalent: Client discovers contract -> authenticates -> calls bounded pro
 ### 6.4 Client bootstrap transport — issue #76
 
 The owning frontend startup contract is BOOT-SER-01/02 and BOOT-HTTP-01 in [SDD-0013](SDD-0013-frontend-kmp-and-platform-architecture.md#64-client-startup-correction--issue-76). Client-side serializer descriptor identity MUST NOT change the public ISO-8601 JSON wire values. Serving a Wasm artifact MUST use one correct MIME header; missing assets retain their HTTP error status. Public API routes, authentication and versioning are not changed by this bootstrap repair.
+
+### 6.5 Bounded storage selections — issue #91
+
+This revision is an implementation contract, committed before code on the Action-linked branch
+based on develop c9f1ac5. The wider API/search/storage portfolio remains partial.
+
+| ID | Required behavior | Failure/retained state |
+|---|---|---|
+| PGN-01 | After ordinary authentication, reject invalid pagination/sort input before storage/metadata lookup, count, query, plugin checks, bytes or events. Direct storage listing/search/recent service calls must enforce the same semantic bounds before even a parent lookup. | Safe VALIDATION_ERROR/400 at HTTP; no storage selection/effect. Authentication reads remain part of normal authentication. |
+| PGN-02 | Public REST limit is1..1000, offset0..2147483647. Missing values alone use endpoint defaults. Query integers are nonempty ASCII digits (leading zeros permitted), with no signs, whitespace, decimals or exponents, and must fit Int. Duplicate known selection keys are invalid. Do not clamp or reinterpret malformed values as defaults. | Safe field identity only; no raw request value or parse/SQL exception in the response. |
+| PGN-03 | Folder listing defaults limit100/offset0/name/asc. It accepts name,size,created_at,updated_at,type and asc/desc, ASCII case-insensitively; unknown/blank/padded tokens fail. | Existing valid frontend enum spellings remain compatible. |
+| PGN-04 | Basic search GET/POST and advanced POST default limit50/offset0. Recent, suggestions and by-metadata default limit20,10,50 respectively and have no offset/sort controls. Basic search GET has no sort controls. Reject unsupported known selection keys on these GET surfaces. Suggestions validate limit even for a short prefix; advanced input validates before plugin/filename selection. JSON integer type/null/overflow failures are bounded400. | Existing query/filter semantics are separate; invalid pagination never starts those operations. |
+| PGN-05 | Valid requests preserve owner, exact folder parent, trash/starred/type predicates and typed repository/provider failures. Authenticated foreign parents remain403 and missing parents404 after input validation; no partial foreign metadata is disclosed. | Do not turn database failure into400 or empty success; cancellation remains control flow. |
+| PGN-06 | SQL selection has a unique stable id ASC final tiebreaker. Primary direction remains requested; TYPE retains its existing name ASC secondary key. Repeated pages over an unchanged dataset have no overlaps/omissions caused by equal sort keys. | No snapshot-isolation promise across concurrent writes or separate HTTP requests. |
+| PGN-07 | A page is floor(offset/limit)+1 (one-based even beyond the end); totalPages is ceil(total/limit), zero for an empty dataset; hasMore compares offset+returned size to total in Long. Compute without overflowing numerator/addition. Widen page/totalPages to Long through domain, server DTO and shared KMP DTO/domain models; do not saturate, wrap or silently clamp. | Existing ordinary JSON integers retain their values/field names. Clients must support the documented int64 metadata range for extreme valid pages. No schema/data migration. |
+| PGN-08 | Keep raw protocol StorageItemQuery separate from validated REST selections. S3/WebDAV internal limits and zero-page conventions are not blanket-rejected by a REST constructor. Common PagedResult keeps the existing limit<=0 totalPages0/page1 convention for legacy/protocol callers, with Long results. | This does not certify S3/WebDAV request validation or all search/filter semantics. |
+
+Domain owns a framework-free validated selection and its bounds/failure identity. API owns query
+cardinality, lexical/token adaptation and JSON error mapping; core orchestration validates typed
+selections and maps into the existing legacy semantic exception port without adding HTTP decisions.
+Extract focused list/recent/search and request handlers instead of growing StorageRoutes,
+SearchRoutes or a ViewModel. SQL owns deterministic ordering. No HTTP/SQL/DI imports in new policy.
+
+Folder/basic-search totals describe the complete selected owned dataset before pagination. The
+by-metadata endpoint remains a bounded authorized projection, not a global authorized count; its
+returned projection uses one-based page1 and totalPages0/1 consistently. Advanced post-page filters,
+filename matching, full-text fallback and global filtered counts remain the separate search work
+in#82/SDD-0012; this input repair must not falsely certify those journeys or mask their failures.
+
+Risk floor: **160 genuinely new backend cases plus8 shared KMP client cases**, excluding migrated
+or expectation-only updates:40 pure policy/request parser,24 service/call-order/failure,72 actual
+HTTP/production-DI/PostgreSQL,16 SQL stable-page/ownership and8 overflow/page arithmetic. Cover
+all normative branches rather than filling a quota with getters. Retain the2981backend,
+1316desktop and1192browser baseline; Long expectation adaptations keep original assertions.
+
+Execute actual query/JSON boundaries including absence, empty, whitespace, signs, leading zeros,
+Unicode digits, overflow, min/max/max+1, duplicates and case variants; verify invalid input causes
+no selection even for a foreign parent/short prefix/plugin path. Positive SQL controls include
+same names in different parents/owners, tied sizes/times/types, root/child, trash, empty/end/beyond
+pages, totals and failures distinct from validation. Reproduce negative limit against the current
+local package before the repair. Verify shared int64 serialization on JVM/Wasm and actual browser
+sorting/recovery through user-reachable controls; label raw-HTTP versus GUI evidence honestly when
+numeric text is not exposed by the UI. Preserve raw failures, exact source/commands, full coverage
+denominators, original SDD drafts, current data and runnable rollback. Complete strict changed-source
+lint, existing coverage gates, architecture/catalog/secret checks, full CI and Copilot review; do not
+weaken them, add heavy workflow frequency, enable setup prematurely or promote master.
 
 ## 7. User-facing configuration
 

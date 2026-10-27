@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define files, folders, metadata, ownership, quotas, trash, storage backends, and content lifecycle.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #91
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -149,6 +149,10 @@ No permission switch is configurable. Token-authorized public downloads keep the
 ### 6.5 Collaboration access to canonical files — issue #89
 
 R01c reuses StorageAccessPolicy.requireOwner before collaboration metadata or effects, then rejects non-FILE/trashed canonical items. A storage download grant does not confer historical or collaboration permission. Document and comment writes recheck authority under item-before-document/comment locks; snapshot saves reject intervening changes. Membership admission/leave/update rechecks the current item owner under the canonical item/session lock, while presence references are validated against their canonical resources. The complete scope, risk inventory and explicit missing cold-start/canonical-commit journeys are in [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89); ordinary storage semantics and the reviewed R01 storage deletion boundary remain unchanged. Local verification passes the2740-case backend gate; [evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md) separates snapshot persistence from canonical commits, which remain#112/#109. Remote CI/review/adoption are pending.
+
+### 6.6 Storage selection validation — issue #91
+
+Domain owns validated REST selections, with limit1..1000/offset0..Int.MAX_VALUE; core checks before any parent/storage query. Preserve ownership/parent/trash constraints and typed failures. SQL adds id ASC after the requested primary and existing TYPE/name ordering. Shared PagedResult computes exact Long metadata without overflow; raw protocol query/limit<=0 compatibility is retained. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
 
 ## 7. User-facing configuration
 
