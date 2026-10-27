@@ -1,9 +1,11 @@
 """Canonical upload selection rejects mixed, missing and altered evidence."""
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'verification'))
 from discovery import VerificationError
@@ -65,6 +67,34 @@ class UploadContracts(unittest.TestCase):
     def test_reversed_populations_rejected(self):
         with self.assertRaises(VerificationError):
             inputs(list(reversed(self.directories)))
+
+    def test_real_upload_cli_writes_only_validated_inputs(self):
+        output = self.root/'output'
+        helper = Path(__file__).resolve().parents[1]/'verification/upload_manifest.py'
+        result = subprocess.run([sys.executable, str(helper), '--backend', str(self.directories[0]),
+                                 '--frontend', str(self.directories[1]), '--output', str(output)],
+                                check=False, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(output.read_text(), 'list='+','.join(str(p/'coverage.xml')for p in self.directories)+'\n')
+
+    def test_real_upload_cli_rejects_output_channel_injection(self):
+        renamed = self.root/'front,end'
+        self.directories[1].rename(renamed)
+        output = self.root/'output'
+        helper = Path(__file__).resolve().parents[1]/'verification/upload_manifest.py'
+        result = subprocess.run([sys.executable, str(helper), '--backend', str(self.directories[0]),
+                                 '--frontend', str(renamed), '--output', str(output)],
+                                check=False, capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(output.exists())
+
+    def test_report_mutated_during_manifest_validation_is_rejected(self):
+        def mutate_after_parse(path):
+            result = coverage(path)
+            path.write_text(path.read_text()+'\n')
+            return result
+        with patch('upload_manifest.coverage', side_effect=mutate_after_parse), self.assertRaises(VerificationError):
+            inputs(self.directories)
 
     def test_symlinked_input_rejected(self):
         path = self.directories[0]/'coverage.xml'

@@ -100,10 +100,10 @@ def collect(task: dict, has_test_sources: bool) -> dict:
         raise VerificationError(f"Required task has no completed cases: {task['path']}")
     if not completed and reports and not failed_cases:
         raise VerificationError(f"Reports without completed task: {task['path']}")
-    if not completed and not has_test_sources:
-        outcome = "no-test-sources"
-    elif totals["failures"] or totals["errors"]:
+    if failed_cases:
         outcome = "failed"
+    elif not completed and not has_test_sources:
+        outcome = "no-test-sources"
     elif totals["skipped"]:
         outcome = "skipped-cases"
     else:

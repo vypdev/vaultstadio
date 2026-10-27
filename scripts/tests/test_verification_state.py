@@ -99,6 +99,30 @@ class StateContracts(unittest.TestCase):
         with self.assertRaises(VerificationError):
             verify_saved({'savedReports': [], 'executionData': [{'path': str(self.root/'missing.exec'), 'sha256': '0'*64}]})
 
+    def tracked_source(self):
+        subprocess.run(['git', 'init', '-q'], cwd=self.root, check=True)
+        file = self.root/'source.kt'
+        file.write_text('original')
+        subprocess.run(['git', 'add', 'source.kt'], cwd=self.root, check=True)
+        subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@audit.invalid', 'commit', '-qm', 'fixture'], cwd=self.root, check=True)
+        return file
+
+    def test_deleted_tracked_source_remains_identified_as_missing(self):
+        file = self.tracked_source()
+        before = source_identity(self.root)
+        file.unlink()
+        self.assertNotEqual(source_identity(self.root), before)
+
+    def test_symlink_identity_does_not_read_external_contents(self):
+        file = self.tracked_source()
+        external = self.root.parent/'external'
+        external.write_text('owned external input')
+        file.unlink()
+        file.symlink_to(external)
+        before = source_identity(self.root)
+        external.write_text('changed external input')
+        self.assertEqual(source_identity(self.root), before)
+
     def test_source_identity_detects_untracked_and_modified_input(self):
         subprocess.run(['git', 'init', '-q'], cwd=self.root, check=True)
         file = self.root/'source.kt'

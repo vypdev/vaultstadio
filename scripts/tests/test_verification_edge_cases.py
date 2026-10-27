@@ -63,6 +63,18 @@ class EvidenceBoundaryContracts(unittest.TestCase):
         result = collect({'path': ':a:test', 'xml': str(self.root), 'marker': str(marker)}, True)
         self.assertEqual((result['outcome'], result['skipped']), ('skipped-cases', 1))
 
+    def test_failed_generated_cases_remain_failed_without_source_directories(self):
+        self.file.write_text('<testsuite tests="1" failures="1" errors="0" skipped="0"><testcase name="case" classname="Generated"><failure/></testcase></testsuite>')
+        result = collect({'path': ':generated:test', 'xml': str(self.root), 'marker': str(self.root/'missing-marker')}, False)
+        self.assertEqual((result['outcome'], result['failures']), ('failed', 1))
+
+    def test_symlinked_xml_is_not_read(self):
+        original = self.root/'original'
+        original.write_text('must not follow')
+        self.file.symlink_to(original)
+        with self.assertRaises(VerificationError):
+            junit(self.file, ':a:test', set())
+
     def test_no_compiled_production_classes_is_failure(self):
         with self.assertRaises(VerificationError):
             snapshot(self.root, {'production': [{'classes': [str(self.root/'build/classes')]}]})
