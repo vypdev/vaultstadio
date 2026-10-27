@@ -31,9 +31,11 @@ internal fun PublicShareInfo.toPublicResponse() = PublicShareResponse(
     expiresAt?.toString(),
 )
 
-internal fun ApplicationCall.publicShareHeaders() {
+internal fun ApplicationCall.publicShareHeaders(page: Boolean = false) {
     response.header(HttpHeaders.CacheControl, "no-store")
-    response.header("Referrer-Policy", "no-referrer")
+    if (response.headers["Referrer-Policy"] == null) {
+        response.header("Referrer-Policy", if (page) "strict-origin" else "no-referrer")
+    }
     response.header("X-Content-Type-Options", "nosniff")
 }
 

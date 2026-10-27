@@ -180,7 +180,9 @@ class PublicShareHttpTest {
         val response = client.get(path)
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals("no-store", response.headers[HttpHeaders.CacheControl])
+        assertEquals(if (case == "view") "strict-origin" else "no-referrer", response.headers["Referrer-Policy"])
         if (case == "view") {
+            assertTrue(response.bodyAsText().contains("name=\"referrer\" content=\"strict-origin\""))
             assertTrue(response.bodyAsText().contains("for=\"password\""))
             assertTrue(response.bodyAsText().contains("role=\"status\""))
             assertTrue(response.headers["Content-Security-Policy"]!!.contains("frame-ancestors 'none'"))

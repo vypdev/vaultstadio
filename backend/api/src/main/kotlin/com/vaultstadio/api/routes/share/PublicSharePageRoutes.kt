@@ -25,12 +25,12 @@ internal fun Route.publicSharePageRoutes() {
     get("/share-assets/public-share.mjs") { call.asset("public-share.mjs", ContentType.Application.JavaScript) }
     get("/share-assets/public-share.css") { call.asset("public-share.css", ContentType.Text.CSS) }
     get("/share/{token}/view") {
-        call.publicShareHeaders()
+        call.publicShareHeaders(page = true)
         if (call.rejectPasswordQuery()) return@get
         call.sharePage()
     }
     post("/share/{token}/view/download") {
-        call.publicShareHeaders()
+        call.publicShareHeaders(page = true)
         if (call.rejectPasswordQuery()) return@post
         call.formPassword().fold(
             { call.sharePage(it) },
@@ -57,7 +57,8 @@ private suspend fun ApplicationCall.formPassword(): Either<PublicShareFailure, S
 }
 
 private suspend fun ApplicationCall.sharePage(failure: PublicShareFailure? = null) {
-    publicShareHeaders()
+    // Keep the form's Origin while withholding the capability path from Referer.
+    publicShareHeaders(page = true)
     response.header(
         "Content-Security-Policy",
         "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; " +
