@@ -228,6 +228,12 @@ Global coverage thresholds and a strict global legacy lint migration remain sepa
 
 Local R04 checkpoint (2026-10-27): complete product execution and failure controls are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). This verifies the declared local scope only; final PR CI, Copilot review and adoption remain pending. JVM, Wasm and Python populations and mobile limitations remain separate.
 
+### 6.9 Critical behavioral coverage increment — issue #119
+
+Pre-implementation contract (2026-10-27): use the complete #84 production populations as the baseline; target the security/data-loss risks in AUTH119-HTTP and CLIENT119-TRANSPORT/STORAGE/FILES. Publish canonical before/after line, branch, instruction and module populations plus focused handwritten-source counters, original scenario/test links, negative reproductions and residual misses. No exclusions, lowered gates, duplicate test-only upload runs or silent global target changes. Compiler/inlined shared source lines must be disclosed rather than attributed twice to modules.
+
+The [98 identified scenario risks](../docs/development/verification/critical-coverage-119-scenarios.json) precede code. Execute complete backend/desktop/browser suites, existing focused gates, actual lint and required source/architecture/scanner contracts on the final candidate, then native CI and Copilot review. Preserve original drafts, data/current dogfood and rollback, major-tag Action selectors, Copilot/protections/master/setup activation. A source-bound green PR does not itself authorize merge or whole-platform readiness.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.

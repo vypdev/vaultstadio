@@ -190,6 +190,14 @@ R04-FAIL-01 requires original browser/compiler/runtime diagnostics and final non
 
 Local R04 checkpoint (2026-10-27): complete product execution and failure controls are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). This verifies the declared local scope only; final PR CI, Copilot review and adoption remain pending. JVM, Wasm and Python populations and mobile limitations remain separate.
 
+### 6.6 Critical client transport and file-state coverage — issue #119
+
+Pre-implementation contract (2026-10-27), CLIENT119-TRANSPORT/FILES: exercise BaseApi/ApiResult, StorageApi and the production HttpClient configuration through a deterministic injected engine while keeping the ordinary platform engine as the default. The seam belongs to the data/composition boundary; domain and feature ports gain no Ktor imports. Preserve token lookup per request, serialization, exact request/byte shape, safe structured/fallback errors and coroutine cancellation. A successful envelope with null data is a valid Unit result only when Unit is the requested result; a missing required typed payload is an error.
+
+FilesLoader/FilesViewModel tests use controllable domain ports and a per-test coroutine scheduler. Exercise modes, paging, breadcrumbs/path resolution, preferences, selection, mutations, activity/share state, failure and retry. Only the current folder/mode/sort request may publish contents/counts/progress; cancellation or stale pagination must not write into a newer navigation. A failed mutation must preserve a visible error and truthful retained state; successful background refresh must not erase the failure before explicit recovery. Keep independent state/transport fixtures focused; avoid a broad feature rewrite.
+
+NET119-01–24 and FILE119-01–32 in [the scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) are acceptance risks, not a claim of executed cases. Run applicable shared contracts on desktop and Wasm; disclose repeated executions. This does not close native file-picker/download, search-response ordering or mobile readiness issues.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
