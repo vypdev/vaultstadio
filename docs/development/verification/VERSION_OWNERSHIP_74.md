@@ -57,7 +57,7 @@ A complete backend run and the independent desktop/browser suites remain the PR 
 | VER-ERROR | typed failures, stream ownership, safe HTTP mapping | ProviderFailure, HttpBoundary, six use-case regression suites |
 | VER-ARCH | pure ports, focused service helpers and production composition | complete affected suites and source/module review |
 
-No schema migration, data reassignment or automatic purge is performed. Consumers must pass the actor to the changed internal service/use-case signatures. Roll back through a reviewed revert; reverting restores the former authorization risk and does not recover content deleted by pre-existing behavior. Keep disposable-data verification isolated. Remote CI, Copilot review, native approval and protected-branch adoption remain pending until separately recorded. Collaboration, shares and pagination findings (#89–#91), full recovery (#109) and the broader audit roadmap remain open.
+No schema migration, data reassignment or automatic purge is performed. Consumers must pass the actor to the changed internal service/use-case signatures. Roll back through a reviewed revert; reverting restores the former authorization risk and does not recover content deleted by pre-existing behavior. Keep disposable-data verification isolated. Final PR110 CI passes4761 cases and Copilot Review has no open findings. The exact user-authorized administrative exception merged bc8ceed into develop0363822; automatic post-merge CI again passes4761 with the same tested tree and unchanged protections. Native self-approval was not fabricated; master promotion remains pending. Collaboration, shares and pagination findings (#89–#91), full recovery (#109) and the broader audit roadmap remain open.
 
 ## Packaged loopback dogfooding
 
@@ -80,3 +80,7 @@ A second genuine assertion failure reproduced two soon-to-be-deleted versions re
 The latest core/version denominator is 272/272lines and90/90branches, without exclusions. Metadata-first retention compensation and concurrent GC remain#109; ordinary sequential batch reclamation is now implemented. The stale count in SDD-0003 was corrected alongside the owning receipt.
 
 Two SQL reviewer claims were checked against the exact packaged Exposed1.0.0 JAR: `ExposedSQLException extends java.sql.SQLException`. Both real DROP TABLE regressions return typed DatabaseException; cancellation remains outside the targeted catch. The valid catches remain unchanged. Evidence and detailed reproduction were reported in [vypdev/copilot#736](https://github.com/vypdev/copilot/issues/736). No broad exception catch, baseline or scanner exclusion was added.
+
+## Adoption checkpoint — PR110
+
+Final source bc8ceed was merged into develop03638226aaa339bc83aeb4363d390367fb561903 after the explicit maintainer exception. PR CI40426022867 and automatic post-merge CI40427381586 each reconcile2255backend+1315desktop+1191browser, zero failures/errors/skips; both integration trees match57664a0be9b4e2bb6d9d205ecfdfea18d2e65b83. Earlier pending statements are superseded for this develop adoption. Protections remain intact. master615f11a and the#89–#91 promotion blockers remain; broader recovery is#109.

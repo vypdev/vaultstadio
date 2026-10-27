@@ -28,6 +28,7 @@ kotlin {
 dependencies {
     // Domain (types and ports)
     api(project(":domain:common"))
+    api(project(":domain:collaboration"))
     api(project(":domain:storage"))
     api(project(":domain:auth"))
     api(project(":domain:share"))

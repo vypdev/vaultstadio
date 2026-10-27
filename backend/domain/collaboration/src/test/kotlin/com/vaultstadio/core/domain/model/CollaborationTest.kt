@@ -1,5 +1,8 @@
 /**
  * VaultStadio Collaboration Model Tests
+ *
+ * Domain ownership lives in domain/collaboration; compatible package names
+ * and the original eleven model regressions are retained.
  */
 
 package com.vaultstadio.core.domain.model

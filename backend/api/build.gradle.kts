@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":plugins-api"))
     implementation(project(":infrastructure"))
     implementation(project(":domain:common"))
+    implementation(project(":domain:collaboration"))
     implementation(project(":domain:storage"))
     implementation(project(":domain:version"))
     implementation(project(":domain:auth"))
@@ -94,6 +95,7 @@ dependencies {
     testImplementation(libs.bundles.testing)
     testImplementation(libs.bundles.testcontainers)
     testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.client.websockets)
 }
 
 tasks.test {

@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":core:auth"))
     implementation(project(":core:storage"))
     implementation(project(":domain:common"))
+    implementation(project(":domain:collaboration"))
     implementation(project(":domain:storage"))
     implementation(project(":domain:version"))
     implementation(project(":domain:auth"))
