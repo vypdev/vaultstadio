@@ -290,7 +290,11 @@ including empty/truncated or extra provider bytes, not a successful complete tra
 
 - `GET /api/v1/share/{token}` returns typed metadata, without login.
 - `GET /api/v1/share/{token}/download` streams admitted bytes as an attachment.
-- Machine credentials use `X-Share-Password`; a `password` query parameter is rejected (400).
+- Machine credentials use `X-Share-Password` containing the password's UTF-8 bytes encoded as
+  canonical unpadded Base64url (1..72 decoded bytes, at most96 ASCII characters). This is transport
+  encoding, not encryption; deployment still owns TLS. Malformed/noncanonical Base64url or invalid
+  UTF-8 is400. This explicit encoding supports non-Latin-1 passwords in browser Fetch headers.
+  A `password` query parameter is rejected (400). The native POST form uses normal UTF-8 form data.
 - `GET /api/v1/share/{token}/view` serves an accessible public page outside the authenticated SPA.
 - The public page reads metadata and submits a native POST form to
   `/api/v1/share/{token}/view/download`; the password travels only in the request body/header.
@@ -303,8 +307,9 @@ including empty/truncated or extra provider bytes, not a successful complete tra
   missing/wrong password is 403 with a stable safe code; invalid request is 400; unexpected
   provider/database failures are safe 500 responses without raw exceptions or credentials.
 - The page has labelled password, load and download controls, visible loading/success/denial,
-  an accessible status region and explicit retry. A denial preserves the entered form locally
-  without echoing its password in HTML responses or URLs; it never claims a completed download.
+  an accessible status region and explicit retry. Metadata denial preserves local form inputs.
+  A native POST denial renders a retry page with an empty password field; the password is never
+  echoed in HTML responses or URLs. The page never claims a completed download.
 
 ### 21.4 Creation and migration
 
@@ -334,3 +339,13 @@ coverage denominators, failures found and fixed, and browser limitations. Target
 coverage of new pure access decisions; report uncovered branches honestly without new exclusions or
 lowered existing gates. Run architecture, strict changed-source lint, specification catalog, secret
 scan and full app CI on the final revision. Evidence is added only after executing these checks.
+
+
+### 21.6 Pre-code protocol refinement — Unicode header transport
+
+Inspection of the browser boundary exposed that arbitrary Unicode cannot be put directly in a
+Fetch header value. Before implementing that boundary refinement, this contract fixes canonical
+Base64url of strict UTF-8 for the machine header. Creation and access reject unpaired surrogates
+rather than silently changing a password. Tests must include ASCII, whitespace, plus/percent,
+non-Latin-1, multibyte byte limits, malformed encodings and actual BCrypt verification. This changes
+only the new unpublished header contract; token paths and the body-form journey remain unchanged.
