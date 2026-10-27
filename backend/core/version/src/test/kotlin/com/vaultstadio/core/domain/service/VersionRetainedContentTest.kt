@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -64,11 +65,21 @@ class VersionRetainedContentTest {
         f.item = f.item.copy(storageKey = null)
         val before = f.snapshot()
         val failure = DatabaseException("later reference lookup failed")
-        coEvery { f.references.hasOtherReferences("key2", "v2") } returns false.right()
-        coEvery { f.references.hasOtherReferences("key1", "v1") } returns failure.left()
+        coEvery { f.references.hasOtherReferences("key2", setOf("v1", "v2")) } returns false.right()
+        coEvery { f.references.hasOtherReferences("key1", setOf("v1", "v2")) } returns failure.left()
         assertSame(failure, assertIs<Either.Left<*>>(f.service.cleanupVersionsForItem("item", "owner")).value)
         assertEquals(before, f.snapshot())
         verify { f.backend wasNot Called }
         coVerify(exactly = 0) { f.versions.deleteAllForItem(any()) }
+    }
+
+    @Test
+    fun `purging restored history removes shared historical bytes but retains current file`() = runTest {
+        val f = VersionServiceFixture()
+        assertIs<Either.Right<*>>(f.service.restoreVersion(RestoreVersionInput("item", 1), "owner"))
+        assertIs<Either.Right<*>>(f.service.cleanupVersionsForItem("item", "owner"))
+        assertTrue(f.rows.isEmpty())
+        assertFalse(f.bytes.containsKey("key1"))
+        assertEquals("new\n", f.bytes["key2"]?.decodeToString())
     }
 }

@@ -77,7 +77,7 @@
     },
     {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionRetentionHttpTest.kt",
-      "sha256": "56e468c6a8e7d748f0e274250436cfa0e160d44597086119ecc70a76a57f0298"
+      "sha256": "de3ad887f3053e504a0c509d13212e0d053699d3d503ffde909bb8fcea1cc48b"
     },
     {
       "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/ApplyRetentionPolicyUseCase.kt",
@@ -121,7 +121,7 @@
     },
     {
       "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionMutations.kt",
-      "sha256": "ca8805721cc7918c115830042bff5c9396016fb3f8d5586e501c2c78e2177dad"
+      "sha256": "4e965c4e6853fc37dabaaaed19b18c432616f46f56f8590dede0de4b502f60f8"
     },
     {
       "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionReads.kt",
@@ -173,11 +173,11 @@
     },
     {
       "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetainedContentTest.kt",
-      "sha256": "98356a6004299ada5bef9b78aae6e3bcbc3e6f7e8694429e95af950017f00e61"
+      "sha256": "65788c6469dea4f965e8bf5a7f00867dc493bb6048b884f46f5e57b07472b7af"
     },
     {
       "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetentionContentTest.kt",
-      "sha256": "1162a1fcdb39583398223b2714bfd833505b6090ccc9a2a0609a7bfb1735ad53"
+      "sha256": "83d673e33ffe21c07fedd437e9fe09a0b4d92122562f24864fb17ad78df656f0"
     },
     {
       "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetentionRegressionTest.kt",
@@ -185,11 +185,11 @@
     },
     {
       "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionServiceFixture.kt",
-      "sha256": "2aecc4de099d8e8d1ae9c3720e56fd41892e932e4cd093bd9757ccc4a61690fc"
+      "sha256": "4984e2831bec4b62040758cc6e7b26fc0c3a6c45d85ef746609c933ec85f31b5"
     },
     {
       "path": "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionContentReferenceRepository.kt",
-      "sha256": "9b5612ddd0a446db0e9b2cc367a6d88b20b0bf017a4061754317139d35841a28"
+      "sha256": "7617a5f699b5fc6cbc020f33f294d2b889ffd7343970d17e4ecf75090c5a7034"
     },
     {
       "path": "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionItemScopeRepository.kt",
@@ -201,7 +201,7 @@
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionContentReferenceRepository.kt",
-      "sha256": "f32d02ec197d16297cd27e55ae6191d6d9ff22f86c79c245fdeb485f6ad93b74"
+      "sha256": "47f4b0482cb3250fd02539559363719bac9b6e00e57babdffe98d41e8a99ce9b"
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionItemScopeRepository.kt",
@@ -209,7 +209,7 @@
     },
     {
       "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionContentReferenceAdapterTest.kt",
-      "sha256": "71763f1113350687a199b915ecbd1dd6c47de49630975799eb41b34095bda919"
+      "sha256": "dfe9d9318e75589f319274cfebfbaa780f0987bd807ba5c116452ce8fb403f18"
     },
     {
       "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionScopeAdapterTest.kt",
@@ -222,7 +222,7 @@
     "tests": {
       "core/version": {
         "counts": {
-          "tests": 196,
+          "tests": 197,
           "failures": 0,
           "errors": 0,
           "skipped": 0
@@ -231,7 +231,7 @@
       },
       "infrastructure": {
         "counts": {
-          "tests": 8,
+          "tests": 11,
           "failures": 0,
           "errors": 0,
           "skipped": 0
@@ -240,7 +240,7 @@
       },
       "api": {
         "counts": {
-          "tests": 139,
+          "tests": 140,
           "failures": 0,
           "errors": 0,
           "skipped": 0
@@ -248,7 +248,7 @@
         "xml": 11
       }
     },
-    "sourceUnchangedDuringBuild": "Per-campaign proof; test-only formatting between API/adapter and final core runs. All production sources unchanged.",
+    "sourceUnchangedDuringBuild": true,
     "matrixExecutions": {
       "service": 72,
       "http": 91
@@ -257,7 +257,7 @@
       "strictDetektModules": 5,
       "maxIssues": 0,
       "baseline": "unchanged",
-      "scope": "All changed Kotlin files in five modules: original strict pass, updated API strict pass, then updated core strict pass after test-only formatting.",
+      "scope": "Latest complete348-case campaign: four updated modules strict; application/version unchanged from its original strict pass.",
       "formatLog": "issue74-final-format.log"
     }
   },
@@ -278,7 +278,7 @@
         "missed": 0
       },
       "LINE": {
-        "covered": 79,
+        "covered": 80,
         "missed": 0
       }
     },
@@ -351,7 +351,7 @@
   },
   "coreVersionCoverage": {
     "lines": {
-      "covered": 271,
+      "covered": 272,
       "missed": 0
     },
     "branches": {
@@ -564,6 +564,7 @@
       "com.vaultstadio.core.domain.service.VersionRetainedContentTest": [
         "deleting the source version preserves bytes referenced by its restored version()",
         "a later reference failure cannot delete an earlier unreferenced blob()",
+        "purging restored history removes shared historical bytes but retains current file()",
         "purging history preserves the current file content()",
         "VER74-CONTENT-FAIL-deleteVersion",
         "VER74-CONTENT-FAIL-cleanupVersionsForItem"
@@ -587,8 +588,11 @@
     "infrastructure": {
       "com.vaultstadio.infrastructure.persistence.VersionContentReferenceAdapterTest": [
         "any current item retains content without requiring owner or name columns()",
+        "empty deletion batch retains every existing reference()",
         "the excluded version alone does not retain its content()",
         "SQL failure is not interpreted as unreferenced content()",
+        "a version outside the deletion batch still retains content()",
+        "the complete deleted batch does not retain shared content()",
         "another version retains content without requiring other metadata columns()"
       ],
       "com.vaultstadio.infrastructure.persistence.VersionScopeAdapterTest": [
@@ -754,7 +758,8 @@
         "VER74-HTTP-retention-cleanup-anonymous"
       ],
       "com.vaultstadio.api.routes.version.VersionRetentionHttpTest": [
-        "retention preserves restored history and canonical current content()"
+        "retention preserves restored history and canonical current content()",
+        "full purge reclaims a shared historical key while preserving canonical bytes()"
       ],
       "com.vaultstadio.api.service.ThumbnailCacheTest$ThumbnailCacheKeyTests": [
         "key default version is zero()",
@@ -866,6 +871,21 @@
       "http": 1
     },
     "behavior": "Reclaim unreferenced keys from removed-row snapshot, preflight all reference queries, deduplicate deletes and propagate errors. Preserve current and retained version references.",
-    "limits": "Metadata-first policy may commit rows before a later reference/storage error; durable compensation and concurrent GC remain109."
+    "limits": "Metadata-first policy may commit rows before a later reference/storage error; durable compensation and concurrent GC remain109.",
+    "cleanupBatch": {
+      "red": "6cases/1real assertion failure before code",
+      "newCases": {
+        "core": 1,
+        "sqlAdapters": 3,
+        "http": 1
+      },
+      "contract": "Exclude the entire authorized deletion set; preserve external version/current item references; query and delete each key once after complete row binding."
+    },
+    "sqlFalsePositives": {
+      "upstream": "https://github.com/vypdev/copilot/issues/736",
+      "artifact": "org.jetbrains.exposed:exposed-core:1.0.0",
+      "actualSuperclass": "java.sql.SQLException",
+      "typedSQLAndCancellationControls": "pass, actual PostgreSQL"
+    }
   }
 }

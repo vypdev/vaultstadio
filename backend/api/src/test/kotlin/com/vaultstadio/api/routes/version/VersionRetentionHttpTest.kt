@@ -1,5 +1,6 @@
 package com.vaultstadio.api.routes.version
 
+import com.vaultstadio.core.domain.service.FileVersionService
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.assertEquals
+import org.koin.ktor.ext.get as koinGet
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VersionRetentionHttpTest {
@@ -46,5 +48,25 @@ class VersionRetentionHttpTest {
             val stream = f.storage.backend.retrieve(key).fold({ throw it }, { it })
             assertEquals(content, stream.bufferedReader().use { it.readText() })
         }
+    }
+
+    @Test
+    fun `full purge reclaims a shared historical key while preserving canonical bytes`() = testApplication {
+        lateinit var service: FileVersionService
+        application {
+            f.install(this)
+            service = koinGet()
+        }
+        val response = client.post("/api/v1/versions/item/${f.item.id}/restore") {
+            bearerAuth("owner")
+            contentType(ContentType.Application.Json)
+            setBody("""{"versionNumber":1}""")
+        }
+        assertEquals(HttpStatusCode.OK, response.status, response.bodyAsText())
+        assertEquals(3, service.cleanupVersionsForItem(f.item.id, f.storage.alice.id).fold({ throw it }, { it }))
+        assertEquals(false, f.storage.backend.exists(f.old.storageKey).fold({ throw it }, { it }))
+        assertEquals(emptyList(), f.repository.listVersions(f.item.id, 100, 0).fold({ throw it }, { it }))
+        val current = f.storage.backend.retrieve(f.latest.storageKey).fold({ throw it }, { it })
+        assertEquals("new\n", current.bufferedReader().use { it.readText() })
     }
 }

@@ -41,8 +41,8 @@ internal class VersionServiceFixture(visibility: Visibility = Visibility.PRIVATE
     init {
         coEvery { references.hasOtherReferences(any(), any()) } answers {
             val key = firstArg<String>()
-            val excluded = secondArg<String>()
-            (item.storageKey == key || rows.any { it.id != excluded && it.storageKey == key }).right()
+            val excluded = secondArg<Set<String>>()
+            (item.storageKey == key || rows.any { it.id !in excluded && it.storageKey == key }).right()
         }
         coEvery { items.findById("item") } answers { item.right() }
         coEvery { scopes.findItemId(any()) } answers { rows.find { it.id == firstArg<String>() }?.itemId.right() }

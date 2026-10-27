@@ -114,7 +114,7 @@ internal class VersionMutations(
         unreferencedRows(listOf(row)).flatMap { deleteContent(it) }
 
     private suspend fun deleteContent(rows: List<FileVersion>): Either<StorageException, Unit> {
-        for (row in rows.distinctBy { it.storageKey }) {
+        for (row in rows) {
             val result = storage.delete(row.storageKey)
             if (result is Either.Left) return result
         }
@@ -123,8 +123,9 @@ internal class VersionMutations(
 
     private suspend fun unreferencedRows(rows: List<FileVersion>): Either<StorageException, List<FileVersion>> {
         val removable = mutableListOf<FileVersion>()
-        for (row in rows) {
-            when (val result = contentReferences.hasOtherReferences(row.storageKey, row.id)) {
+        val excludedIds = rows.map { it.id }.toSet()
+        for (row in rows.distinctBy { it.storageKey }) {
+            when (val result = contentReferences.hasOtherReferences(row.storageKey, excludedIds)) {
                 is Either.Left -> return result
                 is Either.Right -> if (!result.value) removable.add(row)
             }

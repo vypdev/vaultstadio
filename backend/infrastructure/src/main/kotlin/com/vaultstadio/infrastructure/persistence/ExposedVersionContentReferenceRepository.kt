@@ -11,7 +11,7 @@ import com.vaultstadio.infrastructure.persistence.entities.StorageItemsTable
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.core.neq
+import org.jetbrains.exposed.v1.core.notInList
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
 import java.sql.SQLException
@@ -20,12 +20,12 @@ import java.sql.SQLException
 class ExposedVersionContentReferenceRepository : VersionContentReferenceRepository {
     override suspend fun hasOtherReferences(
         storageKey: String,
-        excludingVersionId: String,
+        excludingVersionIds: Set<String>,
     ): Either<StorageException, Boolean> = try {
         newSuspendedTransaction(Dispatchers.IO) {
             val historical = FileVersionsTable.select(FileVersionsTable.id)
                 .where {
-                    FileVersionsTable.storageKey eq storageKey and (FileVersionsTable.id neq excludingVersionId)
+                    FileVersionsTable.storageKey eq storageKey and (FileVersionsTable.id notInList excludingVersionIds)
                 }
                 .limit(1).singleOrNull() != null
             historical ||

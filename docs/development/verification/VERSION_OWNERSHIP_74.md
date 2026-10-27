@@ -20,16 +20,16 @@ The version-download endpoint still returns metadata. Restoring a version create
 
 | Scope | Executed cases | Failures / errors / skips |
 |---|---:|---:|
-| Complete core/version suite | 196 | 0 / 0 / 0 |
-| Version use cases and actual HTTP composition | 139 | 0 / 0 / 0 |
-| Real PostgreSQL scope/reference adapters | 8 | 0 / 0 / 0 |
-| Total selected affected suites | **343** | **0 / 0 / 0** |
+| Complete core/version suite | 197 | 0 / 0 / 0 |
+| Version use cases and actual HTTP composition | 140 | 0 / 0 / 0 |
+| Real PostgreSQL scope/reference adapters | 11 | 0 / 0 / 0 |
+| Total selected affected suites | **348** | **0 / 0 / 0** |
 
 The 72 service matrix executions cover twelve operations × three visibilities × owner/unrelated caller. The 91 HTTP executions cover seven surfaces × three visibilities × owner/unrelated/shared recipient/nonowner admin, plus seven anonymous cases. These are matrix executions, not 163 unique product features. Additional cases cover missing actors/items, stale/mixed row identities, SQL failures, cancellation, stream read/close failures, Unicode diff semantics, latest-version constraints and retained-content sequences.
 
 HTTP fixtures use production routing, use cases, version DI, migrated PostgreSQL and local file bytes; only session-token validation is replaced with disposable actor identities. Rejected requests compare actual row snapshots and byte hashes. Adapter tests use minimal tables that make accidental full-row projection fail. Two original destructive-content assertions were observed failing before the guard and passing afterward.
 
-The complete core/version report, without exclusions, covers **271/271 lines and 90/90 branches**. Both new SQL adapters cover **7/7 lines each**; JaCoCo reports no branches for these adapter classes. This is scoped evidence, not 100% whole-platform coverage. Eight other backend core modules still lack standard XML coverage reports; see [#84](https://github.com/vypdev/vaultstadio/issues/84).
+The complete core/version report, without exclusions, covers **272/272 lines and 90/90 branches**. Both new SQL adapters cover **7/7 lines each**; JaCoCo reports no branches for these adapter classes. This is scoped evidence, not 100% whole-platform coverage. Eight other backend core modules still lack standard XML coverage reports; see [#84](https://github.com/vypdev/vaultstadio/issues/84).
 
 Changed Kotlin sources in all five affected modules passed strict Detekt using the existing configuration with only `build.maxIssues` changed locally from `-1` to `0`, existing baseline unchanged, and an asserted exact changed-file selection. Changed-file ktlint passed. No repository baseline, quality threshold or required check was weakened. Repository-wide legacy Detekt adoption remains separate debt: its current unlimited issue budget can make a green task advisory.
 
@@ -72,3 +72,11 @@ Copilot identified that metadata retention left unreferenced historical blobs be
 The 343 selected cases pass (196 core,139 API,8 SQL adapters). Strict API quality passed in that campaign; one test-only wrapping violation was then formatted, followed by a fresh strict core pass and196 core tests. Production/API/adapter inputs were unchanged during that formatting correction. Whole core/version coverage is271/271 lines and90/90 branches, without exclusions.
 
 The metadata-first repository port can commit row deletion before a later reference/provider error. Such errors remain typed failures, never successful cleanup; reference preflight preserves all bytes on query failure, but there is no durable rollback/outbox or atomic cross-provider transaction. Concurrent mutation, compensation and recovery of that partial state remain #109. This limitation is tested and explicit.
+
+## Full-history batch cleanup follow-up
+
+A second genuine assertion failure reproduced two soon-to-be-deleted versions retaining each other's shared blob. The pure reference port now accepts the full bound deletion-ID set. Core deduplicates keys, preflights all queries and excludes the complete authorized batch while preserving external-version/current-item references. Five new executions cover restored-history purge, full-batch SQL exclusion, an external surviving version, empty exclusion and actual HTTP/service/PostgreSQL purge retaining canonical bytes. The latest single frozen-source campaign passes348 cases (197core,140API,11SQL adapters), strict quality in all four updated modules, and packaging. The unchanged application module retains its prior strict pass.
+
+The latest core/version denominator is 272/272lines and90/90branches, without exclusions. Metadata-first retention compensation and concurrent GC remain#109; ordinary sequential batch reclamation is now implemented. The stale count in SDD-0003 was corrected alongside the owning receipt.
+
+Two SQL reviewer claims were checked against the exact packaged Exposed1.0.0 JAR: `ExposedSQLException extends java.sql.SQLException`. Both real DROP TABLE regressions return typed DatabaseException; cancellation remains outside the targeted catch. The valid catches remain unchanged. Evidence and detailed reproduction were reported in [vypdev/copilot#736](https://github.com/vypdev/copilot/issues/736). No broad exception catch, baseline or scanner exclusion was added.

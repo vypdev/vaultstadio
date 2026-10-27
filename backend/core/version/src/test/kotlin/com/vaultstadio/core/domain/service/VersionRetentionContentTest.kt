@@ -101,14 +101,14 @@ class VersionRetentionContentTest {
         f.bytes["key3"] = "third\n".toByteArray()
         val bytes = f.snapshot().third
         val failure = DatabaseException("late reference failure")
-        coEvery { f.references.hasOtherReferences("key3", "v3") } returns false.right()
-        coEvery { f.references.hasOtherReferences("key1", "v1") } returns failure.left()
+        coEvery { f.references.hasOtherReferences("key3", setOf("v1", "v3")) } returns false.right()
+        coEvery { f.references.hasOtherReferences("key1", setOf("v1", "v3")) } returns failure.left()
         assertSame(failure, assertIs<Either.Left<*>>(f.service.applyRetentionPolicy("item", "owner")).value)
         assertEquals(bytes, f.snapshot().third)
         verify { f.backend wasNot Called }
         coVerifyOrder {
-            f.references.hasOtherReferences("key3", "v3")
-            f.references.hasOtherReferences("key1", "v1")
+            f.references.hasOtherReferences("key3", setOf("v1", "v3"))
+            f.references.hasOtherReferences("key1", setOf("v1", "v3"))
         }
     }
 

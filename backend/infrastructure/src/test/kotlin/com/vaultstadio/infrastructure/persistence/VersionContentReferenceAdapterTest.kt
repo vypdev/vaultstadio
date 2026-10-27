@@ -46,25 +46,49 @@ class VersionContentReferenceAdapterTest {
 
     @Test
     fun `the excluded version alone does not retain its content`() = runTest {
-        assertEquals(false, assertIs<Either.Right<*>>(repository.hasOtherReferences("shared", "target")).value)
-        assertEquals(false, assertIs<Either.Right<*>>(repository.hasOtherReferences("absent", "target")).value)
+        assertEquals(false, assertIs<Either.Right<*>>(repository.hasOtherReferences("shared", setOf("target"))).value)
+        assertEquals(false, assertIs<Either.Right<*>>(repository.hasOtherReferences("absent", setOf("target"))).value)
     }
 
     @Test
     fun `another version retains content without requiring other metadata columns`() = runTest {
         transaction(database) { exec("INSERT INTO file_versions VALUES ('peer', 'shared')") }
-        assertEquals(true, assertIs<Either.Right<*>>(repository.hasOtherReferences("shared", "target")).value)
+        assertEquals(true, assertIs<Either.Right<*>>(repository.hasOtherReferences("shared", setOf("target"))).value)
     }
 
     @Test
     fun `any current item retains content without requiring owner or name columns`() = runTest {
         transaction(database) { exec("INSERT INTO storage_items VALUES ('active', 'shared')") }
-        assertEquals(true, assertIs<Either.Right<*>>(repository.hasOtherReferences("shared", "target")).value)
+        assertEquals(true, assertIs<Either.Right<*>>(repository.hasOtherReferences("shared", setOf("target"))).value)
     }
 
     @Test
     fun `SQL failure is not interpreted as unreferenced content`() = runTest {
         transaction(database) { exec("DROP TABLE file_versions") }
-        assertIs<DatabaseException>(assertIs<Either.Left<*>>(repository.hasOtherReferences("shared", "target")).value)
+        assertIs<DatabaseException>(
+            assertIs<Either.Left<*>>(repository.hasOtherReferences("shared", setOf("target"))).value,
+        )
+    }
+
+    @Test
+    fun `the complete deleted batch does not retain shared content`() = runTest {
+        transaction(database) { exec("INSERT INTO file_versions VALUES ('peer', 'shared')") }
+        val result = repository.hasOtherReferences("shared", setOf("target", "peer"))
+        assertEquals(false, assertIs<Either.Right<*>>(result).value)
+    }
+
+    @Test
+    fun `a version outside the deletion batch still retains content`() = runTest {
+        transaction(database) {
+            exec("INSERT INTO file_versions VALUES ('peer', 'shared'), ('outside', 'shared')")
+        }
+        val result = repository.hasOtherReferences("shared", setOf("target", "peer"))
+        assertEquals(true, assertIs<Either.Right<*>>(result).value)
+    }
+
+    @Test
+    fun `empty deletion batch retains every existing reference`() = runTest {
+        val result = repository.hasOtherReferences("shared", emptySet())
+        assertEquals(true, assertIs<Either.Right<*>>(result).value)
     }
 }
