@@ -121,7 +121,7 @@ Text equivalent: User opens document -> joins session -> receives snapshot/prese
 
 ### 6.4 Collaboration authorization repair — issue #89
 
-Contract accepted before code on 2026-10-27 (`0e8535f`); locally verified implementation source `7bb140e`. R01c closes the observed cross-user admission and all equivalent REST/WebSocket/application bypasses. The repository has no implemented durable read/edit/comment collaboration grant source: download tokens, sharedWithUsers, visibility and previously unguarded membership are not grants. Current canonical file ownership is the authoritative decision for this increment; supported nonowner collaboration remains incomplete until a separately reviewed durable grant lifecycle exists. Do not simulate collaboration by denying the owner's valid flows.
+Contract accepted before code on 2026-10-27 (`0e8535f`); locally verified follow-up `f35140d` (production source `b0c60a6`, initial implementation `7bb140e`). R01c closes the observed cross-user admission and all equivalent REST/WebSocket/application bypasses. The repository has no implemented durable read/edit/comment collaboration grant source: download tokens, sharedWithUsers, visibility and previously unguarded membership are not grants. Current canonical file ownership is the authoritative decision for this increment; supported nonowner collaboration remains incomplete until a separately reviewed durable grant lifecycle exists. Do not simulate collaboration by denying the owner's valid flows.
 
 | ID | Required behavior | Verification |
 |---|---|---|
@@ -261,7 +261,7 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
-| C89-ACTOR/OWNER/SCOPE/BIND/MEMBER/ATOMIC/PRESENCE/STREAM/WS/ERROR/STATE/MAINT/ARCH | R01c domain/application and adapters |442 new collected cases plus preserved regressions; [local evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md), final-head CI/review/adoption pending |issue#89 and§6.4 |
+| C89-ACTOR/OWNER/SCOPE/BIND/MEMBER/ATOMIC/PRESENCE/STREAM/WS/ERROR/STATE/MAINT/ARCH | R01c domain/application and adapters |480 new collected cases plus preserved regressions; [local evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md), final-head CI/review/adoption pending |issue#89 and§6.4 |
 
 ## 18. Implementation or maintenance sequence
 
@@ -307,3 +307,9 @@ WebSocket decoding must preserve the previous ignore-unknown-fields contract, in
 Add actual stale-precheck apply/save regressions and an unknown-field socket regression before changing those implementations. Complete adapter coverage includes changed/missing snapshots, mismatched actors, lost ownership, trashed/folder/missing items, rollback after operation insert, and concurrent version conflict; maintain the existing full inventory rather than replace it. Report the final collected count and real coverage denominators after reconciliation.
 
 The same stale-authorization risk applies to comment create/resolve/reply/delete. Pass the expected item and actor through these write ports, lock the canonical item before the bound comment, recheck authorship where required, and return mutation results inside that transaction. Test all four transfers using the same deterministic genuine-read/committed-transfer interleaving. No public use case may retain an unauthenticated comment mutation port.
+
+### R01c transactional verification checkpoint — supersedes the initial local count
+
+The final f35140d command passes2735backend cases, including480 new cases, with zero failures/errors/skips and strict changed-source quality. Production source b0c60a6 is byte-identical; the later commit separates a test helper. All nine core/collaboration sources, including unchanged OT, cover382/395 lines and183/207 branches. The whole backend remains8042/16414 lines and1555/5712 branches; no source is excluded from this diagnostic aggregate. The receipt retains all changed infrastructure counters and all480 collected IDs.
+
+Actual packaged loopback verification completes/resumes40 HTTP requests plus nine native owner frames, foreign close1008, extension-field compatibility with server actor identity, owner comment/reply/resolve/delete and retained bytes/containers. Probe response-shape assumptions are corrected and recorded separately. The initial442 cases and the pre-code447 follow-up target above are historical checkpoints; all are preserved and the delivered count is480. Remote final-head CI/review/adoption remain pending; R14 remains112.

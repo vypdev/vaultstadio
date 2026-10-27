@@ -2,18 +2,19 @@
   "schemaVersion": 1,
   "issue": 89,
   "contractCommit": "0e8535f2ce8b16b93ce16b4982dfb2bf2680ecc1",
-  "implementationCommit": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+  "implementationCommit": "f35140d99c103b6826e1df005e224663fc4f0aee",
   "baseDevelop": "03638226aaa339bc83aeb4363d390367fb561903",
   "verificationDateUtc": "2026-10-27",
   "completeBackendGate": {
-    "tests": 2697,
+    "tests": 2735,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "rawXmlFiles": 548,
-    "unchangedTasksMayBeUpToDate": true
+    "rawXmlFiles": 552,
+    "unchangedTasksMayBeUpToDate": true,
+    "explicitPrivateTestHomeReuse": true
   },
-  "newCollectedCases": 442,
+  "newCollectedCases": 480,
   "preCodeRiskFloor": 391,
   "retainedOriginalCases": {
     "apiDtos35": 35,
@@ -24,7 +25,7 @@
     "service": 108,
     "http": 195,
     "presence": 18,
-    "websocket": 24,
+    "websocket": 25,
     "minimalSql": 12,
     "membershipAndExpiry": 11,
     "faults": 24,
@@ -33,12 +34,16 @@
     "streamAndPresenceLifecycle": 8,
     "scopeBinding": 7,
     "initialJoinRegression": 1,
-    "missingWorkingState": 1
+    "missingWorkingState": 1,
+    "snapshotPersistence": 5,
+    "staleWriteAuthority": 6,
+    "documentWriteContracts": 14,
+    "commentWriteContracts": 12
   },
   "wholeCoreCollaborationAggregate": {
     "LINE": {
-      "covered": 377,
-      "total": 390
+      "covered": 382,
+      "total": 395
     },
     "BRANCH": {
       "covered": 183,
@@ -47,6 +52,10 @@
   },
   "coreCollaborationAggregateBySource": {
     "CollaborationAccess.kt": {
+      "INSTRUCTION": {
+        "covered": 739,
+        "total": 739
+      },
       "BRANCH": {
         "covered": 54,
         "total": 54
@@ -54,9 +63,25 @@
       "LINE": {
         "covered": 75,
         "total": 75
+      },
+      "COMPLEXITY": {
+        "covered": 46,
+        "total": 46
+      },
+      "METHOD": {
+        "covered": 19,
+        "total": 19
+      },
+      "CLASS": {
+        "covered": 4,
+        "total": 4
       }
     },
     "CollaborationService.kt": {
+      "INSTRUCTION": {
+        "covered": 356,
+        "total": 356
+      },
       "BRANCH": {
         "covered": 2,
         "total": 2
@@ -64,9 +89,25 @@
       "LINE": {
         "covered": 53,
         "total": 53
+      },
+      "COMPLEXITY": {
+        "covered": 27,
+        "total": 27
+      },
+      "METHOD": {
+        "covered": 26,
+        "total": 26
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
       }
     },
     "CollaborationOT.kt": {
+      "INSTRUCTION": {
+        "covered": 137,
+        "total": 259
+      },
       "BRANCH": {
         "covered": 14,
         "total": 28
@@ -74,9 +115,25 @@
       "LINE": {
         "covered": 21,
         "total": 34
+      },
+      "COMPLEXITY": {
+        "covered": 7,
+        "total": 16
+      },
+      "METHOD": {
+        "covered": 2,
+        "total": 2
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
       }
     },
     "CollaborationSessions.kt": {
+      "INSTRUCTION": {
+        "covered": 764,
+        "total": 764
+      },
       "BRANCH": {
         "covered": 30,
         "total": 30
@@ -84,15 +141,47 @@
       "LINE": {
         "covered": 70,
         "total": 70
+      },
+      "COMPLEXITY": {
+        "covered": 25,
+        "total": 25
+      },
+      "METHOD": {
+        "covered": 10,
+        "total": 10
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
       }
     },
     "CollaborationInputs.kt": {
+      "INSTRUCTION": {
+        "covered": 78,
+        "total": 78
+      },
       "LINE": {
         "covered": 11,
         "total": 11
+      },
+      "COMPLEXITY": {
+        "covered": 11,
+        "total": 11
+      },
+      "METHOD": {
+        "covered": 11,
+        "total": 11
+      },
+      "CLASS": {
+        "covered": 2,
+        "total": 2
       }
     },
     "CollaborationStreams.kt": {
+      "INSTRUCTION": {
+        "covered": 368,
+        "total": 398
+      },
       "BRANCH": {
         "covered": 16,
         "total": 23
@@ -100,9 +189,25 @@
       "LINE": {
         "covered": 24,
         "total": 24
+      },
+      "COMPLEXITY": {
+        "covered": 22,
+        "total": 29
+      },
+      "METHOD": {
+        "covered": 16,
+        "total": 16
+      },
+      "CLASS": {
+        "covered": 9,
+        "total": 9
       }
     },
     "CollaborationComments.kt": {
+      "INSTRUCTION": {
+        "covered": 522,
+        "total": 524
+      },
       "BRANCH": {
         "covered": 25,
         "total": 26
@@ -110,19 +215,51 @@
       "LINE": {
         "covered": 57,
         "total": 57
+      },
+      "COMPLEXITY": {
+        "covered": 19,
+        "total": 20
+      },
+      "METHOD": {
+        "covered": 7,
+        "total": 7
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
       }
     },
     "CollaborationDocuments.kt": {
+      "INSTRUCTION": {
+        "covered": 383,
+        "total": 383
+      },
       "BRANCH": {
         "covered": 14,
         "total": 14
       },
       "LINE": {
-        "covered": 31,
-        "total": 31
+        "covered": 36,
+        "total": 36
+      },
+      "COMPLEXITY": {
+        "covered": 13,
+        "total": 13
+      },
+      "METHOD": {
+        "covered": 6,
+        "total": 6
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
       }
     },
     "CollaborationPresence.kt": {
+      "INSTRUCTION": {
+        "covered": 526,
+        "total": 531
+      },
       "BRANCH": {
         "covered": 28,
         "total": 30
@@ -130,6 +267,18 @@
       "LINE": {
         "covered": 35,
         "total": 35
+      },
+      "COMPLEXITY": {
+        "covered": 21,
+        "total": 23
+      },
+      "METHOD": {
+        "covered": 8,
+        "total": 8
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
       }
     }
   },
@@ -199,7 +348,7 @@
     },
     {
       "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocket.kt",
-      "sha256": "bad89323ce67a15a0171062a47df72fc7abea8e144e50c0bcde9025f79d0e562"
+      "sha256": "f99ebd7e287af22fc0f4510995d52c27b25bf865fe8e7ec2b287204f191b1986"
     },
     {
       "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocketManager.kt",
@@ -214,20 +363,36 @@
       "sha256": "d962fdb71b5347126abbdeb501228e1b19cd9f35642e1a8eeae62537208744a6"
     },
     {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationCommentWriteContractTest.kt",
+      "sha256": "cc4e32a41a4ff50d01f277c63c194b00c6c4045b381ef406764daad459a367bf"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationDocumentOwnerRaceTest.kt",
+      "sha256": "0cd3984e2d7c8832b982c9e06457dc08fa7560b272543eb824cd87fbabff94b9"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationDocumentWriteContractTest.kt",
+      "sha256": "83993cce050ecb1f64f164b58db709a07af772573cba007ecb28d2e1c96dbc72"
+    },
+    {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationHttpMatrixTest.kt",
       "sha256": "f1a4e550db50141a9938fbd932d1a1c778ce96b2c47b08fd713be9ede00e9b52"
     },
     {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationIntegrationFixture.kt",
-      "sha256": "1a758b0c54b491d8300df4a3ff79bb2158abf08648101e6e8c25dfd1031893d8"
+      "sha256": "2b614ac73eec77865f7a509db16b481745c2a909145853f6cf651d0794681242"
     },
     {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationMembershipRaceTest.kt",
       "sha256": "d8ebb5c77e1082f8c33524f546d919292761a892b734eb48be44fe72e5d146ec"
     },
     {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSnapshotPersistenceTest.kt",
+      "sha256": "b0b544735f279ff7646ec347eb47e1588e21a8bfa44ff762c22dbd49552eb085"
+    },
+    {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketBoundaryTest.kt",
-      "sha256": "8e0dff2dfb0287cae5f183b808fe3b95b2e9270118f6808e1143d43d8665ac2c"
+      "sha256": "46312b5b9467735f0585343d3d9b29daa24212da7052ad894b8719264b8a6c99"
     },
     {
       "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationSocketFixture.kt",
@@ -259,11 +424,11 @@
     },
     {
       "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationComments.kt",
-      "sha256": "dd20571b35f26ea40f974d8000392f2ddfd9546c96d31f5d618d2e7ae013214a"
+      "sha256": "a1bf14a29c58feb0e2ba6e41481fa9d20babe9a6e124980e877ebd17f17a6675"
     },
     {
       "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationDocuments.kt",
-      "sha256": "b37a198aaae4f4ad41949252830d3ca27f8316a871d445972842a4230aa96768"
+      "sha256": "c15cba1c06c3d899e6e570a7e529af439896d2e813eeca22b7288952fdf0dcba"
     },
     {
       "path": "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationInputs.kt",
@@ -291,7 +456,7 @@
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationFaultContractTest.kt",
-      "sha256": "36852bf9d7aec91266c52dda314153a59222d48a6e629741b70213281c94909a"
+      "sha256": "eeae2ca6dca86c11435e4de65670d72d3266af722e08fc9ce675297167ffcb34"
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationOwnershipMatrixTest.kt",
@@ -303,11 +468,11 @@
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationReturnedStateTest.kt",
-      "sha256": "1cd8cc7bc30a067ddc248696672349d09039d4869980aaf56e350dc6ff5640a4"
+      "sha256": "14e4e13fcc586c770c603e92fbdff127633702a20ded54f78752d2667b58312c"
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationServiceFixture.kt",
-      "sha256": "b63b52033ee3a5fb63d122a98be7dead1286ce4e9c7eaa48cc7097969cb1a410"
+      "sha256": "9ce4cd613c36814608f233d701b2c23c0a1c02829636ca40c35f796fda6cbfcf"
     },
     {
       "path": "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationServiceTest.kt",
@@ -343,11 +508,11 @@
     },
     {
       "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationCommentsRepository.kt",
-      "sha256": "588ba64eacffd409bc9828cdcabb48fcb8c2c61e3dfaaba3592ba0328b67dc8b"
+      "sha256": "cee390a3926d92dc3e580bf4cb5412ccbe180c01dfa1af07cbd9d0a9fe06f7e0"
     },
     {
       "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationDocumentsRepository.kt",
-      "sha256": "4c135ed0917060269d804e89333b6fb515233b3a61a16cf25c7bc18804c17534"
+      "sha256": "cf81d714ec83a0df522f3f6f839fb8fe0a4e29e89c35c821529b5f13a30c30a5"
     },
     {
       "path": "backend/domain/collaboration/src/main/kotlin/com/vaultstadio/core/domain/repository/CollaborationParticipantsRepository.kt",
@@ -382,8 +547,16 @@
       "sha256": "a5c133a46d00eb1f2b1894b22a022afa77b2b0c3b102505754bf97d9e4e9a77f"
     },
     {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationCommentSql.kt",
+      "sha256": "aa893f08ad3e4419d16ee5cfb006ac8f1696e56102dcda5887f30e6aa5117d44"
+    },
+    {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationDatabase.kt",
       "sha256": "9284ee6e9a64866fe949c94146361cb799532a2697f7f00c2c508a9bc6495818"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationDocumentSnapshot.kt",
+      "sha256": "f7348a296dbdfaf4a3fe94a8ac297b76215fba969f5605a91ccd4f3f8203ad10"
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/CollaborationDocumentSql.kt",
@@ -395,11 +568,11 @@
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationComments.kt",
-      "sha256": "4ec6bfa0af7cc4e6f8d005dfe9b43e47af81d81fbff484fde4c199562e12c4ff"
+      "sha256": "e56e9a4595d942e7c3502b7da8e4edea9e5e31e8c4481b4a416815031bf9f14f"
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationDocuments.kt",
-      "sha256": "8d16edfd9680969e6c253162ffad855f5a7cfdc40878cf7955384f67d5ee6071"
+      "sha256": "ab9d9207a42ff5e2208d91914f3e41ea924dbe0ccf153b8930a74b05eb6a2534"
     },
     {
       "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedCollaborationMembershipRepository.kt",
@@ -427,7 +600,7 @@
     }
   ],
   "quality": {
-    "changedKotlinPaths": 67,
+    "changedKotlinPaths": 73,
     "detektMaxIssues": 0,
     "baselineUnchanged": true,
     "ktlintChangedSelectionPass": true,
@@ -439,10 +612,10 @@
     "liveSessionRebindingStatusAndState": 2
   },
   "packagedLoopback": {
-    "source": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+    "source": "b0c60a6c0fb9a8c13b502d49968468e136f3612a",
     "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
     "packageFilesVerified": 237,
-    "requestCount": 28,
+    "requestCount": 40,
     "nativeOwnerFrames": 9,
     "nativeForeignClose": 1008,
     "legacyForeignMembershipStillDenied": true,
@@ -455,19 +628,25 @@
     "canonicalBytesRemainOriginal": true,
     "coldStateAndSaveReturn404": true,
     "commentReplyIdentityVerified": true,
-    "harnessResponseAdapterRecovered": true,
-    "nativeOwnerTranscriptCapturedInPriorSuccessfulPhase": true,
-    "scope": "actual loopback packaged backend; explicit working-state seed; whole UI/bootstrapping/canonical edit/replay remain issue112"
+    "ownerResolveAndDeleteVerified": true,
+    "unknownTopLevelAndNestedSocketFieldsAccepted": true,
+    "ignoredSocketUserIdCannotForgeActor": true,
+    "harnessResponseContractRecovered": true,
+    "harnessCorrection": "resolve returns a message acknowledgment and delete204; direct SQL verifies resolution and reply/comment deletion. Original HTTP journal/native frames preserved and resumed without replaying the document operation.",
+    "scope": "Actual loopback packaged backend; explicit working-state seed. Whole UI/bootstrap/canonical editing/replay remain112."
   },
   "rawEvidence": {
-    "finalBackendArchive": "issue89-domain-isolation-final-reports.zip",
-    "finalBackendArchiveSha256": "603f584830a31cdba5682b04e27c9c5de8ed414315eb1387bc890d731f25d064",
+    "finalBackendArchive": "issue89-atomic-writes-reconciled-final-reports.zip",
+    "finalBackendArchiveSha256": "fdfb4520e413c6b97d83a306cbff3cd981aebdb3c3aa43c617689c3c5d997b7d",
     "initialJoinRed": "issue89-red-http-reports.zip",
     "sessionRebindingRed": "issue89-socket-rebinding-red.zip",
-    "nativeSocketFrames": "issue89-packaged-socket-owner.json",
-    "packagedResults": "issue89-packaged-dogfood-results.json"
+    "nativeSocketFrames": "issue89-atomic-packaged-socket-owner.json",
+    "packagedResults": "issue89-atomic-packaged-dogfood-results.json",
+    "snapshotRaceRed": "issue89-snapshot-race-red.zip",
+    "reviewBoundariesRed": "issue89-review-boundaries-red.zip",
+    "commentTransferRed": "issue89-comment-transfers-red.zip"
   },
-  "remoteCiReviewAdoption": "pending; exact final-head results must be recorded in linked PR before adoption",
+  "remoteCiReviewAdoption": "Final follow-up head pending; prior head5203all0 is historical. New exact-head CI/review/adoption required.",
   "remainingProductWork": [
     {
       "issue": 112,
@@ -498,6 +677,134 @@
     {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationAnonymousSocketTest",
       "case": "C89-WS anonymous native handshake returns 401 without registration or state effects()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"create-forged-author\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"delete-other-author\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"delete-wrong-parent\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"missing-comment\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"reply-forged-author\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"reply-rollback\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"reply-wrong-parent\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"resolve-wrong-parent\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"update-forged-author\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"update-other-author\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"update-own\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationCommentWriteContractTest",
+      "case": "C89-COMMENT-WRITE \"update-wrong-parent\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentOwnerRaceTest",
+      "case": "C89-WRITE-RACE \"apply\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentOwnerRaceTest",
+      "case": "C89-WRITE-RACE \"comment-create\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentOwnerRaceTest",
+      "case": "C89-WRITE-RACE \"comment-delete\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentOwnerRaceTest",
+      "case": "C89-WRITE-RACE \"comment-reply\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentOwnerRaceTest",
+      "case": "C89-WRITE-RACE \"comment-resolve\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentOwnerRaceTest",
+      "case": "C89-WRITE-RACE \"snapshot\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"blank-actor\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"exact\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"folder-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"forged-actor\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"missing-document\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"missing-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"new-owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"rollback\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"stale-content\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"stale-time\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"stale-version\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"trashed-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE \"wrong-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationDocumentWriteContractTest",
+      "case": "C89-WRITE simultaneous transformed writes cannot overwrite one another()"
     },
     {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationHttpMatrixTest",
@@ -1324,6 +1631,26 @@
       "case": "C89-RACE \"transferred-owner\""
     },
     {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSnapshotPersistenceTest",
+      "case": "C89-SNAPSHOT \"changed-current\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSnapshotPersistenceTest",
+      "case": "C89-SNAPSHOT \"deleted-current\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSnapshotPersistenceTest",
+      "case": "C89-SNAPSHOT \"exact-current\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSnapshotPersistenceTest",
+      "case": "C89-SNAPSHOT \"sql-failure\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSnapshotPersistenceTest",
+      "case": "C89-SNAPSHOT a stale save cannot replace a concurrently committed working state()"
+    },
+    {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
       "case": "C89-WS \"foreign-participant\""
     },
@@ -1366,6 +1693,10 @@
     {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
       "case": "C89-WS \"two-owner-connections\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketBoundaryTest",
+      "case": "C89-WS \"unknown-top-level-field\""
     },
     {
       "class": "com.vaultstadio.api.routes.collaboration.CollaborationSocketHandshakeTest",
@@ -2285,5 +2616,384 @@
     },
     "strictDomainQualityPass": true,
     "remoteNewHeadVerification": "pending; no synthetic passing assessment or control change"
-  }
+  },
+  "originalImplementationCommit": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+  "productionImplementationCommit": "b0c60a6c0fb9a8c13b502d49968468e136f3612a",
+  "followupContractCommits": [
+    "d0c9e945e6a5d5f9550635ea8599d14eddd8004b",
+    "84c0dbb83f810a190b0f88c6db366a83928c6d3f",
+    "6df1d51b32bb97d22168d9d610e9b7542c381cb7"
+  ],
+  "wholeBackendAggregate": {
+    "INSTRUCTION": {
+      "covered": 63215,
+      "total": 151424
+    },
+    "BRANCH": {
+      "covered": 1555,
+      "total": 5712
+    },
+    "LINE": {
+      "covered": 8042,
+      "total": 16414
+    },
+    "COMPLEXITY": {
+      "covered": 3615,
+      "total": 8961
+    },
+    "METHOD": {
+      "covered": 3126,
+      "total": 5863
+    },
+    "CLASS": {
+      "covered": 789,
+      "total": 1575
+    }
+  },
+  "changedInfrastructureAggregateBySource": {
+    "CollaborationCommentSql.kt": {
+      "INSTRUCTION": {
+        "covered": 180,
+        "total": 180
+      },
+      "BRANCH": {
+        "covered": 3,
+        "total": 4
+      },
+      "LINE": {
+        "covered": 20,
+        "total": 20
+      },
+      "COMPLEXITY": {
+        "covered": 7,
+        "total": 8
+      },
+      "METHOD": {
+        "covered": 6,
+        "total": 6
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
+      }
+    },
+    "CollaborationDocumentSql.kt": {
+      "INSTRUCTION": {
+        "covered": 198,
+        "total": 229
+      },
+      "BRANCH": {
+        "covered": 7,
+        "total": 16
+      },
+      "LINE": {
+        "covered": 32,
+        "total": 37
+      },
+      "COMPLEXITY": {
+        "covered": 7,
+        "total": 14
+      },
+      "METHOD": {
+        "covered": 6,
+        "total": 6
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
+      }
+    },
+    "ExposedCollaborationScopeRepository.kt": {
+      "INSTRUCTION": {
+        "covered": 177,
+        "total": 184
+      },
+      "BRANCH": {
+        "covered": 8,
+        "total": 10
+      },
+      "LINE": {
+        "covered": 24,
+        "total": 24
+      },
+      "COMPLEXITY": {
+        "covered": 15,
+        "total": 17
+      },
+      "METHOD": {
+        "covered": 12,
+        "total": 12
+      },
+      "CLASS": {
+        "covered": 3,
+        "total": 3
+      }
+    },
+    "CollaborationDatabase.kt": {
+      "INSTRUCTION": {
+        "covered": 58,
+        "total": 67
+      },
+      "LINE": {
+        "covered": 9,
+        "total": 10
+      },
+      "COMPLEXITY": {
+        "covered": 3,
+        "total": 3
+      },
+      "METHOD": {
+        "covered": 3,
+        "total": 3
+      },
+      "CLASS": {
+        "covered": 2,
+        "total": 2
+      }
+    },
+    "ExposedCollaborationMembershipRepository.kt": {
+      "INSTRUCTION": {
+        "covered": 556,
+        "total": 646
+      },
+      "BRANCH": {
+        "covered": 23,
+        "total": 38
+      },
+      "LINE": {
+        "covered": 67,
+        "total": 69
+      },
+      "COMPLEXITY": {
+        "covered": 26,
+        "total": 41
+      },
+      "METHOD": {
+        "covered": 22,
+        "total": 22
+      },
+      "CLASS": {
+        "covered": 9,
+        "total": 9
+      }
+    },
+    "CollaborationDocumentSnapshot.kt": {
+      "INSTRUCTION": {
+        "covered": 70,
+        "total": 70
+      },
+      "BRANCH": {
+        "covered": 9,
+        "total": 10
+      },
+      "LINE": {
+        "covered": 8,
+        "total": 8
+      },
+      "COMPLEXITY": {
+        "covered": 6,
+        "total": 7
+      },
+      "METHOD": {
+        "covered": 2,
+        "total": 2
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
+      }
+    },
+    "ExposedCollaborationRepository.kt": {
+      "INSTRUCTION": {
+        "covered": 28,
+        "total": 28
+      },
+      "LINE": {
+        "covered": 6,
+        "total": 6
+      },
+      "COMPLEXITY": {
+        "covered": 1,
+        "total": 1
+      },
+      "METHOD": {
+        "covered": 1,
+        "total": 1
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
+      }
+    },
+    "ExposedCollaborationDocuments.kt": {
+      "INSTRUCTION": {
+        "covered": 347,
+        "total": 402
+      },
+      "BRANCH": {
+        "covered": 10,
+        "total": 18
+      },
+      "LINE": {
+        "covered": 48,
+        "total": 50
+      },
+      "COMPLEXITY": {
+        "covered": 21,
+        "total": 30
+      },
+      "METHOD": {
+        "covered": 19,
+        "total": 21
+      },
+      "CLASS": {
+        "covered": 11,
+        "total": 12
+      }
+    },
+    "CollaborationMembershipSql.kt": {
+      "INSTRUCTION": {
+        "covered": 579,
+        "total": 603
+      },
+      "BRANCH": {
+        "covered": 42,
+        "total": 52
+      },
+      "LINE": {
+        "covered": 58,
+        "total": 59
+      },
+      "COMPLEXITY": {
+        "covered": 32,
+        "total": 42
+      },
+      "METHOD": {
+        "covered": 16,
+        "total": 16
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 1
+      }
+    },
+    "ExposedCollaborationSessions.kt": {
+      "INSTRUCTION": {
+        "covered": 326,
+        "total": 1109
+      },
+      "BRANCH": {
+        "covered": 6,
+        "total": 60
+      },
+      "LINE": {
+        "covered": 41,
+        "total": 122
+      },
+      "COMPLEXITY": {
+        "covered": 18,
+        "total": 82
+      },
+      "METHOD": {
+        "covered": 18,
+        "total": 52
+      },
+      "CLASS": {
+        "covered": 9,
+        "total": 23
+      }
+    },
+    "ExposedCollaborationComments.kt": {
+      "INSTRUCTION": {
+        "covered": 500,
+        "total": 539
+      },
+      "BRANCH": {
+        "covered": 16,
+        "total": 22
+      },
+      "LINE": {
+        "covered": 62,
+        "total": 64
+      },
+      "COMPLEXITY": {
+        "covered": 36,
+        "total": 43
+      },
+      "METHOD": {
+        "covered": 30,
+        "total": 32
+      },
+      "CLASS": {
+        "covered": 7,
+        "total": 8
+      }
+    },
+    "ExposedCollaborationPresence.kt": {
+      "INSTRUCTION": {
+        "covered": 3,
+        "total": 441
+      },
+      "BRANCH": {
+        "covered": 0,
+        "total": 16
+      },
+      "LINE": {
+        "covered": 1,
+        "total": 52
+      },
+      "COMPLEXITY": {
+        "covered": 1,
+        "total": 35
+      },
+      "METHOD": {
+        "covered": 1,
+        "total": 27
+      },
+      "CLASS": {
+        "covered": 1,
+        "total": 12
+      }
+    }
+  },
+  "followupActualRedCases": {
+    "lostSnapshotRace": 1,
+    "staleDocumentAuthority": 2,
+    "unknownSocketExtension": 1,
+    "staleCommentAuthority": 4
+  },
+  "previousPackagedLoopback": {
+    "source": "7bb140e0f6006a3ffd2885557f816943f788f5c9",
+    "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
+    "packageFilesVerified": 237,
+    "requestCount": 28,
+    "nativeOwnerFrames": 9,
+    "nativeForeignClose": 1008,
+    "legacyForeignMembershipStillDenied": true,
+    "deniedDatabaseStateUnchanged": true,
+    "existingStorageAndPluginBytesUnchanged": true,
+    "postgresAndFrontendContainersUnchanged": true,
+    "twoOwnerDevicesAndStaleDisconnectVerified": true,
+    "workingStateSeedExplicit": true,
+    "workingStateEditedAndSnapshotPersisted": true,
+    "canonicalBytesRemainOriginal": true,
+    "coldStateAndSaveReturn404": true,
+    "commentReplyIdentityVerified": true,
+    "harnessResponseAdapterRecovered": true,
+    "nativeOwnerTranscriptCapturedInPriorSuccessfulPhase": true,
+    "scope": "actual loopback packaged backend; explicit working-state seed; whole UI/bootstrapping/canonical edit/replay remain issue112"
+  },
+  "priorRemoteTechnicalCi": {
+    "head": "c07383b5dd8ffe6343ae94dc75cb8519bcf4083d",
+    "run": 40438483823,
+    "backend": 2697,
+    "desktop": 1315,
+    "browser": 1191,
+    "total": 5203,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "doesNotCertifyCurrentHead": true
+  },
+  "packagedProductionSourcesIdenticalToVerifiedRevision": true
 }

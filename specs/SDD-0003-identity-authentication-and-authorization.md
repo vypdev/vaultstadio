@@ -264,4 +264,4 @@ Inventory identity flows -> define auth matrix -> reconcile config/security docs
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
-R01c evidence: [collaboration verification](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md),442 new cases within the2697-case backend gate. Socket authorization also binds the expected item of an open connection. The client/editor journey remains#112; final-head CI/review/adoption are separate.
+R01c evidence: [collaboration verification](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md),480 new cases within the2735-case backend gate. Socket authorization also binds the expected item of an open connection. The client/editor journey remains#112; final-head CI/review/adoption are separate.
