@@ -22,6 +22,12 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
     sourceSets {
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
         val commonMain by getting {
             kotlin.srcDirs("src/main")
             dependencies {

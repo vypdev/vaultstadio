@@ -169,23 +169,32 @@ internal class FilesLoader(
         var parentId: String? = null
         var lastName: String? = null
         for (segment in segments) {
-            val result = getFolderItemsUseCase(
-                folderId = parentId,
-                sortBy = sortField,
-                sortOrder = sortOrder,
-                limit = folderPageSize,
-                offset = 0,
-            )
-            when (result) {
-                is Result.Success -> {
-                    val folder = result.data.items.find { it.name == segment && it.isFolder }
-                        ?: return parentId to lastName
-                    parentId = folder.id
-                    lastName = segment
-                }
-                else -> return parentId to lastName
-            }
+            val folder = findFolderOnAnyPage(segment, parentId, sortField, sortOrder)
+                ?: return parentId to lastName
+            parentId = folder.id
+            lastName = segment
         }
         return parentId to lastName
     }
+
+    private suspend fun findFolderOnAnyPage(
+        name: String,
+        parentId: String?,
+        sort: SortField,
+        order: SortOrder,
+    ): StorageItem? {
+        var offset = 0
+        val visited = mutableSetOf<String>()
+        while (true) {
+            val result = getFolderItemsUseCase(parentId, sort, order, folderPageSize, offset)
+            if (result !is Result.Success) return null
+            val page = result.data
+            page.items.find { it.name == name && it.isFolder }?.let { return it }
+            if (!page.hasMore || page.items.isEmpty() || !visited.addAll(page.items.map { it.id })) return null
+            val next = offset.toLong() + page.items.size
+            if (next > Int.MAX_VALUE) return null
+            offset = next.toInt()
+        }
+    }
+
 }
