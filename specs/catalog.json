@@ -229,7 +229,8 @@
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
         "docs/development/verification/COLLABORATION_AUTHORIZATION_89.md",
-        "docs/development/verification/collaboration-authorization-89.json"
+        "docs/development/verification/collaboration-authorization-89.json",
+        "docs/development/verification/collaboration-authorization-89-cases.json"
       ],
       "openDecisions": "R01c candidate locally verified; final-head CI/review/adoption pending. Whole R14 remains incomplete: issue112 owns client/server protocol, cold bootstrap, canonical saves, replay and durable grants."
     },
