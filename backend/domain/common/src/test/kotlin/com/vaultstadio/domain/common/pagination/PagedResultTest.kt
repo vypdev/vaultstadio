@@ -20,8 +20,8 @@ class PagedResultTest {
             limit = 2,
         )
         assertTrue(result.hasMore)
-        assertEquals(5, result.totalPages)
-        assertEquals(1, result.currentPage)
+        assertEquals(5L, result.totalPages)
+        assertEquals(1L, result.currentPage)
     }
 
     @Test
@@ -33,8 +33,8 @@ class PagedResultTest {
             limit = 2,
         )
         assertFalse(result.hasMore)
-        assertEquals(2, result.totalPages)
-        assertEquals(2, result.currentPage)
+        assertEquals(2L, result.totalPages)
+        assertEquals(2L, result.currentPage)
     }
 
     @Test
@@ -45,8 +45,8 @@ class PagedResultTest {
             offset = 0,
             limit = 0,
         )
-        assertEquals(0, result.totalPages)
-        assertEquals(1, result.currentPage)
+        assertEquals(0L, result.totalPages)
+        assertEquals(1L, result.currentPage)
     }
 
     @Test
@@ -58,7 +58,7 @@ class PagedResultTest {
             limit = 10,
         )
         assertFalse(result.hasMore)
-        assertEquals(1, result.totalPages)
-        assertEquals(1, result.currentPage)
+        assertEquals(1L, result.totalPages)
+        assertEquals(1L, result.currentPage)
     }
 }
