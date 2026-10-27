@@ -53,12 +53,8 @@ class CollaborationDocumentWriteContractTest {
         val expected = f.repository.getDocumentState(f.item.id).fold({ throw it }, { checkNotNull(it) })
         arrange(case, expected)
         val before = f.snapshot()
-        val target = if (case == "missing-item") "absent" else f.item.id
-        val actor = if (case == "blank-actor") " " else f.storage.alice.id
-        val operation = operation().let { if (case == "forged-actor") it.copy(userId = f.storage.bob.id) else it }
-        val bound = if (case == "wrong-item" || case == "missing-item") expected.copy(itemId = "absent") else expected
         val result = try {
-            f.repository.applyOperation(target, operation, actor, bound)
+            applyScenario(case, expected)
         } finally {
             if (case ==
                 "rollback"
@@ -67,6 +63,14 @@ class CollaborationDocumentWriteContractTest {
             }
         }
         assertOutcome(case, before, result)
+    }
+
+    private suspend fun applyScenario(case: String, expected: DocumentState): Either<*, *> {
+        val target = if (case == "missing-item") "absent" else f.item.id
+        val actor = if (case == "blank-actor") " " else f.storage.alice.id
+        val operation = operation().let { if (case == "forged-actor") it.copy(userId = f.storage.bob.id) else it }
+        val bound = if (case == "wrong-item" || case == "missing-item") expected.copy(itemId = "absent") else expected
+        return f.repository.applyOperation(target, operation, actor, bound)
     }
 
     private fun assertOutcome(case: String, before: List<Any>, result: Either<*, *>) {
