@@ -122,7 +122,16 @@ Text equivalent: File changes -> metadata is extracted/indexed -> user searches 
 
 ### 6.4 Storage selection validation — issue #91
 
-Apply the same bounded input contract to basic GET/POST, advanced POST, metadata and suggestions before query/plugin/metadata effects, including short-prefix suggestions. Folder/basic-search totals stay bound to their actual selected dataset. Metadata results remain a bounded authorized projection with one-based page metadata. Advanced post-page filters/full-text fallback/global filtered counts and filename matching are not certified by this validation repair and remain#82; no provider readiness claim changes. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
+Apply the same bounded input contract to basic GET/POST, advanced POST, metadata and suggestions before query/plugin/metadata effects, including short-prefix suggestions. Folder/basic-search totals stay bound to their actual selected dataset. Metadata results remain a bounded authorized projection with one-based page metadata. Advanced post-page filters/full-text fallback/global filtered counts and filename matching are not certified by this validation repair and remain#82/#115; no provider readiness claim changes. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
+
+### 6.5 Truthful unavailable and failure outcomes — issue #91
+
+The pre-code boundary clarification in SDD-0002§6.5.1 rejects invalid provided dates before
+selection and reports unavailable inline content search as501/CONTENT_SEARCH_UNAVAILABLE
+without selecting filename fallback. Metadata resolution filters explicit forbidden/missing
+items, while typed provider failures remain failures. Issue#115 owns the remaining complete
+advanced filtering/count/provider integration;#82 owns literal filename/prefix matching.
+These bounded error outcomes are not a claim that full-text search is implemented.
 
 ## 7. User-facing configuration
 

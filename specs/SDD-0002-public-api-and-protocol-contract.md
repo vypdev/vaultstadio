@@ -147,7 +147,7 @@ Folder/basic-search totals describe the complete selected owned dataset before p
 by-metadata endpoint remains a bounded authorized projection, not a global authorized count; its
 returned projection uses one-based page1 and totalPages0/1 consistently. Advanced post-page filters,
 filename matching, full-text fallback and global filtered counts remain the separate search work
-in#82/SDD-0012; this input repair must not falsely certify those journeys or mask their failures.
+in#82/#115/SDD-0012; this input repair must not falsely certify those journeys or mask their failures.
 
 Risk floor: **160 genuinely new backend cases plus8 shared KMP client cases**, excluding migrated
 or expectation-only updates:40 pure policy/request parser,24 service/call-order/failure,72 actual
@@ -166,6 +166,23 @@ numeric text is not exposed by the UI. Preserve raw failures, exact source/comma
 denominators, original SDD drafts, current data and runnable rollback. Complete strict changed-source
 lint, existing coverage gates, architecture/catalog/secret checks, full CI and Copilot review; do not
 weaken them, add heavy workflow frequency, enable setup prematurely or promote master.
+
+### 6.5.1 Pre-code boundary clarification from production reproduction
+
+The current package returns200 with a warning map for advanced content search, even with
+limit-1, before continuing into a storage selection. Issue#115 now owns the missing complete
+advanced filter/count/content-search journey;#82 remains filename/prefix matching only.
+Before repairing this boundary, require numeric and provided-date validation before effects.
+Invalid ISO timestamps return bounded400/VALIDATION_ERROR with original cause retained privately.
+The inline content-search implementation is unavailable: a valid searchContent=true request
+returns501/CONTENT_SEARCH_UNAVAILABLE once, with no plugin/storage selection or implicit filename
+fallback. Actual provider integration remains#115, not certified by the unavailable response.
+
+Metadata projection excludes only explicit forbidden/missing canonical items. A database or
+other provider failure while resolving a metadata item must propagate with its typed identity,
+not become a successful smaller/empty result. Add actual HTTP controls for date invalidity,
+unavailable content search, owned/foreign/missing metadata and downstream database failure.
+This clarification precedes its code; it does not implement filename matching or global filters.
 
 ## 7. User-facing configuration
 
