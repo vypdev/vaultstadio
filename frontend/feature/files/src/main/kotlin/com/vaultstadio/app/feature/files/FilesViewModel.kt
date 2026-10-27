@@ -197,11 +197,18 @@ class FilesViewModel(
         loadItems()
     }
 
-    private fun loadContext() = FilesLoadContext(displayedMode, currentFolderId, currentFolderName, sortField, sortOrder)
+    private fun loadContext() = FilesLoadContext(
+        displayedMode,
+        currentFolderId,
+        currentFolderName,
+        sortField,
+        sortOrder,
+    )
 
     private fun loadItems(preserveError: Boolean = false) {
         val context = loadContext()
-        requests.load(context,
+        requests.load(
+            context,
             started = {
                 listLoading = true
                 isLoadingMore = false
@@ -225,7 +232,9 @@ class FilesViewModel(
 
     fun loadMoreFolderItems() {
         if (displayedMode != FilesMode.ALL || !folderHasMore || isLoading || isLoadingMore) return
-        requests.more(loadContext(), items.size,
+        requests.more(
+            loadContext(),
+            items.size,
             started = { isLoadingMore = true },
             completed = { result ->
                 when (result) {

@@ -196,5 +196,4 @@ internal class FilesLoader(
             offset = next.toInt()
         }
     }
-
 }

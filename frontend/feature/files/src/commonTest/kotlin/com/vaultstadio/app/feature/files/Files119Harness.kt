@@ -1,4 +1,5 @@
 @file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.vaultstadio.app.feature.files
 
 import androidx.lifecycle.viewModelScope
@@ -28,7 +29,9 @@ internal class Files119Harness {
 internal fun files119Test(block: suspend TestScope.(Files119Harness) -> Unit) = runTest {
     Dispatchers.setMain(StandardTestDispatcher(testScheduler))
     val fixture = Files119Harness()
-    try { block(fixture) } finally {
+    try {
+        block(fixture)
+    } finally {
         fixture.models.forEach { it.viewModelScope.cancel() }
         runCurrent()
         Dispatchers.resetMain()

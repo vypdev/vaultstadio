@@ -12,7 +12,11 @@ internal fun files119Item(id: String = "file119", type: ItemType = ItemType.FILE
     mimeType = "text/plain", visibility = Visibility.PRIVATE, isStarred = false, isTrashed = false,
     createdAt = files119Time, updatedAt = files119Time,
 )
-internal fun files119Page(items: List<StorageItem> = listOf(files119Item()), total: Long = items.size.toLong(), hasMore: Boolean = false) =
+internal fun files119Page(
+    items: List<StorageItem> = listOf(files119Item()),
+    total: Long = items.size.toLong(),
+    hasMore: Boolean = false,
+) =
     PaginatedResponse(items, total, 1, 50, if (hasMore) 2 else 1, hasMore)
 
 internal class Files119Preferences : FilesViewPreferences {
@@ -21,9 +25,18 @@ internal class Files119Preferences : FilesViewPreferences {
     var order: String? = null
     val writes = mutableListOf<Pair<String, String>>()
     override fun getViewMode() = view
-    override fun setViewMode(value: String) { view = value; writes += "view" to value }
+    override fun setViewMode(value: String) {
+        view = value
+        writes += "view" to value
+    }
     override fun getSortField() = field
-    override fun setSortField(value: String) { field = value; writes += "field" to value }
+    override fun setSortField(value: String) {
+        field = value
+        writes += "field" to value
+    }
     override fun getSortOrder() = order
-    override fun setSortOrder(value: String) { order = value; writes += "order" to value }
+    override fun setSortOrder(value: String) {
+        order = value
+        writes += "order" to value
+    }
 }

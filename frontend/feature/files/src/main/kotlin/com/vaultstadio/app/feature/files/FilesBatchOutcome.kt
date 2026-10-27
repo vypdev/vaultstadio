@@ -8,12 +8,18 @@ internal data class FilesBatchOutcome(val remaining: Set<String>, val error: Str
 internal fun BatchResult.forSelection(requested: Set<String>): FilesBatchOutcome {
     if (failed == 0 && successful == requested.size) return FilesBatchOutcome(emptySet(), null)
     val failedIds = errors.map { it.itemId }.toSet()
-    val completeFailures = failed > 0 && successful >= 0 &&
+    val completeFailures = failed > 0 &&
+        successful >= 0 &&
         successful.toLong() + failed.toLong() == requested.size.toLong() &&
-        failedIds.size == failed && errors.size == failed && failedIds.all { it in requested }
+        failedIds.size == failed &&
+        errors.size == failed &&
+        failedIds.all { it in requested }
     val retained = if (completeFailures) failedIds else requested
     val details = errors.map { it.error }.filter { it.isNotBlank() }.distinct().joinToString("; ")
-    val message = if (completeFailures) details.ifBlank { "$failed items could not be processed" }
-        else "Some results could not be confirmed. Inspect the selection before retrying."
+    val message = if (completeFailures) {
+        details.ifBlank { "$failed items could not be processed" }
+    } else {
+        "Some results could not be confirmed. Inspect the selection before retrying."
+    }
     return FilesBatchOutcome(retained, message)
 }

@@ -32,7 +32,13 @@ internal class FilesLoadingCoordinator(private val scope: CoroutineScope, privat
         loadJob = scope.launch {
             started()
             try {
-                val result = loader.loadItemsForMode(context.mode, context.folderId, context.sort, context.order, context.folderName)
+                val result = loader.loadItemsForMode(
+                    context.mode,
+                    context.folderId,
+                    context.sort,
+                    context.order,
+                    context.folderName,
+                )
                 if (identity == revision) completed(result)
             } finally {
                 if (identity == revision) finished()
