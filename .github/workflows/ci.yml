@@ -282,6 +282,8 @@ jobs:
           package-manager-cache: false
       - name: Test anonymous public share page
         run: node --test scripts/tests/public-share.test.mjs
+      - name: Test public share proxy privacy and origin
+        run: python3 -m unittest discover -s scripts/tests -p 'test_share_proxy.py' -v
       - name: Install workflow parser
         run: python3 -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
       - name: Verify source and workflow contracts
