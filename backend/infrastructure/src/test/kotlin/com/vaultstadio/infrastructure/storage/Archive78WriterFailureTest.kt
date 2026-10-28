@@ -68,7 +68,12 @@ class Archive78WriterFailureTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["../outside", "folder/../outside", "folder\\escape"])
+    @ValueSource(
+        strings = [
+            "../outside", "folder/../outside", "folder\\escape",
+            "C:", "C:/escape", "C:relative", "safe/C:/nested",
+        ],
+    )
     fun `unsafe extraction paths cannot reach a stream`(name: String) = runBlocking {
         val result = BoundedZipArchiveWriter().write(listOf(archive78Entry(name))) { error("No content") }
         assertEquals(400, (result as Either.Left).value.httpStatus)

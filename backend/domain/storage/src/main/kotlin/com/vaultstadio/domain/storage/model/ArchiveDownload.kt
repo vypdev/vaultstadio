@@ -20,4 +20,4 @@ fun isSafeArchiveSegment(name: String): Boolean =
         name.length <= 255 &&
         name != "." &&
         name != ".." &&
-        name.none { it == '/' || it == '\\' || it.code < 32 || it.code == 127 }
+        name.none { it == '/' || it == '\\' || it == ':' || it.code < 32 || it.code == 127 }
