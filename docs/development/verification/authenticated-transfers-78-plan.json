@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "issue": 78,
   "baseline": "15574b973688b06715cb263c518a3b6eaa599617",
-  "phase": "executed; local verification and rendered evidence; final-ref CI and maintainer merge remain separate",
+  "phase": "post-review portable ZIP path refinement pending; earlier complete 6355 execution and GUI evidence retained",
   "sdds": [
     "specs/SDD-0002-public-api-and-protocol-contract.md",
     "specs/SDD-0005-upload-and-transfer-protocols.md",
@@ -679,7 +679,7 @@
     {
       "id": "TRANS78-ARCH-07",
       "risk": "Unsafe segments and duplicate ZIP paths rejected",
-      "status": "verified",
+      "status": "verification-refinement-pending",
       "evidence": [
         {
           "kind": "behavioral-test",
@@ -697,7 +697,8 @@
             "unsafe extraction paths cannot reach a stream"
           ]
         }
-      ]
+      ],
+      "reviewRefinement": "Reject colon-containing portable archive segments, including root/nested drive-absolute/relative names; reproduce across domain, real ZIP writer and actual HTTP before repair."
     },
     {
       "id": "TRANS78-ARCH-08",

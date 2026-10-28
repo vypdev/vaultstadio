@@ -208,6 +208,14 @@ re-authorized when its content is opened; a changed size/provider failure aborts
 Archive policy is owned by an application use case; ZIP encoding/resource ownership is a port
 adapter, not a large route. No foreign data or source mutation is permitted on rejection.
 
+Post-review clarification before its repair (2026-10-28): archive names are portable extraction
+segments. Reject any colon-containing segment, including drive-absolute (`C:` as a folder) and
+drive-relative (`C:payload.bin`) syntax, at complete selection preflight and at the ZIP writer
+boundary. Storage creation may retain its existing names; an unsupported archive selection
+returns a safe400 without attachment bytes or source mutation. Add at least four real HTTP
+regressions for root/nested files and folders, direct writer refusal before stream opening,
+and positive Unicode segment controls. No Windows extractor or hardware execution is claimed.
+
 The first restored in-memory client supports at most32MiB per received file/archive. The archive
 server permits at most256 entries,16 folder levels and24MiB aggregate declared/actual file bytes,
 with a32MiB encoded-output bound. Enforce real read lengths, not only declared metadata or headers.
