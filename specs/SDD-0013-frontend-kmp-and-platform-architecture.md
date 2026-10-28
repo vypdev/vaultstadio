@@ -298,6 +298,12 @@ query restoration, focused editing after dismissal, stale-listener cleanup, meas
 layout at different font scales, inline feedback geometry and actual menu operation.
 Retain the original overlap screenshot and separately verify the corrected package.
 
+### 6.8.1 Review refinement: file-picker failure language — issue #121
+
+Pre-code review refinement (2026-10-28), FOLDER121-COPY: preserve the originating upload action through safe problem delivery. Ordinary-file and large-file picker failures MUST use file-selection language. Unsupported file selection MUST NOT claim missing directory support; file preparation limits MUST NOT advertise the separate32MiB/256-entry/16-level folder contract. Read failures identify selected files, confirm that no selection was added and permit explicit selection again. Folder operations retain their existing localized capability/path/budget/read messages. Raw provider diagnostics are never presented; cancellation and current-action cleanup retain their existing behavior.
+
+Keep the action-aware presentation mapping pure and separate from picker/platform I/O. Maintain all seven locales. Add at least8 meaningful deterministic routing/copy cases, including ordinary/large read failure, ordinary/large capability refusal, ordinary/large non-folder bounds, unchanged folder mapping and maintained-language coverage. Preserve original assertion-red and green evidence, then repeat complete canonical suites, coverage, gates and lint on the resulting source. Previously verified native positive/cancel journeys keep their actual package/source identity; this refinement does not relabel old observations as a new build.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.

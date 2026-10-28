@@ -7,8 +7,8 @@
   ],
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
-  "status": "68risk-families traced to passing tests;9bounded rendered journeys including physicalChromeOSselection/cancel;final-refCI/review/adoption pending",
-  "minimumDeterministicRisks": 68,
+  "status": "68 risk families previously passed;8 action-aware failure-copy refinements planned;9 bounded GUI journeys retain their recorded sources;final-ref verification pending",
+  "minimumDeterministicRisks": 76,
   "minimumRealJourneys": 9,
   "bounds": {
     "aggregateBytes": 33554432,
@@ -1712,6 +1712,54 @@
         "FOLDER121-GUI-09"
       ],
       "scope": "Deterministic component behavior plus separately observed production layout/menu; component tests alone do not certify FilesContent layout."
+    },
+    {
+      "id": "FOLDER121-COPY-01",
+      "risk": "Ordinary read failure identifies files and explicit reselection",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-02",
+      "risk": "Large-file picker read failure identifies files and explicit reselection",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-03",
+      "risk": "Ordinary capability refusal does not describe directory support",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-04",
+      "risk": "Large-file capability refusal does not describe directory support",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-05",
+      "risk": "Ordinary preparation problems do not advertise folder-specific bounds",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-06",
+      "risk": "Large-file preparation problems do not advertise folder-specific bounds",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-07",
+      "risk": "Folder problems preserve their own existing localized messages",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-COPY-08",
+      "risk": "File-picker failure messages cover all seven maintained languages",
+      "status": "planned",
+      "evidence": []
     }
   ],
   "realJourneys": [
@@ -1802,5 +1850,13 @@
   },
   "testSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
   "result": "folder-selection-121.json",
-  "scopeCaveat": "Initial on-disk selections use the browser FileChooser API in the actual production application. Additional physical Chrome macOS Open-panel directory selection, three-file confirmation and native Escape cancellation are observed separately. Original API-only observations retain their actual sources/mechanisms."
+  "scopeCaveat": "Initial on-disk selections use the browser FileChooser API in the actual production application. Additional physical Chrome macOS Open-panel directory selection, three-file confirmation and native Escape cancellation are observed separately. Original API-only observations retain their actual sources/mechanisms.",
+  "reviewRefinement": {
+    "analyzedHead": "a23287cfa84b8db5845023e736eb304cdd41b7f7",
+    "findingComments": [
+      4403525474,
+      4403525480
+    ],
+    "clarification": "Existing READ_FAILED text is generic content; action-aware routing additionally fixes genuine directory-capability/limit coupling and makes file recovery explicit. Label the exercised native platform Chrome/macOS."
+  }
 }
