@@ -206,6 +206,46 @@ BaseApi's reified wrappers supply serialization information while one shared exe
 
 A shared data-network cancellation classifier owns caller-context and wrapped-cause handling for BaseApi and every manual multipart/binary StorageApi adapter. The shared policy must be executable on JVM and Wasm and preserve Ktor transport deadlines as network errors. Controlled incoming-body cancellation tests must cover all four manual adapters, rather than only engine request entry. The production engine, domain ports and public response schemas remain unchanged.
 
+### 6.7 Focused authenticated downloads — issue #78
+
+Pre-code contract on Action branch #78 (baseline `15574b9`). Details, grid menu, list menu and
+selection-ZIP controls MUST dispatch the same focused download operation, not compute an unused
+URL. Folders dispatch their bounded recursive archive. Keep FilesContent/FilesViewModel from
+growing: application/feature state owns ordering, busy/error/cancel/retry; domain owns neutral
+transfer/save ports and bounds; data owns Ktor/bytes/auth; composition owns browser/AWT/filesystem.
+No Ktor, browser, AWT, file or DI policy is added to domain decisions. Existing default engines,
+normal login and current session token lookup remain in use; no seeded authentication backdoor.
+
+Success preserves valid original Unicode names and bytes, including empty content. Reject unsafe
+or ambiguous save/archive path names instead of interpreting them as local paths. Credential-free
+URL helpers cannot contain tokens or duplicate the configured API prefix; authenticated downloads
+use the header-bearing data operation exclusively. Show localized bounded impact/recovery text,
+not raw provider exceptions, private paths, content or session identifiers. The operation must
+retain a recoverable terminal outcome and release busy state after failure/cancel; screen/session
+disposal cancels owned work before later bytes can reach a save callback.
+
+Web uses a binary Blob/object URL rather than a base64 data URL or external navigation, removing
+owned anchors and revoking URLs/timers after handoff, failure and disposal with a bounded grace
+period. Desktop uses a real native save chooser with explicit saved/canceled/failure outcomes and
+atomic owned-file cleanup. Existing Android/iOS placeholders must not claim success: unsupported
+saving returns an explicit capability outcome; no device readiness is inferred. The existing
+profile-export callback remains compatible with the platform boundary.
+
+Use actual production callbacks/component tests and a normal-login production package for the
+browser binary/UTF-8/empty upload-download and ZIP byte/hash journeys. Native chooser acceptance
+requires real interaction on this machine as well as deterministic filesystem tests. Preserve the
+current dataset, both detached SDD drafts, existing package and runnable rollback before installing
+a candidate. See SDD-0002 section6.6, SDD-0005 section6.4 and the identified transfer plan. The wider
+preview/search/origin/mobile portfolio remains separately tracked; this does not certify it.
+
+Post-review CI harness clarification before configuration repair (2026-10-28): the storage-data
+Wasm suite must allow its existing coroutine contracts a finite60-second outer Mocha budget,
+using the repository's module-local Karma snippet mechanism. The exact32MiB binary-boundary
+assertion remains unchanged and is not a two-second latency benchmark. Existing explicit
+transport-deadline/cancellation assertions remain authoritative; do not reduce the payload,
+skip the case or disable browser deadlines to recover a green run. This only changes the
+storage test harness, not production request timeouts or the supported resource bounds.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
@@ -308,6 +348,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
 For #76, executed evidence is recorded in [frontend startup verification](../docs/development/verification/FRONTEND_STARTUP_76.md) and its companion JSON: BOOT-SER-01/02 → 15 production-factory cases on JVM and Wasm; BOOT-HTTP-01 → 4 actual Nginx checks plus built-artifact browser load; BOOT-PKG-01 → generated and launched macOS distributable. BOOT-UI-01 is verified for the exercised local startup/login path: browser login, folder navigation and upload passed; the maintainer entered the disposable desktop credentials, then the assistant submitted and verified native HTTP 200, My Files and folder/file navigation. Autonomous text entry is separately unresolved under #80. BOOT-ISO-01 → dedicated browser origin, disposable backend volumes/account and confirmed in-memory desktop preferences. These results do not certify other platforms or complete feature readiness.
+
+Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `ae5f22a` passed 6,386 product executions including review/CI refinements and all 22 archive path-policy branches; real Web/macOS observations retain their actual client/server sources. Earlier 6,355 acceptance and independent failures remain historical evidence. Transfer bounds, Web directory selection (#121), Web origin (#116), mobile hardware and final-ref CI/review/adoption retain separate acceptance.
 
 ## 18. Implementation or maintenance sequence
 

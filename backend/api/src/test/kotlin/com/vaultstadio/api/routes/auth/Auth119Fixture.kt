@@ -2,10 +2,12 @@ package com.vaultstadio.api.routes.auth
 
 import com.vaultstadio.api.config.configureSecurity
 import com.vaultstadio.api.middleware.configureErrorHandling
+import com.vaultstadio.api.routes.storage.batchRoutes
 import com.vaultstadio.api.routes.storage.storageRoutes
 import com.vaultstadio.application.di.applicationAuthModule
 import com.vaultstadio.application.di.applicationStorageModule
 import com.vaultstadio.core.domain.event.EventBus
+import com.vaultstadio.core.domain.service.ArchiveWriter
 import com.vaultstadio.core.domain.service.StorageService
 import com.vaultstadio.core.domain.service.UserService
 import com.vaultstadio.domain.auth.model.User
@@ -18,6 +20,7 @@ import com.vaultstadio.infrastructure.persistence.entities.StorageItemsTable
 import com.vaultstadio.infrastructure.persistence.entities.UserSessionsTable
 import com.vaultstadio.infrastructure.persistence.entities.UsersTable
 import com.vaultstadio.infrastructure.security.BCryptPasswordHasher
+import com.vaultstadio.infrastructure.storage.BoundedZipArchiveWriter
 import com.vaultstadio.infrastructure.storage.LocalStorageBackend
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -100,6 +103,7 @@ internal class Auth119Fixture : AutoCloseable {
                 module {
                     single { userService }
                     single { storage }
+                    single<ArchiveWriter> { BoundedZipArchiveWriter() }
                 },
                 applicationAuthModule(),
                 applicationStorageModule(),
@@ -110,7 +114,10 @@ internal class Auth119Fixture : AutoCloseable {
         routing {
             route("/api/v1") {
                 authRoutes()
-                authenticate("auth-bearer") { storageRoutes() }
+                authenticate("auth-bearer") {
+                    storageRoutes()
+                    batchRoutes()
+                }
             }
         }
     }

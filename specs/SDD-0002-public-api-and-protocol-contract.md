@@ -184,6 +184,49 @@ not become a successful smaller/empty result. Add actual HTTP controls for date 
 unavailable content search, owned/foreign/missing metadata and downstream database failure.
 This clarification precedes its code; it does not implement filename matching or global filters.
 
+### 6.6 Authenticated transfer restoration — issue #78
+
+Pre-code implementation contract on the Action-published branch, based on develop `15574b9`.
+GET `/api/v1/storage/download/{itemId}` is the existing authenticated single-file endpoint;
+POST `/api/v1/storage/batch/download-zip` with JSON `itemIds` is the archive endpoint. The client
+MUST compose the API prefix once for the configured production base and send the current bearer
+only in Authorization. A generated credential-bearing URL, navigation to a protected endpoint,
+or a MockEngine accepting a nonexistent path is not download acceptance. Public capability-share
+paths and their authorization remain unchanged and have positive regressions.
+
+Single-file success preserves exact binary, UTF-8 and empty content, and the supported original
+filename. Missing/invalid identity returns401, foreign ownership403 even for ADMIN, missing
+items404, and provider/server failures their safe typed failure. No unsuccessful response may
+reach a save adapter. Real production routing/DI/PostgreSQL and a rendered-client byte/hash round
+trip must establish client/server compatibility, including normal upload before download.
+
+Archives must be complete or fail before200/attachment bytes: authorize the entire selection and
+its recursively listed folder contents before opening content, preserve relative safe names and
+empty directories, and never silently omit failed entries. Empty/duplicate/ambiguous selection,
+unsafe path segments, repeated/cyclic items and excessive depth/count fail safely. Every entry is
+re-authorized when its content is opened; a changed size/provider failure aborts the archive.
+Archive policy is owned by an application use case; ZIP encoding/resource ownership is a port
+adapter, not a large route. No foreign data or source mutation is permitted on rejection.
+
+Post-review clarification before its repair (2026-10-28): archive segments must reject drive-prefix syntax.
+Reject any colon-containing segment, including drive-absolute (`C:` as a folder) and
+drive-relative (`C:payload.bin`) syntax, at complete selection preflight and at the ZIP writer
+boundary. Storage creation may retain its existing names; an unsupported archive selection
+returns a safe400 without attachment bytes or source mutation. Add at least four real HTTP
+regressions for root/nested files and folders, direct writer refusal before stream opening,
+and positive Unicode segment controls. No Windows extractor or hardware execution is claimed.
+The existing storage coverage-verification task must enforce100% line and branch coverage for
+the focused `ArchiveDownloadKt` path policy, alongside its existing ownership-policy rule.
+This scoped gate must not remove any code from the complete canonical coverage population.
+
+The first restored in-memory client supports at most32MiB per received file/archive. The archive
+server permits at most256 entries,16 folder levels and24MiB aggregate declared/actual file bytes,
+with a32MiB encoded-output bound. Enforce real read lengths, not only declared metadata or headers.
+These fixed safety bounds are documented rather than represented as unlimited streaming support.
+Ordinary server single-file streaming remains compatible; larger rendered-client downloads return
+a visible limit failure without saving a partial file. No schema migration, public-share policy,
+S3/WebDAV behavior, dependency changes, Copilot changes or master promotion are included.
+
 ## 7. User-facing configuration
 
 Swagger path, API version prefix, protocol enablement, authentication mode, and route limits are explicit configuration contracts. Unknown or malformed values fail closed.
@@ -282,6 +325,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
+
+Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `ae5f22a` passed 6,386 product executions including review/CI refinements and all 22 archive path-policy branches; real Web/macOS observations retain their actual client/server sources. Earlier 6,355 acceptance and independent failures remain historical evidence. Transfer bounds, Web directory selection (#121), Web origin (#116), mobile hardware and final-ref CI/review/adoption retain separate acceptance.
 
 ## 18. Implementation or maintenance sequence
 

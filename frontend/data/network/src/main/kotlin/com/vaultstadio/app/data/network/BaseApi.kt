@@ -120,7 +120,7 @@ abstract class BaseApi(protected val client: HttpClient) {
                 else -> ApiResult.Error("UNKNOWN_ERROR", "Missing response data")
             }
         }
-    } catch (error: Exception) {
+    } catch (error: Throwable) {
         rethrowTransportCancellation(error)
         ApiResult.NetworkError(error.message ?: "Network error")
     }
@@ -131,7 +131,7 @@ abstract class BaseApi(protected val client: HttpClient) {
             envelope.error?.code ?: "HTTP_${response.status.value}",
             envelope.error?.message ?: response.status.description,
         )
-    } catch (error: Exception) {
+    } catch (error: Throwable) {
         rethrowTransportCancellation(error)
         ApiResult.Error("HTTP_${response.status.value}", response.status.description)
     }

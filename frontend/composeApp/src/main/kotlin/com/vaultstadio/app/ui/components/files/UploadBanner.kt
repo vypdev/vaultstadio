@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -44,8 +45,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.domain.upload.UploadFailure
 import com.vaultstadio.app.ui.components.dialogs.UploadItem
 import com.vaultstadio.app.ui.components.dialogs.UploadStatus
 import com.vaultstadio.app.utils.formatFileSize
@@ -58,6 +62,8 @@ fun UploadBanner(
     onDismiss: () -> Unit,
     onCancelItem: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onRetryItem: ((String) -> Unit)? = null,
+    canRetryItem: (String) -> Boolean = { true },
 ) {
     AnimatedVisibility(
         visible = uploadItems.isNotEmpty(),
@@ -103,7 +109,9 @@ fun UploadBanner(
                         )
                     }
                     val allDone = uploadItems.all {
-                        it.status == UploadStatus.COMPLETED || it.status == UploadStatus.FAILED
+                        it.status == UploadStatus.COMPLETED ||
+                            it.status == UploadStatus.FAILED ||
+                            it.status == UploadStatus.CANCELED
                     }
                     if (allDone) {
                         IconButton(
@@ -150,6 +158,9 @@ fun UploadBanner(
                             UploadBannerItemRow(
                                 item = item,
                                 onCancel = { onCancelItem(item.id) },
+                                onRetry = onRetryItem?.takeIf {
+                                    canRetryItem(item.id)
+                                }?.let { retry -> { retry(item.id) } },
                             )
                         }
                     }
@@ -164,7 +175,9 @@ private fun UploadBannerItemRow(
     item: UploadItem,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
+    onRetry: (() -> Unit)? = null,
 ) {
+    val strings = LocalStrings.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -184,7 +197,7 @@ private fun UploadBannerItemRow(
                     )
                 UploadStatus.COMPLETED ->
                     Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                UploadStatus.FAILED ->
+                UploadStatus.FAILED, UploadStatus.CANCELED ->
                     Icon(Icons.Filled.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
             }
         }
@@ -197,14 +210,24 @@ private fun UploadBannerItemRow(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = formatFileSize(item.size),
+                text = when (item.failure) {
+                    UploadFailure.INVALID_CONTENT -> strings.uploadInvalidContent
+                    UploadFailure.TRANSFER_FAILED, UploadFailure.FOLDER_UNAVAILABLE -> strings.uploadFailed
+                    UploadFailure.CANCELED -> strings.uploadCanceled
+                    null -> formatFileSize(item.size)
+                },
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+        if (onRetry != null && item.status in listOf(UploadStatus.FAILED, UploadStatus.CANCELED)) {
+            IconButton(onClick = onRetry, modifier = Modifier.size(28.dp).testTag("uploads.retry.${item.id}")) {
+                Icon(Icons.Filled.Refresh, contentDescription = strings.actionRetry, modifier = Modifier.size(16.dp))
+            }
+        }
         if (item.status == UploadStatus.UPLOADING) {
-            IconButton(onClick = onCancel, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Filled.Close, contentDescription = "Cancel", modifier = Modifier.size(16.dp))
+            IconButton(onClick = onCancel, modifier = Modifier.size(28.dp).testTag("uploads.cancel.${item.id}")) {
+                Icon(Icons.Filled.Close, contentDescription = strings.actionCancel, modifier = Modifier.size(16.dp))
             }
         }
     }

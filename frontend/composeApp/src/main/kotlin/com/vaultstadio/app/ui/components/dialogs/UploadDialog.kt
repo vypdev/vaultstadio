@@ -51,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.domain.upload.UploadFailure
 
 /**
  * Upload item state.
@@ -62,6 +63,8 @@ data class UploadItem(
     val size: Long,
     val progress: Float = 0f,
     val status: UploadStatus = UploadStatus.PENDING,
+    val failure: UploadFailure? = null,
+    val cleanupInProgress: Boolean = false,
 )
 
 /**
@@ -72,6 +75,7 @@ enum class UploadStatus {
     UPLOADING,
     COMPLETED,
     FAILED,
+    CANCELED,
 }
 
 /**
@@ -214,7 +218,9 @@ fun UploadDialog(
                     }
                 } else {
                     val allCompleted = uploadItems.all {
-                        it.status == UploadStatus.COMPLETED || it.status == UploadStatus.FAILED
+                        it.status == UploadStatus.COMPLETED ||
+                            it.status == UploadStatus.FAILED ||
+                            it.status == UploadStatus.CANCELED
                     }
 
                     if (allCompleted) {
@@ -232,7 +238,11 @@ fun UploadDialog(
         dismissButton = {
             if (!isUploading &&
                 uploadItems.isNotEmpty() &&
-                !uploadItems.all { it.status == UploadStatus.COMPLETED || it.status == UploadStatus.FAILED }
+                !uploadItems.all {
+                    it.status == UploadStatus.COMPLETED ||
+                        it.status == UploadStatus.FAILED ||
+                        it.status == UploadStatus.CANCELED
+                }
             ) {
                 TextButton(onClick = onDismiss) {
                     Text(strings.actionCancel)
@@ -292,7 +302,7 @@ private fun UploadItemRow(
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
-                    UploadStatus.FAILED -> {
+                    UploadStatus.FAILED, UploadStatus.CANCELED -> {
                         Icon(
                             imageVector = Icons.Filled.Error,
                             contentDescription = "Failed",

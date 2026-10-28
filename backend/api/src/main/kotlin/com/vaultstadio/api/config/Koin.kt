@@ -31,6 +31,7 @@ import com.vaultstadio.core.domain.repository.FederationRepository
 import com.vaultstadio.core.domain.repository.MetadataRepository
 import com.vaultstadio.core.domain.repository.SyncRepository
 import com.vaultstadio.core.domain.service.ActivityLogger
+import com.vaultstadio.core.domain.service.ArchiveWriter
 import com.vaultstadio.core.domain.service.FederationCryptoService
 import com.vaultstadio.core.domain.service.FederationService
 import com.vaultstadio.core.domain.service.InMemoryLockManager
@@ -63,6 +64,7 @@ import com.vaultstadio.infrastructure.persistence.ExposedSyncRepository
 import com.vaultstadio.infrastructure.persistence.ExposedTransactionManager
 import com.vaultstadio.infrastructure.persistence.ExposedUserRepository
 import com.vaultstadio.infrastructure.security.BCryptPasswordHasher
+import com.vaultstadio.infrastructure.storage.BoundedZipArchiveWriter
 import com.vaultstadio.infrastructure.storage.LocalStorageBackend
 import com.vaultstadio.infrastructure.storage.S3StorageBackend
 import com.vaultstadio.infrastructure.storage.S3StorageConfig
@@ -140,6 +142,8 @@ fun coreModule(config: AppConfig) = module {
     single<PasswordHasher> {
         BCryptPasswordHasher(cost = config.security.bcryptRounds)
     }
+
+    single<ArchiveWriter> { BoundedZipArchiveWriter() }
 
     // Storage Backend
     single<StorageBackend> {

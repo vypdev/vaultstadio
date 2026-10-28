@@ -71,6 +71,8 @@ object HttpClientFactory {
     }
 
     private fun HttpClientConfig<*>.configure(config: ApiClientConfig, tokenProvider: TokenProvider, logger: Logger?) {
+        install(DownloadBodyPlugin)
+
         install(ContentNegotiation) {
             json(json)
         }

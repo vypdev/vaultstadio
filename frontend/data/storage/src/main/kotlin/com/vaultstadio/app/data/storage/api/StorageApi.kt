@@ -169,7 +169,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Chunk upload failed")
         }
@@ -230,7 +230,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload failed")
         }
@@ -280,24 +280,15 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_ERROR", "Upload failed: ${response.status}")
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload error")
         }
     }
 
-    suspend fun downloadFile(itemId: String): ApiResult<ByteArray> {
-        return try {
-            val response = client.get("/api/v1/storage/item/$itemId/download")
-            if (response.status.isSuccess()) {
-                val bytes = response.body<ByteArray>()
-                ApiResult.Success(bytes)
-            } else {
-                ApiResult.Error("HTTP_${response.status.value}", response.status.description)
-            }
-        } catch (e: Exception) {
-            rethrowTransportCancellation(e)
-            ApiResult.NetworkError(e.message ?: "Download failed")
-        }
-    }
+    suspend fun downloadFile(itemId: String): ApiResult<ByteArray> = StorageDownloadApi(client).file(itemId)
+
+    suspend fun downloadArchive(itemIds: List<String>): ApiResult<ByteArray> = StorageDownloadApi(
+        client,
+    ).archive(itemIds)
 }

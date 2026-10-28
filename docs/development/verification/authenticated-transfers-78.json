@@ -1,0 +1,627 @@
+{
+  "schemaVersion": 1,
+  "issue": 78,
+  "baselineDevelop": "15574b973688b06715cb263c518a3b6eaa599617",
+  "precodeSddCommit": "379f3b803e26ed0e94902d4ead686998c76aa694",
+  "testedImplementation": {
+    "head": "ae5f22a8eef9de54b357ba429765c432fd84775e",
+    "tree": "e7637db6c2ae9acf89d5f8bda45632c53b6a18a5",
+    "status": "",
+    "digest": "59e78c15214ca28d0ef6edf276cdf769af44366fc6e6aefd06e22344a3e420dc"
+  },
+  "product": {
+    "backend": {
+      "tests": 3388,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktop": {
+      "tests": 1563,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "tests": 1435,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "totalProductExecutions": 6386,
+  "adopted119Executions": 6091,
+  "command": [
+    "make",
+    "test-coverage"
+  ],
+  "seconds": 506.33,
+  "canonical": {
+    "backend": {
+      "summary": {
+        "classes": 2196,
+        "sha256": "ef20f1d8dbffb8f2735718bde30872d525bd54f8dfeb541533999f99a3276292",
+        "line": {
+          "missed": 7614,
+          "covered": 9433
+        },
+        "branch": {
+          "missed": 4075,
+          "covered": 2140
+        },
+        "instruction": {
+          "missed": 83007,
+          "covered": 74190
+        }
+      },
+      "modulePopulation": 44
+    },
+    "frontend": {
+      "summary": {
+        "classes": 1826,
+        "sha256": "8cea370c2946f3a6b3311f7d1a317885be5e440ae43fe3372aeb0fd225981b61",
+        "line": {
+          "missed": 14324,
+          "covered": 7488
+        },
+        "branch": {
+          "missed": 4518,
+          "covered": 1454
+        },
+        "instruction": {
+          "missed": 132953,
+          "covered": 46632
+        }
+      },
+      "modulePopulation": 52
+    }
+  },
+  "focusedSourceCoverage": {
+    "backend/com/vaultstadio/infrastructure/storage/BoundedZipArchiveWriter.kt": {
+      "INSTRUCTION": {
+        "covered": 603,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 31,
+        "missed": 1
+      },
+      "LINE": {
+        "covered": 68,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 26,
+        "missed": 1
+      },
+      "METHOD": {
+        "covered": 11,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 5,
+        "missed": 0
+      }
+    },
+    "backend/com/vaultstadio/domain/storage/model/ArchiveDownload.kt": {
+      "INSTRUCTION": {
+        "covered": 184,
+        "missed": 30
+      },
+      "BRANCH": {
+        "covered": 36,
+        "missed": 14
+      },
+      "LINE": {
+        "covered": 16,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 21,
+        "missed": 14
+      },
+      "METHOD": {
+        "covered": 10,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 3,
+        "missed": 0
+      }
+    },
+    "backend/com/vaultstadio/api/routes/storage/ArchiveDownloadRoutes.kt": {
+      "INSTRUCTION": {
+        "covered": 136,
+        "missed": 61
+      },
+      "BRANCH": {
+        "covered": 3,
+        "missed": 6
+      },
+      "LINE": {
+        "covered": 15,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 2,
+        "missed": 6
+      },
+      "METHOD": {
+        "covered": 2,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 0
+      }
+    },
+    "backend/com/vaultstadio/application/usecase/storage/ArchiveSelection.kt": {
+      "INSTRUCTION": {
+        "covered": 486,
+        "missed": 8
+      },
+      "BRANCH": {
+        "covered": 54,
+        "missed": 2
+      },
+      "LINE": {
+        "covered": 53,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 30,
+        "missed": 2
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "backend/com/vaultstadio/application/usecase/storage/DownloadArchiveUseCase.kt": {
+      "INSTRUCTION": {
+        "covered": 227,
+        "missed": 10
+      },
+      "BRANCH": {
+        "covered": 20,
+        "missed": 3
+      },
+      "LINE": {
+        "covered": 25,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 13,
+        "missed": 3
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/domain/storage/usecase/DownloadArchiveUseCase.kt": {},
+    "frontend/com/vaultstadio/app/data/network/TransportCancellation.kt": {
+      "INSTRUCTION": {
+        "covered": 68,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 16,
+        "missed": 4
+      },
+      "LINE": {
+        "covered": 13,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 7,
+        "missed": 4
+      },
+      "METHOD": {
+        "covered": 1,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/data/storage/api/StorageDownloadApi.kt": {
+      "INSTRUCTION": {
+        "covered": 340,
+        "missed": 37
+      },
+      "BRANCH": {
+        "covered": 22,
+        "missed": 4
+      },
+      "LINE": {
+        "covered": 54,
+        "missed": 2
+      },
+      "COMPLEXITY": {
+        "covered": 19,
+        "missed": 5
+      },
+      "METHOD": {
+        "covered": 10,
+        "missed": 1
+      },
+      "CLASS": {
+        "covered": 3,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/DesktopDownloadSaver.kt": {
+      "INSTRUCTION": {
+        "covered": 220,
+        "missed": 24
+      },
+      "BRANCH": {
+        "covered": 16,
+        "missed": 2
+      },
+      "LINE": {
+        "covered": 29,
+        "missed": 2
+      },
+      "COMPLEXITY": {
+        "covered": 15,
+        "missed": 4
+      },
+      "METHOD": {
+        "covered": 8,
+        "missed": 2
+      },
+      "CLASS": {
+        "covered": 3,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/DesktopDownloadDialog.kt": {
+      "INSTRUCTION": {
+        "covered": 91,
+        "missed": 65
+      },
+      "BRANCH": {
+        "covered": 5,
+        "missed": 7
+      },
+      "LINE": {
+        "covered": 12,
+        "missed": 11
+      },
+      "COMPLEXITY": {
+        "covered": 6,
+        "missed": 9
+      },
+      "METHOD": {
+        "covered": 5,
+        "missed": 4
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 1
+      }
+    },
+    "frontend/com/vaultstadio/app/data/storage/usecase/DownloadArchiveUseCaseImpl.kt": {
+      "INSTRUCTION": {
+        "covered": 21,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 3,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 2,
+        "missed": 0
+      },
+      "METHOD": {
+        "covered": 2,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/feature/upload/UploadWork.kt": {
+      "INSTRUCTION": {
+        "covered": 138,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 3,
+        "missed": 1
+      },
+      "LINE": {
+        "covered": 17,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 12,
+        "missed": 1
+      },
+      "METHOD": {
+        "covered": 11,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 4,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/feature/upload/UploadManager.kt": {
+      "INSTRUCTION": {
+        "covered": 1378,
+        "missed": 66
+      },
+      "BRANCH": {
+        "covered": 92,
+        "missed": 22
+      },
+      "LINE": {
+        "covered": 196,
+        "missed": 4
+      },
+      "COMPLEXITY": {
+        "covered": 60,
+        "missed": 23
+      },
+      "METHOD": {
+        "covered": 29,
+        "missed": 2
+      },
+      "CLASS": {
+        "covered": 6,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/feature/upload/UploadEntryProcessor.kt": {
+      "INSTRUCTION": {
+        "covered": 770,
+        "missed": 61
+      },
+      "BRANCH": {
+        "covered": 27,
+        "missed": 9
+      },
+      "LINE": {
+        "covered": 49,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 16,
+        "missed": 9
+      },
+      "METHOD": {
+        "covered": 7,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 4,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/feature/files/transfer/FilesDownloadController.kt": {
+      "INSTRUCTION": {
+        "covered": 723,
+        "missed": 50
+      },
+      "BRANCH": {
+        "covered": 83,
+        "missed": 35
+      },
+      "LINE": {
+        "covered": 94,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 54,
+        "missed": 32
+      },
+      "METHOD": {
+        "covered": 20,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 5,
+        "missed": 0
+      }
+    }
+  },
+  "deterministicOperationCasesPerPlatform": 36,
+  "riskFamilies": 72,
+  "plannedRenderedFamiliesVerified": 12,
+  "gui": "authenticated-transfers-78-gui.json",
+  "originalEvidence": {
+    "archiveSha256": "928bbd1e8cfa9ad44dc5c333120c7966a509a71ce2519a756dfe7169f25ce9b5",
+    "fileCount": 5775,
+    "contents": [
+      "source-bound clean suite receipts",
+      "original JUnit XML",
+      "canonical coverage XML",
+      "executed JVM class inputs and JaCoCo execution data",
+      "original complete command output and input hashes"
+    ]
+  },
+  "limitations": [
+    "Final-ref PR CI and Copilot review/adoption are separate",
+    "Mobile-specific runtime/hardware not executed; saver explicitly unsupported",
+    "Web folder picker still tracked in #121; tested hierarchy created with ordinary UI folders/uploads",
+    "Configured Web origin remains #116",
+    "Global and compiler-generated coverage gaps remain; no source exclusions or lowered gates",
+    "Actionlint 1.7.12 rejects three unchanged generated queue:max fields; reported nonzero, no suppression"
+  ],
+  "workflowSafety": {
+    "copilotUnmodified": true,
+    "protectionsUnmodified": true,
+    "masterUnmodified": true,
+    "verificationSetupEnabled": false
+  },
+  "earlierDiagnostics": [
+    {
+      "phase": "red-route",
+      "archiveSha256": "cb734e354bde67e1e0de7c918ab28db5f468f3e18107afdc1017bb0a222c4822"
+    },
+    {
+      "phase": "red-archive",
+      "archiveSha256": "702958a0665c2b7aa82d2cb48ce55814400b1030c8d951e73802f9a925428e63"
+    },
+    {
+      "phase": "streaming-regression",
+      "archiveSha256": "1241f0c2051e1c3829fc38ee548c3f87b919812cc8f1603703b2702ed69403e6"
+    },
+    {
+      "phase": "red-empty-upload",
+      "archiveSha256": "257d6e4c9310532aa91354ca05c5749e389938129c49d5686f376d0b811b8257"
+    },
+    {
+      "phase": "fixture-refinement",
+      "archiveSha256": "6dc1dd611375613cd51e84015164a9e1406b989010cff0b800fba2111ff3ce47"
+    },
+    {
+      "phase": "real-browser-fetch-red",
+      "archiveSha256": "e5ef3a9112748aec8a0d14db84891dab18e6b538135bd7a8ffe1ba5d4a8f6f64"
+    },
+    {
+      "phase": "operation-refinement",
+      "archiveSha256": "494dd10c31f2101c1d7657238ba0aba8ad8fe12fa397056935cc25ed116c16e9"
+    },
+    {
+      "phase": "completed-native-and-transfer-6355",
+      "archiveSha256": "4bf923d610ec103193c64f8657dcd0adf48d779d68eb631f9d7b1249e8199172"
+    },
+    {
+      "phase": "review-drive-prefix-red",
+      "archiveSha256": "bfde4f448e02b56439fb3b5b0fedeaf8b55179c0d7cf3e06fbda76a5e8ac9292"
+    },
+    {
+      "phase": "ci-c2-storage-maximum-mocha-2000ms",
+      "archiveSha256": "b3c7b60bfc1a29a8c61c539b50649c431b704649fdc4deb65cac2fcc9ad1d3d2"
+    }
+  ],
+  "additionalChecks": [
+    {
+      "check": "wasm-mime",
+      "exitCode": 0
+    },
+    {
+      "check": "public-share-node",
+      "exitCode": 0
+    },
+    {
+      "check": "test_share_proxy.py",
+      "exitCode": 0
+    },
+    {
+      "check": "test_frontend_accessibility_inventory.py",
+      "exitCode": 0
+    },
+    {
+      "check": "test_test_browser_bootstrap.py",
+      "exitCode": 0
+    },
+    {
+      "check": "test_codecov_keyring.py",
+      "exitCode": 0
+    },
+    {
+      "check": "test_ci_cadence.py",
+      "exitCode": 0
+    },
+    {
+      "check": "test_share_architecture.py",
+      "exitCode": 0
+    },
+    {
+      "check": "test_selection_architecture.py",
+      "exitCode": 0
+    },
+    {
+      "check": "setup-contracts",
+      "exitCode": 0
+    },
+    {
+      "check": "accessible-source",
+      "exitCode": 0
+    },
+    {
+      "check": "sdd-catalog",
+      "exitCode": 0
+    },
+    {
+      "check": "no-fqn",
+      "exitCode": 0
+    },
+    {
+      "check": "actionlint",
+      "exitCode": 1
+    }
+  ],
+  "coverageGates": {
+    "backendStorage": 0,
+    "frontendSerializerAndSemantics": 0,
+    "actualMakeLint": 0
+  },
+  "nativeScreenshot": {
+    "publishedEvidenceCommit": "5321a3b6596b2b73cb4a1cd6b5208c76d59edf2b",
+    "url": "https://github.com/vypdev/vaultstadio/blob/5321a3b6596b2b73cb4a1cd6b5208c76d59edf2b/docs/development/verification/assets/transfer78-native-save.png?raw=true",
+    "sha256": "b715fdebce39f491419eee4a1295274d237fff05fa0ac5c95db0a23e29a9e962",
+    "bytes": 244037,
+    "retainedLocalOriginal": true,
+    "excludedFromFinalTextDiffBecause": "GitHub binary patch omission blocks Copilot progress assessment; published history and original screenshot are preserved."
+  },
+  "criticalArchivePathMethodCoverage": {
+    "INSTRUCTION": {
+      "covered": 51,
+      "missed": 0
+    },
+    "BRANCH": {
+      "covered": 22,
+      "missed": 0
+    },
+    "LINE": {
+      "covered": 5,
+      "missed": 0
+    },
+    "COMPLEXITY": {
+      "covered": 12,
+      "missed": 0
+    },
+    "METHOD": {
+      "covered": 1,
+      "missed": 0
+    }
+  },
+  "archivePathPolicyCases": 23,
+  "reviewRefinements": {
+    "drivePath": "Root/nested drive-prefixed files/folders denied before content; 14 red failures retained, 23 direct segment policy cases plus writer and real HTTP regressions. No vulnerable Windows extractor was run.",
+    "browserHarness": "Original exact32MiB case and its byte assertions unchanged; module-local finite Mocha60000ms budget resolves CI outer 2,000 ms timeout. Production deadlines unchanged.",
+    "runtime": "Web client4a / backendCF used actual Create Folder C:, visible ZIP refusal, then original65537-byte binary and complete six-entry folder ZIP recovery."
+  },
+  "upstreamReports": {
+    "generatedAgentLinkingGuidance": "https://github.com/vypdev/copilot/issues/759",
+    "supplementalPngEvidence": "https://github.com/vypdev/copilot/issues/760"
+  },
+  "archivePathPolicyEnforcedGate": {
+    "task": ":domain:storage:jacocoTestCoverageVerification",
+    "class": "com.vaultstadio.domain.storage.model.ArchiveDownloadKt",
+    "minimumLine": 1.0,
+    "minimumBranch": 1.0,
+    "currentDataPass": true,
+    "priorIncompleteDataRejected": true,
+    "negativeControlClassBytesIdentical": true,
+    "noAdditionalCiJobs": true,
+    "productionAndTestsUnchangedAfterCleanProductRun": true
+  }
+}
