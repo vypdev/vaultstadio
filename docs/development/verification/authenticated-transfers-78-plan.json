@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "issue": 78,
   "baseline": "15574b973688b06715cb263c518a3b6eaa599617",
-  "phase": "pre-code; no execution is claimed",
+  "phase": "executed; local verification and rendered evidence; final-ref CI and maintainer merge remain separate",
   "sdds": [
     "specs/SDD-0002-public-api-and-protocol-contract.md",
     "specs/SDD-0005-upload-and-transfer-protocols.md",
@@ -21,434 +21,1324 @@
     {
       "id": "TRANS78-HTTP-01",
       "risk": "Production item route and configured API prefix once",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78RouteTest.kt",
+          "cases": [
+            "transfer78UsesTheRegisteredAuthenticatedItemRoute"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78LocationTest.kt",
+          "cases": [
+            "transfer78OriginBaseGetsExactlyOneApiPrefix",
+            "transfer78ApiBaseGetsExactlyOneApiPrefix",
+            "transfer78VersionedBaseGetsExactlyOneApiPrefix"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-02",
       "risk": "Archive POST JSON selection uses registered route",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78LocationTest.kt",
+          "cases": [
+            "transfer78ArchiveUsesAuthenticatedPostWithExactSelection"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveHttpTest.kt",
+          "cases": [
+            "TRANS78-ARCH01 ZIP preserves every selected file byte without source changes"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-03",
       "risk": "Bearer header current per request, no token in any URL",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78LocationTest.kt",
+          "cases": [
+            "transfer78RotatedTokenIsReadForEveryDownload",
+            "transfer78PublicLocationDropsInheritedUserPasswordQueryAndFragment"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Network119BoundaryTest.kt",
+          "cases": [
+            "net119ActualHttpLoggerDoesNotExposeBearerHeaders"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-04",
       "risk": "Binary bytes including zero and non-UTF8",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78BinaryBytesCrossChunkBoundariesWithoutConversion"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-02"
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-05",
       "risk": "UTF-8 bytes and original Unicode name",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-03"
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/wasmJsTest/kotlin/com/vaultstadio/app/platform/Browser78DownloadTest.kt",
+          "cases": [
+            "transfer78BrowserPreservesUnicodeFilenameOnAnchor"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-06",
       "risk": "Zero-length body is successful content",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78EmptySuccessfulBodyIsAnEmptyFile"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-04"
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-07",
       "risk": "401 does not save and permits normal reauthentication",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78FailureTest.kt",
+          "cases": [
+            "download78UnauthorizedNeverSavesAnErrorBody"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-01"
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-08",
       "risk": "403 owner denial preserves server bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveDenialTest.kt",
+          "cases": [
+            "TRANS78-ARCH03 foreign selection cannot become a successful empty ZIP"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78ForbiddenResponseNeverBecomesFileBytes"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-09",
       "risk": "404 is visible and saves nothing",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78MissingFileResponseNeverBecomesFileBytes"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78FailureTest.kt",
+          "cases": [
+            "download78MissingNeverSavesAnErrorBody"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-10",
       "risk": "500 structured and non-JSON errors remain bounded",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119FailureTest.kt",
+          "cases": [
+            "sto119HttpTransferFailureCannotBecomeSuccess",
+            "sto119OfflineAndMalformedTransfersRemainFailures"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78UnavailableProviderResponseNeverBecomesFileBytes"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-11",
       "risk": "Connection failure and genuine deadline release busy",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt",
+          "cases": [
+            "sto119GenuineRequestDeadlineRemainsANetworkFailure"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/wasmJsTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BrowserFailureTest.kt",
+          "cases": [
+            "transfer78ActualBrowserFetchFailureMapsUploadToNetworkError",
+            "transfer78ActualBrowserFetchFailureMapsChunkToNetworkError",
+            "transfer78ActualBrowserFetchFailureMapsMetadataToNetworkError",
+            "transfer78ActualBrowserFetchFailureMapsFileToNetworkError",
+            "transfer78ActualBrowserFetchFailureMapsArchiveToNetworkError"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-09"
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-12",
       "risk": "Caller and incoming-body cancellation propagate",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119BodyCancellationTest.kt",
+          "cases": [
+            "sto119DownloadIncomingBodyCancellationRemainsControlFlow"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119CancellationTest.kt",
+          "cases": [
+            "sto119DownloadCancellationRemainsControlFlow"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-13",
       "risk": "Declared oversized response rejected before allocation",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78DeclaredOversizeIsRejectedEvenWhenBodyIsEmpty",
+            "transfer78UndeclaredOversizeBodyIsRejectedWhileReading"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-14",
       "risk": "Unknown/false length capped by actual streamed bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78UndeclaredOversizeBodyIsRejectedWhileReading",
+            "transfer78ExactlySupportedMaximumPreservesBytes"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-15",
       "risk": "Truncated/contradictory body is not success",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78BodyTest.kt",
+          "cases": [
+            "transfer78TruncatedDeclaredBodyIsRejected",
+            "transfer78MoreBytesThanDeclaredIsRejected"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-HTTP-16",
       "risk": "Public token-share download remains compatible",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/share/PublicShareTransferLifetimeTest.kt",
+          "cases": [
+            "streamsAreOwnedUntilTransferOrDenial"
+          ]
+        }
+      ],
+      "limitation": "Executed existing anonymous-share real HTTP/SQL/stream regression; no new rendered public-share campaign."
     },
     {
       "id": "TRANS78-OP-01",
       "risk": "Details action reaches operation and save once",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78FileCallsMetadataThenBytesThenSaveExactlyOnce"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-02"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-02",
       "risk": "Grid action reaches same operation once",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-05"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-03",
       "risk": "List action reaches same operation once",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-06"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-04",
       "risk": "Selection action snapshots exact archive IDs",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78ArchiveSelectionIsAnOwnedSnapshot"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-07"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-05",
       "risk": "Folder action requests recursive archive",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78FolderUsesTheArchivePortInsteadOfFileBytes"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-08"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-06",
       "risk": "Duplicate click while busy does not dispatch again",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78FailureTest.kt",
+          "cases": [
+            "download78DoubleClickCannotDispatchASecondTransferWhileFetching",
+            "download78DoubleClickCannotDispatchWhileTheChooserIsOpen"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-12"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-07",
       "risk": "Fetch failure never invokes save",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78FailureTest.kt",
+          "cases": [
+            "download78OfflineStateDoesNotContainProviderDiagnostics",
+            "download78ServerFailureDoesNotAutomaticallyRetry"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-08",
       "risk": "Cancel/dispose before completion cannot save late bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78FailureTest.kt",
+          "cases": [
+            "download78CanceledOldBytesCannotReachSavingOrOverwriteANewerOutcome",
+            "download78CloseCancelsOwnedWorkAndRejectsFurtherActions"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78LifecycleTest.kt",
+          "cases": [
+            "transfer78ScopeCanceledBeforeCoroutineDispatchReleasesBusyWithoutAnyEffects"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-09",
       "risk": "Chooser cancellation is a normal terminal outcome",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78NativeChooserCancellationIsNotAnErrorOrSavedClaim"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-11"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-10",
       "risk": "Save failure remains visible and permits explicit retry",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78FailureTest.kt",
+          "cases": [
+            "download78SaveFailureHasSafeImpactAndCanBeRetriedExplicitly"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-09"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-11",
       "risk": "Safe supported filename preserved; unsafe name rejected",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78UnsafeFilenameCannotReachTheByteOrSavePorts"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-03"
+        }
+      ]
     },
     {
       "id": "TRANS78-OP-12",
       "risk": "Success/handed-to-browser are distinct truthful outcomes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78BrowserHandoffIsDistinctFromDiskSave",
+            "download78UnsupportedPlatformCannotClaimSuccess"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-10"
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-01",
       "risk": "Owned multiple files preserve exact decompressed bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveHttpTest.kt",
+          "cases": [
+            "TRANS78-ARCH01 ZIP preserves every selected file byte without source changes"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterIntegrityTest.kt",
+          "cases": [
+            "binary content CRC and names survive actual ZIP encoding"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-07"
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-02",
       "risk": "Nested folder and empty directory paths preserved",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveHttpTest.kt",
+          "cases": [
+            "TRANS78-ARCH02 nested and empty folders retain their relative ZIP paths"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-08"
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-03",
       "risk": "Foreign selected item denied before content opening",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveDenialTest.kt",
+          "cases": [
+            "TRANS78-ARCH03 foreign selection cannot become a successful empty ZIP"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/application/storage/src/test/kotlin/com/vaultstadio/application/usecase/storage/Archive78RevalidationTest.kt",
+          "cases": [
+            "a foreign later selected item prevents writer and earlier file reads"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-04",
       "risk": "Foreign descendant or changed owner denied",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/application/storage/src/test/kotlin/com/vaultstadio/application/usecase/storage/Archive78SelectionFailureTest.kt",
+          "cases": [
+            "descendant owner change after listing is denied before content"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/application/storage/src/test/kotlin/com/vaultstadio/application/usecase/storage/Archive78RevalidationTest.kt",
+          "cases": [
+            "changed canonical facts close the just-opened stream and reject stale archive"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-05",
       "risk": "Missing item/provider error cannot yield partial200ZIP",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveHttpTest.kt",
+          "cases": [
+            "TRANS78-ARCH05 missing selected item fails without attachment bytes",
+            "TRANS78-ARCH05 actual database failure cannot become an empty ZIP"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterFailureTest.kt",
+          "cases": [
+            "provider identity survives a second failure while closing the ZIP",
+            "read failure is bounded privately and closes the input"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-06",
       "risk": "Empty duplicate or overlapping ambiguous selections rejected",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveHttpTest.kt",
+          "cases": [
+            "TRANS78-ARCH06 empty selection fails before archive creation",
+            "TRANS78-ARCH06 duplicate selected IDs are rejected before content",
+            "TRANS78-ARCH06 parent plus descendant cannot create overlapping entries"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-07",
       "risk": "Unsafe segments and duplicate ZIP paths rejected",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveHttpTest.kt",
+          "cases": [
+            "TRANS78-ARCH07 conflicting names from different folders cannot be silently skipped",
+            "TRANS78-ARCH07 untrusted path segment cannot become an extraction path"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterFailureTest.kt",
+          "cases": [
+            "duplicate ZIP paths fail before opening either stream",
+            "unsafe extraction paths cannot reach a stream"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-08",
       "risk": "Cycles/repeated listing/stalled paging rejected",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/application/storage/src/test/kotlin/com/vaultstadio/application/usecase/storage/Archive78SelectionBoundsTest.kt",
+          "cases": [
+            "a stalled page with hasMore cannot become a truncated success",
+            "repeated child across pages is rejected rather than looping or duplicating",
+            "cyclic folder metadata cannot recurse indefinitely"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-09",
       "risk": "Entry and recursion-depth bounds enforced",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/application/storage/src/test/kotlin/com/vaultstadio/application/usecase/storage/Archive78SelectionBoundsTest.kt",
+          "cases": [
+            "entry limit includes directory entries",
+            "folder depth limit prevents further recursive traversal",
+            "a file at the permitted folder depth remains selectable"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-10",
       "risk": "Declared aggregate and actual content size bounds enforced",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/application/storage/src/test/kotlin/com/vaultstadio/application/usecase/storage/Archive78SelectionBoundsTest.kt",
+          "cases": [
+            "declared file bytes exceeding the aggregate limit open no content",
+            "aggregate declared bytes are counted across selected files"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterFailureTest.kt",
+          "cases": [
+            "longer actual content cannot bypass the metadata size",
+            "actual aggregate size is capped across streams"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-11",
       "risk": "Compressed output bound enforced including incompressible bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterFailureTest.kt",
+          "cases": [
+            "encoded output cannot exceed the hard bound even in ZIP headers"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-ARCH-12",
       "risk": "All content streams closed on success/failure/cancellation",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterCancellationTest.kt",
+          "cases": [
+            "cancellation interrupts owned input and closes it without publishing ZIP bytes"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterFailureTest.kt",
+          "cases": [
+            "short actual content fails and closes its stream",
+            "read failure is bounded privately and closes the input",
+            "nonadvancing provider input fails rather than spinning"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/storage/Archive78WriterIntegrityTest.kt",
+          "cases": [
+            "binary content CRC and names survive actual ZIP encoding"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-01",
       "risk": "Browser Blob contains original binary and MIME",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/wasmJsTest/kotlin/com/vaultstadio/app/platform/Browser78DownloadTest.kt",
+          "cases": [
+            "transfer78BrowserBuildsBinaryBlobWithExactBytesAndMime",
+            "transfer78BrowserHandsOffAnActualEmptyBlob"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-02",
       "risk": "Browser anchor owns safe download name and no bearer",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/wasmJsTest/kotlin/com/vaultstadio/app/platform/Browser78DownloadTest.kt",
+          "cases": [
+            "transfer78BrowserPreservesUnicodeFilenameOnAnchor"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage78LocationTest.kt",
+          "cases": [
+            "transfer78PublicLocationDropsInheritedUserPasswordQueryAndFragment"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-03",
       "risk": "Browser URL revoked after bounded handoff",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/wasmJsTest/kotlin/com/vaultstadio/app/platform/Browser78DownloadTest.kt",
+          "cases": [
+            "transfer78BrowserGraceTimerRevokesUrlAndCloseDoesNotRevokeTwice"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-04",
       "risk": "Browser failure/disposal removes anchor URL and timer",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/wasmJsTest/kotlin/com/vaultstadio/app/platform/Browser78DownloadTest.kt",
+          "cases": [
+            "transfer78BrowserCloseRevokesEveryPendingUrlOnce",
+            "transfer78BrowserFailedClickRemovesAnchorAndRevokesUrl",
+            "transfer78BrowserClosedSaverCreatesNoUrl"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-05",
       "risk": "Browser does not navigate to external/protected URL",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/wasmJsTest/kotlin/com/vaultstadio/app/platform/Browser78DownloadTest.kt",
+          "cases": [
+            "transfer78BrowserRemovesTemporaryAnchorImmediately"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-02"
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-06",
       "risk": "Desktop chooser preserves Unicode suggested name",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DownloadTest.kt",
+          "cases": [
+            "transfer78DesktopSavesBinaryBytesAndSuggestsUnicodeName"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-10"
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-07",
       "risk": "Desktop canceled chooser produces no file/temp",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DownloadTest.kt",
+          "cases": [
+            "transfer78DesktopCancelDoesNotCreateOrOverwriteAnyFile"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-11"
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DialogTest.kt",
+          "cases": [
+            "transfer78CancellationClosesAModalDialogAndDoesNotReturnItsLateSelection"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-08",
       "risk": "Desktop selected file matches exact bytes/hash",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DownloadTest.kt",
+          "cases": [
+            "transfer78DesktopSavesBinaryBytesAndSuggestsUnicodeName"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-10"
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-14"
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-09",
       "risk": "Desktop publication is atomic and preserves old target on failure",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DownloadTest.kt",
+          "cases": [
+            "transfer78AtomicWriterReplacesOnlyWithCompletePayloadAndRemovesStaging",
+            "transfer78AtomicWriterPublishFailurePreservesDirectoryAndRemovesStaging"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-10",
       "risk": "Desktop cancellation removes owned temporary and closes handles",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DownloadTest.kt",
+          "cases": [
+            "transfer78AtomicWriterCancellationMidWritePreservesExistingFileAndRemovesStaging",
+            "transfer78AtomicWriterCancellationBeforePublishCreatesNoDestination"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/platform/Desktop78DialogTest.kt",
+          "cases": [
+            "transfer78UnexpectedDialogFactoryFailureCompletesTheSuspendedCaller",
+            "transfer78UnexpectedSelectionFailureClosesDialogAndCompletesTheCaller",
+            "transfer78CloseFailureCannotEscapeTheEventQueueOrClaimAChosenDestination",
+            "transfer78NativeDialogSelectionAndDisposalRunOnTheRealEventQueue"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-PLAT-11",
       "risk": "Unsupported mobile saver returns explicit capability failure",
-      "status": "planned",
-      "evidence": []
+      "status": "verified-explicitly-unsupported",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/transfer/Download78OperationTest.kt",
+          "cases": [
+            "download78UnsupportedPlatformCannotClaimSuccess"
+          ]
+        }
+      ],
+      "limitation": "Common capability contract plus Android/iOS source inspection only; no mobile runtime or hardware acceptance."
     },
     {
       "id": "TRANS78-PLAT-12",
       "risk": "Existing profile-export platform callback remains compatible",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenario": "TRANS78-PLAT-12"
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-01",
       "risk": "Zero-byte normal picker entry reaches upload queue",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78EmptyTest.kt",
+          "cases": [
+            "transfer78ZeroByteSelectionUploadsRatherThanSilentlyFailing"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-04"
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-02",
       "risk": "Nonempty unreadable picker entry cannot fabricate empty content",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78QueueTest.kt",
+          "cases": [
+            "transfer78MismatchedSelectedBytesNeverReachTransport"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78ChunkTest.kt",
+          "cases": [
+            "transfer78UnreadableChunkIsRejectedAndOwnedSessionCanceled"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-03",
       "risk": "Multipart binary original bytes/MIME/parent retained",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78QueueTest.kt",
+          "cases": [
+            "transfer78SuccessfulUploadPreservesBytesNameMimeAndParent"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/data/storage/src/commonTest/kotlin/com/vaultstadio/app/data/storage/api/Storage119TransferTest.kt",
+          "cases": [
+            "sto119FileMultipartPreservesNameMimeParentAndBinaryBytes"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-04",
       "risk": "Successful upload triggers real list refresh once",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-02"
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-14"
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-05",
       "risk": "Failed upload remains failed with no completion signal",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78QueueTest.kt",
+          "cases": [
+            "transfer78FailedUploadEmitsNoCompletionAndCanRetrySameSnapshot",
+            "transfer78ThrownTransportFailureIsVisibleAndRetryable"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-13"
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-06",
       "risk": "Upload cancellation releases progress and owned reader",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78CancellationTest.kt",
+          "cases": [
+            "transfer78CancelStopsOneActiveChildWithoutStoppingAnotherUpload",
+            "transfer78CancelPendingEntryNeverStartsItsNetworkRequest",
+            "transfer78ClearCancelsOwnedWorkAndRejectsNewEntriesOrRetry"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78ChunkTest.kt",
+          "cases": [
+            "transfer78CancellationStopsChunkWorkAndRunsOwnedSessionCleanup"
+          ]
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-07",
       "risk": "Explicit retry preserves same bytes/name and target parent",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78QueueTest.kt",
+          "cases": [
+            "transfer78FailedUploadEmitsNoCompletionAndCanRetrySameSnapshot"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "frontend/composeApp/src/test/kotlin/com/vaultstadio/app/feature/upload/Upload78CancellationTest.kt",
+          "cases": [
+            "transfer78CanceledAttemptCannotChangeRetriedProgress"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-13"
+        }
+      ]
     },
     {
       "id": "TRANS78-UPLOAD-08",
       "risk": "Real server listing/download preserves uploaded size/content",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-02"
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-03"
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-04"
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-14"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-01",
       "risk": "Normal browser login without token seeding",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-01"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-02",
       "risk": "Browser details binary upload-download SHA256 roundtrip",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-02"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-03",
       "risk": "Browser Unicode UTF8 name and bytes roundtrip",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-03"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-04",
       "risk": "Browser empty upload-download roundtrip",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-04"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-05",
       "risk": "Actual grid context-menu download roundtrip",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-05"
+        }
+      ],
+      "limitation": "Actual grid context menu opened by long press; secondary mouse-button support is not certified."
     },
     {
       "id": "TRANS78-UI-06",
       "risk": "Actual list context-menu download roundtrip",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-06"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-07",
       "risk": "Actual selection toolbar ZIP contains exact files",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-07"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-08",
       "risk": "Actual folder download preserves recursive entries",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-08"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-09",
       "risk": "Rendered failure and explicit retry recovery",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-09"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-10",
       "risk": "Native normal login and save chooser writes exact bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-10"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-11",
       "risk": "Native chooser cancellation writes nothing",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-11"
+        }
+      ]
     },
     {
       "id": "TRANS78-UI-12",
       "risk": "Rendered cancellation and repeated dispatch remain usable",
-      "status": "planned",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-12"
+        }
+      ]
     }
-  ]
+  ],
+  "precodeCommit": "379f3b803e26ed0e94902d4ead686998c76aa694",
+  "verificationReport": "AUTHENTICATED_TRANSFERS_78.md"
 }

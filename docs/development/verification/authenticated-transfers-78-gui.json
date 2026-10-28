@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "issue": 78,
+  "method": "Actual rendered application through documented CUA controls; normal sign-in; original download bytes and native saved files independently hashed; private credentials/session data excluded.",
+  "productionSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+  "earlierPositiveSource": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+  "sourcesAreDistinct": true,
+  "events": [
+    {
+      "scenario": "TRANS78-UI-02",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "scenario": "TRANS78-UI-03",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 46,
+      "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+    },
+    {
+      "scenario": "TRANS78-UI-04",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "scenario": "TRANS78-UI-05",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "scenario": "TRANS78-UI-07",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6"
+    },
+    {
+      "scenario": "TRANS78-UI-07",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "entries": [
+        {
+          "name": "binary78.bin",
+          "bytes": 65537,
+          "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+        },
+        {
+          "name": "empty78.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "música ñ 日本語78.txt",
+          "bytes": 46,
+          "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+        }
+      ]
+    },
+    {
+      "scenario": "TRANS78-UI-06",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "scenario": "TRANS78-UI-08",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6"
+    },
+    {
+      "scenario": "TRANS78-UI-08",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "entries": [
+        {
+          "name": "archive78/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/binary78.bin",
+          "bytes": 65537,
+          "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+        },
+        {
+          "name": "archive78/nested/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/empty-dir/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/empty78.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/música ñ 日本語78.txt",
+          "bytes": 46,
+          "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+        }
+      ]
+    },
+    {
+      "scenario": "TRANS78-UI-01",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "method": "normal real form sign-out/sign-in",
+      "tokensSeeded": false,
+      "filesLoaded": true
+    },
+    {
+      "scenario": "TRANS78-UI-09-failure",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "fixture": "loopback proxy denies CORS only for owned file",
+      "retryVisible": true,
+      "noNewBinaryFile": true
+    },
+    {
+      "scenario": "TRANS78-UI-09-retry",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "scenario": "TRANS78-UI-12-cancel",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "fixture": "independently verified held body after first byte",
+      "noNewBinaryFile": true,
+      "duplicateDownloadClicks": 2,
+      "canceledVisible": true,
+      "noDownloadEvent": true
+    },
+    {
+      "scenario": "TRANS78-UI-12-retry-after-cancel",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "scenario": "TRANS78-UI-12-no-stale-completion",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "unexpectedExtraDownload": false
+    },
+    {
+      "scenario": "TRANS78-UI-13-upload-failure",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "fixture": "single owned multipart upload503 before upstream",
+      "retryVisible": true,
+      "fileListHasRetryFile": false,
+      "completionText": "text 0 / 1 completed • 1 failed"
+    },
+    {
+      "scenario": "TRANS78-UI-13-upload-retry",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "retryClickedAfterNavigation": "/files/archive78",
+      "completed": 1,
+      "failed": 0,
+      "retryFileInWrongCurrentFolder": false
+    },
+    {
+      "scenario": "TRANS78-UI-13-upload-retry-roundtrip",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 129,
+      "sha256": "a14a45b30d8e4eca06366744bea6597da4da3404e76a29019874cfec816bc586"
+    },
+    {
+      "scenario": "TRANS78-UI-11",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "method": "Escape after Cancel AX action/read timeout",
+      "realNativeChooserSuggestedName": "binary78.bin",
+      "nativeOutputEmpty": true,
+      "canceledStatusVisible": true
+    },
+    {
+      "scenario": "TRANS78-UI-10-native-save",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 46,
+      "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+    },
+    {
+      "scenario": "TRANS78-UI-10-native-login-and-save",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "tokensSeeded": false,
+      "loginMethod": "explicit focus and native keyboard, real submit",
+      "passwordMasked": true,
+      "actualSystemChooser": true,
+      "fileSavedVisible": false,
+      "temporaryPartsLeft": 0
+    },
+    {
+      "scenario": "TRANS78-UI-14-native-upload-download",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 321,
+      "sha256": "9a3f2af84b24c845767ceb07914fb4a53a1c62a351f1d8cd393f51067181f237"
+    },
+    {
+      "scenario": "TRANS78-PLAT-12",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "platform": "macOS",
+      "result": "passed-existing-profile-export-callback-through-real-save-dialog",
+      "bytes": 339,
+      "sha256": "3e5c0deebbeaa908b6bcf5edd34fc848c05142dc9670f0c00bf054bbc4824703"
+    },
+    {
+      "scenario": "TRANS78-PLAT-12",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "platform": "Web",
+      "result": "passed-existing-profile-export-callback-through-real-browser-download",
+      "bytes": 336,
+      "sha256": "63c0460cc3b0053fe2ae51ad624a5034a48307795bb427007e698c1659b0bc0a"
+    }
+  ]
+}
