@@ -39,6 +39,7 @@ actual suspend fun openLargeFilePicker(
 actual suspend fun pickLargeFilesForUpload(): List<UploadQueueEntry> = emptyList()
 
 actual fun isFilePickerAvailable(): Boolean = false
+actual fun isFolderPickerAvailable(): Boolean = false
 
 actual suspend fun openFolderPicker(): List<FolderFile> {
     return emptyList()

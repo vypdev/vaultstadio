@@ -5,10 +5,12 @@
 package com.vaultstadio.app.feature.files
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -28,13 +30,16 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.StringResources
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.core.resources.clear
 import com.vaultstadio.app.core.resources.emptyTrash
 import com.vaultstadio.app.core.resources.refresh
@@ -204,6 +209,7 @@ private fun FilesUploadMenu(
     onUploadAction: (UploadAction) -> Unit,
     onUploadMenuChange: (Boolean) -> Unit,
 ) {
+    val folderCopy = folderUploadCopy(Strings.currentLanguage)
     IconButton(onClick = { onUploadMenuChange(true) }) {
         Icon(Icons.Default.CloudUpload, contentDescription = "Upload")
     }
@@ -222,7 +228,13 @@ private fun FilesUploadMenu(
             },
         )
         DropdownMenuItem(
-            text = { Text("Upload folder") },
+            text = {
+                Column(Modifier.widthIn(max = 280.dp)) {
+                    Text(folderCopy.choose)
+                    Text(folderCopy.hint, style = MaterialTheme.typography.bodySmall)
+                }
+            },
+            modifier = Modifier.testTag("files.upload.folder"),
             onClick = {
                 onUploadMenuChange(false)
                 onUploadAction(UploadAction.Folder)

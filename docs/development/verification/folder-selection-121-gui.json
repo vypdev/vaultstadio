@@ -1,0 +1,695 @@
+{
+  "schemaVersion": 1,
+  "issue": 121,
+  "sources": {
+    "initialLoginAndTreeUpload": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
+    "correctedUiAndRepeatedUploadsAndDownloads": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+    "reviewedCodeSource": "d3816d65cc1194848b91e73f6cb82a677678442f"
+  },
+  "mechanism": "Normal rendered UI login and actions; public browser FileChooser API over owned on-disk fixtures plus separate physical Chrome macOS Open-panel selection/three-file confirmation/native Escape cancellation. Actual saved downloads and authenticated read-only API checks are distinct evidence. No injected login/session/application state or fabricated FileList in GUI journeys. Controlled DOM/File/FileReader tests remain separate.",
+  "journeys": [
+    {
+      "id": "FOLDER121-GUI-01",
+      "risk": "Normal login and navigation with disposable account on actual production Web package",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "id": "FOLDER121-GUI-01",
+          "atUtc": "2026-10-28T13:52:51.835Z",
+          "client": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
+          "result": "normal credentials typed by assistant; normal login reached empty My Files after exact local CORS origin configuration; no seeded browser session"
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-02",
+      "risk": "Actual OS directory selection, root/nested Unicode/empty file hierarchy, listing and byte/SHA256 download round trips",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "id": "FOLDER121-GUI-02-upload",
+          "atUtc": "2026-10-28T15:28:37.899Z",
+          "client": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
+          "result": "actual file chooser accepted the owned directory; root tree121-2e2f51cf visible and 3/3 completed including binary, nested Unicode and empty file; download hashes still pending",
+          "acceptanceBlocker": "search DOM control overlaps upload menu; correction pending",
+          "toolCallReportedSeconds": 5207.4405,
+          "timingLimit": "one combined CUA call covered chooser and setFiles; cannot attribute this wall time to application I/O or certify performance"
+        },
+        {
+          "id": "FOLDER121-GUI-02-final",
+          "atUtc": "2026-10-28T16:19:21.974Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Actual corrected production package selected owned tree again into retry121 parent; listed root and nested Unicode/empty files; actual browser downloads saved binary65793, Unicode42 and empty0bytes with matching fixture hashes; independent API verified all10GUI-created payloads.",
+          "receipts": [
+            "gui-browser-downloads.json",
+            "gui-all-payloads-verified.json"
+          ],
+          "screenshots": [
+            "gui-valid-retry-completed.png",
+            "gui-empty-file-download.png"
+          ]
+        },
+        {
+          "id": "FOLDER121-GUI-02-native-positive",
+          "atUtc": "2026-10-28T16:44:46.724Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Normal Chrome login, physical macOS directory Open panel, Go to Folder navigated owned fixtures parent, selected tree121 directory row, physical Upload button, observed Chrome Upload 3 files to this site confirmation and clicked its Upload control. Actual application shows3/3completed in native121 destination. Independent API verifies13files/8folders and all original payload hashes.",
+          "nativeMechanism": "Native application controls and actual OS directory/three-file confirmation; no browser FileChooser setFiles for this upload",
+          "receipts": [
+            "gui-native-selected-tree.ax.txt",
+            "gui-native-upload-confirmation.ax.txt",
+            "gui-native-final-confirmation.ax.txt",
+            "gui-state-after-native-upload.json",
+            "gui-all-payloads-native-verified.json"
+          ],
+          "screenshots": [
+            "gui-native-upload-completed.png"
+          ]
+        },
+        {
+          "id": "FOLDER121-GUI-02-native-roundtrip",
+          "atUtc": "2026-10-28T16:46:04.199Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Opened native121/tree121/binary121.bin in actual Chrome details and clicked Download. Browser event watcher timed out at15s, but the actual newly saved Downloads/binary121.bin exists and independently matches65793bytes and fixtureSHA256. Preserve watcher failure as a tooling diagnostic, not an application byte failure.",
+          "receipts": [
+            "gui-browser-downloads.json",
+            "gui-all-payloads-native-verified.json"
+          ],
+          "screenshots": [
+            "gui-native-binary-download.png"
+          ],
+          "toolingLimit": "Chrome waitForEvent(download) timed out despite completed actual saved file; earlier in-app-browser download events succeeded."
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-03",
+      "risk": "Observe omitted empty directories and empty-selection no-mutation policy",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T16:05:23.740Z",
+          "case": "GUI03",
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS-browser-chooser-API",
+          "observations": [
+            "Fresh explicit Retry chooser accepted on-disk empty directory tree",
+            "Visible No files selected. Empty folders are omitted.",
+            "Read-only API confirms same3files/2folders as after unsafe selection"
+          ],
+          "readOnlyReceipts": [
+            "gui-state-after-unsafe.json",
+            "gui-state-after-empty.json"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-04",
+      "risk": "Reopen the chooser and select the same owned tree after cancellation, retaining a fresh usable input",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T16:07:24.554Z",
+          "cases": [
+            "GUI04",
+            "GUI08-retry",
+            "GUI09-feedback"
+          ],
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS-browser-chooser-API",
+          "observations": [
+            "After cancellation a fresh chooser is usable",
+            "Unsafe folder refused again in original new destination",
+            "Explicit Retry accepts same owned valid on-disk tree",
+            "Actual uploads3/3completed, destination retry121/tree121 with root/nested hierarchy",
+            "Inline queued feedback does not overlap search field"
+          ],
+          "readOnlyReceipt": "gui-state-after-valid-retry.json",
+          "screenshots": [
+            "gui-valid-retry-completed.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-05",
+      "risk": "Cancel the real OS directory chooser and verify busy state and remote state",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T16:06:23.949Z",
+          "case": "GUI05-application-cancel",
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS-application-cancel-OS-dialog-unverified",
+          "observations": [
+            "Real pending browser chooser opened from production app",
+            "Application Cancel ends busy state with No files selected",
+            "Delivering actual owned tree afterwards through old chooser does not enqueue or mutate",
+            "Read-only API confirms new destination remains empty"
+          ],
+          "readOnlyReceipt": "gui-state-after-cancel-and-late-selection.json",
+          "limitation": "This proves application cancellation and stale-result disposal; a physical OS dialog Cancel click remains separate"
+        },
+        {
+          "id": "FOLDER121-GUI-05-native",
+          "atUtc": "2026-10-28T16:38:09.449Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Physical Chrome macOS Open panel opened from native app UI, Go to Folder navigated to owned tree121 on disk; actual open-panel had CancelButton169 and Where tree121. Focused only isolated test window1082193698 and sent native application Escape; production page changed from Preparing folder to No files selected. Empty folders are omitted. API no-mutation confirmation follows.",
+          "nativeMechanism": "Native application UI, not browser filechooser interception; native Escape cancellation",
+          "screenshot": "gui-native-cancel-completed.png",
+          "limitations": [
+            "Native ScreenCaptureKit screenshot failed with audio/video stream error; browser page screenshot and actual native AX/tool observations are distinct evidence.",
+            "One later native AX read followed another foreground Chrome window; unintended diagnostic text was immediately discarded, with no unrelated content copied into Git/evidence."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-06",
+      "risk": "Ordinary single/multiple file picker upload/download regression from actual application",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T16:12:22.109Z",
+          "case": "GUI06",
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS",
+          "observations": [
+            "Production ordinary picker selected2ownedfiles and completed2/2",
+            "Fresh ordinary picker selected1ownedfile in root and completed1/1",
+            "Actual browser download events saved ordinary text and binary",
+            "Independent API verifies every GUI payload, including both ordinary destinations"
+          ],
+          "readOnlyReceipt": "gui-all-payloads-verified.json",
+          "downloadReceipt": "gui-browser-downloads.json",
+          "screenshots": [
+            "gui-ordinary-multiple-completed.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-07",
+      "risk": "Large-file picker reaches chunked upload and retains source bytes through download",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T16:09:53.326Z",
+          "case": "GUI07",
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS",
+          "observations": [
+            "Production Upload large file(s) opens actual file chooser",
+            "Selected owned10486017byte on-disk file",
+            "Application queue shows1/1completed in original retry121 destination",
+            "Actual browser download event and saved file10486017bytes match fixture SHA256"
+          ],
+          "readOnlyReceipt": "gui-state-after-large.json",
+          "downloadReceipt": "gui-browser-downloads.json",
+          "screenshots": [
+            "gui-large-completed.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-08",
+      "risk": "Owned unsafe folder name causes visible safe refusal/no remote mutation; explicit valid selection succeeds afterwards",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T16:04:53.100Z",
+          "case": "GUI08-refusal",
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS-refusal-retry-pending",
+          "observations": [
+            "Actual production folder menu selected owned on-disk unsafe colon folder through browser chooser API",
+            "Visible localized safe refusal with Retry/Close",
+            "Independent account tree remains exactly3files/2folders, no unsafe entry"
+          ],
+          "screenshots": [
+            "gui-unsafe-folder-feedback.png"
+          ],
+          "readOnlyReceipt": "gui-state-after-unsafe.json"
+        },
+        {
+          "atUtc": "2026-10-28T16:07:24.554Z",
+          "cases": [
+            "GUI04",
+            "GUI08-retry",
+            "GUI09-feedback"
+          ],
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS-browser-chooser-API",
+          "observations": [
+            "After cancellation a fresh chooser is usable",
+            "Unsafe folder refused again in original new destination",
+            "Explicit Retry accepts same owned valid on-disk tree",
+            "Actual uploads3/3completed, destination retry121/tree121 with root/nested hierarchy",
+            "Inline queued feedback does not overlap search field"
+          ],
+          "readOnlyReceipt": "gui-state-after-valid-retry.json",
+          "screenshots": [
+            "gui-valid-retry-completed.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FOLDER121-GUI-09",
+      "risk": "Actual corrected upload/sort menu visibility, search query retention/re-edit and inline preparation/error feedback without overlap",
+      "status": "passed-with-bounded-scope",
+      "observations": [
+        {
+          "atUtc": "2026-10-28T15:52:09.556Z",
+          "case": "GUI09",
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS",
+          "observations": [
+            "Native search edited to tree121",
+            "Upload menu removes search input; full folder limits and empty-directory hint visible",
+            "Outside click restores query tree121",
+            "Real typing edits restored input to -tree121",
+            "Sort menu removes search input and restores query on selection",
+            "Keyboard select-all/backspace clears restored input"
+          ],
+          "screenshots": [
+            "gui-menu-layer-corrected.png",
+            "gui-sort-layer-corrected.png"
+          ],
+          "escapeObservation": "Escape had no visible effect; outside click and selecting a sort option closed popups"
+        },
+        {
+          "atUtc": "2026-10-28T16:07:24.554Z",
+          "cases": [
+            "GUI04",
+            "GUI08-retry",
+            "GUI09-feedback"
+          ],
+          "source": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "PASS-browser-chooser-API",
+          "observations": [
+            "After cancellation a fresh chooser is usable",
+            "Unsafe folder refused again in original new destination",
+            "Explicit Retry accepts same owned valid on-disk tree",
+            "Actual uploads3/3completed, destination retry121/tree121 with root/nested hierarchy",
+            "Inline queued feedback does not overlap search field"
+          ],
+          "readOnlyReceipt": "gui-state-after-valid-retry.json",
+          "screenshots": [
+            "gui-valid-retry-completed.png"
+          ]
+        }
+      ]
+    }
+  ],
+  "allGuiCreatedPayloads": {
+    "atUtc": "2026-10-28T16:43:55.097035+00:00",
+    "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+    "kind": "Independent authenticated API reads of actual GUI-created files; separate from browser download handoff",
+    "files": [
+      {
+        "id": "131e7a32-cb69-43c6-bbba-169d1f72e0c9",
+        "path": "/native121-2e2f51cf/tree121-2e2f51cf/binary121.bin",
+        "bytes": 65793,
+        "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+        "matchesFixture": true
+      },
+      {
+        "id": "140962b9-2069-47b1-b8c8-6f31f727f613",
+        "path": "/native121-2e2f51cf/tree121-2e2f51cf/nested/empty121.dat",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "matchesFixture": true
+      },
+      {
+        "id": "a4c6c485-5734-444d-80b8-d9da3fe7c8d4",
+        "path": "/native121-2e2f51cf/tree121-2e2f51cf/nested/niño 日本語.txt",
+        "bytes": 42,
+        "sha256": "78a4807483465cd206b2ab1dc19b76c33360e7330c385add5228bbc1edcc5044",
+        "matchesFixture": true
+      },
+      {
+        "id": "b29724aa-6726-41f3-ad73-bb96d354ad52",
+        "path": "/ordinary121.bin",
+        "bytes": 321,
+        "sha256": "1ac16fd237b8303abda0ee2c34c5dd444f2d88965d34dcb0cdb7a9edaea5d244",
+        "matchesFixture": true
+      },
+      {
+        "id": "519afaf8-d05d-4eac-a48e-d4692a557acb",
+        "path": "/retry121-2e2f51cf/large121.bin",
+        "bytes": 10486017,
+        "sha256": "dd4b38a5069f2da0c9a67ce4eeb47a3aa5a25e3b6934c6897df2859892543519",
+        "matchesFixture": true
+      },
+      {
+        "id": "0b0431b6-b3d9-4226-97f9-9d68611ea07d",
+        "path": "/retry121-2e2f51cf/ordinary121.bin",
+        "bytes": 321,
+        "sha256": "1ac16fd237b8303abda0ee2c34c5dd444f2d88965d34dcb0cdb7a9edaea5d244",
+        "matchesFixture": true
+      },
+      {
+        "id": "92d74afa-22a0-4226-a29d-87a87babe733",
+        "path": "/retry121-2e2f51cf/ordinary121.txt",
+        "bytes": 22,
+        "sha256": "47d1cdcdee35caa06ec6fdcce634be4481d5f2a6d5fe20d5b08b105e2e138cb1",
+        "matchesFixture": true
+      },
+      {
+        "id": "8671fa8a-0931-41fa-a5dd-a635ddcf9be7",
+        "path": "/retry121-2e2f51cf/tree121-2e2f51cf/binary121.bin",
+        "bytes": 65793,
+        "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+        "matchesFixture": true
+      },
+      {
+        "id": "4c6e9022-5195-4634-a983-134360c45e23",
+        "path": "/retry121-2e2f51cf/tree121-2e2f51cf/nested/empty121.dat",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "matchesFixture": true
+      },
+      {
+        "id": "41fb1e16-a841-4b19-ba47-fd039e8422fd",
+        "path": "/retry121-2e2f51cf/tree121-2e2f51cf/nested/niño 日本語.txt",
+        "bytes": 42,
+        "sha256": "78a4807483465cd206b2ab1dc19b76c33360e7330c385add5228bbc1edcc5044",
+        "matchesFixture": true
+      },
+      {
+        "id": "e6f73b6c-3e07-4361-bc33-8047715f0c2d",
+        "path": "/tree121-2e2f51cf/binary121.bin",
+        "bytes": 65793,
+        "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+        "matchesFixture": true
+      },
+      {
+        "id": "048e9063-f022-4aae-97d9-6dd471f45868",
+        "path": "/tree121-2e2f51cf/nested/empty121.dat",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "matchesFixture": true
+      },
+      {
+        "id": "e58667ed-da74-4ccd-b015-032cb035df32",
+        "path": "/tree121-2e2f51cf/nested/niño 日本語.txt",
+        "bytes": 42,
+        "sha256": "78a4807483465cd206b2ab1dc19b76c33360e7330c385add5228bbc1edcc5044",
+        "matchesFixture": true
+      }
+    ],
+    "allPayloadsPreserved": true,
+    "exactFileCount": 13,
+    "exactFolderCount": 8
+  },
+  "browserDownloads": [
+    {
+      "atUtc": "2026-10-28T16:01:53.615269+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "file": "binary121.bin",
+      "bytes": 65793,
+      "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+      "actualBrowserDownload": true,
+      "matchesFixture": true,
+      "toolDownloadEventWallSeconds": 548.4452,
+      "timingCaveat": "Tool call exceeded its requested20s bound; cannot attribute delay to application transfer"
+    },
+    {
+      "atUtc": "2026-10-28T16:09:43.102003+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "file": "large121.bin",
+      "bytes": 10486017,
+      "sha256": "dd4b38a5069f2da0c9a67ce4eeb47a3aa5a25e3b6934c6897df2859892543519",
+      "actualBrowserDownload": true,
+      "matchesFixture": true
+    },
+    {
+      "atUtc": "2026-10-28T16:10:09.461276+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "kind": "ordinary-unicode",
+      "file": "ordinary121.txt",
+      "bytes": 22,
+      "sha256": "47d1cdcdee35caa06ec6fdcce634be4481d5f2a6d5fe20d5b08b105e2e138cb1",
+      "actualBrowserDownload": true,
+      "matchesFixture": true
+    },
+    {
+      "atUtc": "2026-10-28T16:11:04.793118+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "kind": "tree-unicode",
+      "file": "niño 日本語.txt",
+      "bytes": 42,
+      "sha256": "78a4807483465cd206b2ab1dc19b76c33360e7330c385add5228bbc1edcc5044",
+      "actualBrowserDownload": true,
+      "matchesFixture": true
+    },
+    {
+      "atUtc": "2026-10-28T16:11:04.840114+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "kind": "tree-empty-file",
+      "file": "empty121.dat",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "actualBrowserDownload": true,
+      "matchesFixture": true
+    },
+    {
+      "atUtc": "2026-10-28T16:12:42.029134+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "kind": "ordinary-binary",
+      "file": "ordinary121.bin",
+      "bytes": 321,
+      "sha256": "1ac16fd237b8303abda0ee2c34c5dd444f2d88965d34dcb0cdb7a9edaea5d244",
+      "actualBrowserDownload": true,
+      "matchesFixture": true
+    },
+    {
+      "atUtc": "2026-10-28T16:46:10.147369+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "kind": "tree-binary",
+      "file": "binary121.bin",
+      "bytes": 65793,
+      "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+      "actualBrowserDownload": true,
+      "matchesFixture": true,
+      "browser": "Chrome",
+      "uiSourcePath": "/native121-2e2f51cf/tree121-2e2f51cf/binary121.bin",
+      "downloadEventWatcher": "Timed out at15s; actual new saved file independently verified, no successful event claim",
+      "savedAtUtc": "2026-10-28T16:45:00.054986+00:00"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "gui-desktop-folder-canceled.png",
+      "sha256": "d9cbd9b93bccbfb7afefc0231578bcb8ce23831d22d3c919ca76e20349d6306a",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-desktop-folder-dialog.png",
+      "sha256": "0e9a04126a82e9d0dcd7d98982468cc1b6f383e3e7276e385e56301202fad32e",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-empty-file-download.png",
+      "sha256": "eafba20c07a7a2ac0d3133c38566fe7fa81547f107ffb9c32f8dcb16b4252e8c",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-final-cancel-status.png",
+      "sha256": "3c11588314acdb7171c12c756674848b68f31efd5546605e75219ce5d4949ffe",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-final-hierarchy-menu.png",
+      "sha256": "f049e2b6e9e670f32f9339f17033679b26352010849dc58b111ba3360493198b",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-folder-upload-core.png",
+      "sha256": "f6890214d1aff39afc94cbace54c0a452274025a916aada547bafaddd539df19",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-initial-cors-refusal.png",
+      "sha256": "cafb651703f3adb2b5349f90da59c40a2386b6416aa982d1a5f5dad8a3439bd8",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-large-completed.png",
+      "sha256": "99fa3e70129d1a3e15588fc48002027aaab4c91f34b6ee57cf56b195d50a28e7",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-menu-layer-corrected.png",
+      "sha256": "20e494d70d27d4a53391f9a3f8ed1da50a8ebf3b8ec55fcb05149e826bebbfb4",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-menu-search-overlap-before.png",
+      "sha256": "a6960d57e32cd579fc6925e7e1de0acb1e424afc5d2e4aeaf466f6aac7248e98",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-binary-download.png",
+      "sha256": "36ff9307bc37c601dc88801a1b69c02b386d36bd1e8b086f53d3b15f32cc8eda",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-budget-canceled.png",
+      "sha256": "d9cbd9b93bccbfb7afefc0231578bcb8ce23831d22d3c919ca76e20349d6306a",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-cancel-completed.png",
+      "sha256": "2823b18fa6317dbe7cbfe1d13c857fea1d7d82c3ca3025fff1a828c98ef69ce9",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-upload-completed.png",
+      "sha256": "694e6c121d7cdac0f7a24a34d56293ffec266d8b165a4cc8c6431f7819acabad",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-ordinary-multiple-completed.png",
+      "sha256": "7cbcc308f22b5006fd7a84147089c2f35e64ce00397b35a93c2dd50657db7767",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-review-copy-read-failure.png",
+      "sha256": "42c2827795c3862f133593b009be041feeb373a642313666b72a95f672d5bdaf",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-sort-layer-corrected.png",
+      "sha256": "19aee634727adc189e6df8fa3b13c76d86bb10aea2491990f44e25e6543e2a92",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-unsafe-folder-feedback.png",
+      "sha256": "dbdab03492b91a05f67c46580871d2d3378e9d6260ad0ef81e9e730c5a058473",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-valid-retry-completed.png",
+      "sha256": "de5195b3126f225795d6d9063091d9f24b5bf0779d6455fd59b402e2feebcc2d",
+      "originalRetainedOutsideGit": true
+    }
+  ],
+  "limitations": [
+    "Physical Chrome/macOS selection and native Escape cancellation are certified separately from the initial browser chooser API journeys.",
+    "Native ScreenCaptureKit screenshots failed with an audio/video stream error; actual native AX/controls and browser-page screenshots are separate evidence. Chrome download event watcher timed out despite a verified newly saved file; no successful watcher event is claimed.",
+    "Tool calls once exceeded requested time bounds; those waits are not application performance measurements.",
+    "Other browser engines, native desktop folder enumeration and mobile pickers were not accepted by this Web increment."
+  ],
+  "originalNativeAx": [
+    {
+      "name": "gui-native-final-confirmation.ax.txt",
+      "sha256": "a1988028a1f450732eb2be8854a651db797140f9c90dce5e95185dd0eb33587c",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-selected-tree.ax.txt",
+      "sha256": "d4ededce94ac857a0199ae0da0c5faad0d62317908564c5e006983bad312f036",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-upload-confirmation.ax.txt",
+      "sha256": "847e47af539aaa408564e1c69742e6c8a30a48e2683b68e8100e6a3f8c70ed05",
+      "originalRetainedOutsideGit": true
+    }
+  ],
+  "nativeAcceptanceOriginals": {
+    "archive": "issue121-native-d18d72c/originals.zip",
+    "sha256": "db38eb9bb98294ab34e65c3d2efa026ff8a73631171c1760b94d38d42f87a567",
+    "files": 13,
+    "allEntriesByteCompared": true
+  },
+  "reviewFileReadFailure": {
+    "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+    "mechanism": "Actual production Wasm package; ordinary Upload files; public browser FileChooser API selects an owned four-byte mode000 on-disk fixture; actual FileReader refusal; no fabricated FileList or injected app/session/error state.",
+    "observedMessage": "The selected files could not be read. Nothing was added. Select the files again.",
+    "beforeAfterIdentical": true,
+    "files": 13,
+    "folders": 8,
+    "idsAndParentRelationsUnchanged": true,
+    "fixturePermissionsRestored": "0600",
+    "screenshot": "gui-review-copy-read-failure.png",
+    "ax": "gui-review-copy-read-failure.ax.txt",
+    "scope": "Additional actual file-read failure acceptance; original nine directory/native journeys retain their recorded earlier source."
+  },
+  "desktopReviewSmoke": {
+    "atUtc": "2026-10-28T18:23:58.643038+00:00",
+    "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+    "kind": "Actual desktop application smoke; separate from controlled EventQueue and earlier Chrome/macOS OS-panel evidence.",
+    "normalUiLogin": true,
+    "credentialsAutonomouslyTyped": true,
+    "unseededInMemoryPreferences": true,
+    "productionJarsUnmodified": true,
+    "menuUploadFolderActivated": true,
+    "mainWindowBecameModalAndPreparing": true,
+    "applicationCancelClosedModal": true,
+    "returnedToStandardWindow": true,
+    "observedFeedback": "No files selected. Empty folders are omitted.",
+    "files": 13,
+    "folders": 8,
+    "idsAndParentsUnchanged": true,
+    "actualSwingDialogControlsExposedToAutomation": false,
+    "positiveSwingDirectorySelectionCertified": false,
+    "screenshots": [
+      "gui-desktop-folder-dialog.png",
+      "gui-desktop-folder-canceled.png"
+    ],
+    "ax": "gui-desktop-folder-canceled.ax.txt",
+    "toolLimitation": "Initial getApp took1316.343seconds to return; subsequent native actions were normal. This is recorded as an orchestration delay, not product performance. Tool bound main window rather than separate Swing chooser; only application cancel is certified."
+  },
+  "reviewAcceptanceOriginals": {
+    "archive": "issue121-review-4d3fb74/originals.zip",
+    "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+    "sha256": "8fce753e9a123a9584013d67427cd9beebf80c16925c5a79e5672d30fc419482",
+    "files": 20,
+    "allEntriesByteCompared": true,
+    "fixtureModeAfter": "0600"
+  },
+  "nativeBudgetSmoke": {
+    "atUtc": "2026-10-28T18:49:17.587880+00:00",
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "kind": "Actual isolated native package smoke after resource repair; no injected credentials/session/application state.",
+    "normalAutonomousLogin": true,
+    "productionJarsUnmodified": true,
+    "signatureVerified": true,
+    "unseededPreferences": true,
+    "folderMenuActivated": true,
+    "modalPreparingObserved": true,
+    "applicationCancelClosesModal": true,
+    "standardOperableWindowRestored": true,
+    "files": 13,
+    "folders": 8,
+    "idsAndParentsUnchanged": true,
+    "positivePhysicalSwingSelectionCertified": false,
+    "actualResourceValidationEvidence": "Separate12 on-disk desktop cases plus shared reader controls; not inferred from cancel smoke.",
+    "ax": [
+      "gui-native-budget-preparing.ax.txt",
+      "gui-native-budget-canceled.ax.txt"
+    ],
+    "screenshot": "gui-native-budget-canceled.png",
+    "toolAppAcquisitionSeconds": 22.8002
+  },
+  "desktopAcceptanceOriginals": {
+    "archive": "issue121-desktop-17f1f3f/originals.zip",
+    "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+    "sha256": "a59efe51ebe8a602fa38f096ba5509a840300c2e32d3b4c51f46e9ff978b6d45",
+    "files": 27,
+    "allEntriesByteCompared": true
+  },
+  "nativeBudgetAcceptanceOriginals": {
+    "archive": "issue121-native-budget-d3816d6/originals.zip",
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "sha256": "6ef5aa1714a6145e992af8c94c7c1006c840cda3eb88b4987b765b287a35035d",
+    "files": 18,
+    "allEntriesByteCompared": true,
+    "scope": "Original red7assertion failures/5controls, final48focusedgreen, actual native application normal login/menu/appCancel with13files/8folders unchanged; positive physical Swing selection not certified. Full campaign has separate original archive."
+  }
+}

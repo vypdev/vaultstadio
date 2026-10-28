@@ -246,6 +246,80 @@ transport-deadline/cancellation assertions remain authoritative; do not reduce t
 skip the case or disable browser deadlines to recover a green run. This only changes the
 storage test harness, not production request timeouts or the supported resource bounds.
 
+### 6.8 Focused directory picker and preparation — issue #121
+
+Pre-implementation contract (2026-10-28), FOLDER121, on the Action-linked issue121 branch
+from develop `95d2adb`. Pure upload-domain policy owns relative paths, entry collisions and
+the fixed preparation bounds in SDD-0005 section6.5. A focused application reader owns
+validation-before-read, sequential byte reconciliation and cancellation. Browser adapters
+own public directory capability detection, input lifecycle, `webkitRelativePath`, Blob/FileReader
+I/O and cleanup. Presentation owns busy/cancel/failure/retry and the selected-parent snapshot.
+Keep DOM/Compose/Ktor/filesystem types out of the domain policy and file-source port.
+
+Decompose the existing Wasm file-picker implementation into focused input, byte-reader and
+selection adapters, with thin expect/actual entrypoints. Do not enlarge FilesContent,
+FilesViewModel or the old picker with directory orchestration. A shared browser input/reader
+may serve ordinary and large-file pickers only with explicit byte, cancellation, threshold,
+source-shape and cleanup regressions; preserve their existing data/streaming distinction.
+
+An input belongs to one operation. Install listeners before activation, handle real change
+and cancel events, settle once, and remove owned inputs/listeners on completion, failure and
+disposal. Abort an active FileReader after detaching its handlers on cancellation; stale or
+duplicate callbacks cannot resume twice or publish files. Expected DOM/read failures become
+bounded semantic outcomes; cancellation and unexpected fatal errors retain their meaning.
+Never hide a failure as empty bytes or report a canceled selection as successful upload.
+
+Folder preparation has an observable active state and cancel action. Duplicate activation
+cannot dispatch another chooser/read, screen/session disposal cancels owned work, and a late
+read cannot enqueue into a new route. Feedback is localized and avoids private paths, content,
+tokens and provider exception messages. Explain the empty-directory limitation and bounded
+folder selection where it helps the user choose the appropriate action. Unsupported pickers
+return an explicit result rather than a misleading ordinary-file fallback.
+
+Tests MUST exercise real browser File/Blob/FileReader and owned DOM input behavior as well
+as controllable domain ports. Distinguish controlled DOM tests from a real OS directory
+chooser and actual packaged upload/list/download verification. Native/mobile readiness stays
+separate; preserve their existing entrypoints and record the exercised scope precisely.
+Keep Copilot, branch protections, workflow cadence, dependency pins and setup activation intact.
+The risk-derived floor and real journeys are in the
+[pre-code inventory](../docs/development/verification/folder-selection-121-plan.json).
+
+Pre-code refinement after actual Web acceptance on `8320a43` (2026-10-28),
+FOLDER121-LAYER: the native HTML search input visibly covers the upload popup and its
+new folder hint. Green6,559-case execution does not satisfy this rendered acceptance.
+While an owned Files upload/sort popup is open, suspend the background search control
+and reserve its measured layout space. Preserve its controlled query and restore a
+real editable control on dismissal; release detached DOM listeners rather than leave
+an invisible hit target over the popup. Keep this policy in the owning presentation,
+using public component lifecycle; no framework-parent style or private editor mutation.
+Render folder preparation/error feedback in normal Files layout flow so it cannot
+cover the native search input. Add eight risk families for popup occlusion, repeated
+query restoration, focused editing after dismissal, stale-listener cleanup, measured
+layout at different font scales, inline feedback geometry and actual menu operation.
+Retain the original overlap screenshot and separately verify the corrected package.
+
+### 6.8.1 Review refinement: file-picker failure language — issue #121
+
+Pre-code review refinement (2026-10-28), FOLDER121-COPY: preserve the originating upload action through safe problem delivery. Ordinary-file and large-file picker failures MUST use file-selection language. Unsupported file selection MUST NOT claim missing directory support; file preparation limits MUST NOT advertise the separate32MiB/256-entry/16-level folder contract. Read failures identify selected files, confirm that no selection was added and permit explicit selection again. Folder operations retain their existing localized capability/path/budget/read messages. Raw provider diagnostics are never presented; cancellation and current-action cleanup retain their existing behavior.
+
+Keep the action-aware presentation mapping pure and separate from picker/platform I/O. Maintain all seven locales. Add at least8 meaningful deterministic routing/copy cases, including ordinary/large read failure, ordinary/large capability refusal, ordinary/large non-folder bounds, unchanged folder mapping and maintained-language coverage. Preserve original assertion-red and green evidence, then repeat complete canonical suites, coverage, gates and lint on the resulting source. Previously verified native positive/cancel journeys keep their actual package/source identity; this refinement does not relabel old observations as a new build.
+
+### 6.8.2 Review refinement: desktop chooser thread ownership — issue #121
+
+Pre-code review refinement (2026-10-28), FOLDER121-DESKTOP: the desktop availability adapter exposes the existing Swing folder chooser. Construct, display and dispose that chooser exclusively on the actual AWT event dispatch thread. Return only the approved directory across that boundary; recursive file enumeration and reads remain on Dispatchers.IO. Keep those platform responsibilities in focused collaborators, with no Swing or filesystem type in the domain/controller.
+
+The operation owns its dialog: pre-dispatch cancellation must not construct it; cancellation of an active modal dialog schedules disposal on its owning event queue and cannot publish a late selection. Expected native cancellation returns no selection. Factory, selection and disposal exceptions must reach the suspended caller safely, without escaping the event-queue callback or claiming a chosen directory. Preserve the existing desktop enumeration/path/size behavior in this thread-ownership repair; broader native hierarchy/resource/symlink acceptance remains separate from the Web contract.
+
+Add at least8 meaningful desktop cases using the real EventQueue and controlled dialogs: thread ownership and chosen result, native cancel/no read, factory failure, selection failure/disposal, disposal failure, cancellation before dispatch, active modal cancellation/late-result rejection and filesystem I/O outside the UI thread. Preserve assertion-red and green originals, repeat complete suites/coverage/gates/lint, and keep the prior Web/native observations tied to their actual sources. A display-independent controlled dialog test does not certify an actual OS chooser.
+
+### 6.8.3 Review refinement: bounded native folder preparation — issue #121
+
+Pre-code review refinement (2026-10-28), FOLDER121-NATIVE: move native validation ahead of body reads. The desktop enumerator MUST use a lazy no-follow filesystem traversal on IO, with cancellation checks and a cap of256 visited entries including the selected root and empty directories. Stop beyond16 relative path segments. Preserve legacy desktop root-relative paths; the shared pure policy already supports requireRoot=false. Validate every accumulated metadata snapshot through that policy and validate the complete selection before creating body reads. Keep browser requireRoot=true as the default.
+
+Use the existing application reader for sequential, atomic, cancellable body reconciliation, with an explicit root-policy option. Desktop folder selection uses the same32MiB aggregate declared/actual bound; replace silent skipping of files above the ordinary-file threshold or unreadable entries with a typed whole-selection failure. Do not change ordinary/large-file picker thresholds or chunking. Read at most snapshotted size plus1 byte per accepted source so a growing file cannot allocate an unbounded buffer. A truncated/growing/unreadable file cannot publish earlier files. Do not follow symlink entries/root; refuse a swapped leaf link at open. Keep physical filesystem types and traversal in focused platform collaborators, neutral metadata/policy in domain and orchestration in the application reader.
+
+Add at least12 native risk families: real basic binary/Unicode/empty reads, exact32MiB aggregate bytes, aggregate plus1, single oversize refusal, exact visited-entry bound, visited-entry plus1, exact depth, depth plus1, static/swapped symlink refusal, read failure without partial output, changed byte lengths and cancellation before later reads. Assert no body callback for metadata/resource refusal. Keep actual on-disk IO and controlled callback evidence distinct from a physical chooser; broader native OS/UI readiness and parent-directory race guarantees are not claimed. Preserve red/green originals, rerun full suites/coverage/gates/lint and retain previous sources and failed CI evidence.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
@@ -350,6 +424,9 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 For #76, executed evidence is recorded in [frontend startup verification](../docs/development/verification/FRONTEND_STARTUP_76.md) and its companion JSON: BOOT-SER-01/02 → 15 production-factory cases on JVM and Wasm; BOOT-HTTP-01 → 4 actual Nginx checks plus built-artifact browser load; BOOT-PKG-01 → generated and launched macOS distributable. BOOT-UI-01 is verified for the exercised local startup/login path: browser login, folder navigation and upload passed; the maintainer entered the disposable desktop credentials, then the assistant submitted and verified native HTTP 200, My Files and folder/file navigation. Autonomous text entry is separately unresolved under #80. BOOT-ISO-01 → dedicated browser origin, disposable backend volumes/account and confirmed in-memory desktop preferences. These results do not certify other platforms or complete feature readiness.
 
 Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `ae5f22a` passed 6,386 product executions including review/CI refinements and all 22 archive path-policy branches; real Web/macOS observations retain their actual client/server sources. Earlier 6,355 acceptance and independent failures remain historical evidence. Transfer bounds, Web directory selection (#121), Web origin (#116), mobile hardware and final-ref CI/review/adoption retain separate acceptance.
+
+
+Executed #121 evidence is recorded in [Web directory selection verification](../docs/development/verification/FOLDER_SELECTION_121.md), its96-family risk matrix and separate GUI receipts. Source `d3816d6` passes6,606 complete product executions with zero failures/errors/skips and retains full44/52 module populations. Domain path/budget policy covers33/33lines and48/48branches; actual browser reads check every byte at the32MiB bound. All9 rendered journeys pass within their recorded scope, including separate physical Chrome/macOS directory selection, native Escape cancellation with no mutation, three-file confirmation/upload and a saved binary round trip. Initial browser-chooser API and native journeys retain their own mechanism and earlier sources. The action-specific error mapper covers38/38lines and12/12branches; a real four-byte unreadable-file selection on package4d3fb74 shows file-specific feedback and leaves all13 files/8 folders unchanged. The desktop-only follow-up moves Swing chooser ownership to EventQueue, retains filesystem reads on IO and passes9 controlled desktop cases plus real native login/application-cancel smoke without mutation. The subsequent native resource repair validates bounded metadata before reads, caps actual reads at snapshot+1 and rejects changing/unreadable/link sources atomically, with12 filesystem cases and48 focused controls plus the complete campaign. Native legacy relative paths and browser selected-root semantics remain distinct. Physical positive Swing selection is not certified. Final-ref CI, review and explicit adoption remain pending; no whole-platform readiness claim is made.
 
 ## 18. Implementation or maintenance sequence
 
