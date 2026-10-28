@@ -315,6 +315,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `4128d03` passed 6,355 product executions; real Web/macOS upload, download, ZIP, retry, cancellation and native selector results have explicit source and byte/hash evidence. The 32 MiB client and bounded archive contract remain explicit. Web directory selection (#121), Web origin (#116), mobile runtime/hardware and final-ref CI/review/adoption retain separate acceptance.
+
 ## 18. Implementation or maintenance sequence
 
 Inventory routes -> decide source of truth -> reconcile Swagger/OpenAPI -> add parity validator -> update API docs -> add protocol-specific contract tests.

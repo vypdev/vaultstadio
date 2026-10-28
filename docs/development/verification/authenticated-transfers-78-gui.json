@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "issue": 78,
   "method": "Actual rendered application through documented CUA controls; normal sign-in; original download bytes and native saved files independently hashed; private credentials/session data excluded.",
-  "productionSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+  "webProductionSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+  "finalNativeProductionSource": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
   "earlierPositiveSource": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
   "sourcesAreDistinct": true,
   "events": [
@@ -208,6 +209,30 @@
       "result": "passed-existing-profile-export-callback-through-real-browser-download",
       "bytes": 336,
       "sha256": "63c0460cc3b0053fe2ae51ad624a5034a48307795bb427007e698c1659b0bc0a"
+    },
+    {
+      "scenario": "TRANS78-UI-15-native-final-save",
+      "source": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
+      "bytes": 321,
+      "sha256": "9a3f2af84b24c845767ceb07914fb4a53a1c62a351f1d8cd393f51067181f237",
+      "assertions": [
+        "normal autonomous login without seeded tokens",
+        "actual Save File dialog",
+        "File saved visible",
+        "original bytes match",
+        "no temporary part files"
+      ]
+    },
+    {
+      "scenario": "TRANS78-UI-16-native-final-cancel",
+      "source": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
+      "assertions": [
+        "actual Save File cancelled by Escape",
+        "Download canceled visible",
+        "Retry visible",
+        "existing destination bytes unchanged",
+        "no new file or temporary parts"
+      ]
     }
   ]
 }

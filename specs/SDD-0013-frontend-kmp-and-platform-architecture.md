@@ -341,6 +341,8 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 
 For #76, executed evidence is recorded in [frontend startup verification](../docs/development/verification/FRONTEND_STARTUP_76.md) and its companion JSON: BOOT-SER-01/02 → 15 production-factory cases on JVM and Wasm; BOOT-HTTP-01 → 4 actual Nginx checks plus built-artifact browser load; BOOT-PKG-01 → generated and launched macOS distributable. BOOT-UI-01 is verified for the exercised local startup/login path: browser login, folder navigation and upload passed; the maintainer entered the disposable desktop credentials, then the assistant submitted and verified native HTTP 200, My Files and folder/file navigation. Autonomous text entry is separately unresolved under #80. BOOT-ISO-01 → dedicated browser origin, disposable backend volumes/account and confirmed in-memory desktop preferences. These results do not certify other platforms or complete feature readiness.
 
+Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `4128d03` passed 6,355 product executions; real Web/macOS upload, download, ZIP, retry, cancellation and native selector results have explicit source and byte/hash evidence. The 32 MiB client and bounded archive contract remain explicit. Web directory selection (#121), Web origin (#116), mobile runtime/hardware and final-ref CI/review/adoption retain separate acceptance.
+
 ## 18. Implementation or maintenance sequence
 
 Inventory current modules -> classify legacy docs -> publish baseline -> add dependency/state checks -> reconcile feature/API docs -> validate platform claims.
