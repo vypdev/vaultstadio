@@ -7,7 +7,7 @@
   ],
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
-  "status": "pre-implementation risk inventory",
+  "status": "68risk-families traced to passing tests;8bounded rendered journeys and1partial native-dialog journey;CI/review/adoption pending",
   "minimumDeterministicRisks": 68,
   "minimumRealJourneys": 9,
   "bounds": {
@@ -21,466 +21,1771 @@
     {
       "id": "FOLDER121-POLICY-01",
       "risk": "Preserve selected root and direct file path",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PreservesRootAndPath",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-02",
       "risk": "Preserve nested Unicode names and original casing",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PreservesUnicodeCaseAndSpaces",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-03",
       "risk": "Accept a legitimate zero-byte file",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121AcceptsEmptyFile",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-04",
       "risk": "Accept exact aggregate byte bound",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121AcceptsExactAggregateBytes",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReadsEveryByteAtExactAggregateBound",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FolderBudgetTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/202.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReadsTwoFilesAtExactSharedAggregateBound",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FolderBudgetTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/202.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-05",
       "risk": "Reject aggregate byte bound plus one before reading",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsByteBoundPlusOne",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserRejectsActualBoundPlusOneBeforeFileReaderStarts",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FolderBudgetTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/202.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-06",
       "risk": "Reject negative declared size before reading",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsNegativeSize",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsLongOverflowSize",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-07",
       "risk": "Reject absolute slash paths",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsAbsolutePaths",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-08",
       "risk": "Reject absolute/backslash or ambiguous separator paths",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsBackslashes",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-09",
       "risk": "Reject dot and parent navigation segments",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsDotNavigation",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsParentNavigation",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-10",
       "risk": "Reject empty or blank path segments",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsEmptySegment",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsBlankSegment",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsTrailingSeparator",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-11",
       "risk": "Reject control and NUL characters",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsControlCharacters",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-12",
       "risk": "Reject colon/drive-prefixed segments",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsDriveSyntax",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsColonInNestedSegment",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-13",
       "risk": "Reject basename/path disagreement",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsDifferentBasename",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-14",
       "risk": "Reject missing browser directory root",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsMissingRoot",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-15",
       "risk": "Reject exact duplicate file paths",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsExactDuplicates",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-16",
       "risk": "Reject file-as-directory collision independent of entry order",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsFileDirectoryCollisionInBothOrders",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-17",
       "risk": "Accept distinct case-sensitive and Unicode spellings without normalization",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PreservesDistinctCaseAndUnicodeSpellings",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-18",
       "risk": "Accept exactly256 represented files/implicit-directory entries",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121AcceptsExactCombinedEntryBound",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-19",
       "risk": "Reject entry bound plus one including implicit directories",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121CountsImplicitRootAgainstEntryBudget",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121CountsAllImplicitDirectories",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsExcessFileCountImmediately",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-20",
       "risk": "Accept exactly16 path segments",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121AcceptsExactDepth",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-21",
       "risk": "Reject17 path segments",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RejectsExcessDepth",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-22",
       "risk": "Accept255-code-unit segment and reject256",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121AcceptsExactSegmentLength",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsExcessSegmentLength",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RejectsUnboundedPathBeforeSplitting",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121AcceptsMaximumComposedPathLength",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-23",
       "risk": "Reject invalid selection atomically before any reader or queue mutation",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderValidatesWholeSelectionBeforeFirstRead",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ControllerRejectsPreparedPathBeforeQueueMutation",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-POLICY-24",
       "risk": "Treat empty selection as no mutation with explicit empty-directory policy",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121AcceptsEmptySelectionWithoutCreatingAnything",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/7888871eca33b6f5338e22269bc87ed9468fd89c35dd99e06d57238c0ef6a38b/0.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.domain.upload.FolderSelectionPolicyTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/99f974c67de1f75353de048adbd23e3693d32b5ddbfe7ab52c6e5e59a052de89/0.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ReaderEmptySelectionPerformsNoWork",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-01",
       "risk": "Preserve binary bytes and MIME through actual source read",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderPreservesBinaryNamePathAndMime",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReaderPreservesBytesAndDetachesCallbacks",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-02",
       "risk": "Read files sequentially and preserve original selection order",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderKeepsInputOrderAndReadsSequentially",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-03",
       "risk": "Retain legitimate empty content with exact declared size",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderIncludesActualEmptyFile",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReaderAcceptsRealEmptyBlob",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-04",
       "risk": "Reject truncated or oversized actual bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderRejectsTruncatedBody",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ReaderRejectsExcessBodyBytes",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-05",
       "risk": "Map a read failure without returning earlier successful files",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderFailureDoesNotReturnEarlierFiles",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-06",
       "risk": "Stop before reading when metadata validation rejects",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderRejectsResourceBoundBeforeReading",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-07",
       "risk": "Honor cancellation before first read",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderCancellationBeforeLaunchReadsNothing",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-08",
       "risk": "Honor cancellation during a pending read",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderCancellationStopsPendingSourceAndLaterFiles",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-09",
       "risk": "Honor cancellation between files and after read completion",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderChecksCancellationAfterReadBeforeNextSource",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-10",
       "risk": "Keep total actual bytes within the validated budget",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121BrowserReadsTwoFilesAtExactSharedAggregateBound",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FolderBudgetTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/202.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ReaderRejectsExcessBodyBytes",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-11",
       "risk": "Propagate unexpected fatal errors independently of expected read failures",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderDoesNotHideUnexpectedFatalError",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-READER-12",
       "risk": "Retain immutable metadata and original destination through preparation",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ReaderSnapshotsMetadataBeforeAnySuspension",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/182.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121SelectionReaderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/190.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ControllerQueuesIntoOriginalParent",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-01",
       "risk": "Use a real directory-capable file input",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121UsesDirectoryInputInsteadOfOrdinaryMultiplePicker",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DirectoryRegressionTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/200.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-02",
       "risk": "Return explicit unsupported capability without flat-file fallback",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogUnsupportedCapabilityNeverFallsBackToFiles",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-03",
       "risk": "Read public webkitRelativePath from actual browser File objects",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PreservesSelectedRootAndNestedUnicodePath",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DirectoryRegressionTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/200.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-04",
       "risk": "Preserve recursive actual File/Blob bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121FixtureRetainsActualBrowserBinaryBytes",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DirectoryRegressionTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/200.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReadsEveryByteAtExactAggregateBound",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FolderBudgetTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/202.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-05",
       "risk": "Handle real cancel event and remove owned input",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogCancelRemovesOwnedInput",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-06",
       "risk": "Handle empty change event with no files",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogEmptyChangeDoesNotInventFiles",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-07",
       "risk": "Settle once after duplicate change/cancel callbacks",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogDuplicateEventsSettleOnlyOnce",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-08",
       "risk": "Dispose selection before callback and ignore late events",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogCoroutineCancellationCleansInputAndLateEvents",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-09",
       "risk": "Remove owned input and handlers after activation failure",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogExpectedActivationRefusalIsBounded",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121DialogUnexpectedFatalActivationIsNotMappedToCapability",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-10",
       "risk": "Abort active FileReader and detach handlers on cancellation",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121BrowserReaderCancellationAbortsAndDetachesBeforeAbort",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-11",
       "risk": "Reject FileReader error or invalid/null result without empty success",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121BrowserReaderErrorNeverBecomesEmptySuccess",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReaderNullResultIsRejected",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121BrowserReaderTextResultIsRejected",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-12",
       "risk": "Ignore stale or duplicate FileReader completion",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121BrowserReaderDuplicateCompletionSettlesOnlyOnce",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121FileReaderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/201.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-13",
       "risk": "Preserve ordinary single-file input mode and bytes",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121OrdinarySinglePickerPreservesModeAcceptAndBytes",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-14",
       "risk": "Preserve ordinary multiple selection, threshold and order",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121OrdinaryMultiplePickerPreservesOrderAndEmptyFile",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121OrdinaryOversizedMetadataStillRequiresLargeFilePath",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-15",
       "risk": "Preserve streaming large-file source shape and exact chunk reads",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121LargePickerDefersReadsAndPreservesChunkRange",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121LargeQueueSourceRetainsDeferredBytePort",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121LargePickerRejectsInvalidChunkRangeBeforeRead",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-BROWSER-16",
       "risk": "Release input/reader resources before a fresh repeated selection",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DialogFreshSelectionAfterCancelStillReads",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DialogLifecycleTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/199.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-01",
       "risk": "Expose active preparation and allow explicit cancel",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RenderedCancelStopsPreparationWithoutQueueing",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121FeedbackInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/176.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ControllerDismissCannotHideActivePreparation",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-02",
       "risk": "Reject duplicate activation while selection/read is active",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ControllerRejectsDuplicateActivation",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-03",
       "risk": "Snapshot selected parent before asynchronous selection",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ControllerQueuesIntoOriginalParent",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-04",
       "risk": "Never enqueue a late result after close/navigation/cancel",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ControllerIgnoresLateResultAfterCancelAndNewOperation",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ControllerCloseDiscardsLateResultAndPreventsRestart",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-05",
       "risk": "Map bounded failure to localized recoverable feedback",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ControllerExpectedFailureKeepsTypedProblemAndBusyCanClear",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121ControllerDoesNotExposeProviderExceptionText",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RenderedUnsupportedFeedbackDoesNotOfferMisleadingRetry",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121FeedbackInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/176.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-06",
       "risk": "Retry explicitly using original destination without automatic duplicate upload",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121ControllerRetryRequiresExplicitActionAndUsesOriginalDestination",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/183.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Folder121UploadControllerTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/191.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RenderedRetryKeepsOriginalParentAndCloseDismissesFeedback",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121FeedbackInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/176.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-07",
       "risk": "Preserve folder-creation failure and sibling path ownership",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "transfer78FolderCreationFailureNeverUploadsIntoPartialParent",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Upload78FolderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/187.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Upload78FolderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/195.xml"
+            }
+          ]
+        },
+        {
+          "test": "transfer78FolderSiblingsReuseCreatedParentAndKeepAllPayloads",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Upload78FolderTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/187.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Upload78FolderTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/195.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-CONTROL-08",
       "risk": "Preserve queue failure, byte snapshot and explicit original-parent retry",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "transfer78FailedUploadEmitsNoCompletionAndCanRetrySameSnapshot",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Upload78QueueTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/188.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Upload78QueueTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/196.xml"
+            }
+          ]
+        },
+        {
+          "test": "transfer78SuccessfulUploadPreservesBytesNameMimeAndParent",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.upload.Upload78QueueTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/188.xml"
+            },
+            {
+              "class": "com.vaultstadio.app.feature.upload.Upload78QueueTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/196.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-01",
       "risk": "Upload/sort popups do not overlap an active native search input",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PopupReleasesNativeSearchHitTarget",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.files.Browser121SearchLayerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/168.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-02",
       "risk": "Repeated popup close/reopen preserves the controlled Unicode query",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PopupReopeningPreservesQueryAndRealEditing",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.files.Browser121SearchLayerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/168.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RepeatedPopupDoesNotEmitSpuriousQueryChanges",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121SearchPopupInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/177.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-03",
       "risk": "Restored real search field supports ordinary focus and editing",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DefaultSearchRemainsVisibleAndEditable",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.files.Browser121SearchLayerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/168.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121PopupRetainsQueryAndRestoresEditableControl",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121SearchPopupInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/177.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-04",
       "risk": "Disposed background DOM fields release listeners and ignore stale input events",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121DisposedBackgroundInputDoesNotPublishStaleEdits",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.files.Browser121SearchLayerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/168.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-05",
       "risk": "Measured search layout remains stable at normal font scale",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PopupPreservesMeasuredSlot",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.files.Browser121SearchLayerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/168.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121PopupPreservesMeasuredLayoutSpace",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121SearchPopupInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/177.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-06",
       "risk": "Measured search layout remains stable at increased font scale",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121PopupPreservesMeasuredSlotWithLargerFonts",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.feature.files.Browser121SearchLayerTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/168.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121PopupPreservesLayoutWithLargeFontScale",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121SearchPopupInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/177.xml"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "FOLDER121-LAYER-07",
       "risk": "Folder feedback uses normal layout and cannot cover the native input",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121RenderedRetryKeepsOriginalParentAndCloseDismissesFeedback",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121FeedbackInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/176.xml"
+            }
+          ]
+        }
+      ],
+      "actualPackageEvidence": [
+        "FOLDER121-GUI-09"
+      ],
+      "scope": "Deterministic component behavior plus separately observed production layout/menu; component tests alone do not certify FilesContent layout."
     },
     {
       "id": "FOLDER121-LAYER-08",
       "risk": "Actual packaged folder menu and its limit/empty-directory hint remain visible and operable",
-      "status": "planned",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        {
+          "test": "folder121UsesDirectoryInputInsteadOfOrdinaryMultiplePicker",
+          "executions": [
+            {
+              "class": "wasmJsBrowserTest.com.vaultstadio.app.platform.Browser121DirectoryRegressionTest",
+              "xml": "repository/frontend/build/verification/runs/browser-d0b664adfb354beb9abf477b7d4d7c8b/junit/b6d6c4f8bee49f7fac5232ca8ecd2281e5d70f6cfdbfe052439d4a2504baef1a/200.xml"
+            }
+          ]
+        },
+        {
+          "test": "folder121RenderedUnsupportedFeedbackDoesNotOfferMisleadingRetry",
+          "executions": [
+            {
+              "class": "com.vaultstadio.app.feature.files.Folder121FeedbackInteractionTest",
+              "xml": "repository/frontend/build/verification/runs/desktop-44c7876cd9924b14a1c6ac84ed9e5010/junit/3c55e72b7739b7b66599ac4a048bba63f8ac304d301a94bc43afe9f1a01a4b0d/176.xml"
+            }
+          ]
+        }
+      ],
+      "actualPackageEvidence": [
+        "FOLDER121-GUI-09"
+      ],
+      "scope": "Deterministic component behavior plus separately observed production layout/menu; component tests alone do not certify FilesContent layout."
     }
   ],
   "realJourneys": [
     {
       "id": "FOLDER121-GUI-01",
       "risk": "Normal login and navigation with disposable account on actual production Web package",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-01"
+      ]
     },
     {
       "id": "FOLDER121-GUI-02",
       "risk": "Actual OS directory selection, root/nested Unicode/empty file hierarchy, listing and byte/SHA256 download round trips",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-02"
+      ]
     },
     {
       "id": "FOLDER121-GUI-03",
       "risk": "Observe omitted empty directories and empty-selection no-mutation policy",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-03"
+      ]
     },
     {
       "id": "FOLDER121-GUI-04",
       "risk": "Reopen the chooser and select the same owned tree after cancellation, retaining a fresh usable input",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-04"
+      ]
     },
     {
       "id": "FOLDER121-GUI-05",
       "risk": "Cancel the real OS directory chooser and verify busy state and remote state",
-      "status": "planned",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-05"
+      ]
     },
     {
       "id": "FOLDER121-GUI-06",
       "risk": "Ordinary single/multiple file picker upload/download regression from actual application",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-06"
+      ]
     },
     {
       "id": "FOLDER121-GUI-07",
       "risk": "Large-file picker reaches chunked upload and retains source bytes through download",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-07"
+      ]
     },
     {
       "id": "FOLDER121-GUI-08",
       "risk": "Owned unsafe folder name causes visible safe refusal/no remote mutation; explicit valid selection succeeds afterwards",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-08"
+      ]
     },
     {
       "id": "FOLDER121-GUI-09",
       "risk": "Actual corrected upload/sort menu visibility, search query retention/re-edit and inline preparation/error feedback without overlap",
-      "status": "planned",
-      "evidence": []
+      "status": "passed-with-bounded-scope",
+      "evidence": [
+        "folder-selection-121-gui.json#FOLDER121-GUI-09"
+      ]
     }
   ],
   "evidencePolicy": "Risk families and repeated desktop/Wasm executions are counted separately. Record original red/green XML, exact source/class/SDK inputs, full 44/52 current production populations, real package/OS chooser evidence, byte hashes, current data and runnable rollback. No readiness inference for unexecuted browsers/mobile/OS targets.",
@@ -494,5 +1799,8 @@
     "source": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
     "cause": "Actual Web screenshot shows native search input above upload menu; core full6559pass and actual directory3/3upload do not close this visual acceptance defect.",
     "originalEvidence": "gui-menu-search-overlap-before.png retained privately with actual package/source identity"
-  }
+  },
+  "testSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+  "result": "folder-selection-121.json",
+  "scopeCaveat": "On-disk selections use the browser FileChooser API in the actual production application. No claim of physical Finder dialog clicks. GUI05 proves application Cancel and stale-result disposal; physical OS dialog Cancel remains unverified."
 }

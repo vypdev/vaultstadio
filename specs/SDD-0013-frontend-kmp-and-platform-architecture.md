@@ -403,6 +403,9 @@ For #76, executed evidence is recorded in [frontend startup verification](../doc
 
 Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `ae5f22a` passed 6,386 product executions including review/CI refinements and all 22 archive path-policy branches; real Web/macOS observations retain their actual client/server sources. Earlier 6,355 acceptance and independent failures remain historical evidence. Transfer bounds, Web directory selection (#121), Web origin (#116), mobile hardware and final-ref CI/review/adoption retain separate acceptance.
 
+
+Executed #121 evidence is recorded in [Web directory selection verification](../docs/development/verification/FOLDER_SELECTION_121.md), its68-family risk matrix and separate GUI receipts. Source `d18d72c` passes6,569 complete product executions with zero failures/errors/skips and retains full44/52 module populations. Domain path/budget policy covers33/33lines and48/48branches; actual browser reads check every byte at the32MiB bound. Eight rendered journeys pass within their recorded browser-chooser scope; GUI05 physical OS dialog cancellation remains partial and must not be inferred from application Cancel. Final-ref CI, review and explicit adoption remain pending; no whole-platform readiness claim is made.
+
 ## 18. Implementation or maintenance sequence
 
 Inventory current modules -> classify legacy docs -> publish baseline -> add dependency/state checks -> reconcile feature/API docs -> validate platform claims.
