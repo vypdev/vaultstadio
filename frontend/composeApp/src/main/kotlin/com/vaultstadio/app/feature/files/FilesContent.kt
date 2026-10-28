@@ -21,6 +21,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -231,6 +232,8 @@ private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
                     )
                 }
 
+                FolderUploadFeedback(folderUploads, Modifier.align(Alignment.CenterHorizontally))
+
                 FilesSearchBar(
                     searchQuery = viewModel.searchQuery,
                     onQueryChange = { query ->
@@ -250,6 +253,7 @@ private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
                     onClearSuggestions = { viewModel.clearSuggestions() },
                     isSearching = viewModel.isSearching,
                     strings = strings,
+                    obscuredByPopup = showUploadMenu || showSortMenu,
                 )
 
                 // Selection toolbar

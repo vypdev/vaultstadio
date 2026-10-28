@@ -1,8 +1,6 @@
 package com.vaultstadio.app.feature.files
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Surface
@@ -48,10 +46,7 @@ internal fun FilesFolderUploadHost(content: @Composable () -> Unit) {
     }
     DisposableEffect(controller) { onDispose(controller::close) }
     CompositionLocalProvider(LocalFolderUploads provides controller) {
-        Box(Modifier.fillMaxSize()) {
-            content()
-            FolderUploadFeedback(controller, Modifier.align(Alignment.TopCenter).padding(top = 72.dp))
-        }
+        content()
     }
 }
 
