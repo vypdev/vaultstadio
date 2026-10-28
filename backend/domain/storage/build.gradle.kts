@@ -43,7 +43,7 @@ tasks.jacocoTestReport {
     }
 }
 
-// STO-AUTH-01–06: enforce the measured policy budget, independently of upload services.
+// STO-AUTH-01–06 and TRANS78-ARCH07: enforce critical policy coverage independently of services.
 tasks.jacocoTestCoverageVerification {
     dependsOn(tasks.test)
     doFirst {
@@ -54,7 +54,10 @@ tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             element = "CLASS"
-            includes = listOf("com.vaultstadio.domain.storage.model.StorageAccessPolicy")
+            includes = listOf(
+                "com.vaultstadio.domain.storage.model.StorageAccessPolicy",
+                "com.vaultstadio.domain.storage.model.ArchiveDownloadKt",
+            )
             for (metric in listOf("LINE", "BRANCH")) {
                 limit {
                     counter = metric

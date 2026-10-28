@@ -612,5 +612,16 @@
   "upstreamReports": {
     "generatedAgentLinkingGuidance": "https://github.com/vypdev/copilot/issues/759",
     "supplementalPngEvidence": "https://github.com/vypdev/copilot/issues/760"
+  },
+  "archivePathPolicyEnforcedGate": {
+    "task": ":domain:storage:jacocoTestCoverageVerification",
+    "class": "com.vaultstadio.domain.storage.model.ArchiveDownloadKt",
+    "minimumLine": 1.0,
+    "minimumBranch": 1.0,
+    "currentDataPass": true,
+    "priorIncompleteDataRejected": true,
+    "negativeControlClassBytesIdentical": true,
+    "noAdditionalCiJobs": true,
+    "productionAndTestsUnchangedAfterCleanProductRun": true
   }
 }
