@@ -30,7 +30,11 @@ internal class Upload78ChunkRepository : Upload78Repository() {
         return initialized
     }
 
-    override suspend fun uploadChunk(uploadId: String, chunkIndex: Int, chunkData: ByteArray): Result<ChunkedUploadStatus> {
+    override suspend fun uploadChunk(
+        uploadId: String,
+        chunkIndex: Int,
+        chunkData: ByteArray,
+    ): Result<ChunkedUploadStatus> {
         check(uploadId == "session78")
         parts += chunkIndex to chunkData.copyOf()
         return chunk()
@@ -51,7 +55,9 @@ internal class Upload78ChunkRepository : Upload78Repository() {
 
 internal fun upload78ChunkEntry(bytes: ByteArray = byteArrayOf(0, 1, -1, 3, 4), truncate: Boolean = false) =
     UploadQueueEntry.Chunked(
-        "chunks.bin", bytes.size.toLong(), "test/binary",
+        "chunks.bin",
+        bytes.size.toLong(),
+        "test/binary",
         object : ChunkedFileSource {
             override val name = "chunks.bin"
             override val size = bytes.size.toLong()

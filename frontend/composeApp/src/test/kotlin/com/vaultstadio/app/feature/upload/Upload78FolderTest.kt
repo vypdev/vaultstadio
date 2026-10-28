@@ -12,7 +12,9 @@ import kotlin.test.assertTrue
 class Upload78FolderTest {
     @Test fun transfer78FolderCreationFailureNeverUploadsIntoPartialParent() = upload78Test {
         repository.folder = { name, parent ->
-            if (name == "blocked") Result.Error("FORBIDDEN", "denied") else {
+            if (name == "blocked") {
+                Result.Error("FORBIDDEN", "denied")
+            } else {
                 Result.Success(upload78Item(name, parent, folder = true))
             }
         }
@@ -38,6 +40,10 @@ class Upload78FolderTest {
     }
 
     private fun entry(path: String) = FolderUploadEntry(
-        path.substringAfterLast('/'), path, 1, "application/octet-stream", byteArrayOf(1),
+        path.substringAfterLast('/'),
+        path,
+        1,
+        "application/octet-stream",
+        byteArrayOf(1),
     )
 }

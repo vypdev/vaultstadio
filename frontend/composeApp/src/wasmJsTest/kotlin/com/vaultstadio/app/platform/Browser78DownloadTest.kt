@@ -65,7 +65,10 @@ class Browser78DownloadTest {
         withSaver { saver ->
             saver.save(payload())
             suspendCoroutine { continuation ->
-                window.setTimeout({ continuation.resume(Unit); null }, 1200)
+                window.setTimeout({
+                    continuation.resume(Unit)
+                    null
+                }, 1200)
             }
             assertEquals(1, revocations())
             saver.close()
@@ -116,7 +119,8 @@ class Browser78DownloadTest {
         DownloadPayload("file.bin", bytes, "application/octet-stream")
 }
 
-private fun installCapture(): Unit = js("""{
+private fun installCapture(): Unit = js(
+    """{
     const state = {create: URL.createObjectURL, revoke: URL.revokeObjectURL,
         click: HTMLAnchorElement.prototype.click, urls: [], revoked: 0, clicks: 0, fail: false};
     globalThis.__vaultTransfer78 = state;
@@ -128,17 +132,22 @@ private fun installCapture(): Unit = js("""{
         state.clicks++; state.name = this.download;
         if (state.fail) throw new Error('owned click failure fixture');
     };
-}""")
-private fun restoreCapture(): Unit = js("""{
+}""",
+)
+private fun restoreCapture(): Unit = js(
+    """{
     const state = globalThis.__vaultTransfer78;
     URL.createObjectURL = state.create; URL.revokeObjectURL = state.revoke;
     HTMLAnchorElement.prototype.click = state.click;
     for (const url of state.urls) state.revoke.call(URL, url);
     delete globalThis.__vaultTransfer78;
-}""")
-private fun capturedBytes(): Promise<JsString> = js("""(async function() {
+}""",
+)
+private fun capturedBytes(): Promise<JsString> = js(
+    """(async function() {
     return JSON.stringify(Array.from(new Uint8Array(await globalThis.__vaultTransfer78.blob.arrayBuffer())));
-})()""")
+})()""",
+)
 private fun capturedMime(): String = js("globalThis.__vaultTransfer78.blob.type")
 private fun capturedName(): String = js("globalThis.__vaultTransfer78.name")
 private fun clicks(): Int = js("globalThis.__vaultTransfer78.clicks")

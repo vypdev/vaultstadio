@@ -49,7 +49,7 @@ internal class StorageDownloadApi(private val client: HttpClient) {
                 readBounded(response)
             }
         }
-    } catch (error: Exception) {
+    } catch (error: Throwable) {
         rethrowTransportCancellation(error)
         ApiResult.NetworkError(error.message ?: "Download failed")
     }

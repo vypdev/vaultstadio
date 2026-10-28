@@ -43,7 +43,9 @@ class Storage78LocationTest {
     }
 
     @Test fun transfer78OriginBaseGetsExactlyOneApiPrefix() = prefix("https://audit.invalid")
+
     @Test fun transfer78ApiBaseGetsExactlyOneApiPrefix() = prefix("https://audit.invalid/api")
+
     @Test fun transfer78VersionedBaseGetsExactlyOneApiPrefix() = prefix("https://audit.invalid/api/v1/")
 
     @Test fun transfer78DownloadIdIsEncodedAsOnePathSegment() = runTest {
@@ -63,7 +65,13 @@ class Storage78LocationTest {
             assertTrueQueryEmpty(request.url)
             respond(byteArrayOf(1))
         }
-        val client = HttpClientFactory.create(ApiClientConfig("https://audit.invalid/api"), TokenProvider { token }, engine)
+        val client = HttpClientFactory.create(
+            ApiClientConfig("https://audit.invalid/api"),
+            TokenProvider {
+                token
+            },
+            engine,
+        )
         try {
             StorageApi(client).downloadFile("first")
             token = "ephemeral-second"

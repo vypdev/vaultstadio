@@ -7,9 +7,10 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
-/** Preserve caller cancellation through Ktor wrappers; genuine transport deadlines stay failures. */
-suspend fun rethrowTransportCancellation(error: Exception) {
+/** Preserve cancellation and fatal failures; the browser's typed fetch wrapper is a recoverable transport failure. */
+suspend fun rethrowTransportCancellation(error: Throwable) {
     currentCoroutineContext().ensureActive()
+    if (error !is Exception && !isPlatformFetchFailure(error)) throw error
     if (error is CancellationException) throw error
     val causes = mutableSetOf<Throwable>()
     var next: Throwable? = error
@@ -25,3 +26,5 @@ suspend fun rethrowTransportCancellation(error: Exception) {
     }
     causes.filterIsInstance<CancellationException>().firstOrNull()?.let { throw it }
 }
+
+internal expect fun isPlatformFetchFailure(error: Throwable): Boolean

@@ -73,7 +73,13 @@ class Upload78CancellationTest {
 
     @Test fun transfer78ClearCancelsOwnedWorkAndRejectsNewEntriesOrRetry() = upload78Test {
         var finalized = false
-        repository.transfer = { try { awaitCancellation() } finally { finalized = true } }
+        repository.transfer = {
+            try {
+                awaitCancellation()
+            } finally {
+                finalized = true
+            }
+        }
         add()
         tick()
         val id = manager.items.value.single().id

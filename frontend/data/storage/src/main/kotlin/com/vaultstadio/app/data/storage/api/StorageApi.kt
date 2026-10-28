@@ -169,7 +169,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Chunk upload failed")
         }
@@ -230,7 +230,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_${response.status.value}", response.status.description)
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload failed")
         }
@@ -280,7 +280,7 @@ class StorageApi(client: HttpClient) : BaseApi(client) {
             } else {
                 ApiResult.Error("HTTP_ERROR", "Upload failed: ${response.status}")
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             rethrowTransportCancellation(e)
             ApiResult.NetworkError(e.message ?: "Upload error")
         }

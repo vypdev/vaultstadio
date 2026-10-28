@@ -5,6 +5,7 @@ import com.vaultstadio.app.domain.storage.transfer.DownloadPayload
 import com.vaultstadio.app.domain.storage.transfer.DownloadSaver
 import com.vaultstadio.app.domain.storage.transfer.SaveOutcome
 import com.vaultstadio.app.domain.storage.transfer.isSafeDownloadName
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -13,11 +14,11 @@ import kotlinx.coroutines.withContext
 import java.awt.EventQueue
 import java.awt.FileDialog
 import java.awt.Frame
+import java.awt.HeadlessException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption.ATOMIC_MOVE
 import java.nio.file.StandardCopyOption.REPLACE_EXISTING
-import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 actual fun createDownloadSaver(): DownloadSaver = DesktopDownloadSaver()
@@ -64,22 +65,43 @@ internal fun writeDownloadAtomically(target: Path, bytes: ByteArray, checkActive
 }
 
 private suspend fun chooseDownloadTarget(name: String): Path? = suspendCancellableCoroutine { continuation ->
-    EventQueue.invokeLater {
-        if (!continuation.isActive) return@invokeLater
+    EventQueue.invokeLater { openDownloadDialog(name, continuation) }
+}
+
+private fun openDownloadDialog(name: String, continuation: CancellableContinuation<Path?>) {
+    if (!continuation.isActive) return
+    try {
         val dialog = FileDialog(null as Frame?, "Save File", FileDialog.SAVE)
-        continuation.invokeOnCancellation { EventQueue.invokeLater { dialog.dispose() } }
-        try {
-            dialog.file = name
-            if (continuation.isActive) dialog.isVisible = true
-            val directory = dialog.directory
-            val file = dialog.file
-            if (continuation.isActive) {
-                continuation.resume(if (directory != null && file != null) Path.of(directory, file) else null)
-            }
-        } catch (error: Exception) {
-            if (continuation.isActive) continuation.resumeWithException(error)
-        } finally {
-            dialog.dispose()
-        }
+        runDownloadDialog(dialog, name, continuation)
+    } catch (error: HeadlessException) {
+        failDownloadDialog(continuation, error)
+    } catch (error: IllegalArgumentException) {
+        failDownloadDialog(continuation, error)
+    } catch (error: IllegalStateException) {
+        failDownloadDialog(continuation, error)
+    } catch (error: SecurityException) {
+        failDownloadDialog(continuation, error)
     }
+}
+
+private fun failDownloadDialog(continuation: CancellableContinuation<Path?>, error: RuntimeException) {
+    if (continuation.isActive) continuation.resumeWithException(error)
+}
+
+private fun runDownloadDialog(dialog: FileDialog, name: String, continuation: CancellableContinuation<Path?>) {
+    continuation.invokeOnCancellation { EventQueue.invokeLater { dialog.dispose() } }
+    try {
+        dialog.file = name
+        if (!continuation.isActive) return
+        dialog.isVisible = true
+        if (continuation.isActive) continuation.resume(dialog.selectedDownloadPath(), onCancellation = null)
+    } finally {
+        dialog.dispose()
+    }
+}
+
+private fun FileDialog.selectedDownloadPath(): Path? {
+    val selectedDirectory = directory ?: return null
+    val selectedFile = file ?: return null
+    return Path.of(selectedDirectory, selectedFile)
 }

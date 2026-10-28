@@ -19,7 +19,10 @@ class Desktop78DownloadTest {
         withDirectory { directory ->
             val target = directory.resolve("elegido ñ.bin")
             var suggested = ""
-            val saver = DesktopDownloadSaver { suggested = it; target }
+            val saver = DesktopDownloadSaver {
+                suggested = it
+                target
+            }
             try {
                 val bytes = byteArrayOf(0, -1, 127, 4)
                 assertEquals(SaveOutcome.SAVED, saver.save(payload(bytes, "original ñ.bin")))
@@ -64,7 +67,10 @@ class Desktop78DownloadTest {
 
     @Test fun transfer78DesktopRejectsPathNamesBeforeShowingChooser() = runTest {
         var choices = 0
-        val saver = DesktopDownloadSaver { choices++; null }
+        val saver = DesktopDownloadSaver {
+            choices++
+            null
+        }
         try {
             assertFailsWith<IllegalArgumentException> { saver.save(payload(name = "../escape")) }
             assertEquals(0, choices)
@@ -75,7 +81,10 @@ class Desktop78DownloadTest {
 
     @Test fun transfer78DesktopRejectsOversizeBeforeShowingChooser() = runTest {
         var choices = 0
-        val saver = DesktopDownloadSaver { choices++; null }
+        val saver = DesktopDownloadSaver {
+            choices++
+            null
+        }
         try {
             assertFailsWith<IllegalArgumentException> {
                 saver.save(payload(ByteArray(DownloadLimits.MAX_BYTES + 1)))
@@ -88,7 +97,10 @@ class Desktop78DownloadTest {
 
     @Test fun transfer78DesktopClosedSaverRejectsWithoutChooser() = runTest {
         var choices = 0
-        val saver = DesktopDownloadSaver { choices++; null }
+        val saver = DesktopDownloadSaver {
+            choices++
+            null
+        }
         saver.close()
         saver.close()
         assertFailsWith<IllegalStateException> { saver.save(payload()) }

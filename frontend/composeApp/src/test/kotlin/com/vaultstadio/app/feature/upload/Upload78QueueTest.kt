@@ -71,7 +71,10 @@ class Upload78QueueTest {
 
     @Test fun transfer78ProgressIsFiniteClampedAndCannotOverwriteCompletedState() = upload78Test {
         val release = CompletableDeferred<Unit>()
-        repository.transfer = { release.await(); Result.Success(upload78Item(it.name)) }
+        repository.transfer = {
+            release.await()
+            Result.Success(upload78Item(it.name))
+        }
         add()
         tick()
         val progress = repository.calls.single().progress
@@ -95,7 +98,9 @@ class Upload78QueueTest {
     @Test fun transfer78DismissReleasesFailedRetryAndPreservesActiveEntry() = upload78Test {
         val release = CompletableDeferred<Unit>()
         repository.transfer = {
-            if (it.name == "failed") Result.Error("FAILED", "failure") else {
+            if (it.name == "failed") {
+                Result.Error("FAILED", "failure")
+            } else {
                 release.await()
                 Result.Success(upload78Item(it.name))
             }
