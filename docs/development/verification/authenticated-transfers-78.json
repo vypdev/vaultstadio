@@ -534,5 +534,13 @@
     "backendStorage": 0,
     "frontendSerializerAndSemantics": 0,
     "actualMakeLint": 0
+  },
+  "nativeScreenshot": {
+    "publishedEvidenceCommit": "5321a3b6596b2b73cb4a1cd6b5208c76d59edf2b",
+    "url": "https://github.com/vypdev/vaultstadio/blob/5321a3b6596b2b73cb4a1cd6b5208c76d59edf2b/docs/development/verification/assets/transfer78-native-save.png?raw=true",
+    "sha256": "b715fdebce39f491419eee4a1295274d237fff05fa0ac5c95db0a23e29a9e962",
+    "bytes": 244037,
+    "retainedLocalOriginal": true,
+    "excludedFromFinalTextDiffBecause": "GitHub binary patch omission blocks Copilot progress assessment; published history and original screenshot are preserved."
   }
 }

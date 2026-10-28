@@ -86,4 +86,6 @@ Original data/plugins hashes, database identity and backup, original detached SD
 
 This certificate covers the stated authenticated transfer scope and observed macOS/Web paths; it does not certify every platform feature or production deployment.
 
-![Final native candidate after actual Save File, matching 321-byte payload](assets/transfer78-native-save.png)
+![Final native candidate after actual Save File, matching 321-byte payload](https://github.com/vypdev/vaultstadio/blob/5321a3b6596b2b73cb4a1cd6b5208c76d59edf2b/docs/development/verification/assets/transfer78-native-save.png?raw=true)
+
+The original screenshot remains in the published evidence commit `5321a3b`, linked above and retained in local original observations. It is outside the final text diff because GitHub omits its binary patch and Copilot progress reports `validation.evidence-unavailable`; evidence is preserved rather than discarded.
