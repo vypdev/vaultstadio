@@ -1,31 +1,32 @@
 {
   "schemaVersion": 1,
   "issue": 121,
-  "implementationSource": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+  "implementationSource": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "preCodeContractCommits": [
     "b23219b6c62ee36328bd8c6b5bca9139a6e3a94d",
     "a06f27d270134e4d2d9f0d1c5b57d4e252b42e18",
-    "21415fc614cbea3df91f433ada09933b82d5481e"
+    "21415fc614cbea3df91f433ada09933b82d5481e",
+    "d91620ab5325001b85520e34f2e244d44f3ceba7"
   ],
   "fullCommand": [
     "make",
     "test-coverage"
   ],
-  "seconds": 478.60188579559326,
+  "seconds": 447.26788902282715,
   "totals": {
     "backend": 3388,
-    "desktop": 1643,
+    "desktop": 1652,
     "browser": 1554,
-    "total": 6585,
+    "total": 6594,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "newTests": {
-    "distinctMethods": 127,
-    "platformExecutions": 199,
-    "distinctRiskFamilies": 76,
+    "distinctMethods": 136,
+    "platformExecutions": 208,
+    "distinctRiskFamilies": 84,
     "inheritedPlatformExecutions": 6386
   },
   "compiledCoverage": {
@@ -33,7 +34,7 @@
       "modules": 44,
       "summary": {
         "classes": 2196,
-        "sha256": "82700a4dd7ad97c66171d79febfebeaa6d4c2e9104afe57ab85ef981e6d6d6f8",
+        "sha256": "4c30a2bdbe9818c57540b8505599cb2bfecf7720b4e877ad6053325ca9b3bc13",
         "line": {
           "missed": 7614,
           "covered": 9433
@@ -51,19 +52,19 @@
     "frontend/coverage": {
       "modules": 52,
       "summary": {
-        "classes": 1850,
-        "sha256": "6d2dda39b2c89d754a2618f9267c4743bd19b0e720b58d7441bc78cdea354d9a",
+        "classes": 1857,
+        "sha256": "edacbc7243666aa924964593673283af4be04333f55bd341f2f287f9a4073066",
         "line": {
-          "missed": 14363,
-          "covered": 7766
+          "missed": 14337,
+          "covered": 7814
         },
         "branch": {
-          "missed": 4564,
-          "covered": 1595
+          "missed": 4559,
+          "covered": 1612
         },
         "instruction": {
-          "missed": 133417,
-          "covered": 48312
+          "missed": 133336,
+          "covered": 48599
         }
       }
     }
@@ -95,56 +96,108 @@
         "missed": 0
       }
     },
+    "frontend/com/vaultstadio/app/platform/DesktopFolderDialog.kt": {
+      "INSTRUCTION": {
+        "covered": 94,
+        "missed": 55
+      },
+      "BRANCH": {
+        "covered": 7,
+        "missed": 5
+      },
+      "LINE": {
+        "covered": 16,
+        "missed": 10
+      },
+      "COMPLEXITY": {
+        "covered": 9,
+        "missed": 7
+      },
+      "METHOD": {
+        "covered": 6,
+        "missed": 4
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 1
+      }
+    },
     "frontend/com/vaultstadio/app/platform/FilePicker.kt": {
       "INSTRUCTION": {
-        "covered": 0,
-        "missed": 188
+        "covered": 30,
+        "missed": 158
       },
       "BRANCH": {
         "covered": 0,
         "missed": 24
       },
       "LINE": {
-        "covered": 0,
-        "missed": 27
+        "covered": 6,
+        "missed": 21
       },
       "COMPLEXITY": {
-        "covered": 0,
-        "missed": 27
+        "covered": 5,
+        "missed": 22
       },
       "METHOD": {
-        "covered": 0,
-        "missed": 15
+        "covered": 5,
+        "missed": 10
       },
       "CLASS": {
-        "covered": 0,
-        "missed": 2
+        "covered": 1,
+        "missed": 1
       }
     },
     "frontend/com/vaultstadio/app/platform/FilePicker.desktop.kt": {
       "INSTRUCTION": {
         "covered": 0,
-        "missed": 521
+        "missed": 378
       },
       "BRANCH": {
         "covered": 0,
-        "missed": 38
+        "missed": 26
       },
       "LINE": {
         "covered": 0,
-        "missed": 102
+        "missed": 68
       },
       "COMPLEXITY": {
         "covered": 0,
-        "missed": 43
+        "missed": 34
       },
       "METHOD": {
         "covered": 0,
-        "missed": 24
+        "missed": 21
       },
       "CLASS": {
         "covered": 0,
-        "missed": 7
+        "missed": 6
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/DesktopFolderFiles.kt": {
+      "INSTRUCTION": {
+        "covered": 163,
+        "missed": 37
+      },
+      "BRANCH": {
+        "covered": 10,
+        "missed": 2
+      },
+      "LINE": {
+        "covered": 26,
+        "missed": 4
+      },
+      "COMPLEXITY": {
+        "covered": 9,
+        "missed": 4
+      },
+      "METHOD": {
+        "covered": 5,
+        "missed": 2
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 1
       }
     },
     "frontend/com/vaultstadio/app/feature/files/UploadSelectionProblemCopy.kt": {
@@ -305,12 +358,12 @@
     }
   },
   "originalEvidence": {
-    "archive": "issue121-full-4d3fb74/originals.zip",
-    "sha256": "560facd5c0369556a6064ffd69d55b3de9e3d24e938a10483cc6cf5bcdf02d83",
-    "files": 5821,
+    "archive": "issue121-full-17f1f3f/originals.zip",
+    "sha256": "0ef4047a0cc0465decc4b8bcec474a106a28b52596f89053a816da53abe6659f",
+    "files": 5831,
     "crcValidated": true,
     "rawJUnitIndependentlyRecounted": true,
-    "rawXml": 1196
+    "rawXml": 1197
   },
   "redEvidence": [
     {
@@ -368,10 +421,20 @@
       "originalArtifacts": 5,
       "rawXml": 1194,
       "digestsCrcSourceTreeAndRawTotalsVerified": true
+    },
+    "thirdAttempt": {
+      "head": "9cbbd595a2229c46af1b8c9ded573970bd8031de",
+      "runId": 40738396952,
+      "attempt": 1,
+      "status": "failure",
+      "backendActualTests": 2688,
+      "backendFailures": 43,
+      "all43AreDockerInitializationFailures": true,
+      "rootCauseObserved": "OrbStack stopped/socket disappeared during tests; no cause for shutdown inferred. Same four owned containers resumed normally, all30 original and13 GUI payload hashes verified. Frontend and contracts passed. New desktop code requires a new CI round instead of rerunning obsolete head."
     }
   },
   "reviewRefinement": {
-    "preCode": "21415fc614cbea3df91f433ada09933b82d5481e",
+    "preCode": "21415fc",
     "additionalRiskFamilies": 8,
     "copyRed": {
       "platformExecutions": 16,
@@ -448,6 +511,70 @@
     "files": 13,
     "allEntriesByteCompared": true
   },
+  "desktopReviewRefinement": {
+    "preCode": "d91620ab5325001b85520e34f2e244d44f3ceba7",
+    "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+    "additionalRiskFamilies": 8,
+    "red": {
+      "tests": 8,
+      "assertionFailures": 2,
+      "passingControls": 6,
+      "failures": [
+        {
+          "test": "folder121DesktopOwnsConstructionSelectionAndDisposalOnEdt[desktop]",
+          "type": "java.lang.AssertionError",
+          "message": "java.lang.AssertionError: factory must own EDT"
+        },
+        {
+          "test": "folder121DesktopActiveModalCancellationDisposesAndRejectsLateResult[desktop]",
+          "type": "java.lang.AssertionError",
+          "message": "java.lang.AssertionError: Expected value to be true."
+        }
+      ],
+      "sha256": "2cdc890fe5294ddda09aa98b3cd5ebbe72f8889e8b0d25ec9fb7287281678406",
+      "kind": "Corrected assertion-red against unchanged IO-thread dialog behavior in unwired API-shape bridge; separate first diagnostic contains invalid identity assertions, not counted here."
+    },
+    "green": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": {
+        "Desktop121FolderDialogTest": 9,
+        "Desktop78DialogTest": 5,
+        "Upload121ProblemCopyTest": 8
+      },
+      "sha256": "5e4b76e8328f4999217c589d203205edd0ceb2224143483a488d8077374e70ad",
+      "kind": "Actual JVM EventQueue + controlled native dialogs and real filesystem byte-read regression; not physical native chooser acceptance."
+    },
+    "actualApplication": {
+      "atUtc": "2026-10-28T18:23:58.643038+00:00",
+      "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+      "kind": "Actual desktop application smoke; separate from controlled EventQueue and earlier Chrome/macOS OS-panel evidence.",
+      "normalUiLogin": true,
+      "credentialsAutonomouslyTyped": true,
+      "unseededInMemoryPreferences": true,
+      "productionJarsUnmodified": true,
+      "menuUploadFolderActivated": true,
+      "mainWindowBecameModalAndPreparing": true,
+      "applicationCancelClosedModal": true,
+      "returnedToStandardWindow": true,
+      "observedFeedback": "No files selected. Empty folders are omitted.",
+      "files": 13,
+      "folders": 8,
+      "idsAndParentsUnchanged": true,
+      "actualSwingDialogControlsExposedToAutomation": false,
+      "positiveSwingDirectorySelectionCertified": false,
+      "screenshots": [
+        "gui-desktop-folder-dialog.png",
+        "gui-desktop-folder-canceled.png"
+      ],
+      "ax": "gui-desktop-folder-canceled.ax.txt",
+      "toolLimitation": "Initial getApp took1316.343seconds to return; subsequent native actions were normal. This is recorded as an orchestration delay, not product performance. Tool bound main window rather than separate Swing chooser; only application cancel is certified."
+    },
+    "officialThreadingContract": "https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/swing/package-summary.html#threading",
+    "initialFixtureDiagnostic": "Three invalid exception-object-identity assertions were corrected for coroutine stacktrace recovery. Those initial failures are not counted as production-red evidence."
+  },
   "reviewAcceptanceOriginals": {
     "archive": "issue121-review-4d3fb74/originals.zip",
     "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
@@ -455,5 +582,12 @@
     "files": 20,
     "allEntriesByteCompared": true,
     "fixtureModeAfter": "0600"
+  },
+  "desktopAcceptanceOriginals": {
+    "archive": "issue121-desktop-17f1f3f/originals.zip",
+    "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+    "sha256": "a59efe51ebe8a602fa38f096ba5509a840300c2e32d3b4c51f46e9ff978b6d45",
+    "files": 27,
+    "allEntriesByteCompared": true
   }
 }

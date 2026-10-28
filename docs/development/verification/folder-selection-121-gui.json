@@ -4,7 +4,7 @@
   "sources": {
     "initialLoginAndTreeUpload": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
     "correctedUiAndRepeatedUploadsAndDownloads": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
-    "reviewedCodeSource": "4d3fb740f3ae093135159a7d0c06752f136f0c38"
+    "reviewedCodeSource": "17f1f3fbdd152d2a29450e2e834b68275e5656c4"
   },
   "mechanism": "Normal rendered UI login and actions; public browser FileChooser API over owned on-disk fixtures plus separate physical Chrome macOS Open-panel selection/three-file confirmation/native Escape cancellation. Actual saved downloads and authenticated read-only API checks are distinct evidence. No injected login/session/application state or fabricated FileList in GUI journeys. Controlled DOM/File/FileReader tests remain separate.",
   "journeys": [
@@ -483,6 +483,16 @@
   ],
   "screenshots": [
     {
+      "name": "gui-desktop-folder-canceled.png",
+      "sha256": "d9cbd9b93bccbfb7afefc0231578bcb8ce23831d22d3c919ca76e20349d6306a",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-desktop-folder-dialog.png",
+      "sha256": "0e9a04126a82e9d0dcd7d98982468cc1b6f383e3e7276e385e56301202fad32e",
+      "originalRetainedOutsideGit": true
+    },
+    {
       "name": "gui-empty-file-download.png",
       "sha256": "eafba20c07a7a2ac0d3133c38566fe7fa81547f107ffb9c32f8dcb16b4252e8c",
       "originalRetainedOutsideGit": true
@@ -605,6 +615,31 @@
     "ax": "gui-review-copy-read-failure.ax.txt",
     "scope": "Additional actual file-read failure acceptance; original nine directory/native journeys retain their recorded earlier source."
   },
+  "desktopReviewSmoke": {
+    "atUtc": "2026-10-28T18:23:58.643038+00:00",
+    "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+    "kind": "Actual desktop application smoke; separate from controlled EventQueue and earlier Chrome/macOS OS-panel evidence.",
+    "normalUiLogin": true,
+    "credentialsAutonomouslyTyped": true,
+    "unseededInMemoryPreferences": true,
+    "productionJarsUnmodified": true,
+    "menuUploadFolderActivated": true,
+    "mainWindowBecameModalAndPreparing": true,
+    "applicationCancelClosedModal": true,
+    "returnedToStandardWindow": true,
+    "observedFeedback": "No files selected. Empty folders are omitted.",
+    "files": 13,
+    "folders": 8,
+    "idsAndParentsUnchanged": true,
+    "actualSwingDialogControlsExposedToAutomation": false,
+    "positiveSwingDirectorySelectionCertified": false,
+    "screenshots": [
+      "gui-desktop-folder-dialog.png",
+      "gui-desktop-folder-canceled.png"
+    ],
+    "ax": "gui-desktop-folder-canceled.ax.txt",
+    "toolLimitation": "Initial getApp took1316.343seconds to return; subsequent native actions were normal. This is recorded as an orchestration delay, not product performance. Tool bound main window rather than separate Swing chooser; only application cancel is certified."
+  },
   "reviewAcceptanceOriginals": {
     "archive": "issue121-review-4d3fb74/originals.zip",
     "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
@@ -612,5 +647,12 @@
     "files": 20,
     "allEntriesByteCompared": true,
     "fixtureModeAfter": "0600"
+  },
+  "desktopAcceptanceOriginals": {
+    "archive": "issue121-desktop-17f1f3f/originals.zip",
+    "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+    "sha256": "a59efe51ebe8a602fa38f096ba5509a840300c2e32d3b4c51f46e9ff978b6d45",
+    "files": 27,
+    "allEntriesByteCompared": true
   }
 }
