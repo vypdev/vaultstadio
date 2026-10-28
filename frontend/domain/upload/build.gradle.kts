@@ -23,6 +23,7 @@ kotlin {
             kotlin.srcDirs("src/main")
             dependencies { implementation(project(":domain:result")) }
         }
+        commonTest.dependencies { implementation(kotlin("test")) }
     }
 }
 afterEvaluate { group = libNamespace }

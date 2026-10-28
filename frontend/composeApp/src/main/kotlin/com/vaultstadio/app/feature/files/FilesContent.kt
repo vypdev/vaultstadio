@@ -26,6 +26,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.LocalStrings
+import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.core.resources.files
 import com.vaultstadio.app.core.resources.newFolder
 import com.vaultstadio.app.core.resources.noFiles
@@ -37,15 +38,10 @@ import com.vaultstadio.app.core.resources.trash
 import com.vaultstadio.app.core.resources.trashEmpty
 import com.vaultstadio.app.domain.storage.model.StorageItem
 import com.vaultstadio.app.domain.storage.model.ViewMode
-import com.vaultstadio.app.domain.upload.FolderUploadEntry
-import com.vaultstadio.app.domain.upload.UploadQueueEntry
 import com.vaultstadio.app.feature.files.FilesMode
 import com.vaultstadio.app.feature.upload.LocalUploadManager
 import com.vaultstadio.app.navigation.MainDestination
 import com.vaultstadio.app.navigation.RoutePaths
-import com.vaultstadio.app.platform.openFilePicker
-import com.vaultstadio.app.platform.openFolderPicker
-import com.vaultstadio.app.platform.pickLargeFilesForUpload
 import com.vaultstadio.app.platform.setPath
 import com.vaultstadio.app.ui.components.files.FileInfoPanel
 import com.vaultstadio.app.ui.components.layout.SelectionToolbar
@@ -61,13 +57,14 @@ fun FilesContent(
     component: FilesComponent,
     modifier: Modifier = Modifier,
 ) {
-    key(component) { FilesDownloadHost { FilesScreenContent(component, modifier) } }
+    key(component) { FilesDownloadHost { FilesFolderUploadHost { FilesScreenContent(component, modifier) } } }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
     val downloads = LocalFileDownloads.current
+    val folderUploads = LocalFolderUploads.current
     val viewModel: FilesViewModel = koinViewModel { parametersOf(component.mode) }
     val strings = LocalStrings.current
 
@@ -145,31 +142,14 @@ private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
     }
 
     var uploadAction by remember { mutableStateOf<UploadAction?>(null) }
-    LaunchedEffect(uploadAction) {
-        val manager = uploadManager ?: return@LaunchedEffect
-        val action = uploadAction ?: return@LaunchedEffect
-        val parentId = viewModel.currentFolderId
-        when (action) {
-            UploadAction.Files -> {
-                val files = openFilePicker(multiple = true, accept = "*/*")
-                val entries = files
-                    .map { f -> UploadQueueEntry.WithData(f.name, f.size, f.mimeType, f.data) }
-                if (entries.isNotEmpty()) manager.addEntries(entries, parentId)
-            }
-            UploadAction.Folder -> {
-                val folderFiles = openFolderPicker()
-                val entries = folderFiles.map { f ->
-                    FolderUploadEntry(f.name, f.relativePath, f.size, f.mimeType, f.data)
-                }
-                if (entries.isNotEmpty()) manager.addFolderEntries(entries, parentId)
-            }
-            UploadAction.LargeFiles -> {
-                val entries = pickLargeFilesForUpload()
-                if (entries.isNotEmpty()) manager.addEntries(entries, parentId)
-            }
-        }
-        uploadAction = null
-    }
+    val selectionCopy = folderUploadCopy(Strings.currentLanguage)
+    FilesUploadEffects(
+        uploadAction,
+        viewModel.currentFolderId,
+        uploadManager,
+        onHandled = { handled -> if (uploadAction == handled) uploadAction = null },
+        onProblem = { snackbarHostState.showSnackbar(selectionCopy.problem(it)) },
+    )
 
     val title = when (component.mode) {
         FilesMode.ALL -> strings.files
@@ -207,7 +187,13 @@ private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
                     uploadManager != null,
                 showUploadMenu = showUploadMenu,
                 onUploadMenuChange = { showUploadMenu = it },
-                onUploadAction = { uploadAction = it },
+                onUploadAction = {
+                    if (it == UploadAction.Folder) {
+                        folderUploads.start(viewModel.currentFolderId)
+                    } else {
+                        uploadAction = it
+                    }
+                },
                 showEmptyTrashButton = component.mode == FilesMode.TRASH &&
                     viewModel.items.isNotEmpty(),
                 onEmptyTrash = { viewModel.emptyTrash(component.mode) },

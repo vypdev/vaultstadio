@@ -88,6 +88,9 @@ expect suspend fun openLargeFilePicker(
  */
 expect fun isFilePickerAvailable(): Boolean
 
+/** Directory selection is a distinct platform capability. */
+expect fun isFolderPickerAvailable(): Boolean
+
 /**
  * Picks one or more large files (streaming) and returns them as upload queue entries for chunked upload.
  */

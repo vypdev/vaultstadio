@@ -133,6 +133,7 @@ actual suspend fun openFilePicker(
  * File picker is available on desktop.
  */
 actual fun isFilePickerAvailable(): Boolean = true
+actual fun isFolderPickerAvailable(): Boolean = true
 
 /**
  * Adds a single file to [out] if readable and under size limit; returns true if added.
