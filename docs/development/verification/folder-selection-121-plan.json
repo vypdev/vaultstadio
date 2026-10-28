@@ -8,7 +8,7 @@
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
   "status": "84 risk families traced to passing tests; 9 bounded rendered journeys including physical Chrome/macOS selection and cancellation; final-ref CI/review/adoption pending",
-  "minimumDeterministicRisks": 84,
+  "minimumDeterministicRisks": 96,
   "minimumRealJourneys": 9,
   "bounds": {
     "aggregateBytes": 33554432,
@@ -2017,6 +2017,78 @@
           ]
         }
       ]
+    },
+    {
+      "id": "FOLDER121-NATIVE-01",
+      "risk": "Real native binary/Unicode/empty files retain bytes and legacy relative paths with root policy explicit.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-02",
+      "risk": "Two actual file bodies at the exact32MiB aggregate bound preserve every byte.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-03",
+      "risk": "Aggregate bound plus1 refuses before any body read.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-04",
+      "risk": "Single oversized file refuses before any body read instead of silent skip.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-05",
+      "risk": "Exactly256 visited entries including root are accepted.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-06",
+      "risk": "Visited-entry bound plus1 refuses before any body read.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-07",
+      "risk": "Exactly16 relative path segments are accepted.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-08",
+      "risk": "Relative depth plus1 refuses before any body read.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-09",
+      "risk": "Root/entry symlinks and a leaf swapped to symlink cannot read outside content.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-10",
+      "risk": "An unreadable source rejects the whole selection without partial output.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-11",
+      "risk": "Growing and truncated bodies are rejected against the original size snapshot with bounded read.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-NATIVE-12",
+      "risk": "Cancellation during first read prevents later reads and partial output.",
+      "status": "planned",
+      "scope": "Actual owned filesystem inputs with explicit read callback controls; physical positive native chooser acceptance remains separate."
     }
   ],
   "realJourneys": [

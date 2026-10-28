@@ -185,6 +185,10 @@ suites with full-population coverage and existing gates. A DOM attribute or fake
 does not establish acceptance. Preserve source-bound failures, current data/packages/rollback,
 both detached SDD drafts and the published #78 history throughout this work.
 
+### 6.5.1 Desktop preparation resource refinement — issue #121
+
+Pre-code review refinement (2026-10-28): the desktop adapter MUST reject metadata/path/resource violations before reading file bodies, using the same32MiB aggregate policy and the application reader described above. Its selected-root-relative paths retain existing desktop semantics (requireRoot=false); Web still preserves the selected root (requireRoot=true). Native traversal is independently bounded to256 visited entries including the selected root/empty directories and16 relative path segments. Unsupported aliases/symlinks and unreadable or changing files fail the whole selection; ordinary/large-file picker thresholds remain unchanged. Each accepted native read is limited to snapshotted size plus1 byte and compared against that snapshot. See SDD0013 section6.8.3 and the12-family native resource matrix. This does not certify positive physical Swing selection or every native filesystem race.
+
 ## 7. User-facing configuration
 
 Maximum file/chunk/session sizes, session TTL, allowed methods, WebDAV auth requirement, S3 route enablement, and checksum policy are bounded configuration.
