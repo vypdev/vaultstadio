@@ -11,9 +11,12 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
 /** Sequential preparation; a failed/canceled read never publishes a partial folder selection. */
-internal suspend fun readFolderSelection(sources: List<FolderFileSource>): List<FolderUploadEntry> {
+internal suspend fun readFolderSelection(
+    sources: List<FolderFileSource>,
+    requireRoot: Boolean = true,
+): List<FolderUploadEntry> {
     val snapshot: List<Pair<FolderFileSource, FolderFileMetadata>> = sources.map { it to it.metadata.copy() }
-    folderSelectionProblem(snapshot.map { it.second })?.let { throw FolderSelectionException(it) }
+    folderSelectionProblem(snapshot.map { it.second }, requireRoot)?.let { throw FolderSelectionException(it) }
     val result = mutableListOf<FolderUploadEntry>()
     for ((source, metadata) in snapshot) {
         currentCoroutineContext().ensureActive()
