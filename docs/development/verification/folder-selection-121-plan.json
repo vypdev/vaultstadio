@@ -8,8 +8,8 @@
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
   "status": "pre-implementation risk inventory",
-  "minimumDeterministicRisks": 60,
-  "minimumRealJourneys": 8,
+  "minimumDeterministicRisks": 68,
+  "minimumRealJourneys": 9,
   "bounds": {
     "aggregateBytes": 33554432,
     "combinedFileAndImplicitDirectoryEntries": 256,
@@ -377,6 +377,54 @@
       "risk": "Preserve queue failure, byte snapshot and explicit original-parent retry",
       "status": "planned",
       "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-01",
+      "risk": "Upload/sort popups do not overlap an active native search input",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-02",
+      "risk": "Repeated popup close/reopen preserves the controlled Unicode query",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-03",
+      "risk": "Restored real search field supports ordinary focus and editing",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-04",
+      "risk": "Disposed background DOM fields release listeners and ignore stale input events",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-05",
+      "risk": "Measured search layout remains stable at normal font scale",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-06",
+      "risk": "Measured search layout remains stable at increased font scale",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-07",
+      "risk": "Folder feedback uses normal layout and cannot cover the native input",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-LAYER-08",
+      "risk": "Actual packaged folder menu and its limit/empty-directory hint remain visible and operable",
+      "status": "planned",
+      "evidence": []
     }
   ],
   "realJourneys": [
@@ -427,6 +475,12 @@
       "risk": "Owned unsafe folder name causes visible safe refusal/no remote mutation; explicit valid selection succeeds afterwards",
       "status": "planned",
       "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-09",
+      "risk": "Actual corrected upload/sort menu visibility, search query retention/re-edit and inline preparation/error feedback without overlap",
+      "status": "planned",
+      "evidence": []
     }
   ],
   "evidencePolicy": "Risk families and repeated desktop/Wasm executions are counted separately. Record original red/green XML, exact source/class/SDK inputs, full 44/52 current production populations, real package/OS chooser evidence, byte hashes, current data and runnable rollback. No readiness inference for unexecuted browsers/mobile/OS targets.",
@@ -435,5 +489,10 @@
     "https://developer.mozilla.org/en-US/docs/Web/API/File/webkitRelativePath",
     "https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/cancel_event",
     "https://wicg.github.io/entries-api/"
-  ]
+  ],
+  "refinement": {
+    "source": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
+    "cause": "Actual Web screenshot shows native search input above upload menu; core full6559pass and actual directory3/3upload do not close this visual acceptance defect.",
+    "originalEvidence": "gui-menu-search-overlap-before.png retained privately with actual package/source identity"
+  }
 }

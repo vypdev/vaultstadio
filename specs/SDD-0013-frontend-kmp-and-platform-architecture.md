@@ -284,6 +284,20 @@ Keep Copilot, branch protections, workflow cadence, dependency pins and setup ac
 The risk-derived floor and real journeys are in the
 [pre-code inventory](../docs/development/verification/folder-selection-121-plan.json).
 
+Pre-code refinement after actual Web acceptance on `8320a43` (2026-10-28),
+FOLDER121-LAYER: the native HTML search input visibly covers the upload popup and its
+new folder hint. Green6,559-case execution does not satisfy this rendered acceptance.
+While an owned Files upload/sort popup is open, suspend the background search control
+and reserve its measured layout space. Preserve its controlled query and restore a
+real editable control on dismissal; release detached DOM listeners rather than leave
+an invisible hit target over the popup. Keep this policy in the owning presentation,
+using public component lifecycle; no framework-parent style or private editor mutation.
+Render folder preparation/error feedback in normal Files layout flow so it cannot
+cover the native search input. Add eight risk families for popup occlusion, repeated
+query restoration, focused editing after dismissal, stale-listener cleanup, measured
+layout at different font scales, inline feedback geometry and actual menu operation.
+Retain the original overlap screenshot and separately verify the corrected package.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
