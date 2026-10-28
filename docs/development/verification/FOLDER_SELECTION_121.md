@@ -1,6 +1,6 @@
 # Web directory selection verification — issue #121
 
-The [pre-code inventory](folder-selection-121-plan.json) records 68 risk families and nine rendered journeys. SDD-0005 section6.5 and SDD-0013 section6.8 were committed before their implementations in `b23219b` and the subsequent UI refinement in `a06f27d`. [Machine results](folder-selection-121.json) and [separate GUI evidence](folder-selection-121-gui.json) retain exact sources and scope. This is a local verification checkpoint; Final-ref CI, real Copilot review and adoption remain open; the native acceptance follow-up below closes the earlier draft gate.
+The [pre-code inventory](folder-selection-121-plan.json) records 76 risk families and nine rendered journeys. SDD-0005 section6.5 and SDD-0013 section6.8 were committed before their implementations in `b23219b` and the subsequent UI refinement in `a06f27d`; the action-specific failure-copy contract preceded its implementation in `21415fc`. [Machine results](folder-selection-121.json) and [separate GUI evidence](folder-selection-121-gui.json) retain exact sources and scope. This is a local verification checkpoint. The native acceptance follow-up closes the earlier draft gate; the review refinements below require fresh final-ref CI/review and explicit adoption.
 
 ## Behavior and ownership
 
@@ -18,16 +18,24 @@ The original browser regression ran four cases before implementation: two assert
 
 Real production-package dogfooding then found the framework's native search input above the upload menu. A separate pre-code refinement specified the correction; a targeted renderer assertion failed before the runtime change, archived as SHA256 `055b249ea88574086df25885e5fbde68fe649b4640a04ca215293bd2e70ec893`. No framework-private DOM state is modified. While upload/sort popups are open, the real background search control is removed and its measured layout space retained. Closing restores the controlled query and an editable input. Folder preparation/error feedback now occupies normal layout above search. Six actual browser renderer cases, four desktop component cases and the separately observed packaged UI cover the refinement, including increased font scale and detached-listener disposal. This does not promise caret position retention across unmounting.
 
+## Copilot review refinements
+
+The actual review of `a23287c` raised three findings. The status now explicitly names **Chrome on macOS**. File/large-file picker failures now retain their originating action and use a pure, localized file-selection mapping across all seven maintained languages; folder capability and preparation-budget text remain specific to folders. Eight additional semantic tests ran red first:16 platform executions,14 assertion failures and2 unchanged-folder controls (original SHA256 `3cc5ff10b0e78ced50457b5f23717051cd03ba08a2c1e74b1563af407db0f79a`). The focused green run passes35 desktop/browser cases (original SHA256 `1e091f343dabea065058d22d930929b8fce15eb49c9d64e4fbd84e92487a53d4`).
+
+The raw-JavaScript parameter finding is refuted by the generated Kotlin2.4.20 import module, whose functions declare `(empty)`, `(size,count)`, `(size)` and `(file,size)` as formal arguments. All15 affected actual browser cases pass on analyzed source `a23287c`, including full32MiB reads. The [official Kotlin/Wasm contract](https://kotlinlang.org/docs/wasm-js-interop.html#kotlin-functions-with-javascript-code) supports package-level parameterized `= js(...)` bridges. Generated module, Wasm, sources, original XML and command receipts are archived (SHA256 `f64696ff46d1c0fcb34f21d1464b5ed3aca41851313e451a5cdb3612f345fc73`); [upstream issue764](https://github.com/vypdev/copilot/issues/764) and the PR reply contain the evidence. Valid fixtures are retained; the final review state is verified separately.
+
+After packaging `4d3fb74`, an additional actual UI journey selected a four-byte owned file with mode000 through ordinary Upload files. The real FileReader refusal displayed “The selected files could not be read. Nothing was added. Select the files again.” The before/after API listings are identical:13 files,8 folders, including IDs and parent relations. No queue item or upload was created. The fixture was restored to0600. This uses the production package and an on-disk failure, with no injected error/session/application state; it supplements the nine earlier directory/native journeys rather than changing their source attribution.
+
 ## Complete tests and coverage
 
-Clean production/test source `d18d72c579d8f0dc011cfd9b866a2004a8c30340` passed `make test-coverage` in436.56s: **6,569 executions —3,388 backend,1,635 desktop and1,546 Wasm— with zero failures, errors or skipped cases**. Raw saved JUnit XML was independently recounted. There are119 distinct new methods and183 repeated platform executions over the adopted6,386 baseline. These are distinct from the68 risk families. Existing folder creation, sibling ownership and queue retry tests are reused explicitly in the matrix.
+Clean production/test source `4d3fb740f3ae093135159a7d0c06752f136f0c38` passed `make test-coverage` in478.60s: **6,585 executions —3,388 backend,1,643 desktop and1,554 Wasm— with zero failures, errors or skipped cases**. All1,196 raw saved JUnit XML reports were independently recounted. There are127 distinct new methods and199 repeated platform executions over the adopted6,386 baseline. These are distinct from the76 risk families. Existing folder creation, sibling ownership and queue retry tests are reused explicitly in the matrix.
 
-The original5,816-file archive contains source/SDK/command receipts, raw XML, executed production classes, execution data and canonical reports; CRC validation and SHA256 `aed871e09dcbd3cd7670c0e418646acac25bb8d3823cdcd9e65b8b6ee1a4b7e4` were checked. Earlier full6,559 execution evidence belongs to core source `8320a43`, before the UI correction, and is not relabeled as the final result.
+The original5,821-file archive contains source/SDK/command receipts, raw XML, executed production classes, execution data and canonical reports; CRC validation and SHA256 `560facd5c0369556a6064ffd69d55b3de9e3d24e938a10483cc6cf5bcdf02d83` were checked. Earlier full6,559 execution evidence belongs to core source `8320a43`; the6,569 campaign and original native journeys belong to `d18d72c`. Their sources remain explicit.
 
 | Full compiled population | Covered lines | Covered branches |
 |---|---|---|
 | Backend,44 modules |9,433 /17,047 (55.34%)|2,140 /6,215 (34.43%)|
-| Frontend,52 modules |7,725 /22,089 (34.97%)|1,583 /6,147 (25.75%)|
+| Frontend,52 modules |7,766 /22,129 (35.09%)|1,595 /6,159 (25.90%)|
 
 | Critical source | Lines | Branches |
 |---|---|---|
@@ -35,14 +43,15 @@ The original5,816-file archive contains source/SDK/command receipts, raw XML, ex
 | FolderSelectionReader.kt |16 /16|6 /6|
 | FolderUploadController.kt |61 /61|44 /52|
 | FolderUploadCopy.kt |88 /88|11 /11|
+| UploadSelectionProblemCopy.kt |38 /38|12 /12|
 
 Whole-population coverage remains partial. Coroutine/defensive branches keep their actual missed counts; thin composition wiring and legacy desktop picker code remain incomplete under JVM instrumentation. Real Wasm/GUI evidence is separate and does not become JVM JaCoCo coverage. No exclusions, lowered thresholds or fabricated tests were added. Actual browser File/FileReader tests compare every byte at32MiB, two files summing exactly32MiB, and bound+1 refusal before reading.
 
 `make lint`, existing storage authorization/path gates, Instant serializer and input semantics gates pass. Twelve contract groups pass: accessibility/MIME/specification/no-FQN, inventory, browser bootstrap, Codecov keyring, CI cadence, share/selection architecture, verification tooling and managed setup. The exact head's full history scan has zero secret findings; the unchanged17/19 reviewed nonsecrets remain recorded. No workflow, Copilot, branch protection or setup activation is changed.
 
-## Actual application verification and remaining native check
+## Actual application verification and native acceptance
 
-The copied production Wasm package runs against the real local backend/PostgreSQL at `http://127.0.0.1:18090`. Normal UI login uses a disposable USER account and no seeded session. Actual directory operations use the browser FileChooser API over owned on-disk fixtures, not a fabricated FileList. Download buttons produce actual browser events and saved files; bytes and SHA256 are checked after saving. Independent authenticated API reads verify server facts separately.
+The copied production Wasm package from `4d3fb74` runs against the real local backend/PostgreSQL at `http://127.0.0.1:18090`. Normal UI login uses a disposable USER account and no seeded session. Actual directory operations use the browser FileChooser API over owned on-disk fixtures, not a fabricated FileList. Download buttons produce actual browser events and saved files; bytes and SHA256 are checked after saving. Independent authenticated API reads verify server facts separately.
 
 All nine rendered journeys have bounded passing evidence, including the separate native cancellation below: normal login; root/nested Unicode/empty-file upload and downloads; disclosed empty directories and no-mutation empty selection; fresh selection after cancellation; ordinary single/multiple round trips; large-picker chunked round trip; unsafe-name refusal followed by explicit valid retry; and popup/search/inline-feedback behavior. All13 files created through the GUI retain their original sizes and SHA256. Saved browser downloads include binary65,793bytes, Unicode42bytes, empty0bytes, ordinary321/22bytes and large10,486,017bytes. The account contains exactly13 files and8 represented folders after those planned operations.
 
@@ -56,7 +65,7 @@ Two tool calls exceeded their requested time bounds during chooser/download orch
 
 ## GitHub CI checkpoint
 
-Documentation head `0df291f` passed [CI40725080774](https://github.com/vypdev/vaultstadio/actions/runs/40725080774), including Codecov. All five original artifact ZIP digests and CRCs were verified, and1,194 saved XML reports independently reproduce3,388backend/1,635desktop/1,546Wasm executions with zero failures/errors/skips. Canonical reports retain all44/52 compiled modules and match the exact expected Git tree. Copilot Review was neutral/skipped while the PR was draft; it is not a favorable code review. The native-acceptance documentation follow-up requires its own final-ref CI and real Copilot review before adoption.
+Documentation head `0df291f` passed [CI40725080774](https://github.com/vypdev/vaultstadio/actions/runs/40725080774), including Codecov. All five original artifact ZIP digests and CRCs were verified, and1,194 saved XML reports independently reproduce3,388backend/1,635desktop/1,546Wasm executions with zero failures/errors/skips. Canonical reports retain all44/52 compiled modules and match the exact expected Git tree. Copilot Review was neutral/skipped while the PR was draft; it is not a favorable code review. The native-acceptance follow-up `a23287c` also passes [CI40729907715](https://github.com/vypdev/vaultstadio/actions/runs/40729907715):6,569 executions and the same5-artifact/1,194-XML verification. Its actual Copilot review produced the three findings addressed above. The new review-refinement candidate still requires its own final-ref CI/artifact verification and actual Copilot reassessment before adoption.
 
 ## Preservation and next steps
 

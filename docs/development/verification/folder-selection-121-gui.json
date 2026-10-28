@@ -3,7 +3,8 @@
   "issue": 121,
   "sources": {
     "initialLoginAndTreeUpload": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
-    "correctedUiAndRepeatedUploadsAndDownloads": "d18d72c579d8f0dc011cfd9b866a2004a8c30340"
+    "correctedUiAndRepeatedUploadsAndDownloads": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+    "reviewedCodeSource": "4d3fb740f3ae093135159a7d0c06752f136f0c38"
   },
   "mechanism": "Normal rendered UI login and actions; public browser FileChooser API over owned on-disk fixtures plus separate physical Chrome macOS Open-panel selection/three-file confirmation/native Escape cancellation. Actual saved downloads and authenticated read-only API checks are distinct evidence. No injected login/session/application state or fabricated FileList in GUI journeys. Controlled DOM/File/FileReader tests remain separate.",
   "journeys": [
@@ -542,6 +543,11 @@
       "originalRetainedOutsideGit": true
     },
     {
+      "name": "gui-review-copy-read-failure.png",
+      "sha256": "42c2827795c3862f133593b009be041feeb373a642313666b72a95f672d5bdaf",
+      "originalRetainedOutsideGit": true
+    },
+    {
       "name": "gui-sort-layer-corrected.png",
       "sha256": "19aee634727adc189e6df8fa3b13c76d86bb10aea2491990f44e25e6543e2a92",
       "originalRetainedOutsideGit": true
@@ -585,5 +591,26 @@
     "sha256": "db38eb9bb98294ab34e65c3d2efa026ff8a73631171c1760b94d38d42f87a567",
     "files": 13,
     "allEntriesByteCompared": true
+  },
+  "reviewFileReadFailure": {
+    "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+    "mechanism": "Actual production Wasm package; ordinary Upload files; public browser FileChooser API selects an owned four-byte mode000 on-disk fixture; actual FileReader refusal; no fabricated FileList or injected app/session/error state.",
+    "observedMessage": "The selected files could not be read. Nothing was added. Select the files again.",
+    "beforeAfterIdentical": true,
+    "files": 13,
+    "folders": 8,
+    "idsAndParentRelationsUnchanged": true,
+    "fixturePermissionsRestored": "0600",
+    "screenshot": "gui-review-copy-read-failure.png",
+    "ax": "gui-review-copy-read-failure.ax.txt",
+    "scope": "Additional actual file-read failure acceptance; original nine directory/native journeys retain their recorded earlier source."
+  },
+  "reviewAcceptanceOriginals": {
+    "archive": "issue121-review-4d3fb74/originals.zip",
+    "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+    "sha256": "8fce753e9a123a9584013d67427cd9beebf80c16925c5a79e5672d30fc419482",
+    "files": 20,
+    "allEntriesByteCompared": true,
+    "fixtureModeAfter": "0600"
   }
 }

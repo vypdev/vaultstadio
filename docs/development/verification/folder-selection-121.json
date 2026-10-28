@@ -1,30 +1,31 @@
 {
   "schemaVersion": 1,
   "issue": 121,
-  "implementationSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+  "implementationSource": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "preCodeContractCommits": [
     "b23219b6c62ee36328bd8c6b5bca9139a6e3a94d",
-    "a06f27d270134e4d2d9f0d1c5b57d4e252b42e18"
+    "a06f27d270134e4d2d9f0d1c5b57d4e252b42e18",
+    "21415fc614cbea3df91f433ada09933b82d5481e"
   ],
   "fullCommand": [
     "make",
     "test-coverage"
   ],
-  "seconds": 436.5566017627716,
+  "seconds": 478.60188579559326,
   "totals": {
     "backend": 3388,
-    "desktop": 1635,
-    "browser": 1546,
-    "total": 6569,
+    "desktop": 1643,
+    "browser": 1554,
+    "total": 6585,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "newTests": {
-    "distinctMethods": 119,
-    "platformExecutions": 183,
-    "distinctRiskFamilies": 68,
+    "distinctMethods": 127,
+    "platformExecutions": 199,
+    "distinctRiskFamilies": 76,
     "inheritedPlatformExecutions": 6386
   },
   "compiledCoverage": {
@@ -32,7 +33,7 @@
       "modules": 44,
       "summary": {
         "classes": 2196,
-        "sha256": "cdc97bc1a84f48617816f906c43971c62acf2b22878dfcba91f659eaa42882eb",
+        "sha256": "82700a4dd7ad97c66171d79febfebeaa6d4c2e9104afe57ab85ef981e6d6d6f8",
         "line": {
           "missed": 7614,
           "covered": 9433
@@ -50,19 +51,19 @@
     "frontend/coverage": {
       "modules": 52,
       "summary": {
-        "classes": 1848,
-        "sha256": "615f6b06f0a6cc2ec14cd67092532f2752860b6a3f2b488e7100b1c78affe5ab",
+        "classes": 1850,
+        "sha256": "6d2dda39b2c89d754a2618f9267c4743bd19b0e720b58d7441bc78cdea354d9a",
         "line": {
-          "missed": 14364,
-          "covered": 7725
+          "missed": 14363,
+          "covered": 7766
         },
         "branch": {
           "missed": 4564,
-          "covered": 1583
+          "covered": 1595
         },
         "instruction": {
-          "missed": 133425,
-          "covered": 48196
+          "missed": 133417,
+          "covered": 48312
         }
       }
     }
@@ -146,10 +147,36 @@
         "missed": 7
       }
     },
+    "frontend/com/vaultstadio/app/feature/files/UploadSelectionProblemCopy.kt": {
+      "INSTRUCTION": {
+        "covered": 101,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 12,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 38,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 14,
+        "missed": 0
+      },
+      "METHOD": {
+        "covered": 5,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 0
+      }
+    },
     "frontend/com/vaultstadio/app/feature/files/FilesUploadEffects.kt": {
       "INSTRUCTION": {
         "covered": 0,
-        "missed": 275
+        "missed": 276
       },
       "BRANCH": {
         "covered": 0,
@@ -174,8 +201,8 @@
     },
     "frontend/com/vaultstadio/app/feature/files/FolderUploadCopy.kt": {
       "INSTRUCTION": {
-        "covered": 159,
-        "missed": 15
+        "covered": 162,
+        "missed": 12
       },
       "BRANCH": {
         "covered": 11,
@@ -186,12 +213,12 @@
         "missed": 0
       },
       "COMPLEXITY": {
-        "covered": 16,
-        "missed": 5
+        "covered": 17,
+        "missed": 4
       },
       "METHOD": {
-        "covered": 7,
-        "missed": 5
+        "covered": 8,
+        "missed": 4
       },
       "CLASS": {
         "covered": 2,
@@ -278,11 +305,12 @@
     }
   },
   "originalEvidence": {
-    "archive": "issue121-full-d18d72c/originals.zip",
-    "sha256": "aed871e09dcbd3cd7670c0e418646acac25bb8d3823cdcd9e65b8b6ee1a4b7e4",
-    "files": 5816,
+    "archive": "issue121-full-4d3fb74/originals.zip",
+    "sha256": "560facd5c0369556a6064ffd69d55b3de9e3d24e938a10483cc6cf5bcdf02d83",
+    "files": 5821,
     "crcValidated": true,
-    "rawJUnitIndependentlyRecounted": true
+    "rawJUnitIndependentlyRecounted": true,
+    "rawXml": 1196
   },
   "redEvidence": [
     {
@@ -305,11 +333,12 @@
     "backendGates": 0,
     "frontendGates": 0,
     "contractGroups": 12,
+    "contractCommands": 18,
     "allContractGroupsPass": true
   },
   "runtime": {
     "origin": "http://127.0.0.1:18090",
-    "productionPackageSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+    "productionPackageSource": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
     "previousWebRollbackOrigin": "http://127.0.0.1:18088",
     "guiUploadFilesVerified": 13,
     "guiFolders": 8,
@@ -331,12 +360,100 @@
     "originalArtifacts": 5,
     "rawXml": 1194,
     "digestsCrcSourceTreeAndRawTotalsVerified": true,
-    "review": "Draft check was neutral/skipped; real final-ref review remains pending."
+    "review": "Draft check was neutral/skipped; real final-ref review remains pending.",
+    "secondVerifiedRun": {
+      "head": "a23287cfa84b8db5845023e736eb304cdd41b7f7",
+      "runId": 40729907715,
+      "tests": 6569,
+      "originalArtifacts": 5,
+      "rawXml": 1194,
+      "digestsCrcSourceTreeAndRawTotalsVerified": true
+    }
+  },
+  "reviewRefinement": {
+    "preCode": "21415fc614cbea3df91f433ada09933b82d5481e",
+    "additionalRiskFamilies": 8,
+    "copyRed": {
+      "platformExecutions": 16,
+      "assertionFailures": 14,
+      "passingControls": 2,
+      "sha256": "3cc5ff10b0e78ced50457b5f23717051cd03ba08a2c1e74b1563af407db0f79a"
+    },
+    "copyGreen": {
+      "suites": {
+        "desktopTest": {
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "wasmJsBrowserTest": {
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "sha256": "1e091f343dabea065058d22d930929b8fce15eb49c9d64e4fbd84e92487a53d4"
+    },
+    "interopFindingRefuted": {
+      "upstreamIssue": "https://github.com/vypdev/copilot/issues/764",
+      "source": "a23287cfa84b8db5845023e736eb304cdd41b7f7",
+      "actualBrowserTests": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "formalBindings": {
+        "installDirectoryFixture": {
+          "formalParameters": "empty",
+          "generatedLine": 6940
+        },
+        "installBudgetFiles": {
+          "formalParameters": "size, count",
+          "generatedLine": 6989
+        },
+        "fileWithReportedSize": {
+          "formalParameters": "size",
+          "generatedLine": 7009
+        },
+        "changeReportedSize": {
+          "formalParameters": "file, size",
+          "generatedLine": 7011
+        }
+      },
+      "generatedModuleSha256": "5f382b748d144928aaac6371b67e82f4f2119e4e41b02a176d08cbffd37600c0",
+      "originalProofSha256": "f64696ff46d1c0fcb34f21d1464b5ed3aca41851313e451a5cdb3612f345fc73",
+      "documentation": "https://kotlinlang.org/docs/wasm-js-interop.html#kotlin-functions-with-javascript-code"
+    },
+    "nativePlatformLabel": "Chrome/macOS",
+    "actualFileReadFailure": {
+      "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+      "mechanism": "Actual production Wasm package; ordinary Upload files; public browser FileChooser API selects an owned four-byte mode000 on-disk fixture; actual FileReader refusal; no fabricated FileList or injected app/session/error state.",
+      "observedMessage": "The selected files could not be read. Nothing was added. Select the files again.",
+      "beforeAfterIdentical": true,
+      "files": 13,
+      "folders": 8,
+      "idsAndParentRelationsUnchanged": true,
+      "fixturePermissionsRestored": "0600",
+      "screenshot": "gui-review-copy-read-failure.png",
+      "ax": "gui-review-copy-read-failure.ax.txt",
+      "scope": "Additional actual file-read failure acceptance; original nine directory/native journeys retain their recorded earlier source."
+    }
   },
   "nativeAcceptanceOriginals": {
     "archive": "issue121-native-d18d72c/originals.zip",
     "sha256": "db38eb9bb98294ab34e65c3d2efa026ff8a73631171c1760b94d38d42f87a567",
     "files": 13,
     "allEntriesByteCompared": true
+  },
+  "reviewAcceptanceOriginals": {
+    "archive": "issue121-review-4d3fb74/originals.zip",
+    "source": "4d3fb740f3ae093135159a7d0c06752f136f0c38",
+    "sha256": "8fce753e9a123a9584013d67427cd9beebf80c16925c5a79e5672d30fc419482",
+    "files": 20,
+    "allEntriesByteCompared": true,
+    "fixtureModeAfter": "0600"
   }
 }
