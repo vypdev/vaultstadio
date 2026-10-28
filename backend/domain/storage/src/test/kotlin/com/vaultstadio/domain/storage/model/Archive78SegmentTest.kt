@@ -1,5 +1,6 @@
 package com.vaultstadio.domain.storage.model
 
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.assertFalse
@@ -17,4 +18,25 @@ class Archive78SegmentTest {
     fun `portable ZIP segments retain ordinary Unicode names`(name: String) {
         assertTrue(isSafeArchiveSegment(name))
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["", " ", ".", "..", "safe/file", "safe\\file"])
+    fun `blank navigation and separator segments cannot become ZIP entries`(name: String) {
+        assertFalse(isSafeArchiveSegment(name))
+    }
+
+    @Test fun `forbidden control characters cannot hide inside a ZIP segment`() {
+        for (character in listOf('\u0000', '\u001f', '\u007f')) {
+            assertFalse(isSafeArchiveSegment("before${character}after"))
+        }
+    }
+
+    @Test fun `exact maximum supported segment length is retained`() {
+        assertTrue(isSafeArchiveSegment("a".repeat(255)))
+    }
+
+    @Test fun `first unsupported segment length is rejected`() {
+        assertFalse(isSafeArchiveSegment("a".repeat(256)))
+    }
+
 }
