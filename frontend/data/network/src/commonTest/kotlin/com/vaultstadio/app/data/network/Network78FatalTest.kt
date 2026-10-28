@@ -5,6 +5,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertSame
 
 class Network78FatalTest {
@@ -31,7 +32,7 @@ class Network78FatalTest {
 
     @Test fun transfer78OrdinaryFailureStillMapsToNetworkError() = runTest {
         withNetwork119Client { client ->
-            kotlin.test.assertIs<ApiResult.NetworkError>(
+            assertIs<ApiResult.NetworkError>(
                 fatalRequest(client, IllegalStateException("owned network failure")),
             )
         }

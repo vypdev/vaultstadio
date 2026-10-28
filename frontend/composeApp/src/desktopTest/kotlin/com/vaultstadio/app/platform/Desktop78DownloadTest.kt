@@ -5,6 +5,7 @@ import com.vaultstadio.app.domain.storage.transfer.DownloadPayload
 import com.vaultstadio.app.domain.storage.transfer.SaveOutcome
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.Test
@@ -151,7 +152,7 @@ class Desktop78DownloadTest {
         withDirectory { directory ->
             val target = Files.createDirectory(directory.resolve("existing-directory"))
             Files.write(target.resolve("keep"), byteArrayOf(5))
-            assertFailsWith<java.io.IOException> { writeDownloadAtomically(target, byteArrayOf(1)) }
+            assertFailsWith<IOException> { writeDownloadAtomically(target, byteArrayOf(1)) }
             assertContentEquals(byteArrayOf(5), Files.readAllBytes(target.resolve("keep")))
             assertEquals(listOf(target), children(directory))
         }
@@ -160,7 +161,7 @@ class Desktop78DownloadTest {
     @Test fun transfer78AtomicWriterMissingParentFailsWithoutCreatingDestination() {
         withDirectory { directory ->
             val target = directory.resolve("missing/file")
-            assertFailsWith<java.io.IOException> { writeDownloadAtomically(target, byteArrayOf(1)) }
+            assertFailsWith<IOException> { writeDownloadAtomically(target, byteArrayOf(1)) }
             assertTrue(children(directory).isEmpty())
         }
     }

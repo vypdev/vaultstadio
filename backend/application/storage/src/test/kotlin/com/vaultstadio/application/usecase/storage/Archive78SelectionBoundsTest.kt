@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.right
 import com.vaultstadio.domain.common.pagination.PagedResult
 import com.vaultstadio.domain.storage.model.ArchiveLimits
+import com.vaultstadio.domain.storage.model.StorageItem
 import io.mockk.coEvery
 import io.mockk.coVerify
 import kotlinx.coroutines.runBlocking
@@ -76,7 +77,7 @@ internal class Archive78SelectionBoundsTest : Archive78SelectionFixture() {
         val root = folder()
         metadata(root)
         coEvery { storage.listFolder(root.id, "owner78", any()) } returns
-            PagedResult<com.vaultstadio.domain.storage.model.StorageItem>(emptyList(), 1, 0, 256).right()
+            PagedResult<StorageItem>(emptyList(), 1, 0, 256).right()
         assertEquals(400, (select(listOf(root.id)) as Either.Left).value.httpStatus)
     }
 
