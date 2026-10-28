@@ -4,7 +4,7 @@
   "sources": {
     "initialLoginAndTreeUpload": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
     "correctedUiAndRepeatedUploadsAndDownloads": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
-    "reviewedCodeSource": "17f1f3fbdd152d2a29450e2e834b68275e5656c4"
+    "reviewedCodeSource": "d3816d65cc1194848b91e73f6cb82a677678442f"
   },
   "mechanism": "Normal rendered UI login and actions; public browser FileChooser API over owned on-disk fixtures plus separate physical Chrome macOS Open-panel selection/three-file confirmation/native Escape cancellation. Actual saved downloads and authenticated read-only API checks are distinct evidence. No injected login/session/application state or fabricated FileList in GUI journeys. Controlled DOM/File/FileReader tests remain separate.",
   "journeys": [
@@ -538,6 +538,11 @@
       "originalRetainedOutsideGit": true
     },
     {
+      "name": "gui-native-budget-canceled.png",
+      "sha256": "d9cbd9b93bccbfb7afefc0231578bcb8ce23831d22d3c919ca76e20349d6306a",
+      "originalRetainedOutsideGit": true
+    },
+    {
       "name": "gui-native-cancel-completed.png",
       "sha256": "2823b18fa6317dbe7cbfe1d13c857fea1d7d82c3ca3025fff1a828c98ef69ce9",
       "originalRetainedOutsideGit": true
@@ -648,11 +653,43 @@
     "allEntriesByteCompared": true,
     "fixtureModeAfter": "0600"
   },
+  "nativeBudgetSmoke": {
+    "atUtc": "2026-10-28T18:49:17.587880+00:00",
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "kind": "Actual isolated native package smoke after resource repair; no injected credentials/session/application state.",
+    "normalAutonomousLogin": true,
+    "productionJarsUnmodified": true,
+    "signatureVerified": true,
+    "unseededPreferences": true,
+    "folderMenuActivated": true,
+    "modalPreparingObserved": true,
+    "applicationCancelClosesModal": true,
+    "standardOperableWindowRestored": true,
+    "files": 13,
+    "folders": 8,
+    "idsAndParentsUnchanged": true,
+    "positivePhysicalSwingSelectionCertified": false,
+    "actualResourceValidationEvidence": "Separate12 on-disk desktop cases plus shared reader controls; not inferred from cancel smoke.",
+    "ax": [
+      "gui-native-budget-preparing.ax.txt",
+      "gui-native-budget-canceled.ax.txt"
+    ],
+    "screenshot": "gui-native-budget-canceled.png",
+    "toolAppAcquisitionSeconds": 22.8002
+  },
   "desktopAcceptanceOriginals": {
     "archive": "issue121-desktop-17f1f3f/originals.zip",
     "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
     "sha256": "a59efe51ebe8a602fa38f096ba5509a840300c2e32d3b4c51f46e9ff978b6d45",
     "files": 27,
     "allEntriesByteCompared": true
+  },
+  "nativeBudgetAcceptanceOriginals": {
+    "archive": "issue121-native-budget-d3816d6/originals.zip",
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "sha256": "6ef5aa1714a6145e992af8c94c7c1006c840cda3eb88b4987b765b287a35035d",
+    "files": 18,
+    "allEntriesByteCompared": true,
+    "scope": "Original red7assertion failures/5controls, final48focusedgreen, actual native application normal login/menu/appCancel with13files/8folders unchanged; positive physical Swing selection not certified. Full campaign has separate original archive."
   }
 }

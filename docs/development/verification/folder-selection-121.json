@@ -1,32 +1,33 @@
 {
   "schemaVersion": 1,
   "issue": 121,
-  "implementationSource": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
+  "implementationSource": "d3816d65cc1194848b91e73f6cb82a677678442f",
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "preCodeContractCommits": [
     "b23219b6c62ee36328bd8c6b5bca9139a6e3a94d",
     "a06f27d270134e4d2d9f0d1c5b57d4e252b42e18",
     "21415fc614cbea3df91f433ada09933b82d5481e",
-    "d91620ab5325001b85520e34f2e244d44f3ceba7"
+    "d91620ab5325001b85520e34f2e244d44f3ceba7",
+    "6c6a8c3e1d238d59f5e17984fe416ab04cc9e71f"
   ],
   "fullCommand": [
     "make",
     "test-coverage"
   ],
-  "seconds": 447.26788902282715,
+  "seconds": 550.6043260097504,
   "totals": {
     "backend": 3388,
-    "desktop": 1652,
+    "desktop": 1664,
     "browser": 1554,
-    "total": 6594,
+    "total": 6606,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "newTests": {
-    "distinctMethods": 136,
-    "platformExecutions": 208,
-    "distinctRiskFamilies": 84,
+    "distinctMethods": 148,
+    "platformExecutions": 220,
+    "distinctRiskFamilies": 96,
     "inheritedPlatformExecutions": 6386
   },
   "compiledCoverage": {
@@ -34,37 +35,37 @@
       "modules": 44,
       "summary": {
         "classes": 2196,
-        "sha256": "4c30a2bdbe9818c57540b8505599cb2bfecf7720b4e877ad6053325ca9b3bc13",
+        "sha256": "c9b463330a9b9e9908d9de06ccfe40c98b1a01452b2f7a96736b27a7bd66ca02",
         "line": {
           "missed": 7614,
           "covered": 9433
         },
         "branch": {
-          "missed": 4075,
-          "covered": 2140
+          "missed": 4073,
+          "covered": 2142
         },
         "instruction": {
-          "missed": 83007,
-          "covered": 74190
+          "missed": 82994,
+          "covered": 74203
         }
       }
     },
     "frontend/coverage": {
       "modules": 52,
       "summary": {
-        "classes": 1857,
-        "sha256": "edacbc7243666aa924964593673283af4be04333f55bd341f2f287f9a4073066",
+        "classes": 1864,
+        "sha256": "fc23c2ca2b4460bd2b2f2e165d3fdf0460825ef3f2ec0184e1b8466a18870c7b",
         "line": {
-          "missed": 14337,
-          "covered": 7814
+          "missed": 14340,
+          "covered": 7846
         },
         "branch": {
           "missed": 4559,
-          "covered": 1612
+          "covered": 1624
         },
         "instruction": {
-          "missed": 133336,
-          "covered": 48599
+          "missed": 133374,
+          "covered": 48868
         }
       }
     }
@@ -174,30 +175,82 @@
         "missed": 6
       }
     },
-    "frontend/com/vaultstadio/app/platform/DesktopFolderFiles.kt": {
+    "frontend/com/vaultstadio/app/platform/DesktopFolderMetadata.kt": {
       "INSTRUCTION": {
-        "covered": 163,
-        "missed": 37
+        "covered": 192,
+        "missed": 10
       },
       "BRANCH": {
-        "covered": 10,
+        "covered": 16,
         "missed": 2
       },
       "LINE": {
-        "covered": 26,
-        "missed": 4
+        "covered": 38,
+        "missed": 1
       },
       "COMPLEXITY": {
-        "covered": 9,
-        "missed": 4
+        "covered": 14,
+        "missed": 3
       },
       "METHOD": {
-        "covered": 5,
-        "missed": 2
+        "covered": 7,
+        "missed": 1
       },
       "CLASS": {
         "covered": 2,
-        "missed": 1
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/DesktopFolderFiles.kt": {
+      "INSTRUCTION": {
+        "covered": 136,
+        "missed": 60
+      },
+      "BRANCH": {
+        "covered": 2,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 11,
+        "missed": 6
+      },
+      "COMPLEXITY": {
+        "covered": 5,
+        "missed": 3
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 3
+      },
+      "CLASS": {
+        "covered": 2,
+        "missed": 2
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/DesktopFolderSource.kt": {
+      "INSTRUCTION": {
+        "covered": 89,
+        "missed": 5
+      },
+      "BRANCH": {
+        "covered": 2,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 7,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 8,
+        "missed": 0
+      },
+      "METHOD": {
+        "covered": 7,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 3,
+        "missed": 0
       }
     },
     "frontend/com/vaultstadio/app/feature/files/UploadSelectionProblemCopy.kt": {
@@ -306,23 +359,23 @@
     },
     "frontend/com/vaultstadio/app/feature/upload/FolderSelectionReader.kt": {
       "INSTRUCTION": {
-        "covered": 150,
+        "covered": 165,
         "missed": 0
       },
       "BRANCH": {
-        "covered": 6,
+        "covered": 8,
         "missed": 0
       },
       "LINE": {
-        "covered": 16,
+        "covered": 18,
         "missed": 0
       },
       "COMPLEXITY": {
-        "covered": 4,
+        "covered": 6,
         "missed": 0
       },
       "METHOD": {
-        "covered": 1,
+        "covered": 2,
         "missed": 0
       },
       "CLASS": {
@@ -358,12 +411,12 @@
     }
   },
   "originalEvidence": {
-    "archive": "issue121-full-17f1f3f/originals.zip",
-    "sha256": "0ef4047a0cc0465decc4b8bcec474a106a28b52596f89053a816da53abe6659f",
-    "files": 5831,
+    "archive": "issue121-full-d3816d6/originals.zip",
+    "sha256": "4eb96d2baa995a8403515d0103c8d8d761172a6a9ca0eb7cf092fed23dddd949",
+    "files": 5840,
     "crcValidated": true,
     "rawJUnitIndependentlyRecounted": true,
-    "rawXml": 1197
+    "rawXml": 1199
   },
   "redEvidence": [
     {
@@ -431,6 +484,14 @@
       "backendFailures": 43,
       "all43AreDockerInitializationFailures": true,
       "rootCauseObserved": "OrbStack stopped/socket disappeared during tests; no cause for shutdown inferred. Same four owned containers resumed normally, all30 original and13 GUI payload hashes verified. Frontend and contracts passed. New desktop code requires a new CI round instead of rerunning obsolete head."
+    },
+    "fourthVerifiedRun": {
+      "head": "e138c2cc11638ccce6e0a955c389482d47077b91",
+      "runId": 40745555932,
+      "tests": 6594,
+      "originalArtifacts": 5,
+      "rawXml": 1197,
+      "digestsCrcSourceTreeAndRawTotalsVerified": true
     }
   },
   "reviewRefinement": {
@@ -583,11 +644,149 @@
     "allEntriesByteCompared": true,
     "fixtureModeAfter": "0600"
   },
+  "nativeBudgetRefinement": {
+    "preCode": "6c6a8c3e1d238d59f5e17984fe416ab04cc9e71f",
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "additionalRiskFamilies": 12,
+    "red": {
+      "tests": 12,
+      "assertionFailures": 7,
+      "passingControls": 5,
+      "cases": [
+        {
+          "name": "folder121NativeReadsEveryByteAtExactAggregateLimit[desktop]",
+          "failed": false,
+          "message": null
+        },
+        {
+          "name": "folder121NativeAcceptsExactRelativeDepth[desktop]",
+          "failed": false,
+          "message": null
+        },
+        {
+          "name": "folder121NativeOversizedFileRefusesInsteadOfSkipping[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was java.lang.IllegalStateException: Refused metadata must not start any body read"
+        },
+        {
+          "name": "folder121NativeRelativeDepthPlusOneRefusesBeforeRead[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was java.lang.IllegalStateException: Refused metadata must not start any body read"
+        },
+        {
+          "name": "folder121NativeAggregatePlusOneRefusesBeforeRead[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was java.lang.IllegalStateException: Refused metadata must not start any body read"
+        },
+        {
+          "name": "folder121NativeVisitedEntryPlusOneRefusesBeforeRead[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was java.lang.IllegalStateException: Refused metadata must not start any body read"
+        },
+        {
+          "name": "folder121NativePreservesBasicBytesUnicodeAndEmptyFiles[desktop]",
+          "failed": false,
+          "message": null
+        },
+        {
+          "name": "folder121NativeAcceptsExactVisitedEntryLimit[desktop]",
+          "failed": false,
+          "message": null
+        },
+        {
+          "name": "folder121NativeReadFailureRejectsAllEarlierFiles[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was completed successfully with the result: <[FolderFile(name=2.dat, relativePath=2.dat, size=1, mimeType=application/octet-stream, data=[2]), FolderFile(name=1.dat, relativePath=1.dat, size=1, mimeType=application/octet-stream, data=[1])]>."
+        },
+        {
+          "name": "folder121NativeCancellationStopsBeforeLaterSources[desktop]",
+          "failed": false,
+          "message": null
+        },
+        {
+          "name": "folder121NativeRejectsRootEntryAndSwappedLeafLinks[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was java.lang.IllegalStateException: Refused metadata must not start any body read"
+        },
+        {
+          "name": "folder121NativeRejectsGrowingAndTruncatedBodiesAgainstSnapshot[desktop]",
+          "failed": true,
+          "message": "java.lang.AssertionError: Expected an exception of class com.vaultstadio.app.domain.upload.FolderSelectionException to be thrown, but was completed successfully with the result: <[FolderFile(name=changing.dat, relativePath=changing.dat, size=11, mimeType=application/octet-stream, data=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]>."
+        }
+      ],
+      "sha256": "f091ec31d1aaf1d05b092cd51157b70425597216149569e58bf6054bc60f151e",
+      "scope": "Actual owned files and callback guards against old native behavior with an API-shape read port; unchanged legacy recursion/whole-file read/skip semantics. No physical chooser claim."
+    },
+    "green": {
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": {
+        "Desktop121FolderDialogTest[desktop]": 9,
+        "Desktop78DialogTest[desktop]": 5,
+        "Native121ResourcesTest[desktop]": 8,
+        "Folder121SelectionReaderTest[desktop]": 14,
+        "Native121ReadTest[desktop]": 4,
+        "Upload121ProblemCopyTest[desktop]": 8
+      },
+      "sha256": "e5d672b62c1285cf3d616748c943cbd35d480681eb1b11fc16ccca289430642a",
+      "kind": "Actual owned filesystem bytes/metadata, finite callback guards, real EDT/dialog regression and shared reader controls; not physical chooser selection."
+    },
+    "readContract": "No body callback before complete valid metadata; lazy traversal<=256visited entries including root/empty directories;16relative segments; shared32MiB policy; actual reads<=snapshotted size+1 with exact byte reconciliation. Static/root symlinks rejected; swapped leaf refused at open; parent-directory races not certified.",
+    "rootPolicy": {
+      "browserRequireSelectedRoot": true,
+      "desktopLegacyRelativePaths": true
+    },
+    "actualApplication": {
+      "atUtc": "2026-10-28T18:49:17.587880+00:00",
+      "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+      "kind": "Actual isolated native package smoke after resource repair; no injected credentials/session/application state.",
+      "normalAutonomousLogin": true,
+      "productionJarsUnmodified": true,
+      "signatureVerified": true,
+      "unseededPreferences": true,
+      "folderMenuActivated": true,
+      "modalPreparingObserved": true,
+      "applicationCancelClosesModal": true,
+      "standardOperableWindowRestored": true,
+      "files": 13,
+      "folders": 8,
+      "idsAndParentsUnchanged": true,
+      "positivePhysicalSwingSelectionCertified": false,
+      "actualResourceValidationEvidence": "Separate12 on-disk desktop cases plus shared reader controls; not inferred from cancel smoke.",
+      "ax": [
+        "gui-native-budget-preparing.ax.txt",
+        "gui-native-budget-canceled.ax.txt"
+      ],
+      "screenshot": "gui-native-budget-canceled.png",
+      "toolAppAcquisitionSeconds": 22.8002
+    }
+  },
   "desktopAcceptanceOriginals": {
     "archive": "issue121-desktop-17f1f3f/originals.zip",
     "source": "17f1f3fbdd152d2a29450e2e834b68275e5656c4",
     "sha256": "a59efe51ebe8a602fa38f096ba5509a840300c2e32d3b4c51f46e9ff978b6d45",
     "files": 27,
     "allEntriesByteCompared": true
+  },
+  "nativeBudgetAcceptanceOriginals": {
+    "archive": "issue121-native-budget-d3816d6/originals.zip",
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "sha256": "6ef5aa1714a6145e992af8c94c7c1006c840cda3eb88b4987b765b287a35035d",
+    "files": 18,
+    "allEntriesByteCompared": true,
+    "scope": "Original red7assertion failures/5controls, final48focusedgreen, actual native application normal login/menu/appCancel with13files/8folders unchanged; positive physical Swing selection not certified. Full campaign has separate original archive."
+  },
+  "interruptedLocalVerification": {
+    "source": "d3816d65cc1194848b91e73f6cb82a677678442f",
+    "success": false,
+    "fullCommandExit": 2,
+    "contractsReceiptNotSaved": true,
+    "observedFailures": "Docker/socket failure and ENOSPC; no passing campaign inferred from partial frontend or contracts log.",
+    "archive": "issue121-local-d3816d6-interrupted/originals.zip",
+    "sha256": "90ed543e9890b283eb0c2ec7fdca3e5c1724ceeee25660b7bea6634f4734908b",
+    "archivedFiles": 19180,
+    "retry": "Fresh full campaign and all contract commands on the same clean source after disk recovery."
   }
 }
