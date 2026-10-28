@@ -20,16 +20,17 @@ Domain policy contains no UI, Ktor, AWT or filesystem dependency. Platform detai
 
 ## Verification
 
-The clean implementation `4128d0323ab8d81de537e846553dd77dbe3a6b1e` passed **6,355 product executions** in 445.44 seconds: **3,357 backend, 1,563 desktop and 1,435 Wasm**, with zero failures, errors and skipped cases. This is 264 additional platform executions over the adopted #119 population. There are 36 meaningful operation cases per JVM/Wasm, above the 24-case operation floor; protocol, archive, queue, filesystem and browser tests remain separate. See [machine results](authenticated-transfers-78.json).
+The clean implementation `ae5f22a8eef9de54b357ba429765c432fd84775e` passed **6,386 product executions** in 506.33 seconds: **3,388 backend, 1,563 desktop and 1,435 Wasm**, with zero failures, errors and skipped cases. This is 295 additional platform executions over the adopted #119 population. There are 36 meaningful operation cases per JVM/Wasm and 23 direct archive path-policy cases. See [machine results](authenticated-transfers-78.json).
 
 | Complete compiled population | Lines | Branches |
 |---|---|---|
-| backend (44 modules) | 9,433 / 17,047 (55.34%) | 2,132 / 6,213 (34.32%) |
+| backend (44 modules) | 9,433 / 17,047 (55.34%) | 2,140 / 6,215 (34.43%) |
 | frontend (52 modules) | 7,488 / 21,812 (34.33%) | 1,454 / 5,972 (24.35%) |
 
 | Critical source, including generated/nested classes | Lines | Branches |
 |---|---|---|
 | BoundedZipArchiveWriter.kt | 68 / 68 (100.00%) | 31 / 32 (96.88%) |
+| ArchiveDownload.kt | 16 / 16 (100.00%) | 36 / 50 (72.00%) |
 | ArchiveDownloadRoutes.kt | 15 / 15 (100.00%) | 3 / 9 (33.33%) |
 | ArchiveSelection.kt | 53 / 53 (100.00%) | 54 / 56 (96.43%) |
 | DownloadArchiveUseCase.kt | 25 / 25 (100.00%) | 20 / 23 (86.96%) |
@@ -43,9 +44,9 @@ The clean implementation `4128d0323ab8d81de537e846553dd77dbe3a6b1e` passed **6,3
 | UploadEntryProcessor.kt | 49 / 49 (100.00%) | 27 / 36 (75.00%) |
 | FilesDownloadController.kt | 94 / 94 (100.00%) | 83 / 118 (70.34%) |
 
-Root/source-file line counters are consolidated; class line counters must not be summed. Raw branch counters include coroutine/default/generated code. The actual native chooser code is exercised through the GUI independently of unit instrumentation; no GUI execution is added to the JVM counters. The defensive zero-read/yield branch, composition factories and remaining legacy modules retain their real missed counts.
+The critical `isSafeArchiveSegment` method independently covers **5 / 5 (100.00%) lines and 22 / 22 (100.00%) branches** through ordinary tests. The same source file also contains generated model paths, whose real missed counts remain included. Root/source-file line counters are consolidated; class line counters must not be summed. Raw branch counters include coroutine/default/generated code. Actual native chooser GUI observations are separate from unit instrumentation. The defensive zero-read/yield branch, composition factories and remaining legacy modules retain their missed counts.
 
-Original clean command, receipts, JUnit XML, execution inputs and canonical reports are retained in the final evidence archive, SHA256 `4bf923d610ec103193c64f8657dcd0adf48d779d68eb631f9d7b1249e8199172`. The [machine result](authenticated-transfers-78.json) records independent red/fixture diagnostic hashes.
+Original clean command, receipts, JUnit XML, executed class/JaCoCo inputs and canonical reports are retained in the final evidence archive, SHA256 `928bbd1e8cfa9ad44dc5c333120c7966a509a71ce2519a756dfe7169f25ce9b5`. The [machine result](authenticated-transfers-78.json) retains earlier positive, red and fixture diagnostic hashes.
 
 All applicable backend and desktop compiled module outputs, including untested code, remain in the canonical JVM population. Common tests on JVM and Wasm count as repeated platform executions, not distinct requirements. Mobile-specific compilation/runtime and hardware acceptance remain outside this certificate. No coverage exclusions, lowered gates, scanner suppression or workflow-cadence changes were introduced.
 
@@ -72,6 +73,16 @@ The candidate used the real backend and migrated local PostgreSQL, synthetic acc
 Positive journeys UI02–08 were initially observed on `a207b1356f6a43c2fb3f25f432639551fa92f4c6`; new normal login, real fetch/cancellation/retry, failed-upload retry and native journeys were observed on `4a725d4464864eea65311aac76b9d5d6cdb48975`. These sources remain explicit in the receipts rather than being relabeled as observations of a later commit. The final dialog correction was separately observed on `4128d0323ab8d81de537e846553dd77dbe3a6b1e`: autonomous normal login, real Save File publication of the same 321-byte binary, and selector cancellation preserving that existing destination with no new files or temporary parts (UI15–16).
 
 The initial absent-origin CORS login failure was a local fixture configuration omission. One initial archive 404 came from a test fixture that omitted the registered batch route. Both are kept separate from reproduced production defects. Nginx `limit_rate` did not actually hold the response and is not counted as cancellation evidence; the replacement held-body fixture was independently timed before the real cancellation. Temporary fault proxies are removed and the original direct backend port is restored.
+
+## Review and CI refinements
+
+Copilot identified a real drive-prefix archive gap after the earlier complete acceptance snapshot. Four real root/nested file/folder creation-and-archive HTTP controls returned ZIP 200 before repair; direct policy and writer controls independently failed, for 14 preserved red failures. The shared archive segment policy now rejects `:` before preflight/content opening and again at the ZIP writer. Direct policy cases also cover ordinary Unicode, empty/navigation segments, both separators, control characters and exact 255/first 256 length. This establishes the stated drive-prefix/path invariant, not every Windows filename or extractor behavior. No vulnerable Windows extraction or Windows hardware execution was performed.
+
+A separate original CI artifact records the unchanged maximum 32 MiB byte-equality case failing only on Mocha's outer 2,000 ms timer. The storage module now uses the same finite 60,000 ms Karma mechanism already used by composeApp. The full-size assertion, payload, browser cases and production transport deadlines are unchanged. Both the direct storage suite and complete verification pass; this is a harness budget repair, not evidence of an application byte mismatch or a lower supported size.
+
+The updated live backend uses source `cf7812b`, with identical production code to the final test-only refinement. Through the actual Web UI, an owned folder `C:` was created, selected alone and refused with “Nothing was saved”; the filesystem contained no new ZIP. A negative event-watcher timeout reset the CUA tool, so its promise result is explicitly not counted. The visible refusal and independent filesystem check remain recorded. Subsequent actual binary download returned the same 65,537 bytes/hash, and a valid recursive folder ZIP contained all six original paths/bytes including an empty directory. Current client and server sources remain distinct in the GUI receipts. PostgreSQL, all 30 existing storage files and original 22 hashes were preserved when replacing only the backend package.
+
+The maintainer confirmed that Copilot's temporary develop→master→develop retargeting is intentional issue/PR linking. [copilot#759](https://github.com/vypdev/copilot/issues/759) requests installation-generated agent guidance or investigation of equivalent native linkage without retargeting; it does not call the intended linking step a defect. [copilot#760](https://github.com/vypdev/copilot/issues/760) separately reports supplemental PNG evidence handling and actionable unsupported-path diagnostics. Neither report changes Copilot or grants merge authority.
 
 ## Bounds, preservation and remaining work
 

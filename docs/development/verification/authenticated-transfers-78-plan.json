@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "issue": 78,
   "baseline": "15574b973688b06715cb263c518a3b6eaa599617",
-  "phase": "post-review portable ZIP path refinement pending; earlier complete 6355 execution and GUI evidence retained",
+  "phase": "executed including review and CI refinements; final-ref CI and maintainer adoption remain separate",
   "sdds": [
     "specs/SDD-0002-public-api-and-protocol-contract.md",
     "specs/SDD-0005-upload-and-transfer-protocols.md",
@@ -679,7 +679,7 @@
     {
       "id": "TRANS78-ARCH-07",
       "risk": "Unsafe segments and duplicate ZIP paths rejected",
-      "status": "verification-refinement-pending",
+      "status": "verified",
       "evidence": [
         {
           "kind": "behavioral-test",
@@ -696,9 +696,33 @@
             "duplicate ZIP paths fail before opening either stream",
             "unsafe extraction paths cannot reach a stream"
           ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/domain/storage/src/test/kotlin/com/vaultstadio/domain/storage/model/Archive78SegmentTest.kt",
+          "cases": [
+            "portable ZIP segments reject drive prefixes and colon syntax",
+            "portable ZIP segments retain ordinary Unicode names",
+            "blank navigation and separator segments cannot become ZIP entries",
+            "forbidden control characters cannot hide inside a ZIP segment",
+            "exact maximum supported segment length is retained",
+            "first unsupported segment length is rejected"
+          ]
+        },
+        {
+          "kind": "behavioral-test",
+          "file": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/auth/Transfer78ArchiveDrivePathTest.kt",
+          "cases": [
+            "TRANS78-ARCH07 drive-prefixed root and descendant names cannot yield attachment bytes"
+          ]
+        },
+        {
+          "kind": "rendered-application",
+          "file": "authenticated-transfers-78-gui.json",
+          "scenarioPrefix": "TRANS78-UI-17"
         }
       ],
-      "reviewRefinement": "Reject colon-containing portable archive segments, including root/nested drive-absolute/relative names; reproduce across domain, real ZIP writer and actual HTTP before repair."
+      "reviewRefinement": "Verified colon/drive syntax refusal at selection and writer boundaries, all23 direct policy cases and all22 branches, real root/nested file/folder HTTP refusals, and actual rendered safe rejection/recovery."
     },
     {
       "id": "TRANS78-ARCH-08",
@@ -1341,5 +1365,6 @@
     }
   ],
   "precodeCommit": "379f3b803e26ed0e94902d4ead686998c76aa694",
-  "verificationReport": "AUTHENTICATED_TRANSFERS_78.md"
+  "verificationReport": "AUTHENTICATED_TRANSFERS_78.md",
+  "testedImplementation": "ae5f22a8eef9de54b357ba429765c432fd84775e"
 }

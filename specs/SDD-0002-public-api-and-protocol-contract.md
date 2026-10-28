@@ -208,13 +208,16 @@ re-authorized when its content is opened; a changed size/provider failure aborts
 Archive policy is owned by an application use case; ZIP encoding/resource ownership is a port
 adapter, not a large route. No foreign data or source mutation is permitted on rejection.
 
-Post-review clarification before its repair (2026-10-28): archive names are portable extraction
-segments. Reject any colon-containing segment, including drive-absolute (`C:` as a folder) and
+Post-review clarification before its repair (2026-10-28): archive segments must reject drive-prefix syntax.
+Reject any colon-containing segment, including drive-absolute (`C:` as a folder) and
 drive-relative (`C:payload.bin`) syntax, at complete selection preflight and at the ZIP writer
 boundary. Storage creation may retain its existing names; an unsupported archive selection
 returns a safe400 without attachment bytes or source mutation. Add at least four real HTTP
 regressions for root/nested files and folders, direct writer refusal before stream opening,
 and positive Unicode segment controls. No Windows extractor or hardware execution is claimed.
+The existing storage coverage-verification task must enforce100% line and branch coverage for
+the focused `ArchiveDownloadKt` path policy, alongside its existing ownership-policy rule.
+This scoped gate must not remove any code from the complete canonical coverage population.
 
 The first restored in-memory client supports at most32MiB per received file/archive. The archive
 server permits at most256 entries,16 folder levels and24MiB aggregate declared/actual file bytes,
@@ -323,7 +326,7 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
-Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `4128d03` passed 6,355 product executions; real Web/macOS upload, download, ZIP, retry, cancellation and native selector results have explicit source and byte/hash evidence. The 32 MiB client and bounded archive contract remain explicit. Web directory selection (#121), Web origin (#116), mobile runtime/hardware and final-ref CI/review/adoption retain separate acceptance.
+Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `ae5f22a` passed 6,386 product executions including review/CI refinements and all 22 archive path-policy branches; real Web/macOS observations retain their actual client/server sources. Earlier 6,355 acceptance and independent failures remain historical evidence. Transfer bounds, Web directory selection (#121), Web origin (#116), mobile hardware and final-ref CI/review/adoption retain separate acceptance.
 
 ## 18. Implementation or maintenance sequence
 

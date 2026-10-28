@@ -4,14 +4,14 @@
   "baselineDevelop": "15574b973688b06715cb263c518a3b6eaa599617",
   "precodeSddCommit": "379f3b803e26ed0e94902d4ead686998c76aa694",
   "testedImplementation": {
-    "head": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
-    "tree": "4d06eff96f9daa0e52a6a5c3948053129c788f13",
+    "head": "ae5f22a8eef9de54b357ba429765c432fd84775e",
+    "tree": "e7637db6c2ae9acf89d5f8bda45632c53b6a18a5",
     "status": "",
-    "digest": "9bbd9b24f7ff3ee45f0e0b733111782cc5d7525f78c79fd033b1b559fda9de01"
+    "digest": "59e78c15214ca28d0ef6edf276cdf769af44366fc6e6aefd06e22344a3e420dc"
   },
   "product": {
     "backend": {
-      "tests": 3357,
+      "tests": 3388,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -29,29 +29,29 @@
       "skipped": 0
     }
   },
-  "totalProductExecutions": 6355,
+  "totalProductExecutions": 6386,
   "adopted119Executions": 6091,
   "command": [
     "make",
     "test-coverage"
   ],
-  "seconds": 445.44,
+  "seconds": 506.33,
   "canonical": {
     "backend": {
       "summary": {
         "classes": 2196,
-        "sha256": "02e5197f741f2c4fc4db905799be9884db87029f7818a3e015192688efee66e8",
+        "sha256": "ef20f1d8dbffb8f2735718bde30872d525bd54f8dfeb541533999f99a3276292",
         "line": {
           "missed": 7614,
           "covered": 9433
         },
         "branch": {
-          "missed": 4081,
-          "covered": 2132
+          "missed": 4075,
+          "covered": 2140
         },
         "instruction": {
-          "missed": 83008,
-          "covered": 74186
+          "missed": 83007,
+          "covered": 74190
         }
       },
       "modulePopulation": 44
@@ -59,7 +59,7 @@
     "frontend": {
       "summary": {
         "classes": 1826,
-        "sha256": "199b23036d3b8f775bfea95751cd5274740fae7be6b893d7ff24f95c0ddbe892",
+        "sha256": "8cea370c2946f3a6b3311f7d1a317885be5e440ae43fe3372aeb0fd225981b61",
         "line": {
           "missed": 14324,
           "covered": 7488
@@ -100,6 +100,32 @@
       },
       "CLASS": {
         "covered": 5,
+        "missed": 0
+      }
+    },
+    "backend/com/vaultstadio/domain/storage/model/ArchiveDownload.kt": {
+      "INSTRUCTION": {
+        "covered": 184,
+        "missed": 30
+      },
+      "BRANCH": {
+        "covered": 36,
+        "missed": 14
+      },
+      "LINE": {
+        "covered": 16,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 21,
+        "missed": 14
+      },
+      "METHOD": {
+        "covered": 10,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 3,
         "missed": 0
       }
     },
@@ -418,8 +444,8 @@
   "plannedRenderedFamiliesVerified": 12,
   "gui": "authenticated-transfers-78-gui.json",
   "originalEvidence": {
-    "archiveSha256": "4bf923d610ec103193c64f8657dcd0adf48d779d68eb631f9d7b1249e8199172",
-    "fileCount": 5773,
+    "archiveSha256": "928bbd1e8cfa9ad44dc5c333120c7966a509a71ce2519a756dfe7169f25ce9b5",
+    "fileCount": 5775,
     "contents": [
       "source-bound clean suite receipts",
       "original JUnit XML",
@@ -470,6 +496,18 @@
     {
       "phase": "operation-refinement",
       "archiveSha256": "494dd10c31f2101c1d7657238ba0aba8ad8fe12fa397056935cc25ed116c16e9"
+    },
+    {
+      "phase": "completed-native-and-transfer-6355",
+      "archiveSha256": "4bf923d610ec103193c64f8657dcd0adf48d779d68eb631f9d7b1249e8199172"
+    },
+    {
+      "phase": "review-drive-prefix-red",
+      "archiveSha256": "bfde4f448e02b56439fb3b5b0fedeaf8b55179c0d7cf3e06fbda76a5e8ac9292"
+    },
+    {
+      "phase": "ci-c2-storage-maximum-mocha-2000ms",
+      "archiveSha256": "b3c7b60bfc1a29a8c61c539b50649c431b704649fdc4deb65cac2fcc9ad1d3d2"
     }
   ],
   "additionalChecks": [
@@ -542,5 +580,37 @@
     "bytes": 244037,
     "retainedLocalOriginal": true,
     "excludedFromFinalTextDiffBecause": "GitHub binary patch omission blocks Copilot progress assessment; published history and original screenshot are preserved."
+  },
+  "criticalArchivePathMethodCoverage": {
+    "INSTRUCTION": {
+      "covered": 51,
+      "missed": 0
+    },
+    "BRANCH": {
+      "covered": 22,
+      "missed": 0
+    },
+    "LINE": {
+      "covered": 5,
+      "missed": 0
+    },
+    "COMPLEXITY": {
+      "covered": 12,
+      "missed": 0
+    },
+    "METHOD": {
+      "covered": 1,
+      "missed": 0
+    }
+  },
+  "archivePathPolicyCases": 23,
+  "reviewRefinements": {
+    "drivePath": "Root/nested drive-prefixed files/folders denied before content; 14 red failures retained, 23 direct segment policy cases plus writer and real HTTP regressions. No vulnerable Windows extractor was run.",
+    "browserHarness": "Original exact32MiB case and its byte assertions unchanged; module-local finite Mocha60000ms budget resolves CI outer 2,000 ms timeout. Production deadlines unchanged.",
+    "runtime": "Web client4a / backendCF used actual Create Folder C:, visible ZIP refusal, then original65537-byte binary and complete six-entry folder ZIP recovery."
+  },
+  "upstreamReports": {
+    "generatedAgentLinkingGuidance": "https://github.com/vypdev/copilot/issues/759",
+    "supplementalPngEvidence": "https://github.com/vypdev/copilot/issues/760"
   }
 }
