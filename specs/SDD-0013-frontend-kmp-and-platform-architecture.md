@@ -246,6 +246,44 @@ transport-deadline/cancellation assertions remain authoritative; do not reduce t
 skip the case or disable browser deadlines to recover a green run. This only changes the
 storage test harness, not production request timeouts or the supported resource bounds.
 
+### 6.8 Focused directory picker and preparation — issue #121
+
+Pre-implementation contract (2026-10-28), FOLDER121, on the Action-linked issue121 branch
+from develop `95d2adb`. Pure upload-domain policy owns relative paths, entry collisions and
+the fixed preparation bounds in SDD-0005 section6.5. A focused application reader owns
+validation-before-read, sequential byte reconciliation and cancellation. Browser adapters
+own public directory capability detection, input lifecycle, `webkitRelativePath`, Blob/FileReader
+I/O and cleanup. Presentation owns busy/cancel/failure/retry and the selected-parent snapshot.
+Keep DOM/Compose/Ktor/filesystem types out of the domain policy and file-source port.
+
+Decompose the existing Wasm file-picker implementation into focused input, byte-reader and
+selection adapters, with thin expect/actual entrypoints. Do not enlarge FilesContent,
+FilesViewModel or the old picker with directory orchestration. A shared browser input/reader
+may serve ordinary and large-file pickers only with explicit byte, cancellation, threshold,
+source-shape and cleanup regressions; preserve their existing data/streaming distinction.
+
+An input belongs to one operation. Install listeners before activation, handle real change
+and cancel events, settle once, and remove owned inputs/listeners on completion, failure and
+disposal. Abort an active FileReader after detaching its handlers on cancellation; stale or
+duplicate callbacks cannot resume twice or publish files. Expected DOM/read failures become
+bounded semantic outcomes; cancellation and unexpected fatal errors retain their meaning.
+Never hide a failure as empty bytes or report a canceled selection as successful upload.
+
+Folder preparation has an observable active state and cancel action. Duplicate activation
+cannot dispatch another chooser/read, screen/session disposal cancels owned work, and a late
+read cannot enqueue into a new route. Feedback is localized and avoids private paths, content,
+tokens and provider exception messages. Explain the empty-directory limitation and bounded
+folder selection where it helps the user choose the appropriate action. Unsupported pickers
+return an explicit result rather than a misleading ordinary-file fallback.
+
+Tests MUST exercise real browser File/Blob/FileReader and owned DOM input behavior as well
+as controllable domain ports. Distinguish controlled DOM tests from a real OS directory
+chooser and actual packaged upload/list/download verification. Native/mobile readiness stays
+separate; preserve their existing entrypoints and record the exercised scope precisely.
+Keep Copilot, branch protections, workflow cadence, dependency pins and setup activation intact.
+The risk-derived floor and real journeys are in the
+[pre-code inventory](../docs/development/verification/folder-selection-121-plan.json).
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.

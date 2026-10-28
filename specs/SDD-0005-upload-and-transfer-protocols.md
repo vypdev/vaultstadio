@@ -148,6 +148,43 @@ Retain red-phase evidence and original XML, then execute complete backend/deskto
 canonical full-population coverage, existing gates/lint/contracts and Copilot review on the final
 source. State mobile, native OS and large-file limits precisely; compilation is not runtime proof.
 
+### 6.5 Real Web directory selection — issue #121
+
+Pre-implementation contract (2026-10-28), FOLDER121, based on adopted develop
+`95d2adb1fa2a01653ac0660e6add5f3245de3ab0`: Web **Upload folder** MUST open a real
+directory-capable input and preserve the selected root plus every represented relative path.
+An unsupported browser returns a visible capability result; it MUST NOT fall back to a flat
+multiple-file selection. Ordinary single/multiple and large/chunked file selection retain
+their existing entry shapes, byte semantics and explicit user-selected upload destination.
+
+Before reading file bodies, validate the complete selection: exact basename/path agreement,
+relative slash-separated paths, no empty/navigation/control/separator/drive-prefixed segments,
+no duplicate paths or file/directory collisions. Preserve valid Unicode, casing and bytes;
+do not trim or normalize user names into a different path. Fixed preparation bounds are
+32MiB aggregate declared and actual bytes, 256 combined file/implicit-directory entries,
+16 path segments and 255 UTF-16 code units per segment. Reject the whole invalid selection
+before any body read or remote mutation. The separate ordinary/chunked thresholds are unchanged.
+
+Read accepted file sources sequentially through a cancellable owned reader. A legitimate
+zero-byte file is retained; unreadable, truncated or inconsistent content is a visible failure,
+never fabricated empty content or a partially accepted selection. Cancel/dispose aborts owned
+reads and prevents a late result from enqueuing work. Preparation keeps the original parent
+snapshot. Existing upload failures retain truthful per-item state and never upload into the
+wrong parent after folder creation fails. Recovery is explicit; no automatic duplicate upload.
+
+The file-list directory API represents files and their ancestor paths, not empty directories.
+The Web surface MUST explain that empty directories are omitted; an empty selection/cancel
+performs no mutation. Empty files remain supported. This increment does not certify empty-
+directory enumeration, unsupported mobile pickers, other OS hardware or all browser engines.
+
+The pre-code [risk inventory](../docs/development/verification/folder-selection-121-plan.json)
+defines at least60 deterministic risk cases and8 separately recorded real-package journeys.
+Include path/budget boundaries, lifecycle and original picker regressions, queue parent/failure
+contracts, actual Web hierarchy/list/download byte hashes, and complete backend/desktop/Wasm
+suites with full-population coverage and existing gates. A DOM attribute or fake picker alone
+does not establish acceptance. Preserve source-bound failures, current data/packages/rollback,
+both detached SDD drafts and the published #78 history throughout this work.
+
 ## 7. User-facing configuration
 
 Maximum file/chunk/session sizes, session TTL, allowed methods, WebDAV auth requirement, S3 route enablement, and checksum policy are bounded configuration.

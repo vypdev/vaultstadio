@@ -1,0 +1,439 @@
+{
+  "schemaVersion": 1,
+  "issue": 121,
+  "owningSdds": [
+    "SDD-0005",
+    "SDD-0013"
+  ],
+  "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
+  "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
+  "status": "pre-implementation risk inventory",
+  "minimumDeterministicRisks": 60,
+  "minimumRealJourneys": 8,
+  "bounds": {
+    "aggregateBytes": 33554432,
+    "combinedFileAndImplicitDirectoryEntries": 256,
+    "pathSegments": 16,
+    "segmentUtf16CodeUnits": 255
+  },
+  "emptyDirectoryPolicy": "File-list selection preserves files and their represented ancestors; unrepresented empty directories are omitted and disclosed; empty selection/cancel performs no mutation. Empty files remain supported.",
+  "cases": [
+    {
+      "id": "FOLDER121-POLICY-01",
+      "risk": "Preserve selected root and direct file path",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-02",
+      "risk": "Preserve nested Unicode names and original casing",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-03",
+      "risk": "Accept a legitimate zero-byte file",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-04",
+      "risk": "Accept exact aggregate byte bound",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-05",
+      "risk": "Reject aggregate byte bound plus one before reading",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-06",
+      "risk": "Reject negative declared size before reading",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-07",
+      "risk": "Reject absolute slash paths",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-08",
+      "risk": "Reject absolute/backslash or ambiguous separator paths",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-09",
+      "risk": "Reject dot and parent navigation segments",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-10",
+      "risk": "Reject empty or blank path segments",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-11",
+      "risk": "Reject control and NUL characters",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-12",
+      "risk": "Reject colon/drive-prefixed segments",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-13",
+      "risk": "Reject basename/path disagreement",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-14",
+      "risk": "Reject missing browser directory root",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-15",
+      "risk": "Reject exact duplicate file paths",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-16",
+      "risk": "Reject file-as-directory collision independent of entry order",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-17",
+      "risk": "Accept distinct case-sensitive and Unicode spellings without normalization",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-18",
+      "risk": "Accept exactly256 represented files/implicit-directory entries",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-19",
+      "risk": "Reject entry bound plus one including implicit directories",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-20",
+      "risk": "Accept exactly16 path segments",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-21",
+      "risk": "Reject17 path segments",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-22",
+      "risk": "Accept255-code-unit segment and reject256",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-23",
+      "risk": "Reject invalid selection atomically before any reader or queue mutation",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-POLICY-24",
+      "risk": "Treat empty selection as no mutation with explicit empty-directory policy",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-01",
+      "risk": "Preserve binary bytes and MIME through actual source read",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-02",
+      "risk": "Read files sequentially and preserve original selection order",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-03",
+      "risk": "Retain legitimate empty content with exact declared size",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-04",
+      "risk": "Reject truncated or oversized actual bytes",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-05",
+      "risk": "Map a read failure without returning earlier successful files",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-06",
+      "risk": "Stop before reading when metadata validation rejects",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-07",
+      "risk": "Honor cancellation before first read",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-08",
+      "risk": "Honor cancellation during a pending read",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-09",
+      "risk": "Honor cancellation between files and after read completion",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-10",
+      "risk": "Keep total actual bytes within the validated budget",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-11",
+      "risk": "Propagate unexpected fatal errors independently of expected read failures",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-READER-12",
+      "risk": "Retain immutable metadata and original destination through preparation",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-01",
+      "risk": "Use a real directory-capable file input",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-02",
+      "risk": "Return explicit unsupported capability without flat-file fallback",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-03",
+      "risk": "Read public webkitRelativePath from actual browser File objects",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-04",
+      "risk": "Preserve recursive actual File/Blob bytes",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-05",
+      "risk": "Handle real cancel event and remove owned input",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-06",
+      "risk": "Handle empty change event with no files",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-07",
+      "risk": "Settle once after duplicate change/cancel callbacks",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-08",
+      "risk": "Dispose selection before callback and ignore late events",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-09",
+      "risk": "Remove owned input and handlers after activation failure",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-10",
+      "risk": "Abort active FileReader and detach handlers on cancellation",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-11",
+      "risk": "Reject FileReader error or invalid/null result without empty success",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-12",
+      "risk": "Ignore stale or duplicate FileReader completion",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-13",
+      "risk": "Preserve ordinary single-file input mode and bytes",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-14",
+      "risk": "Preserve ordinary multiple selection, threshold and order",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-15",
+      "risk": "Preserve streaming large-file source shape and exact chunk reads",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-BROWSER-16",
+      "risk": "Release input/reader resources before a fresh repeated selection",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-01",
+      "risk": "Expose active preparation and allow explicit cancel",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-02",
+      "risk": "Reject duplicate activation while selection/read is active",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-03",
+      "risk": "Snapshot selected parent before asynchronous selection",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-04",
+      "risk": "Never enqueue a late result after close/navigation/cancel",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-05",
+      "risk": "Map bounded failure to localized recoverable feedback",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-06",
+      "risk": "Retry explicitly using original destination without automatic duplicate upload",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-07",
+      "risk": "Preserve folder-creation failure and sibling path ownership",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-CONTROL-08",
+      "risk": "Preserve queue failure, byte snapshot and explicit original-parent retry",
+      "status": "planned",
+      "evidence": []
+    }
+  ],
+  "realJourneys": [
+    {
+      "id": "FOLDER121-GUI-01",
+      "risk": "Normal login and navigation with disposable account on actual production Web package",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-02",
+      "risk": "Actual OS directory selection, root/nested Unicode/empty file hierarchy, listing and byte/SHA256 download round trips",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-03",
+      "risk": "Observe omitted empty directories and empty-selection no-mutation policy",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-04",
+      "risk": "Reopen the chooser and select the same owned tree after cancellation, retaining a fresh usable input",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-05",
+      "risk": "Cancel the real OS directory chooser and verify busy state and remote state",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-06",
+      "risk": "Ordinary single/multiple file picker upload/download regression from actual application",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-07",
+      "risk": "Large-file picker reaches chunked upload and retains source bytes through download",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "FOLDER121-GUI-08",
+      "risk": "Owned unsafe folder name causes visible safe refusal/no remote mutation; explicit valid selection succeeds afterwards",
+      "status": "planned",
+      "evidence": []
+    }
+  ],
+  "evidencePolicy": "Risk families and repeated desktop/Wasm executions are counted separately. Record original red/green XML, exact source/class/SDK inputs, full 44/52 current production populations, real package/OS chooser evidence, byte hashes, current data and runnable rollback. No readiness inference for unexecuted browsers/mobile/OS targets.",
+  "references": [
+    "https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/webkitdirectory",
+    "https://developer.mozilla.org/en-US/docs/Web/API/File/webkitRelativePath",
+    "https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/cancel_event",
+    "https://wicg.github.io/entries-api/"
+  ]
+}
