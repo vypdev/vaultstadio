@@ -238,6 +238,14 @@ current dataset, both detached SDD drafts, existing package and runnable rollbac
 a candidate. See SDD-0002 section6.6, SDD-0005 section6.4 and the identified transfer plan. The wider
 preview/search/origin/mobile portfolio remains separately tracked; this does not certify it.
 
+Post-review CI harness clarification before configuration repair (2026-10-28): the storage-data
+Wasm suite must allow its existing coroutine contracts a finite60-second outer Mocha budget,
+using the repository's module-local Karma snippet mechanism. The exact32MiB binary-boundary
+assertion remains unchanged and is not a two-second latency benchmark. Existing explicit
+transport-deadline/cancellation assertions remain authoritative; do not reduce the payload,
+skip the case or disable browser deadlines to recover a green run. This only changes the
+storage test harness, not production request timeouts or the supported resource bounds.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
