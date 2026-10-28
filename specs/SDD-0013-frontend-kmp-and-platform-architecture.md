@@ -304,6 +304,14 @@ Pre-code review refinement (2026-10-28), FOLDER121-COPY: preserve the originatin
 
 Keep the action-aware presentation mapping pure and separate from picker/platform I/O. Maintain all seven locales. Add at least8 meaningful deterministic routing/copy cases, including ordinary/large read failure, ordinary/large capability refusal, ordinary/large non-folder bounds, unchanged folder mapping and maintained-language coverage. Preserve original assertion-red and green evidence, then repeat complete canonical suites, coverage, gates and lint on the resulting source. Previously verified native positive/cancel journeys keep their actual package/source identity; this refinement does not relabel old observations as a new build.
 
+### 6.8.2 Review refinement: desktop chooser thread ownership — issue #121
+
+Pre-code review refinement (2026-10-28), FOLDER121-DESKTOP: the desktop availability adapter exposes the existing Swing folder chooser. Construct, display and dispose that chooser exclusively on the actual AWT event dispatch thread. Return only the approved directory across that boundary; recursive file enumeration and reads remain on Dispatchers.IO. Keep those platform responsibilities in focused collaborators, with no Swing or filesystem type in the domain/controller.
+
+The operation owns its dialog: pre-dispatch cancellation must not construct it; cancellation of an active modal dialog schedules disposal on its owning event queue and cannot publish a late selection. Expected native cancellation returns no selection. Factory, selection and disposal exceptions must reach the suspended caller safely, without escaping the event-queue callback or claiming a chosen directory. Preserve the existing desktop enumeration/path/size behavior in this thread-ownership repair; broader native hierarchy/resource/symlink acceptance remains separate from the Web contract.
+
+Add at least8 meaningful desktop cases using the real EventQueue and controlled dialogs: thread ownership and chosen result, native cancel/no read, factory failure, selection failure/disposal, disposal failure, cancellation before dispatch, active modal cancellation/late-result rejection and filesystem I/O outside the UI thread. Preserve assertion-red and green originals, repeat complete suites/coverage/gates/lint, and keep the prior Web/native observations tied to their actual sources. A display-independent controlled dialog test does not certify an actual OS chooser.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.

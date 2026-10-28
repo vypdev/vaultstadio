@@ -8,7 +8,7 @@
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
   "status": "76 risk families traced to passing tests; 9 bounded rendered journeys including physical Chrome/macOS selection and cancellation; final-ref CI/review/adoption pending",
-  "minimumDeterministicRisks": 76,
+  "minimumDeterministicRisks": 84,
   "minimumRealJourneys": 9,
   "bounds": {
     "aggregateBytes": 33554432,
@@ -1872,6 +1872,54 @@
           ]
         }
       ]
+    },
+    {
+      "id": "FOLDER121-DESKTOP-01",
+      "risk": "Native folder chooser construction, selection and disposal occur on the real event dispatch thread; selected result preserved.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-02",
+      "risk": "Native cancellation returns empty and performs no recursive reads.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-03",
+      "risk": "Dialog factory failure reaches suspended caller without escaping event queue.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-04",
+      "risk": "Selection failure disposes dialog and reaches caller.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-05",
+      "risk": "Disposal failure cannot claim selected directory.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-06",
+      "risk": "Cancellation before dispatch prevents chooser construction.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-07",
+      "risk": "Active modal cancellation disposes on EDT and discards late selection.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
+    },
+    {
+      "id": "FOLDER121-DESKTOP-08",
+      "risk": "Approved recursive enumeration/byte reads run on IO, preserving current desktop semantics.",
+      "status": "planned",
+      "scope": "Actual JVM EventQueue with controlled dialogs; actual OS picker acceptance remains separate."
     }
   ],
   "realJourneys": [
