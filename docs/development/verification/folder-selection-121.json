@@ -311,17 +311,32 @@
     "origin": "http://127.0.0.1:18090",
     "productionPackageSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
     "previousWebRollbackOrigin": "http://127.0.0.1:18088",
-    "guiUploadFilesVerified": 10,
-    "guiFolders": 5,
+    "guiUploadFilesVerified": 13,
+    "guiFolders": 8,
     "preexistingStorageFilesProtected": 30,
     "databaseReset": false,
     "environmentOnlyCorsOriginAdded": "http://127.0.0.1:18090",
     "unapprovedOrigin18091StillRefused": true
   },
   "pending": [
-    "Physical OS dialog cancellation acceptance (GUI05 partial)",
     "Final-ref GitHub CI and Copilot review",
     "Explicit maintainer adoption; no merge authorization for this PR has been granted"
   ],
-  "readinessClaim": "Bounded Web implementation verified locally; not whole-platform readiness and not all9physicalOS journeys complete."
+  "readinessClaim": "Bounded Web implementation and all9rendered journeys verified with explicit API/native mechanisms; not whole-platform readiness.",
+  "historicalGitHubCi": {
+    "head": "0df291f81a7c7c52cfa932ec0c59470b2484192a",
+    "runId": 40725080774,
+    "technicalStatus": "success",
+    "tests": 6569,
+    "originalArtifacts": 5,
+    "rawXml": 1194,
+    "digestsCrcSourceTreeAndRawTotalsVerified": true,
+    "review": "Draft check was neutral/skipped; real final-ref review remains pending."
+  },
+  "nativeAcceptanceOriginals": {
+    "archive": "issue121-native-d18d72c/originals.zip",
+    "sha256": "db38eb9bb98294ab34e65c3d2efa026ff8a73631171c1760b94d38d42f87a567",
+    "files": 13,
+    "allEntriesByteCompared": true
+  }
 }

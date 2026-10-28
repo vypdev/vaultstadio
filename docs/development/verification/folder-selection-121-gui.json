@@ -5,7 +5,7 @@
     "initialLoginAndTreeUpload": "8320a43dc78fc7e1227f43c3df40798c524d5e42",
     "correctedUiAndRepeatedUploadsAndDownloads": "d18d72c579d8f0dc011cfd9b866a2004a8c30340"
   },
-  "mechanism": "Normal rendered UI login and actions; public browser FileChooser API selects owned real on-disk fixtures; actual browser download events and saved files; independent authenticated read-only API checks. No injected login/session/application state or fabricated FileList in GUI journeys. Controlled DOM/File/FileReader tests remain separate.",
+  "mechanism": "Normal rendered UI login and actions; public browser FileChooser API over owned on-disk fixtures plus separate physical Chrome macOS Open-panel selection/three-file confirmation/native Escape cancellation. Actual saved downloads and authenticated read-only API checks are distinct evidence. No injected login/session/application state or fabricated FileList in GUI journeys. Controlled DOM/File/FileReader tests remain separate.",
   "journeys": [
     {
       "id": "FOLDER121-GUI-01",
@@ -47,6 +47,37 @@
             "gui-valid-retry-completed.png",
             "gui-empty-file-download.png"
           ]
+        },
+        {
+          "id": "FOLDER121-GUI-02-native-positive",
+          "atUtc": "2026-10-28T16:44:46.724Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Normal Chrome login, physical macOS directory Open panel, Go to Folder navigated owned fixtures parent, selected tree121 directory row, physical Upload button, observed Chrome Upload 3 files to this site confirmation and clicked its Upload control. Actual application shows3/3completed in native121 destination. Independent API verifies13files/8folders and all original payload hashes.",
+          "nativeMechanism": "Native application controls and actual OS directory/three-file confirmation; no browser FileChooser setFiles for this upload",
+          "receipts": [
+            "gui-native-selected-tree.ax.txt",
+            "gui-native-upload-confirmation.ax.txt",
+            "gui-native-final-confirmation.ax.txt",
+            "gui-state-after-native-upload.json",
+            "gui-all-payloads-native-verified.json"
+          ],
+          "screenshots": [
+            "gui-native-upload-completed.png"
+          ]
+        },
+        {
+          "id": "FOLDER121-GUI-02-native-roundtrip",
+          "atUtc": "2026-10-28T16:46:04.199Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Opened native121/tree121/binary121.bin in actual Chrome details and clicked Download. Browser event watcher timed out at15s, but the actual newly saved Downloads/binary121.bin exists and independently matches65793bytes and fixtureSHA256. Preserve watcher failure as a tooling diagnostic, not an application byte failure.",
+          "receipts": [
+            "gui-browser-downloads.json",
+            "gui-all-payloads-native-verified.json"
+          ],
+          "screenshots": [
+            "gui-native-binary-download.png"
+          ],
+          "toolingLimit": "Chrome waitForEvent(download) timed out despite completed actual saved file; earlier in-app-browser download events succeeded."
         }
       ]
     },
@@ -103,7 +134,7 @@
     {
       "id": "FOLDER121-GUI-05",
       "risk": "Cancel the real OS directory chooser and verify busy state and remote state",
-      "status": "partial",
+      "status": "passed-with-bounded-scope",
       "observations": [
         {
           "atUtc": "2026-10-28T16:06:23.949Z",
@@ -118,6 +149,18 @@
           ],
           "readOnlyReceipt": "gui-state-after-cancel-and-late-selection.json",
           "limitation": "This proves application cancellation and stale-result disposal; a physical OS dialog Cancel click remains separate"
+        },
+        {
+          "id": "FOLDER121-GUI-05-native",
+          "atUtc": "2026-10-28T16:38:09.449Z",
+          "client": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+          "result": "Physical Chrome macOS Open panel opened from native app UI, Go to Folder navigated to owned tree121 on disk; actual open-panel had CancelButton169 and Where tree121. Focused only isolated test window1082193698 and sent native application Escape; production page changed from Preparing folder to No files selected. Empty folders are omitted. API no-mutation confirmation follows.",
+          "nativeMechanism": "Native application UI, not browser filechooser interception; native Escape cancellation",
+          "screenshot": "gui-native-cancel-completed.png",
+          "limitations": [
+            "Native ScreenCaptureKit screenshot failed with audio/video stream error; browser page screenshot and actual native AX/tool observations are distinct evidence.",
+            "One later native AX read followed another foreground Chrome window; unintended diagnostic text was immediately discarded, with no unrelated content copied into Git/evidence."
+          ]
         }
       ]
     },
@@ -261,10 +304,31 @@
     }
   ],
   "allGuiCreatedPayloads": {
-    "atUtc": "2026-10-28T16:11:34.491230+00:00",
+    "atUtc": "2026-10-28T16:43:55.097035+00:00",
     "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
     "kind": "Independent authenticated API reads of actual GUI-created files; separate from browser download handoff",
     "files": [
+      {
+        "id": "131e7a32-cb69-43c6-bbba-169d1f72e0c9",
+        "path": "/native121-2e2f51cf/tree121-2e2f51cf/binary121.bin",
+        "bytes": 65793,
+        "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+        "matchesFixture": true
+      },
+      {
+        "id": "140962b9-2069-47b1-b8c8-6f31f727f613",
+        "path": "/native121-2e2f51cf/tree121-2e2f51cf/nested/empty121.dat",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "matchesFixture": true
+      },
+      {
+        "id": "a4c6c485-5734-444d-80b8-d9da3fe7c8d4",
+        "path": "/native121-2e2f51cf/tree121-2e2f51cf/nested/niño 日本語.txt",
+        "bytes": 42,
+        "sha256": "78a4807483465cd206b2ab1dc19b76c33360e7330c385add5228bbc1edcc5044",
+        "matchesFixture": true
+      },
       {
         "id": "b29724aa-6726-41f3-ad73-bb96d354ad52",
         "path": "/ordinary121.bin",
@@ -337,8 +401,8 @@
       }
     ],
     "allPayloadsPreserved": true,
-    "exactFileCount": 10,
-    "exactFolderCount": 5
+    "exactFileCount": 13,
+    "exactFolderCount": 8
   },
   "browserDownloads": [
     {
@@ -400,6 +464,20 @@
       "sha256": "1ac16fd237b8303abda0ee2c34c5dd444f2d88965d34dcb0cdb7a9edaea5d244",
       "actualBrowserDownload": true,
       "matchesFixture": true
+    },
+    {
+      "atUtc": "2026-10-28T16:46:10.147369+00:00",
+      "clientSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
+      "kind": "tree-binary",
+      "file": "binary121.bin",
+      "bytes": 65793,
+      "sha256": "3cc748c58322699faba2aae711c1f059d72dac5b06e4a420d4229e42360a32f0",
+      "actualBrowserDownload": true,
+      "matchesFixture": true,
+      "browser": "Chrome",
+      "uiSourcePath": "/native121-2e2f51cf/tree121-2e2f51cf/binary121.bin",
+      "downloadEventWatcher": "Timed out at15s; actual new saved file independently verified, no successful event claim",
+      "savedAtUtc": "2026-10-28T16:45:00.054986+00:00"
     }
   ],
   "screenshots": [
@@ -411,6 +489,11 @@
     {
       "name": "gui-final-cancel-status.png",
       "sha256": "3c11588314acdb7171c12c756674848b68f31efd5546605e75219ce5d4949ffe",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-final-hierarchy-menu.png",
+      "sha256": "f049e2b6e9e670f32f9339f17033679b26352010849dc58b111ba3360493198b",
       "originalRetainedOutsideGit": true
     },
     {
@@ -439,6 +522,21 @@
       "originalRetainedOutsideGit": true
     },
     {
+      "name": "gui-native-binary-download.png",
+      "sha256": "36ff9307bc37c601dc88801a1b69c02b386d36bd1e8b086f53d3b15f32cc8eda",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-cancel-completed.png",
+      "sha256": "2823b18fa6317dbe7cbfe1d13c857fea1d7d82c3ca3025fff1a828c98ef69ce9",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-upload-completed.png",
+      "sha256": "694e6c121d7cdac0f7a24a34d56293ffec266d8b165a4cc8c6431f7819acabad",
+      "originalRetainedOutsideGit": true
+    },
+    {
       "name": "gui-ordinary-multiple-completed.png",
       "sha256": "7cbcc308f22b5006fd7a84147089c2f35e64ce00397b35a93c2dd50657db7767",
       "originalRetainedOutsideGit": true
@@ -460,9 +558,32 @@
     }
   ],
   "limitations": [
-    "Physical Finder dialog selection/cancellation is not certified; browser chooser API and actual application Cancel are certified separately.",
-    "GUI05 remains partial; do not relabel it as a completed physical OS dialog test.",
+    "Physical Chrome/macOS selection and native Escape cancellation are certified separately from the initial browser chooser API journeys.",
+    "Native ScreenCaptureKit screenshots failed with an audio/video stream error; actual native AX/controls and browser-page screenshots are separate evidence. Chrome download event watcher timed out despite a verified newly saved file; no successful watcher event is claimed.",
     "Tool calls once exceeded requested time bounds; those waits are not application performance measurements.",
     "Other browser engines, native desktop folder enumeration and mobile pickers were not accepted by this Web increment."
-  ]
+  ],
+  "originalNativeAx": [
+    {
+      "name": "gui-native-final-confirmation.ax.txt",
+      "sha256": "a1988028a1f450732eb2be8854a651db797140f9c90dce5e95185dd0eb33587c",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-selected-tree.ax.txt",
+      "sha256": "d4ededce94ac857a0199ae0da0c5faad0d62317908564c5e006983bad312f036",
+      "originalRetainedOutsideGit": true
+    },
+    {
+      "name": "gui-native-upload-confirmation.ax.txt",
+      "sha256": "847e47af539aaa408564e1c69742e6c8a30a48e2683b68e8100e6a3f8c70ed05",
+      "originalRetainedOutsideGit": true
+    }
+  ],
+  "nativeAcceptanceOriginals": {
+    "archive": "issue121-native-d18d72c/originals.zip",
+    "sha256": "db38eb9bb98294ab34e65c3d2efa026ff8a73631171c1760b94d38d42f87a567",
+    "files": 13,
+    "allEntriesByteCompared": true
+  }
 }

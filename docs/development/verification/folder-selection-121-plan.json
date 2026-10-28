@@ -7,7 +7,7 @@
   ],
   "baselineDevelop": "95d2adb1fa2a01653ac0660e6add5f3245de3ab0",
   "managedBranch": "bugfix/121-restore-real-directory-selection-and-hierarchy-in-the-web-folder-picker",
-  "status": "68risk-families traced to passing tests;8bounded rendered journeys and1partial native-dialog journey;CI/review/adoption pending",
+  "status": "68risk-families traced to passing tests;9bounded rendered journeys including physicalChromeOSselection/cancel;final-refCI/review/adoption pending",
   "minimumDeterministicRisks": 68,
   "minimumRealJourneys": 9,
   "bounds": {
@@ -1750,7 +1750,7 @@
     {
       "id": "FOLDER121-GUI-05",
       "risk": "Cancel the real OS directory chooser and verify busy state and remote state",
-      "status": "partial",
+      "status": "passed-with-bounded-scope",
       "evidence": [
         "folder-selection-121-gui.json#FOLDER121-GUI-05"
       ]
@@ -1802,5 +1802,5 @@
   },
   "testSource": "d18d72c579d8f0dc011cfd9b866a2004a8c30340",
   "result": "folder-selection-121.json",
-  "scopeCaveat": "On-disk selections use the browser FileChooser API in the actual production application. No claim of physical Finder dialog clicks. GUI05 proves application Cancel and stale-result disposal; physical OS dialog Cancel remains unverified."
+  "scopeCaveat": "Initial on-disk selections use the browser FileChooser API in the actual production application. Additional physical Chrome macOS Open-panel directory selection, three-file confirmation and native Escape cancellation are observed separately. Original API-only observations retain their actual sources/mechanisms."
 }
