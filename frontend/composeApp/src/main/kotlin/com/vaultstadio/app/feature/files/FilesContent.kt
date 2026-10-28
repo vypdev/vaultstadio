@@ -143,13 +143,15 @@ private fun FilesScreenContent(component: FilesComponent, modifier: Modifier) {
     }
 
     var uploadAction by remember { mutableStateOf<UploadAction?>(null) }
-    val selectionCopy = folderUploadCopy(Strings.currentLanguage)
+    val selectionLanguage = Strings.currentLanguage
     FilesUploadEffects(
         uploadAction,
         viewModel.currentFolderId,
         uploadManager,
         onHandled = { handled -> if (uploadAction == handled) uploadAction = null },
-        onProblem = { snackbarHostState.showSnackbar(selectionCopy.problem(it)) },
+        onProblem = { action, problem ->
+            snackbarHostState.showSnackbar(uploadSelectionProblemCopy(selectionLanguage, action, problem))
+        },
     )
 
     val title = when (component.mode) {

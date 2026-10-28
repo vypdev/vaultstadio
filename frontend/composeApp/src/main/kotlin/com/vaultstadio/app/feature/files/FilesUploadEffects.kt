@@ -16,7 +16,7 @@ internal fun FilesUploadEffects(
     parentId: String?,
     manager: UploadManager?,
     onHandled: (UploadAction) -> Unit,
-    onProblem: suspend (FolderSelectionProblem) -> Unit,
+    onProblem: suspend (UploadAction, FolderSelectionProblem) -> Unit,
 ) {
     val folders = LocalFolderUploads.current
     LaunchedEffect(action) {
@@ -38,7 +38,7 @@ internal fun FilesUploadEffects(
         } catch (canceled: CancellationException) {
             throw canceled
         } catch (failure: Exception) {
-            onProblem((failure as? FolderSelectionException)?.problem ?: FolderSelectionProblem.READ_FAILED)
+            onProblem(current, (failure as? FolderSelectionException)?.problem ?: FolderSelectionProblem.READ_FAILED)
         } finally {
             onHandled(current)
         }
