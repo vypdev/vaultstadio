@@ -19,7 +19,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
-import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -71,7 +70,17 @@ object HttpClientFactory {
     }
 
     private fun HttpClientConfig<*>.configure(config: ApiClientConfig, tokenProvider: TokenProvider, logger: Logger?) {
+        val endpoint = ApiEndpoint(config.baseUrl)
+        defaultRequest {
+            url(config.baseUrl)
+            contentType(ContentType.Application.Json)
+        }
         install(DownloadBodyPlugin)
+
+        install(ApiEndpointPlugin) {
+            this.endpoint = endpoint
+            this.tokenProvider = tokenProvider
+        }
 
         install(ContentNegotiation) {
             json(json)
@@ -79,7 +88,7 @@ object HttpClientFactory {
 
         install(Logging) {
             level = LogLevel.INFO
-            filter { !it.url.encodedPath.startsWith("/api/v1/share/") }
+            filter { !endpoint.isPublicCapability(it.url) }
             sanitizeHeader { it.equals(HttpHeaders.Authorization, ignoreCase = true) }
             if (logger != null) this.logger = logger
         }
@@ -87,14 +96,6 @@ object HttpClientFactory {
         install(HttpTimeout) {
             requestTimeoutMillis = config.timeout
             connectTimeoutMillis = config.timeout
-        }
-
-        defaultRequest {
-            url(config.baseUrl)
-            contentType(ContentType.Application.Json)
-            tokenProvider.getToken()?.let {
-                headers.append(HttpHeaders.Authorization, "Bearer $it")
-            }
         }
     }
 

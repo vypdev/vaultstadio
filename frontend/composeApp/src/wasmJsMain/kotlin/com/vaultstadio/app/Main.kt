@@ -2,14 +2,18 @@
  * VaultStadio Web Application Entry Point
  *
  * Koin must be started before the first composable so that KoinComponent and
- * koinInject() resolve via GlobalContext. The API base URL can be overridden
- * via query param or window config in the future.
+ * koinInject() resolve via GlobalContext. The operator's static JSON configuration
+ * is validated before application effects; absence of an override means same origin.
  */
 
 package com.vaultstadio.app
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import com.vaultstadio.app.boot.canonicalBrowserApiUrl
+import com.vaultstadio.app.boot.readBrowserConfiguration
+import com.vaultstadio.app.boot.showWebConfigurationError
+import com.vaultstadio.app.boot.startConfiguredWebApplication
 import com.vaultstadio.app.data.activity.di.activityModule
 import com.vaultstadio.app.data.admin.di.adminModule
 import com.vaultstadio.app.data.ai.di.aiModule
@@ -41,14 +45,27 @@ import com.vaultstadio.app.feature.sharedwithme.di.featureSharedWithMeModule
 import com.vaultstadio.app.feature.shares.di.featureSharesModule
 import com.vaultstadio.app.feature.sync.di.featureSyncModule
 import com.vaultstadio.app.feature.versionhistory.di.featureVersionHistoryModule
+import kotlinx.browser.window
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.koin.core.context.startKoin
 
 private const val VIEWPORT_CONTAINER_ID = "ComposeTarget"
 
-@OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    // Default API URL; can be made configurable via host page (e.g. window.__VAULTSTADIO_API_URL__)
-    val apiBaseUrl = "http://localhost:8080/api"
+    MainScope().launch {
+        startConfiguredWebApplication(
+            window.location.origin,
+            { readBrowserConfiguration() },
+            ::canonicalBrowserApiUrl,
+            ::startWebApplication,
+            { showWebConfigurationError(it) },
+        )
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+private fun startWebApplication(apiBaseUrl: String) {
     startKoin {
         modules(
             runtimeModules(apiBaseUrl) + wasmJsModule() +

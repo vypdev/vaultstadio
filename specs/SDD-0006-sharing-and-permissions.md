@@ -450,3 +450,38 @@ the existing application contract job for these bounded tests; add no workflow o
 [Source-bound R05 verification](../docs/development/verification/PUBLIC_SHARE_ACCESS_90.md):2981backend,1316desktop and1192browser cases, all without failures/errors/skips;241 new backend cases, with11 migrated legacy cases excluded from that count. Pure policy covers28/28lines and70/70branches; orchestration36/36lines and19/20branches. Full denominators, native download hashes,42-request real HTTP campaign, five real Nginx tests, observed failures and remaining product/rollout scope are recorded in the linked receipt. No portfolio-wide100% or master adoption is claimed.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+Issue #116 preserves this sharing contract while fixing proxy-prefix public assets/forms and client-generated URLs; the pre-code mechanics and API116-21/23/26–29/35 acceptance are owned by SDD-0002/0013/0014 and [the risk inventory](../docs/development/verification/api-origin-116-plan.json). No new public-write, internal-recipient or history grant is introduced.
+
+
+### 21.11 Pre-code #116 refinement — acknowledged clipboard writes
+
+Production dogfooding on the configured proxy found that `Copy link` reports success without
+writing to any clipboard: the existing ViewModel only opens a confirmation dialog. This is part
+of API116-23's actual copy/display contract, not evidence that a displayed URL was copied.
+
+Before repairing this flow, require an injected domain output port for writing the configured
+public link. The feature may display `Link Copied` only after an acknowledged successful platform
+write. Unavailable/denied/failed writes and a five-second deadline produce safe retryable feedback;
+none may claim success or echo platform exception details. Cancellation remains cancellation,
+dismissal prevents stale success UI, and duplicate clicks cannot publish competing confirmations.
+A cancelled native clipboard operation may already have changed the system clipboard; the app
+must not claim cancellation rolls that external effect back.
+
+Web awaits the real clipboard promise (or a synchronous native copy fallback only when that API
+is absent); denial must not trigger a permission-bypassing fallback. Temporary selection/focus
+and any owned DOM fallback element are restored/removed. Desktop uses the actual system adapter;
+Android/iOS bindings retain the same honest outcome contract. Hardware claims require executed
+platform evidence. Unit fault controls do not certify native clipboard permission behavior.
+
+Verification must call the actual ViewModel/output adapter: pending acknowledgment, exact configured
+URL, success, denial/unavailable/failure, timeout, cancellation, repeat-click and retry. Browser
+adapter tests exercise callback cleanup and late settlement without altering real user clipboard
+contents. Packaged dogfooding must compare the actual copied value with the visible configured
+link. If the browser automation's clipboard scope differs, record that limit and use an actual
+paste into an owned visible control; never manufacture success by injecting clipboard/app state.
+
+
+## Scoped local verification checkpoint — issue #116
+
+The fixed operator Web API origin, prefix-safe consumers and acknowledged public-link clipboard contract are implemented at `35ce407`. See the [executed report](../docs/development/verification/WEB_API_ORIGIN_116.md) and [38-family traceability](../docs/development/verification/api-origin-116-results.json): 3,397 backend + 1,729 desktop + 1,636 browser executions, zero failures/errors/skips, source-bound JVM coverage, real two-origin packaged transfers/public pages, clipboard-value comparison and invalid-config/no-API/reload recovery. Native mobile compilation and remaining platform/media/version/collaboration gaps are explicitly separated. Final-ref PR CI, Copilot review, protected adoption and master remain separate gates; this does not promote the whole capability status.

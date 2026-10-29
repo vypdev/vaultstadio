@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.
-- Related issues/PRs: #71, #91, #124
+- Related issues/PRs: #71, #91, #124, #116
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -227,11 +227,35 @@ Ordinary server single-file streaming remains compatible; larger rendered-client
 a visible limit failure without saving a partial file. No schema migration, public-share policy,
 S3/WebDAV behavior, dependency changes, Copilot changes or master promotion are included.
 
+### 6.7 Web API origin contract — issue #116
+
+Pre-implementation contract at develop `7b52127` (2026-10-29). This implements only the fixed-primary slice of PD-001; multi-server product targets remain future milestones.
+
+API116-ROOT: the Web package defaults to the serving origin's `/api` and accepts only the operator's `apiBaseUrl` from `/vaultstadio-config.json`. An origin-only override receives `/api`; a nonempty explicit path is an API root, and a trailing `/v1` is a versioned alias. Examples: `https://host` → `https://host/api/v1`, `https://host/gateway/api/` → `https://host/gateway/api/v1`, and `https://host/gateway/v1` → `https://host/gateway/v1`. Append version/resource/identifier segments exactly once. Preserve IPv4/hostname/bracketed IPv6 and effective ports, query parameters and individually encoded IDs. Rebase only owned `/api/v1` requests to the selected root; already-prefixed locations are idempotent and generic non-API transport paths retain their semantics.
+
+API116-TRUST: validate absolute HTTP(S), authority and port, UTF-8/path syntax and bounds before client creation. Reject userinfo, query/fragment, controls, backslashes, repeated separators, malformed/ambiguous encodings and dot navigation. HTTPS Web cannot select HTTP API. The client automatically attaches the current bearer only to the configured authority; foreign absolute requests cannot inherit application credentials. Preserve explicit request headers, cancellation/body/timeout distinctions, TLS/CORS, trusted-forwarded-header rules and secret redaction, including prefixed public capabilities. This does not add user-controlled server switching.
+
+API116-LOCATIONS: all request adapters and download/ZIP/thumbnail/preview/share/version/socket location builders consume the same effective snapshot. Public display/copy URLs must agree with that root instead of a proxy-unaware server-origin string. No bearer belongs in a generated URL. Use actual storage/version route shapes; the existing version-download metadata response remains #109 and the separate collaboration authentication/protocol gap remains #112. A corrected location does not certify those capabilities.
+
+API116-PUBLIC: public-page assets and forms work at an arbitrary API proxy prefix for both GET view and denied POST view/download. Use route-controlled relative asset depth and a bounded same-origin pathname parser; no CSP weakening or untrusted forwarded-prefix authority. Keep no-account password/revoke/expiry/admission/privacy contracts from SDD-0006.
+
+API116-MEDIA: private image fetching must reuse the configured API client and its current scoped bearer, rather than Coil's anonymous default client. Disable unscoped private image memory/disk caches; the no-store image request remains subject to explicit server CORS policy. Text previews use the existing domain download port instead of creating a transport client in presentation; preserve their existing100KiB displayed-text cap, cancellation and safe failures. This URL/auth repair does not certify bounded full-file preview buffering or implement the separate unsupported native media players.
+
+API116-CORS: preserve the configured HTTP versus HTTPS scheme in each explicitly allowed backend origin; do not broaden the origin list. Support the Cache-Control header emitted by uncached private-image requests, retaining all other origin/method/credential restrictions. Verify configured HTTPS acceptance, corresponding unconfigured HTTP rejection, other-host/port denial and actual preflight behavior.
+
 ## 7. User-facing configuration
 
 Swagger path, API version prefix, protocol enablement, authentication mode, and route limits are explicit configuration contracts. Unknown or malformed values fail closed.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Web API configuration (#116)
+
+| Source/field | Type/default | Validation and precedence |
+|---|---|---|
+| `/vaultstadio-config.json` | UTF-8 JSON object, default `{}` | Same-origin static resource, successful JSON MIME, no redirects/credentials/cache;16KiB and5second total load/read budget. |
+| `apiBaseUrl` | Optional string; absent uses page origin + `/api` | Absolute HTTP(S), ≤2048 UTF-16 units, safe authority/path, no userinfo/query/fragment or HTTPS downgrade. Explicit invalid/null/unknown fields fail. |
+| Effective configuration | One immutable startup value | Operator resource is the sole override; no user/query/hash/global precedence. Fix resource and reload for recovery. |
 
 ## 8. Clean Architecture design
 
@@ -303,6 +327,8 @@ Minimum risk-derived budget: **Minimum 24 cases: route registration, auth, autho
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #116, the pre-code [38-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -320,6 +346,13 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given `/swagger` is the implementation path, when Quick Start is rendered, then it does not advertise `/swagger-ui`.
 3. Given an unsupported S3 Signature V4 operation, when invoked, then the response states unsupported behavior without claiming success.
 
+### Web origin acceptance (#116)
+
+- API116-01–13: controlled valid/invalid/default/prefixed/IP/port inputs and actual invalid-config screen produce the exact effective root or safe failure; invalid/canceled startup launches no Koin/API and operator correction/reload recovers.
+- API116-14–25: production request shapes, fresh scoped bearer, binary/multipart bytes and canonical encoded location consumers retain methods/query/results/cancellation without prefix duplication, root loss, token URL or capability log leakage.
+- API116-26–32: GET/denied-POST public-page assets/action, valid/invalid path parser, privacy and development/common compatibility pass real adapters and focused controls.
+- API116-33–36: one source-identified production Web package passes two serving-origin campaigns with normal disposable login, actual saved bytes/public links, and malformed config/no-API/reload recovery. Component or mocked transport assertions alone do not satisfy these journeys.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -331,6 +364,12 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
 Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs/development/verification/AUTHENTICATED_TRANSFERS_78.md), the 72-family risk matrix and separate GUI receipts. Clean source `ae5f22a` passed 6,386 product executions including review/CI refinements and all 22 archive path-policy branches; real Web/macOS observations retain their actual client/server sources. Earlier 6,355 acceptance and independent failures remain historical evidence. Transfer bounds, Web directory selection (#121), Web origin (#116), mobile hardware and final-ref CI/review/adoption retain separate acceptance.
+
+| #116 contract | Implementation owner | Verification/evidence target |
+|---|---|---|
+| Startup grammar, load and safe failure | data/platform reader and composition root | API116-01–13/36; pure configuration, browser stream/lifecycle and real startup/recovery |
+| API root, trust, prefix and generated locations | shared network/data URL adapters, domain URL ports | API116-14–25; request/consumer/byte/privacy matrices and complete suites |
+| Public-page and operator/development behavior | bounded route/static/platform adapters | API116-26–35; Node/real route/proxy/assets plus actual two-origin browser evidence |
 
 ## 18. Implementation or maintenance sequence
 
@@ -363,3 +402,8 @@ Inventory routes -> decide source of truth -> reconcile Swagger/OpenAPI -> add p
 The pre-code selection contract is implemented and locally verified at1499c6b. See the [source-bound report](../docs/development/verification/STORAGE_SELECTION_91.md), case inventory and complete coverage detail:3247backend+1324desktop+1200browser, all failures/errors/skips0;266 genuinely new backend cases plus8 shared KMP cases per platform. Actual packaged browser sort and400/recovery pass with original data/rollback preserved. The unavailable content option is explicit501; full filename/advanced search remains#82/#115, and Web origin configuration#116. Final PR CI, Copilot review and protected adoption remain pending; this checkpoint does not promote the whole capability status or master.
 
 Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.
+
+
+## Scoped local verification checkpoint — issue #116
+
+The fixed operator Web API origin, prefix-safe consumers and acknowledged public-link clipboard contract are implemented at `35ce407`. See the [executed report](../docs/development/verification/WEB_API_ORIGIN_116.md) and [38-family traceability](../docs/development/verification/api-origin-116-results.json): 3,397 backend + 1,729 desktop + 1,636 browser executions, zero failures/errors/skips, source-bound JVM coverage, real two-origin packaged transfers/public pages, clipboard-value comparison and invalid-config/no-API/reload recovery. Native mobile compilation and remaining platform/media/version/collaboration gaps are explicitly separated. Final-ref PR CI, Copilot review, protected adoption and master remain separate gates; this does not promote the whole capability status.

@@ -33,10 +33,12 @@ internal fun Route.publicSharePageRoutes() {
         call.publicShareHeaders(page = true)
         if (call.rejectPasswordQuery()) return@post
         call.formPassword().fold(
-            { call.sharePage(it) },
+            { call.sharePage(it, downloadPage = true) },
             { password ->
                 val download: DownloadPublicShareUseCase = call.application.koinGet()
-                download(call.shareInput(password)).fold({ call.sharePage(it) }, { call.streamShare(it) })
+                download(call.shareInput(password)).fold({
+                    call.sharePage(it, downloadPage = true)
+                }, { call.streamShare(it) })
             },
         )
     }
@@ -56,7 +58,7 @@ private suspend fun ApplicationCall.formPassword(): Either<PublicShareFailure, S
     passwordFields.singleOrNull()?.takeIf { it.isNotEmpty() }
 }
 
-private suspend fun ApplicationCall.sharePage(failure: PublicShareFailure? = null) {
+private suspend fun ApplicationCall.sharePage(failure: PublicShareFailure? = null, downloadPage: Boolean = false) {
     // Keep the form's Origin while withholding the capability path from Referer.
     publicShareHeaders(page = true)
     response.header(
@@ -64,7 +66,9 @@ private suspend fun ApplicationCall.sharePage(failure: PublicShareFailure? = nul
         "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; " +
             "form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
     )
-    val html = resource("public-share.html").replace("{{ERROR}}", failure?.description.orEmpty())
+    val html = resource("public-share.html")
+        .replace("{{ERROR}}", failure?.description.orEmpty())
+        .replace("{{ASSET_PREFIX}}", if (downloadPage) "../../../share-assets" else "../../share-assets")
     respondText(html, ContentType.Text.Html, failure?.httpStatus ?: HttpStatusCode.OK)
 }
 

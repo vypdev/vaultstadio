@@ -5,7 +5,7 @@
 package com.vaultstadio.app.data.version.repository
 
 import com.vaultstadio.app.data.network.ApiClientConfig
-import com.vaultstadio.app.data.network.TokenStorage
+import com.vaultstadio.app.data.network.apiV1Location
 import com.vaultstadio.app.data.network.mapper.toResult
 import com.vaultstadio.app.data.version.service.VersionService
 import com.vaultstadio.app.domain.version.VersionRepository
@@ -13,7 +13,6 @@ import com.vaultstadio.app.domain.version.VersionRepository
 class VersionRepositoryImpl(
     private val versionService: VersionService,
     private val config: ApiClientConfig,
-    private val tokenStorage: TokenStorage,
 ) : VersionRepository {
 
     override suspend fun getVersionHistory(itemId: String) =
@@ -42,9 +41,9 @@ class VersionRepositoryImpl(
     ) = versionService.cleanupVersions(itemId, maxVersions, maxAgeDays, minVersionsToKeep)
         .map { }.toResult()
 
-    override fun getVersionDownloadUrl(itemId: String, versionNumber: Int): String {
-        val token = tokenStorage.getAccessToken()
-        val auth = if (token != null) "?token=$token" else ""
-        return "${config.baseUrl}/api/v1/versions/item/$itemId/version/$versionNumber/download$auth"
-    }
+    override fun getVersionDownloadUrl(itemId: String, versionNumber: Int): String =
+        apiV1Location(
+            config.baseUrl,
+            listOf("versions", "item", itemId, "version", versionNumber.toString(), "download"),
+        )
 }

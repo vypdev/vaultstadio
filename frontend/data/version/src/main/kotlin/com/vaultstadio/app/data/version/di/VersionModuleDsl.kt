@@ -6,7 +6,6 @@
 package com.vaultstadio.app.data.version.di
 
 import com.vaultstadio.app.data.network.ApiClientConfig
-import com.vaultstadio.app.data.network.TokenStorage
 import com.vaultstadio.app.data.version.api.VersionApi
 import com.vaultstadio.app.data.version.repository.VersionRepositoryImpl
 import com.vaultstadio.app.data.version.service.VersionService
@@ -30,7 +29,7 @@ val versionModule = module {
     single { VersionApi(get<HttpClient>()) }
     single { VersionService(get()) }
     single<VersionRepository> {
-        VersionRepositoryImpl(get(), get<ApiClientConfig>(), get<TokenStorage>())
+        VersionRepositoryImpl(get(), get<ApiClientConfig>())
     }
 
     factory<GetVersionHistoryUseCase> { GetVersionHistoryUseCaseImpl(get()) }

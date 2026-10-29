@@ -6,6 +6,8 @@ package com.vaultstadio.app.feature.shares
 
 import com.vaultstadio.app.domain.config.usecase.GetShareUrlUseCase
 import com.vaultstadio.app.domain.result.Result
+import com.vaultstadio.app.domain.share.ClipboardWriteOutcome
+import com.vaultstadio.app.domain.share.ShareLinkClipboard
 import com.vaultstadio.app.domain.share.model.ShareLink
 import com.vaultstadio.app.domain.share.usecase.DeleteShareUseCase
 import com.vaultstadio.app.domain.share.usecase.GetMySharesUseCase
@@ -58,6 +60,7 @@ class SharesViewModelTest {
         deleteShareResult: Result<Unit> = Result.success(Unit),
         getShareUrl: (String) -> String = { "https://app.test/share/$it" },
     ): SharesViewModel = SharesViewModel(
+        clipboard = ShareLinkClipboard { ClipboardWriteOutcome.COPIED },
         getMySharesUseCase = FakeGetMySharesUseCase(getMySharesResult),
         deleteShareUseCase = FakeDeleteShareUseCase(deleteShareResult),
         getShareUrlUseCase = object : GetShareUrlUseCase {
@@ -104,6 +107,7 @@ class SharesViewModelTest {
         val links = listOf(testShareLink("s1"))
         val getUseCase = FakeGetMySharesUseCase(Result.success(links))
         val vm = SharesViewModel(
+            clipboard = ShareLinkClipboard { ClipboardWriteOutcome.COPIED },
             getMySharesUseCase = getUseCase,
             deleteShareUseCase = FakeDeleteShareUseCase(Result.success(Unit)),
             getShareUrlUseCase = FakeGetShareUrlUseCase(),

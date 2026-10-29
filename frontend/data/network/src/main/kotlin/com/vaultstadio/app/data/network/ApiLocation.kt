@@ -8,7 +8,7 @@ import io.ktor.http.encodedPath
 fun apiV1Location(baseUrl: String, segments: List<String>, query: Map<String, String> = emptyMap()): String =
     URLBuilder(baseUrl).apply {
         require(segments.none { it.isBlank() || it == "." || it == ".." || it.any { char -> char.code < 32 } })
-        encodedPath = "/api/v1"
+        encodedPath = ApiEndpoint(baseUrl).path
         appendPathSegments(*segments.toTypedArray(), encodeSlash = true)
         user = null
         password = null
