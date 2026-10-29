@@ -27,3 +27,7 @@ Generated from `specs/catalog.json`. The JSON catalog is authoritative.
 - `As-built baseline` records observed behavior and known debt; it is not a completeness claim.
 - `Proposed` documents contain open decisions and cannot be treated as implemented.
 - Evidence paths are checked by `python3 scripts/validate-specification-catalog.py`.
+
+The [2026-10-29 discovery index](discovery/2026-10-29/README.md) maps 30 accepted future
+requirements to these existing owners. The table's statuses and last-verified values are
+unchanged: planning provenance is not implementation or execution evidence.

@@ -6,7 +6,7 @@
 - Last verified: R05 at `03aa8552424d703db127be1d97e08c066598168d` (2026-10-27 UTC); wider sharing portfolio remains partial
 - Owners: VaultStadio maintainers
 - Scope: Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.
-- Related issues/PRs: #71, #90
+- Related issues/PRs: #71, #124, #90
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -119,11 +119,40 @@ Text equivalent: Owner selects item -> chooses recipient/permission/expiry -> sh
 | `revoked` | Owner removed access | recipient | no access |
 | `invalid` | Token or permission invalid | recipient | safe denial |
 
+### 6.4 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-017"></a>
+
+#### PD-017: Selectable public-link capabilities
+
+Owners or expressly authorized responsible users MUST be able to select public-link capabilities for view/download, upload delivery or editing/collaboration, limited to authorized content. Permission modes cannot confer authority outside their file/folder scope or imply access to history, surrounding folders or unrelated uploads.
+
+**Blocking technical decisions:** Permission lattice, folder traversal, upload-only recipient privacy, quotas/rate limits, delegation, E2EE sharing, collaboration grants and revocation of active sessions. Existing verified read-only single-file sharing remains the baseline.
+
+<a id="pd-018"></a>
+
+#### PD-018: Identity required by default for public writes
+
+Public-link uploads, edits and collaboration MUST require an account or verified invitation by default. Administrators configure the governing policy and authorized link creators may choose only permitted per-link identity settings.
+
+**Blocking technical decisions:** Verified invitation lifecycle, guest identity/audit retention, anonymous-write exceptions and abuse controls, policy changes and session revocation.
+
 ## 7. User-facing configuration
 
 Permission values, maximum expiry, public-share enablement, and inherited-folder rules are bounded and validated; secure defaults deny anonymous write.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-017 | Per-link permissions within administrator policy; write identity is governed by PD-018. Default permissions, expiry/password and E2EE public-link design remain undecided. |
+| PD-018 | Default identified writes; per-link settings are constrained by administrator policy, never a permission to override it. Anonymous reads were not newly defined by this decision. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -191,6 +220,8 @@ Minimum risk-derived budget: **Minimum 24 cases: create, permission matrix, owne
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -208,6 +239,16 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given a folder share, when a child is moved outside the scope, then access follows the declared inheritance rule.
 3. Given public sharing with no explicit expiry, when configuration requires expiry, then creation fails.
 
+### Planned discovery acceptance (#124)
+
+- **PD-017-P** — Exercise view/download, upload-only and collaborative links against real authorized file/folder scopes and verify permitted effects and byte identities.
+- **PD-017-N** — Read-only links cannot write; upload-only links cannot list other deliveries; no link escapes its scope or gains history access by implication.
+- **PD-017-F** — Revoke/expire a link during transfer or collaboration and verify bounded termination, preserved prior content and truthful partial outcomes.
+
+- **PD-018-P** — A valid account or verified invitation can perform an allowed write; administrator-approved link settings produce their documented effective policy.
+- **PD-018-N** — Anonymous/unverified writers are denied by default before bytes/state effects, including stale links created before a policy was strengthened.
+- **PD-018-F** — Identity-provider/invitation verification failure does not downgrade to anonymous writing; pending data remains isolated and recoverable under the chosen lifecycle.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -218,9 +259,18 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-017](#pd-017) | PD-017-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M5](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m5) |
+| [PD-018](#pd-018) | PD-018-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M5](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m5) |
+
 ## 18. Implementation or maintenance sequence
 
 Define permission vocabulary -> inventory route behavior -> add policy tests -> verify token lifecycle -> align frontend/API/security docs.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -398,3 +448,5 @@ the existing application contract job for these bounded tests; add no workflow o
 ### 21.10 Executed checkpoint
 
 [Source-bound R05 verification](../docs/development/verification/PUBLIC_SHARE_ACCESS_90.md):2981backend,1316desktop and1192browser cases, all without failures/errors/skips;241 new backend cases, with11 migrated legacy cases excluded from that count. Pure policy covers28/28lines and70/70branches; orchestration36/36lines and19/20branches. Full denominators, native download hashes,42-request real HTTP campaign, five real Nginx tests, observed failures and remaining product/rollout scope are recorded in the linked receipt. No portfolio-wide100% or master adoption is claimed.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

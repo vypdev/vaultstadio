@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define Docker, Helm, configuration, health, migrations, backup, CI, release, versioning, rollback, and operator evidence.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -234,11 +234,40 @@ Pre-implementation contract (2026-10-27): use the complete #84 production popula
 
 The [98 identified scenario risks](../docs/development/verification/critical-coverage-119-scenarios.json) precede code. Execute complete backend/desktop/browser suites, existing focused gates, actual lint and required source/architecture/scanner contracts on the final candidate, then native CI and Copilot review. Preserve original drafts, data/current dogfood and rollback, major-tag Action selectors, Copilot/protections/master/setup activation. A source-bound green PR does not itself authorize merge or whole-platform readiness.
 
+### 6.10 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-023"></a>
+
+#### PD-023: Optional primary-service high availability
+
+Administrators MUST be able to configure optional high availability for primary identity, permissions and catalog services when infrastructure permits, through one logical access endpoint with handover to another primary. This is separate from redundant file placement.
+
+**Blocking technical decisions:** Manual/automatic handover, quorum/fencing, metadata replication, session continuity, recovery objectives, configuration authority and safe rollback.
+
+<a id="pd-028"></a>
+
+#### PD-028: Automatic complete backups and selective restoration
+
+The product MUST manage automatic configuration, catalog and content backups with configurable destinations/retention and full or selective restoration. Backup/restore must preserve E2EE boundaries and explicit content-access rules; independent installations require their own applicable authority.
+
+**Blocking technical decisions:** Snapshot consistency, key custody, secret-bearing configuration, destination verification, restore ACL mapping, selective conflicts, integrity checks, immutable/offsite options and recovery objectives.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-023 | Optional administrator-enabled topology; no automatic-failover or quorum algorithm was selected. Insufficient infrastructure cannot be presented as highly available. |
+| PD-028 | Operator/administrator-configured destinations and retention. Schedule, encryption, consistency boundary, recovery authority and RPO/RTO were not selected; redundancy is not a backup. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -310,6 +339,8 @@ The budget is a floor, not a substitute for covering every normative requirement
 
 Issue #84 adds a floor of **40 risk-derived controls**, not a cap or a claim of completion. R04-01–06 cover live backend/desktop/browser discovery, new backend/frontend modules and explicit extra-platform scope. R04-07–17 cover real omitted-module and asynchronous Wasm failures, independent-suite continuation, frontend/root Make and shell propagation, stderr, missing/incompatible Java/browser and unknown arguments. R04-18–28 cover stale/retired/missing XML, NO-SOURCE/skips, malformed/inconsistent counters, parameterized cases, duplicate collection, failed/partial runs, source/runtime/task binding and invalidated reuse. R04-29–38 cover cross-module execution, untested production classes, all main outputs, missing/stale coverage inputs, raw counter reconciliation, changed denominators, JVM/Wasm distinctions, deliberate focused gate failure, strict uploader behavior and actual/advisory lint distinctions. R04-39–40 cover unchanged CI cadence/fork/cancellation and final restored source-bound complete suites/CI with preservation and alignment. Record each collected control and command in the owning evidence; process fixtures do not substitute for actual Gradle/browser negative controls or product suites.
 
+For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -329,6 +360,16 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 
 For #84, acceptance additionally requires: (a) a new applicable module is discovered without a module-list edit; (b) a real failed backend or asynchronous browser assertion makes all owning entrypoints fail while retaining diagnostics; (c) stale/missing/retired reports cannot produce a green current receipt; (d) code covered through another module contributes to its owning classes and untested classes remain in the denominator; (e) existing focused gates and strict uploader failures remain effective; and (f) all deliberate faults are restored, complete fresh suites and CI pass, and preserved work/remote alignment are checked. Android/iOS/device and whole-platform readiness are not inferred from this tooling repair.
 
+### Planned discovery acceptance (#124)
+
+- **PD-023-P** — Using the declared supported topology, hand over the primary through the same endpoint and verify identity, permission and catalog continuity.
+- **PD-023-N** — A minority/stale primary cannot commit authoritative conflicting changes or gain permissions during handover.
+- **PD-023-F** — Interrupt handover/partition a primary; demonstrate fencing, retained acknowledged state and a documented recovery action within chosen objectives.
+
+- **PD-028-P** — Restore a consistent complete backup and a selected subset to isolated targets; verify configuration/catalog/bytes, ACLs and E2EE ciphertext/key boundaries.
+- **PD-028-N** — A backup operator or foreign installation cannot gain plaintext/content access, overwrite unrelated live data or restore broader grants by default.
+- **PD-028-F** — Corruption, unavailable destination or interrupted restore retains the last verified backup and prior recoverable state with an explicit partial/recovery result.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -340,9 +381,18 @@ For #84, acceptance additionally requires: (a) a new applicable module is discov
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 | R04-ROOT/DISC/FAIL/FRESH/COUNT/COV/GATE/CLI/LINT/CI/PRESERVE | Focused Gradle and contributor verification adapters | R04-01–40, real negative controls, complete root suites and final-ref CI | #84 verification evidence, contributor commands and SDD-0001/0013/0014 |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-023](#pd-023) | PD-023-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M7](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m7) |
+| [PD-028](#pd-028) | PD-028-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M7](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m7) |
+
 ## 18. Implementation or maintenance sequence
 
 Choose version source -> publish toolchain matrix -> repair workflow references/policies -> add render/path validators -> verify isolated build/deploy smoke -> document rollback.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -366,3 +416,5 @@ Choose version source -> publish toolchain matrix -> repair workflow references/
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

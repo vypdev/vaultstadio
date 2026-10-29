@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define collaboration sessions, WebSocket lifecycle, presence, operations, OT, comments, reconnect, and participant limits.
-- Related issues/PRs: #71, #89
+- Related issues/PRs: #71, #89, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -173,6 +173,10 @@ WebSocket message schemas, operation IDs, sequence/ack, and close reasons are ve
 - Every concrete adapter MUST have focused contract tests and every public route/workflow MUST have an owning SDD/evidence entry.
 - The validator MUST report missing evidence rather than infer success from file existence alone.
 - RepoWise and Graphify results MAY guide investigation but MUST NOT be used as the sole acceptance criterion.
+
+### Discovery implementation boundary (#124)
+
+[PD-017/018](SDD-0006-sharing-and-permissions.md#pd-017) own future public-link capabilities/identity policy, not implicit collaboration grants. #112 still owns the real client/server collaboration journey. Add explicit participant/content authority, revocation and convergence evidence before widening the existing owner-only baseline; conflict policy and immutable history remain owned by SDD-0008 and SDD-0007.
 
 ## 9. UI/UX and content contract
 

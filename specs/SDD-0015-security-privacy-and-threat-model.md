@@ -6,7 +6,7 @@
 - Last verified: not applicable
 - Owners: VaultStadio maintainers
 - Scope: Define cross-cutting threat models, privacy rules, trust boundaries, abuse controls, logging constraints, and security evidence.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -128,11 +128,49 @@ Wasm credential fields MUST use app-owned native HTML inputs with `type=password
 
 UI verification uses disposable local accounts and the normal authentication flow. No production session injection, privileged test endpoint, blanket security disablement or persisted real-account credential is permitted. Test fixtures may inject ports into real presentation components to observe callbacks; those tests do not establish server authorization or real device operation. Reports MUST distinguish component tests from actual native/browser proof and keep raw credentials/session material out of repository artifacts.
 
+### 6.5 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-005"></a>
+
+#### PD-005: Server-processable encryption and E2EE vaults
+
+VaultStadio MUST offer server-processable encrypted spaces and end-to-end encrypted vaults, displaying the capabilities available for each mode. The server MUST NOT possess the ability to decrypt E2EE content; no search, sharing, processing or backup feature may silently weaken that boundary.
+
+**Blocking technical decisions:** Cryptographic protocol, key custody/rotation, metadata leakage, client trust, crypto audit and supported operations/capability matrix. Server-processable encryption is not protection from a host operator who controls server keys.
+
+<a id="pd-006"></a>
+
+#### PD-006: Encryption mode belongs to the space or vault
+
+The encryption mode MUST be selected when creating a space/vault and apply to all its content. Creation, import and mutation paths must enforce the same mode boundary.
+
+**Blocking technical decisions:** Later mode changes, cross-mode copy/move, migration authorization, interruption and rollback. This decision neither approves silent conversion nor forbids a future reviewed migration.
+
+<a id="pd-007"></a>
+
+#### PD-007: Owner-controlled E2EE recovery
+
+E2EE recovery MUST support owner recovery material/devices and optional assistance from people expressly authorized by that owner, while the server remains unable to decrypt. Administrative status does not make a person a recovery trustee.
+
+**Blocking technical decisions:** Recovery protocol, threshold/quorum, trustee enrollment/revocation, device loss, compromise response and key rotation. Account/MFA recovery is a separate contract.
+
 ## 7. User-facing configuration
 
 Security limits such as token expiry, upload size, rate limits, plugin capabilities, federation domains, AI send policy, and secret sources are bounded and not weakened by arbitrary user input.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-005 | Mode is selected per space/vault under PD-006. No default encryption mode was selected; unavailable functionality must be explicit rather than simulated. |
+| PD-006 | One mode per new space/vault; no per-file override. Selection default and any later migration workflow remain undecided. |
+| PD-007 | Trusted-person assistance is optional and owner-authorized. No default trustees, quorum or administrator escrow was selected. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -200,6 +238,8 @@ Minimum risk-derived budget: **Minimum 32 cases: input abuse, auth/replay, owner
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **9 future acceptance families** (3 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -217,6 +257,20 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given a security scanner command references a missing file, when the workflow runs, then it fails or reports explicit advisory status rather than silently succeeding.
 3. Given a provider or credential is unavailable, when a sensitive operation starts, then it fails closed without selecting an unsafe alternate.
 
+### Planned discovery acceptance (#124)
+
+- **PD-005-P** — Create one space of each mode; verify ciphertext/key boundaries and the visible mode-specific capability matrix using actual clients and storage.
+- **PD-005-N** — An E2EE server-side processing or administrator decryption attempt cannot obtain plaintext or a decryption key.
+- **PD-005-F** — An unavailable key or interrupted cryptographic operation leaves recoverable ciphertext and an explicit locked/failure state, never a plaintext fallback.
+
+- **PD-006-P** — New files and nested folders inherit their space mode across every supported entrypoint.
+- **PD-006-N** — A request that attempts an incompatible per-file mode is rejected without storing plaintext or mixed-mode metadata.
+- **PD-006-F** — Interrupted creation/import leaves no falsely active mixed-mode space; retain the original content and report recoverable incomplete work.
+
+- **PD-007-P** — Recover with the approved owner/device path and, after explicit enrollment, the chosen trusted-person protocol; verify recovered bytes and server key absence.
+- **PD-007-N** — An unauthorized/revoked trustee or administrator cannot recover a vault or weaken its required recovery threshold.
+- **PD-007-F** — Insufficient/unavailable trustees or a lost recovery session leaves the vault encrypted and reports what owner-controlled recovery remains possible.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -227,9 +281,19 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-005](#pd-005) | PD-005-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+| [PD-006](#pd-006) | PD-006-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+| [PD-007](#pd-007) | PD-007-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+
 ## 18. Implementation or maintenance sequence
 
 Inventory assets/trust boundaries -> threat matrix -> define shared invariants -> add static/security contract checks -> reconcile capability SDDs -> perform authorized integration tests.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -255,3 +319,5 @@ Inventory assets/trust boundaries -> threat matrix -> define shared invariants -
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

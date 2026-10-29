@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 1,
+  "issue": "https://github.com/vypdev/vaultstadio/issues/124",
+  "acceptedOn": "2026-10-29",
+  "status": "accepted-targets-not-implementation-evidence",
+  "sourceSnapshotSha256": "3058388806f731e9d2121fb03b5b5805fb37c4336f6a492ef6c4433f479223f8",
+  "note": "Verbatim Spanish questions/answers from the maintainer discovery round; owning SDDs contain the normative interpretation. This is provenance, not a parallel specification lifecycle.",
+  "decisions": [
+    {
+      "id": "PD-001",
+      "sourceKey": "DEPLOYMENT-PRIMARY-AND-EXPANSION",
+      "question": "Para #116, ¿cómo debe conectarse la aplicación Web al servidor?",
+      "answer": "Prefiero el punto 1, pero con la capacidad del segundo; es decir: una instalacion fija (el operador configura el servidor \"maestro\" y el usuario inicia sesion; aunque en muchas ocasiones ambos sean la misma persona) con la capacidad de añadir mas servidores \"esclavo\" que amplian la capacidad pudiendo ver (visualizar los archivos) como un conjunto de archivos o dividido por servidores",
+      "owningSdd": "specs/SDD-0000-architecture-quality-and-product-contract.md",
+      "requirementAnchor": "pd-001",
+      "plannedAcceptance": [
+        "PD-001-P",
+        "PD-001-N",
+        "PD-001-F"
+      ],
+      "milestone": "M0"
+    },
+    {
+      "id": "PD-002",
+      "sourceKey": "ADDITIONAL-SERVER-MODES",
+      "question": "¿Cómo debe gestionarse cada servidor adicional respecto al principal?",
+      "answer": "Ambos modelos: elegir al añadir cada servidor si será un nodo gestionado o una instalación independiente.",
+      "owningSdd": "specs/SDD-0010-federation-and-trust.md",
+      "requirementAnchor": "pd-002",
+      "plannedAcceptance": [
+        "PD-002-P",
+        "PD-002-N",
+        "PD-002-F"
+      ],
+      "milestone": "M4"
+    },
+    {
+      "id": "PD-003",
+      "sourceKey": "ADDITIONAL-SERVER-ADMINISTRATION",
+      "question": "¿Quién podrá añadir servidores adicionales a VaultStadio?",
+      "answer": "Solo administradores: añaden nodos o instalaciones independientes y habilitan su capacidad para usuarios o espacios.",
+      "owningSdd": "specs/SDD-0010-federation-and-trust.md",
+      "requirementAnchor": "pd-003",
+      "plannedAcceptance": [
+        "PD-003-P",
+        "PD-003-N",
+        "PD-003-F"
+      ],
+      "milestone": "M4"
+    },
+    {
+      "id": "PD-004",
+      "sourceKey": "PERSONAL-AND-SHARED-SPACES",
+      "question": "¿Cómo quieres organizar los usuarios y los archivos dentro de una instalación de VaultStadio?",
+      "answer": "Archivos personales por usuario y espacios compartidos para familias o equipos, dentro de una misma comunidad de usuarios.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-004",
+      "plannedAcceptance": [
+        "PD-004-P",
+        "PD-004-N",
+        "PD-004-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-005",
+      "sourceKey": "SERVER-PROCESSABLE-AND-E2EE-MODES",
+      "question": "¿Qué modelo de cifrado y procesamiento del contenido quieres para VaultStadio?",
+      "answer": "Ambos modos: espacios procesables por el servidor y bóvedas con cifrado extremo a extremo, indicando las funciones disponibles en cada modo.",
+      "owningSdd": "specs/SDD-0015-security-privacy-and-threat-model.md",
+      "requirementAnchor": "pd-005",
+      "plannedAcceptance": [
+        "PD-005-P",
+        "PD-005-N",
+        "PD-005-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-006",
+      "sourceKey": "ENCRYPTION-MODE-PER-SPACE",
+      "question": "¿Dónde debe elegirse entre cifrado gestionado por el servidor y cifrado extremo a extremo?",
+      "answer": "Por espacio o bóveda: se elige al crearlo y todo su contenido utiliza ese modo.",
+      "owningSdd": "specs/SDD-0015-security-privacy-and-threat-model.md",
+      "requirementAnchor": "pd-006",
+      "plannedAcceptance": [
+        "PD-006-P",
+        "PD-006-N",
+        "PD-006-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-007",
+      "sourceKey": "E2EE-OWNER-AND-TRUSTED-RECOVERY",
+      "question": "Si alguien pierde el acceso a una bóveda con cifrado extremo a extremo, ¿qué recuperación debe ofrecer VaultStadio?",
+      "answer": "Además de su clave y dispositivos, permitir recuperación asistida por personas de confianza que el propietario autorice expresamente; el servidor sigue sin poder descifrar.",
+      "owningSdd": "specs/SDD-0015-security-privacy-and-threat-model.md",
+      "requirementAnchor": "pd-007",
+      "plannedAcceptance": [
+        "PD-007-P",
+        "PD-007-N",
+        "PD-007-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-008",
+      "sourceKey": "ADMIN-NO-IMPLICIT-CONTENT-ACCESS",
+      "question": "En los espacios con cifrado gestionado por el servidor, ¿qué acceso tendrá un administrador al contenido ajeno dentro de la aplicación?",
+      "answer": "Ninguno por su cargo: administra cuentas, cuotas y servidores, pero solo accede al contenido si recibe permisos explícitos.",
+      "owningSdd": "specs/SDD-0003-identity-authentication-and-authorization.md",
+      "requirementAnchor": "pd-008",
+      "plannedAcceptance": [
+        "PD-008-P",
+        "PD-008-N",
+        "PD-008-F"
+      ],
+      "milestone": "M1"
+    },
+    {
+      "id": "PD-009",
+      "sourceKey": "BIDIRECTIONAL-ON-DEMAND-OFFLINE-SYNC",
+      "question": "¿Qué modelo general de sincronización de archivos quieres para VaultStadio?",
+      "answer": "Sincronización bidireccional con archivos bajo demanda: se descargan al utilizarlos y se pueden marcar archivos o carpetas para mantenerlos disponibles sin conexión.",
+      "owningSdd": "specs/SDD-0008-device-sync-and-conflicts.md",
+      "requirementAnchor": "pd-009",
+      "plannedAcceptance": [
+        "PD-009-P",
+        "PD-009-N",
+        "PD-009-F"
+      ],
+      "milestone": "M3"
+    },
+    {
+      "id": "PD-010",
+      "sourceKey": "CONFIGURABLE-CONFLICT-STRATEGIES",
+      "question": "Cuando dos dispositivos modifiquen el mismo archivo antes de sincronizar, ¿cómo quieres resolver el conflicto?",
+      "answer": "Las tres opciones me gustan, esto deberia poder configurarlo cada organizacion o admin a placer, donde el comportamiento por defecto sea el punto 2, pero que pueda ser tambien 1 o 3",
+      "owningSdd": "specs/SDD-0008-device-sync-and-conflicts.md",
+      "requirementAnchor": "pd-010",
+      "plannedAcceptance": [
+        "PD-010-P",
+        "PD-010-N",
+        "PD-010-F"
+      ],
+      "milestone": "M3"
+    },
+    {
+      "id": "PD-011",
+      "sourceKey": "CONFLICT-POLICY-ADMIN-SPACE-OVERRIDES",
+      "question": "¿A qué nivel debe poder configurarse la política de conflictos?",
+      "answer": "Una configuración general por defecto, con excepciones por espacio o bóveda gestionadas por administradores.",
+      "owningSdd": "specs/SDD-0008-device-sync-and-conflicts.md",
+      "requirementAnchor": "pd-011",
+      "plannedAcceptance": [
+        "PD-011-P",
+        "PD-011-N",
+        "PD-011-F"
+      ],
+      "milestone": "M3"
+    },
+    {
+      "id": "PD-012",
+      "sourceKey": "TRASH-RETENTION-ADMIN-OVERRIDES",
+      "question": "¿Cuánto tiempo deben conservarse los archivos borrados en la papelera, por defecto?",
+      "answer": "30 días por defecto, pero configurable por los administradores, con excepciones por espacio o bóveda y la opción de conservarlos indefinidamente.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-012",
+      "plannedAcceptance": [
+        "PD-012-P",
+        "PD-012-N",
+        "PD-012-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-013",
+      "sourceKey": "VERSION-RETENTION-TIME-PLUS-MINIMUM",
+      "question": "¿Qué retención predeterminada quieres para las versiones antiguas? También será configurable por administradores, con excepciones por espacio/bóveda y conservación indefinida. La versión actual se conserva aparte.",
+      "answer": "La tercera por defecto: 30 días y al menos las últimas 10 versiones, configurable por los administradores, con excepciones por espacio o bóveda y conservación indefinida opcional.",
+      "owningSdd": "specs/SDD-0007-version-history-and-recovery.md",
+      "requirementAnchor": "pd-013",
+      "plannedAcceptance": [
+        "PD-013-P",
+        "PD-013-N",
+        "PD-013-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-014",
+      "sourceKey": "QUOTA-INCLUDES-CURRENT-TRASH-HISTORY",
+      "question": "Por defecto, ¿qué debe contabilizarse en la cuota de almacenamiento de un usuario o espacio?",
+      "answer": "Todo lo almacenado: archivos actuales, papelera y versiones históricas, mostrando por separado el consumo de cada categoría.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-014",
+      "plannedAcceptance": [
+        "PD-014-P",
+        "PD-014-N",
+        "PD-014-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-015",
+      "sourceKey": "CONFIGURABLE-QUOTA-EXHAUSTION-ELIGIBLE-CLEANUP-DEFAULT",
+      "question": "Al agotar la cuota, ¿cómo debemos tratar las operaciones que aumentarían el consumo?",
+      "answer": "Las tres opciones deberían ser configurables por los administradores, con la segunda por defecto y excepciones por espacio o bóveda. Nunca borrar contenido activo ni versiones protegidas.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-015",
+      "plannedAcceptance": [
+        "PD-015-P",
+        "PD-015-N",
+        "PD-015-F"
+      ],
+      "milestone": "M2"
+    },
+    {
+      "id": "PD-016",
+      "sourceKey": "SCALE-100GB-10M-CONFIGURABLE-TARGET",
+      "question": "Además de los límites configurables, ¿qué escala de uso quieres fijar como objetivo que debamos soportar y verificar?",
+      "answer": "Configurable por el administrador, pero por defecto a segunda: hasta 100 GB por archivo y 10 millones de archivos por instalación, con límites configurables por los administradores y excepciones por espacio o bóveda.",
+      "owningSdd": "specs/SDD-0000-architecture-quality-and-product-contract.md",
+      "requirementAnchor": "pd-016",
+      "plannedAcceptance": [
+        "PD-016-P",
+        "PD-016-N",
+        "PD-016-F"
+      ],
+      "milestone": "M8"
+    },
+    {
+      "id": "PD-017",
+      "sourceKey": "PUBLIC-LINK-SELECTABLE-CAPABILITIES",
+      "question": "¿Qué deben permitir los enlaces públicos creados por propietarios o responsables autorizados?",
+      "answer": "Permisos elegibles por enlace: visualizar/descargar, recibir subidas o permitir edición y colaboración dentro del contenido autorizado.",
+      "owningSdd": "specs/SDD-0006-sharing-and-permissions.md",
+      "requirementAnchor": "pd-017",
+      "plannedAcceptance": [
+        "PD-017-P",
+        "PD-017-N",
+        "PD-017-F"
+      ],
+      "milestone": "M5"
+    },
+    {
+      "id": "PD-018",
+      "sourceKey": "PUBLIC-WRITE-IDENTITY-CONFIGURABLE-REQUIRED-DEFAULT",
+      "question": "Para subir, editar o colaborar mediante un enlace público, ¿debe exigirse una cuenta o una invitación verificada?",
+      "answer": "Configurable por administradores y por enlace dentro de su política; por defecto, exigir identificación para escribir.",
+      "owningSdd": "specs/SDD-0006-sharing-and-permissions.md",
+      "requirementAnchor": "pd-018",
+      "plannedAcceptance": [
+        "PD-018-P",
+        "PD-018-N",
+        "PD-018-F"
+      ],
+      "milestone": "M5"
+    },
+    {
+      "id": "PD-019",
+      "sourceKey": "CROSS-PLATFORM-FUNCTIONAL-PARITY-TARGET",
+      "question": "¿Qué alcance funcional quieres en Web, Windows, macOS, Linux, Android e iOS?",
+      "answer": "Las mismas funciones de producto en todas, con interacción adaptada y limitaciones técnicas de cada plataforma documentadas explícitamente.",
+      "owningSdd": "specs/SDD-0013-frontend-kmp-and-platform-architecture.md",
+      "requirementAnchor": "pd-019",
+      "plannedAcceptance": [
+        "PD-019-P",
+        "PD-019-N",
+        "PD-019-F"
+      ],
+      "milestone": "M8"
+    },
+    {
+      "id": "PD-020",
+      "sourceKey": "REDUNDANCY-CAPABILITY-DEPENDENT-CONFIGURABLE",
+      "question": "En los nodos de almacenamiento gestionados por el principal, ¿debe haber redundancia para seguir leyendo los archivos si uno deja de estar disponible?",
+      "answer": "Quiero todo esto configurable, por defecto con un disco no podrá haber redundancia, con mas discos se puede ofrecer, por lo que será configurable",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-020",
+      "plannedAcceptance": [
+        "PD-020-P",
+        "PD-020-N",
+        "PD-020-F"
+      ],
+      "milestone": "M4"
+    },
+    {
+      "id": "PD-021",
+      "sourceKey": "DISK-AND-SERVER-FAULT-PROTECTION",
+      "question": "Cuando haya recursos suficientes, ¿qué tipos de protección debe poder configurar el administrador?",
+      "answer": "Ambos niveles: protección frente a fallos de disco o de servidor, mostrando claramente qué cubre cada configuración.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-021",
+      "plannedAcceptance": [
+        "PD-021-P",
+        "PD-021-N",
+        "PD-021-F"
+      ],
+      "milestone": "M4"
+    },
+    {
+      "id": "PD-022",
+      "sourceKey": "DEGRADED-REDUNDANCY-ADMIN-POLICY-SAFE-DEFAULT",
+      "question": "Si se pierde una de las copias de un espacio redundante, ¿cómo debe funcionar mientras se repara?",
+      "answer": "Configurable por administradores, con excepciones por espacio/bóveda; por defecto, permitir lecturas y bloquear escrituras que no alcancen la protección configurada.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-022",
+      "plannedAcceptance": [
+        "PD-022-P",
+        "PD-022-N",
+        "PD-022-F"
+      ],
+      "milestone": "M4"
+    },
+    {
+      "id": "PD-023",
+      "sourceKey": "OPTIONAL-PRIMARY-HIGH-AVAILABILITY",
+      "question": "Además de proteger los archivos, ¿quieres alta disponibilidad para el servidor principal, que gestiona usuarios, permisos y catálogo?",
+      "answer": "Sí, opcional y configurable por administradores cuando haya infraestructura suficiente, con un punto de acceso único y posibilidad de relevo a otro principal.",
+      "owningSdd": "specs/SDD-0014-deployment-operations-and-release.md",
+      "requirementAnchor": "pd-023",
+      "plannedAcceptance": [
+        "PD-023-P",
+        "PD-023-N",
+        "PD-023-F"
+      ],
+      "milestone": "M7"
+    },
+    {
+      "id": "PD-024",
+      "sourceKey": "LOCAL-CONTENT-PROCESSING-EXTERNAL-DUAL-CONSENT",
+      "question": "Para búsqueda avanzada, OCR o IA en espacios que el servidor puede procesar, ¿se podrá enviar contenido a proveedores externos?",
+      "answer": "Local por defecto; proveedores externos únicamente si el administrador los habilita y el responsable del espacio autoriza expresamente su uso.",
+      "owningSdd": "specs/SDD-0012-metadata-search-and-ai.md",
+      "requirementAnchor": "pd-024",
+      "plannedAcceptance": [
+        "PD-024-P",
+        "PD-024-N",
+        "PD-024-F"
+      ],
+      "milestone": "M6"
+    },
+    {
+      "id": "PD-025",
+      "sourceKey": "CONFIGURABLE-USER-ONBOARDING-INVITATION-DEFAULT",
+      "question": "¿Cómo deben incorporarse nuevos usuarios a una instalación de VaultStadio?",
+      "answer": "Configurable por administradores: por defecto invitación o alta administrativa, con opción de habilitar registro abierto y correo verificado.",
+      "owningSdd": "specs/SDD-0003-identity-authentication-and-authorization.md",
+      "requirementAnchor": "pd-025",
+      "plannedAcceptance": [
+        "PD-025-P",
+        "PD-025-N",
+        "PD-025-F"
+      ],
+      "milestone": "M1"
+    },
+    {
+      "id": "PD-026",
+      "sourceKey": "LOCAL-AND-EXTERNAL-SSO-LOGIN",
+      "question": "¿Qué métodos de inicio de sesión debe admitir VaultStadio?",
+      "answer": "Cuentas locales y acceso mediante proveedores externos de identidad (SSO), configurables por administradores.",
+      "owningSdd": "specs/SDD-0003-identity-authentication-and-authorization.md",
+      "requirementAnchor": "pd-026",
+      "plannedAcceptance": [
+        "PD-026-P",
+        "PD-026-N",
+        "PD-026-F"
+      ],
+      "milestone": "M1"
+    },
+    {
+      "id": "PD-027",
+      "sourceKey": "MFA-CONFIGURABLE-ADMIN-REQUIRED-DEFAULT",
+      "question": "Con una política configurable por los administradores, ¿a quién debe exigirse autenticación multifactor (MFA) por defecto?",
+      "answer": "Obligatoria para administradores y opcional para el resto de usuarios.",
+      "owningSdd": "specs/SDD-0003-identity-authentication-and-authorization.md",
+      "requirementAnchor": "pd-027",
+      "plannedAcceptance": [
+        "PD-027-P",
+        "PD-027-N",
+        "PD-027-F"
+      ],
+      "milestone": "M1"
+    },
+    {
+      "id": "PD-028",
+      "sourceKey": "AUTOMATIC-COMPLETE-SELECTIVE-BACKUPS",
+      "question": "¿Qué copias de seguridad debe gestionar VaultStadio, además de la redundancia entre discos o servidores?",
+      "answer": "Copias automáticas de configuración, catálogo y contenido, con destinos y retención configurables y restauración completa o selectiva.",
+      "owningSdd": "specs/SDD-0014-deployment-operations-and-release.md",
+      "requirementAnchor": "pd-028",
+      "plannedAcceptance": [
+        "PD-028-P",
+        "PD-028-N",
+        "PD-028-F"
+      ],
+      "milestone": "M7"
+    },
+    {
+      "id": "PD-029",
+      "sourceKey": "FULL-CONTENT-OCR-SEMANTIC-SEARCH-TARGET",
+      "question": "En los espacios que permiten procesar contenido, ¿qué capacidades de búsqueda quieres?",
+      "answer": "La tercera: nombre, metadatos, contenido, OCR y búsqueda semántica o en lenguaje natural, cuando haya motores autorizados configurados y respetando la privacidad de cada espacio o bóveda.",
+      "owningSdd": "specs/SDD-0012-metadata-search-and-ai.md",
+      "requirementAnchor": "pd-029",
+      "plannedAcceptance": [
+        "PD-029-P",
+        "PD-029-N",
+        "PD-029-F"
+      ],
+      "milestone": "M6"
+    },
+    {
+      "id": "PD-030",
+      "sourceKey": "AUTOMATIC-PLACEMENT-WITH-POLICY-BOUND-USER-CHOICE",
+      "question": "Al subir archivos a un espacio con varios servidores autorizados para almacenarlos, ¿quién debe elegir su ubicación?",
+      "answer": "Automática por defecto, permitiendo al usuario elegir un servidor autorizado si la política del espacio o bóveda y la redundancia lo permiten, todo configurable por los administradores.",
+      "owningSdd": "specs/SDD-0004-storage-domain-and-data-lifecycle.md",
+      "requirementAnchor": "pd-030",
+      "plannedAcceptance": [
+        "PD-030-P",
+        "PD-030-N",
+        "PD-030-F"
+      ],
+      "milestone": "M4"
+    }
+  ]
+}

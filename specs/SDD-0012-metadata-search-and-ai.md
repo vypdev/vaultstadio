@@ -6,7 +6,7 @@
 - Last verified: not applicable
 - Owners: VaultStadio maintainers
 - Scope: Define metadata extraction, indexing/search, AI-assisted classification, provider boundaries, privacy, and readiness evidence.
-- Related issues/PRs: #71, #91
+- Related issues/PRs: #71, #124, #91
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -133,11 +133,40 @@ items, while typed provider failures remain failures. Issue#115 owns the remaini
 advanced filtering/count/provider integration;#82 owns literal filename/prefix matching.
 These bounded error outcomes are not a claim that full-text search is implemented.
 
+### 6.6 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-024"></a>
+
+#### PD-024: Local processing and dual consent for external providers
+
+Content processing MUST default to local operation. Sending content to an external provider requires both explicit administrator enablement and express authorization from the responsible party of the affected space. This applies to server-processable content and grants no E2EE server decryption.
+
+**Blocking technical decisions:** Provider-specific consent scope, revocation and queued/in-flight jobs, minimization, retention/telemetry, local-engine provisioning and externally derived data deletion.
+
+<a id="pd-029"></a>
+
+#### PD-029: Content, OCR and semantic search
+
+Search MUST target names, metadata, content, OCR and semantic/natural-language queries when the required authorized engines are configured, applying space/vault privacy and current content permissions to indexing and results. External engines obey PD-024; E2EE server plaintext indexing is not authorized.
+
+**Blocking technical decisions:** Formats/languages, engine provisioning, extraction limits, freshness/reindex, grant revocation, semantic quality, result count/filter consistency, E2EE client index and latency objectives.
+
 ## 7. User-facing configuration
 
 Index path, extraction enablement, AI provider/model, credentials, content limits, retention, and external-send policy are explicit. Missing selected-provider credentials fail closed.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-024 | Local default; external use is the intersection of administrator/provider enablement and space-responsible consent, never either alone. |
+| PD-029 | Enable capabilities according to actual authorized engine readiness; no provider/model or local E2EE search design was selected. Existing CONTENT_SEARCH_UNAVAILABLE and partial indexing evidence remain explicit. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -205,6 +234,8 @@ Minimum risk-derived budget: **Minimum 30 cases: metadata extraction, indexing, 
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -222,6 +253,16 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given a configured AI provider without credentials, when the operation starts, then it fails closed before external execution.
 3. Given an AI provider failure, when the operation returns, then no alternative provider is selected implicitly and the source file remains unchanged.
 
+### Planned discovery acceptance (#124)
+
+- **PD-024-P** — With a controlled provider endpoint, verify zero external content sends under default local operation and allowed scoped sends only when both grants exist.
+- **PD-024-N** — Test all missing-consent combinations, another space, revoked consent and an E2EE vault: no unauthorized content leaves the boundary.
+- **PD-024-F** — Provider/consent lookup failure or revocation before dispatch stops the send and reports a failure; no alternate external fallback or secret-bearing diagnostic appears.
+
+- **PD-029-P** — Use declared multilingual/text/scanned/semantic corpora with authorized engines; verify known matches, result provenance, counts and permissions against retained ground truth.
+- **PD-029-N** — An absent engine, unauthorized space, revoked grant or E2EE server query cannot yield fabricated matches, filename fallback presented as content search or private snippets.
+- **PD-029-F** — Interrupt extraction/reindex or fail a provider: preserve source files, expose stale/unavailable state and safely recover without leaking old unauthorized index entries.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -232,9 +273,18 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-024](#pd-024) | PD-024-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M6](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m6) |
+| [PD-029](#pd-029) | PD-029-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M6](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m6) |
+
 ## 18. Implementation or maintenance sequence
 
 Separate metadata/search/AI contracts -> define privacy/provider policy -> add readiness validator -> verify deterministic indexing -> run authorized provider smoke only after policy is accepted.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -263,3 +313,5 @@ Separate metadata/search/AI contracts -> define privacy/provider policy -> add r
 The pre-code selection contract is implemented and locally verified at1499c6b. See the [source-bound report](../docs/development/verification/STORAGE_SELECTION_91.md), case inventory and complete coverage detail:3247backend+1324desktop+1200browser, all failures/errors/skips0;266 genuinely new backend cases plus8 shared KMP cases per platform. Actual packaged browser sort and400/recovery pass with original data/rollback preserved. The unavailable content option is explicit501; full filename/advanced search remains#82/#115, and Web origin configuration#116. Final PR CI, Copilot review and protected adoption remain pending; this checkpoint does not promote the whole capability status or master.
 
 Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

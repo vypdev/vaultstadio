@@ -6,7 +6,7 @@
 - Last verified: not applicable
 - Owners: VaultStadio maintainers
 - Scope: Coordinate the SDD portfolio, architectural ratchets, evidence policy, and ordered remediation of documentation and contract drift.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -117,11 +117,40 @@ Text equivalent: Audit current repository -> classify evidence -> define owner S
 | `implementing` | One bounded capability is changing | owner | validating or blocked |
 | `implemented` | Contract and evidence agree at a verified commit | maintainers | superseded or maintained |
 
+### 6.4 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-001"></a>
+
+#### PD-001: Primary installation and expandable capacity
+
+The product MUST provide an operator-configured primary installation where users sign in, support additional authorized servers that expand capacity, and offer unified and server-grouped views of authorized files. Operator and user may be the same person; their authorities remain distinct.
+
+**Blocking technical decisions:** Primary discovery, stable identities across views, offline/unavailable server presentation and the expansion protocol. #116 fixes Web API origin only; it does not implement this topology.
+
+<a id="pd-016"></a>
+
+#### PD-016: Explicit scale target and configurable limits
+
+The product target MUST be up to 100 GB per file and 10 million files per installation by default, with administrator-configurable limits and space/vault overrides. These are verification targets, not implemented capacity claims; numeric settings alone do not establish this scale.
+
+**Blocking technical decisions:** GB units, population counted as files, installation-wide versus per-space ceilings, hardware/workload/concurrency, latency/memory SLOs and reproducible resource budget. Current 32 MiB bounded UI evidence remains valid only for that bound.
+
 ## 7. User-facing configuration
 
 The catalog location, required headings, status vocabulary, and evidence fields are non-configurable. Validation command is `python3 scripts/validate-specification-catalog.py`.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-001 | Operator selects the primary; administrators control expansion. Fixed installation is the default journey. A file-view preference cannot grant access or turn an independent installation into a managed node. |
+| PD-016 | Default target 100 GB/file and 10 million files/installation. Overrides cannot create physical resources or bypass permission, quota, memory or safety limits. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -189,6 +218,8 @@ Minimum risk-derived budget: **Minimum 12 cases: catalog schema, duplicate IDs, 
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -206,6 +237,16 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given an invalid status or missing path, when validation runs, then it fails with a precise path and no mutation.
 3. Given a historical proposal, when it is classified, then it cannot appear as current implemented behavior without an explicit status change.
 
+### Planned discovery acceptance (#124)
+
+- **PD-001-P** — Given two authorized servers and one forbidden file, switching unified/grouped views preserves the same authorized file identities and hides the forbidden file.
+- **PD-001-N** — A normal user cannot replace the operator-selected primary or gain a remote grant by changing a view.
+- **PD-001-F** — When one server becomes unavailable, the view reports that loss and retains known source identity; it does not claim an empty successful server or lose pending work.
+
+- **PD-016-P** — On a declared representative environment, transfer/checksum a 100 GB file and query/mutate a 10-million-file catalog within agreed memory/latency objectives.
+- **PD-016-N** — Configured lower limits reject boundary+1 without partial admitted content; an override cannot exceed a governing installation safety ceiling once defined.
+- **PD-016-F** — Interrupt/restart large transfers and index operations under resource pressure; prove bounded memory, resumability and no lost/duplicated data before claiming acceptance.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -216,9 +257,18 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-001](#pd-001) | PD-001-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M0](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m0) |
+| [PD-016](#pd-016) | PD-016-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M8](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m8) |
+
 ## 18. Implementation or maintenance sequence
 
 Governance files -> catalog -> validator -> architecture baseline -> API/security baselines -> capability SDDs -> final portfolio audit.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -241,3 +291,5 @@ Governance files -> catalog -> validator -> architecture baseline -> API/securit
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

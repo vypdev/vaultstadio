@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define normal, chunked, folder, multipart, WebDAV, and S3-compatible transfer lifecycles.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -219,6 +219,10 @@ Each protocol has a contract test suite and a shared semantic transfer result; n
 - Every concrete adapter MUST have focused contract tests and every public route/workflow MUST have an owning SDD/evidence entry.
 - The validator MUST report missing evidence rather than infer success from file existence alone.
 - RepoWise and Graphify results MAY guide investigation but MUST NOT be used as the sole acceptance criterion.
+
+### Discovery implementation boundary (#124)
+
+[PD-016](SDD-0000-architecture-quality-and-product-contract.md#pd-016) owns the unverified 100 GB target; [PD-030](SDD-0004-storage-domain-and-data-lifecycle.md#pd-030) owns placement. Transfer work needs bounded streaming/resume, quota reservations, authorization and durable completion before it can satisfy either. Current bounded UI selection/transfer limits remain in force until separately reviewed migration and real size campaigns.
 
 ## 9. UI/UX and content contract
 

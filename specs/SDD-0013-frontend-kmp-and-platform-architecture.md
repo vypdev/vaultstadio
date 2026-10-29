@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define frontend domain/data/feature boundaries, navigation, state ownership, platform entrypoints, and user-facing capability mapping.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -320,11 +320,31 @@ Use the existing application reader for sequential, atomic, cancellable body rec
 
 Add at least12 native risk families: real basic binary/Unicode/empty reads, exact32MiB aggregate bytes, aggregate plus1, single oversize refusal, exact visited-entry bound, visited-entry plus1, exact depth, depth plus1, static/swapped symlink refusal, read failure without partial output, changed byte lengths and cancellation before later reads. Assert no body callback for metadata/resource refusal. Keep actual on-disk IO and controlled callback evidence distinct from a physical chooser; broader native OS/UI readiness and parent-directory race guarantees are not claimed. Preserve red/green originals, rerun full suites/coverage/gates/lint and retain previous sources and failed CI evidence.
 
+### 6.9 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-019"></a>
+
+#### PD-019: Functional parity with explicit platform limits
+
+The product MUST target the same capabilities on Web, Windows, macOS, Linux, Android and iOS, adapting interaction and documenting technical platform limits explicitly. A compiled module, shared test or emulated callback is not proof of real platform functionality.
+
+**Blocking technical decisions:** Supported version matrix, background/offline behavior, filesystem integration, accessibility, mobile/device campaigns and unavoidable restrictions.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-019 | Capability availability is reported per platform/build, with supported OS/browser versions and unavoidable limitations. No platform was accepted as feature-complete by this decision. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -394,6 +414,8 @@ The budget is a floor, not a substitute for covering every normative requirement
 
 For #76 the additional floor is 12 independently collected serialization cases, run on JVM and Wasm and reported as repeated platform executions; cover factory initialization, built-in coexistence, epoch/pre-epoch, offset/nanoseconds, nested/nullable values, unknown fields and malformed/missing/wrong-type values. Add four real Nginx checks (GET, HEAD, missing Wasm, SPA route) and actual web/desktop startup/login evidence. A test that only asserts a descriptor constant does not establish startup. Record the exact built artifact, source revision, commands, collected cases and remaining limitations.
 
+For #124, add at least **3 future acceptance families** (1 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -410,6 +432,12 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 1. Given a feature request failure, when the UI renders, then it shows a recoverable semantic error rather than an empty success state.
 2. Given a new feature module, when architecture validation runs, then its dependencies follow the documented domain/data/feature direction.
 3. Given the desktop test command, when run from `frontend/`, then it executes the intended project task.
+
+### Planned discovery acceptance (#124)
+
+- **PD-019-P** — Run each supported product journey on all six targets with actual package/device identities, adapted accessible interaction and independent retained evidence.
+- **PD-019-N** — Unsupported or unverified platform actions cannot present successful completion or borrow another platform's acceptance evidence.
+- **PD-019-F** — Exercise native cancel, permissions, background interruption and offline recovery per target; retain user data and explicit actionable limitations.
 
 ## 17. Requirements traceability
 
@@ -428,9 +456,17 @@ Executed #78 evidence is recorded in [authenticated transfer acceptance](../docs
 
 Executed #121 evidence is recorded in [Web directory selection verification](../docs/development/verification/FOLDER_SELECTION_121.md), its96-family risk matrix and separate GUI receipts. Source `d3816d6` passes6,606 complete product executions with zero failures/errors/skips and retains full44/52 module populations. Domain path/budget policy covers33/33lines and48/48branches; actual browser reads check every byte at the32MiB bound. All9 rendered journeys pass within their recorded scope, including separate physical Chrome/macOS directory selection, native Escape cancellation with no mutation, three-file confirmation/upload and a saved binary round trip. Initial browser-chooser API and native journeys retain their own mechanism and earlier sources. The action-specific error mapper covers38/38lines and12/12branches; a real four-byte unreadable-file selection on package4d3fb74 shows file-specific feedback and leaves all13 files/8 folders unchanged. The desktop-only follow-up moves Swing chooser ownership to EventQueue, retains filesystem reads on IO and passes9 controlled desktop cases plus real native login/application-cancel smoke without mutation. The subsequent native resource repair validates bounded metadata before reads, caps actual reads at snapshot+1 and rejects changing/unreadable/link sources atomically, with12 filesystem cases and48 focused controls plus the complete campaign. Native legacy relative paths and browser selected-root semantics remain distinct. Physical positive Swing selection is not certified. Final-ref CI, review and explicit adoption remain pending; no whole-platform readiness claim is made.
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-019](#pd-019) | PD-019-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M8](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m8) |
+
 ## 18. Implementation or maintenance sequence
 
 Inventory current modules -> classify legacy docs -> publish baseline -> add dependency/state checks -> reconcile feature/API docs -> validate platform claims.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -452,3 +488,5 @@ Inventory current modules -> classify legacy docs -> publish baseline -> add dep
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.
-- Related issues/PRs: #71, #91
+- Related issues/PRs: #71, #91, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -257,6 +257,10 @@ The route inventory, OpenAPI path inventory, API Markdown, and tests are reconci
 - Every concrete adapter MUST have focused contract tests and every public route/workflow MUST have an owning SDD/evidence entry.
 - The validator MUST report missing evidence rather than infer success from file existence alone.
 - RepoWise and Graphify results MAY guide investigation but MUST NOT be used as the sole acceptance criterion.
+
+### Discovery implementation boundary (#124)
+
+[PD-001](SDD-0000-architecture-quality-and-product-contract.md#pd-001) is the fixed-primary product journey; #116 remains the bounded Web origin/configuration repair. Future server/space/policy APIs need versioned identities, authorization and typed unavailable/partial outcomes before implementation. Root/API-prefix URL handling must not silently become a federation protocol or relax current authentication.
 
 ## 9. UI/UX and content contract
 

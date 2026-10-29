@@ -22,9 +22,12 @@
         "docs/architecture/ARCHITECTURE.md",
         "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-001, PD-016 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "standalone-projects-and-clean-architecture",
@@ -94,9 +97,12 @@
         "backend/api/src/test/kotlin/com/vaultstadio/api/config/SecurityTest.kt",
         "docs/operations/SECURITY.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-008, PD-025, PD-026, PD-027 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "storage-domain-and-data-lifecycle",
@@ -124,9 +130,12 @@
         "docs/development/verification/storage-selection-91-cases.json",
         "docs/development/verification/storage-selection-91-coverage.json",
         "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
-        "docs/development/verification/storage-selection-91-review.json"
+        "docs/development/verification/storage-selection-91-review.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage. #124 accepted targets PD-004, PD-012, PD-014, PD-015, PD-020, PD-021, PD-022, PD-030 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "upload-and-transfer-protocols",
@@ -174,9 +183,12 @@
         "docs/development/verification/PUBLIC_SHARE_ACCESS_90.md",
         "docs/development/verification/public-share-access-90.json",
         "docs/development/verification/public-share-access-90-cases.json",
-        "docs/development/verification/public-share-access-90-coverage.json"
+        "docs/development/verification/public-share-access-90-coverage.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "R05/#90 adopted in PR114/developc9f1ac5, post-merge CI40493531498 all5489 executions green. Portfolio remains partial: internal recipients, folder/inherited permissions and shared-with-me remain separate unverified product scope."
+      "openDecisions": "R05/#90 adopted in PR114/developc9f1ac5, post-merge CI40493531498 all5489 executions green. Portfolio remains partial: internal recipients, folder/inherited permissions and shared-with-me remain separate unverified product scope. #124 accepted targets PD-017, PD-018 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "version-history-and-recovery",
@@ -196,9 +208,12 @@
         "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version",
         "docs/operations/BACKUP_RESTORE.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-013 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "device-sync-and-conflicts",
@@ -221,9 +236,12 @@
         "frontend/data/sync",
         "frontend/feature/sync",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-009, PD-010, PD-011 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "real-time-collaboration",
@@ -269,9 +287,12 @@
         "docs/api/PHASE6_ADVANCED_FEATURES.md",
         "docs/operations/SECURITY.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-002, PD-003 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "plugin-runtime-and-extensibility",
@@ -322,9 +343,12 @@
         "docs/development/verification/storage-selection-91-cases.json",
         "docs/development/verification/storage-selection-91-coverage.json",
         "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
-        "docs/development/verification/storage-selection-91-review.json"
+        "docs/development/verification/storage-selection-91-review.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage."
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage. #124 accepted targets PD-024, PD-029 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "frontend-kmp-and-platform-architecture",
@@ -346,9 +370,12 @@
         "docs/architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md",
         "docs/frontend/FRONTEND_TESTING.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-019 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "deployment-operations-and-release",
@@ -374,9 +401,12 @@
         "docs/operations/DEPLOYMENT.md",
         "docs/operations/BACKUP_RESTORE.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-023, PD-028 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     },
     {
       "id": "security-privacy-and-threat-model",
@@ -398,9 +428,12 @@
         "docs/plugins/AI_INTEGRATION.md",
         ".github/workflows/security.yml",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
-        "docs/development/audits/2026-10-25/verification-summary.json"
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/discovery/2026-10-29/README.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-005, PD-006, PD-007 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence"
     }
   ]
 }
