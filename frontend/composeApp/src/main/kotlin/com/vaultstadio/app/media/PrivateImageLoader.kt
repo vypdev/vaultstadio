@@ -11,5 +11,6 @@ internal fun privateImageLoader(context: PlatformContext, client: HttpClient): I
     ImageLoader.Builder(context)
         .components { add(KtorNetworkFetcherFactory(client)) }
         .memoryCachePolicy(CachePolicy.DISABLED)
+        // Coil's network fetcher maps disabled disk reads/writes to Cache-Control: no-cache, no-store.
         .diskCachePolicy(CachePolicy.DISABLED)
         .build()

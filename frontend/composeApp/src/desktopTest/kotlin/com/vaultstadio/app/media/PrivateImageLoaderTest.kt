@@ -19,7 +19,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 /** Actual Coil fetch/decode path with the application transport, not a URL-only simulation. */
 class PrivateImageLoaderTest {
@@ -29,7 +28,7 @@ class PrivateImageLoaderTest {
         val engine = MockEngine { request ->
             seen += request.headers[HttpHeaders.Authorization]
             assertEquals("/gateway/api/v1/storage/item/image/thumbnail", request.url.encodedPath)
-            assertTrue(request.headers[HttpHeaders.CacheControl]!!.contains("no-store"))
+            assertEquals("no-cache, no-store", request.headers[HttpHeaders.CacheControl])
             if (request.headers[HttpHeaders.Authorization] == null) {
                 respond("denied", HttpStatusCode.Unauthorized)
             } else {
