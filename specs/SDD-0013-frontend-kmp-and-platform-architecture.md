@@ -541,3 +541,9 @@ opening a dialog. Existing Copilot configuration, generated guides and workflow 
 ## Scoped local verification checkpoint — issue #116
 
 The fixed operator Web API origin, prefix-safe consumers and acknowledged public-link clipboard contract are implemented at `35ce407`. See the [executed report](../docs/development/verification/WEB_API_ORIGIN_116.md) and [38-family traceability](../docs/development/verification/api-origin-116-results.json): 3,397 backend + 1,729 desktop + 1,636 browser executions, zero failures/errors/skips, source-bound JVM coverage, real two-origin packaged transfers/public pages, clipboard-value comparison and invalid-config/no-API/reload recovery. Native mobile compilation and remaining platform/media/version/collaboration gaps are explicitly separated. Final-ref PR CI, Copilot review, protected adoption and master remain separate gates; this does not promote the whole capability status.
+
+### Review refinement: UTF-8 display boundaries (#116)
+
+Before implementing the review repair: the 100 KiB text display budget counts bytes, but a valid UTF-8 code point crossing that boundary MUST be omitted as a whole instead of manufacturing U+FFFD. A complete code point ending exactly at the limit MUST remain visible. Existing replacement semantics for malformed source bytes and the truncation notice MUST remain unchanged. Inspect at most one adjacent code point; this is not a new streaming or full-body memory bound.
+
+Acceptance MUST exercise every split position of two-, three- and four-byte code points, complete boundary-aligned sequences, genuine encoded U+FFFD, malformed continuation/overlong/surrogate/out-of-range sequences and an incomplete source tail, on JVM and Wasm. Keep the original review finding and red/green execution evidence distinct from the initial acceptance checkpoint.
