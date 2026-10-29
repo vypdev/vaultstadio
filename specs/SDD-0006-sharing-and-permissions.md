@@ -480,3 +480,8 @@ adapter tests exercise callback cleanup and late settlement without altering rea
 contents. Packaged dogfooding must compare the actual copied value with the visible configured
 link. If the browser automation's clipboard scope differs, record that limit and use an actual
 paste into an owned visible control; never manufacture success by injecting clipboard/app state.
+
+
+## Scoped local verification checkpoint — issue #116
+
+The fixed operator Web API origin, prefix-safe consumers and acknowledged public-link clipboard contract are implemented at `35ce407`. See the [executed report](../docs/development/verification/WEB_API_ORIGIN_116.md) and [38-family traceability](../docs/development/verification/api-origin-116-results.json): 3,397 backend + 1,729 desktop + 1,636 browser executions, zero failures/errors/skips, source-bound JVM coverage, real two-origin packaged transfers/public pages, clipboard-value comparison and invalid-config/no-API/reload recovery. Native mobile compilation and remaining platform/media/version/collaboration gaps are explicitly separated. Final-ref PR CI, Copilot review, protected adoption and master remain separate gates; this does not promote the whole capability status.

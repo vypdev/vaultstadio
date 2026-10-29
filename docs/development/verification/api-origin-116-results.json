@@ -1,0 +1,597 @@
+{
+  "schemaVersion": 1,
+  "issue": 116,
+  "implementationHead": "35ce4076f88f030237a886f628dbb829ed51e21f",
+  "scope": "Fixed operator Web API origin and consistent versioned paths; no multi-server implementation, version binary lifecycle or collaboration protocol claim.",
+  "state": "Local checkpoint verified; final-ref PR CI, Copilot review and protected adoption remain separate gates.",
+  "preCodeHeads": [
+    "4ae1fd8046b943383aebbb9fddf10f510a797804",
+    "9926d785703ac790d9df7a7a067626699a7e12c1",
+    "0c039ad972d04193f33dd23d0be489fe83f9d6b9"
+  ],
+  "riskFamiliesAreNotTestCounts": true,
+  "riskFamilies": [
+    {
+      "id": "API116-01",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-02",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-03",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-04",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-05",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-06",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-07",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-08",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-09",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-10",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-11",
+      "status": "verified-locally",
+      "evidence": [
+        "WebApiConfigurationTest",
+        "WebStartupTest",
+        "BrowserConfigurationReaderTest"
+      ]
+    },
+    {
+      "id": "API116-12",
+      "status": "verified-locally",
+      "evidence": [
+        "WebStartupTest",
+        "BrowserConfigurationErrorTest",
+        "config-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-13",
+      "status": "verified-locally",
+      "evidence": [
+        "WebStartupTest",
+        "BrowserConfigurationErrorTest",
+        "config-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-14",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-15",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-16",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-17",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-18",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-19",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-20",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-21",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest",
+        "Storage116PrefixTransferTest",
+        "Api116ConsumerTest",
+        "api-consumer-inventory.json"
+      ]
+    },
+    {
+      "id": "API116-22",
+      "status": "verified-locally",
+      "evidence": [
+        "GetStorageUrlsUseCaseTest",
+        "Storage116PrefixTransferTest",
+        "authenticated-a-final.json",
+        "authenticated-b-zip.json"
+      ]
+    },
+    {
+      "id": "API116-23",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116ConsumerTest",
+        "Clipboard116ViewModelTest",
+        "DirectClipboard116Test",
+        "BrowserClipboard116Test",
+        "BrowserClipboardFallback116Test",
+        "clipboard-real-35ce407.json"
+      ]
+    },
+    {
+      "id": "API116-24",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116ConsumerTest"
+      ]
+    },
+    {
+      "id": "API116-25",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116AuthorityTest",
+        "Api116ExistingRegressionTest"
+      ]
+    },
+    {
+      "id": "API116-26",
+      "status": "verified-locally",
+      "evidence": [
+        "scripts/tests/public-share.test.mjs",
+        "PublicSharePrefixAssetsTest",
+        "public-runtime-http-result.json",
+        "public-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-27",
+      "status": "verified-locally",
+      "evidence": [
+        "scripts/tests/public-share.test.mjs",
+        "PublicSharePrefixAssetsTest",
+        "public-runtime-http-result.json",
+        "public-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-28",
+      "status": "verified-locally",
+      "evidence": [
+        "scripts/tests/public-share.test.mjs",
+        "PublicSharePrefixAssetsTest",
+        "public-runtime-http-result.json",
+        "public-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-29",
+      "status": "verified-locally",
+      "evidence": [
+        "scripts/tests/public-share.test.mjs",
+        "PublicSharePrefixAssetsTest",
+        "public-runtime-http-result.json",
+        "public-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-30",
+      "status": "verified-locally",
+      "evidence": [
+        "development-real-result.json",
+        "origin-a-final-upload-download.json"
+      ]
+    },
+    {
+      "id": "API116-31",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116ExistingRegressionTest",
+        "complete source-bound product suites",
+        "api116-mobile-compile-35ce407.json"
+      ]
+    },
+    {
+      "id": "API116-32",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116ExistingRegressionTest",
+        "complete source-bound product suites",
+        "api116-mobile-compile-35ce407.json"
+      ]
+    },
+    {
+      "id": "API116-33",
+      "status": "verified-locally",
+      "evidence": [
+        "origin-a-final-upload-download.json",
+        "authenticated-a-final.json"
+      ]
+    },
+    {
+      "id": "API116-34",
+      "status": "verified-locally",
+      "evidence": [
+        "authenticated-b-download.json",
+        "authenticated-b-zip.json"
+      ]
+    },
+    {
+      "id": "API116-35",
+      "status": "verified-locally",
+      "evidence": [
+        "anonymous-a-final.json",
+        "public-b-download.json",
+        "public-limit-http-result.json",
+        "public-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-36",
+      "status": "verified-locally",
+      "evidence": [
+        "config-real-result.json"
+      ]
+    },
+    {
+      "id": "API116-37",
+      "status": "verified-locally",
+      "evidence": [
+        "PrivateImageLoaderTest",
+        "TextPreviewLoaderTest"
+      ]
+    },
+    {
+      "id": "API116-38",
+      "status": "verified-locally",
+      "evidence": [
+        "Api116CorsTest",
+        "public-runtime-http-result.json"
+      ]
+    }
+  ],
+  "productExecutions": {
+    "backend/backend": {
+      "tests": 3397,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "frontend/desktop": {
+      "tests": 1729,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "frontend/browser": {
+      "tests": 1636,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "coverage": {
+    "backend/coverage": {
+      "classes": 2196,
+      "sha256": "83c346dde350dea16037b13471e8e4c44ce664c105f10382ef215ddd33a2d277",
+      "line": {
+        "missed": 7614,
+        "covered": 9446
+      },
+      "branch": {
+        "missed": 4075,
+        "covered": 2146
+      },
+      "instruction": {
+        "missed": 83007,
+        "covered": 74232
+      }
+    },
+    "frontend/coverage": {
+      "classes": 1902,
+      "sha256": "cd0a144ed4a25861f48e045158a7a149a4f909871e658505683e64558264fa2c",
+      "line": {
+        "missed": 14294,
+        "covered": 8159
+      },
+      "branch": {
+        "missed": 4585,
+        "covered": 1866
+      },
+      "instruction": {
+        "missed": 133297,
+        "covered": 51057
+      }
+    }
+  },
+  "fullArchive": {
+    "path": "audit/evidence/issue116-full-35ce407/originals.zip",
+    "sha256": "6b11659b31d639708d80de3f0f0d181fdd8c180b545a55e433fe7e9bb3ce0ef7",
+    "files": 5932
+  },
+  "runtimeSupplement": {
+    "path": "audit/evidence/issue116-runtime-supplement-35ce407/originals.zip",
+    "sha256": "7daf1e8cf0328b824faf5fb1958b1259b120c6b3a473d6f17a14793e88fcb80f"
+  },
+  "runtime": {
+    "atUtc": "2026-10-29T09:36:43.930551+00:00",
+    "webSource": "35ce4076f88f030237a886f628dbb829ed51e21f",
+    "backendSource": "ccff15aa47b1bd41bd2537fe37c4d70be4de27cf",
+    "backendTreeIdenticalToFinal": "e458727b9ce8a51c8f5257aeaba21a8cc731cfdc",
+    "sameWebPackageForBoth": true,
+    "created": {
+      "web-a": "aae032385e996a1cce69af42443e32ae7659cd950be0d1fa6d5143bfd2a97bc8",
+      "web-b": "64d2268a5a7feb7d1664da83ba092db6e042da771458e9cf1de1dd0ad39c18b7"
+    },
+    "webFiles": 7,
+    "previousRuntimeRetainedForRollback": true,
+    "volumesAndDatabaseUntouched": true
+  },
+  "criticalSourceCoverage": {
+    "frontend/com/vaultstadio/app/ui/components/files/TextPreviewLoader.kt": {
+      "LINE": {
+        "covered": 12,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 2,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/data/network/ApiRootSyntax.kt": {
+      "LINE": {
+        "covered": 46,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 123,
+        "missed": 9
+      }
+    },
+    "frontend/com/vaultstadio/app/data/network/WebConfigurationShape.kt": {
+      "LINE": {
+        "covered": 22,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 24,
+        "missed": 2
+      }
+    },
+    "frontend/com/vaultstadio/app/data/network/WebApiConfiguration.kt": {
+      "LINE": {
+        "covered": 14,
+        "missed": 1
+      },
+      "BRANCH": {
+        "covered": 27,
+        "missed": 1
+      }
+    },
+    "frontend/com/vaultstadio/app/data/network/ApiEndpoint.kt": {
+      "LINE": {
+        "covered": 22,
+        "missed": 1
+      },
+      "BRANCH": {
+        "covered": 24,
+        "missed": 4
+      }
+    },
+    "frontend/com/vaultstadio/app/data/network/ApiUrlUnicode.kt": {
+      "LINE": {
+        "covered": 10,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 9,
+        "missed": 1
+      }
+    },
+    "frontend/com/vaultstadio/app/data/network/ApiEndpointPlugin.kt": {
+      "LINE": {
+        "covered": 21,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 8,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/media/PrivateImageLoader.kt": {
+      "LINE": {
+        "covered": 5,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/DirectShareLinkClipboard.kt": {
+      "LINE": {
+        "covered": 11,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/platform/ShareClipboard.desktop.kt": {
+      "LINE": {
+        "covered": 0,
+        "missed": 9
+      },
+      "BRANCH": {
+        "covered": 0,
+        "missed": 2
+      }
+    },
+    "frontend/com/vaultstadio/app/boot/WebStartup.kt": {
+      "LINE": {
+        "covered": 11,
+        "missed": 0
+      },
+      "BRANCH": {
+        "covered": 4,
+        "missed": 0
+      }
+    },
+    "frontend/com/vaultstadio/app/feature/shares/SharesViewModel.kt": {
+      "LINE": {
+        "covered": 76,
+        "missed": 4
+      },
+      "BRANCH": {
+        "covered": 20,
+        "missed": 6
+      }
+    }
+  },
+  "boundaries": [
+    "JVM coverage is not Wasm coverage.",
+    "Android/iOS compilation is not device or native clipboard acceptance.",
+    "Desktop AWT positive native clipboard execution is not measured here.",
+    "Metadata version URLs do not certify historical binary delivery (#109).",
+    "Socket URL tests do not certify collaboration protocol interoperability (#112).",
+    "Preview component checks do not make the current file-screen no-op functional.",
+    "No public TLS deployment, browser-subpath hosting, full-body text-preview bound, mobile transfer or scale-target acceptance claim."
+  ],
+  "originalDataPreservation": {
+    "atUtc": "2026-10-29T09:51:58.455091+00:00",
+    "source": "35ce4076f88f030237a886f628dbb829ed51e21f",
+    "allSevenOriginalContainersAndImagesPreserved": true,
+    "allFourOriginalVolumesPreserved": true,
+    "preexistingNonDatabaseFiles": 43,
+    "currentNonDatabaseFiles": 49,
+    "allPreexistingNonDatabasePathsAndBytesUnchanged": true,
+    "databaseUsesOriginalContainerAndVolume": true,
+    "databaseChangesAreNormalRuntimeAndDisposableFixturesNotColdByteIdentity": true,
+    "preCandidateLogicalBackupSha256": "1b69282afc9333c6b8fceb88dc5b860ee3e319b37614d8cfb51cd5d9ccbde70d",
+    "originalDetachedDraftsUnchanged": {
+      "specs/SDD-0003-identity-authentication-and-authorization.md": "5833e5c53ea515438d5102107709184f4a4953d1364997c6502724f19dbcd6c5",
+      "specs/SDD-0007-version-history-and-recovery.md": "7345b4003b1aa787de3facdfb8371d306b9fa537403df2db573d29e9faa96c14"
+    },
+    "noResetRestoreDropOrPrune": true
+  },
+  "supplementaryAnonymousAResult": {
+    "source": "35ce4076f88f030237a886f628dbb829ed51e21f",
+    "atUtc": "2026-10-29T09:57:23.447024+00:00",
+    "normalUiDisplayedAUrlMatchesConfiguredRoot": true,
+    "normalUiLogoutBeforeAnonymousPublicDownload": true,
+    "savedBytes": 611,
+    "sha256": "b28d149d3bed2468d09f7ef45d21da23866a5c59f0b87c26cb14d7a11183bb60"
+  }
+}
