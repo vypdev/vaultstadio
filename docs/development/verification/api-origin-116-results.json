@@ -593,5 +593,7 @@
     "normalUiLogoutBeforeAnonymousPublicDownload": true,
     "savedBytes": 611,
     "sha256": "b28d149d3bed2468d09f7ef45d21da23866a5c59f0b87c26cb14d7a11183bb60"
-  }
+  },
+  "reviewRefinementReport": "WEB_API_ORIGIN_116_REVIEW.md",
+  "initialCheckpointOnly": true
 }

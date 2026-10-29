@@ -3,6 +3,8 @@
 Local implementation checkpoint: `35ce4076f88f030237a886f628dbb829ed51e21f`, 2026-10-29.
 Final PR CI, Copilot review and protected adoption are separate gates. This report does not certify the whole platform or promote master.
 
+The later [PR review supplement](WEB_API_ORIGIN_116_REVIEW.md) records the valid UTF-8 repair at `398f72d`, 19 additional shared cases, fresh complete frontend coverage and the investigated Coil false positive. The figures and package identities below retain their original checkpoint meaning.
+
 ## Contract and implementation
 
 The pre-code contract was committed at `4ae1fd8`, extended for private media/exact CORS at `9926d78`, and refined for acknowledged clipboard writes at `0c039ad`. The [38-family plan](api-origin-116-plan.json) remains a plan; [executed traceability](api-origin-116-results.json) identifies its actual evidence.
