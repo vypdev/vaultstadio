@@ -41,6 +41,9 @@ fun SharedScreen(
     onClearClipboardLink: () -> Unit,
     onClearError: () -> Unit,
     modifier: Modifier = Modifier,
+    isCopyingLink: Boolean = false,
+    copyError: String? = null,
+    onClearCopyError: () -> Unit = {},
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Row(
@@ -60,6 +63,7 @@ fun SharedScreen(
         }
 
         HorizontalDivider()
+        if (isCopyingLink) Text("Copying link…")
 
         when {
             isLoading -> {
@@ -89,6 +93,7 @@ fun SharedScreen(
                             share = share,
                             onCopyLink = { onCopyLink(share) },
                             onDelete = { onDeleteShare(share) },
+                            copyEnabled = !isCopyingLink,
                         )
                     }
                 }
@@ -99,6 +104,7 @@ fun SharedScreen(
     clipboardLink?.let { link ->
         LinkCopiedDialog(link = link, onDismiss = onClearClipboardLink)
     }
+    copyError?.let { message -> SharedErrorDialog(message = message, onDismiss = onClearCopyError) }
     error?.let { message ->
         SharedErrorDialog(message = message, onDismiss = onClearError)
     }

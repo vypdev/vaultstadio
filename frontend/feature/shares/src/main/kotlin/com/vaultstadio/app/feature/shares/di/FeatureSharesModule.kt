@@ -5,5 +5,5 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val featureSharesModule = module {
-    viewModel { SharesViewModel(get(), get(), get()) }
+    viewModel { SharesViewModel(get(), get(), get(), get()) }
 }

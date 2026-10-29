@@ -47,6 +47,7 @@ fun ShareLinkCard(
     onCopyLink: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
+    copyEnabled: Boolean = true,
 ) {
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
@@ -65,6 +66,7 @@ fun ShareLinkCard(
                 share = share,
                 onCopyLink = onCopyLink,
                 onDeleteClick = { showDeleteConfirm = true },
+                copyEnabled = copyEnabled,
             )
 
             share.expiresAt?.let { expiresAt ->
@@ -97,6 +99,7 @@ private fun ShareLinkHeader(
     share: ShareLink,
     onCopyLink: () -> Unit,
     onDeleteClick: () -> Unit,
+    copyEnabled: Boolean,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -136,7 +139,7 @@ private fun ShareLinkHeader(
         }
 
         Row {
-            IconButton(onClick = onCopyLink) {
+            IconButton(onClick = onCopyLink, enabled = copyEnabled) {
                 Icon(Icons.Filled.ContentCopy, contentDescription = "Copy link")
             }
             IconButton(onClick = onDeleteClick) {
