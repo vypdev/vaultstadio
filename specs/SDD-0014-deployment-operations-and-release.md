@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define Docker, Helm, configuration, health, migrations, backup, CI, release, versioning, rollback, and operator evidence.
-- Related issues/PRs: #71, #124
+- Related issues/PRs: #71, #124, #116
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -254,6 +254,18 @@ The product MUST manage automatic configuration, catalog and content backups wit
 
 **Blocking technical decisions:** Snapshot consistency, key custody, secret-bearing configuration, destination verification, restore ACL mapping, selective conflicts, integrity checks, immutable/offsite options and recovery objectives.
 
+### 6.11 Web API origin contract — issue #116
+
+Pre-implementation contract at develop `7b52127` (2026-10-29). This implements only the fixed-primary slice of PD-001; multi-server product targets remain future milestones.
+
+API116-DEPLOY: ship `/vaultstadio-config.json` alongside the portable Web package. It is a UTF-8 JSON object with only optional `apiBaseUrl`; `{}` selects same-origin `/api`. Operator overrides are absolute HTTP(S) API roots, with a trailing `/v1` accepted as a versioned alias. A configured root path is preserved literally; do not silently add `/api` to a nonempty custom root. The static resource must be served as JSON, no-store, and must return an explicit missing-file failure rather than SPA HTML fallback.
+
+API116-OPERATE: no rebuild is needed to select the operator endpoint. Startup snapshots config once and validates before authenticated requests; changes apply after reload. Defaults remain bounded at16KiB response,2048 UTF-16 URL units and5seconds total fetch/read. These guards are not externally weakened by JSON. Invalid values, missing resource, redirect, wrong MIME and unavailable reads are actionable failures. Do not log the supplied configuration, tokens or passwords. Root/prefixed reverse proxies retain capability path/query/Referer redaction and disable share upstream diagnostics that can echo the token.
+
+API116-DEV: standalone Web development keeps a reviewed `/api` proxy to the local backend and serves the same default config resource. Production and development share resolution rules. Preserve published Wasm MIME, normal asset routing, existing authentication/TLS/CORS and rollback packages/data; do not add a blanket cross-origin exception.
+
+API116-EVIDENCE: record exact source/tree/package/config/serving and API origins without credentials for two actual production browser origins. Retain malformed-config/no-API-call/reload recovery, prefixed public assets/form and byte-identical transfer evidence. Run complete final backend/desktop/Wasm tests and existing coverage/lint/architecture/secret contracts, then exact-ref CI/original artifact and actual Copilot review. Action references remain major tags, heavy workflow cadence and all protections/Copilot/master/setup activation remain unchanged.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.
@@ -268,6 +280,14 @@ Configuration MUST define type, recommended default, allowed values, validation,
 | PD-028 | Operator/administrator-configured destinations and retention. Schedule, encryption, consistency boundary, recovery authority and RPO/RTO were not selected; redundancy is not a backup. |
 
 These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
+
+### Web API configuration (#116)
+
+| Source/field | Type/default | Validation and precedence |
+|---|---|---|
+| `/vaultstadio-config.json` | UTF-8 JSON object, default `{}` | Same-origin static resource, successful JSON MIME, no redirects/credentials/cache;16KiB and5second total load/read budget. |
+| `apiBaseUrl` | Optional string; absent uses page origin + `/api` | Absolute HTTP(S), ≤2048 UTF-16 units, safe authority/path, no userinfo/query/fragment or HTTPS downgrade. Explicit invalid/null/unknown fields fail. |
+| Effective configuration | One immutable startup value | Operator resource is the sole override; no user/query/hash/global precedence. Fix resource and reload for recovery. |
 
 ## 8. Clean Architecture design
 
@@ -341,6 +361,8 @@ Issue #84 adds a floor of **40 risk-derived controls**, not a cap or a claim of 
 
 For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
 
+For #116, the pre-code [36-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -370,6 +392,13 @@ For #84, acceptance additionally requires: (a) a new applicable module is discov
 - **PD-028-N** — A backup operator or foreign installation cannot gain plaintext/content access, overwrite unrelated live data or restore broader grants by default.
 - **PD-028-F** — Corruption, unavailable destination or interrupted restore retains the last verified backup and prior recoverable state with an explicit partial/recovery result.
 
+### Web origin acceptance (#116)
+
+- API116-01–13: controlled valid/invalid/default/prefixed/IP/port inputs and actual invalid-config screen produce the exact effective root or safe failure; invalid/canceled startup launches no Koin/API and operator correction/reload recovers.
+- API116-14–25: production request shapes, fresh scoped bearer, binary/multipart bytes and canonical encoded location consumers retain methods/query/results/cancellation without prefix duplication, root loss, token URL or capability log leakage.
+- API116-26–32: GET/denied-POST public-page assets/action, valid/invalid path parser, privacy and development/common compatibility pass real adapters and focused controls.
+- API116-33–36: one source-identified production Web package passes two serving-origin campaigns with normal disposable login, actual saved bytes/public links, and malformed config/no-API/reload recovery. Component or mocked transport assertions alone do not satisfy these journeys.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -387,6 +416,12 @@ For #84, acceptance additionally requires: (a) a new applicable module is discov
 |---|---|---|---|
 | [PD-023](#pd-023) | PD-023-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M7](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m7) |
 | [PD-028](#pd-028) | PD-028-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M7](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m7) |
+
+| #116 contract | Implementation owner | Verification/evidence target |
+|---|---|---|
+| Startup grammar, load and safe failure | data/platform reader and composition root | API116-01–13/36; pure configuration, browser stream/lifecycle and real startup/recovery |
+| API root, trust, prefix and generated locations | shared network/data URL adapters, domain URL ports | API116-14–25; request/consumer/byte/privacy matrices and complete suites |
+| Public-page and operator/development behavior | bounded route/static/platform adapters | API116-26–35; Node/real route/proxy/assets plus actual two-origin browser evidence |
 
 ## 18. Implementation or maintenance sequence
 

@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define frontend domain/data/feature boundaries, navigation, state ownership, platform entrypoints, and user-facing capability mapping.
-- Related issues/PRs: #71, #124
+- Related issues/PRs: #71, #124, #116
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -332,6 +332,18 @@ The product MUST target the same capabilities on Web, Windows, macOS, Linux, And
 
 **Blocking technical decisions:** Supported version matrix, background/offline behavior, filesystem integration, accessibility, mobile/device campaigns and unavoidable restrictions.
 
+### 6.10 Web API origin contract — issue #116
+
+Pre-implementation contract at develop `7b52127` (2026-10-29). This implements only the fixed-primary slice of PD-001; multi-server product targets remain future milestones.
+
+API116-BOOT: load `/vaultstadio-config.json` before Koin, API clients or the application root. The packaged default is `{}`; only the optional `apiBaseUrl` string is accepted. Unknown keys, null/non-string/empty values, invalid JSON/URI and unsafe transport are failures, never an absent-value fallback. URL/page query/hash, mutable global JavaScript and normal user preferences are not configuration sources. Capture one validated startup string and pass it to runtime modules and application configuration.
+
+API116-LOAD: the platform reader requests the same-origin static resource with no-store, omitted credentials and redirect refusal; require successful JSON content, bound the streamed response to16KiB and the whole fetch/read to5seconds. UTF-8 decoding errors, non-JSON/SPA fallback, missing/failed response, timeout and excess bytes produce a safe load failure. Cancellation releases the reader/timer/abort resources and cannot launch late. No credential/config value enters error text or logs.
+
+API116-UX: invalid/unavailable configuration replaces the loader with an accessible native error/status and named Reload control. Explain impact and operator correction without echoing the supplied URL or secrets. Valid configuration launches once; invalid/load-failed/canceled work causes zero API/Koin effects. Correcting the served config and reloading recovers through the normal login. Presentation/media URL consumers use inward-facing configuration/storage URL ports; remove divergent raw-origin concatenation. Keep existing authentic input, normal authentication, file-selection and transfer behavior.
+
+API116-BOUNDARY: the two-origin packaged Web campaign includes login, folder/sort, error/retry, actual upload/saved binary or ZIP bytes, preview/location behavior and logged-out public-link flow. Separate component/MockEngine/controlled-stream cases from actual browser evidence. Desktop/common suites preserve configuration compatibility; mobile/hardware parity is not inferred.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
@@ -345,6 +357,14 @@ Configuration MUST define type, recommended default, allowed values, validation,
 | PD-019 | Capability availability is reported per platform/build, with supported OS/browser versions and unavoidable limitations. No platform was accepted as feature-complete by this decision. |
 
 These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
+
+### Web API configuration (#116)
+
+| Source/field | Type/default | Validation and precedence |
+|---|---|---|
+| `/vaultstadio-config.json` | UTF-8 JSON object, default `{}` | Same-origin static resource, successful JSON MIME, no redirects/credentials/cache;16KiB and5second total load/read budget. |
+| `apiBaseUrl` | Optional string; absent uses page origin + `/api` | Absolute HTTP(S), ≤2048 UTF-16 units, safe authority/path, no userinfo/query/fragment or HTTPS downgrade. Explicit invalid/null/unknown fields fail. |
+| Effective configuration | One immutable startup value | Operator resource is the sole override; no user/query/hash/global precedence. Fix resource and reload for recovery. |
 
 ## 8. Clean Architecture design
 
@@ -416,6 +436,8 @@ For #76 the additional floor is 12 independently collected serialization cases, 
 
 For #124, add at least **3 future acceptance families** (1 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
 
+For #116, the pre-code [36-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -439,6 +461,13 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 - **PD-019-N** — Unsupported or unverified platform actions cannot present successful completion or borrow another platform's acceptance evidence.
 - **PD-019-F** — Exercise native cancel, permissions, background interruption and offline recovery per target; retain user data and explicit actionable limitations.
 
+### Web origin acceptance (#116)
+
+- API116-01–13: controlled valid/invalid/default/prefixed/IP/port inputs and actual invalid-config screen produce the exact effective root or safe failure; invalid/canceled startup launches no Koin/API and operator correction/reload recovers.
+- API116-14–25: production request shapes, fresh scoped bearer, binary/multipart bytes and canonical encoded location consumers retain methods/query/results/cancellation without prefix duplication, root loss, token URL or capability log leakage.
+- API116-26–32: GET/denied-POST public-page assets/action, valid/invalid path parser, privacy and development/common compatibility pass real adapters and focused controls.
+- API116-33–36: one source-identified production Web package passes two serving-origin campaigns with normal disposable login, actual saved bytes/public links, and malformed config/no-API/reload recovery. Component or mocked transport assertions alone do not satisfy these journeys.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -461,6 +490,12 @@ Executed #121 evidence is recorded in [Web directory selection verification](../
 | Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
 |---|---|---|---|
 | [PD-019](#pd-019) | PD-019-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M8](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m8) |
+
+| #116 contract | Implementation owner | Verification/evidence target |
+|---|---|---|
+| Startup grammar, load and safe failure | data/platform reader and composition root | API116-01–13/36; pure configuration, browser stream/lifecycle and real startup/recovery |
+| API root, trust, prefix and generated locations | shared network/data URL adapters, domain URL ports | API116-14–25; request/consumer/byte/privacy matrices and complete suites |
+| Public-page and operator/development behavior | bounded route/static/platform adapters | API116-26–35; Node/real route/proxy/assets plus actual two-origin browser evidence |
 
 ## 18. Implementation or maintenance sequence
 
