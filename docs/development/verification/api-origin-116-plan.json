@@ -235,7 +235,19 @@
       "risk": "Malformed real served operator config yields visible error and no API traffic; operator-only correction/reload restores the normal journey.",
       "status": "planned",
       "evidence": []
+    },
+    {
+      "id": "API116-37",
+      "risk": "Actual configured Coil client sends current scoped bearer and no-store, bypasses unscoped memory/disk cache, rejects foreign/tokenless access, and text preview uses the authenticated domain port with safe cancellation/error and unchanged displayed cap. Unbounded full-body preview/media support is not certified.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-38",
+      "risk": "Real CORS preflight honors each configured origin scheme/host/port and Cache-Control request header; unconfigured HTTP counterpart, host and port stay denied. No wildcard/origin broadening.",
+      "status": "planned",
+      "evidence": []
     }
   ],
-  "acceptance": "At least all36 families expanded into actual assertions; complete final suites/gates/lint/contracts, raw source-bound coverage, actual same package on two production origins including prefixed proxy/public flow and bad-config recovery. Planned families are not executed test counts."
+  "acceptance": "At least all38 families expanded into actual assertions; complete final suites/gates/lint/contracts, raw source-bound coverage, actual same package on two production origins including prefixed proxy/public flow and bad-config recovery. Planned families are not executed test counts."
 }

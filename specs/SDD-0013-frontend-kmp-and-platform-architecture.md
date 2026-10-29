@@ -344,6 +344,10 @@ API116-UX: invalid/unavailable configuration replaces the loader with an accessi
 
 API116-BOUNDARY: the two-origin packaged Web campaign includes login, folder/sort, error/retry, actual upload/saved binary or ZIP bytes, preview/location behavior and logged-out public-link flow. Separate component/MockEngine/controlled-stream cases from actual browser evidence. Desktop/common suites preserve configuration compatibility; mobile/hardware parity is not inferred.
 
+API116-MEDIA: private image fetching must reuse the configured API client and its current scoped bearer, rather than Coil's anonymous default client. Disable unscoped private image memory/disk caches; the no-store image request remains subject to explicit server CORS policy. Text previews use the existing domain download port instead of creating a transport client in presentation; preserve their existing100KiB displayed-text cap, cancellation and safe failures. This URL/auth repair does not certify bounded full-file preview buffering or implement the separate unsupported native media players.
+
+API116-CORS: preserve the configured HTTP versus HTTPS scheme in each explicitly allowed backend origin; do not broaden the origin list. Support the Cache-Control header emitted by uncached private-image requests, retaining all other origin/method/credential restrictions. Verify configured HTTPS acceptance, corresponding unconfigured HTTP rejection, other-host/port denial and actual preflight behavior.
+
 ## 7. User-facing configuration
 
 API base URL, platform environment, locale, feature enablement, and auth persistence are validated at platform/composition boundaries.
@@ -436,7 +440,7 @@ For #76 the additional floor is 12 independently collected serialization cases, 
 
 For #124, add at least **3 future acceptance families** (1 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
 
-For #116, the pre-code [36-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
+For #116, the pre-code [38-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
 
 ## 15. Documentation and discoverability
 

@@ -266,6 +266,10 @@ API116-DEV: standalone Web development keeps a reviewed `/api` proxy to the loca
 
 API116-EVIDENCE: record exact source/tree/package/config/serving and API origins without credentials for two actual production browser origins. Retain malformed-config/no-API-call/reload recovery, prefixed public assets/form and byte-identical transfer evidence. Run complete final backend/desktop/Wasm tests and existing coverage/lint/architecture/secret contracts, then exact-ref CI/original artifact and actual Copilot review. Action references remain major tags, heavy workflow cadence and all protections/Copilot/master/setup activation remain unchanged.
 
+API116-MEDIA: private image fetching must reuse the configured API client and its current scoped bearer, rather than Coil's anonymous default client. Disable unscoped private image memory/disk caches; the no-store image request remains subject to explicit server CORS policy. Text previews use the existing domain download port instead of creating a transport client in presentation; preserve their existing100KiB displayed-text cap, cancellation and safe failures. This URL/auth repair does not certify bounded full-file preview buffering or implement the separate unsupported native media players.
+
+API116-CORS: preserve the configured HTTP versus HTTPS scheme in each explicitly allowed backend origin; do not broaden the origin list. Support the Cache-Control header emitted by uncached private-image requests, retaining all other origin/method/credential restrictions. Verify configured HTTPS acceptance, corresponding unconfigured HTTP rejection, other-host/port denial and actual preflight behavior.
+
 ## 7. User-facing configuration
 
 JDK/Gradle versions, image tags, chart/app version, environment variables, health endpoints, migration policy, storage/secrets, and runner labels are explicit.
@@ -361,7 +365,7 @@ Issue #84 adds a floor of **40 risk-derived controls**, not a cap or a claim of 
 
 For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
 
-For #116, the pre-code [36-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
+For #116, the pre-code [38-family risk inventory](../docs/development/verification/api-origin-116-plan.json) is a floor, not a test count. Expand grammar, API consumer, request/body/auth, generated URL, prefix, deadline/cancel and two-origin browser matrices; retain source-bound red/green and failure evidence. Existing regression budgets and global denominators/gates remain unchanged.
 
 ## 15. Documentation and discoverability
 
