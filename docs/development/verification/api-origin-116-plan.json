@@ -154,7 +154,7 @@
     },
     {
       "id": "API116-23",
-      "risk": "Copy/display/open public-share URLs agree with the effective root and actual backend public-page route.",
+      "risk": "Copy/display/open public-share URLs agree with the effective root and actual backend public-page route. Copy confirmation requires acknowledged clipboard IO, with denial/failure/deadline/cancellation/retry and no stale or invented success.",
       "status": "planned",
       "evidence": []
     },
@@ -249,5 +249,13 @@
       "evidence": []
     }
   ],
-  "acceptance": "At least all38 families expanded into actual assertions; complete final suites/gates/lint/contracts, raw source-bound coverage, actual same package on two production origins including prefixed proxy/public flow and bad-config recovery. Planned families are not executed test counts."
+  "acceptance": "At least all38 families expanded into actual assertions; complete final suites/gates/lint/contracts, raw source-bound coverage, actual same package on two production origins including prefixed proxy/public flow and bad-config recovery. Planned families are not executed test counts.",
+  "clipboardContract": {
+    "owner": "SDD-0006 section21.11; SDD-0013 composition boundary",
+    "deadlineMs": 5000,
+    "success": "Only an acknowledged platform write may publish Link Copied.",
+    "failure": "Safe retryable unavailable/denied/failed/timeout feedback; preserve external cancellation and prevent stale success.",
+    "externalEffect": "Cancellation cannot promise rollback of an already-started system clipboard write.",
+    "proof": "Actual ViewModel and adapter tests plus actual packaged copied-value comparison; no local-variable clipboard simulation."
+  }
 }

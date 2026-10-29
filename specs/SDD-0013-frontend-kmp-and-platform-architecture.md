@@ -529,3 +529,10 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - Related capability contracts are listed in `specs/catalog.json`.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+
+Issue #116 clipboard refinement is specified before code in SDD-0006 §21.11. Clipboard IO stays in
+platform adapters behind a neutral domain output port, wired by the application composition root.
+Shares presentation depends on that port and generated-link use case, and confirms copy only after
+acknowledgment. It must not import browser, AWT, Android or UIKit APIs or infer copy success from
+opening a dialog. Existing Copilot configuration, generated guides and workflow policy are unchanged.
