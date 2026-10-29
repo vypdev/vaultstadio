@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Record user identity, JWT lifecycle, roles, permissions, and protocol-specific authentication boundaries.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -150,11 +150,58 @@ The supported registration email shape has one `@`, a nonblank local part and a 
 
 AUTH119-11/12 includes concurrent reuse: one refresh credential may commit at most one rotation. Compare the expected old refresh hash atomically with the persisted session identity before replacing credentials; a missing/revoked or already-rotated session is an authentication failure, never a successful unpersisted credential pair. The semantic repository port owns that conditional mutation; SQL details remain in infrastructure. Verify two real concurrent HTTP requests after both have read the same original row, and a refresh held across logout, with bounded deterministic barriers and actual SQL state. Sequential rotation alone does not prove this property.
 
+### 6.8 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-008"></a>
+
+#### PD-008: Administration grants no content access
+
+An application administrator MUST manage accounts, quotas and servers without gaining access to other users' content by that role. Content access requires an explicit applicable grant. This extends rather than bypasses the existing owner-scoped storage/history/collaboration protections.
+
+**Blocking technical decisions:** Grant types for shared spaces/history/collaboration, revocation, access audit and separation between application administrator and infrastructure/key-custody threat models.
+
+<a id="pd-025"></a>
+
+#### PD-025: Invitation-first configurable onboarding
+
+Administrators MUST configure onboarding with invitation or administrative creation as the default, and optional open registration requiring verified email before activation. This accepted target does not silently change or relabel the existing public registration baseline.
+
+**Blocking technical decisions:** First-administrator bootstrap, invitation expiry/reuse, verification tokens, mail adapter, existing account migration and verified-identity linking.
+
+<a id="pd-026"></a>
+
+#### PD-026: Local accounts and configurable external SSO
+
+The installation MUST support local accounts and administrator-configured external identity-provider SSO. Successful authentication does not itself grant content access or unreviewed administrator privileges.
+
+**Blocking technical decisions:** Protocols/providers, issuer/audience validation, linking/unlinking, duplicate identities, role mapping, last-administrator recovery and provider outages.
+
+<a id="pd-027"></a>
+
+#### PD-027: Configurable MFA with administrator requirement by default
+
+MFA policy MUST be administrator-configurable, required for administrators and optional for other users by default. Authentication and privileged actions must enforce the effective policy; E2EE trusted-person recovery is not automatically an account/MFA recovery mechanism.
+
+**Blocking technical decisions:** Enrollment/bootstrap, factors, recovery credentials, last-administrator lockout, step-up/expiry, validated SSO assurance and existing-session policy changes.
+
 ## 7. User-facing configuration
 
 JWT secret, expiration, issuer, audience, password policy, protocol auth modes, and admin role rules are validated at startup. Secrets have no committed defaults.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-008 | No configurable implicit administrator content bypass. Future explicit grants need the owning capability's reviewed permission matrix. |
+| PD-025 | Default invitation/admin creation; open verified-email registration only when enabled. Bootstrap and verification details for administratively created accounts remain unresolved. |
+| PD-026 | Administrators configure allowed methods/providers. No SSO protocol, provider, account-linking rule or automatic role mapping was selected. |
+| PD-027 | Default administrators required/others optional. Supported factors, accepted SSO MFA assertions and policy-change recovery need review before enforcement/migration. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -222,6 +269,8 @@ Minimum risk-derived budget: **Minimum 24 cases: registration validation, passwo
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **12 future acceptance families** (4 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -239,6 +288,24 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given an authenticated non-admin user, when an admin route is called, then no mutation occurs and the result is forbidden.
 3. Given missing production JWT configuration, when startup validates configuration, then it fails closed.
 
+### Planned discovery acceptance (#124)
+
+- **PD-008-P** — An administrator can change an allowed quota/server setting, cannot read its owner's file, and can read only after a valid explicit content grant is implemented.
+- **PD-008-N** — ADMIN alone fails storage/history/collaboration/search/preview requests before content or sensitive metadata disclosure.
+- **PD-008-F** — Grant lookup failure or revocation during a request fails closed with unchanged content; it cannot select an administrator bypass.
+
+- **PD-025-P** — Verify default invitation/admin-created enrollment and enabled open registration that cannot activate before email verification.
+- **PD-025-N** — Disabled open registration, expired/reused invites and an unverified email cannot create an active authorized session.
+- **PD-025-F** — Mail failure or interrupted activation retains a nonactive recoverable enrollment without duplicate accounts or leaked invite/verification tokens.
+
+- **PD-026-P** — Authenticate separate local and configured SSO accounts and verify stable identity, explicit role mapping and unchanged content permissions.
+- **PD-026-N** — Wrong issuer/audience, untrusted provider, replay or matching unverified email cannot impersonate/link an account or gain an administrator role.
+- **PD-026-F** — Provider outage or failed linking preserves existing local access as configured without silently linking identities or bypassing authentication.
+
+- **PD-027-P** — Default local/SSO administrator journeys satisfy verified MFA before authorized privileged access; ordinary users may enroll voluntarily.
+- **PD-027-N** — Missing/replayed factors, a forged SSO assurance claim or an old non-MFA administrator session cannot bypass the effective policy.
+- **PD-027-F** — Lost factor or unavailable provider enters the reviewed recovery/enrollment flow without an implicit administrator bypass or unrecoverable unplanned lockout.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -249,9 +316,20 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-008](#pd-008) | PD-008-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M1](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m1) |
+| [PD-025](#pd-025) | PD-025-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M1](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m1) |
+| [PD-026](#pd-026) | PD-026-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M1](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m1) |
+| [PD-027](#pd-027) | PD-027-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M1](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m1) |
+
 ## 18. Implementation or maintenance sequence
 
 Inventory identity flows -> define auth matrix -> reconcile config/security docs -> add protocol contract tests -> add threat-model companion review.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -275,3 +353,5 @@ Inventory identity flows -> define auth matrix -> reconcile config/security docs
 - Related capability contracts are listed in `specs/catalog.json`.
 
 R01c evidence: [collaboration verification](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md),485 new cases within the2740-case backend gate. Socket authorization also binds the expected item of an open connection. The client/editor journey remains#112; final-head CI/review/adoption are separate.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

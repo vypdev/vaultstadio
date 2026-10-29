@@ -6,7 +6,7 @@
 - Last verified: not applicable
 - Owners: VaultStadio maintainers
 - Scope: Define cross-instance identity, signed messages, federated shares, activities, trust, key lifecycle, and failure behavior.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -118,11 +118,40 @@ Text equivalent: Operator configures identity -> instance advertises/requests tr
 | `revoked` | Remote/key no longer accepted | operator | rotate/re-establish |
 | `degraded` | Remote unavailable or invalid | operator | retry/investigate |
 
+### 6.4 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-002"></a>
+
+#### PD-002: Managed nodes and independent installations
+
+Adding a server MUST allow an explicit choice between a storage node governed by the primary and an independent installation with its own authority. Independent installations expose only mutually authorized resources; adding their URL does not delegate administration.
+
+**Blocking technical decisions:** Enrollment, trust establishment, identity mapping, supported remote operations, protocol compatibility and mode conversion. Managed-node enrollment and federation trust need distinct semantic ports.
+
+<a id="pd-003"></a>
+
+#### PD-003: Administrative server enrollment and capacity grants
+
+Adding managed nodes or independent installations and enabling their capacity for users or spaces MUST be restricted to administrators. Enrollment alone does not confer file access, a remote write grant or backup authority.
+
+**Blocking technical decisions:** Administrative role granularity, grant revocation during transfers, audit retention and limits on delegated administration.
+
 ## 7. User-facing configuration
 
 Federation enablement, instance domain/name, public/private keys, allowed/blocked domains, HTTPS requirement, and key rotation are explicit and fail closed.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-002 | Administrator chooses the mode for each addition. Neither model is a universal default chosen in this round; record the selected mode explicitly. |
+| PD-003 | Administrator-managed per-server capacity assignments to users/spaces. Effective assignments remain constrained by independent remote authority and content permissions. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -190,6 +219,8 @@ Minimum risk-derived budget: **Minimum 28 cases: trust states, signature, canoni
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **6 future acceptance families** (2 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -207,6 +238,16 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given a revoked remote key, when a signed message arrives, then it does not authorize a share or activity.
 3. Given outbound federation is not implemented, when configured, then startup/doctor reports unsupported rather than advertising readiness.
 
+### Planned discovery acceptance (#124)
+
+- **PD-002-P** — Add one server of each type and verify the displayed mode, authority and authorized capacity against both servers.
+- **PD-002-N** — A managed-node credential cannot administer an independent installation or enumerate its unshared content.
+- **PD-002-F** — A failed enrollment or revoked peer leaves no falsely usable capacity; retain enough state to retry or remove only the incomplete enrollment.
+
+- **PD-003-P** — An administrator enables a server for one space; an authorized member can use it while an unrelated space cannot.
+- **PD-003-N** — A non-administrator enrollment/assignment request is denied before remote enrollment or local catalog effects.
+- **PD-003-F** — Revoke an assignment during a pending operation and verify a defined retained outcome without falling back to an unauthorized server.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -217,9 +258,18 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-002](#pd-002) | PD-002-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M4](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m4) |
+| [PD-003](#pd-003) | PD-003-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M4](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m4) |
+
 ## 18. Implementation or maintenance sequence
 
 Classify current behavior -> choose wire/trust contract -> define key lifecycle -> implement/verify outbound contract -> add isolated interoperability evidence.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -241,3 +291,5 @@ Classify current behavior -> choose wire/trust contract -> define key lifecycle 
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

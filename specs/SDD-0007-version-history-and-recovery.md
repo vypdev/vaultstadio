@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define file versions, history, diffs, restore, retention, deletion, and system recovery boundaries.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -140,11 +140,31 @@ The content guard was added after two failing owner-sequence tests reproduced de
 
 Local implementation checkpoint: [verification receipt](../docs/development/verification/VERSION_OWNERSHIP_74.md), 348 affected-suite cases (197 core, 140 API/use cases, eleven real SQL-adapter cases), zero failures/errors/skips. The 72 service and91 HTTP matrix budgets were executed; core/version covers272/272 lines and90/90 branches without exclusions. Exact source hashes and case names accompany the receipt. Packaged local dogfooding also passes 15 real HTTP requests with preserved storage/plugin byte hashes. Remote CI/review and adoption remain separate acceptance steps; the overall as-built status and R07 gaps are unchanged.
 
+### 6.5 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-013"></a>
+
+#### PD-013: Time plus minimum historical-version retention
+
+The default history policy MUST retain every historical version for 30 days since it ceased being current AND at least the latest 10 historical versions even when older. The current version is separate. A historical version is retention-eligible only when it is outside both protections; explicit holds and live byte references still block reclamation.
+
+**Blocking technical decisions:** Boundary clock/order, time/count validation, policy changes, E2EE history, concurrent restore/cleanup and atomic reference/byte compensation. #109 still owns real version lifecycle/binary restore gaps.
+
 ## 7. User-facing configuration
 
 Retention count/time, diff limits, restore policy, and backup schedule are explicit. Defaults cannot weaken authorization or data-retention safety.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-013 | Administrator general time/count policy with explicit space/vault overrides and indefinite retention. Current version is not counted among the 10 historical versions; no quota strategy may remove protected versions. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -218,6 +238,8 @@ The matrix floor is **163 executions**, not 163 independent product behaviors or
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **3 future acceptance families** (1 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -235,6 +257,12 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given restore failure, when the operation returns, then the pre-restore current state remains recoverable.
 3. Given retention policy forbids deletion, when deletion is requested, then the version remains and the result explains why.
 
+### Planned discovery acceptance (#124)
+
+- **PD-013-P** — Using controlled age/order, retain all young versions and the latest 10 old historical versions while keeping current separate; verify overrides and indefinite mode.
+- **PD-013-N** — A cleanup cannot delete a protected historical version or bytes referenced by current content, another version or a retention hold.
+- **PD-013-F** — Interrupt restore/cleanup under concurrent version creation and verify prior recoverability, truthful partial effects and a safe reconciliation path.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -246,9 +274,17 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 | VER-OWNER/GRANT/SCOPE/BIND/EFFECTS/CONTENT/ERROR/ARCH | Version policy, application, adapters and composition | VER74-SVC / VER74-HTTP plus explicit state/error variants | issue #74 and [local executed evidence](../docs/development/verification/VERSION_OWNERSHIP_74.md); remote adoption pending |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-013](#pd-013) | PD-013-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+
 ## 18. Implementation or maintenance sequence
 
 Define version invariants -> reconcile route behavior -> add restore failure tests -> separate backup contract -> update recovery docs.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -278,3 +314,5 @@ Historical retention checkpoint `0fbb0af`: the nine new core cases and one new r
 Cleanup-batch follow-up contract (before code): reference liveness must ignore every version ID removed by the authorized full-history purge, not only the row currently inspected. Deduplicate keys after complete scope binding and preflight all remaining-reference queries before content/metadata deletion. Add at least five executions: restored/shared-key purge, full-set SQL exclusion, external-version retention, empty exclusion and real HTTP purge preserving canonical bytes. Historical orphan repair, concurrent GC and durable compensation remain R07.
 
 Final batch-aware local checkpoint:348 affected cases pass (197core,140API,11real SQL adapters), with unchanged inputs during the complete campaign; strict checks and packaging pass. Full module coverage is 272/272lines and90/90branches. The SQL inheritance claims are disproved by the actual resolved1.0.0 bytecode and executed fault/cancellation tests (upstream#736); no catch broadening is needed. Fresh remote CI/review of the published batch-aware candidate remains required.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

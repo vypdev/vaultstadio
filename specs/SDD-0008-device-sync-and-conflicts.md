@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define device registration, delta synchronization, conflict detection, replay, deactivation, and recovery.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -121,11 +121,49 @@ Text equivalent: Device registers -> pulls known changes -> pushes local changes
 | `deactivated` | Device blocked | owner | reactivate |
 | `converged` | Client and server share known state | client | continue |
 
+### 6.4 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-009"></a>
+
+#### PD-009: Bidirectional on-demand synchronization and offline pinning
+
+Clients MUST synchronize bidirectionally, download file content when used and let users pin files or folders for offline availability. Metadata visibility is not proof that a body is present locally; pending offline edits and their synchronization status must remain visible.
+
+**Blocking technical decisions:** Placeholders, background execution by platform, cache/key protection, subtree pinning, tombstones, disk-full behavior, replay and permission revocation while offline.
+
+<a id="pd-010"></a>
+
+#### PD-010: Three configurable conflict strategies
+
+The conflict policy MUST offer preserve-both/manual resolution; safe automatic merge for supported compatible formats with preserve-both/manual fallback; and latest-received as current while retaining the other version in history. Safe automatic merge with that fallback is the default; unsupported, binary, unsafe or E2EE-server merges cannot silently discard either side.
+
+**Blocking technical decisions:** Compatible formats, merge safety/detection, receipt ordering, history admission under quota, user resolution UX and client-side E2EE merge boundaries.
+
+<a id="pd-011"></a>
+
+#### PD-011: Conflict policy inheritance
+
+Administrators MUST manage a general conflict default with explicit space/vault overrides. An applicable explicit override takes precedence over the general default; an absent override inherits it.
+
+**Blocking technical decisions:** Policy revision/snapshot behavior for in-flight/offline edits, auditing, validation and migration of retired strategies.
+
 ## 7. User-facing configuration
 
 Device limits, delta block size, conflict retention, sync enablement, and payload bounds are explicit. Defaults are safe and bounded.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-009 | On-demand bodies by default; explicit file/folder offline pins. Device cache budgets and unpin/eviction policy remain undecided. |
+| PD-010 | Administrators choose the strategy under PD-011. Latest received means server receipt order, not untrusted device wall-clock order; exact concurrency ordering is still a design decision. |
+| PD-011 | Installation default is PD-010 safe compatible merge with manual fallback; administrator-managed space/vault exception wins. A device preference cannot override the effective administrative policy. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -193,6 +231,8 @@ Minimum risk-derived budget: **Minimum 30 cases: registration, device ownership,
 
 The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
 
+For #124, add at least **9 future acceptance families** (3 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -210,6 +250,20 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 2. Given an out-of-order change, when automatic application is unsafe, then the server records an explicit conflict.
 3. Given a deactivated device, when it pushes, then no mutation occurs.
 
+### Planned discovery acceptance (#124)
+
+- **PD-009-P** — Two real clients synchronize edits both ways; opening an unpinned file downloads its bytes and a completed folder pin remains usable offline.
+- **PD-009-N** — An unavailable body cannot be shown as offline-ready; deactivated devices and revoked permissions cannot perform new server effects.
+- **PD-009-F** — Interrupt download/upload then reconnect: retain local edits, resume or retry without duplicate mutations, and distinguish partial pins from completed ones.
+
+- **PD-010-P** — Exercise the same two-client divergence under all three strategies; verify default compatible merge, incompatible fallback and retained loser history for latest-received.
+- **PD-010-N** — Binary/incompatible or unavailable-key input does not trigger a claimed safe merge or silent overwrite.
+- **PD-010-F** — An interrupted merge or failed history write retains both source revisions and exposes a retryable/unresolved conflict instead of acknowledging destructive success.
+
+- **PD-011-P** — An inheriting space follows the general strategy and an explicitly overridden vault follows its own strategy on the same conflict inputs.
+- **PD-011-N** — A non-administrator or device-supplied conflict strategy cannot weaken the effective policy.
+- **PD-011-F** — A concurrent policy change/reconnect yields one recorded effective policy revision; retain conflict inputs if a valid policy cannot be resolved.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -220,9 +274,19 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 | Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
 | Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-009](#pd-009) | PD-009-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M3](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m3) |
+| [PD-010](#pd-010) | PD-010-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M3](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m3) |
+| [PD-011](#pd-011) | PD-011-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M3](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m3) |
+
 ## 18. Implementation or maintenance sequence
 
 Define protocol identity -> document state machine -> add replay/conflict tests -> align frontend models -> verify operational recovery.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -244,3 +308,5 @@ Define protocol identity -> document state machine -> add replay/conflict tests 
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

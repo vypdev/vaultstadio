@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define plugin discovery, lifecycle, API, endpoint exposure, configuration, isolation, permissions, and failure containment.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -149,6 +149,10 @@ Plugin manifest/schema, lifecycle events, endpoint registration, failure mapping
 - Every concrete adapter MUST have focused contract tests and every public route/workflow MUST have an owning SDD/evidence entry.
 - The validator MUST report missing evidence rather than infer success from file existence alone.
 - RepoWise and Graphify results MAY guide investigation but MUST NOT be used as the sole acceptance criterion.
+
+### Discovery implementation boundary (#124)
+
+[PD-024](SDD-0012-metadata-search-and-ai.md#pd-024) owns local/default and external dual consent; [PD-029](SDD-0012-metadata-search-and-ai.md#pd-029) owns search capabilities. Plugins implement bounded ports and cannot infer content-send authority from installation or administrator enablement. Engine lifecycle/readiness, cancellation and credential-safe failures require actual adapter evidence; a registered plugin is not verified functionality.
 
 ## 9. UI/UX and content contract
 

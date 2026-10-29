@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Define files, folders, metadata, ownership, quotas, trash, storage backends, and content lifecycle.
-- Related issues/PRs: #71, #91
+- Related issues/PRs: #71, #124, #91
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -162,11 +162,94 @@ Incoming body consumption is part of transfer cancellation semantics, including 
 
 STO119-01–20 in [the scenario inventory](../docs/development/verification/critical-coverage-119-scenarios.json) cover these boundaries. Existing S3/WebDAV, authenticated UI download, search, version recovery and advanced-capability debts retain their own issues; this increment must neither exclude them from canonical coverage nor certify their readiness using a transport fixture.
 
+### 6.8 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-004"></a>
+
+#### PD-004: Personal files and shared spaces in one community
+
+One installation MUST support personal files per user and family/team shared spaces in one community of users. Shared-space membership and content permissions require explicit modeling; this decision does not introduce isolated multi-tenant organizations or replace existing owner checks with implicit access.
+
+**Blocking technical decisions:** Space ownership, membership lifecycle, role matrix, transfers of ownership, hierarchy boundaries and user-versus-space charging.
+
+<a id="pd-012"></a>
+
+#### PD-012: Configurable trash retention
+
+Trash retention MUST default to 30 days and support administrator configuration, space/vault overrides and explicit indefinite retention. Content is eligible for automatic expiry only under its effective retention policy; quota pressure does not override indefinite/protected retention.
+
+**Blocking technical decisions:** Trash timestamp/clock boundary, holds, child hierarchy, concurrent restore/purge, policy changes on existing trash, backup interaction and physical reclamation consistency.
+
+<a id="pd-014"></a>
+
+#### PD-014: Quota includes current content, trash and history
+
+Quota MUST account for current content, trash and historical versions, displaying each category separately and their coherent total. Moving data between categories does not make its stored consumption disappear.
+
+**Blocking technical decisions:** Charging owner, byte units, reservations for partial uploads, replica overhead, reference sharing, reconciliation and transactional category transitions.
+
+<a id="pd-015"></a>
+
+#### PD-015: Quota exhaustion without destructive admission
+
+Administrators MUST be able to select block-growth without admission-driven purge; cleanup of already retention-eligible trash/history then block growth if still insufficient; or bounded temporary overage while physical capacity permits. The cleanup-then-block strategy is the default. No strategy may delete active content or protected historical versions.
+
+**Blocking technical decisions:** Reservations/concurrent admissions, eligible-cleanup partial effects, overage bounds/expiry, notifications, physical-space reserve and policy revisions during uploads.
+
+<a id="pd-020"></a>
+
+#### PD-020: Resource-dependent configurable redundancy
+
+Administrators MUST be able to configure redundancy according to available resources. One underlying disk cannot provide product-level redundancy; additional disks may make protection possible. No unconditional two-copy default or authority over independent installations is implied.
+
+**Blocking technical decisions:** Resource discovery/attestation, replica versus erasure coding, capacity calculation, repair, acknowledgement durability and provider-managed redundancy evidence.
+
+<a id="pd-021"></a>
+
+#### PD-021: Disk and whole-server failure domains
+
+Where resources permit, the product MUST offer protection against disk and whole-server failures and show exactly which failures the selected placement protects against. Copies on separate disks in one server do not protect against losing that server.
+
+**Blocking technical decisions:** Failure-domain identity, correlated failures, topology changes, recovery point/durability guarantees, replica placement and evidence of resource independence.
+
+<a id="pd-022"></a>
+
+#### PD-022: Safe default while redundancy is degraded
+
+Degraded-redundancy behavior MUST be administrator-configurable with space/vault overrides. By default, allow authorized reads of available content and block writes unable to satisfy the configured protection. Explicit alternative degraded writes must disclose reduced protection and repair state.
+
+**Blocking technical decisions:** Fault detection, fenced write acknowledgements, policy changes during writes, repair/rebalance, split brain and resumption conditions.
+
+<a id="pd-030"></a>
+
+#### PD-030: Automatic placement with constrained user server choice
+
+Placement MUST be automatic by default and allow a user to select an authorized server only when the space/vault policy and required redundancy permit it. Administrators configure behavior and constraints. A user preference cannot override content grants, eligible resources or protection requirements.
+
+**Blocking technical decisions:** Placement algorithm, capacity reservations, primary-versus-replica preference semantics, topology changes, rebalance/migration and independent peer write authorization.
+
 ## 7. User-facing configuration
 
 Storage type, local path, S3 endpoint/region/bucket/credentials, path style, quota, and trash retention are validated with cross-field rules. Storage type controls backend and S3 route registration.
 
 Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-004 | Users use personal storage and explicitly granted shared spaces. Membership roles, creation/delegation rights and defaults are unresolved, not open access. |
+| PD-012 | General 30-day default; explicit administrator space/vault override wins; indefinite is a distinct value, not an accidental zero/overflow. Bounds and deletion-clock semantics require design. |
+| PD-014 | All three categories count by default. User-versus-shared-space charging, logical/physical units, replicas, deduplication and encryption overhead need explicit decisions before billing/admission claims. |
+| PD-015 | General administrator default with space/vault overrides. Temporary-overage amount/duration and physical reserve require explicit bounds; selecting a strategy cannot negate retention or content grants. |
+| PD-020 | Administrator-selected redundancy constrained by eligible disks/servers and capacity. Activation default with multiple disks, replica count and coding scheme remain undecided. |
+| PD-021 | Administrator-selected disk/server protection level, constrained by verified independent resources. Server failure coverage is separate from primary-service availability under PD-023. |
+| PD-022 | Default reads allowed/under-protected writes blocked; explicit space/vault policy overrides the general setting within authorization and actual resource constraints. |
+| PD-030 | Administrator automatic-placement default with optional permitted user server choice at space/vault scope. A selected server is subject to independent-installation write grants and required replica placement. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
 
 ## 8. Clean Architecture design
 
@@ -242,6 +325,8 @@ For #73, the minimum additional budget is 64 executed cases: all three visibilit
 
 VFY-DBTIME-01 in SDD-0014 requires complete persisted fixture baselines and two explicit nanosecond-input regressions. PostgreSQL timestamps have microsecond resolution; the fixture MUST read back the adapter's persisted representation before asserting that a denied or failed operation changed no metadata. These tests retain exact full-row equality, including timestamps, and do not alter production persistence semantics.
 
+For #124, add at least **24 future acceptance families** (8 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
 ## 15. Documentation and discoverability
 
 | Audience | Required artifact | Purpose |
@@ -266,6 +351,40 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 8. Given a nonempty folder in the real migrated schema, permanent delete fails and both owned/foreign children survive. A child insertion racing a file or empty-folder delete must not be silently cascaded; if insertion wins, the original bytes remain (STO-AUTH-07).
 9. Given any preflight port failure, its original typed error reaches the caller and no mutation/backend/event is invoked (STO-AUTH-08).
 
+### Planned discovery acceptance (#124)
+
+- **PD-004-P** — Two users retain separate personal files and can access a shared file only after an explicit applicable grant.
+- **PD-004-N** — A nonmember, removed member or unrelated administrator cannot list/read/mutate private space content by guessing its ID.
+- **PD-004-F** — A failed membership change or interrupted move across spaces preserves authoritative grants and recoverable bytes; no mixed-authority hierarchy appears.
+
+- **PD-012-P** — With a controlled clock, verify 30-day default eligibility, a finite override and indefinite retention while preserving restorable content before eligibility.
+- **PD-012-N** — Quota cleanup or an unauthorized policy edit cannot remove noneligible, indefinitely retained or protected content.
+- **PD-012-F** — A purge interrupted between metadata and bytes reports retained effects and permits safe reconciliation without claiming reclaimed capacity twice.
+
+- **PD-014-P** — Upload, version and trash known payloads; verify category subtotals and the total against authoritative storage/accounting facts after each transition.
+- **PD-014-N** — Trash/version transitions or duplicate requests cannot evade quota, double-charge shared bytes under the chosen model or expose another user's usage details.
+- **PD-014-F** — A failed accounting transition or concurrent reservation does not allow unaccounted growth; reconciliation retains bytes and reports discrepancies.
+
+- **PD-015-P** — Exercise all strategies with known eligible and protected data; default reclaims only eligible content and blocks/notifies when that remains insufficient.
+- **PD-015-N** — Concurrent over-quota uploads, unavailable physical capacity and active/protected deletion attempts cannot bypass admission or erase protected data.
+- **PD-015-F** — A failed cleanup reports actual reclaimed/retained bytes, preserves protected content and never admits growth based on a failed or duplicated reclamation count.
+
+- **PD-020-P** — Discover one and several eligible disks; show no product-level redundancy on one and only feasible configurable protection on the larger topology.
+- **PD-020-N** — Two paths/partitions on the same underlying disk cannot be counted as independent protected copies.
+- **PD-020-F** — A missing/misidentified disk or failed replica allocation leaves the operation under-protected/failed explicitly, never a false protected acknowledgement.
+
+- **PD-021-P** — Lose one disk and then an entire eligible server in separate campaigns; verify readable hashes and displayed coverage against the declared topology.
+- **PD-021-N** — A same-host two-disk configuration cannot claim whole-server protection or acknowledge a placement that violates the selected domain requirement.
+- **PD-021-F** — A domain disappears or changes identity during allocation/repair; record actual remaining protection and retain recoverable copies without a false healthy state.
+
+- **PD-022-P** — Lose a copy: available authorized reads succeed, default under-protected writes fail, and an explicitly permitted alternative reports its actual durability.
+- **PD-022-N** — Stale health or a user-selected server cannot bypass required protection; degraded mode never broadens content permissions.
+- **PD-022-F** — Fail repair or partition the network during a write; retain acknowledged data and report unresolved protection without unsafe duplicate/current-state commits.
+
+- **PD-030-P** — Upload without preference and with an allowed server choice; verify actual placement, required copies, content hashes and returned source identity.
+- **PD-030-N** — A forbidden/full/untrusted server or preference incompatible with required protection is rejected before admitting bytes or reserving unauthorized capacity.
+- **PD-030-F** — Lose the selected server or change policy during upload: retain resumable data and report the actual outcome; any fallback must remain explicitly policy-authorized.
+
 ## 17. Requirements traceability
 
 | Requirement | Owner | Verification target | Documentation |
@@ -278,9 +397,24 @@ The owning user-facing documentation MUST link back to this SDD or its catalog e
 
 Issue #73 evidence targets: domain `StorageAccessPolicy`; core `StorageHierarchy` and storage query/write/mutation helpers; `StorageParentAuthorizationTest`, `StorageMutationAuthorizationTest`, `StorageHierarchyTest`; production-route `StorageOwnershipIntegrationTest` and leaf-delete concurrency adapter tests. Exact paths and measured results are recorded in the linked PR after verification; targets alone do not establish completion.
 
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-004](#pd-004) | PD-004-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+| [PD-012](#pd-012) | PD-012-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+| [PD-014](#pd-014) | PD-014-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+| [PD-015](#pd-015) | PD-015-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+| [PD-020](#pd-020) | PD-020-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M4](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m4) |
+| [PD-021](#pd-021) | PD-021-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M4](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m4) |
+| [PD-022](#pd-022) | PD-022-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M4](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m4) |
+| [PD-030](#pd-030) | PD-030-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M4](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m4) |
+
 ## 18. Implementation or maintenance sequence
 
 Freeze domain lifecycle -> reconcile configuration names -> write backend contract tests -> validate local/S3 parity -> update protocol and operation docs.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
 
 ## 19. Definition of Done
 
@@ -309,3 +443,5 @@ Freeze domain lifecycle -> reconcile configuration names -> write backend contra
 The pre-code selection contract is implemented and locally verified at1499c6b. See the [source-bound report](../docs/development/verification/STORAGE_SELECTION_91.md), case inventory and complete coverage detail:3247backend+1324desktop+1200browser, all failures/errors/skips0;266 genuinely new backend cases plus8 shared KMP cases per platform. Actual packaged browser sort and400/recovery pass with original data/rollback preserved. The unavailable content option is explicit501; full filename/advanced search remains#82/#115, and Web origin configuration#116. Final PR CI, Copilot review and protected adoption remain pending; this checkpoint does not promote the whole capability status or master.
 
 Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.
+
+Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

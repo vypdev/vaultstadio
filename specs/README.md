@@ -92,3 +92,12 @@ changes the stated contract or evidence status.
 ## Audit checkpoint — 2026-10-25
 
 La [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md) añade ejecución completa de suites, cobertura agregada y pruebas reales de API, arranque y recuperación sobre master `615f11a…`. Los [resultados](../docs/development/audits/2026-10-25/verification-summary.json) incluyen fallos de aceptación y un [roadmap priorizado](../docs/development/AUDIT_ROADMAP_2026-10-25.md). Los estados y la verificación original se conservan: un catálogo válido no certifica que la aplicación sea operativa.
+
+## Accepted discovery — 2026-10-29
+
+The [30-decision discovery index](discovery/2026-10-29/README.md) links the maintainer's
+verbatim answers to one owning SDD per requirement, explicit configuration/defaults, blocking
+technical decisions and 90 future acceptance families. The
+[current product roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md) orders bounded
+implementation and evidence gates. These accepted targets are proposed for implementation;
+they do not change catalog status, historical verification dates or existing runtime limits.

@@ -6,7 +6,7 @@
 - Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
 - Owners: VaultStadio maintainers
 - Scope: Record the verified backend/frontend project topology, dependency direction, composition ownership, and architectural constraints.
-- Related issues/PRs: #71
+- Related issues/PRs: #71, #124
 - Required review gates: product UX, architecture, testing, documentation, security/operations
 - Open decisions blocking readiness: see the explicit decisions and limitations below
 
@@ -162,6 +162,10 @@ Architecture checks MUST identify forbidden imports and production dependency cy
 - Every concrete adapter MUST have focused contract tests and every public route/workflow MUST have an owning SDD/evidence entry.
 - The validator MUST report missing evidence rather than infer success from file existence alone.
 - RepoWise and Graphify results MAY guide investigation but MUST NOT be used as the sole acceptance criterion.
+
+### Discovery implementation boundary (#124)
+
+Future discovery implementation must preserve inward dependencies, standalone roots and small semantic collaborators. Policy resolution belongs to domain/application; crypto, database, filesystem, HTTP and provider details remain adapters. Avoid a global topology/policy/ViewModel service that owns unrelated capabilities. The requirement owners and planned acceptance are in the [discovery index](discovery/2026-10-29/README.md); the [roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md) defines staged boundary review.
 
 ## 9. UI/UX and content contract
 

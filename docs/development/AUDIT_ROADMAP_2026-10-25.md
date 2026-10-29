@@ -2,6 +2,11 @@
 
 Entrada: [auditoría integral](REPOSITORY_AUDIT_2026-10-25.md), evidencia de `master` `615f11a…`, issue [#71](https://github.com/vypdev/vaultstadio/issues/71). Este documento propone trabajo posterior; una fila no significa funcionalidad implementada. Mantener las mejoras ya preservadas en `eea796b` y evitar una reescritura general.
 
+Actualización de planificación: el [roadmap del 29-10-2026](PRODUCT_ROADMAP_2026-10-29.md)
+incorpora las 30 decisiones de producto de #124 y el punto de partida posterior a #123.
+Mantiene los checkpoints siguientes como evidencia histórica y conserva #116, #82/#115,
+#109/#112/#111 como reparaciones acotadas antes de los hitos nuevos.
+
 ## Orden de trabajo
 
 Las primeras tres prioridades son seguridad de datos, arranque del cliente y verificación de CI. P0 debe cerrarse antes de usar datos privados; las tareas de UI y CI pueden avanzar independientemente después de fijar los contratos. Cada bloque debe convertirse en una issue admitida y una PR acotada mediante Copilot. La Action crea y mantiene su rama; no se crean ramas remotas alternativas.
