@@ -23,6 +23,14 @@ function fixture(status = 'Retained POST error') {
 for (const path of ['/api/v1/share/ToKen_-/view', '/api/v1/share/ToKen_-/view/download']) {
   test(`S90-page preserves case in ${path}`, () => assert.equal(shareEndpoint(path), '/api/v1/share/ToKen_-'));
 }
+
+for (const prefix of ['/gateway/api', '/gateway', '/tenant%20one/api', '/api/v1/gateway/api']) {
+  for (const ending of ['/view', '/view/download']) {
+    test(`API116 public endpoint preserves ${prefix} at ${ending}`, () => {
+      assert.equal(shareEndpoint(`${prefix}/v1/share/ToKen_-${ending}`), `${prefix}/v1/share/ToKen_-`);
+    });
+  }
+}
 for (const path of ['/files', '/share/x', '/api/v1/share/x/view/extra', '/api/v1/share/a%2Fb/view',
   '/api/v1/share//view', `/api/v1/share/${'x'.repeat(65)}/view`]) {
   test(`S90-page rejects malformed location ${path}`, () => assert.equal(shareEndpoint(path), null));
@@ -169,3 +177,16 @@ for (const password of ['☃', 'é'.repeat(36), ' +%\t', '😀']) {
     assert.equal(Buffer.from(request.headers['X-Share-Password'], 'base64url').toString('utf8'), password);
   });
 }
+
+for (const prefix of ['//foreign.invalid/api', '/a/../api', '/a/%2e/api', '/a/%2F/api', '/a/%5c/api', '/a/%252e/api', '/a/%zz/api', '/a/%00/api', '/a/\\api', '/a?x/api']) {
+  test(`API116 rejects unsafe prefix ${JSON.stringify(prefix)}`, () => assert.equal(shareEndpoint(`${prefix}/v1/share/T/view`), null));
+}
+test('API116 rejects oversized public paths before any request', () => assert.equal(shareEndpoint(`/${'a'.repeat(4096)}/v1/share/T/view`), null));
+test('API116 actual page wiring preserves encoded proxy prefix for inspection and POST', async () => {
+  const f = fixture(); const requests = [];
+  mountSharePage(f.document, { pathname: '/tenant%20one/api/v1/share/CaseToken/view/download' }, async (...args) => {requests.push(args);return reply(200,valid);});
+  assert.equal(f.get('share-form').action, '/tenant%20one/api/v1/share/CaseToken/view/download');
+  await f.get('load').fire('click');
+  assert.equal(requests[0][0], '/tenant%20one/api/v1/share/CaseToken');
+  assert.equal(f.get('download').disabled, false);
+});

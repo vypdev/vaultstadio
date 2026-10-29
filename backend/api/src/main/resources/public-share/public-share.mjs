@@ -1,6 +1,15 @@
 export function shareEndpoint(pathname) {
-  const match = /^\/api\/v1\/share\/([A-Za-z0-9_-]{1,64})\/view(?:\/download)?$/.exec(pathname);
-  return match ? `/api/v1/share/${match[1]}` : null;
+  if (typeof pathname !== 'string' || pathname.length > 4096 ||
+      !pathname.startsWith('/') || /[\\?#\u0000-\u0020\u007f]/.test(pathname) || pathname.includes('//')) return null;
+  try {
+    for (const part of pathname.split('/').slice(1)) {
+      const decoded = decodeURIComponent(part);
+      if (!decoded || decoded === '.' || decoded === '..' || /[/\\\u0000-\u001f\u007f]/.test(decoded) ||
+          /%[0-9a-f]{2}/i.test(decoded)) return null;
+    }
+  } catch { return null; }
+  const match = /^((?:\/[^/]+)*\/v1\/share\/[A-Za-z0-9_-]{1,64})\/view(?:\/download)?$/.exec(pathname);
+  return match ? match[1] : null;
 }
 
 export function encodeSharePassword(password) {

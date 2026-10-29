@@ -23,7 +23,7 @@ import org.koin.dsl.module
 val shareModule = module {
     single { ShareApi(get<HttpClient>()) }
     single { ShareService(get()) }
-    single<ShareRepository> { ShareRepositoryImpl(get()) }
+    single<ShareRepository> { ShareRepositoryImpl(get(), get()) }
 
     factory<GetMySharesUseCase> { GetMySharesUseCaseImpl(get()) }
     factory<GetSharedWithMeUseCase> { GetSharedWithMeUseCaseImpl(get()) }

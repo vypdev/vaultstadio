@@ -6,6 +6,7 @@
 
 package com.vaultstadio.app.data.collaboration.websocket
 
+import com.vaultstadio.app.data.network.apiWebSocketLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
@@ -105,9 +106,12 @@ class CollaborationWebSocket(
             client = HttpClient {
                 install(WebSockets)
             }
-            val wsUrl = baseUrl.replace("http://", "ws://").replace("https://", "wss://")
-            val path = "/api/v1/collaboration/$itemId/ws?sessionId=$sessionId&userId=$userId"
-            client?.webSocket(urlString = "$wsUrl$path") {
+            val wsUrl = apiWebSocketLocation(
+                baseUrl,
+                listOf("collaboration", itemId, "ws"),
+                mapOf("sessionId" to sessionId, "userId" to userId),
+            )
+            client?.webSocket(urlString = wsUrl) {
                 _connectionState.value = ConnectionState.CONNECTED
                 reconnectAttempts = 0
                 val joinMessage = CollaborationWsMessage(
