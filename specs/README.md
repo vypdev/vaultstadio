@@ -281,7 +281,7 @@ La [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md) añ
 
 ## Accepted discovery — 2026-10-29
 
-The [30-decision discovery index](discovery/2026-10-29/README.md) links the maintainer's
+The [30-decision discovery index](product-discovery-2026-10-29.md) links the maintainer's
 verbatim answers to one owning SDD per requirement, explicit configuration/defaults, blocking
 technical decisions and 90 future acceptance families. The
 [current product roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md) orders bounded

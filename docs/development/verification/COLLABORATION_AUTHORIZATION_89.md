@@ -1,6 +1,6 @@
 # Collaboration authorization — issue #89
 
-Contract: [SDD-0009§6.4](../../../specs/SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89), SDD-0003§6.6 and SDD-0004§6.5. The contract was committed before code in `0e8535f`; initial implementation source is `7bb140e`; the verified follow-up is `a29139cf86526b3843411969aeafee2174f4a7d0` (including production history lookup and test SQL observation). Verification: 2026-10-27 UTC. The [machine-readable receipt](collaboration-authorization-89.json) includes source fingerprints and full denominators; its hash-linked [case inventory](collaboration-authorization-89-cases.json) retains every collected new case. Final-head remote CI/review/adoption must be recorded separately in the linked PR.
+Contract: [SDD-0009§6.4](../../../specs/sdd-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89), SDD-0003§6.6 and SDD-0004§6.5. The contract was committed before code in `0e8535f`; initial implementation source is `7bb140e`; the verified follow-up is `a29139cf86526b3843411969aeafee2174f4a7d0` (including production history lookup and test SQL observation). Verification: 2026-10-27 UTC. The [machine-readable receipt](collaboration-authorization-89.json) includes source fingerprints and full denominators; its hash-linked [case inventory](collaboration-authorization-89-cases.json) retains every collected new case. Final-head remote CI/review/adoption must be recorded separately in the linked PR.
 
 ## Behavior and compatibility
 

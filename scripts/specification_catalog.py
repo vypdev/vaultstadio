@@ -35,8 +35,7 @@ def boundary(field, value):
     if not safe_path(value):
         return False
     if field == 'specs':
-        return (value.startswith('specs/') and value.endswith('.md')
-                and value not in {'specs/README.md', 'specs/_template.md', 'specs/CATALOG.md'})
+        return bool(re.fullmatch(r'specs/[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.md', value))
     if field == 'workflows':
         return bool(re.fullmatch(r'(?:\.github|setup)/workflows/.+\.ya?ml', value))
     return field in PATH_FIELDS

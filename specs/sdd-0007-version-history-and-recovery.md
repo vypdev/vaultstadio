@@ -142,7 +142,7 @@ Local implementation checkpoint: [verification receipt](../docs/development/veri
 
 ### 6.5 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-013"></a>
 
@@ -304,7 +304,7 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt`
 - `docs/operations/BACKUP_RESTORE.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 Review checkpoint (before follow-up implementation, 2026-10-26/27 UTC): Copilot identified missing retention blob reclamation in PR #110. VER-CONTENT-02 adds the focused contract and at least nine non-overlapping retention/reference/error cases; complete concurrency/compensation remains #109. The earlier passing CI is historical until the follow-up candidate has its own results.
@@ -315,7 +315,7 @@ Cleanup-batch follow-up contract (before code): reference liveness must ignore e
 
 Final batch-aware local checkpoint:348 affected cases pass (197core,140API,11real SQL adapters), with unchanged inputs during the complete campaign; strict checks and packaging pass. Full module coverage is 272/272lines and90/90branches. The SQL inheritance claims are disproved by the actual resolved1.0.0 bytecode and executed fault/cancellation tests (upstream#736); no catch broadening is needed. Fresh remote CI/review of the published batch-aware candidate remains required.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
 
 ## Supported publication-format supplement — #145, 2026-10-30
 

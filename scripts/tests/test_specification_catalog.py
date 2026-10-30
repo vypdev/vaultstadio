@@ -14,6 +14,7 @@ REPO = SCRIPTS.parent
 sys.path.insert(0, str(SCRIPTS))
 from specification_catalog import read_catalog, validate_catalog
 from specification_catalog_render import render_catalog
+from sdd_path_preservation import load_migration, original_owner_bytes, remap_catalog
 
 
 class CatalogControls(unittest.TestCase):
@@ -295,23 +296,27 @@ class ActualMigrationPreservation(unittest.TestCase):
         record = json.loads((REPO/'docs/development/verification/sdd-consumer-adoption-145-preservation.json').read_text())
         before = record['original_catalog']
         after = read_catalog(REPO)
+        migration = load_migration(REPO)
         self.assertEqual({k:v for k,v in before.items() if k!='capabilities'},
                          {k:v for k,v in after.items() if k!='capabilities'})
         self.assertEqual(16, len(after['capabilities']))
         for old, new in zip(before['capabilities'], after['capabilities']):
             for key in ['id', 'title', 'scope', 'owner', 'evidence', 'openDecisions']:
-                self.assertEqual(old[key], new[key])
-            self.assertEqual(old['specs'][0], new['specs'][0])
+                self.assertEqual(remap_catalog(old[key], migration), new[key])
+            self.assertEqual(remap_catalog(old['specs'][0], migration), new['specs'][0])
             self.assertEqual({'status':old['status'],'lastVerified':old['lastVerified']}, new['legacyVerification'])
             self.assertEqual({'Proposed':'proposed','As-built baseline':'as-built-baseline'}[old['status']], new['status'])
 
     def test_original_sdd_and_discovery_bytes_remain(self):
         record = json.loads((REPO/'docs/development/verification/sdd-consumer-adoption-145-preservation.json').read_text())
+        migration = load_migration(REPO)
         for name, previous in record['files'].items():
-            prefix = (REPO/name).read_bytes()[:previous['original_bytes']]
+            prefix = original_owner_bytes(REPO, name, migration)[:previous['original_bytes']]
             self.assertEqual(previous['original_sha256'], hashlib.sha256(prefix).hexdigest(), name)
         for name, digest in record['discovery_sha256'].items():
-            self.assertEqual(digest, hashlib.sha256((REPO/name).read_bytes()).hexdigest(), name)
+            content = (original_owner_bytes(REPO, name, migration) if name.endswith('/README.md')
+                       else (REPO/name).read_bytes())
+            self.assertEqual(digest, hashlib.sha256(content).hexdigest(), name)
 
 
 if __name__ == '__main__':

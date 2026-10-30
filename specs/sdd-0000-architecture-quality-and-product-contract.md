@@ -119,7 +119,7 @@ Text equivalent: Audit current repository -> classify evidence -> define owner S
 
 ### 6.4 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-001"></a>
 
@@ -289,10 +289,10 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `vypdev/copilot/specs/_template.md`
 - `vypdev/copilot/specs/architecture-quality-and-scalability-hardening.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
 
 ## Consumer SDD publication migration — issue #145, 2026-10-30
 
@@ -411,3 +411,96 @@ The added security control MUST independently recompute the historical checksum
 and prove that changing commit, path or line does not inherit this decision.
 Its evidence target is `scripts/tests/test_secret_nonsecret_decisions.py` and
 the original native scan plus complete-source scanner readback.
+
+
+## Consumer owner-path publication contract — issue #178
+
+This scoped maintenance contract is recorded before changing catalog policy or
+migration tooling. It preserves the product requirements and acceptance budgets
+above. Baseline: develop `a72344dddb8232ca496ecf0ad614d940ec05c858`, following #164.
+
+### Observed prerequisite and intended result
+
+The native #82 attempts 41108456778 and 41109113102 published no SDD or branch.
+The latter passed companion ownership analysis but the published SDK reader
+rejected an existing owner path before drafting. An independent execution of the
+unchanged installed SDK workspace adapter against the immutable baseline confirms
+that all 17 registered owner paths are rejected: 16 uppercase primary filenames
+and the nested discovery companion. Catalog acceptance and populated sections do
+not establish workspace-reader or publication acceptance.
+
+Every registered owner MUST be a real, unique, contained file with a flat
+lowercase `specs/<name>.md` path accepted by the unchanged SDK writer and reader.
+Reserved standard/template/catalog paths MUST NOT become capability owners.
+The consumer validator MUST enforce this publication boundary while retaining
+regular-file, symlink, ownership, populated-section, evidence and discovery checks.
+
+### Migration, preservation and compatibility
+
+1. Rename the 16 current primary files from `SDD-...md` to `sdd-...md` and move the
+   existing discovery owner to `specs/product-discovery-2026-10-29.md`. Capability
+   IDs, primary/companion order and logical ownership remain the same.
+2. Preserve every original requirement, decision, case ID, budget, date, nullable
+   historical value and readiness classification. Canonical path/link rebasing is
+   the only permitted transformation of pre-existing normative content. New
+   migration guidance is explicitly appended, not presented as historical intent.
+3. Keep verbatim discovery answers and dated source receipts unchanged. Historical
+   source-coordinate references, including reviewed-nonsecret decisions, retain
+   their original immutable commit/path/line semantics.
+4. Record a bijective old/new path map, immutable Git source origins and reversible
+   literal link/reference changes. Verification MUST reconstruct the original
+   baseline bytes from each moved owner and compare its Git blob identity. Existing
+   #145 preservation checks MUST still reconstruct and verify their earlier
+   prefixes; a renamed path does not waive historical preservation.
+5. Rebase the moved discovery document's relative links according to its new
+   directory and update live internal links/catalog paths. Validate canonical
+   path spelling against a case-sensitive inventory so macOS file lookup cannot
+   hide links that fail on Linux/GitHub.
+6. Publish the path/catalog/reference set together through a normal reviewed
+   contributor commit on the exact branch created by the Action. There is no
+   database, file-content, user-data, runtime or product API migration.
+
+Rollback uses a reviewed forward commit restoring the complete prior
+path/catalog/reference set. Original Git blobs, answers and source receipts remain
+available; no history rewrite, destructive reset or work deletion is required.
+Concurrent edits require reconciliation against the immutable source and final
+Action branch head before a normal push.
+
+### Architecture, verification and acceptance
+
+Publication-path policy belongs to focused repository catalog tooling; product
+domain/application/adapters and Copilot internals remain unchanged. One-time
+migration orchestration is not a new product capability. Preserve every CI
+trigger, job, runner, permission, existing threshold and major Action reference.
+Focused controls may run within the existing contract job without replacing any
+existing command.
+
+Minimum additional budget: **12 distinct path, reconstruction and preservation
+controls**, beyond the original 44 catalog controls. Cover valid flat ownership,
+uppercase/nested/reserved path denial, duplicate/colliding mappings, complete
+primary/companion inventory, original owner reconstruction, discovery index and
+verbatim answers, historical metadata and decision ownership, exact live-link
+rebasing, tamper detection, partial-migration rejection and reversible rollback.
+Use owned real temporary files for failure controls. Fixture variants and
+repeated platform executions do not multiply the budget.
+
+Independently run the actual unchanged SDK workspace reader on the committed
+candidate: all 17 registered owners MUST be read successfully and invalid-path
+controls MUST remain denied. These are one integration family with 17 owner
+observations, not 17 new product tests. Preserve the original all-17-rejected
+baseline proof. No provider, model, CLI entrypoint or native branch operation is
+needed for this reader check.
+
+Run all four unchanged contributor commands, scoped tooling coverage, actual
+native CI/security and full Copilot review, retaining original artifacts and
+failures. Product test totals remain separate from catalog/path controls. A
+successful reader check does not certify model drafting, native publication or
+filename-search behavior; #82 still requires its own Action-published SDD,
+verified branch and implementation acceptance after authorized adoption.
+
+Documentation MUST explain canonical paths, historical origins, the migration and
+rollback, reader evidence and remaining limits. Keep #165's retained setup scope,
+#105's consolidated dependency update, #111's separate activation responsibility,
+`VERIFICATION_SETUP=false`, all protections, draft #86 and unrelated local drafts.
+No SDK edit, manual managed branch, Copilot cancellation, deployment, release or
+tag is authorized. This follow-up PR needs its own explicit merge authorization.

@@ -60,7 +60,7 @@ the supported profile throughout; regeneration adds no runtime evidence.
 ## Verification and limits
 
 The pre-code contract and risk-derived 22-control floor are in
-[SDD-0000's migration appendix](../../../specs/SDD-0000-architecture-quality-and-product-contract.md#consumer-sdd-publication-migration--issue-145-2026-10-30).
+[SDD-0000's migration appendix](../../../specs/sdd-0000-architecture-quality-and-product-contract.md#consumer-sdd-publication-migration--issue-145-2026-10-30).
 Migration preservation and actual validation results will be recorded with their
 candidate source and original reports before requesting merge. A planned control
 or registered test file is not an executed test result.

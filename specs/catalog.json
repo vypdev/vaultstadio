@@ -13,8 +13,8 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0000-architecture-quality-and-product-contract.md",
-        "specs/discovery/2026-10-29/README.md"
+        "specs/sdd-0000-architecture-quality-and-product-contract.md",
+        "specs/product-discovery-2026-10-29.md"
       ],
       "evidence": [
         "docs/development/REPOSITORY_AUDIT.md",
@@ -24,7 +24,7 @@
         "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -54,7 +54,9 @@
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md",
-        "docs/development/verification/SDD_CONSUMER_ADOPTION_145.md"
+        "docs/development/verification/SDD_CONSUMER_ADOPTION_145.md",
+        "docs/development/verification/sdd-owner-path-migration-178.json",
+        "docs/development/verification/SDD_OWNER_PATHS_178.md"
       ],
       "companionRoles": {
         "specs/discovery/2026-10-29/README.md": "Accepted discovery provenance index; individual PD requirement ownership remains with the original primary SDDs."
@@ -68,7 +70,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0001-standalone-projects-and-clean-architecture.md"
+        "specs/sdd-0001-standalone-projects-and-clean-architecture.md"
       ],
       "evidence": [
         "backend/settings.gradle.kts",
@@ -119,7 +121,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0002-public-api-and-protocol-contract.md"
+        "specs/sdd-0002-public-api-and-protocol-contract.md"
       ],
       "evidence": [
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Routing.kt",
@@ -175,7 +177,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0003-identity-authentication-and-authorization.md"
+        "specs/sdd-0003-identity-authentication-and-authorization.md"
       ],
       "evidence": [
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Security.kt",
@@ -186,7 +188,7 @@
         "docs/operations/SECURITY.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -225,7 +227,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0004-storage-domain-and-data-lifecycle.md"
+        "specs/sdd-0004-storage-domain-and-data-lifecycle.md"
       ],
       "evidence": [
         "backend/domain/storage",
@@ -244,7 +246,7 @@
         "docs/development/verification/storage-selection-91-coverage.json",
         "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
         "docs/development/verification/storage-selection-91-review.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -290,7 +292,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0005-upload-and-transfer-protocols.md"
+        "specs/sdd-0005-upload-and-transfer-protocols.md"
       ],
       "evidence": [
         "backend/application/chunkedupload",
@@ -336,7 +338,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0006-sharing-and-permissions.md"
+        "specs/sdd-0006-sharing-and-permissions.md"
       ],
       "evidence": [
         "backend/domain/share",
@@ -353,7 +355,7 @@
         "docs/development/verification/public-share-access-90.json",
         "docs/development/verification/public-share-access-90-cases.json",
         "docs/development/verification/public-share-access-90-coverage.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -397,7 +399,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0007-version-history-and-recovery.md"
+        "specs/sdd-0007-version-history-and-recovery.md"
       ],
       "evidence": [
         "backend/domain/version",
@@ -408,7 +410,7 @@
         "docs/operations/BACKUP_RESTORE.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -448,7 +450,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0008-device-sync-and-conflicts.md"
+        "specs/sdd-0008-device-sync-and-conflicts.md"
       ],
       "evidence": [
         "backend/domain/sync",
@@ -462,7 +464,7 @@
         "frontend/feature/sync",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -499,7 +501,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0009-real-time-collaboration.md"
+        "specs/sdd-0009-real-time-collaboration.md"
       ],
       "evidence": [
         "backend/domain/collaboration",
@@ -551,7 +553,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0010-federation-and-trust.md"
+        "specs/sdd-0010-federation-and-trust.md"
       ],
       "evidence": [
         "backend/domain/federation",
@@ -562,7 +564,7 @@
         "docs/operations/SECURITY.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -601,7 +603,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0011-plugin-runtime-and-extensibility.md"
+        "specs/sdd-0011-plugin-runtime-and-extensibility.md"
       ],
       "evidence": [
         "backend/plugins-api",
@@ -651,7 +653,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0012-metadata-search-and-ai.md"
+        "specs/sdd-0012-metadata-search-and-ai.md"
       ],
       "evidence": [
         "backend/domain/metadata",
@@ -670,7 +672,7 @@
         "docs/development/verification/storage-selection-91-coverage.json",
         "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
         "docs/development/verification/storage-selection-91-review.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -715,7 +717,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0013-frontend-kmp-and-platform-architecture.md"
+        "specs/sdd-0013-frontend-kmp-and-platform-architecture.md"
       ],
       "evidence": [
         "frontend/settings.gradle.kts",
@@ -728,7 +730,7 @@
         "docs/frontend/FRONTEND_TESTING.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -768,7 +770,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0014-deployment-operations-and-release.md"
+        "specs/sdd-0014-deployment-operations-and-release.md"
       ],
       "evidence": [
         ".github/workflows/ci.yml",
@@ -785,7 +787,7 @@
         "docs/operations/BACKUP_RESTORE.md",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
@@ -831,7 +833,7 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0015-security-privacy-and-threat-model.md"
+        "specs/sdd-0015-security-privacy-and-threat-model.md"
       ],
       "evidence": [
         "docs/operations/SECURITY.md",
@@ -844,7 +846,7 @@
         ".github/workflows/security.yml",
         "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
         "docs/development/audits/2026-10-25/verification-summary.json",
-        "specs/discovery/2026-10-29/README.md",
+        "specs/product-discovery-2026-10-29.md",
         "specs/discovery/2026-10-29/answers.json",
         "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],

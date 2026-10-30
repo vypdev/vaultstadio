@@ -1,7 +1,7 @@
 # Product roadmap from the 30 accepted decisions
 
 This is the current planning overlay for [issue #124](https://github.com/vypdev/vaultstadio/issues/124),
-the [discovery index](../../specs/discovery/2026-10-29/README.md) and the existing capability SDDs.
+the [discovery index](../../specs/product-discovery-2026-10-29.md) and the existing capability SDDs.
 It extends the [original audit roadmap](AUDIT_ROADMAP_2026-10-25.md) without replacing historical
 evidence. A milestone is a dependency group of bounded issues/PRs, not one large implementation PR.
 Numbers indicate planning order; independent work need not wait for unrelated optional features.

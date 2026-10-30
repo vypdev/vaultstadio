@@ -829,7 +829,7 @@ Authorization: Bearer <token>
 
 ## Share Endpoints
 
-Contract: [SDD-0006 revision R05](../../specs/SDD-0006-sharing-and-permissions.md#21-revision-r05--public-file-access-90-pre-implementation-contract).
+Contract: [SDD-0006 revision R05](../../specs/sdd-0006-sharing-and-permissions.md#21-revision-r05--public-file-access-90-pre-implementation-contract).
 Public links grant metadata and an admitted download of one active file; they never authenticate
 an account or grant storage listing, mutation, version history or collaboration.
 

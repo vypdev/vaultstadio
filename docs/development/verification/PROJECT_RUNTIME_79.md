@@ -5,7 +5,7 @@ Fixture tests and a native preflight do not certify the official Linux verifier.
 
 ## Contract and source boundary
 
-[SDD-0014 §6.4](../../../specs/SDD-0014-deployment-operations-and-release.md#64-project-verification-runtime-repair--issue-79)
+[SDD-0014 §6.4](../../../specs/sdd-0014-deployment-operations-and-release.md#64-project-verification-runtime-repair--issue-79)
 defines the VFY runtime, persisted-fixture and browser-sandbox requirements.
 The project owns `.github/actions/copilot-verification-setup/` and its assets.
 Copilot implementation, generated workflows, protection, lifecycle and configured

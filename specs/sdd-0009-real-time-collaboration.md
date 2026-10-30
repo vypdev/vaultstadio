@@ -176,7 +176,7 @@ WebSocket message schemas, operation IDs, sequence/ack, and close reasons are ve
 
 ### Discovery implementation boundary (#124)
 
-[PD-017/018](SDD-0006-sharing-and-permissions.md#pd-017) own future public-link capabilities/identity policy, not implicit collaboration grants. #112 still owns the real client/server collaboration journey. Add explicit participant/content authority, revocation and convergence evidence before widening the existing owner-only baseline; conflict policy and immutable history remain owned by SDD-0008 and SDD-0007.
+[PD-017/018](sdd-0006-sharing-and-permissions.md#pd-017) own future public-link capabilities/identity policy, not implicit collaboration grants. #112 still owns the real client/server collaboration journey. Add explicit participant/content authority, revocation and convergence evidence before widening the existing owner-only baseline; conflict policy and immutable history remain owned by SDD-0008 and SDD-0007.
 
 ## 9. UI/UX and content contract
 
@@ -289,7 +289,7 @@ Freeze message/schema inventory -> test OT/state semantics -> test WebSocket lif
 - `backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationOT.kt`
 - `frontend/feature/collaboration`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 ### R01c local verification checkpoint — 2026-10-27

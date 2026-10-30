@@ -1,6 +1,6 @@
 # Secret scanning verification — issue 87
 
-Contract: [SDD-0014 §6.5](../../../specs/SDD-0014-deployment-operations-and-release.md), issue [87](https://github.com/vypdev/vaultstadio/issues/87).
+Contract: [SDD-0014 §6.5](../../../specs/sdd-0014-deployment-operations-and-release.md), issue [87](https://github.com/vypdev/vaultstadio/issues/87).
 
 ## Observed failure
 

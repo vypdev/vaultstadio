@@ -121,7 +121,7 @@ Text equivalent: Owner selects item -> chooses recipient/permission/expiry -> sh
 
 ### 6.4 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-017"></a>
 
@@ -290,7 +290,7 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareRoutes.kt`
 - `frontend/feature/shares`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 
@@ -449,7 +449,7 @@ the existing application contract job for these bounded tests; add no workflow o
 
 [Source-bound R05 verification](../docs/development/verification/PUBLIC_SHARE_ACCESS_90.md):2981backend,1316desktop and1192browser cases, all without failures/errors/skips;241 new backend cases, with11 migrated legacy cases excluded from that count. Pure policy covers28/28lines and70/70branches; orchestration36/36lines and19/20branches. Full denominators, native download hashes,42-request real HTTP campaign, five real Nginx tests, observed failures and remaining product/rollout scope are recorded in the linked receipt. No portfolio-wide100% or master adoption is claimed.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
 
 Issue #116 preserves this sharing contract while fixing proxy-prefix public assets/forms and client-generated URLs; the pre-code mechanics and API116-21/23/26–29/35 acceptance are owned by SDD-0002/0013/0014 and [the risk inventory](../docs/development/verification/api-origin-116-plan.json). No new public-write, internal-recipient or history grant is introduced.
 

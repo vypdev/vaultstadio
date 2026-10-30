@@ -186,7 +186,7 @@ The default frontend verification MUST execute every configured desktop JVM and 
 
 At the pre-implementation source `816e6732b7fd605a2852745420ad7d2c75bf1474`, configuration-only inventory declares 52 desktop and 52 Wasm browser test tasks, plus 53 iOS simulator and three Android flavor unit tasks. These are declared tasks, not executed case counts. Default JVM/Wasm execution MUST NOT certify Android/iOS compilation, device integration or whole-app readiness; their actual verification remains separately stated.
 
-R04-FAIL-01 requires original browser/compiler/runtime diagnostics and final nonzero status after any failed applicable suite, including asynchronous browser assertions. Independent suites may continue collecting evidence, but the final outcome MUST remain failed. R04-COV-01/02 require all current JVM main compilation classes/source sets against matching cross-module execution data, including untested modules. Wasm case counts are not JVM line/branch coverage. Preserve the existing serializer, input helper and form coverage input/gate contracts. The owning freshness, counting, CI and risk-derived test budget are [SDD-0014 §6.8 and §14](SDD-0014-deployment-operations-and-release.md#68-complete-verification-and-truthful-evidence--issue-84).
+R04-FAIL-01 requires original browser/compiler/runtime diagnostics and final nonzero status after any failed applicable suite, including asynchronous browser assertions. Independent suites may continue collecting evidence, but the final outcome MUST remain failed. R04-COV-01/02 require all current JVM main compilation classes/source sets against matching cross-module execution data, including untested modules. Wasm case counts are not JVM line/branch coverage. Preserve the existing serializer, input helper and form coverage input/gate contracts. The owning freshness, counting, CI and risk-derived test budget are [SDD-0014 §6.8 and §14](sdd-0014-deployment-operations-and-release.md#68-complete-verification-and-truthful-evidence--issue-84).
 
 R04 verification infrastructure was adopted on develop through PR #118; its local, final CI and post-merge evidence are recorded in [the verification report](../docs/development/verification/COMPLETE_VERIFICATION_84.md). Current critical behavioral coverage continues in [issue #119](../docs/development/verification/CRITICAL_COVERAGE_119.md), with its own final-ref CI/review/adoption steps. JVM, Wasm and Python populations, mobile limitations and whole-platform readiness remain separate.
 
@@ -322,7 +322,7 @@ Add at least12 native risk families: real basic binary/Unicode/empty reads, exac
 
 ### 6.9 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-019"></a>
 
@@ -525,10 +525,10 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `frontend/composeApp/src/main/kotlin/com/vaultstadio/app/VaultStadioRoot.kt`
 - `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
 
 
 Issue #116 clipboard refinement is specified before code in SDD-0006 §21.11. Clipboard IO stays in
