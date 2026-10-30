@@ -69,6 +69,7 @@ def remap_catalog(value, record):
 def check_owner_links(text, relative, inventory, record):
     mapping = {row['old']: row['new'] for row in record['owners']}
     canonical = set(mapping.values())
+    owner_casefold = {path.casefold() for path in (*mapping, *canonical)}
     discovery = mapping['specs/discovery/2026-10-29/README.md']
     patterns = [r'\]\((?P<target><[^>]+>|[^)\s]+)',
                 r'(?m)^\s*\[[^\]]+\]:\s*(?P<target><[^>]+>|\S+)']
@@ -81,8 +82,10 @@ def check_owner_links(text, relative, inventory, record):
             resolved = posixpath.normpath(posixpath.join(posixpath.dirname(relative), unquote(parts.path)))
             if resolved in mapping:
                 raise ValueError('Live link retains a historical owner path: ' + resolved)
-            if (resolved in canonical or relative == discovery) and resolved not in inventory:
-                raise ValueError('Live owner/provenance link does not match the exact file inventory: ' + resolved)
+            if resolved.casefold() in owner_casefold and (resolved not in canonical or resolved not in inventory):
+                raise ValueError('Live owner link does not match the exact file inventory: ' + resolved)
+            if relative == discovery and resolved not in inventory:
+                raise ValueError('Live provenance link does not match the exact file inventory: ' + resolved)
 
 
 def require_catalog_preservation(current, record):

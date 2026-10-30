@@ -34,8 +34,8 @@ objects reconstructs all 17 owners and 13 other documents exactly; the managed
 catalog view reproduces from both the original and mapped catalogs. Only the
 explicit governance migration contract and discovery location note are appended.
 
-The original 44 catalog controls remain and 19 additional path/preservation
-controls pass: **63 tests, zero failures/errors/skips**. They cover strict path
+The original 44 catalog controls remain and 22 additional path/preservation
+controls pass: **66 tests, zero failures/errors/skips**. They cover strict path
 boundaries, complete metadata/evidence, original owner reconstruction, accepted
 discovery and verbatim answers, primary ordering, colliding maps, text/reference
 tampering, exact-case live links, missing-owner partial migration and rollback in
@@ -81,3 +81,16 @@ After explicitly authorized adoption, retry the same #82 with its confirmed
 filename/prefix/case/accent/ñ decisions and full planned acceptance matrix. No
 filename-search implementation or whole-portfolio readiness is claimed here.
 #165 retains its separate original documentation/setup acceptance.
+
+
+## Native review: exact-case owner links
+
+Copilot review of candidate `b1339309c2933c3bcacd2284936f48db1fa8a0ae`
+identified mixed-case owner links that bypassed the exact-path classification.
+Three added regression controls fail against that original implementation and
+pass after recognizing both canonical and historical owner spellings with
+case-insensitive comparison, then requiring exact canonical inventory membership.
+The controls cover all 16 mixed-case primaries, percent-encoded reference links
+and mixed-case nested historical discovery links. Exact canonical live links and
+remote immutable historical links continue through the existing full inventory
+audit. The original 63 controls remain; the focused total is now 66.

@@ -1791,9 +1791,9 @@
   "scoped_verification": {
     "captured_at": "2026-10-30T19:06:38.470567+00:00",
     "focused_controls": {
-      "executed": 63,
+      "executed": 66,
       "original_controls_retained": 44,
-      "additional_controls": 19,
+      "additional_controls": 22,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -2043,6 +2043,14 @@
       "historical_receipts_answers_and_reviewed_nonsecret_coordinates_unchanged": true
     },
     "limits": "Original contributor-command and native CI artifacts are separate source-bound evidence. Scoped reader/tooling results do not establish model drafting, native publication, filename-search correctness or whole-portfolio readiness.",
-    "additive_preservation": "Existing metadata, evidence, original relative order and primary ownership remain required. Supported additive evidence, companions and distinct future capabilities still require normal catalog validation. Exact equality of this migration is independently checked against the immutable original Git catalog plus the reviewed path map and two documentation entries."
+    "additive_preservation": "Existing metadata, evidence, original relative order and primary ownership remain required. Supported additive evidence, companions and distinct future capabilities still require normal catalog validation. Exact equality of this migration is independently checked against the immutable original Git catalog plus the reviewed path map and two documentation entries.",
+    "review_regression": {
+      "review_comment": 4427812641,
+      "finding": "case-variant-owner-links",
+      "original_source": "b1339309c2933c3bcacd2284936f48db1fa8a0ae",
+      "additional_controls": 3,
+      "negative_control": "All three new controls fail before the fix; canonical exact-case tracked links still pass.",
+      "behavior": "Known canonical and historical owner paths are recognized case-insensitively, then required to equal an exact canonical tracked path. Encoded reference links and mixed-case nested historical links are covered. Remote immutable source links remain historical evidence."
+    }
   }
 }

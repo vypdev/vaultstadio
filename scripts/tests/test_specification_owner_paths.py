@@ -110,6 +110,26 @@ class OwnerPathMigrationControls(unittest.TestCase):
             check_owner_links('[contract](' + row['old'] + ')', 'README.md',
                               {row['new']}, self.record)
 
+    def test_mixed_case_primary_owner_links_are_denied(self):
+        for row in self.record['owners']:
+            if not row['primary']:
+                continue
+            wrong = row['new'].replace('/sdd-', '/Sdd-', 1)
+            with self.subTest(path=wrong), self.assertRaisesRegex(ValueError, 'exact file inventory'):
+                check_owner_links('[contract](' + wrong + ')', 'README.md',
+                                  {row['new']}, self.record)
+
+    def test_encoded_reference_owner_casing_is_denied(self):
+        with self.assertRaisesRegex(ValueError, 'exact file inventory'):
+            check_owner_links('[contract]: <../specs/%53dd-0012-metadata-search-and-ai.md#scope>',
+                              'docs/example.md', {'specs/sdd-0012-metadata-search-and-ai.md'},
+                              self.record)
+
+    def test_mixed_case_nested_historical_owner_is_denied(self):
+        with self.assertRaisesRegex(ValueError, 'exact file inventory'):
+            check_owner_links('[discovery](Specs/Discovery/2026-10-29/Readme.md)',
+                              'README.md', {'specs/product-discovery-2026-10-29.md'}, self.record)
+
     def test_partial_migration_missing_owner_is_rejected(self):
         root, row, target = self.owned_fixture()
         target.unlink()  # Owned disposable fixture only.
