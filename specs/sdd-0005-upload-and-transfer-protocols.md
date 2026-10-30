@@ -222,7 +222,7 @@ Each protocol has a contract test suite and a shared semantic transfer result; n
 
 ### Discovery implementation boundary (#124)
 
-[PD-016](SDD-0000-architecture-quality-and-product-contract.md#pd-016) owns the unverified 100 GB target; [PD-030](SDD-0004-storage-domain-and-data-lifecycle.md#pd-030) owns placement. Transfer work needs bounded streaming/resume, quota reservations, authorization and durable completion before it can satisfy either. Current bounded UI selection/transfer limits remain in force until separately reviewed migration and real size campaigns.
+[PD-016](sdd-0000-architecture-quality-and-product-contract.md#pd-016) owns the unverified 100 GB target; [PD-030](sdd-0004-storage-domain-and-data-lifecycle.md#pd-030) owns placement. Transfer work needs bounded streaming/resume, quota reservations, authorization and durable completion before it can satisfy either. Current bounded UI selection/transfer limits remain in force until separately reviewed migration and real size campaigns.
 
 ## 9. UI/UX and content contract
 
@@ -319,7 +319,7 @@ Inventory transfer states -> define shared semantic contract -> test chunked/fol
 - `backend/core/common/src/main/kotlin/com/vaultstadio/core/domain/service/MultipartUploadManager.kt`
 - `backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/WebDAVRoutes.kt`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 ## Supported publication-format supplement — #145, 2026-10-30

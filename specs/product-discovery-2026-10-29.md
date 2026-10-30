@@ -2,7 +2,7 @@
 
 [Issue #124](https://github.com/vypdev/vaultstadio/issues/124) reconciles the maintainer's
 30 answers into the existing SDD portfolio before the focused #116 implementation resumes.
-The [verbatim Spanish answers](answers.json) preserve their order and source keys. The
+The [verbatim Spanish answers](discovery/2026-10-29/answers.json) preserve their order and source keys. The
 recorded source snapshot hash identifies the original retained local questionnaire, not the
 different byte representation of this normalized registry.
 
@@ -26,36 +26,36 @@ concurrency, cryptographic and platform risks before becoming ready for implemen
 
 | Decision | Owning contract | Planned acceptance | Roadmap |
 |---|---|---|---|
-| PD-001 Primary installation and views | [SDD-0000](../../SDD-0000-architecture-quality-and-product-contract.md#pd-001) | PD-001-P/N/F | M0 |
-| PD-002 Two server models | [SDD-0010](../../SDD-0010-federation-and-trust.md#pd-002) | PD-002-P/N/F | M4 |
-| PD-003 Administrative enrollment | [SDD-0010](../../SDD-0010-federation-and-trust.md#pd-003) | PD-003-P/N/F | M4 |
-| PD-004 Personal/shared spaces | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-004) | PD-004-P/N/F | M2 |
-| PD-005 Server-processable/E2EE modes | [SDD-0015](../../SDD-0015-security-privacy-and-threat-model.md#pd-005) | PD-005-P/N/F | M2 |
-| PD-006 Mode chosen per space | [SDD-0015](../../SDD-0015-security-privacy-and-threat-model.md#pd-006) | PD-006-P/N/F | M2 |
-| PD-007 Owner/trusted recovery | [SDD-0015](../../SDD-0015-security-privacy-and-threat-model.md#pd-007) | PD-007-P/N/F | M2 |
-| PD-008 No administrator content bypass | [SDD-0003](../../SDD-0003-identity-authentication-and-authorization.md#pd-008) | PD-008-P/N/F | M1 |
-| PD-009 On-demand/offline sync | [SDD-0008](../../SDD-0008-device-sync-and-conflicts.md#pd-009) | PD-009-P/N/F | M3 |
-| PD-010 Three conflict strategies | [SDD-0008](../../SDD-0008-device-sync-and-conflicts.md#pd-010) | PD-010-P/N/F | M3 |
-| PD-011 Conflict inheritance | [SDD-0008](../../SDD-0008-device-sync-and-conflicts.md#pd-011) | PD-011-P/N/F | M3 |
-| PD-012 Trash retention | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-012) | PD-012-P/N/F | M2 |
-| PD-013 Version retention | [SDD-0007](../../SDD-0007-version-history-and-recovery.md#pd-013) | PD-013-P/N/F | M2 |
-| PD-014 Quota categories | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-014) | PD-014-P/N/F | M2 |
-| PD-015 Quota exhaustion | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-015) | PD-015-P/N/F | M2 |
-| PD-016 Scale target | [SDD-0000](../../SDD-0000-architecture-quality-and-product-contract.md#pd-016) | PD-016-P/N/F | M8 |
-| PD-017 Link capabilities | [SDD-0006](../../SDD-0006-sharing-and-permissions.md#pd-017) | PD-017-P/N/F | M5 |
-| PD-018 Identity for public writes | [SDD-0006](../../SDD-0006-sharing-and-permissions.md#pd-018) | PD-018-P/N/F | M5 |
-| PD-019 Platform parity | [SDD-0013](../../SDD-0013-frontend-kmp-and-platform-architecture.md#pd-019) | PD-019-P/N/F | M8 |
-| PD-020 Feasible redundancy | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-020) | PD-020-P/N/F | M4 |
-| PD-021 Disk/server failure domains | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-021) | PD-021-P/N/F | M4 |
-| PD-022 Degraded operation | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-022) | PD-022-P/N/F | M4 |
-| PD-023 Primary HA | [SDD-0014](../../SDD-0014-deployment-operations-and-release.md#pd-023) | PD-023-P/N/F | M7 |
-| PD-024 External processing consent | [SDD-0012](../../SDD-0012-metadata-search-and-ai.md#pd-024) | PD-024-P/N/F | M6 |
-| PD-025 Invitation-first onboarding | [SDD-0003](../../SDD-0003-identity-authentication-and-authorization.md#pd-025) | PD-025-P/N/F | M1 |
-| PD-026 Local and SSO identity | [SDD-0003](../../SDD-0003-identity-authentication-and-authorization.md#pd-026) | PD-026-P/N/F | M1 |
-| PD-027 MFA defaults | [SDD-0003](../../SDD-0003-identity-authentication-and-authorization.md#pd-027) | PD-027-P/N/F | M1 |
-| PD-028 Automatic backups/restore | [SDD-0014](../../SDD-0014-deployment-operations-and-release.md#pd-028) | PD-028-P/N/F | M7 |
-| PD-029 Content/OCR/semantic search | [SDD-0012](../../SDD-0012-metadata-search-and-ai.md#pd-029) | PD-029-P/N/F | M6 |
-| PD-030 Placement/user choice | [SDD-0004](../../SDD-0004-storage-domain-and-data-lifecycle.md#pd-030) | PD-030-P/N/F | M4 |
+| PD-001 Primary installation and views | [SDD-0000](sdd-0000-architecture-quality-and-product-contract.md#pd-001) | PD-001-P/N/F | M0 |
+| PD-002 Two server models | [SDD-0010](sdd-0010-federation-and-trust.md#pd-002) | PD-002-P/N/F | M4 |
+| PD-003 Administrative enrollment | [SDD-0010](sdd-0010-federation-and-trust.md#pd-003) | PD-003-P/N/F | M4 |
+| PD-004 Personal/shared spaces | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-004) | PD-004-P/N/F | M2 |
+| PD-005 Server-processable/E2EE modes | [SDD-0015](sdd-0015-security-privacy-and-threat-model.md#pd-005) | PD-005-P/N/F | M2 |
+| PD-006 Mode chosen per space | [SDD-0015](sdd-0015-security-privacy-and-threat-model.md#pd-006) | PD-006-P/N/F | M2 |
+| PD-007 Owner/trusted recovery | [SDD-0015](sdd-0015-security-privacy-and-threat-model.md#pd-007) | PD-007-P/N/F | M2 |
+| PD-008 No administrator content bypass | [SDD-0003](sdd-0003-identity-authentication-and-authorization.md#pd-008) | PD-008-P/N/F | M1 |
+| PD-009 On-demand/offline sync | [SDD-0008](sdd-0008-device-sync-and-conflicts.md#pd-009) | PD-009-P/N/F | M3 |
+| PD-010 Three conflict strategies | [SDD-0008](sdd-0008-device-sync-and-conflicts.md#pd-010) | PD-010-P/N/F | M3 |
+| PD-011 Conflict inheritance | [SDD-0008](sdd-0008-device-sync-and-conflicts.md#pd-011) | PD-011-P/N/F | M3 |
+| PD-012 Trash retention | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-012) | PD-012-P/N/F | M2 |
+| PD-013 Version retention | [SDD-0007](sdd-0007-version-history-and-recovery.md#pd-013) | PD-013-P/N/F | M2 |
+| PD-014 Quota categories | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-014) | PD-014-P/N/F | M2 |
+| PD-015 Quota exhaustion | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-015) | PD-015-P/N/F | M2 |
+| PD-016 Scale target | [SDD-0000](sdd-0000-architecture-quality-and-product-contract.md#pd-016) | PD-016-P/N/F | M8 |
+| PD-017 Link capabilities | [SDD-0006](sdd-0006-sharing-and-permissions.md#pd-017) | PD-017-P/N/F | M5 |
+| PD-018 Identity for public writes | [SDD-0006](sdd-0006-sharing-and-permissions.md#pd-018) | PD-018-P/N/F | M5 |
+| PD-019 Platform parity | [SDD-0013](sdd-0013-frontend-kmp-and-platform-architecture.md#pd-019) | PD-019-P/N/F | M8 |
+| PD-020 Feasible redundancy | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-020) | PD-020-P/N/F | M4 |
+| PD-021 Disk/server failure domains | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-021) | PD-021-P/N/F | M4 |
+| PD-022 Degraded operation | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-022) | PD-022-P/N/F | M4 |
+| PD-023 Primary HA | [SDD-0014](sdd-0014-deployment-operations-and-release.md#pd-023) | PD-023-P/N/F | M7 |
+| PD-024 External processing consent | [SDD-0012](sdd-0012-metadata-search-and-ai.md#pd-024) | PD-024-P/N/F | M6 |
+| PD-025 Invitation-first onboarding | [SDD-0003](sdd-0003-identity-authentication-and-authorization.md#pd-025) | PD-025-P/N/F | M1 |
+| PD-026 Local and SSO identity | [SDD-0003](sdd-0003-identity-authentication-and-authorization.md#pd-026) | PD-026-P/N/F | M1 |
+| PD-027 MFA defaults | [SDD-0003](sdd-0003-identity-authentication-and-authorization.md#pd-027) | PD-027-P/N/F | M1 |
+| PD-028 Automatic backups/restore | [SDD-0014](sdd-0014-deployment-operations-and-release.md#pd-028) | PD-028-P/N/F | M7 |
+| PD-029 Content/OCR/semantic search | [SDD-0012](sdd-0012-metadata-search-and-ai.md#pd-029) | PD-029-P/N/F | M6 |
+| PD-030 Placement/user choice | [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#pd-030) | PD-030-P/N/F | M4 |
 
 ## Interpretation and interacting policies
 
@@ -91,8 +91,16 @@ concurrency, cryptographic and platform risks before becoming ready for implemen
 
 ## Next work and unresolved decisions
 
-The [ordered roadmap](../../../docs/development/PRODUCT_ROADMAP_2026-10-29.md) preserves the
+The [ordered roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md) preserves the
 existing focused issues and describes implementation/evidence dependencies. Technical choices
 are recorded with their owning requirement rather than silently resolved here. Future issues
 must expand the scenarios and resolve their own blocking decisions before implementation;
 there is no need to reopen all 30 product questions or launch all milestones at once.
+
+
+## Canonical owner-path migration — issue #178
+
+This discovery record moved to the flat canonical owner path required by the
+published SDD reader. The provenance directory referenced above still retains
+the unchanged verbatim answers. Accepted requirements, logical ownership,
+90 planned families and implementation/readiness limits remain unchanged.

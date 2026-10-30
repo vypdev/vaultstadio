@@ -120,7 +120,7 @@ Text equivalent: User registers/logs in -> receives token pair -> calls protecte
 
 ### 6.4 Storage resource authorization — issue #73
 
-AUTH-STORAGE-01: authenticated identity MUST NOT imply permission on a different owner's item, parent or ancestor. PRIVATE/PUBLIC/SHARED are metadata, not an implicit write or ordinary-read grant. The owning lifecycle contract and per-operation acceptance matrix are STO-AUTH-01–08 in [SDD-0004](SDD-0004-storage-domain-and-data-lifecycle.md#64-ownership-correction-contract--issue-73).
+AUTH-STORAGE-01: authenticated identity MUST NOT imply permission on a different owner's item, parent or ancestor. PRIVATE/PUBLIC/SHARED are metadata, not an implicit write or ordinary-read grant. The owning lifecycle contract and per-operation acceptance matrix are STO-AUTH-01–08 in [SDD-0004](sdd-0004-storage-domain-and-data-lifecycle.md#64-ownership-correction-contract--issue-73).
 
 AUTH-STORAGE-02: authorization MUST run in transport-independent policy before metadata/content effects. HTTP maps the domain error to 403 without exposing owner names or ancestor paths. Tests MUST assert zero forbidden effects and use actual production routing with two distinct actors and the migrated PostgreSQL schema.
 
@@ -128,7 +128,7 @@ This does not change token validation, administrator roles or the separate publi
 
 ### 6.5 Historical file authorization — issue #74
 
-R01b contract, proposed before implementation on 2026-10-26: apply the owning [version-history contract](SDD-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) before version metadata, names, counts, keys, bytes or effects. Authentication identifies the caller; every application operation still requires its explicit actor and current canonical item-owner decision. PUBLIC/SHARED, download links, sharedWithUsers, version createdBy and a nonowner ADMIN role do not confer version-history or mutation grants. Do not retain an actor-less/internal default that restores the bypass.
+R01b contract, proposed before implementation on 2026-10-26: apply the owning [version-history contract](sdd-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) before version metadata, names, counts, keys, bytes or effects. Authentication identifies the caller; every application operation still requires its explicit actor and current canonical item-owner decision. PUBLIC/SHARED, download links, sharedWithUsers, version createdBy and a nonowner ADMIN role do not confer version-history or mutation grants. Do not retain an actor-less/internal default that restores the bypass.
 
 Version-ID-only operations use the minimal item-scope semantic port before the owner decision; complete version lookup follows authorization and must bind to the authorized item and requested identity. An anonymous request stops at authentication. A cross-user rejection preserves all rows/content/events and exposes no resource metadata. Typed repository/provider failures remain distinct from forbidden/not-found outcomes at HTTP mapping.
 
@@ -136,7 +136,7 @@ Traceability: VER-OWNER-01, VER-GRANT-01, VER-SCOPE-01, VER-BIND-01, VER-EFFECTS
 
 ### 6.6 Collaboration actor and resource authorization — issue #89
 
-Accepted pre-code contract, locally verified in7bb140e: apply [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89) to every REST/socket/application collaboration surface. Current canonical active-file ownership is the available authority; unguarded membership, public/shared metadata, download shares and a nonowner administrator role do not grant editing or state access. Scope ID-only references minimally before loading full state, bind path/session/participant/comment identities, and keep global presence/maintenance self-scoped. Every public application call has an explicit actor; socket checks precede registration/effects and each delivery. The owner retains real positive behavior, including multiple independently bound connections.
+Accepted pre-code contract, locally verified in7bb140e: apply [SDD-0009§6.4](sdd-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89) to every REST/socket/application collaboration surface. Current canonical active-file ownership is the available authority; unguarded membership, public/shared metadata, download shares and a nonowner administrator role do not grant editing or state access. Scope ID-only references minimally before loading full state, bind path/session/participant/comment identities, and keep global presence/maintenance self-scoped. Every public application call has an explicit actor; socket checks precede registration/effects and each delivery. The owner retains real positive behavior, including multiple independently bound connections.
 
 The absence of durable nonowner collaboration grants is explicit product debt, not an invented grant or a claim that the whole feature is complete. Numeric inventory391 and migration/compatibility limits belong to the owning SDD. No authentication mechanism, Copilot contract or protection is changed.
 
@@ -152,7 +152,7 @@ AUTH119-11/12 includes concurrent reuse: one refresh credential may commit at mo
 
 ### 6.8 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-008"></a>
 
@@ -349,12 +349,12 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `backend/api/src/main/kotlin/com/vaultstadio/api/routes/auth/AuthRoutes.kt`
 - `docs/operations/SECURITY.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 R01c evidence: [collaboration verification](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md),485 new cases within the2740-case backend gate. Socket authorization also binds the expected item of an open connection. The client/editor journey remains#112; final-head CI/review/adoption are separate.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
 
 ## Supported publication-format supplement — #145, 2026-10-30
 

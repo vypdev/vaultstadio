@@ -148,11 +148,11 @@ No permission switch is configurable. Token-authorized public downloads keep the
 
 ### 6.5 Collaboration access to canonical files — issue #89
 
-R01c reuses StorageAccessPolicy.requireOwner before collaboration metadata or effects, then rejects non-FILE/trashed canonical items. A storage download grant does not confer historical or collaboration permission. Document and comment writes recheck authority under item-before-document/comment locks; snapshot saves reject intervening changes. Membership admission/leave/update rechecks the current item owner under the canonical item/session lock, while presence references are validated against their canonical resources. The complete scope, risk inventory and explicit missing cold-start/canonical-commit journeys are in [SDD-0009§6.4](SDD-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89); ordinary storage semantics and the reviewed R01 storage deletion boundary remain unchanged. Local verification passes the2740-case backend gate; [evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md) separates snapshot persistence from canonical commits, which remain#112/#109. Remote CI/review/adoption are pending.
+R01c reuses StorageAccessPolicy.requireOwner before collaboration metadata or effects, then rejects non-FILE/trashed canonical items. A storage download grant does not confer historical or collaboration permission. Document and comment writes recheck authority under item-before-document/comment locks; snapshot saves reject intervening changes. Membership admission/leave/update rechecks the current item owner under the canonical item/session lock, while presence references are validated against their canonical resources. The complete scope, risk inventory and explicit missing cold-start/canonical-commit journeys are in [SDD-0009§6.4](sdd-0009-real-time-collaboration.md#64-collaboration-authorization-repair--issue-89); ordinary storage semantics and the reviewed R01 storage deletion boundary remain unchanged. Local verification passes the2740-case backend gate; [evidence](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md) separates snapshot persistence from canonical commits, which remain#112/#109. Remote CI/review/adoption are pending.
 
 ### 6.6 Storage selection validation — issue #91
 
-Domain owns validated REST selections, with limit1..1000/offset0..Int.MAX_VALUE; core checks before any parent/storage query. Preserve ownership/parent/trash constraints and typed failures. SQL adds id ASC after the requested primary and existing TYPE/name ordering. Shared PagedResult computes exact Long metadata without overflow; raw protocol query/limit<=0 compatibility is retained. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
+Domain owns validated REST selections, with limit1..1000/offset0..Int.MAX_VALUE; core checks before any parent/storage query. Preserve ownership/parent/trash constraints and typed failures. SQL adds id ASC after the requested primary and existing TYPE/name ordering. Shared PagedResult computes exact Long metadata without overflow; raw protocol query/limit<=0 compatibility is retained. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](sdd-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
 
 ### 6.7 Critical authenticated file-journey coverage — issue #119
 
@@ -164,7 +164,7 @@ STO119-01–20 in [the scenario inventory](../docs/development/verification/crit
 
 ### 6.8 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-004"></a>
 
@@ -434,7 +434,7 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `backend/infrastructure`
 - `docs/operations/STORAGE_CONFIGURATION.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 
@@ -444,7 +444,7 @@ The pre-code selection contract is implemented and locally verified at1499c6b. S
 
 Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
 
 ## Supported publication-format supplement — #145, 2026-10-30
 

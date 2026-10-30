@@ -1,6 +1,6 @@
 # VaultStadio frontend testing guide
 
-The frontend is a standalone Gradle build in `frontend/`. Its interaction contract is defined in [SDD-0013](../../specs/SDD-0013-frontend-kmp-and-platform-architecture.md), with password/privacy requirements in [SDD-0015](../../specs/SDD-0015-security-privacy-and-threat-model.md).
+The frontend is a standalone Gradle build in `frontend/`. Its interaction contract is defined in [SDD-0013](../../specs/sdd-0013-frontend-kmp-and-platform-architecture.md), with password/privacy requirements in [SDD-0015](../../specs/sdd-0015-security-privacy-and-threat-model.md).
 
 ## Sources and responsibilities
 

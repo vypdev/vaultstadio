@@ -1,6 +1,6 @@
 # Frontend input and accessibility verification — issue #80
 
-The local candidate supports assistant-operated text entry on the exercised Web and macOS paths. All 29 maintained field declarations use the platform form boundary. This is scoped input verification, not whole-platform readiness or merge approval. Contract: [SDD-0013 §6.1.1](../../../specs/SDD-0013-frontend-kmp-and-platform-architecture.md). Machine-readable results: [frontend-accessibility-80.json](frontend-accessibility-80.json).
+The local candidate supports assistant-operated text entry on the exercised Web and macOS paths. All 29 maintained field declarations use the platform form boundary. This is scoped input verification, not whole-platform readiness or merge approval. Contract: [SDD-0013 §6.1.1](../../../specs/sdd-0013-frontend-kmp-and-platform-architecture.md). Machine-readable results: [frontend-accessibility-80.json](frontend-accessibility-80.json).
 
 ## Source and artifact identity
 

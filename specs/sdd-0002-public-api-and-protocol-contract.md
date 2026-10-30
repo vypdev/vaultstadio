@@ -119,7 +119,7 @@ Text equivalent: Client discovers contract -> authenticates -> calls bounded pro
 
 ### 6.4 Client bootstrap transport — issue #76
 
-The owning frontend startup contract is BOOT-SER-01/02 and BOOT-HTTP-01 in [SDD-0013](SDD-0013-frontend-kmp-and-platform-architecture.md#64-client-startup-correction--issue-76). Client-side serializer descriptor identity MUST NOT change the public ISO-8601 JSON wire values. Serving a Wasm artifact MUST use one correct MIME header; missing assets retain their HTTP error status. Public API routes, authentication and versioning are not changed by this bootstrap repair.
+The owning frontend startup contract is BOOT-SER-01/02 and BOOT-HTTP-01 in [SDD-0013](sdd-0013-frontend-kmp-and-platform-architecture.md#64-client-startup-correction--issue-76). Client-side serializer descriptor identity MUST NOT change the public ISO-8601 JSON wire values. Serving a Wasm artifact MUST use one correct MIME header; missing assets retain their HTTP error status. Public API routes, authentication and versioning are not changed by this bootstrap repair.
 
 ### 6.5 Bounded storage selections — issue #91
 
@@ -284,7 +284,7 @@ The route inventory, OpenAPI path inventory, API Markdown, and tests are reconci
 
 ### Discovery implementation boundary (#124)
 
-[PD-001](SDD-0000-architecture-quality-and-product-contract.md#pd-001) is the fixed-primary product journey; #116 remains the bounded Web origin/configuration repair. Future server/space/policy APIs need versioned identities, authorization and typed unavailable/partial outcomes before implementation. Root/API-prefix URL handling must not silently become a federation protocol or relax current authentication.
+[PD-001](sdd-0000-architecture-quality-and-product-contract.md#pd-001) is the fixed-primary product journey; #116 remains the bounded Web origin/configuration repair. Future server/space/policy APIs need versioned identities, authorization and typed unavailable/partial outcomes before implementation. Root/API-prefix URL handling must not silently become a federation protocol or relax current authentication.
 
 ## 9. UI/UX and content contract
 
@@ -393,7 +393,7 @@ Inventory routes -> decide source of truth -> reconcile Swagger/OpenAPI -> add p
 - `backend/api/src/main/resources/openapi/documentation.yaml`
 - `docs/api/API.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 

@@ -152,7 +152,7 @@ Plugin manifest/schema, lifecycle events, endpoint registration, failure mapping
 
 ### Discovery implementation boundary (#124)
 
-[PD-024](SDD-0012-metadata-search-and-ai.md#pd-024) owns local/default and external dual consent; [PD-029](SDD-0012-metadata-search-and-ai.md#pd-029) owns search capabilities. Plugins implement bounded ports and cannot infer content-send authority from installation or administrator enablement. Engine lifecycle/readiness, cancellation and credential-safe failures require actual adapter evidence; a registered plugin is not verified functionality.
+[PD-024](sdd-0012-metadata-search-and-ai.md#pd-024) owns local/default and external dual consent; [PD-029](sdd-0012-metadata-search-and-ai.md#pd-029) owns search capabilities. Plugins implement bounded ports and cannot infer content-send authority from installation or administrator enablement. Engine lifecycle/readiness, cancellation and credential-safe failures require actual adapter evidence; a registered plugin is not verified functionality.
 
 ## 9. UI/UX and content contract
 
@@ -244,7 +244,7 @@ Inventory plugin API -> define manifest/trust contract -> add lifecycle tests ->
 - `backend/api/src/main/kotlin/com/vaultstadio/api/plugins/PluginManager.kt`
 - `docs/plugins/PLUGIN_DEVELOPMENT.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 ## Supported publication-format supplement — #145, 2026-10-30

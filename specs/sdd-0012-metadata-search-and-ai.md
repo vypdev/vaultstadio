@@ -122,7 +122,7 @@ Text equivalent: File changes -> metadata is extracted/indexed -> user searches 
 
 ### 6.4 Storage selection validation — issue #91
 
-Apply the same bounded input contract to basic GET/POST, advanced POST, metadata and suggestions before query/plugin/metadata effects, including short-prefix suggestions. Folder/basic-search totals stay bound to their actual selected dataset. Metadata results remain a bounded authorized projection with one-based page metadata. Advanced post-page filters/full-text fallback/global filtered counts and filename matching are not certified by this validation repair and remain#82/#115; no provider readiness claim changes. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](SDD-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
+Apply the same bounded input contract to basic GET/POST, advanced POST, metadata and suggestions before query/plugin/metadata effects, including short-prefix suggestions. Folder/basic-search totals stay bound to their actual selected dataset. Metadata results remain a bounded authorized projection with one-based page metadata. Advanced post-page filters/full-text fallback/global filtered counts and filename matching are not certified by this validation repair and remain#82/#115; no provider readiness claim changes. The complete lexical/default/bounds/compatibility and160-backend-plus8-client risk contract is [SDD-0002§6.5](sdd-0002-public-api-and-protocol-contract.md#65-bounded-storage-selections--issue-91), committed before code. Numeric page fields widen consistently to int64 across the server/client boundary; ordinary JSON values stay unchanged. This is a scoped contract, not whole-capability acceptance.
 
 ### 6.5 Truthful unavailable and failure outcomes — issue #91
 
@@ -135,7 +135,7 @@ These bounded error outcomes are not a claim that full-text search is implemente
 
 ### 6.6 Accepted product discovery — issue #124 (2026-10-29)
 
-These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](discovery/2026-10-29/README.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
 
 <a id="pd-024"></a>
 
@@ -304,7 +304,7 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - `backend/plugins/ai-classification`
 - `docs/plugins/AI_INTEGRATION.md`
 
-- Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
 
 
@@ -314,4 +314,4 @@ The pre-code selection contract is implemented and locally verified at1499c6b. S
 
 Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.
 
-Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).

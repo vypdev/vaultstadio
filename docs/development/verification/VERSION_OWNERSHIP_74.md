@@ -1,6 +1,6 @@
 # Version ownership and retained content — issue #74
 
-Contract: [SDD-0007 §6.4](../../../specs/SDD-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) and [SDD-0003 §6.5](../../../specs/SDD-0003-identity-authentication-and-authorization.md#65-historical-file-authorization--issue-74). Local verification: 2026-10-27 UTC (review follow-up), Java 17.0.9. The [machine-readable receipt](version-ownership-74.json) records exact source hashes and collected test names; the linked PR records the final commit and remote results.
+Contract: [SDD-0007 §6.4](../../../specs/sdd-0007-version-history-and-recovery.md#64-owner-scoped-version-operations--issue-74) and [SDD-0003 §6.5](../../../specs/sdd-0003-identity-authentication-and-authorization.md#65-historical-file-authorization--issue-74). Local verification: 2026-10-27 UTC (review follow-up), Java 17.0.9. The [machine-readable receipt](version-ownership-74.json) records exact source hashes and collected test names; the linked PR records the final commit and remote results.
 
 ## Behavior and compatibility
 

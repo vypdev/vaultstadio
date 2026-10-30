@@ -1,6 +1,6 @@
 # Testing and coverage
 
-Backend and frontend are independent Gradle projects. There is no repository-root Gradle wrapper. Complete contributor and CI verification follows [SDD-0001](../../specs/SDD-0001-standalone-projects-and-clean-architecture.md), [SDD-0013](../../specs/SDD-0013-frontend-kmp-and-platform-architecture.md) and the [R04 contract in SDD-0014](../../specs/SDD-0014-deployment-operations-and-release.md#68-complete-verification-and-truthful-evidence--issue-84).
+Backend and frontend are independent Gradle projects. There is no repository-root Gradle wrapper. Complete contributor and CI verification follows [SDD-0001](../../specs/sdd-0001-standalone-projects-and-clean-architecture.md), [SDD-0013](../../specs/sdd-0013-frontend-kmp-and-platform-architecture.md) and the [R04 contract in SDD-0014](../../specs/sdd-0014-deployment-operations-and-release.md#68-complete-verification-and-truthful-evidence--issue-84).
 
 ## Prerequisites
 
