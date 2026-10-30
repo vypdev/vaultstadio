@@ -15,7 +15,7 @@ import kotlin.time.Instant
 
 object InstantIso8601Serializer : KSerializer<Instant> {
     override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("kotlin.time.Instant", PrimitiveKind.STRING)
+        PrimitiveSerialDescriptor("VaultStadio.InstantIso8601", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): Instant =
         Instant.parse(decoder.decodeString())

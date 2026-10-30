@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "status": "Native password editor/widget cases and real protected login passed; general native editing and full acceptance remain under verification.",
+  "activeEntryPoints": [
+    "RootContent -> AuthContent",
+    "RootContent -> MainContent -> destination Content"
+  ],
+  "fields": [
+    {
+      "id": "admin.quota",
+      "source": "frontend/feature/admin/src/main/kotlin/com/vaultstadio/app/feature/admin/AdminDialogs.kt",
+      "route": "admin",
+      "value": "quotaValue",
+      "label": "LocalStrings.current.inputLabel(InputLabel.QUOTA)",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "ai.input",
+      "source": "frontend/feature/ai/src/main/kotlin/com/vaultstadio/app/feature/ai/AIScreenContent.kt",
+      "route": "ai",
+      "value": "inputText",
+      "label": "when (selectedMode) { AIMode.CHAT -> strings.aiTypePlaceholder; AIMode.DESCRIBE -> strings.aiImageUrlPlaceholder; AIMode.TAG -> strings.aiTagPlaceholder; AIMode.CLASSIFY -> strings.aiClassifyPlaceholder; AIMode.SUMMARIZE -> strings.aiSummarizePlaceholder }",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "auth.login.email",
+      "source": "frontend/feature/auth/src/main/kotlin/com/vaultstadio/app/feature/auth/AuthForms.kt",
+      "route": "auth",
+      "value": "viewModel.loginEmail",
+      "label": "strings.email",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "auth.login.password",
+      "source": "frontend/feature/auth/src/main/kotlin/com/vaultstadio/app/feature/auth/AuthForms.kt",
+      "route": "auth",
+      "value": "viewModel.loginPassword",
+      "label": "strings.password",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "auth.register.confirm-password",
+      "source": "frontend/feature/auth/src/main/kotlin/com/vaultstadio/app/feature/auth/AuthForms.kt",
+      "route": "auth",
+      "value": "viewModel.registerConfirmPassword",
+      "label": "strings.confirmPassword",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "auth.register.email",
+      "source": "frontend/feature/auth/src/main/kotlin/com/vaultstadio/app/feature/auth/AuthForms.kt",
+      "route": "auth",
+      "value": "viewModel.registerEmail",
+      "label": "strings.email",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "auth.register.password",
+      "source": "frontend/feature/auth/src/main/kotlin/com/vaultstadio/app/feature/auth/AuthForms.kt",
+      "route": "auth",
+      "value": "viewModel.registerPassword",
+      "label": "strings.password",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "auth.register.username",
+      "source": "frontend/feature/auth/src/main/kotlin/com/vaultstadio/app/feature/auth/AuthForms.kt",
+      "route": "auth",
+      "value": "viewModel.registerUsername",
+      "label": "strings.username",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "collaboration.comment",
+      "source": "frontend/feature/collaboration/src/main/kotlin/com/vaultstadio/app/feature/collaboration/CollaborationDialogs.kt",
+      "route": "collaboration",
+      "value": "commentText",
+      "label": "strings.collaborationComment",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "collaboration.document",
+      "source": "frontend/feature/collaboration/src/main/kotlin/com/vaultstadio/app/feature/collaboration/CollaborationScreenContent.kt",
+      "route": "collaboration",
+      "value": "editedContent",
+      "label": "LocalStrings.current.inputLabel(InputLabel.DOCUMENT_CONTENT)",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "federation.display-name",
+      "source": "frontend/feature/federation/src/main/kotlin/com/vaultstadio/app/feature/federation/FederationDialogs.kt",
+      "route": "federation",
+      "value": "displayName",
+      "label": "strings.inputLabel(InputLabel.DISPLAY_NAME)",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "federation.domain",
+      "source": "frontend/feature/federation/src/main/kotlin/com/vaultstadio/app/feature/federation/FederationDialogs.kt",
+      "route": "federation",
+      "value": "domain",
+      "label": "strings.federationInstanceDomain",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "federation.message",
+      "source": "frontend/feature/federation/src/main/kotlin/com/vaultstadio/app/feature/federation/FederationDialogs.kt",
+      "route": "federation",
+      "value": "message",
+      "label": "strings.federationMessageOptional",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "federation.remote-instance",
+      "source": "frontend/feature/federation/src/main/kotlin/com/vaultstadio/app/feature/federation/FederationDialogs.kt",
+      "route": "federation",
+      "value": "remoteInstance",
+      "label": "strings.inputLabel(InputLabel.REMOTE_INSTANCE)",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "federation.remote-user",
+      "source": "frontend/feature/federation/src/main/kotlin/com/vaultstadio/app/feature/federation/FederationDialogs.kt",
+      "route": "federation",
+      "value": "remoteUserId",
+      "label": "strings.inputLabel(InputLabel.REMOTE_USER)",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "files.folder-name",
+      "source": "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/feature/files/FilesDialogs.kt",
+      "route": "files",
+      "value": "folderName",
+      "label": "strings.folderName",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "files.rename",
+      "source": "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/feature/files/FilesDialogs.kt",
+      "route": "files",
+      "value": "renameValue",
+      "label": "strings.actionRename",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "files.search",
+      "source": "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/feature/files/FilesSearchBar.kt",
+      "route": "files",
+      "value": "searchQuery",
+      "label": "strings.actionSearch",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "password.confirm",
+      "source": "frontend/feature/changepassword/src/main/kotlin/com/vaultstadio/app/feature/changepassword/ChangePasswordScreen.kt",
+      "route": "changepassword",
+      "value": "confirmPassword",
+      "label": "strings.authConfirmPassword",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "password.current",
+      "source": "frontend/feature/changepassword/src/main/kotlin/com/vaultstadio/app/feature/changepassword/ChangePasswordScreen.kt",
+      "route": "changepassword",
+      "value": "currentPassword",
+      "label": "strings.inputLabel(InputLabel.CURRENT_PASSWORD)",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "password.new",
+      "source": "frontend/feature/changepassword/src/main/kotlin/com/vaultstadio/app/feature/changepassword/ChangePasswordScreen.kt",
+      "route": "changepassword",
+      "value": "newPassword",
+      "label": "strings.inputLabel(InputLabel.NEW_PASSWORD)",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "profile.confirm-password",
+      "source": "frontend/feature/profile/src/main/kotlin/com/vaultstadio/app/feature/profile/ProfileDialogs.kt",
+      "route": "profile",
+      "value": "confirmPassword",
+      "label": "strings.authConfirmPassword",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "profile.current-password",
+      "source": "frontend/feature/profile/src/main/kotlin/com/vaultstadio/app/feature/profile/ProfileDialogs.kt",
+      "route": "profile",
+      "value": "currentPassword",
+      "label": "strings.inputLabel(InputLabel.CURRENT_PASSWORD)",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "profile.new-password",
+      "source": "frontend/feature/profile/src/main/kotlin/com/vaultstadio/app/feature/profile/ProfileDialogs.kt",
+      "route": "profile",
+      "value": "newPassword",
+      "label": "strings.inputLabel(InputLabel.NEW_PASSWORD)",
+      "secure": true,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "profile.username",
+      "source": "frontend/feature/profile/src/main/kotlin/com/vaultstadio/app/feature/profile/ProfileDialogs.kt",
+      "route": "profile",
+      "value": "username",
+      "label": "strings.authUsername",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "sync.device-name",
+      "source": "frontend/feature/sync/src/main/kotlin/com/vaultstadio/app/feature/sync/SyncDialogs.kt",
+      "route": "sync",
+      "value": "deviceName",
+      "label": "strings.inputLabel(InputLabel.DEVICE_NAME)",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "versions.keep-last",
+      "source": "frontend/feature/versionhistory/src/main/kotlin/com/vaultstadio/app/feature/versionhistory/VersionHistoryScreen.kt",
+      "route": "versionhistory",
+      "value": "maxVersions",
+      "label": "strings.versionKeepLast",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "versions.max-age",
+      "source": "frontend/feature/versionhistory/src/main/kotlin/com/vaultstadio/app/feature/versionhistory/VersionHistoryScreen.kt",
+      "route": "versionhistory",
+      "value": "maxAgeDays",
+      "label": "strings.versionDeleteOlderThan",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    },
+    {
+      "id": "versions.restore-comment",
+      "source": "frontend/feature/versionhistory/src/main/kotlin/com/vaultstadio/app/feature/versionhistory/VersionHistoryScreen.kt",
+      "route": "versionhistory",
+      "value": "restoreComment",
+      "label": "strings.versionCommentOptional",
+      "secure": false,
+      "expectedCase": "edit-clear-focus; production callback/state; masked output for secure fields"
+    }
+  ],
+  "fieldCount": 29,
+  "dormantPaths": [
+    "composeApp/ui/screens/LoginScreen.kt",
+    "composeApp/ui/screens/login/AuthComponents.kt",
+    "composeApp/ui/screens/FilesScreen.kt",
+    "composeApp/ui/components/dialogs/AdvancedSearchDialog.kt",
+    "composeApp/ui/components/dialogs/ContextMenu.kt",
+    "composeApp/ui/components/dialogs/UploadDialog.kt"
+  ],
+  "dormantPolicy": "Not reached from active root/destination call graph; do not count as executed coverage; activation requires inventory/test inclusion.",
+  "controlEvidence": {
+    "outlined and secure text inputs": "ActiveFieldInteractionTest: 87 edit/clear/focus cases, including default masking",
+    "basic document editor": "ActiveFieldInteractionTest: collaboration.document",
+    "buttons and text buttons": "FormBoundaryInteractionTest and AuthScreenInteractionTest",
+    "icon buttons and reversible visibility": "AuthenticationInteractionTest and LocalizedInputInteractionTest",
+    "checkboxes and selection state": "ControlInteractionTest and FileControlInteractionTest",
+    "switches": "ControlInteractionTest.settingsSwitchExposesStateAndDispatchesOnce",
+    "radio selections": "ControlInteractionTest: role, theme and language state/callback cases",
+    "dropdown menu and menu item": "ControlInteractionTest.quotaDropdownChangesUnitUsedBySubmission",
+    "filter chips": "FormBoundaryInteractionTest.deviceTypeChipChangesSubmittedSelection",
+    "navigation tabs": "ControlInteractionTest.sidebarNavigationExposesSelectedDestination",
+    "file list and grid controls": "FileControlInteractionTest: open, long press and independent selection",
+    "dialog lifecycle": "FormBoundaryInteractionTest: cancel, validation, callback and reopen cases"
+  },
+  "componentCaseCounts": {
+    "perFieldEditClearFocus": 87,
+    "distinctNonParameterizedUIRisks": 41,
+    "localeVariants": 7,
+    "disabledFieldVariants": 14,
+    "helperGuardCases": 2,
+    "totalNewCases": 151
+  },
+  "webEditorCaseCount": 30,
+  "runtimeCompatibilityCaseCount": 2,
+  "webSocketRuntimeCaseCount": 3,
+  "scope": "Maintained production feature components; static declaration/case consistency does not establish runtime reachability.",
+  "retainedInactiveFields": [
+    "profile.current-password",
+    "profile.new-password",
+    "profile.confirm-password"
+  ],
+  "retainedInactiveReason": "ChangePasswordDialog has no current caller; these fields retain component tests. The active profile route navigates to the dedicated change-password screen.",
+  "nativeRendererRequired": true
+}

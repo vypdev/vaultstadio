@@ -1,0 +1,576 @@
+{
+  "audited_master": "615f11adf5272bd1d4626f9571b31e691eeee062",
+  "preserved_work_commit": "eea796b14c979445108db1afb56ca59b104cd66e",
+  "date": "2026-10-25",
+  "baseline": {
+    "backend": {
+      "tests": {
+        "tests": 1756,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test_modules": {
+        ":api": {
+          "tests": 727,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:activity": {
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:ai": {
+          "tests": 68,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:auth": {
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core": {
+          "tests": 99,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:collaboration": {
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:common": {
+          "tests": 82,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:federation": {
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:share": {
+          "tests": 37,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:storage": {
+          "tests": 35,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:sync": {
+          "tests": 39,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:version": {
+          "tests": 30,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:activity": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:admin": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:auth": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:common": {
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:share": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:storage": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":infrastructure": {
+          "tests": 318,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:ai-classification": {
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:fulltext-search": {
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:image-metadata": {
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:video-metadata": {
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins-api": {
+          "tests": 71,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "current_ci_scope_tests": 1303,
+      "tests_outside_current_ci_scope": 453,
+      "aggregate_coverage": {
+        "INSTRUCTION": {
+          "covered": 42891,
+          "missed": 103918,
+          "percent": 29.22
+        },
+        "BRANCH": {
+          "covered": 852,
+          "missed": 4494,
+          "percent": 15.94
+        },
+        "LINE": {
+          "covered": 6018,
+          "missed": 9953,
+          "percent": 37.68
+        },
+        "COMPLEXITY": {
+          "covered": 2766,
+          "missed": 5698,
+          "percent": 32.68
+        },
+        "METHOD": {
+          "covered": 2490,
+          "missed": 3062,
+          "percent": 44.85
+        },
+        "CLASS": {
+          "covered": 579,
+          "missed": 887,
+          "percent": 39.5
+        }
+      },
+      "report_files": 505
+    },
+    "frontend": {
+      "tests": {
+        "tests": 1127,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test_modules": {
+        ":composeApp": {
+          "tests": 1070,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:resources": {
+          "tests": 42,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":data:auth": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "current_ci_scope_tests": 1070,
+      "tests_outside_current_ci_scope": 57,
+      "aggregate_coverage": {
+        "INSTRUCTION": {
+          "covered": 18017,
+          "missed": 188748,
+          "percent": 8.71
+        },
+        "BRANCH": {
+          "covered": 359,
+          "missed": 12423,
+          "percent": 2.81
+        },
+        "LINE": {
+          "covered": 4008,
+          "missed": 16740,
+          "percent": 19.32
+        },
+        "COMPLEXITY": {
+          "covered": 1399,
+          "missed": 12189,
+          "percent": 10.3
+        },
+        "METHOD": {
+          "covered": 1270,
+          "missed": 6609,
+          "percent": 16.12
+        },
+        "CLASS": {
+          "covered": 294,
+          "missed": 771,
+          "percent": 27.61
+        }
+      },
+      "report_files": 244
+    }
+  },
+  "preserved_work": {
+    "backend": {
+      "tests": {
+        "tests": 1762,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test_modules": {
+        ":api": {
+          "tests": 729,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:activity": {
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:ai": {
+          "tests": 68,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:auth": {
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core": {
+          "tests": 99,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:collaboration": {
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:common": {
+          "tests": 82,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:federation": {
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:share": {
+          "tests": 37,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:storage": {
+          "tests": 35,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:sync": {
+          "tests": 42,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:version": {
+          "tests": 31,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:activity": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:admin": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:auth": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:common": {
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:share": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":domain:storage": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":infrastructure": {
+          "tests": 318,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:ai-classification": {
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:fulltext-search": {
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:image-metadata": {
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins:video-metadata": {
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":plugins-api": {
+          "tests": 71,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "current_ci_scope_tests": 1305,
+      "tests_outside_current_ci_scope": 457,
+      "aggregate_coverage": {
+        "INSTRUCTION": {
+          "covered": 42891,
+          "missed": 103918,
+          "percent": 29.22
+        },
+        "BRANCH": {
+          "covered": 852,
+          "missed": 4494,
+          "percent": 15.94
+        },
+        "LINE": {
+          "covered": 6018,
+          "missed": 9953,
+          "percent": 37.68
+        },
+        "COMPLEXITY": {
+          "covered": 2766,
+          "missed": 5698,
+          "percent": 32.68
+        },
+        "METHOD": {
+          "covered": 2490,
+          "missed": 3062,
+          "percent": 44.85
+        },
+        "CLASS": {
+          "covered": 579,
+          "missed": 887,
+          "percent": 39.5
+        }
+      },
+      "report_files": 505
+    },
+    "frontend": {
+      "tests": {
+        "tests": 1130,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test_modules": {
+        ":composeApp": {
+          "tests": 1070,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":core:resources": {
+          "tests": 45,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        ":data:auth": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "current_ci_scope_tests": 1070,
+      "tests_outside_current_ci_scope": 60,
+      "aggregate_coverage": {
+        "INSTRUCTION": {
+          "covered": 18099,
+          "missed": 188666,
+          "percent": 8.75
+        },
+        "BRANCH": {
+          "covered": 359,
+          "missed": 12423,
+          "percent": 2.81
+        },
+        "LINE": {
+          "covered": 4008,
+          "missed": 16740,
+          "percent": 19.32
+        },
+        "COMPLEXITY": {
+          "covered": 1440,
+          "missed": 12148,
+          "percent": 10.6
+        },
+        "METHOD": {
+          "covered": 1311,
+          "missed": 6568,
+          "percent": 16.64
+        },
+        "CLASS": {
+          "covered": 294,
+          "missed": 771,
+          "percent": 27.61
+        }
+      },
+      "report_files": 244
+    }
+  },
+  "browser_tests": {
+    "tests": 1070,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android_debug_build": "passed",
+  "android_unit_tests": "NO-SOURCE",
+  "ios_shared_compile": "passed",
+  "ios_entrypoint_compile": "failed: obsolete TokenStorage import",
+  "desktop_startup": "failed: conflicting kotlin.time.Instant serial descriptor",
+  "web_startup": "failed: duplicate MIME, then AuthRepository instance creation",
+  "architecture": {
+    "backend": {
+      "modules": 45,
+      "edges": 184,
+      "declared_project_cycles": [],
+      "pure_boundary_import_matches": []
+    },
+    "frontend": {
+      "modules": 53,
+      "edges": 199,
+      "declared_project_cycles": [],
+      "pure_boundary_import_matches": []
+    }
+  },
+  "api_smoke": {
+    "total": 81,
+    "passed": 73,
+    "failed": 8
+  },
+  "api_advanced": {
+    "total": 21,
+    "passed": 11,
+    "failed": 10
+  },
+  "admin": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  },
+  "operations": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1
+  },
+  "published_images": {
+    "backend_manifest_digest": "sha256:9ace072656ef15df123fb1bda8b3dd5d96ca4bc9238d6c4cbf08d0622e282dea",
+    "frontend_manifest_digest": "sha256:75553c4969c9ef57130dfcee0b0b280e5a83b5d819527bca412ed815cbed0215"
+  },
+  "lint-backend": {
+    "exit_code": 0,
+    "elapsed_seconds": 37.71
+  },
+  "lint-frontend": {
+    "exit_code": 0,
+    "elapsed_seconds": 35.11
+  },
+  "audit_runner_boundary_tests": {
+    "tests": 4,
+    "failures": 0,
+    "scope": "loopback transport, environment proxies, redirects and private output boundary"
+  }
+}

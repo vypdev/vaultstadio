@@ -1,14 +1,32 @@
 # VaultStadio CI Pipeline
-# Runs on every push and pull request
+# Complete fresh test suites on every PR update; heavy checks are scheduled separately.
 # Runners: shared self-hosted Linux/macOS; Docker/Testcontainers on Apple Silicon
 
 name: CI
 
 on:
-  push:
-    branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      project_environment:
+        description: Additional manual environment check (application suites always run)
+        type: choice
+        default: none
+        options: [none, complete, inventory]
+      project_environment_runner:
+        description: Placement for the additional manual environment check
+        type: choice
+        default: hosted-linux
+        options: [hosted-linux, macos-arm64]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: application-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
   JAVA_VERSION: '17'
@@ -24,6 +42,8 @@ jobs:
       group: vypdev
       labels: [self-hosted, macOS, ARM64]
     
+    timeout-minutes: 35
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -34,11 +54,28 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
       
+      - name: Set up verification Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: '0.11.29'
+          checksum: '61c04acc52a33ef0f331e494bdfbedcdb6c26c6970c022ed3699e5860f8930e3'
+          python-version: '3.13'
+          activate-environment: true
+          venv-path: ${{ runner.temp }}/verification-python
+          enable-cache: false
+        env:
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/verification-python-runtime
+          UV_CACHE_DIR: ${{ runner.temp }}/verification-uv-cache
+          UV_PYTHON_PREFERENCE: only-managed
+
+      - name: Verify isolated Python
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 13), sys.version; print(sys.executable, sys.version)'
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
           project-root: backend
-          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
+          cache-read-only: false
       
       - name: Prepare private Docker client
         uses: ./.github/actions/prepare-docker
@@ -77,40 +114,21 @@ jobs:
             docker info || exit 1
           fi
       
-      - name: Build backend modules
+      - name: Run complete backend suites
+        working-directory: backend
+        run: python3 ../scripts/verification/run.py test --root backend
+
+      - name: Verify storage authorization coverage
         working-directory: backend
         run: |
-          ./gradlew :core:build \
-            :plugins-api:build \
-            :infrastructure:build \
-            :api:build \
-            -x test
-      
-      - name: Run backend tests
-        working-directory: backend
-        run: |
-          ./gradlew :core:test \
-            :api:test \
-            :infrastructure:test \
-            :plugins-api:test \
-            :plugins:image-metadata:test \
-            :plugins:video-metadata:test \
-            :plugins:fulltext-search:test \
-            :plugins:ai-classification:test \
-            --continue
+          ./gradlew --init-script ../scripts/verification/model.gradle :domain:storage:jacocoTestCoverageVerification \
+            :core:storage:jacocoTestCoverageVerification
 
       - name: Generate backend coverage reports
         working-directory: backend
         run: |
-          ./gradlew :core:jacocoTestReport \
-            :api:jacocoTestReport \
-            :infrastructure:jacocoTestReport \
-            :plugins-api:jacocoTestReport \
-            :plugins:image-metadata:jacocoTestReport \
-            :plugins:video-metadata:jacocoTestReport \
-            :plugins:fulltext-search:jacocoTestReport \
-            :plugins:ai-classification:jacocoTestReport \
-            --continue
+          ./gradlew --init-script ../scripts/verification/model.gradle jacocoTestReport --continue --build-cache
+          python3 ../scripts/verification/run.py coverage --root backend --reuse-tests
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -120,6 +138,10 @@ jobs:
           path: |
             backend/**/build/reports/tests/
             backend/**/build/test-results/
+            backend/build/verification/*.json
+            backend/build/verification/commands/
+            backend/build/verification/runs/
+          if-no-files-found: error
           retention-days: 7
 
       - name: Upload backend coverage reports
@@ -127,14 +149,9 @@ jobs:
         with:
           name: jacoco-coverage-backend
           path: |
-            backend/core/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/api/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins-api/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/image-metadata/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/video-metadata/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/fulltext-search/build/reports/jacoco/test/jacocoTestReport.xml
-            backend/plugins/ai-classification/build/reports/jacoco/test/jacocoTestReport.xml
+            backend/build/verification/coverage/coverage.xml
+            backend/build/verification/coverage.json
+          if-no-files-found: error
           retention-days: 1
 
   # Build the frontend (standalone project in frontend/)
@@ -145,6 +162,8 @@ jobs:
       group: vypdev
       labels: [self-hosted, macOS, X64]
 
+    timeout-minutes: 35
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -152,36 +171,105 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version-file: frontend/.java-version
+          distribution: jetbrains
+
+      - name: Isolate Android SDK for this job
+        shell: bash
+        run: |
+          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install \
+            "platforms;android-37.0" \
+            "build-tools;36.0.0"
+
+      - name: Set up verification Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: '0.11.29'
+          checksum: 'c4c4de482da9ccdd076dc4fb5cfe7b740609029385c72f58606be3153602387d'
+          python-version: '3.13'
+          activate-environment: true
+          venv-path: ${{ runner.temp }}/verification-python
+          enable-cache: false
+        env:
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/verification-python-runtime
+          UV_CACHE_DIR: ${{ runner.temp }}/verification-uv-cache
+          UV_PYTHON_PREFERENCE: only-managed
+
+      - name: Verify isolated Python
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 13), sys.version; print(sys.executable, sys.version)'
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
+        with:
+          cache-read-only: false
 
-      - name: Build frontend (Desktop)
-        run: cd frontend && ./gradlew :composeApp:compileKotlinDesktop --no-build-cache
+      - name: Install and verify the job-owned browser
+        id: chrome
+        run: python3 scripts/ci/setup_test_browser.py
 
-      - name: Run frontend tests (desktop)
-        run: cd frontend && ./gradlew :composeApp:desktopTest --continue --no-build-cache
+      - name: Run complete frontend desktop suites
+        working-directory: frontend
+        run: python3 ../scripts/verification/run.py test --root frontend --suite desktop
 
-      - name: Generate frontend coverage report
-        run: cd frontend && ./gradlew :composeApp:jacocoTestReport --continue --no-build-cache
+      - name: Run complete frontend browser suites
+        working-directory: frontend
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          test -x "$CHROME_BIN"
+          "$CHROME_BIN" --version
+          python3 ../scripts/verification/run.py test --root frontend --suite browser
 
-      - name: Upload frontend coverage report
+      - name: Generate frontend coverage and enforce existing gates
+        working-directory: frontend
+        run: |
+          ./gradlew --init-script ../scripts/verification/model.gradle jacocoTestReport :data:network:verifyInstantSerializerCoverage \
+            :core:ui:verifyInputSemanticsCoverage --continue --build-cache
+          python3 ../scripts/verification/run.py coverage --root frontend --reuse-tests
+
+      - name: Upload frontend test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-results
+          path: |
+            frontend/**/build/reports/tests/
+            frontend/**/build/test-results/
+            frontend/build/verification/*.json
+            frontend/build/verification/commands/
+            frontend/build/verification/runs/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload frontend coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-frontend
-          path: frontend/composeApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          path: |
+            frontend/build/verification/coverage/coverage.xml
+            frontend/build/verification/coverage.json
+          if-no-files-found: error
           retention-days: 1
 
   # Upload coverage to Codecov
   coverage:
     name: Coverage (Codecov)
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    needs: [backend, frontend]
+    runs-on: ubuntu-24.04
+    needs: [backend, frontend, quality]
+
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -199,189 +287,98 @@ jobs:
           name: jacoco-coverage-frontend
           path: coverage-frontend
 
-      - name: List coverage files (debug)
-        run: |
-          echo "=== coverage-backend ==="
-          find coverage-backend -type f 2>/dev/null || true
-          echo "=== coverage-frontend ==="
-          find coverage-frontend -type f 2>/dev/null || true
-          echo "=== all jacocoTestReport.xml in workspace ==="
-          find . -name 'jacocoTestReport.xml' -type f 2>/dev/null || true
+      - name: Download verification tooling coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: verification-tooling-coverage
+          path: coverage-python
 
       - name: Discover coverage files for Codecov
         id: coverage-files
         run: |
-          FILES=$(find . -name 'jacocoTestReport.xml' -type f 2>/dev/null | tr '\n' ',' | sed 's/,$//')
-          echo "list=$FILES" >> "$GITHUB_OUTPUT"
-          if [ -z "$FILES" ]; then
-            echo "No jacocoTestReport.xml found"
-            exit 1
-          fi
-          echo "Found coverage files: $FILES"
+          python3 scripts/verification/upload_manifest.py \
+            --backend coverage-backend --frontend coverage-frontend --python coverage-python --output "$GITHUB_OUTPUT"
+
+      - name: Isolate Codecov verification keyring
+        run: bash scripts/ci/prepare_codecov_keyring.sh
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v7
         with:
           disable_search: true
           files: ${{ steps.coverage-files.outputs.list }}
-          fail_ci_if_error: false
+          version: v11.3.1
+          skip_validation: false
+          fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  # Build plugins
-  plugins:
-    name: Plugins Build
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
+  quality:
+    name: Source & Workflow Contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+          persist-credentials: false
+      - uses: actions/setup-python@v6
         with:
-          project-root: backend
-      
-      - name: Build plugins
-        working-directory: backend
+          python-version: '3.13'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Test anonymous public share page
+        run: node --test scripts/tests/public-share.test.mjs
+      - name: Test public share proxy privacy and origin
+        run: python3 -m unittest discover -s scripts/tests -p 'test_share_proxy.py' -v
+      - name: Install workflow parser
+        run: python3 -m pip --isolated install --index-url https://pypi.org/simple PyYAML==6.0.3
+      - name: Install verification coverage tool
+        run: python3 -m pip --isolated install --index-url https://pypi.org/simple coverage==7.17.0
+      - name: Verify source and workflow contracts
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          COVERAGE_RCFILE: ${{ github.workspace }}/scripts/verification/coverage.ini
+          COVERAGE_FILE: ${{ github.workspace }}/build/verification/python/.coverage
         run: |
-          ./gradlew :plugins:image-metadata:build \
-            :plugins:video-metadata:build \
-            :plugins:fulltext-search:build \
-            :plugins:ai-classification:build \
-            -x test
-
-  # Build Android app
-  android:
-    name: Android Build
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Isolate Android SDK for this job
-        shell: bash
-        run: |
-          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
-          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
-      
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
-      
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-      
-      - name: Build Android APK (debug)
-        run: cd frontend && ./gradlew :androidApp:assembleDevDebug
-
-  # Code quality checks (no root Gradle; backend and frontend are standalone)
-  lint:
-    name: Lint & Code Quality
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-      
-      - name: Isolate Android SDK for this job
-        shell: bash
-        run: |
-          sdk_root="$(mktemp -d "$RUNNER_TEMP/android-sdk.XXXXXX")"
-          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
-      
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
-      
-      - name: Check no FQN in type positions
-        run: ./scripts/check-no-fqn.sh
-      
-      - name: Run Detekt (backend)
-        working-directory: backend
-        run: ./gradlew detektMain --continue
-      
-      - name: Run Detekt (frontend)
-        working-directory: frontend
-        run: ./gradlew detektDesktopMain --continue
-      
-      - name: Upload Detekt report
+          python3 scripts/check-frontend-accessibility.py
+          python3 scripts/check-frontend-wasm-mime.py
+          python3 scripts/validate-specification-catalog.py
+          python3 -m unittest discover -s scripts/tests -p 'test_specification_catalog.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_specification_owner_paths.py' -v
+          bash scripts/check-no-fqn.sh
+          python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_codecov_keyring.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_ci_cadence.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_share_architecture.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_selection_architecture.py' -v
+          python3 scripts/verification/tooling_report.py start
+          python3 -m coverage erase
+          python3 -m coverage run -m unittest discover -s scripts/tests -p 'test_verification_*.py' -v
+          python3 -m coverage combine
+          python3 -m coverage xml -o build/verification/python/coverage.xml
+          python3 -m coverage json -o build/verification/python/coverage.json
+          python3 scripts/verification/tooling_report.py finish
+          python3 -m unittest discover -s .github/actions/copilot-verification-setup/tests -p 'test_*.py' -v
+      - name: Upload verification tooling coverage
+        if: always()
         uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: detekt-report
-          path: '**/build/reports/detekt/'
-          retention-days: 7
+          name: verification-tooling-coverage
+          path: |
+            build/verification/python/coverage.xml
+            build/verification/python/coverage.json
+            build/verification/python/receipt.json
+            build/verification/python/source.json
+          if-no-files-found: error
+          retention-days: 1
 
-  # Security scanning
-  security:
-    name: Security Scan
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-        continue-on-error: true
-      
-      - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with: 
-          sarif_file: 'trivy-results.sarif'
-        continue-on-error: true
+  project-environment:
+    name: Explicit project environment verification
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.project_environment == 'complete' || inputs.project_environment == 'inventory') }}
+    uses: ./.github/workflows/project_runtime_verification.yml
+    with:
+      mode: ${{ inputs.project_environment == 'inventory' && 'inventory' || 'complete' }}
+      placement: ${{ inputs.project_environment_runner || 'hosted-linux' }}

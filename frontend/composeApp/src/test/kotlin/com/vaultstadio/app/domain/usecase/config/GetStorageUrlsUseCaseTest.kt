@@ -79,9 +79,15 @@ class GetShareUrlUseCaseTest {
         val repo = FakeConfigRepository("https://api.test")
         val useCase = GetShareUrlUseCaseImpl(repo)
         assertEquals(
-            "https://api.test/share/abc123token",
+            "https://api.test/api/v1/share/abc123token/view",
             useCase("abc123token"),
         )
+    }
+
+    @Test
+    fun invoke_preservesCaseAndRemovesTrailingOriginSlash() {
+        val useCase = GetShareUrlUseCaseImpl(FakeConfigRepository("https://api.test/"))
+        assertEquals("https://api.test/api/v1/share/ToKen_-123/view", useCase("ToKen_-123"))
     }
 }
 
@@ -92,7 +98,7 @@ class GetVersionUrlsUseCaseTest {
         val repo = FakeConfigRepository("https://api.test")
         val useCase = GetVersionUrlsUseCaseImpl(repo)
         assertEquals(
-            "https://api.test/api/v1/versions/item-1/download/2",
+            "https://api.test/api/v1/versions/item/item-1/version/2/download",
             useCase.downloadUrl("item-1", 2),
         )
     }
@@ -102,7 +108,7 @@ class GetVersionUrlsUseCaseTest {
         val repo = FakeConfigRepository("https://app.example.com")
         val useCase = GetVersionUrlsUseCaseImpl(repo)
         assertEquals(
-            "https://app.example.com/api/v1/versions/doc-id/download/5",
+            "https://app.example.com/api/v1/versions/item/doc-id/version/5/download",
             useCase.downloadUrl("doc-id", 5),
         )
     }

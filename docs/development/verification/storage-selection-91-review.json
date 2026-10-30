@@ -1,0 +1,185 @@
+{
+  "source": "63e12a1a851498d62fa681b7c3bf2a655e3abf7d",
+  "productionImplementationUnchanged": "1499c6b0437d4a451f9b5cbf1596d1727a2e1c4e",
+  "changesFromFirstPrHead": [
+    "backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/SelectionExposedFailureTest.kt"
+  ],
+  "suites": {
+    "backend": {
+      "tests": 3249,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlFiles": 580
+    },
+    "desktop": {
+      "tests": 1324,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlFiles": 258
+    },
+    "browser": {
+      "tests": 1200,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlFiles": 254
+    },
+    "backendCoverage": {
+      "INSTRUCTION": {
+        "covered": 70386,
+        "missed": 85159
+      },
+      "BRANCH": {
+        "covered": 1934,
+        "missed": 4108
+      },
+      "LINE": {
+        "covered": 8958,
+        "missed": 7919
+      },
+      "COMPLEXITY": {
+        "covered": 4040,
+        "missed": 5280
+      },
+      "METHOD": {
+        "covered": 3399,
+        "missed": 2645
+      },
+      "CLASS": {
+        "covered": 881,
+        "missed": 758
+      }
+    }
+  },
+  "totalCases": 5773,
+  "genuinelyNewBackendCases": 268,
+  "newSharedKmpPerPlatform": 8,
+  "rawArchive": {
+    "name": "issue91-review-63e12a1-verification.zip",
+    "sha256": "a2a0d9a5f73f67feb24dab3e2b129447d7b3f450f7b906ba71817a720c42c074",
+    "bytes": 4066916
+  },
+  "testedKotlinInputsCount": 42,
+  "allTestedHashesEqualGitBlobs": true,
+  "executionHeadAtStart": "d619fa258f68df354f64fbba013f99821c9bc6be",
+  "selectorScope": "Complete root backend selector without filters; updated API1518 freshly executed, unchanged modules reuse the earlier complete asserted-source run. JVM1324/Wasm1200 sources unchanged and separately fully executed. Fresh PR CI remains required.",
+  "exposedJar": {
+    "coordinate": "org.jetbrains.exposed:exposed-core:1.0.0",
+    "sha256": "4e6b44f76b5dc69bb611d64474f2a34ac444e4ec156a96ac8cdcccda3b2a0b7a",
+    "actualSuperclass": "java.sql.SQLException"
+  },
+  "regressions": [
+    "Actual duplicate primary key: DatabaseException retains ExposedSQLException/JDBC cause SQLState23505, rollback preserves row/bytes",
+    "Actual PostgreSQL selection failure reaches production HTTP500 DATABASE_ERROR with safe message; table restoration recovers200 and retained row/bytes"
+  ],
+  "upstreamIssue": 736,
+  "originalReview": {
+    "head": "d619fa258f68df354f64fbba013f99821c9bc6be",
+    "run": 40503612760,
+    "finding": 4388655926,
+    "fingerprint": "fp-b3aea683",
+    "actionTag": "v3",
+    "resolvedActionSource": "39679e26a22b40a5a4a40e8f167f46273157182e",
+    "diagnosis": "False superclass premise contradicted by the actual pinned JAR and real database execution; no broader catch added"
+  },
+  "originalPrCi": {
+    "run": 40503612712,
+    "head": "d619fa258f68df354f64fbba013f99821c9bc6be",
+    "base": "c9f1ac505c09c03d6c3eec9d1f4f940e26bdbce0",
+    "conclusion": "success",
+    "actualCheckout": "b4ab0e7d2fa3c08fae71a3a0249de9d87f68aef7",
+    "integrationParents": [
+      "c9f1ac505c09c03d6c3eec9d1f4f940e26bdbce0",
+      "d619fa258f68df354f64fbba013f99821c9bc6be"
+    ],
+    "integrationTree": "d2c9cc4e982ffbbf475e12cf69330177b13625ab",
+    "counts": {
+      "backend": {
+        "tests": 3247,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "desktop": {
+        "tests": 1324,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "browser": {
+        "tests": 1200,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "xmlFilesByArea": {
+      "backend": 579,
+      "desktop": 258,
+      "browser": 254
+    },
+    "totalXmlFiles": 1091,
+    "totalTests": 5771,
+    "artifacts": [
+      {
+        "name": "jacoco-coverage-backend",
+        "id": 12734545940,
+        "sha256": "8e516c18dd73652b0aee08e649a5649a787610307a22bb7fc7ad41717dec4871",
+        "bytes": 186543
+      },
+      {
+        "name": "frontend-test-results",
+        "id": 12734371943,
+        "sha256": "27cfd5fc6ec8a6f94f3b54bc7116759135d55d1b862763efca44a13df0e8d5aa",
+        "bytes": 1240073
+      },
+      {
+        "name": "jacoco-coverage-frontend",
+        "id": 12734287020,
+        "sha256": "4fa38b8001a1e4ff18002847380729113bc72eed804f80adabda18eb7db0cd58",
+        "bytes": 67885
+      },
+      {
+        "name": "backend-test-results",
+        "id": 12733374756,
+        "sha256": "811fd8e1080437535cff64fe19ddafd115c47836f0282fd21ecfd39c705600ce",
+        "bytes": 2115403
+      }
+    ],
+    "jobs": [
+      {
+        "name": "Backend Build & Test",
+        "runner": "apple-silicon-runner-1",
+        "conclusion": "success"
+      },
+      {
+        "name": "Frontend Build",
+        "runner": "apple-intel-runner-1",
+        "conclusion": "success"
+      },
+      {
+        "name": "Source & Workflow Contracts",
+        "runner": "GitHub Actions 1000013091",
+        "conclusion": "success"
+      },
+      {
+        "name": "Explicit project environment verification",
+        "runner": null,
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Coverage (Codecov)",
+        "runner": "GitHub Actions 1000013093",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "acceptancePending": [
+    "fresh final-head CI",
+    "Copilot finding reconciliation",
+    "native approval or exact explicit exception",
+    "develop adoption"
+  ]
+}

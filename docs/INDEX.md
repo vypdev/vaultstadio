@@ -52,9 +52,9 @@ This is the central navigation for all VaultStadio documentation. Documents are 
 |----------|-------------|----------|
 | [../specs/README.md](../specs/README.md) | SDD standard, states, required sections, and validation rules | Maintainers |
 | [../specs/CATALOG.md](../specs/CATALOG.md) | Human-readable capability and SDD catalog | All contributors |
-| [../specs/SDD-0000-architecture-quality-and-product-contract.md](../specs/SDD-0000-architecture-quality-and-product-contract.md) | SDD portfolio ordering and evidence policy | Maintainers |
-| [../specs/SDD-0001-standalone-projects-and-clean-architecture.md](../specs/SDD-0001-standalone-projects-and-clean-architecture.md) | Current backend/frontend architecture baseline | Developers |
-| [../specs/SDD-0002-public-api-and-protocol-contract.md](../specs/SDD-0002-public-api-and-protocol-contract.md) | REST, OpenAPI, WebDAV, S3, and WebSocket contract | API developers |
+| [../specs/SDD-0000-architecture-quality-and-product-contract.md](../specs/sdd-0000-architecture-quality-and-product-contract.md) | SDD portfolio ordering and evidence policy | Maintainers |
+| [../specs/SDD-0001-standalone-projects-and-clean-architecture.md](../specs/sdd-0001-standalone-projects-and-clean-architecture.md) | Current backend/frontend architecture baseline | Developers |
+| [../specs/SDD-0002-public-api-and-protocol-contract.md](../specs/sdd-0002-public-api-and-protocol-contract.md) | REST, OpenAPI, WebDAV, S3, and WebSocket contract | API developers |
 
 ### API and integration
 

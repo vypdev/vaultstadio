@@ -1,0 +1,891 @@
+{
+  "schemaVersion": 1,
+  "issue": 74,
+  "sourceIdentity": "Git blob hashes in sourceInputs; final commit and remote CI recorded in the linked PR",
+  "sourceInputs": [
+    {
+      "path": "backend/api/build.gradle.kts",
+      "sha256": "4c6ee07ee51b7ba7af0ebde000b86854b632ab87fb725fd7f2356a6a1acd4749"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
+      "sha256": "e2727a723b4c5662fecad9068f0c6bea9178aa7449a7d06e3a4b870a1a4d5024"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/VersionModule.kt",
+      "sha256": "250d8fe49f2bf6dd638afa5467cc5b6ff73605c8ca23f6672a674f46b73bed4a"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionDetailRoutes.kt",
+      "sha256": "525f9fea361114622fcd113efb9fd7f41ce2316c58f911e6a6013a2b502db3e1"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionDtos.kt",
+      "sha256": "530f71df068c91b1afe5079a9eb12d76748b8aeaa1dbabd6c8c320608e6176ea"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionErrors.kt",
+      "sha256": "3fcce9d009fcc2d9b6c43fd1f1971755eec31dee82366548dc155c4fd7484713"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionHistoryRoutes.kt",
+      "sha256": "8e3df5ccaebb06f782fa527f5b2bb4735c36c1cb97fd5360ce50777824368e97"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionMutationRoutes.kt",
+      "sha256": "1db0ba5e1855329172aa35ea1feda2b90cd4e80657b69ce9774951c0e6044a39"
+    },
+    {
+      "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt",
+      "sha256": "ad9cd99964dc4084d299e8f3f31138e657721ffed94f3f2695e1569aee91a182"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/ApplyRetentionPolicyUseCaseTest.kt",
+      "sha256": "185ecfef16c874985c639de669dbff154b80e17ccbdd87355d7f2ea4b7196288"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/CompareVersionsUseCaseTest.kt",
+      "sha256": "34dbc9462ad1076ba9609e5e20691d6a56371a00fe89e76c49c58bde35dfe8d3"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/DeleteVersionUseCaseTest.kt",
+      "sha256": "f866096eabcaa040f084cdf75ca2916220834caa64da04726d02bc7a3469c4f4"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionHistoryUseCaseTest.kt",
+      "sha256": "ca785ec866c4ab0f0067abaaab725706e2ff1765f76b92547a2374b9cd2f33db"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionUseCaseTest.kt",
+      "sha256": "96482a1c36fc581f25385f9df6ac9e2599fbf5e2130dfe18c90ace739ebcd097"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/RestoreVersionUseCaseTest.kt",
+      "sha256": "875d1918d081cd7cf12eb51bcaa32654400ef6c9dfacc1d372c1d4f3d00acf03"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionHttpBoundaryTest.kt",
+      "sha256": "ba4b7024465912d434a09208a1a5e5129746f3e0ec83ba71c30362329294275f"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionIntegrationFixture.kt",
+      "sha256": "a19e97c1b838d5a01ec1d38121130724ca2b5902d8474d1bf5e95c568c11428a"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionOwnershipHttpTest.kt",
+      "sha256": "e3b4447508cae5d7569b409abefc0e963cec369d9c3dc008f7d8ce5313f361b6"
+    },
+    {
+      "path": "backend/api/src/test/kotlin/com/vaultstadio/api/routes/version/VersionRetentionHttpTest.kt",
+      "sha256": "de3ad887f3053e504a0c509d13212e0d053699d3d503ffde909bb8fcea1cc48b"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/ApplyRetentionPolicyUseCase.kt",
+      "sha256": "196d48308b1db9ade5b8272a24854c1ae1410a14fbc06097c6d0b063fe4fe97e"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/CompareVersionsUseCase.kt",
+      "sha256": "fc1eade439b4e3d27afc65f11109cd6dc97655ee69a607aa846faecfd4a6e32b"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/GetVersionHistoryUseCase.kt",
+      "sha256": "1a22bd9f7cf7bb651a4f7367d8c6a4a79ef6dab42081c5ade8b2ed19d4c830de"
+    },
+    {
+      "path": "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/GetVersionUseCase.kt",
+      "sha256": "f65d6e9a3e46bd8e5c956c198197ba58cf32771d6b0f5d3d0e67c7bae252e2b5"
+    },
+    {
+      "path": "backend/core/version/build.gradle.kts",
+      "sha256": "69db893652cc6c0ca9f72f6ba246b99d72ae9c17b109aff6763d8d02adb587c5"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/FileVersionService.kt",
+      "sha256": "b9ac7062a75934c2f2f45a859aa814e67e8c5cc1cda833db9c3477f3ae35cf46"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionAccess.kt",
+      "sha256": "f6a779fbefbc7caa279d53b717e52efc49ef3510eee332e2079740ae34ce7bc2"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionDiffGenerator.kt",
+      "sha256": "93220aab4664647834fa8895b5ab9037010e53ad29c010a408654a7aa52b378a"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionInputs.kt",
+      "sha256": "7a6cb88e2f3108cb87bed794704e5be1a1cbb50f4d56765e97261b536be8b5bf"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionLineDiff.kt",
+      "sha256": "c153fb53519bf044acc5876478cae0b8980480e2cd8054944a7b2246e0934981"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionMutations.kt",
+      "sha256": "4e965c4e6853fc37dabaaaed19b18c432616f46f56f8590dede0de4b502f60f8"
+    },
+    {
+      "path": "backend/core/version/src/main/kotlin/com/vaultstadio/core/domain/service/VersionReads.kt",
+      "sha256": "f1b48263cef14960ee5380c8e052929cc3de99b12af2d95537d585c3ee59d8c8"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionAuthorizationFaultTest.kt",
+      "sha256": "575ed7983c4375d03c709cc7547c203913708e30fe61e3c8f6ac314602f19251"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionBindingFaultTest.kt",
+      "sha256": "222a1917bce09f92d4331335f8d9ba9f841449f478b410212e593f9f19c65480"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionComparisonRegressionTest.kt",
+      "sha256": "3a453c748da9666bb1f8f8c8901ed5e1c4fe34b20e7675d4e258b127a1ea2d02"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionCreationRegressionTest.kt",
+      "sha256": "ab021df7a985f707c17bc01af819def86f14c4cc9ba7d09e632cdffd5acc082e"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionDetailRegressionTest.kt",
+      "sha256": "b6852a05fc165bdcd6ba264f3ced8c85d2c90427f82346dee4e3a2346941ebac"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionDiffSemanticsTest.kt",
+      "sha256": "18d8f2beb29f4e012741234b7dc58f8d3924fce3dae7f45f0df25511fa1b2817"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionHistoryRegressionTest.kt",
+      "sha256": "2d9e440b098ddaf6ff38da75fa08c4fa57a97bdf59b908bbd9c94c250d8d93d2"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionMutationRegressionTest.kt",
+      "sha256": "bb7f7786c713a5e6563460462eb2850ccd3731f4139e70738afb0929a8c19db5"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionOwnershipMatrixTest.kt",
+      "sha256": "b218fb8729f62620da8c6b4d2ae7a740f95a3b4f2c9c8fd6142b78bad9cb09cd"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionProviderFailureTest.kt",
+      "sha256": "c00f546ee39d3f7ae8c5dc3c17c6182a899fc9fd876934d9200d752c9ce095bc"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRegressionFixture.kt",
+      "sha256": "2e80d7f9dce81774cc81b2cde8efcd038c16d29333ecea1c9672d50e76928b25"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetainedContentTest.kt",
+      "sha256": "65788c6469dea4f965e8bf5a7f00867dc493bb6048b884f46f5e57b07472b7af"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetentionContentTest.kt",
+      "sha256": "83d673e33ffe21c07fedd437e9fe09a0b4d92122562f24864fb17ad78df656f0"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionRetentionRegressionTest.kt",
+      "sha256": "58e905afb2c8d8cbec3ad3aa9cfd278d929ddc99c6920f7ed9d35f4a92116850"
+    },
+    {
+      "path": "backend/core/version/src/test/kotlin/com/vaultstadio/core/domain/service/VersionServiceFixture.kt",
+      "sha256": "4984e2831bec4b62040758cc6e7b26fc0c3a6c45d85ef746609c933ec85f31b5"
+    },
+    {
+      "path": "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionContentReferenceRepository.kt",
+      "sha256": "7617a5f699b5fc6cbc020f33f294d2b889ffd7343970d17e4ecf75090c5a7034"
+    },
+    {
+      "path": "backend/domain/version/src/main/kotlin/com/vaultstadio/domain/version/repository/VersionItemScopeRepository.kt",
+      "sha256": "bc3517b642f819162f40de2aedc9b0e8d745664e733325801b6a735fcfc9a0bd"
+    },
+    {
+      "path": "backend/infrastructure/build.gradle.kts",
+      "sha256": "1c39ebd9c9a4fc9f7fcb5838684d8d84ca36486819ba2456a4cb1b8363ba7fda"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionContentReferenceRepository.kt",
+      "sha256": "47f4b0482cb3250fd02539559363719bac9b6e00e57babdffe98d41e8a99ce9b"
+    },
+    {
+      "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedVersionItemScopeRepository.kt",
+      "sha256": "e2cdc7bf0002681380f8ae2c534bb0dc553749fe908e93952b9b1cde39d1eff2"
+    },
+    {
+      "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionContentReferenceAdapterTest.kt",
+      "sha256": "dfe9d9318e75589f319274cfebfbaa780f0987bd807ba5c116452ce8fb403f18"
+    },
+    {
+      "path": "backend/infrastructure/src/test/kotlin/com/vaultstadio/infrastructure/persistence/VersionScopeAdapterTest.kt",
+      "sha256": "349df942335f3909971e594d4dd74af28a0602b502775bca652a2ffa286da783"
+    }
+  ],
+  "localRun": {
+    "utcDate": "2026-10-27",
+    "java": "Corretto 17.0.9",
+    "tests": {
+      "core/version": {
+        "counts": {
+          "tests": 197,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "xml": 13
+      },
+      "infrastructure": {
+        "counts": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "xml": 2
+      },
+      "api": {
+        "counts": {
+          "tests": 140,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "xml": 11
+      }
+    },
+    "sourceUnchangedDuringBuild": true,
+    "matrixExecutions": {
+      "service": 72,
+      "http": 91
+    },
+    "quality": {
+      "strictDetektModules": 5,
+      "maxIssues": 0,
+      "baseline": "unchanged",
+      "scope": "Latest complete348-case campaign: four updated modules strict; application/version unchanged from its original strict pass.",
+      "formatLog": "issue74-final-format.log"
+    }
+  },
+  "coverageByClass": {
+    "VersionLineDiff": {
+      "BRANCH": {
+        "covered": 20,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 32,
+        "missed": 0
+      }
+    },
+    "VersionMutations": {
+      "BRANCH": {
+        "covered": 22,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 80,
+        "missed": 0
+      }
+    },
+    "FileVersionService": {
+      "LINE": {
+        "covered": 37,
+        "missed": 0
+      }
+    },
+    "RestoreVersionInput": {
+      "LINE": {
+        "covered": 5,
+        "missed": 0
+      }
+    },
+    "VersionDiffGenerator": {
+      "BRANCH": {
+        "covered": 14,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 63,
+        "missed": 0
+      }
+    },
+    "VersionAccessKt": {
+      "LINE": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "VersionAccess": {
+      "BRANCH": {
+        "covered": 10,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 18,
+        "missed": 0
+      }
+    },
+    "CreateVersionInput": {
+      "LINE": {
+        "covered": 7,
+        "missed": 0
+      }
+    },
+    "VersionReads": {
+      "BRANCH": {
+        "covered": 24,
+        "missed": 0
+      },
+      "LINE": {
+        "covered": 28,
+        "missed": 0
+      }
+    },
+    "ExposedVersionItemScopeRepository": {
+      "LINE": {
+        "covered": 7,
+        "missed": 0
+      }
+    },
+    "ExposedVersionContentReferenceRepository": {
+      "LINE": {
+        "covered": 7,
+        "missed": 0
+      }
+    }
+  },
+  "coreVersionCoverage": {
+    "lines": {
+      "covered": 272,
+      "missed": 0
+    },
+    "branches": {
+      "covered": 90,
+      "missed": 0
+    }
+  },
+  "collectedCases": {
+    "core/version": {
+      "com.vaultstadio.core.domain.service.VersionAuthorizationFaultTest": [
+        "canonical item identity must match even when its claimed owner matches()",
+        "scope resolution missing and provider failure cannot fetch a complete version()",
+        "VER74-FAULT-createVersion-blank-actor",
+        "VER74-FAULT-createVersion-missing-item",
+        "VER74-FAULT-createVersion-item-failure",
+        "VER74-FAULT-restoreVersion-blank-actor",
+        "VER74-FAULT-restoreVersion-missing-item",
+        "VER74-FAULT-restoreVersion-item-failure",
+        "VER74-FAULT-getHistory-blank-actor",
+        "VER74-FAULT-getHistory-missing-item",
+        "VER74-FAULT-getHistory-item-failure",
+        "VER74-FAULT-getVersion-blank-actor",
+        "VER74-FAULT-getVersion-missing-item",
+        "VER74-FAULT-getVersion-item-failure",
+        "VER74-FAULT-getLatestVersion-blank-actor",
+        "VER74-FAULT-getLatestVersion-missing-item",
+        "VER74-FAULT-getLatestVersion-item-failure",
+        "VER74-FAULT-listVersions-blank-actor",
+        "VER74-FAULT-listVersions-missing-item",
+        "VER74-FAULT-listVersions-item-failure",
+        "VER74-FAULT-deleteVersion-blank-actor",
+        "VER74-FAULT-deleteVersion-missing-item",
+        "VER74-FAULT-deleteVersion-item-failure",
+        "VER74-FAULT-applyRetentionPolicy-blank-actor",
+        "VER74-FAULT-applyRetentionPolicy-missing-item",
+        "VER74-FAULT-applyRetentionPolicy-item-failure",
+        "VER74-FAULT-compareVersions-blank-actor",
+        "VER74-FAULT-compareVersions-missing-item",
+        "VER74-FAULT-compareVersions-item-failure",
+        "VER74-FAULT-getVersionCount-blank-actor",
+        "VER74-FAULT-getVersionCount-missing-item",
+        "VER74-FAULT-getVersionCount-item-failure",
+        "VER74-FAULT-getTotalVersionSize-blank-actor",
+        "VER74-FAULT-getTotalVersionSize-missing-item",
+        "VER74-FAULT-getTotalVersionSize-item-failure",
+        "VER74-FAULT-cleanupVersionsForItem-blank-actor",
+        "VER74-FAULT-cleanupVersionsForItem-missing-item",
+        "VER74-FAULT-cleanupVersionsForItem-item-failure",
+        "latest semantic rejection cannot disclose history to a previous creator()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionBindingFaultTest": [
+        "retention refuses returned IDs outside its authorized snapshot()",
+        "history uses current canonical metadata instead of stale repository names()",
+        "VER74-BIND-detail-item",
+        "VER74-BIND-detail-number",
+        "VER74-BIND-latest",
+        "VER74-BIND-history-item",
+        "VER74-BIND-history-rows",
+        "VER74-BIND-list",
+        "VER74-BIND-retention",
+        "VER74-BIND-cleanup",
+        "VER74-BIND-delete-id",
+        "VER74-BIND-delete-scope",
+        "VER74-BIND-compare-from",
+        "VER74-BIND-restore",
+        "VER74-BIND-compare-to",
+        "VER74-BIND-create-latest"
+      ],
+      "com.vaultstadio.core.domain.service.VersionComparisonRegressionTest": [
+        "compareVersions should fail when from version not found()",
+        "compareVersions should fail when to version not found()",
+        "compareVersions should return binary diff when file is not text()",
+        "compareVersions should return text diff when file is text()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionCreationRegressionTest": [
+        "createVersion should fail for folder()",
+        "createVersion should fail for non-existent item()",
+        "createVersion should propagate when itemRepository findById returns Left()",
+        "createVersion should create new version for existing file()",
+        "createVersion should mark current latest as not latest when it exists()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionDetailRegressionTest": [
+        "getLatestVersion should return version when found()",
+        "getVersion should fail when version not found()",
+        "getVersion should propagate when versionRepository findByItemAndVersion returns Left()",
+        "getVersion should return version when found()",
+        "getLatestVersion should fail when no versions exist()",
+        "getLatestVersion should propagate when versionRepository findLatest returns Left()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionDiffSemanticsTest": [
+        "VER74-DIFF-empty",
+        "VER74-DIFF-unicode",
+        "VER74-DIFF-unchanged",
+        "VER74-DIFF-append-all",
+        "VER74-DIFF-remove-all",
+        "VER74-DIFF-insert",
+        "VER74-DIFF-delete",
+        "VER74-DIFF-replace",
+        "VER74-DIFF-reorder-delete",
+        "VER74-DIFF-duplicates",
+        "VER74-DIFF-reorder-insert",
+        "VER74-MIME-absent",
+        "VER74-MIME-application/octet-stream",
+        "VER74-MIME-text/new-kind",
+        "VER74-MIME-application/vendor+json",
+        "VER74-MIME-application/vendor+xml"
+      ],
+      "com.vaultstadio.core.domain.service.VersionHistoryRegressionTest": [
+        "getTotalVersionSize should return total size()",
+        "getHistory should return version history()",
+        "listVersions should propagate when repository returns Left()",
+        "listVersions should return paginated versions()",
+        "getHistory should propagate when repository returns Left()",
+        "getVersionCount should propagate when repository returns Left()",
+        "getVersionCount should return count()",
+        "getTotalVersionSize should propagate when repository returns Left()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionMutationRegressionTest": [
+        "deleteVersion should fail when version not found()",
+        "deleteVersion should succeed when version exists and is not latest()",
+        "restoreVersion should create new version from non-latest version()",
+        "restoreVersion should fail when version is latest()",
+        "restoreVersion should fail when version not found()",
+        "deleteVersion should fail when version is latest()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionOwnershipMatrixTest": [
+        "VER74-SVC-createVersion-PRIVATE-owner",
+        "VER74-SVC-createVersion-PRIVATE-unrelated",
+        "VER74-SVC-createVersion-SHARED-owner",
+        "VER74-SVC-createVersion-SHARED-unrelated",
+        "VER74-SVC-createVersion-PUBLIC-owner",
+        "VER74-SVC-createVersion-PUBLIC-unrelated",
+        "VER74-SVC-restoreVersion-PRIVATE-owner",
+        "VER74-SVC-restoreVersion-PRIVATE-unrelated",
+        "VER74-SVC-restoreVersion-SHARED-owner",
+        "VER74-SVC-restoreVersion-SHARED-unrelated",
+        "VER74-SVC-restoreVersion-PUBLIC-owner",
+        "VER74-SVC-restoreVersion-PUBLIC-unrelated",
+        "VER74-SVC-getHistory-PRIVATE-owner",
+        "VER74-SVC-getHistory-PRIVATE-unrelated",
+        "VER74-SVC-getHistory-SHARED-owner",
+        "VER74-SVC-getHistory-SHARED-unrelated",
+        "VER74-SVC-getHistory-PUBLIC-owner",
+        "VER74-SVC-getHistory-PUBLIC-unrelated",
+        "VER74-SVC-getVersion-PRIVATE-owner",
+        "VER74-SVC-getVersion-PRIVATE-unrelated",
+        "VER74-SVC-getVersion-SHARED-owner",
+        "VER74-SVC-getVersion-SHARED-unrelated",
+        "VER74-SVC-getVersion-PUBLIC-owner",
+        "VER74-SVC-getVersion-PUBLIC-unrelated",
+        "VER74-SVC-getLatestVersion-PRIVATE-owner",
+        "VER74-SVC-getLatestVersion-PRIVATE-unrelated",
+        "VER74-SVC-getLatestVersion-SHARED-owner",
+        "VER74-SVC-getLatestVersion-SHARED-unrelated",
+        "VER74-SVC-getLatestVersion-PUBLIC-owner",
+        "VER74-SVC-getLatestVersion-PUBLIC-unrelated",
+        "VER74-SVC-listVersions-PRIVATE-owner",
+        "VER74-SVC-listVersions-PRIVATE-unrelated",
+        "VER74-SVC-listVersions-SHARED-owner",
+        "VER74-SVC-listVersions-SHARED-unrelated",
+        "VER74-SVC-listVersions-PUBLIC-owner",
+        "VER74-SVC-listVersions-PUBLIC-unrelated",
+        "VER74-SVC-deleteVersion-PRIVATE-owner",
+        "VER74-SVC-deleteVersion-PRIVATE-unrelated",
+        "VER74-SVC-deleteVersion-SHARED-owner",
+        "VER74-SVC-deleteVersion-SHARED-unrelated",
+        "VER74-SVC-deleteVersion-PUBLIC-owner",
+        "VER74-SVC-deleteVersion-PUBLIC-unrelated",
+        "VER74-SVC-applyRetentionPolicy-PRIVATE-owner",
+        "VER74-SVC-applyRetentionPolicy-PRIVATE-unrelated",
+        "VER74-SVC-applyRetentionPolicy-SHARED-owner",
+        "VER74-SVC-applyRetentionPolicy-SHARED-unrelated",
+        "VER74-SVC-applyRetentionPolicy-PUBLIC-owner",
+        "VER74-SVC-applyRetentionPolicy-PUBLIC-unrelated",
+        "VER74-SVC-compareVersions-PRIVATE-owner",
+        "VER74-SVC-compareVersions-PRIVATE-unrelated",
+        "VER74-SVC-compareVersions-SHARED-owner",
+        "VER74-SVC-compareVersions-SHARED-unrelated",
+        "VER74-SVC-compareVersions-PUBLIC-owner",
+        "VER74-SVC-compareVersions-PUBLIC-unrelated",
+        "VER74-SVC-getVersionCount-PRIVATE-owner",
+        "VER74-SVC-getVersionCount-PRIVATE-unrelated",
+        "VER74-SVC-getVersionCount-SHARED-owner",
+        "VER74-SVC-getVersionCount-SHARED-unrelated",
+        "VER74-SVC-getVersionCount-PUBLIC-owner",
+        "VER74-SVC-getVersionCount-PUBLIC-unrelated",
+        "VER74-SVC-getTotalVersionSize-PRIVATE-owner",
+        "VER74-SVC-getTotalVersionSize-PRIVATE-unrelated",
+        "VER74-SVC-getTotalVersionSize-SHARED-owner",
+        "VER74-SVC-getTotalVersionSize-SHARED-unrelated",
+        "VER74-SVC-getTotalVersionSize-PUBLIC-owner",
+        "VER74-SVC-getTotalVersionSize-PUBLIC-unrelated",
+        "VER74-SVC-cleanupVersionsForItem-PRIVATE-owner",
+        "VER74-SVC-cleanupVersionsForItem-PRIVATE-unrelated",
+        "VER74-SVC-cleanupVersionsForItem-SHARED-owner",
+        "VER74-SVC-cleanupVersionsForItem-SHARED-unrelated",
+        "VER74-SVC-cleanupVersionsForItem-PUBLIC-owner",
+        "VER74-SVC-cleanupVersionsForItem-PUBLIC-unrelated"
+      ],
+      "com.vaultstadio.core.domain.service.VersionProviderFailureTest": [
+        "stream I O failure becomes typed provider failure with resource closure()",
+        "stream close failure stays typed and prevents opening the next version()",
+        "owner file type and trashed read semantics remain explicit()",
+        "cleanup provider failure stops before row deletion()",
+        "cleanup covers more than a default page()",
+        "diff stops on first provider error and closes earlier streams on second error()",
+        "latest lookup rejects a nonlatest row()",
+        "delete provider failure propagates and preserves metadata()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionRetainedContentTest": [
+        "deleting the source version preserves bytes referenced by its restored version()",
+        "a later reference failure cannot delete an earlier unreferenced blob()",
+        "purging restored history removes shared historical bytes but retains current file()",
+        "purging history preserves the current file content()",
+        "VER74-CONTENT-FAIL-deleteVersion",
+        "VER74-CONTENT-FAIL-cleanupVersionsForItem"
+      ],
+      "com.vaultstadio.core.domain.service.VersionRetentionContentTest": [
+        "retention policy failure preserves rows and all bytes()",
+        "a later reference failure prevents every retention byte deletion()",
+        "empty retention does not query references or delete content()",
+        "retention preserves content referenced by a retained version()",
+        "retention preserves content referenced by the current file()",
+        "retention reclaims removed unreferenced content()",
+        "reference failure after metadata retention preserves remaining bytes and is not success()",
+        "retention content deletion failure propagates after metadata and retains current bytes()",
+        "retention deletes a shared unreferenced key only once()"
+      ],
+      "com.vaultstadio.core.domain.service.VersionRetentionRegressionTest": [
+        "cleanupVersionsForItem should delete all version files and remove from repository()",
+        "applyRetentionPolicy should return only scoped deleted version ids()"
+      ]
+    },
+    "infrastructure": {
+      "com.vaultstadio.infrastructure.persistence.VersionContentReferenceAdapterTest": [
+        "any current item retains content without requiring owner or name columns()",
+        "empty deletion batch retains every existing reference()",
+        "the excluded version alone does not retain its content()",
+        "SQL failure is not interpreted as unreferenced content()",
+        "a version outside the deletion batch still retains content()",
+        "the complete deleted batch does not retain shared content()",
+        "another version retains content without requiring other metadata columns()"
+      ],
+      "com.vaultstadio.infrastructure.persistence.VersionScopeAdapterTest": [
+        "resolve exact scope without any version metadata columns()",
+        "cancelled scope lookup remains cancellation instead of a database failure()",
+        "SQL failure remains a typed error rather than absence()",
+        "missing scope is nullable absence()"
+      ]
+    },
+    "api": {
+      "com.vaultstadio.api.application.usecase.version.ApplyRetentionPolicyUseCaseTest": [
+        "invokeReturnsLeftWhenFileVersionServiceReturnsLeft()",
+        "invokeDelegatesToFileVersionServiceAndReturnsRightList()"
+      ],
+      "com.vaultstadio.api.application.usecase.version.CompareVersionsUseCaseTest": [
+        "invokeReturnsLeftWhenFileVersionServiceReturnsLeft()",
+        "invokeDelegatesToFileVersionServiceAndReturnsRightVersionDiff()"
+      ],
+      "com.vaultstadio.api.application.usecase.version.DeleteVersionUseCaseTest": [
+        "invokeReturnsLeftWhenFileVersionServiceReturnsLeft()",
+        "invokeDelegatesToFileVersionServiceAndReturnsRightUnit()"
+      ],
+      "com.vaultstadio.api.application.usecase.version.GetVersionHistoryUseCaseTest": [
+        "invokeReturnsLeftWhenServiceFails()",
+        "invokeReturnsHistoryWhenServiceSucceeds()"
+      ],
+      "com.vaultstadio.api.application.usecase.version.GetVersionUseCaseTest": [
+        "invokeDelegatesToFileVersionServiceAndReturnsRightVersion()",
+        "invokeReturnsLeftWhenFileVersionServiceReturnsLeft()"
+      ],
+      "com.vaultstadio.api.application.usecase.version.RestoreVersionUseCaseTest": [
+        "invokeDelegatesToFileVersionServiceAndReturnsRightFileVersion()",
+        "invokeReturnsLeftWhenFileVersionServiceReturnsLeft()"
+      ],
+      "com.vaultstadio.api.routes.VersionRoutesTest": [
+        "FileVersionResponse should allow null comment()",
+        "CleanupRequest should accept maxVersions()",
+        "CleanupRequest should have default values()",
+        "DiffPatchResponse should represent MODIFY operation()",
+        "VersionDiffResponse should allow negative size change()",
+        "DiffPatchResponse should represent ADD operation()",
+        "RestoreVersionRequest should allow null comment()",
+        "FileVersionResponse should indicate not latest version()",
+        "VersionDiffResponse should store all properties()",
+        "FileVersionResponse should indicate restore source()",
+        "RestoreVersionRequest should support version 0()",
+        "CleanupRequest should allow zero minVersionsToKeep()",
+        "VersionDiffResponse should indicate binary file()",
+        "CreateVersionRequest should allow comment()",
+        "VersionHistoryResponse should allow empty versions list()",
+        "CleanupRequest should accept maxAgeDays()",
+        "FileVersionResponse should store all properties()",
+        "CreateVersionRequest should allow null comment()",
+        "CleanupRequest should accept all parameters()",
+        "CleanupRequest should allow very large maxVersions()",
+        "VersionHistoryResponse should store all properties()",
+        "RestoreVersionRequest should allow comment()",
+        "DiffPatchResponse should represent DELETE operation()",
+        "VersionHistoryResponse versions should be in order()",
+        "RestoreVersionRequest should store version number()",
+        "CreateVersionRequest should have default null comment()"
+      ],
+      "com.vaultstadio.api.routes.version.VersionHttpBoundaryTest": [
+        "another owners current item protects a shared blob without exposing that item()",
+        "real SQL failure remains 500 and cannot override an earlier denial()",
+        "restored history retains its bytes after the source version is deleted()",
+        "owner missing version is 404 while a previous creator remains forbidden()",
+        "missing canonical item never authorizes retained history or version deletion()",
+        "production service purges history without deleting the active file()",
+        "actual unreadable historical bytes preserve state and produce a safe provider failure()"
+      ],
+      "com.vaultstadio.api.routes.version.VersionOwnershipHttpTest": [
+        "VER74-HTTP-history-PRIVATE-owner",
+        "VER74-HTTP-history-PRIVATE-unrelated",
+        "VER74-HTTP-history-PRIVATE-shared",
+        "VER74-HTTP-history-PRIVATE-admin",
+        "VER74-HTTP-history-SHARED-owner",
+        "VER74-HTTP-history-SHARED-unrelated",
+        "VER74-HTTP-history-SHARED-shared",
+        "VER74-HTTP-history-SHARED-admin",
+        "VER74-HTTP-history-PUBLIC-owner",
+        "VER74-HTTP-history-PUBLIC-unrelated",
+        "VER74-HTTP-history-PUBLIC-shared",
+        "VER74-HTTP-history-PUBLIC-admin",
+        "VER74-HTTP-detail-PRIVATE-owner",
+        "VER74-HTTP-detail-PRIVATE-unrelated",
+        "VER74-HTTP-detail-PRIVATE-shared",
+        "VER74-HTTP-detail-PRIVATE-admin",
+        "VER74-HTTP-detail-SHARED-owner",
+        "VER74-HTTP-detail-SHARED-unrelated",
+        "VER74-HTTP-detail-SHARED-shared",
+        "VER74-HTTP-detail-SHARED-admin",
+        "VER74-HTTP-detail-PUBLIC-owner",
+        "VER74-HTTP-detail-PUBLIC-unrelated",
+        "VER74-HTTP-detail-PUBLIC-shared",
+        "VER74-HTTP-detail-PUBLIC-admin",
+        "VER74-HTTP-download-metadata-PRIVATE-owner",
+        "VER74-HTTP-download-metadata-PRIVATE-unrelated",
+        "VER74-HTTP-download-metadata-PRIVATE-shared",
+        "VER74-HTTP-download-metadata-PRIVATE-admin",
+        "VER74-HTTP-download-metadata-SHARED-owner",
+        "VER74-HTTP-download-metadata-SHARED-unrelated",
+        "VER74-HTTP-download-metadata-SHARED-shared",
+        "VER74-HTTP-download-metadata-SHARED-admin",
+        "VER74-HTTP-download-metadata-PUBLIC-owner",
+        "VER74-HTTP-download-metadata-PUBLIC-unrelated",
+        "VER74-HTTP-download-metadata-PUBLIC-shared",
+        "VER74-HTTP-download-metadata-PUBLIC-admin",
+        "VER74-HTTP-restore-PRIVATE-owner",
+        "VER74-HTTP-restore-PRIVATE-unrelated",
+        "VER74-HTTP-restore-PRIVATE-shared",
+        "VER74-HTTP-restore-PRIVATE-admin",
+        "VER74-HTTP-restore-SHARED-owner",
+        "VER74-HTTP-restore-SHARED-unrelated",
+        "VER74-HTTP-restore-SHARED-shared",
+        "VER74-HTTP-restore-SHARED-admin",
+        "VER74-HTTP-restore-PUBLIC-owner",
+        "VER74-HTTP-restore-PUBLIC-unrelated",
+        "VER74-HTTP-restore-PUBLIC-shared",
+        "VER74-HTTP-restore-PUBLIC-admin",
+        "VER74-HTTP-compare-PRIVATE-owner",
+        "VER74-HTTP-compare-PRIVATE-unrelated",
+        "VER74-HTTP-compare-PRIVATE-shared",
+        "VER74-HTTP-compare-PRIVATE-admin",
+        "VER74-HTTP-compare-SHARED-owner",
+        "VER74-HTTP-compare-SHARED-unrelated",
+        "VER74-HTTP-compare-SHARED-shared",
+        "VER74-HTTP-compare-SHARED-admin",
+        "VER74-HTTP-compare-PUBLIC-owner",
+        "VER74-HTTP-compare-PUBLIC-unrelated",
+        "VER74-HTTP-compare-PUBLIC-shared",
+        "VER74-HTTP-compare-PUBLIC-admin",
+        "VER74-HTTP-delete-PRIVATE-owner",
+        "VER74-HTTP-delete-PRIVATE-unrelated",
+        "VER74-HTTP-delete-PRIVATE-shared",
+        "VER74-HTTP-delete-PRIVATE-admin",
+        "VER74-HTTP-delete-SHARED-owner",
+        "VER74-HTTP-delete-SHARED-unrelated",
+        "VER74-HTTP-delete-SHARED-shared",
+        "VER74-HTTP-delete-SHARED-admin",
+        "VER74-HTTP-delete-PUBLIC-owner",
+        "VER74-HTTP-delete-PUBLIC-unrelated",
+        "VER74-HTTP-delete-PUBLIC-shared",
+        "VER74-HTTP-delete-PUBLIC-admin",
+        "VER74-HTTP-retention-cleanup-PRIVATE-owner",
+        "VER74-HTTP-retention-cleanup-PRIVATE-unrelated",
+        "VER74-HTTP-retention-cleanup-PRIVATE-shared",
+        "VER74-HTTP-retention-cleanup-PRIVATE-admin",
+        "VER74-HTTP-retention-cleanup-SHARED-owner",
+        "VER74-HTTP-retention-cleanup-SHARED-unrelated",
+        "VER74-HTTP-retention-cleanup-SHARED-shared",
+        "VER74-HTTP-retention-cleanup-SHARED-admin",
+        "VER74-HTTP-retention-cleanup-PUBLIC-owner",
+        "VER74-HTTP-retention-cleanup-PUBLIC-unrelated",
+        "VER74-HTTP-retention-cleanup-PUBLIC-shared",
+        "VER74-HTTP-retention-cleanup-PUBLIC-admin",
+        "VER74-HTTP-history-anonymous",
+        "VER74-HTTP-detail-anonymous",
+        "VER74-HTTP-download-metadata-anonymous",
+        "VER74-HTTP-restore-anonymous",
+        "VER74-HTTP-compare-anonymous",
+        "VER74-HTTP-delete-anonymous",
+        "VER74-HTTP-retention-cleanup-anonymous"
+      ],
+      "com.vaultstadio.api.routes.version.VersionRetentionHttpTest": [
+        "retention preserves restored history and canonical current content()",
+        "full purge reclaims a shared historical key while preserving canonical bytes()"
+      ],
+      "com.vaultstadio.api.service.ThumbnailCacheTest$ThumbnailCacheKeyTests": [
+        "key default version is zero()",
+        "key holds itemId size version()"
+      ]
+    }
+  },
+  "limits": [
+    "Selected affected suites, not a final full-backend campaign.",
+    "No claim of complete platform coverage; infrastructure coverage from selected adapter cases is not global coverage.",
+    "Sequential reference guard only; concurrent content lifecycle and canonical restore remain #109.",
+    "Remote CI, Copilot review and protected-branch adoption are separate acceptance steps."
+  ],
+  "packagedDogfood": {
+    "head": "e3b5ce2b1455d210e12619214e4e13374488146d",
+    "runtimeImage": "sha256:4dd393701b8ec63fc809ee241b630193757f131a67b6b4e2fe393a7151fdc5a8",
+    "packageFilesVerified": 237,
+    "requestCount": 15,
+    "requests": [
+      {
+        "case": "login-owner",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "case": "login-unrelated",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "case": "owner-metadata-before",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "owner-download-before",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "owner-history",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "anonymous-history",
+        "method": "GET",
+        "status": 401
+      },
+      {
+        "case": "unrelated-storage-item",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-history",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-detail",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-download-metadata",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-compare",
+        "method": "GET",
+        "status": 403
+      },
+      {
+        "case": "unrelated-restore",
+        "method": "POST",
+        "status": 403
+      },
+      {
+        "case": "unrelated-cleanup",
+        "method": "POST",
+        "status": 403
+      },
+      {
+        "case": "owner-metadata-after",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "case": "owner-download-after",
+        "method": "GET",
+        "status": 200
+      }
+    ],
+    "foreignSurfacesDenied": 7,
+    "ownerMetadataUnchanged": true,
+    "ownerBytesUnchanged": true,
+    "contentSha256": "92ed1e3eb223867f9f458e4f2187cafb962f2c02e3f3a32d032ce5c4f47367e1",
+    "allExistingStorageAndPluginBytesUnchanged": true,
+    "postgresAndFrontendContainersUnchanged": true,
+    "scope": "actual mounted packaged backend against preserved local disposable accounts, PostgreSQL and content; version-row effect matrices remain integrated-test evidence"
+  },
+  "reviewFollowup": {
+    "finding": "retention-leaves-deleted-version-content",
+    "reproduction": "One real failing assertion before code fix, raw XML retained",
+    "newCases": {
+      "core": 9,
+      "http": 1
+    },
+    "behavior": "Reclaim unreferenced keys from removed-row snapshot, preflight all reference queries, deduplicate deletes and propagate errors. Preserve current and retained version references.",
+    "limits": "Metadata-first policy may commit rows before a later reference/storage error; durable compensation and concurrent GC remain109.",
+    "cleanupBatch": {
+      "red": "6cases/1real assertion failure before code",
+      "newCases": {
+        "core": 1,
+        "sqlAdapters": 3,
+        "http": 1
+      },
+      "contract": "Exclude the entire authorized deletion set; preserve external version/current item references; query and delete each key once after complete row binding."
+    },
+    "sqlFalsePositives": {
+      "upstream": "https://github.com/vypdev/copilot/issues/736",
+      "artifact": "org.jetbrains.exposed:exposed-core:1.0.0",
+      "actualSuperclass": "java.sql.SQLException",
+      "typedSQLAndCancellationControls": "pass, actual PostgreSQL"
+    }
+  }
+}

@@ -18,6 +18,6 @@ data class ShareLink(
     val createdAt: Instant,
     val sharedWithUsers: List<String> = emptyList(),
 ) {
-    fun isExpired(now: Instant): Boolean = expiresAt?.let { it < now } ?: false
+    fun isExpired(now: Instant): Boolean = expiresAt?.let { it <= now } ?: false
     fun isDownloadLimitReached(): Boolean = maxDownloads?.let { downloadCount >= it } ?: false
 }

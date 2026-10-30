@@ -123,20 +123,35 @@ private fun Application.configureBackgroundJobs() {
 /**
  * Configures CORS based on server configuration.
  */
-private fun Application.configureCors(serverConfig: HttpServerConfig) {
+internal fun Application.configureCors(serverConfig: HttpServerConfig) {
     install(CORS) {
         // Configure allowed origins
         if (serverConfig.corsAllowedOrigins.contains("*")) {
             anyHost()
         } else {
             serverConfig.corsAllowedOrigins.forEach { origin ->
-                allowHost(origin.removePrefix("http://").removePrefix("https://"))
+                val scheme = when {
+                    origin.startsWith("https://", ignoreCase = true) -> "https"
+                    else -> "http"
+                }
+                val host = if (origin.startsWith(
+                        "$scheme://",
+                        ignoreCase = true,
+                    )
+                ) {
+                    origin.substringAfter("://")
+                } else {
+                    origin
+                }
+                allowHost(host, schemes = listOf(scheme))
             }
         }
 
         // Allowed headers
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.CacheControl)
+        allowHeader("X-Share-Password")
         allowHeader(HttpHeaders.Accept)
         allowHeader(HttpHeaders.Origin)
         allowHeader(HttpHeaders.AccessControlRequestMethod)

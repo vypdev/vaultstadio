@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "issue": 78,
+  "method": "Actual rendered application through documented CUA controls; normal sign-in; original download bytes and native saved files independently hashed; private credentials/session data excluded.",
+  "webProductionSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+  "finalNativeProductionSource": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
+  "earlierPositiveSource": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+  "sourcesAreDistinct": true,
+  "events": [
+    {
+      "atUtc": "2026-10-28T08:06:47.211Z",
+      "scenario": "TRANS78-UI-02",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "atUtc": "2026-10-28T08:07:09.292Z",
+      "scenario": "TRANS78-UI-03",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 46,
+      "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+    },
+    {
+      "atUtc": "2026-10-28T08:07:19.653Z",
+      "scenario": "TRANS78-UI-04",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "atUtc": "2026-10-28T08:07:44.551Z",
+      "scenario": "TRANS78-UI-05",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "atUtc": "2026-10-28T08:07:55.077Z",
+      "scenario": "TRANS78-UI-07",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6"
+    },
+    {
+      "atUtc": "2026-10-28T08:08:12.166594+00:00",
+      "scenario": "TRANS78-UI-07",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "entries": [
+        {
+          "name": "binary78.bin",
+          "bytes": 65537,
+          "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+        },
+        {
+          "name": "empty78.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "música ñ 日本語78.txt",
+          "bytes": 46,
+          "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+        }
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T08:11:15.141Z",
+      "scenario": "TRANS78-UI-06",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "atUtc": "2026-10-28T08:23:30.578Z",
+      "scenario": "TRANS78-UI-08",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6"
+    },
+    {
+      "atUtc": "2026-10-28T08:23:55.558779+00:00",
+      "scenario": "TRANS78-UI-08",
+      "source": "a207b1356f6a43c2fb3f25f432639551fa92f4c6",
+      "entries": [
+        {
+          "name": "archive78/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/binary78.bin",
+          "bytes": 65537,
+          "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+        },
+        {
+          "name": "archive78/nested/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/empty-dir/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/empty78.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/música ñ 日本語78.txt",
+          "bytes": 46,
+          "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+        }
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T08:35:07.640Z",
+      "scenario": "TRANS78-UI-01",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "method": "normal real form sign-out/sign-in",
+      "tokensSeeded": false,
+      "filesLoaded": true
+    },
+    {
+      "atUtc": "2026-10-28T08:35:51.079Z",
+      "scenario": "TRANS78-UI-09-failure",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "fixture": "loopback proxy denies CORS only for owned file",
+      "retryVisible": true,
+      "noNewBinaryFile": true
+    },
+    {
+      "atUtc": "2026-10-28T08:36:26.616Z",
+      "scenario": "TRANS78-UI-09-retry",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "atUtc": "2026-10-28T08:44:27.919Z",
+      "scenario": "TRANS78-UI-12-cancel",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "fixture": "independently verified held body after first byte",
+      "noNewBinaryFile": true,
+      "duplicateDownloadClicks": 2,
+      "canceledVisible": true,
+      "noDownloadEvent": true
+    },
+    {
+      "atUtc": "2026-10-28T08:45:52.577Z",
+      "scenario": "TRANS78-UI-12-retry-after-cancel",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+    },
+    {
+      "atUtc": "2026-10-28T08:45:54.663Z",
+      "scenario": "TRANS78-UI-12-no-stale-completion",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "unexpectedExtraDownload": false
+    },
+    {
+      "atUtc": "2026-10-28T08:47:53.818Z",
+      "scenario": "TRANS78-UI-13-upload-failure",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "fixture": "single owned multipart upload503 before upstream",
+      "retryVisible": true,
+      "fileListHasRetryFile": false,
+      "completionText": "text 0 / 1 completed • 1 failed"
+    },
+    {
+      "atUtc": "2026-10-28T08:49:54.551Z",
+      "scenario": "TRANS78-UI-13-upload-retry",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "retryClickedAfterNavigation": "/files/archive78",
+      "completed": 1,
+      "failed": 0,
+      "retryFileInWrongCurrentFolder": false
+    },
+    {
+      "atUtc": "2026-10-28T08:50:12.819Z",
+      "scenario": "TRANS78-UI-13-upload-retry-roundtrip",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 129,
+      "sha256": "a14a45b30d8e4eca06366744bea6597da4da3404e76a29019874cfec816bc586"
+    },
+    {
+      "atUtc": "2026-10-28T10:21:02.444Z",
+      "scenario": "TRANS78-UI-11",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "method": "Escape after Cancel AX action/read timeout",
+      "realNativeChooserSuggestedName": "binary78.bin",
+      "nativeOutputEmpty": true,
+      "canceledStatusVisible": true
+    },
+    {
+      "atUtc": "2026-10-28T10:22:41.384Z",
+      "scenario": "TRANS78-UI-10-native-save",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 46,
+      "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+    },
+    {
+      "atUtc": "2026-10-28T10:22:41.629Z",
+      "scenario": "TRANS78-UI-10-native-login-and-save",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "tokensSeeded": false,
+      "loginMethod": "explicit focus and native keyboard, real submit",
+      "passwordMasked": true,
+      "actualSystemChooser": true,
+      "fileSavedVisible": false,
+      "temporaryPartsLeft": 0
+    },
+    {
+      "atUtc": "2026-10-28T10:24:00.301Z",
+      "scenario": "TRANS78-UI-14-native-upload-download",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 321,
+      "sha256": "9a3f2af84b24c845767ceb07914fb4a53a1c62a351f1d8cd393f51067181f237"
+    },
+    {
+      "atUtc": "2026-10-28T10:35:36.460Z",
+      "scenario": "TRANS78-PLAT-12",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "platform": "macOS",
+      "result": "passed-existing-profile-export-callback-through-real-save-dialog",
+      "bytes": 339,
+      "sha256": "3e5c0deebbeaa908b6bcf5edd34fc848c05142dc9670f0c00bf054bbc4824703",
+      "validJson": true,
+      "keys": [
+        "exportDate",
+        "quota",
+        "user"
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T10:36:03.913Z",
+      "scenario": "TRANS78-PLAT-12",
+      "source": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "platform": "Web",
+      "result": "passed-existing-profile-export-callback-through-real-browser-download",
+      "bytes": 336,
+      "sha256": "63c0460cc3b0053fe2ae51ad624a5034a48307795bb427007e698c1659b0bc0a",
+      "validJson": true,
+      "keys": [
+        "exportDate",
+        "quota",
+        "user"
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T10:54:15.020Z",
+      "scenario": "TRANS78-UI-15-native-final-save",
+      "source": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
+      "bytes": 321,
+      "sha256": "9a3f2af84b24c845767ceb07914fb4a53a1c62a351f1d8cd393f51067181f237",
+      "assertions": [
+        "normal autonomous login without seeded tokens",
+        "actual Save File dialog",
+        "File saved visible",
+        "original bytes match",
+        "no temporary part files"
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T10:54:30.988Z",
+      "scenario": "TRANS78-UI-16-native-final-cancel",
+      "source": "4128d0323ab8d81de537e846553dd77dbe3a6b1e",
+      "assertions": [
+        "actual Save File cancelled by Escape",
+        "Download canceled visible",
+        "Retry visible",
+        "existing destination bytes unchanged",
+        "no new file or temporary parts"
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T11:38:33.339Z",
+      "scenario": "TRANS78-UI-17-drive-prefix-refusal",
+      "source": "cf7812b20f61c7b6a2686cba9cb2d3664dfbce29",
+      "clientSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "assertions": [
+        "actual Create Folder form accepted C:",
+        "only C: selected",
+        "actual selection toolbar ZIP action",
+        "safe invalid-selection Nothing was saved visible",
+        "Retry visible",
+        "no new VaultStadio ZIP since backend update"
+      ],
+      "observationLimitation": "Negative download-event watcher timed out and reset the CUA session; its promise result is not counted. Rendered refusal and filesystem check were independently verified."
+    },
+    {
+      "atUtc": "2026-10-28T11:39:03.422Z",
+      "scenario": "TRANS78-UI-18-binary-after-drive-refusal",
+      "source": "cf7812b20f61c7b6a2686cba9cb2d3664dfbce29",
+      "clientSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 65537,
+      "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d",
+      "assertions": [
+        "actual details Download after rejected ZIP",
+        "original binary bytes equal",
+        "operation recovers normally"
+      ]
+    },
+    {
+      "atUtc": "2026-10-28T11:39:54.038Z",
+      "scenario": "TRANS78-UI-19-valid-zip-after-drive-refusal",
+      "source": "cf7812b20f61c7b6a2686cba9cb2d3664dfbce29",
+      "clientSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "bytes": 1497,
+      "sha256": "71ccf43de0591ca1b25f1f9b4f1c33685c3efdeb263071dae0e5d52d81d20ed5"
+    },
+    {
+      "atUtc": "2026-10-28T11:40:17.358166+00:00",
+      "scenario": "TRANS78-UI-19-valid-zip-after-drive-refusal",
+      "source": "cf7812b20f61c7b6a2686cba9cb2d3664dfbce29",
+      "clientSource": "4a725d4464864eea65311aac76b9d5d6cdb48975",
+      "entries": [
+        {
+          "name": "archive78/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/binary78.bin",
+          "bytes": 65537,
+          "sha256": "237356e18b503616912abb8ffaed3a72591e397d4ac294c4637917d48a3f529d"
+        },
+        {
+          "name": "archive78/nested/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/empty-dir/",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/empty78.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "archive78/nested/música ñ 日本語78.txt",
+          "bytes": 46,
+          "sha256": "f7b808b22d48dfe80e7fd340c851ccffe0e7b4a924e478ed0397eab9507152e1"
+        }
+      ],
+      "assertions": [
+        "six exact recursive paths including empty directory",
+        "all decompressed original bytes equal",
+        "CRC checked by actual ZIP decoding",
+        "no unsafe folder entry included"
+      ]
+    }
+  ],
+  "currentBackendSource": "cf7812b20f61c7b6a2686cba9cb2d3664dfbce29"
+}

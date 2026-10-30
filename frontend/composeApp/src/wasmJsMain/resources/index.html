@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="/">
     <title>VaultStadio</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <style>
         html, body {
             margin: 0;
@@ -51,19 +50,12 @@
     </style>
 </head>
 <body>
-    <div id="loading" class="loading">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Loading VaultStadio...</div>
+    <div id="ComposeTarget">
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading VaultStadio...</div>
+        </div>
     </div>
-    <canvas id="ComposeTarget"></canvas>
-    <script>
-        // Hide loading indicator when app is ready
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loading').style.display = 'none';
-            }, 100);
-        });
-    </script>
     <script src="/composeApp.js"></script>
 </body>
 </html>

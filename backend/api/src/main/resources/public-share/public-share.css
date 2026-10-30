@@ -1,0 +1,11 @@
+:root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+body { margin: 0; padding: 2rem 1rem; }
+main { max-width: 38rem; margin: auto; }
+label, input { display: block; }
+input { box-sizing: border-box; width: 100%; padding: .75rem; margin: .5rem 0 1rem; font-size: 1rem; }
+button { padding: .75rem 1rem; font-size: 1rem; cursor: pointer; }
+button:disabled { cursor: default; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+:focus-visible { outline: 3px solid #558bff; outline-offset: 3px; }
+dd { margin: .25rem 0 1rem; overflow-wrap: anywhere; }
+#status { min-height: 3rem; }

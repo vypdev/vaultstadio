@@ -1,7 +1,6 @@
 package com.vaultstadio.app.ui.components.layout
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.activity
@@ -221,6 +222,7 @@ fun MainSidebar(
                 label = strings.logout,
                 selected = false,
                 onClick = onLogout,
+                role = Role.Button,
             )
 
             // User info
@@ -283,6 +285,7 @@ private fun SidebarItem(
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
+    role: Role = Role.Tab,
 ) {
     Row(
         modifier = Modifier
@@ -295,7 +298,7 @@ private fun SidebarItem(
                     MaterialTheme.colorScheme.surfaceVariant
                 },
             )
-            .clickable(onClick = onClick)
+            .selectable(selected = selected, role = role, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),

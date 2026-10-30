@@ -1,0 +1,1628 @@
+{
+  "schemaVersion": 1,
+  "issue": 119,
+  "baselineDevelop": "dcd7eab411bdeb94e601bdee0ffac6319cb78a26",
+  "testedImplementation": {
+    "head": "85aca01b02ed5f84d54b9c972c6237e7d1ca77e4",
+    "tree": "b1e6adc6a1798b074759719d40e8b48ba14294a1",
+    "status": "",
+    "digest": "9010a575b662422b1a318378424ebac383b6123954a28953bab3abc7d4cd64dd"
+  },
+  "product": {
+    "backend": {
+      "tests": 3296,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktop": {
+      "tests": 1460,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "tests": 1335,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "totalProductExecutions": 6091,
+  "command": [
+    "make",
+    "test-coverage"
+  ],
+  "seconds": 580.15,
+  "canonical": {
+    "backend": {
+      "summary": {
+        "classes": 2180,
+        "sha256": "174a1801bd77eb846960a3e490c8e4a69957542d09b3b4cc7acc07834dbef38b",
+        "line": {
+          "missed": 7657,
+          "covered": 9246
+        },
+        "branch": {
+          "missed": 4064,
+          "covered": 1995
+        },
+        "instruction": {
+          "missed": 83349,
+          "covered": 72469
+        }
+      },
+      "modules": {
+        ":api": {
+          "line": {
+            "covered": 2563,
+            "missed": 3932
+          },
+          "branch": {
+            "covered": 662,
+            "missed": 2452
+          },
+          "instruction": {
+            "covered": 21131,
+            "missed": 49781
+          }
+        },
+        ":domain:common": {
+          "line": {
+            "covered": 162,
+            "missed": 7
+          },
+          "branch": {
+            "covered": 19,
+            "missed": 3
+          },
+          "instruction": {
+            "covered": 1184,
+            "missed": 95
+          }
+        },
+        ":domain:admin": {
+          "line": {
+            "covered": 10,
+            "missed": 1
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 107,
+            "missed": 28
+          }
+        },
+        ":core": {
+          "line": {
+            "covered": 478,
+            "missed": 68
+          },
+          "branch": {
+            "covered": 6,
+            "missed": 10
+          },
+          "instruction": {
+            "covered": 4169,
+            "missed": 1126
+          }
+        },
+        ":domain:collaboration": {
+          "line": {
+            "covered": 114,
+            "missed": 40
+          },
+          "branch": {
+            "covered": 6,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 986,
+            "missed": 380
+          }
+        },
+        ":core:common": {
+          "line": {
+            "covered": 445,
+            "missed": 256
+          },
+          "branch": {
+            "covered": 60,
+            "missed": 114
+          },
+          "instruction": {
+            "covered": 3440,
+            "missed": 3319
+          }
+        },
+        ":core:version": {
+          "line": {
+            "covered": 272,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 90,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 3002,
+            "missed": 0
+          }
+        },
+        ":core:collaboration": {
+          "line": {
+            "covered": 382,
+            "missed": 13
+          },
+          "branch": {
+            "covered": 183,
+            "missed": 24
+          },
+          "instruction": {
+            "covered": 3873,
+            "missed": 159
+          }
+        },
+        ":core:federation": {
+          "line": {
+            "covered": 343,
+            "missed": 84
+          },
+          "branch": {
+            "covered": 75,
+            "missed": 64
+          },
+          "instruction": {
+            "covered": 1961,
+            "missed": 782
+          }
+        },
+        ":core:sync": {
+          "line": {
+            "covered": 291,
+            "missed": 52
+          },
+          "branch": {
+            "covered": 57,
+            "missed": 35
+          },
+          "instruction": {
+            "covered": 1884,
+            "missed": 349
+          }
+        },
+        ":core:storage": {
+          "line": {
+            "covered": 367,
+            "missed": 47
+          },
+          "branch": {
+            "covered": 120,
+            "missed": 60
+          },
+          "instruction": {
+            "covered": 3641,
+            "missed": 500
+          }
+        },
+        ":core:auth": {
+          "line": {
+            "covered": 243,
+            "missed": 46
+          },
+          "branch": {
+            "covered": 87,
+            "missed": 51
+          },
+          "instruction": {
+            "covered": 1777,
+            "missed": 403
+          }
+        },
+        ":core:activity": {
+          "line": {
+            "covered": 192,
+            "missed": 36
+          },
+          "branch": {
+            "covered": 5,
+            "missed": 5
+          },
+          "instruction": {
+            "covered": 1105,
+            "missed": 208
+          }
+        },
+        ":core:share": {
+          "line": {
+            "covered": 86,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 27,
+            "missed": 1
+          },
+          "instruction": {
+            "covered": 803,
+            "missed": 26
+          }
+        },
+        ":infrastructure": {
+          "line": {
+            "covered": 1632,
+            "missed": 1739
+          },
+          "branch": {
+            "covered": 336,
+            "missed": 559
+          },
+          "instruction": {
+            "covered": 12121,
+            "missed": 14385
+          }
+        },
+        ":domain:activity": {
+          "line": {
+            "covered": 60,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 454,
+            "missed": 85
+          }
+        },
+        ":core:ai": {
+          "line": {
+            "covered": 424,
+            "missed": 247
+          },
+          "branch": {
+            "covered": 76,
+            "missed": 131
+          },
+          "instruction": {
+            "covered": 2438,
+            "missed": 2072
+          }
+        },
+        ":application:sync": {
+          "line": {
+            "covered": 27,
+            "missed": 12
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 145,
+            "missed": 183
+          }
+        },
+        ":plugins-api": {
+          "line": {
+            "covered": 257,
+            "missed": 59
+          },
+          "branch": {
+            "covered": 30,
+            "missed": 22
+          },
+          "instruction": {
+            "covered": 2034,
+            "missed": 638
+          }
+        },
+        ":domain:storage": {
+          "line": {
+            "covered": 88,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 30,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 908,
+            "missed": 54
+          }
+        },
+        ":application:version": {
+          "line": {
+            "covered": 26,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 213,
+            "missed": 0
+          }
+        },
+        ":domain:share": {
+          "line": {
+            "covered": 64,
+            "missed": 6
+          },
+          "branch": {
+            "covered": 80,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 670,
+            "missed": 41
+          }
+        },
+        ":application:health": {
+          "line": {
+            "covered": 61,
+            "missed": 11
+          },
+          "branch": {
+            "covered": 7,
+            "missed": 7
+          },
+          "instruction": {
+            "covered": 383,
+            "missed": 125
+          }
+        },
+        ":plugins:fulltext-search": {
+          "line": {
+            "covered": 84,
+            "missed": 230
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 72
+          },
+          "instruction": {
+            "covered": 344,
+            "missed": 1751
+          }
+        },
+        ":application:plugin": {
+          "line": {
+            "covered": 32,
+            "missed": 9
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 170,
+            "missed": 130
+          }
+        },
+        ":application:ai": {
+          "line": {
+            "covered": 5,
+            "missed": 18
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 22,
+            "missed": 138
+          }
+        },
+        ":core:share-access": {
+          "line": {
+            "covered": 36,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 19,
+            "missed": 1
+          },
+          "instruction": {
+            "covered": 330,
+            "missed": 25
+          }
+        },
+        ":plugins:ai-classification": {
+          "line": {
+            "covered": 50,
+            "missed": 127
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 52
+          },
+          "instruction": {
+            "covered": 193,
+            "missed": 1018
+          }
+        },
+        ":application:admin": {
+          "line": {
+            "covered": 9,
+            "missed": 6
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 63,
+            "missed": 79
+          }
+        },
+        ":plugins:image-metadata": {
+          "line": {
+            "covered": 64,
+            "missed": 204
+          },
+          "branch": {
+            "covered": 2,
+            "missed": 136
+          },
+          "instruction": {
+            "covered": 260,
+            "missed": 1655
+          }
+        },
+        ":application:user": {
+          "line": {
+            "covered": 10,
+            "missed": 7
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 77,
+            "missed": 96
+          }
+        },
+        ":application:share": {
+          "line": {
+            "covered": 26,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 206,
+            "missed": 103
+          }
+        },
+        ":domain:auth": {
+          "line": {
+            "covered": 78,
+            "missed": 11
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 722,
+            "missed": 192
+          }
+        },
+        ":application:activity": {
+          "line": {
+            "covered": 6,
+            "missed": 6
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 32,
+            "missed": 83
+          }
+        },
+        ":application:storage": {
+          "line": {
+            "covered": 78,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 617,
+            "missed": 68
+          }
+        },
+        ":application:chunkedupload": {
+          "line": {
+            "covered": 81,
+            "missed": 19
+          },
+          "branch": {
+            "covered": 17,
+            "missed": 9
+          },
+          "instruction": {
+            "covered": 472,
+            "missed": 207
+          }
+        },
+        ":application:metadata": {
+          "line": {
+            "covered": 10,
+            "missed": 4
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 89,
+            "missed": 47
+          }
+        },
+        ":application:auth": {
+          "line": {
+            "covered": 14,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 139,
+            "missed": 0
+          }
+        },
+        ":plugins:video-metadata": {
+          "line": {
+            "covered": 75,
+            "missed": 349
+          },
+          "branch": {
+            "covered": 1,
+            "missed": 256
+          },
+          "instruction": {
+            "covered": 304,
+            "missed": 3018
+          }
+        }
+      },
+      "sharedSourceFiles": [
+        {
+          "source": "com/vaultstadio/core/domain/service/Comparisons.kt",
+          "owners": [
+            ":core:common",
+            ":core:federation"
+          ],
+          "line": {
+            "covered": 1,
+            "missed": 1
+          }
+        }
+      ]
+    },
+    "frontend": {
+      "summary": {
+        "classes": 1772,
+        "sha256": "8bcce537c6084d7417675100cf4bc8c578600b51abd9ae02fbc03c9f5a2d7e1f",
+        "line": {
+          "missed": 14217,
+          "covered": 6951
+        },
+        "branch": {
+          "missed": 4442,
+          "covered": 1180
+        },
+        "instruction": {
+          "missed": 132571,
+          "covered": 42364
+        }
+      },
+      "modules": {
+        ":composeApp": {
+          "line": {
+            "covered": 834,
+            "missed": 5891
+          },
+          "branch": {
+            "covered": 265,
+            "missed": 2213
+          },
+          "instruction": {
+            "covered": 5810,
+            "missed": 52805
+          }
+        },
+        ":feature:profile": {
+          "line": {
+            "covered": 123,
+            "missed": 394
+          },
+          "branch": {
+            "covered": 42,
+            "missed": 175
+          },
+          "instruction": {
+            "covered": 1357,
+            "missed": 3654
+          }
+        },
+        ":feature:versionhistory": {
+          "line": {
+            "covered": 368,
+            "missed": 276
+          },
+          "branch": {
+            "covered": 43,
+            "missed": 107
+          },
+          "instruction": {
+            "covered": 3201,
+            "missed": 3084
+          }
+        },
+        ":data:sync": {
+          "line": {
+            "covered": 21,
+            "missed": 167
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 24
+          },
+          "instruction": {
+            "covered": 89,
+            "missed": 1277
+          }
+        },
+        ":data:plugin": {
+          "line": {
+            "covered": 9,
+            "missed": 41
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 35,
+            "missed": 267
+          }
+        },
+        ":data:metadata": {
+          "line": {
+            "covered": 31,
+            "missed": 197
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 12
+          },
+          "instruction": {
+            "covered": 96,
+            "missed": 2000
+          }
+        },
+        ":data:ai": {
+          "line": {
+            "covered": 15,
+            "missed": 199
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 8
+          },
+          "instruction": {
+            "covered": 58,
+            "missed": 1681
+          }
+        },
+        ":feature:plugins": {
+          "line": {
+            "covered": 21,
+            "missed": 283
+          },
+          "branch": {
+            "covered": 3,
+            "missed": 43
+          },
+          "instruction": {
+            "covered": 163,
+            "missed": 2287
+          }
+        },
+        ":data:activity": {
+          "line": {
+            "covered": 6,
+            "missed": 41
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 25,
+            "missed": 334
+          }
+        },
+        ":domain:ai": {
+          "line": {
+            "covered": 64,
+            "missed": 23
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 428,
+            "missed": 284
+          }
+        },
+        ":domain:config": {
+          "line": {
+            "covered": 1,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 10,
+            "missed": 7
+          }
+        },
+        ":core:form": {
+          "line": {
+            "covered": 192,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 99,
+            "missed": 33
+          },
+          "instruction": {
+            "covered": 1260,
+            "missed": 71
+          }
+        },
+        ":domain:storage": {
+          "line": {
+            "covered": 94,
+            "missed": 40
+          },
+          "branch": {
+            "covered": 15,
+            "missed": 5
+          },
+          "instruction": {
+            "covered": 610,
+            "missed": 430
+          }
+        },
+        ":domain:plugin": {
+          "line": {
+            "covered": 8,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 30,
+            "missed": 15
+          }
+        },
+        ":data:version": {
+          "line": {
+            "covered": 18,
+            "missed": 126
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 2
+          },
+          "instruction": {
+            "covered": 80,
+            "missed": 890
+          }
+        },
+        ":data:collaboration": {
+          "line": {
+            "covered": 39,
+            "missed": 329
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 34
+          },
+          "instruction": {
+            "covered": 164,
+            "missed": 2639
+          }
+        },
+        ":feature:admin": {
+          "line": {
+            "covered": 170,
+            "missed": 391
+          },
+          "branch": {
+            "covered": 22,
+            "missed": 111
+          },
+          "instruction": {
+            "covered": 1852,
+            "missed": 3481
+          }
+        },
+        ":data:network": {
+          "line": {
+            "covered": 141,
+            "missed": 43
+          },
+          "branch": {
+            "covered": 50,
+            "missed": 22
+          },
+          "instruction": {
+            "covered": 742,
+            "missed": 295
+          }
+        },
+        ":feature:auth": {
+          "line": {
+            "covered": 220,
+            "missed": 47
+          },
+          "branch": {
+            "covered": 94,
+            "missed": 76
+          },
+          "instruction": {
+            "covered": 2507,
+            "missed": 477
+          }
+        },
+        ":data:storage": {
+          "line": {
+            "covered": 281,
+            "missed": 271
+          },
+          "branch": {
+            "covered": 60,
+            "missed": 22
+          },
+          "instruction": {
+            "covered": 1616,
+            "missed": 2428
+          }
+        },
+        ":domain:upload": {
+          "line": {
+            "covered": 24,
+            "missed": 8
+          },
+          "branch": {
+            "covered": 14,
+            "missed": 10
+          },
+          "instruction": {
+            "covered": 159,
+            "missed": 58
+          }
+        },
+        ":core:ui": {
+          "line": {
+            "covered": 3,
+            "missed": 0
+          },
+          "branch": {
+            "covered": 8,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 47,
+            "missed": 0
+          }
+        },
+        ":data:config": {
+          "line": {
+            "covered": 15,
+            "missed": 10
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 74,
+            "missed": 76
+          }
+        },
+        ":data:auth": {
+          "line": {
+            "covered": 39,
+            "missed": 144
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 4
+          },
+          "instruction": {
+            "covered": 155,
+            "missed": 929
+          }
+        },
+        ":core:resources": {
+          "line": {
+            "covered": 2174,
+            "missed": 56
+          },
+          "branch": {
+            "covered": 23,
+            "missed": 4
+          },
+          "instruction": {
+            "covered": 5559,
+            "missed": 3448
+          }
+        },
+        ":data:federation": {
+          "line": {
+            "covered": 64,
+            "missed": 201
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 16
+          },
+          "instruction": {
+            "covered": 293,
+            "missed": 1839
+          }
+        },
+        ":data:share": {
+          "line": {
+            "covered": 12,
+            "missed": 77
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 2
+          },
+          "instruction": {
+            "covered": 49,
+            "missed": 558
+          }
+        },
+        ":data:admin": {
+          "line": {
+            "covered": 12,
+            "missed": 76
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 52,
+            "missed": 645
+          }
+        },
+        ":domain:result": {
+          "line": {
+            "covered": 9,
+            "missed": 28
+          },
+          "branch": {
+            "covered": 7,
+            "missed": 23
+          },
+          "instruction": {
+            "covered": 81,
+            "missed": 177
+          }
+        },
+        ":domain:activity": {
+          "line": {
+            "covered": 10,
+            "missed": 2
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 66,
+            "missed": 51
+          }
+        },
+        ":domain:federation": {
+          "line": {
+            "covered": 82,
+            "missed": 14
+          },
+          "branch": {
+            "covered": 2,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 544,
+            "missed": 195
+          }
+        },
+        ":domain:metadata": {
+          "line": {
+            "covered": 99,
+            "missed": 19
+          },
+          "branch": {
+            "covered": 11,
+            "missed": 3
+          },
+          "instruction": {
+            "covered": 823,
+            "missed": 284
+          }
+        },
+        ":domain:version": {
+          "line": {
+            "covered": 30,
+            "missed": 12
+          },
+          "branch": {
+            "covered": 2,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 178,
+            "missed": 120
+          }
+        },
+        ":domain:admin": {
+          "line": {
+            "covered": 26,
+            "missed": 1
+          },
+          "branch": {
+            "covered": 3,
+            "missed": 1
+          },
+          "instruction": {
+            "covered": 151,
+            "missed": 47
+          }
+        },
+        ":feature:activity": {
+          "line": {
+            "covered": 29,
+            "missed": 237
+          },
+          "branch": {
+            "covered": 3,
+            "missed": 98
+          },
+          "instruction": {
+            "covered": 241,
+            "missed": 2409
+          }
+        },
+        ":feature:sync": {
+          "line": {
+            "covered": 107,
+            "missed": 652
+          },
+          "branch": {
+            "covered": 11,
+            "missed": 165
+          },
+          "instruction": {
+            "covered": 1132,
+            "missed": 6219
+          }
+        },
+        ":feature:collaboration": {
+          "line": {
+            "covered": 138,
+            "missed": 712
+          },
+          "branch": {
+            "covered": 27,
+            "missed": 286
+          },
+          "instruction": {
+            "covered": 1223,
+            "missed": 6856
+          }
+        },
+        ":feature:ai": {
+          "line": {
+            "covered": 169,
+            "missed": 820
+          },
+          "branch": {
+            "covered": 46,
+            "missed": 226
+          },
+          "instruction": {
+            "covered": 1252,
+            "missed": 7495
+          }
+        },
+        ":feature:files": {
+          "line": {
+            "covered": 480,
+            "missed": 51
+          },
+          "branch": {
+            "covered": 217,
+            "missed": 39
+          },
+          "instruction": {
+            "covered": 3885,
+            "missed": 315
+          }
+        },
+        ":feature:licenses": {
+          "line": {
+            "covered": 0,
+            "missed": 140
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 14
+          },
+          "instruction": {
+            "covered": 0,
+            "missed": 851
+          }
+        },
+        ":domain:sync": {
+          "line": {
+            "covered": 61,
+            "missed": 16
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 415,
+            "missed": 132
+          }
+        },
+        ":feature:shares": {
+          "line": {
+            "covered": 35,
+            "missed": 284
+          },
+          "branch": {
+            "covered": 6,
+            "missed": 60
+          },
+          "instruction": {
+            "covered": 263,
+            "missed": 2575
+          }
+        },
+        ":domain:share": {
+          "line": {
+            "covered": 18,
+            "missed": 6
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 114,
+            "missed": 52
+          }
+        },
+        ":feature:settings": {
+          "line": {
+            "covered": 114,
+            "missed": 345
+          },
+          "branch": {
+            "covered": 16,
+            "missed": 110
+          },
+          "instruction": {
+            "covered": 1038,
+            "missed": 3629
+          }
+        },
+        ":feature:changepassword": {
+          "line": {
+            "covered": 166,
+            "missed": 77
+          },
+          "branch": {
+            "covered": 41,
+            "missed": 35
+          },
+          "instruction": {
+            "covered": 1282,
+            "missed": 897
+          }
+        },
+        ":feature:federation": {
+          "line": {
+            "covered": 184,
+            "missed": 795
+          },
+          "branch": {
+            "covered": 34,
+            "missed": 250
+          },
+          "instruction": {
+            "covered": 1966,
+            "missed": 7731
+          }
+        },
+        ":domain:auth": {
+          "line": {
+            "covered": 49,
+            "missed": 1
+          },
+          "branch": {
+            "covered": 4,
+            "missed": 0
+          },
+          "instruction": {
+            "covered": 249,
+            "missed": 62
+          }
+        },
+        ":domain:collaboration": {
+          "line": {
+            "covered": 51,
+            "missed": 16
+          },
+          "branch": {
+            "covered": 0,
+            "missed": 2
+          },
+          "instruction": {
+            "covered": 258,
+            "missed": 267
+          }
+        },
+        ":feature:security": {
+          "line": {
+            "covered": 34,
+            "missed": 298
+          },
+          "branch": {
+            "covered": 3,
+            "missed": 99
+          },
+          "instruction": {
+            "covered": 269,
+            "missed": 2714
+          }
+        },
+        ":feature:sharedwithme": {
+          "line": {
+            "covered": 61,
+            "missed": 358
+          },
+          "branch": {
+            "covered": 9,
+            "missed": 108
+          },
+          "instruction": {
+            "covered": 413,
+            "missed": 3534
+          }
+        }
+      },
+      "sharedSourceFiles": []
+    }
+  },
+  "criticalSources": {
+    "com/vaultstadio/core/domain/service/UserService.kt": {
+      "instruction": {
+        "covered": 1667,
+        "missed": 403
+      },
+      "branch": {
+        "covered": 69,
+        "missed": 51
+      },
+      "line": {
+        "covered": 235,
+        "missed": 46
+      }
+    },
+    "com/vaultstadio/core/domain/service/UserInputValidation.kt": {
+      "instruction": {
+        "covered": 110,
+        "missed": 0
+      },
+      "branch": {
+        "covered": 18,
+        "missed": 0
+      },
+      "line": {
+        "covered": 8,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/api/routes/auth/AuthRoutes.kt": {
+      "instruction": {
+        "covered": 512,
+        "missed": 373
+      },
+      "branch": {
+        "covered": 15,
+        "missed": 19
+      },
+      "line": {
+        "covered": 76,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/infrastructure/persistence/ExposedSessionRepository.kt": {
+      "instruction": {
+        "covered": 876,
+        "missed": 55
+      },
+      "branch": {
+        "covered": 13,
+        "missed": 11
+      },
+      "line": {
+        "covered": 125,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/app/data/network/TransportCancellation.kt": {
+      "instruction": {
+        "covered": 61,
+        "missed": 0
+      },
+      "branch": {
+        "covered": 13,
+        "missed": 3
+      },
+      "line": {
+        "covered": 12,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/app/data/network/BaseApi.kt": {
+      "instruction": {
+        "covered": 251,
+        "missed": 99
+      },
+      "branch": {
+        "covered": 21,
+        "missed": 7
+      },
+      "line": {
+        "covered": 57,
+        "missed": 15
+      }
+    },
+    "com/vaultstadio/app/data/network/HttpClientFactory.kt": {
+      "instruction": {
+        "covered": 215,
+        "missed": 5
+      },
+      "branch": {
+        "covered": 8,
+        "missed": 0
+      },
+      "line": {
+        "covered": 43,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/app/data/storage/api/StorageApi.kt": {
+      "instruction": {
+        "covered": 1035,
+        "missed": 41
+      },
+      "branch": {
+        "covered": 60,
+        "missed": 8
+      },
+      "line": {
+        "covered": 151,
+        "missed": 4
+      }
+    },
+    "com/vaultstadio/app/feature/files/FilesLoadingCoordinator.kt": {
+      "instruction": {
+        "covered": 240,
+        "missed": 0
+      },
+      "branch": {
+        "covered": 18,
+        "missed": 0
+      },
+      "line": {
+        "covered": 33,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/app/feature/files/FilesLoader.kt": {
+      "instruction": {
+        "covered": 789,
+        "missed": 48
+      },
+      "branch": {
+        "covered": 55,
+        "missed": 7
+      },
+      "line": {
+        "covered": 108,
+        "missed": 3
+      }
+    },
+    "com/vaultstadio/app/feature/files/FilesBatchOutcome.kt": {
+      "instruction": {
+        "covered": 145,
+        "missed": 5
+      },
+      "branch": {
+        "covered": 21,
+        "missed": 5
+      },
+      "line": {
+        "covered": 15,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/app/feature/files/FilesInfoState.kt": {
+      "instruction": {
+        "covered": 308,
+        "missed": 6
+      },
+      "branch": {
+        "covered": 13,
+        "missed": 7
+      },
+      "line": {
+        "covered": 31,
+        "missed": 0
+      }
+    },
+    "com/vaultstadio/app/feature/files/FilesViewModel.kt": {
+      "instruction": {
+        "covered": 2372,
+        "missed": 161
+      },
+      "branch": {
+        "covered": 110,
+        "missed": 20
+      },
+      "line": {
+        "covered": 289,
+        "missed": 15
+      }
+    }
+  },
+  "pythonTooling": {
+    "xmlSha256": "d7322330ad1166cf88df86f74cc703b2021043a6004010367df6ab78a16c7364",
+    "counters": {
+      "lines-valid": 597,
+      "lines-covered": 586,
+      "branches-valid": 256,
+      "branches-covered": 244
+    },
+    "files": [
+      "scripts/verification/coverage_run.py",
+      "scripts/verification/discovery.py",
+      "scripts/verification/execution.py",
+      "scripts/verification/population.py",
+      "scripts/verification/process.py",
+      "scripts/verification/reports.py",
+      "scripts/verification/run.py",
+      "scripts/verification/state.py",
+      "scripts/verification/tooling_report.py",
+      "scripts/verification/upload_manifest.py"
+    ],
+    "toolVersion": "7.17.0"
+  },
+  "originalsArchive": {
+    "sha256": "81b0960f8f28582c28c1c8f8502a90cfa40ba160a97eca696296d6384ec8a8e0",
+    "bytes": 4248484
+  },
+  "riskInventory": "critical-coverage-119-scenarios.json",
+  "negativePhases": [
+    {
+      "name": "issue119-red-auth",
+      "sha256": "056f8094baefc9e333d301ef2817202e4e942d45c204925c6decc434e7ea644b"
+    },
+    {
+      "name": "issue119-red-files",
+      "sha256": "4d17f0f202e3b98cf18e99688354f9a2affb08e39ce126e825e71a8f323d03f5"
+    },
+    {
+      "name": "issue119-red-final-boundaries",
+      "sha256": "e8aed83e4a69911b3fc91c142ec1bbd32d7a46e753821474c87533e8c911dcb9"
+    },
+    {
+      "name": "issue119-red-network",
+      "sha256": "1e728e5061b54ab522f7e1e96298d658464234bdf95d94147781728d0cb17dc8"
+    },
+    {
+      "name": "issue119-red-network-boundaries",
+      "sha256": "c8b4b43ae6618fd69fe54e1caff948b138f1f1ddcd68ad5493f960a6c01d32bc"
+    },
+    {
+      "name": "issue119-red-refresh-races",
+      "sha256": "7fc3af7001e56ef4c148958b0acf9286cb4d80986d1406c9b3d837ca5c95047a"
+    },
+    {
+      "name": "issue119-red-storage",
+      "sha256": "5898c3ec06a5106c37820ee58fd87e84dd00b1e1a500b73f667c393846354017"
+    },
+    {
+      "name": "issue119-red-storage-body-cancellation",
+      "sha256": "81a3374d1adb369ed2a149de40da3de35750047a333c7689c409cfcaf28a6b6f"
+    }
+  ],
+  "status": "Local verification complete on tested implementation; final-ref PR CI, Copilot review and adoption are separate acceptance steps",
+  "limits": [
+    "Common tests repeat on desktop and Wasm. Case counts are not unique scenarios.",
+    "MockEngine verifies transport semantics; domain ports verify state ownership. Neither certifies the rendered packaged application.",
+    "Known client download URL mismatch remains #78. Other roadmap issues remain open.",
+    "No class exclusions, reduced thresholds, workflow changes, Copilot modifications, protection changes, setup activation or master promotion."
+  ],
+  "toolingOriginalsArchiveSha256": "0bb972c596b071e472eae40b2223f39c17963322f05fe9851f098e4c9b0d0ca7",
+  "localCoverageConsumer": "upload_manifest.py accepted three source-matching canonical populations at85aca01",
+  "reviewReconciliation": {
+    "upstream": "https://github.com/vypdev/copilot/issues/749",
+    "reviewedHead": "3d6741cfcd6d53b01e38075e90cdc2caede4e58a",
+    "finding": "UserInputValidation.kt:10:accepts-empty-email-domain-labels",
+    "threadResolvedOnExecutedCounterexample": true,
+    "exactReportedInput": "user@\u200bexample..com",
+    "actualAccepted": false,
+    "control": "Actual compiled validator; three rejected malformed inputs and supported plus-tag positive. Independent control is excluded from product case counts."
+  },
+  "testTaskPopulations": {
+    "backend": {
+      "selected": 44,
+      "outcomes": {
+        "passed": 26,
+        "no-test-sources": 18
+      },
+      "rawXmlFiles": 586
+    },
+    "desktop": {
+      "selected": 52,
+      "outcomes": {
+        "passed": 7,
+        "no-test-sources": 45
+      },
+      "rawXmlFiles": 279
+    },
+    "browser": {
+      "selected": 52,
+      "outcomes": {
+        "passed": 7,
+        "no-test-sources": 45
+      },
+      "rawXmlFiles": 274
+    }
+  }
+}

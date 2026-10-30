@@ -9,6 +9,7 @@
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -24,7 +25,7 @@ kotlin {
 
     android {
         namespace = "com.vaultstadio.app.shared"
-        compileSdk = 36
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = 24
     }
 
@@ -59,6 +60,8 @@ kotlin {
                 implementation(project(":domain:collaboration"))
                 implementation(project(":domain:upload"))
                 implementation(project(":core:resources"))
+                implementation(project(":core:ui"))
+                implementation(project(":core:form"))
                 implementation(project(":feature:auth"))
                 implementation(project(":feature:settings"))
                 implementation(project(":feature:profile"))
@@ -143,10 +146,21 @@ kotlin {
             }
         }
 
+        val desktopTest by getting {
+            dependencies {
+                implementation(compose.desktop.uiTestJUnit4)
+                implementation(kotlin("test-junit"))
+            }
+        }
+
         val wasmJsMain by getting {
             dependencies {
                 // Web-specific dependencies
             }
+        }
+
+        val wasmJsTest by getting {
+            dependencies { implementation(project(":core:form")) }
         }
 
         val androidMain by getting {
@@ -171,6 +185,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.ktor.client.mock)
                 implementation(project(":domain:result"))
                 implementation(project(":domain:federation"))
                 implementation(project(":domain:storage"))
@@ -195,8 +210,34 @@ kotlin {
 // ViewModel and UploadManager tests use UnconfinedTestDispatcher for Main (ViewModelTestBase)
 // so they run on desktop and Android without a real main looper.
 
+val desktopJavaHome = providers.gradleProperty("desktopJavaHome")
+    .orElse(providers.environmentVariable("JAVA_HOME"))
+    .getOrElse(System.getProperty("java.home"))
+val desktopRuntimeVersion = rootProject.file(".java-version").readText().trim()
+val verifyDesktopRuntime = tasks.register("verifyDesktopRuntime") {
+    group = "verification"
+    description = "Requires the reviewed accessible runtime for desktop launch and packaging"
+    inputs.file(rootProject.file(".java-version"))
+    inputs.file(file("$desktopJavaHome/release"))
+    inputs.property("requiredVersion", desktopRuntimeVersion)
+    doLast {
+        val requiredVersion = inputs.properties.getValue("requiredVersion") as String
+        val releaseFile = inputs.files.files.single { it.name == "release" }
+        val release = Properties().apply { releaseFile.inputStream().use(::load) }
+        val version = release.getProperty("JAVA_VERSION", "").trim('"')
+        val vendor = release.getProperty("IMPLEMENTOR", "").trim('"')
+        check(version == requiredVersion && vendor.contains("JetBrains")) {
+            "Desktop accessibility requires JetBrains Runtime $requiredVersion; " +
+                "select its JDK through JAVA_HOME or -PdesktopJavaHome. Found $vendor $version."
+        }
+    }
+}
+tasks.matching { it.name in setOf("run", "runDistributable", "createRuntimeImage", "createDistributable") }
+    .configureEach { dependsOn(verifyDesktopRuntime) }
+
 compose.desktop {
     application {
+        javaHome = desktopJavaHome
         mainClass = "com.vaultstadio.app.MainKt"
 
         nativeDistributions {
@@ -204,15 +245,7 @@ compose.desktop {
             packageName = "VaultStadio"
             packageVersion = "1.0.0"
 
-            macOS {
-                iconFile.set(project.file("icons/icon.icns"))
-            }
-            windows {
-                iconFile.set(project.file("icons/icon.ico"))
-            }
-            linux {
-                iconFile.set(project.file("icons/icon.png"))
-            }
+            // Use jpackage's default icon until platform branding assets are versioned.
         }
     }
 }

@@ -15,6 +15,7 @@ kotlin {
 
 dependencies {
     api(project(":domain:common"))
+    api(project(":domain:storage"))
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.serialization.json)
     api(libs.kotlinx.datetime)

@@ -30,7 +30,7 @@ class AppInitializationTest {
     @Test
     fun `app should show login when unauthenticated`() {
         val state = AuthState.Unauthenticated
-        val shouldShowLogin = state is AuthState.Unauthenticated || state is AuthState.Error
+        val shouldShowLogin = state is AuthState.Unauthenticated
 
         assertTrue(shouldShowLogin)
     }

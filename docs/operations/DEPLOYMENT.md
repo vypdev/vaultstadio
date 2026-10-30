@@ -100,6 +100,8 @@
 
 ## Configuration
 
+For the Web principal endpoint, same-origin defaults, custom API prefixes and recovery, see [Web API configuration](WEB_API_CONFIGURATION.md).
+
 ### Required Settings
 
 | Setting | Description | Example |

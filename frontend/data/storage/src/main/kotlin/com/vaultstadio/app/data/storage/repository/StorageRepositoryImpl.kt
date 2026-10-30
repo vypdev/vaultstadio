@@ -6,6 +6,7 @@ package com.vaultstadio.app.data.storage.repository
 
 import com.vaultstadio.app.data.network.ApiClientConfig
 import com.vaultstadio.app.data.network.TokenStorage
+import com.vaultstadio.app.data.network.apiV1Location
 import com.vaultstadio.app.data.network.mapper.toResult
 import com.vaultstadio.app.data.storage.service.StorageService
 import com.vaultstadio.app.domain.result.Result
@@ -139,19 +140,12 @@ class StorageRepositoryImpl(
     override suspend fun downloadFile(itemId: String): Result<ByteArray> =
         storageService.downloadFile(itemId).toResult()
 
-    override fun getDownloadUrl(itemId: String): String {
-        val token = tokenStorage.getAccessToken()
-        return "${config.baseUrl}/api/v1/storage/item/$itemId/download${if (token != null) "?token=$token" else ""}"
-    }
+    override fun getDownloadUrl(itemId: String): String =
+        apiV1Location(config.baseUrl, listOf("storage", "download", itemId))
 
-    override fun getThumbnailUrl(itemId: String, size: String): String {
-        val token = tokenStorage.getAccessToken()
-        val auth = if (token != null) "&token=$token" else ""
-        return "${config.baseUrl}/api/v1/storage/item/$itemId/thumbnail?size=$size$auth"
-    }
+    override fun getThumbnailUrl(itemId: String, size: String): String =
+        apiV1Location(config.baseUrl, listOf("storage", "item", itemId, "thumbnail"), mapOf("size" to size))
 
-    override fun getPreviewUrl(itemId: String): String {
-        val token = tokenStorage.getAccessToken()
-        return "${config.baseUrl}/api/v1/storage/item/$itemId/preview${if (token != null) "?token=$token" else ""}"
-    }
+    override fun getPreviewUrl(itemId: String): String =
+        apiV1Location(config.baseUrl, listOf("storage", "item", itemId, "preview"))
 }

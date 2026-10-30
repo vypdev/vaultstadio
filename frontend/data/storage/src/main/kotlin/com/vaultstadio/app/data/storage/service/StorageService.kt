@@ -139,6 +139,9 @@ class StorageService(private val storageApi: StorageApi) {
     ): ApiResult<FolderUploadResult> =
         storageApi.uploadFolder(files, parentId, tokenProvider, onProgress).map { it.toDomain() }
 
+    suspend fun downloadArchive(itemIds: List<String>): ApiResult<ByteArray> =
+        storageApi.downloadArchive(itemIds)
+
     suspend fun downloadFile(itemId: String): ApiResult<ByteArray> =
         storageApi.downloadFile(itemId)
 }

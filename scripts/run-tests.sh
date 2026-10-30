@@ -1,20 +1,12 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
-echo "Running tests..."
-
-# Backend tests (standalone project)
-echo "Running backend tests..."
-(cd backend && ./gradlew :core:test :infrastructure:test :api:test)
-
-echo "Running frontend tests..."
-(cd frontend && ./gradlew :composeApp:desktopTest) 2>/dev/null || true
-
-echo "All tests complete!"
-
-# Generate coverage report
-if [ "$1" = "--coverage" ]; then
-    echo "Generating coverage report..."
-    make test-coverage
-    echo "Coverage reports: backend/*/build/reports/jacoco/, frontend/composeApp/build/reports/jacoco/"
+repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+operation=test
+if [ "$#" -eq 1 ] && [ "$1" = '--coverage' ]; then
+    operation=coverage
+elif [ "$#" -ne 0 ]; then
+    echo 'Usage: scripts/run-tests.sh [--coverage]' >&2
+    exit 2
 fi
+exec python3 "$repository_root/scripts/verification/run.py" "$operation"

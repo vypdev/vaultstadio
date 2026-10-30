@@ -28,6 +28,10 @@ interface StringResources {
     val actionCreateFolder: String
     val actionSelectFiles: String
     val actionAddMoreFiles: String
+    val actionRetry: String
+    val uploadInvalidContent: String
+    val uploadFailed: String
+    val uploadCanceled: String
     val actionCancel: String
     val actionClose: String
     val actionDone: String

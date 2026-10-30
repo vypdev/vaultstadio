@@ -1,0 +1,1360 @@
+{
+  "schemaVersion": 2,
+  "source": "03aa8552424d703db127be1d97e08c066598168d",
+  "coverage": {
+    "wholeBackend": {
+      "INSTRUCTION": {
+        "covered": 67505,
+        "missed": 87156
+      },
+      "BRANCH": {
+        "covered": 1823,
+        "missed": 4178
+      },
+      "LINE": {
+        "covered": 8558,
+        "missed": 8197
+      },
+      "COMPLEXITY": {
+        "covered": 3875,
+        "missed": 5342
+      },
+      "METHOD": {
+        "covered": 3274,
+        "missed": 2687
+      },
+      "CLASS": {
+        "covered": 838,
+        "missed": 768
+      }
+    },
+    "packages": {
+      "com/vaultstadio/domain/share/access": {
+        "counters": {
+          "INSTRUCTION": {
+            "covered": 434,
+            "missed": 0
+          },
+          "BRANCH": {
+            "covered": 72,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 48,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 61,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 25,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 6,
+            "missed": 0
+          }
+        },
+        "sources": {
+          "PublicShareAccess.kt": {
+            "INSTRUCTION": {
+              "covered": 129,
+              "missed": 0
+            },
+            "BRANCH": {
+              "covered": 2,
+              "missed": 0
+            },
+            "LINE": {
+              "covered": 10,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 18,
+              "missed": 0
+            },
+            "METHOD": {
+              "covered": 17,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 4,
+              "missed": 0
+            }
+          },
+          "PublicShareFailure.kt": {
+            "INSTRUCTION": {
+              "covered": 81,
+              "missed": 0
+            },
+            "LINE": {
+              "covered": 10,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 3,
+              "missed": 0
+            },
+            "METHOD": {
+              "covered": 3,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          },
+          "PublicSharePolicy.kt": {
+            "INSTRUCTION": {
+              "covered": 224,
+              "missed": 0
+            },
+            "BRANCH": {
+              "covered": 70,
+              "missed": 0
+            },
+            "LINE": {
+              "covered": 28,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 40,
+              "missed": 0
+            },
+            "METHOD": {
+              "covered": 5,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          }
+        }
+      },
+      "com/vaultstadio/api/routes/share": {
+        "counters": {
+          "INSTRUCTION": {
+            "covered": 1931,
+            "missed": 1374
+          },
+          "BRANCH": {
+            "covered": 134,
+            "missed": 94
+          },
+          "LINE": {
+            "covered": 208,
+            "missed": 56
+          },
+          "COMPLEXITY": {
+            "covered": 100,
+            "missed": 89
+          },
+          "METHOD": {
+            "covered": 45,
+            "missed": 9
+          },
+          "CLASS": {
+            "covered": 21,
+            "missed": 4
+          }
+        },
+        "sources": {
+          "ShareOrigin.kt": {
+            "INSTRUCTION": {
+              "covered": 188,
+              "missed": 3
+            },
+            "BRANCH": {
+              "covered": 33,
+              "missed": 3
+            },
+            "LINE": {
+              "covered": 26,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 19,
+              "missed": 3
+            },
+            "METHOD": {
+              "covered": 4,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          },
+          "PublicSharePageRoutes.kt": {
+            "INSTRUCTION": {
+              "covered": 687,
+              "missed": 149
+            },
+            "BRANCH": {
+              "covered": 38,
+              "missed": 26
+            },
+            "LINE": {
+              "covered": 41,
+              "missed": 2
+            },
+            "COMPLEXITY": {
+              "covered": 22,
+              "missed": 26
+            },
+            "METHOD": {
+              "covered": 11,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 6,
+              "missed": 0
+            }
+          },
+          "PublicShareErrors.kt": {
+            "INSTRUCTION": {
+              "covered": 56,
+              "missed": 0
+            },
+            "BRANCH": {
+              "covered": 15,
+              "missed": 0
+            },
+            "LINE": {
+              "covered": 19,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 15,
+              "missed": 0
+            },
+            "METHOD": {
+              "covered": 2,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          },
+          "OwnerShareListingRoutes.kt": {
+            "INSTRUCTION": {
+              "covered": 34,
+              "missed": 615
+            },
+            "BRANCH": {
+              "covered": 0,
+              "missed": 26
+            },
+            "LINE": {
+              "covered": 5,
+              "missed": 39
+            },
+            "COMPLEXITY": {
+              "covered": 2,
+              "missed": 19
+            },
+            "METHOD": {
+              "covered": 2,
+              "missed": 3
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 3
+            }
+          },
+          "OwnerShareMutationRoutes.kt": {
+            "INSTRUCTION": {
+              "covered": 141,
+              "missed": 292
+            },
+            "BRANCH": {
+              "covered": 2,
+              "missed": 11
+            },
+            "LINE": {
+              "covered": 21,
+              "missed": 10
+            },
+            "COMPLEXITY": {
+              "covered": 3,
+              "missed": 10
+            },
+            "METHOD": {
+              "covered": 3,
+              "missed": 1
+            },
+            "CLASS": {
+              "covered": 2,
+              "missed": 1
+            }
+          },
+          "PublicShareRoutes.kt": {
+            "INSTRUCTION": {
+              "covered": 466,
+              "missed": 276
+            },
+            "BRANCH": {
+              "covered": 25,
+              "missed": 23
+            },
+            "LINE": {
+              "covered": 32,
+              "missed": 4
+            },
+            "COMPLEXITY": {
+              "covered": 16,
+              "missed": 21
+            },
+            "METHOD": {
+              "covered": 8,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 3,
+              "missed": 0
+            }
+          },
+          "SharePasswordHeader.kt": {
+            "INSTRUCTION": {
+              "covered": 81,
+              "missed": 22
+            },
+            "BRANCH": {
+              "covered": 8,
+              "missed": 2
+            },
+            "LINE": {
+              "covered": 14,
+              "missed": 1
+            },
+            "COMPLEXITY": {
+              "covered": 4,
+              "missed": 2
+            },
+            "METHOD": {
+              "covered": 1,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          },
+          "PublicShareResponse.kt": {
+            "INSTRUCTION": {
+              "covered": 256,
+              "missed": 17
+            },
+            "BRANCH": {
+              "covered": 13,
+              "missed": 3
+            },
+            "LINE": {
+              "covered": 43,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 17,
+              "missed": 8
+            },
+            "METHOD": {
+              "covered": 12,
+              "missed": 5
+            },
+            "CLASS": {
+              "covered": 5,
+              "missed": 0
+            }
+          },
+          "ShareRoutes.kt": {
+            "INSTRUCTION": {
+              "covered": 22,
+              "missed": 0
+            },
+            "LINE": {
+              "covered": 7,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 2,
+              "missed": 0
+            },
+            "METHOD": {
+              "covered": 2,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          }
+        }
+      },
+      "com/vaultstadio/core/share/access": {
+        "counters": {
+          "INSTRUCTION": {
+            "covered": 330,
+            "missed": 25
+          },
+          "BRANCH": {
+            "covered": 19,
+            "missed": 1
+          },
+          "LINE": {
+            "covered": 36,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 15,
+            "missed": 1
+          },
+          "METHOD": {
+            "covered": 6,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        },
+        "sources": {
+          "PublicShareService.kt": {
+            "INSTRUCTION": {
+              "covered": 330,
+              "missed": 25
+            },
+            "BRANCH": {
+              "covered": 19,
+              "missed": 1
+            },
+            "LINE": {
+              "covered": 36,
+              "missed": 0
+            },
+            "COMPLEXITY": {
+              "covered": 15,
+              "missed": 1
+            },
+            "METHOD": {
+              "covered": 6,
+              "missed": 0
+            },
+            "CLASS": {
+              "covered": 1,
+              "missed": 0
+            }
+          }
+        }
+      }
+    },
+    "changedProductionSources": [
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/Application.kt",
+        "sha256": "5bfd938cb3c732757955352ccc00768a884f6b3b9f89a9f37315310a075d5d1d",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 95,
+            "missed": 224
+          },
+          "BRANCH": {
+            "covered": 1,
+            "missed": 11
+          },
+          "LINE": {
+            "covered": 23,
+            "missed": 44
+          },
+          "COMPLEXITY": {
+            "covered": 3,
+            "missed": 22
+          },
+          "METHOD": {
+            "covered": 3,
+            "missed": 16
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
+        "sha256": "defe4fc7c9ab899de90c322fd25253fa896bec7e6fccd61d3c65ad39b2c063be",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 208,
+            "missed": 822
+          },
+          "BRANCH": {
+            "covered": 0,
+            "missed": 18
+          },
+          "LINE": {
+            "covered": 42,
+            "missed": 122
+          },
+          "COMPLEXITY": {
+            "covered": 10,
+            "missed": 49
+          },
+          "METHOD": {
+            "covered": 10,
+            "missed": 40
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 1
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/config/ShareAccessKoin.kt",
+        "sha256": "88cfca6ae8e033022a7f022e581b93e4c92df8d2851d29b1ef4f47734c6e9250",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 88,
+            "missed": 11
+          },
+          "LINE": {
+            "covered": 7,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 6,
+            "missed": 2
+          },
+          "METHOD": {
+            "covered": 6,
+            "missed": 2
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/dto/ApiResponse.kt",
+        "sha256": "7d1cbdbb548aec85ebc8dc4b5f472e740810eefefbb45ec085edff2a983f27fb",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 1780,
+            "missed": 186
+          },
+          "BRANCH": {
+            "covered": 2,
+            "missed": 22
+          },
+          "LINE": {
+            "covered": 257,
+            "missed": 24
+          },
+          "COMPLEXITY": {
+            "covered": 173,
+            "missed": 35
+          },
+          "METHOD": {
+            "covered": 172,
+            "missed": 24
+          },
+          "CLASS": {
+            "covered": 36,
+            "missed": 16
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/middleware/Logging.kt",
+        "sha256": "d6000e2d9acb9354ba58b9a23d067b483f5f8e5567cd0657562154701076cad9",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 77,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 12,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 5,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 5,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/OwnerShareListingRoutes.kt",
+        "sha256": "c77f93b9a452cc8a258fe4ffc889cbcd1f9fbe52013f279b959a2cf7644db8da",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 34,
+            "missed": 615
+          },
+          "BRANCH": {
+            "covered": 0,
+            "missed": 26
+          },
+          "LINE": {
+            "covered": 5,
+            "missed": 39
+          },
+          "COMPLEXITY": {
+            "covered": 2,
+            "missed": 19
+          },
+          "METHOD": {
+            "covered": 2,
+            "missed": 3
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 3
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/OwnerShareMutationRoutes.kt",
+        "sha256": "d1bc62d18dd636d0725e8604e87397cc14b84a429b331b5d985a3214adda0c9b",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 141,
+            "missed": 292
+          },
+          "BRANCH": {
+            "covered": 2,
+            "missed": 11
+          },
+          "LINE": {
+            "covered": 21,
+            "missed": 10
+          },
+          "COMPLEXITY": {
+            "covered": 3,
+            "missed": 10
+          },
+          "METHOD": {
+            "covered": 3,
+            "missed": 1
+          },
+          "CLASS": {
+            "covered": 2,
+            "missed": 1
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/PublicShareErrors.kt",
+        "sha256": "bf44c167ca7daed6ab1d2a6df760be1922de76caef74e7c6ee322cef07cb9579",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 56,
+            "missed": 0
+          },
+          "BRANCH": {
+            "covered": 15,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 19,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 15,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 2,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/PublicSharePageRoutes.kt",
+        "sha256": "db137394f65c05a01ec2c11f70cea407d82fda08c7cb2cd2ac52b9b076517340",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 687,
+            "missed": 149
+          },
+          "BRANCH": {
+            "covered": 38,
+            "missed": 26
+          },
+          "LINE": {
+            "covered": 41,
+            "missed": 2
+          },
+          "COMPLEXITY": {
+            "covered": 22,
+            "missed": 26
+          },
+          "METHOD": {
+            "covered": 11,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 6,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/PublicShareResponse.kt",
+        "sha256": "f6e2b8061d3b9163184d6b9580df475c4625aa3e2340fcb9fbd22c33542b1644",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 256,
+            "missed": 17
+          },
+          "BRANCH": {
+            "covered": 13,
+            "missed": 3
+          },
+          "LINE": {
+            "covered": 43,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 17,
+            "missed": 8
+          },
+          "METHOD": {
+            "covered": 12,
+            "missed": 5
+          },
+          "CLASS": {
+            "covered": 5,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/PublicShareRoutes.kt",
+        "sha256": "2284e27c2a32b02c66c1dce79394107f6c39351e73ca95c3e2853e2768c44633",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 466,
+            "missed": 276
+          },
+          "BRANCH": {
+            "covered": 25,
+            "missed": 23
+          },
+          "LINE": {
+            "covered": 32,
+            "missed": 4
+          },
+          "COMPLEXITY": {
+            "covered": 16,
+            "missed": 21
+          },
+          "METHOD": {
+            "covered": 8,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 3,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareOrigin.kt",
+        "sha256": "b4475e140b9623b1b62048ec7f9c237b7eae2efad88df6b97be53a563530f2ba",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 188,
+            "missed": 3
+          },
+          "BRANCH": {
+            "covered": 33,
+            "missed": 3
+          },
+          "LINE": {
+            "covered": 26,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 19,
+            "missed": 3
+          },
+          "METHOD": {
+            "covered": 4,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/SharePasswordHeader.kt",
+        "sha256": "7f23327524ba82c5eadb4e3405bd614956fd0791f4d34bb324ce638807eedd76",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 81,
+            "missed": 22
+          },
+          "BRANCH": {
+            "covered": 8,
+            "missed": 2
+          },
+          "LINE": {
+            "covered": 14,
+            "missed": 1
+          },
+          "COMPLEXITY": {
+            "covered": 4,
+            "missed": 2
+          },
+          "METHOD": {
+            "covered": 1,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareRoutes.kt",
+        "sha256": "37a3ab7ab0a64c1412ddb88fee76a5c9baedaac928cc7bd9d34691231241d6f0",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 22,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 7,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 2,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 2,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/application/share/src/main/kotlin/com/vaultstadio/application/di/ApplicationShareKoin.kt",
+        "sha256": "b30ed4c9edfbbd9cff89e6e5c5129be68eb511a22adf0b76b84265bd8d499595",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 82,
+            "missed": 65
+          },
+          "LINE": {
+            "covered": 10,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 5,
+            "missed": 5
+          },
+          "METHOD": {
+            "covered": 5,
+            "missed": 5
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/application/share/src/main/kotlin/com/vaultstadio/application/usecase/share/AccessShareUseCase.kt",
+        "sha256": "d4ae3e345ff76fb3aa65cb3ee63716a45a169b2faa79d49d264f676bf2ab302c",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 15,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 2,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 2,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 2,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/application/share/src/main/kotlin/com/vaultstadio/application/usecase/share/DownloadPublicShareUseCase.kt",
+        "sha256": "8e2adf113ae2f26c4fa093579a22b491f33d94d3f71c394d30e8074328749770",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 15,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 2,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 2,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 2,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/core/share-access/src/main/kotlin/com/vaultstadio/core/share/access/PublicShareService.kt",
+        "sha256": "94a8a97a8bfe0a262a440f795b2dce775fa90e1fca1b920339f49220e4bffedb",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 330,
+            "missed": 25
+          },
+          "BRANCH": {
+            "covered": 19,
+            "missed": 1
+          },
+          "LINE": {
+            "covered": 36,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 15,
+            "missed": 1
+          },
+          "METHOD": {
+            "covered": 6,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/core/share/src/main/kotlin/com/vaultstadio/core/domain/service/ShareService.kt",
+        "sha256": "3a169b41737bd52c6b858cfe1edac86d5df582b07440fba05235fc7e657ff04b",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 803,
+            "missed": 26
+          },
+          "BRANCH": {
+            "covered": 27,
+            "missed": 1
+          },
+          "LINE": {
+            "covered": 86,
+            "missed": 2
+          },
+          "COMPLEXITY": {
+            "covered": 31,
+            "missed": 1
+          },
+          "METHOD": {
+            "covered": 18,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/access/PublicShareAccess.kt",
+        "sha256": "bb92576709030db1cfc596e1e16f9051628bf4046f7492d68a4596d811c37735",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 129,
+            "missed": 0
+          },
+          "BRANCH": {
+            "covered": 2,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 10,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 18,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 17,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 4,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/access/PublicShareFailure.kt",
+        "sha256": "f3dc9dd11896435f689b18e48e3d96c13f0fbf4f80cfb8bcf858c2ccdf33d5d0",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 81,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 10,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 3,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 3,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/access/PublicSharePolicy.kt",
+        "sha256": "925c372f8f96badbec0c80a6f62a2ca59a9fa8b0000d403013a18ea5dc83e363",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 224,
+            "missed": 0
+          },
+          "BRANCH": {
+            "covered": 70,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 28,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 40,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 5,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/model/ShareLink.kt",
+        "sha256": "947fe60b67149e4c3110bab4da20773ac64f6152b8b7849946dce8269a0192c1",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 236,
+            "missed": 3
+          },
+          "BRANCH": {
+            "covered": 8,
+            "missed": 0
+          },
+          "LINE": {
+            "covered": 16,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 20,
+            "missed": 1
+          },
+          "METHOD": {
+            "covered": 16,
+            "missed": 1
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 1
+          }
+        }
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/repository/ShareLifecycleRepository.kt",
+        "sha256": "a07b53da70dc0e861ab13e99cde50891e1751694b022348d41466710780412d7",
+        "coverage": {}
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/repository/ShareLookupRepository.kt",
+        "sha256": "b2e3483661b6f1853c1f8d2272e154d800e0b153a49e7e8771fb8ca9e36a9922",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 0,
+            "missed": 38
+          },
+          "LINE": {
+            "covered": 0,
+            "missed": 6
+          },
+          "COMPLEXITY": {
+            "covered": 0,
+            "missed": 4
+          },
+          "METHOD": {
+            "covered": 0,
+            "missed": 4
+          },
+          "CLASS": {
+            "covered": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "path": "backend/domain/share/src/main/kotlin/com/vaultstadio/domain/share/repository/ShareRepository.kt",
+        "sha256": "b897197ff0541bc4b11f6d47f5ac8172837421c1dc63395902f6f578a6570792",
+        "coverage": {}
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedActivityRepository.kt",
+        "sha256": "6cdec7af5348f86df50f74a0e28db34ebce78ca3f1a62a007d7bc2ccf64a7fe2",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 3,
+            "missed": 630
+          },
+          "BRANCH": {
+            "covered": 0,
+            "missed": 12
+          },
+          "LINE": {
+            "covered": 1,
+            "missed": 99
+          },
+          "COMPLEXITY": {
+            "covered": 1,
+            "missed": 25
+          },
+          "METHOD": {
+            "covered": 1,
+            "missed": 19
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 7
+          }
+        }
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedPublicShareAccess.kt",
+        "sha256": "924369d4c0e79f03dcdf0be7fa1c8aecc6a8bfbfff43b75bef10fd4bbabd85f0",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 278,
+            "missed": 38
+          },
+          "BRANCH": {
+            "covered": 19,
+            "missed": 5
+          },
+          "LINE": {
+            "covered": 40,
+            "missed": 5
+          },
+          "COMPLEXITY": {
+            "covered": 22,
+            "missed": 5
+          },
+          "METHOD": {
+            "covered": 15,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 3,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedShareRepository.kt",
+        "sha256": "07d1cc9be1b09c6448548f757ab7f8f6b9c0f94fb9e0719f5be1a612981cb8c3",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 368,
+            "missed": 725
+          },
+          "BRANCH": {
+            "covered": 7,
+            "missed": 28
+          },
+          "LINE": {
+            "covered": 54,
+            "missed": 109
+          },
+          "COMPLEXITY": {
+            "covered": 16,
+            "missed": 38
+          },
+          "METHOD": {
+            "covered": 16,
+            "missed": 20
+          },
+          "CLASS": {
+            "covered": 6,
+            "missed": 6
+          }
+        }
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ShareLinkMapping.kt",
+        "sha256": "db6a783770a0fe06088d0cb1b80990bd563e8b038a9eb2717cb4c38b9c43bfdc",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 130,
+            "missed": 2
+          },
+          "BRANCH": {
+            "covered": 1,
+            "missed": 1
+          },
+          "LINE": {
+            "covered": 13,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 1,
+            "missed": 1
+          },
+          "METHOD": {
+            "covered": 1,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/security/SharePasswordVerifierAdapter.kt",
+        "sha256": "b87fe3c68ab4cb483286577212ee0e3ad8189301b3324547f015f9c0c29a529c",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 25,
+            "missed": 3
+          },
+          "LINE": {
+            "covered": 5,
+            "missed": 1
+          },
+          "COMPLEXITY": {
+            "covered": 2,
+            "missed": 0
+          },
+          "METHOD": {
+            "covered": 2,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/storage/ShareContentReaderAdapter.kt",
+        "sha256": "aefedbdbd0a23e911ba72d3f0e3fae10f60a3e28637449a83d35cdc5bfa504fd",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 210,
+            "missed": 5
+          },
+          "BRANCH": {
+            "covered": 14,
+            "missed": 2
+          },
+          "LINE": {
+            "covered": 32,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 13,
+            "missed": 2
+          },
+          "METHOD": {
+            "covered": 7,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 4,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "path": "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/storage/VerifiedShareInputStream.kt",
+        "sha256": "8978c7a2f20e22b6fc84409aabef3256e2fb90021c79bbe82486185a39d352ca",
+        "coverage": {
+          "INSTRUCTION": {
+            "covered": 154,
+            "missed": 18
+          },
+          "BRANCH": {
+            "covered": 18,
+            "missed": 6
+          },
+          "LINE": {
+            "covered": 23,
+            "missed": 0
+          },
+          "COMPLEXITY": {
+            "covered": 13,
+            "missed": 6
+          },
+          "METHOD": {
+            "covered": 7,
+            "missed": 0
+          },
+          "CLASS": {
+            "covered": 1,
+            "missed": 0
+          }
+        }
+      }
+    ]
+  }
+}

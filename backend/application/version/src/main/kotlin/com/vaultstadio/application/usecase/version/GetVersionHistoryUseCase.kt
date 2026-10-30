@@ -13,13 +13,16 @@ import com.vaultstadio.domain.common.exception.StorageException
 
 interface GetVersionHistoryUseCase {
 
-    suspend operator fun invoke(itemId: String): Either<StorageException, FileVersionHistory>
+    suspend operator fun invoke(itemId: String, userId: String): Either<StorageException, FileVersionHistory>
 }
 
 class GetVersionHistoryUseCaseImpl(
     private val fileVersionService: FileVersionService,
 ) : GetVersionHistoryUseCase {
 
-    override suspend fun invoke(itemId: String): Either<StorageException, FileVersionHistory> =
-        fileVersionService.getHistory(itemId)
+    override suspend fun invoke(
+        itemId: String,
+        userId: String,
+    ): Either<StorageException, FileVersionHistory> =
+        fileVersionService.getHistory(itemId, userId)
 }

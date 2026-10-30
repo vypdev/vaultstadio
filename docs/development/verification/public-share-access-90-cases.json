@@ -1,0 +1,972 @@
+{
+  "schemaVersion": 2,
+  "source": "03aa8552424d703db127be1d97e08c066598168d",
+  "count": 241,
+  "migratedLegacyCasesExcluded": 11,
+  "cases": [
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"=\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"YQ==\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"YQ=\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"YR\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"Y+\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"Y/\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"a b\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"☃\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"_w\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-invalid \"wK8\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-valid \"ascii\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-valid \"unicode\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-valid \"spaces\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-valid \"absent\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-bounds 1"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-bounds 72"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-bounds 73"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.SharePasswordHeaderTest",
+      "name": "S90-header-encoding-bounds 1000"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"trash\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"deleted-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"folder\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"size\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"key\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"version\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"name\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"password\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"revoked\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"expired\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"limit\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"deleted-share\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"token\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"creator\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-revalidation \"rebind\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-last-allowance contenders=2"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-last-allowance contenders=8"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90-SQL-last-allowance contenders=16"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90 equality expiry is checked at admission even after a successful inspection()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90 actual SQL failure rolls back admission counter()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareAdmissionTest",
+      "name": "S90 stale lifecycle update cannot reset an admitted counter()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-valid \"api.test\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-valid \"api.test:443\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-valid \"api.test:8443\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-valid \"127.0.0.1:18086\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-valid \"[::1]\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-valid \"[::1]:18086\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-scheme-invalid \"javascript\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-scheme-invalid \"file\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-scheme-invalid \"https,http\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-scheme-invalid \"\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test:\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test:0\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test:65536\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"user:password@api.test\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test/path\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test?password=secret\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test#fragment\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"a b\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"::1\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.ShareOriginTest",
+      "name": "S90-origin-invalid \"api.test,other.test\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90 public capability does not authenticate owner management()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-query-secret \"\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-query-secret \"/download\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-query-secret \"/view\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90 repeated anonymous metadata is typed minimal and has zero download effects()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-page \"view\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-page \"js\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-page \"css\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-form-boundary \"duplicate\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-form-boundary \"oversize\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-form-boundary \"json\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"info-missing\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"info-wrong\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"info-correct\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"download-missing\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"download-wrong\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"download-correct\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"form-missing\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"form-wrong\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-password \"form-correct\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"invalid\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"case\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"revoked\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"expired\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"equal\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"limit\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"trash\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"folder\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"key\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareHttpTest",
+      "name": "S90-HTTP-denial \"missing-item\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLinkOriginTest",
+      "name": "S90-generated-origin \"127.0.0.1:18086\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLinkOriginTest",
+      "name": "S90-generated-origin \"api.test:8443\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLinkOriginTest",
+      "name": "S90-generated-origin \"[::1]:18086\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLinkOriginTest",
+      "name": "S90-generated-origin \"bad/path\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLinkOriginTest",
+      "name": "S90-generated-origin \"user:secret@api.test\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareUnicodePasswordTest",
+      "name": "S90-actual-UTF8-password \"snowman\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareUnicodePasswordTest",
+      "name": "S90-actual-UTF8-password \"emoji\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareUnicodePasswordTest",
+      "name": "S90-actual-UTF8-password \"spaces\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareUnicodePasswordTest",
+      "name": "S90-actual-UTF8-password \"latin-max\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLogSafetyTest",
+      "name": "S90-privacy-actual-log \"query-denial\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLogSafetyTest",
+      "name": "S90-privacy-actual-log \"password-success\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareLogSafetyTest",
+      "name": "S90-privacy-actual-log \"sql-failure\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareClockLockTest",
+      "name": "S90 expiry clock is read after the actual PostgreSQL lock wait()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"empty\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"binary\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"utf8\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"large\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"prepare-failure\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"late-failure\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"revoke\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"owner\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"password\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"content\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"filename-unicode\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"filename-control\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"filename-quote\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareTransferLifetimeTest",
+      "name": "S90-transfer-resource-lifetime \"filename-html\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-no-expanded-grant \"storage-token\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-no-expanded-grant \"history-token\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-no-expanded-grant \"collaboration-token\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-no-expanded-grant \"storage-recipient\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-no-expanded-grant \"history-recipient\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-no-expanded-grant \"collaboration-recipient\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-protected-owner-positive \"storage\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90-protected-owner-positive \"history\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareGrantBoundaryTest",
+      "name": "S90 injected response failure cannot consume a metadata allowance()"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"default\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"no-expiry\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"max-days\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"zero-days\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"negative-days\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"over-days\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"zero-limit\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"negative-limit\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"empty-password\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"72-utf8\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"74-utf8\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareCreationTest",
+      "name": "S90-create-actual-BCrypt-input \"foreign\""
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 cancellation during prefix preparation closes the provider()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-provider-I/O-failure at 0"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-provider-I/O-failure at 4"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-provider-I/O-failure at 8193"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 missing content key cannot invoke provider()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-late-length-failure 8999"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-late-length-failure 9001"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 retrieval cancellation is propagated()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-exact-bytes 0"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-exact-bytes 1"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-exact-bytes 8191"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-exact-bytes 8192"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-exact-bytes 8193"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-exact-bytes 20000"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 close failure cannot replace a denied preparation outcome()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 cancellation after provider opens retains ownership until close()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 provider error is safe and has no raw diagnostic()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 single-byte read and zero-length read obey InputStream contract()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90 Long MAX size does not overflow prefix bound()"
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-early-length-failure \"empty-truncated\""
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-early-length-failure \"empty-extra\""
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-early-length-failure \"small-truncated\""
+    },
+    {
+      "class": "com.vaultstadio.infrastructure.storage.ShareContentReaderAdapterTest",
+      "name": "S90-content-early-length-failure \"small-extra\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"defaults\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"no-expiry\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"one-day\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"max-days\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"zero-days\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"negative-days\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"too-long\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"one-download\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"max-downloads\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"zero-downloads\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"negative-downloads\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"empty-password\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"one-byte\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"72-bytes\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"73-bytes\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"72-utf8\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"74-utf8\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"surrogate-high\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-creation \"surrogate-low\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"same\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"counter\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"state\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"id\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"token-case\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"item\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"creator\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-credential \"hash\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"active\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"revoked\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"past\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"equal\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"future\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"negative\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"zero-limit\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"bad-limit\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"last\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"full\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"over\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-link \"overflow\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"valid\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"missing\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"other-item\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"other-owner\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"folder\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"trash\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"no-key\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"blank-key\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"negative-size\""
+    },
+    {
+      "class": "com.vaultstadio.domain.share.access.PublicSharePolicyTest",
+      "name": "S90-policy-item \"empty-file\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 cancellation after preparation prevents admission and closes stream()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 password denial cannot open content()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 inspect denial cannot open content()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 provider preparation failure cannot admit or consume allowance()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes NOT_FOUND"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes REVOKED"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes EXPIRED"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes LIMIT_REACHED"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes PASSWORD_REQUIRED"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes PASSWORD_INVALID"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes CHANGED"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes INVALID_REQUEST"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-admission-failure-closes UNAVAILABLE"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 cancellation in admission closes prepared stream and propagates()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 download orders authorization preparation admission and transfers ownership()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90 metadata preserves token case and does not expose private fields()"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-token \"\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-token \"has space\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-token \"a/b\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-token \"a?password=x\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-token \"á\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-token \"a________________________________________________________________\""
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-password-byte-count 0"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-password-byte-count 73"
+    },
+    {
+      "class": "com.vaultstadio.core.share.access.PublicShareServiceTest",
+      "name": "S90-invalid-password-byte-count 1024"
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareBrowserOriginTest",
+      "name": "S90-browser-form-origin \"http://127.0.0.1:18086\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareBrowserOriginTest",
+      "name": "S90-browser-form-origin \"null\""
+    },
+    {
+      "class": "com.vaultstadio.api.routes.share.PublicShareBrowserOriginTest",
+      "name": "S90-browser-form-origin \"https://foreign.invalid\""
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import com.vaultstadio.core.domain.event.FileEvent
 import com.vaultstadio.core.domain.event.FolderEvent
 import com.vaultstadio.domain.common.exception.AuthorizationException
 import com.vaultstadio.domain.common.exception.ItemNotFoundException
+import com.vaultstadio.domain.common.exception.StorageException
 import com.vaultstadio.domain.common.exception.ValidationException
 import com.vaultstadio.domain.common.pagination.PagedResult
 import com.vaultstadio.domain.common.pagination.SortOrder
@@ -383,11 +384,12 @@ class StorageServiceTest {
 
         @Test
         fun `should return ancestors for item`() = runTest {
-            val item = createTestFile("item-id", "file.txt", "/A/B/file.txt", "user-123")
+            val item = createTestFile("item-id", "file.txt", "/A/B/file.txt", "user-123").copy(parentId = "b-id")
             val ancestorA = createTestFolder("a-id", "A", "/A", "user-123")
-            val ancestorB = createTestFolder("b-id", "B", "/A/B", "user-123")
+            val ancestorB = createTestFolder("b-id", "B", "/A/B", "user-123").copy(parentId = "a-id")
             coEvery { storageItemRepository.findById("item-id") } returns item.right()
-            coEvery { storageItemRepository.getAncestors("item-id") } returns listOf(ancestorA, ancestorB).right()
+            coEvery { storageItemRepository.findById("a-id") } returns ancestorA.right()
+            coEvery { storageItemRepository.findById("b-id") } returns ancestorB.right()
 
             val result = storageService.getBreadcrumbs("item-id", "user-123")
 
@@ -764,8 +766,10 @@ class StorageServiceTest {
             } returns Unit.right()
 
             coEvery {
-                storageItemRepository.delete("file-id")
-            } returns Unit.right()
+                storageItemRepository.deleteLeaf("file-id", "user-123", any())
+            } coAnswers {
+                thirdArg<suspend (StorageItem) -> Either<StorageException, Unit>>().invoke(item).map { item }
+            }
 
             // When
             val result = storageService.deleteItem("file-id", "user-123")
@@ -786,8 +790,10 @@ class StorageServiceTest {
             } returns folder.right()
 
             coEvery {
-                storageItemRepository.delete("folder-id")
-            } returns Unit.right()
+                storageItemRepository.deleteLeaf("folder-id", "user-123", any())
+            } coAnswers {
+                thirdArg<suspend (StorageItem) -> Either<StorageException, Unit>>().invoke(folder).map { folder }
+            }
 
             // When
             val result = storageService.deleteItem("folder-id", "user-123")

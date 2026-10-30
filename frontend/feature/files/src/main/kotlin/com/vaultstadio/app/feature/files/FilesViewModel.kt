@@ -13,6 +13,7 @@ import com.vaultstadio.app.domain.metadata.usecase.GetSearchSuggestionsUseCase
 import com.vaultstadio.app.domain.result.Result
 import com.vaultstadio.app.domain.share.model.ShareLink
 import com.vaultstadio.app.domain.share.usecase.CreateShareUseCase
+import com.vaultstadio.app.domain.storage.model.BatchResult
 import com.vaultstadio.app.domain.storage.model.Breadcrumb
 import com.vaultstadio.app.domain.storage.model.SortField
 import com.vaultstadio.app.domain.storage.model.SortOrder
@@ -90,8 +91,9 @@ class FilesViewModel(
 
     var items by mutableStateOf<List<StorageItem>>(emptyList())
         private set
-    var isLoading by mutableStateOf(false)
-        private set
+    private var listLoading by mutableStateOf(false)
+    private var pendingMutations by mutableStateOf(0)
+    val isLoading: Boolean get() = listLoading || pendingMutations > 0
     var error by mutableStateOf<String?>(null)
         private set
 
@@ -113,14 +115,12 @@ class FilesViewModel(
         private set
     val isSelectionMode: Boolean get() = selectedItems.isNotEmpty()
 
-    var showInfoPanel by mutableStateOf(false)
-        private set
-    var selectedInfoItem by mutableStateOf<StorageItem?>(null)
-        private set
-    var itemActivity by mutableStateOf<List<Activity>>(emptyList())
-        private set
-    var isLoadingActivity by mutableStateOf(false)
-        private set
+    private val info = FilesInfoState(viewModelScope, getItemActivityUseCase)
+    private val requests = FilesLoadingCoordinator(viewModelScope, loader)
+    val showInfoPanel: Boolean get() = info.visible
+    val selectedInfoItem: StorageItem? get() = info.item
+    val itemActivity: List<Activity> get() = info.activity
+    val isLoadingActivity: Boolean get() = info.loading
 
     private var displayedMode: FilesMode = mode
 
@@ -194,57 +194,59 @@ class FilesViewModel(
 
     fun loadItemsForMode(displayedMode: FilesMode) {
         this.displayedMode = displayedMode
-        viewModelScope.launch {
-            isLoading = true
-            error = null
-            when (
-                val result = loader.loadItemsForMode(
-                    mode = displayedMode,
-                    currentFolderId = currentFolderId,
-                    sortField = sortField,
-                    sortOrder = sortOrder,
-                    currentFolderName = currentFolderName,
-                )
-            ) {
-                is LoadItemsResult.Success -> {
-                    items = result.items
-                    folderTotalItems = result.total
-                    folderHasMore = result.hasMore
-                    breadcrumbs = result.breadcrumbs
-                    if (currentFolderId == null && displayedMode == FilesMode.ALL) {
-                        currentFolderName = null
-                    } else {
-                        currentFolderName = result.currentFolderName
-                    }
-                }
-                is LoadItemsResult.Error -> error = result.message
-            }
-            isLoading = false
-        }
+        loadItems()
     }
 
-    private fun loadItems() = loadItemsForMode(displayedMode)
+    private fun loadContext() = FilesLoadContext(
+        displayedMode,
+        currentFolderId,
+        currentFolderName,
+        sortField,
+        sortOrder,
+    )
+
+    private fun loadItems(preserveError: Boolean = false) {
+        val context = loadContext()
+        requests.load(
+            context,
+            started = {
+                listLoading = true
+                isLoadingMore = false
+                if (!preserveError) error = null
+            },
+            completed = { result ->
+                when (result) {
+                    is LoadItemsResult.Success -> {
+                        items = result.items
+                        folderTotalItems = result.total
+                        folderHasMore = result.hasMore
+                        breadcrumbs = result.breadcrumbs
+                        currentFolderName = result.currentFolderName
+                    }
+                    is LoadItemsResult.Error -> if (!preserveError || error == null) error = result.message
+                }
+            },
+            finished = { listLoading = false },
+        )
+    }
 
     fun loadMoreFolderItems() {
         if (displayedMode != FilesMode.ALL || !folderHasMore || isLoading || isLoadingMore) return
-        viewModelScope.launch {
-            isLoadingMore = true
-            when (
-                val result = loader.loadMoreFolderItems(
-                    currentFolderId = currentFolderId,
-                    sortField = sortField,
-                    sortOrder = sortOrder,
-                    currentOffset = items.size,
-                )
-            ) {
-                is LoadMoreResult.Success -> {
-                    items = items + result.newItems
-                    folderHasMore = result.hasMore
+        requests.more(
+            loadContext(),
+            items.size,
+            started = { isLoadingMore = true },
+            completed = { result ->
+                when (result) {
+                    is LoadMoreResult.Success -> {
+                        items = items + result.newItems
+                        folderHasMore = result.hasMore
+                    }
+                    is LoadMoreResult.Error -> error = result.message
                 }
-                is LoadMoreResult.Error -> error = result.message
-            }
-            isLoadingMore = false
-        }
+            },
+            finished = { isLoadingMore = false },
+        )
     }
 
     private fun runOp(
@@ -265,13 +267,41 @@ class FilesViewModel(
         onSuccess: () -> Unit = { loadItems() },
     ) {
         viewModelScope.launch {
-            isLoading = true
-            when (val result = block()) {
-                is Result.Success -> onSuccess()
-                is Result.Error -> error = result.message
-                is Result.NetworkError -> error = result.message
+            pendingMutations++
+            try {
+                when (val result = block()) {
+                    is Result.Success -> onSuccess()
+                    is Result.Error -> error = result.message
+                    is Result.NetworkError -> error = result.message
+                }
+            } finally {
+                pendingMutations--
             }
-            isLoading = false
+        }
+    }
+
+    private fun runBatchOp(loading: Boolean = true, block: suspend (List<String>) -> Result<BatchResult>) {
+        val requested = selectedItems.toSet()
+        if (requested.isEmpty()) return
+        val context = loadContext()
+        viewModelScope.launch {
+            if (loading) pendingMutations++
+            try {
+                when (val result = block(requested.toList())) {
+                    is Result.Success -> {
+                        val outcome = result.data.forSelection(requested)
+                        if (currentFolderId == context.folderId && displayedMode == context.mode) {
+                            selectedItems = (selectedItems - requested) + (outcome.remaining intersect selectedItems)
+                        }
+                        if (outcome.error != null) error = outcome.error
+                        loadItems(preserveError = outcome.error != null)
+                    }
+                    is Result.Error -> error = result.message
+                    is Result.NetworkError -> error = result.message
+                }
+            } finally {
+                if (loading) pendingMutations--
+            }
         }
     }
 
@@ -294,10 +324,7 @@ class FilesViewModel(
             when (val result = toggleStarUseCase(item.id)) {
                 is Result.Success -> {
                     loadItems()
-                    if (selectedInfoItem?.id == item.id) {
-                        selectedInfoItem = items.find { it.id == item.id }
-                            ?: selectedInfoItem?.copy(isStarred = !item.isStarred)
-                    }
+                    info.update(result.data)
                 }
                 is Result.Error -> error = result.message
                 is Result.NetworkError -> error = result.message
@@ -329,89 +356,36 @@ class FilesViewModel(
         selectedItems = emptySet()
     }
 
-    fun batchDelete(permanent: Boolean = false) {
-        if (selectedItems.isEmpty()) return
-        runOpWithLoading(
-            block = { batchDeleteUseCase(selectedItems.toList(), permanent) },
-            onSuccess = {
-                clearSelection()
-                loadItems()
-            },
-        )
-    }
-
-    fun batchMove(destinationId: String?) {
-        if (selectedItems.isEmpty()) return
-        runOpWithLoading(
-            block = { batchMoveUseCase(selectedItems.toList(), destinationId) },
-            onSuccess = {
-                clearSelection()
-                loadItems()
-            },
-        )
-    }
+    fun batchDelete(permanent: Boolean = false) = runBatchOp { batchDeleteUseCase(it, permanent) }
+    fun batchMove(destinationId: String?) = runBatchOp { batchMoveUseCase(it, destinationId) }
 
     fun moveItemToFolder(itemId: String, destinationId: String?) {
         viewModelScope.launch {
             items = items.filter { it.id != itemId }
             when (val result = batchMoveUseCase(listOf(itemId), destinationId)) {
-                is Result.Success -> loadItems()
+                is Result.Success -> {
+                    val outcome = result.data.forSelection(setOf(itemId))
+                    if (outcome.error != null) error = outcome.error
+                    loadItems(preserveError = outcome.error != null)
+                }
                 is Result.Error -> {
                     error = result.message
-                    loadItems()
+                    loadItems(preserveError = true)
                 }
                 is Result.NetworkError -> {
                     error = result.message
-                    loadItems()
+                    loadItems(preserveError = true)
                 }
             }
         }
     }
 
-    fun batchCopy(destinationId: String?) {
-        if (selectedItems.isEmpty()) return
-        runOpWithLoading(
-            block = { batchCopyUseCase(selectedItems.toList(), destinationId) },
-            onSuccess = {
-                clearSelection()
-                loadItems()
-            },
-        )
-    }
+    fun batchCopy(destinationId: String?) = runBatchOp { batchCopyUseCase(it, destinationId) }
+    fun batchStar(starred: Boolean) = runBatchOp(loading = false) { batchStarUseCase(it, starred) }
 
-    fun batchStar(starred: Boolean) {
-        if (selectedItems.isEmpty()) return
-        runOp(
-            block = { batchStarUseCase(selectedItems.toList(), starred) },
-            onSuccess = {
-                clearSelection()
-                loadItems()
-            },
-        )
-    }
-
-    fun showItemInfo(item: StorageItem) {
-        selectedInfoItem = item
-        showInfoPanel = true
-        loadItemActivity(item.id)
-    }
-
-    fun hideItemInfo() {
-        showInfoPanel = false
-        selectedInfoItem = null
-        itemActivity = emptyList()
-    }
-
-    fun loadItemActivity(itemId: String, limit: Int = 10) {
-        viewModelScope.launch {
-            isLoadingActivity = true
-            when (val result = getItemActivityUseCase(itemId, limit)) {
-                is Result.Success -> itemActivity = result.data
-                else -> { }
-            }
-            isLoadingActivity = false
-        }
-    }
+    fun showItemInfo(item: StorageItem) = info.show(item)
+    fun hideItemInfo() = info.hide()
+    fun loadItemActivity(itemId: String, limit: Int = 10) = info.load(itemId, limit)
 
     fun updateViewMode(mode: ViewMode) {
         viewMode = mode

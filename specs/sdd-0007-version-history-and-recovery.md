@@ -1,0 +1,366 @@
+# Version History and Recovery
+
+- Status: As-built baseline
+- Date: 2026-09-21
+- Catalog capability ID: `version-history-and-recovery`
+- Last verified: `603d84a2f88297c9e7fd1b7143df3980fb21e24d` (2026-09-20 UTC)
+- Owners: VaultStadio maintainers
+- Scope: Define file versions, history, diffs, restore, retention, deletion, and system recovery boundaries.
+- Related issues/PRs: #71, #124
+- Required review gates: product UX, architecture, testing, documentation, security/operations
+- Open decisions blocking readiness: see the explicit decisions and limitations below
+
+## 1. Executive summary
+
+Version history protects file-level recovery, while backup/restore protects system-level recovery. This baseline keeps those contracts distinct and defines their interaction.
+
+This document is an integrated product and engineering contract. For an as-built baseline, it records current behavior and the contract maintainers choose to preserve; it does not by itself authorize a behavior change.
+
+## 2. Problem, current behavior, and evidence
+
+### 2.1 Problem
+
+Version routes and operational backup documentation exist, but there is no single contract for retention, restore effects, version deletion, or partial recovery.
+
+### 2.2 Current behavior
+
+Backend has version domain/core/application modules and route/test coverage for history, compare, restore, and delete.
+
+### 2.3 Evidence
+
+- `backend/domain/version`
+- `backend/core/version`
+- `backend/application/version`
+- `backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt`
+- `backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version`
+- `docs/operations/BACKUP_RESTORE.md`
+
+### 2.4 Retrospective classification
+
+- **Observed behavior:** the current behavior described above is supported by the listed checkout evidence.
+- **Intentional contract:** only the invariants and acceptance scenarios in this SDD are proposed for preservation; historical motivation is not inferred.
+- **Known debt and limitations:** documentation/source mismatches, incomplete external verification, and explicitly named unsupported operations remain debt until closed.
+- **Unknown rationale:** historic reasons for the current structure are unknown unless a source reference states them.
+- **Proposed improvements:** any future change is listed in the implementation sequence and must not be read as implemented behavior.
+
+### 2.5 Audit checkpoint — 2026-10-25
+
+A01 revela el nombre de un archivo ajeno mediante el historial. A07 observa historial vacío tras el upload normal y falta de conexión de createVersion con ese recorrido. La recuperación de versiones no queda acreditada por el restore de DB/archivos de la auditoría.
+
+Evidencia parcial de producto en master `615f11adf5272bd1d4626f9571b31e691eeee062`: [auditoría integral](../docs/development/REPOSITORY_AUDIT_2026-10-25.md), [resultados saneados](../docs/development/audits/2026-10-25/verification-summary.json) y [roadmap](../docs/development/AUDIT_ROADMAP_2026-10-25.md), issue #71. Este checkpoint no modifica el estado declarado ni sustituye la verificación original de la baseline.
+
+## 3. Actors, surfaces, and terminology
+
+| Actor | Goal | Entry point | Visible surfaces |
+|---|---|---|---|
+| End user | Use the capability safely | REST/API or frontend | response, screen, error/recovery state |
+| Administrator/operator | Configure, diagnose, recover | configuration, Docker/Helm, admin API | logs, health, reports, retained state |
+| Contributor | Change the capability without boundary drift | backend/frontend source | tests, SDD, CI, docs |
+| External client/provider | Interoperate through an explicit contract | protocol adapter | bounded request/response or failure |
+
+**Capability:** the user-visible behavior owned by this SDD. **Semantic port:** an application-facing capability interface that does not expose provider DTOs or transport clients. **Composition root:** the explicit boundary where concrete adapters and credentials are wired. **Retained state:** facts that remain after a failure and determine safe recovery.
+
+## 4. Goals, non-goals, and fixed invariants
+
+### 4.1 Goals
+
+1. Define version invariants and retention.
+2. Make restore effects on metadata, shares, and sync explicit.
+3. Separate file versioning from full-system backup.
+4. Provide deterministic recovery and idempotency evidence.
+
+### 4.2 Non-goals
+
+1. Restore does not silently overwrite unrelated current state.
+2. Backup claims do not imply point-in-time restore unless verified.
+3. No destructive version deletion without authorization and policy.
+
+### 4.3 Fixed product and safety invariants
+
+1. A version is immutable after commit.
+2. Current version and history remain distinguishable.
+3. Restore creates a documented state transition.
+4. Failed restore retains the prior recoverable state.
+
+## 5. Current versus proposed product journey
+
+| Stage | Current/observed | Contract to preserve or implement | User/operator effect |
+|---|---|---|---|
+| Entry | User opens history | Validate identity, input, and configuration before mutation | Invalid work is rejected early |
+| Operation | selects version/diff | Apply one bounded semantic use case | Progress and ownership are explicit |
+| Outcome | new current state or bounded failure is reported. | Return success, partial, or failure with retained state | Next action is inspectable |
+
+Text equivalent: User opens history -> selects version/diff -> previews -> requests restore/delete -> authorization and retention policy validate -> new current state or bounded failure is reported..
+
+## 6. Functional behavior and state model
+
+### 6.1 Happy path
+
+1. The entrypoint validates the request and resolves the capability owner.
+2. The application policy evaluates invariants and calls semantic ports in an explicit order.
+3. Adapters perform bounded external I/O and map provider results to semantic facts.
+4. The presentation surface reports completed facts, current state, next action, and safe evidence.
+
+### 6.2 Alternative, duplicate, stale, and partial paths
+
+- Duplicate requests MUST be idempotent or return an explicit duplicate outcome.
+- Stale, out-of-order, canceled, and partially completed operations MUST retain enough state for a safe retry or a clear terminal action.
+- A provider failure MUST NOT be converted into an empty success result.
+- If an irreversible effect completed before a later step failed, the result MUST distinguish completed effects from pending recovery.
+
+### 6.3 State machine
+
+| State | Trigger/condition | Owner | Allowed next states |
+|---|---|---|---|---|
+| `current` | Version is active head | user | edit/history |
+| `historical` | Version retained for recovery | user | compare/restore/delete |
+| `restoring` | Restore operation in progress | system | complete/retry |
+| `restored` | Selected content is current | user | continue |
+| `retained-failure` | Restore failed with original state retained | operator | retry/investigate |
+
+### 6.4 Owner-scoped version operations — issue #74
+
+Contract proposal dated 2026-10-26, before implementation. The audited cross-user history request discloses another owner's item name. This revision defines R01b; it does not declare the implementation or complete recovery lifecycle verified. Integrate the reviewed storage-policy prerequisite through the Action-managed parent flow before code, preserving both histories.
+
+| ID | Required behavior | Verification target |
+|---|---|---|
+| VER-OWNER-01 | Every version entrypoint carries an explicit authenticated actor, including history/detail/latest/list/count/size, create/restore/delete, comparison, retention and cleanup. Authorize against the current canonical storage item's owner before full version metadata, keys, content or effects. No actor-less overload, nullable/system default or implicit bypass is permitted. | VER74-SVC matrix and actor propagation through production use cases/routes. |
+| VER-GRANT-01 | PRIVATE/PUBLIC/SHARED, a download share, sharedWithUsers, a version's createdBy and a nonowner ADMIN role do not grant historical read or mutation. The current owner remains a positive control even when another actor originally created a version. Blank or absent actors fail closed. | Visibility/actor matrix, previous-creator/new-owner and anonymous cases. |
+| VER-SCOPE-01 | A version-ID-only delete may resolve only its item ID through a minimal domain semantic port before owner authorization. It must not fetch the complete version to discover ownership. Missing scope/item and typed lookup failures stop before further version access. | Minimal SQL projection contract, ordering controls and real route/DB cases. |
+| VER-BIND-01 | Bind every returned version/list/history/diff operand to the authorized current item and requested ID/number before disclosure or bytes. Reject mismatched or mixed rows and a stale scope result. Never return another item's storage key/name as an error diagnostic. | Mismatched item/ID/number, mixed-list/history and stale-scope controls. |
+| VER-EFFECTS-01 | An authorization rejection leaves complete item/version rows, current/latest state, bytes, shares, success events and counters unchanged. No unauthorized count/size/history lookup or backend read/copy/delete is allowed. Preserve each operation's existing owner/type/trash semantics explicitly; missing/deleted current items never authorize orphan history. | Full retained-row and byte/hash comparisons, call-order controls and owner positives. |
+| VER-CONTENT-01 | Sequential direct version deletion/full-history purge MUST preserve bytes still referenced by a current storage item or another version. After ownership and row binding, use a minimal boolean reference port excluding the complete bound deletion batch while retaining all external-version/current-item references; do not retrieve/disclose unrelated item or version metadata. A failed reference lookup stops before content or row deletion. | Restore-then-delete and history-purge red/green cases, actual SQL/byte integration, minimal-column adapter contracts and reference-provider failure controls. |
+| VER-CONTENT-02 | Retention MUST retain the bound pre-deletion rows, validate returned IDs, and reclaim only unreferenced content for those removed rows. After metadata policy execution, preflight every minimal reference check before any byte deletion; delete each unreferenced key once, preserve current-file/retained-version references and propagate reference/storage failures. The existing metadata-first port may already have committed row deletion on a later provider failure; report this limit explicitly rather than promise atomic compensation. | Unreferenced reclamation red/green, retained current/version references, duplicate keys, no-op/error/late-failure controls and real owner HTTP byte assertions. |
+| VER-ERROR-01 | Preserve typed item/scope/version repository and backend errors; do not convert them to an empty success, blanket not-found or raw exception response. Denial occurs before semantic/version-specific error disclosure. Existing latest-version deletion and create-only-file rules remain effective for owners. | Typed injected failures and real HTTP composition, including 401/403/404 versus provider failure. |
+| VER-ARCH-01 | Keep ownership policy and scope ports independent of HTTP, SQL, Koin and provider clients. Reuse the reviewed owner policy and wire adapters at composition. Extract focused authorization, read/mutation and diff responsibilities instead of expanding FileVersionService or its test monolith. | Module/import review, focused fixtures and all affected suites. |
+
+The version-download route currently returns metadata; binary historical download and automatic upload/version wiring remain R07, not completed by R01b. Quota/collaboration/grant implementation and full retention/byte-compensation lifecycle remain separate milestones. Their existing limits must stay visible; passing this permission matrix is not a claim that every owner recovery operation is fully functional.
+
+The content guard was added after two failing owner-sequence tests reproduced deletion of a restored version's shared bytes and deletion of an active file during history cleanup. It is a conservative check for sequential operations. Atomic reference changes, concurrent restore/delete/garbage collection, orphan reclamation and compensation after partial provider/metadata failure remain [R07 / #109](https://github.com/vypdev/vaultstadio/issues/109); this guard does not certify those guarantees. Add at least eight non-overlapping reference/effect checks beyond the permission matrix, and keep the original failing assertions as regression evidence.
+
+Local implementation checkpoint: [verification receipt](../docs/development/verification/VERSION_OWNERSHIP_74.md), 348 affected-suite cases (197 core, 140 API/use cases, eleven real SQL-adapter cases), zero failures/errors/skips. The 72 service and91 HTTP matrix budgets were executed; core/version covers272/272 lines and90/90 branches without exclusions. Exact source hashes and case names accompany the receipt. Packaged local dogfooding also passes 15 real HTTP requests with preserved storage/plugin byte hashes. Remote CI/review and adoption remain separate acceptance steps; the overall as-built status and R07 gaps are unchanged.
+
+### 6.5 Accepted product discovery — issue #124 (2026-10-29)
+
+These are **accepted product targets, proposed for implementation**. They do not change the observed baseline, catalog status or last-verified evidence. The [discovery index](product-discovery-2026-10-29.md) retains the source answers and cross-capability dependencies; this SDD owns the requirements below.
+
+<a id="pd-013"></a>
+
+#### PD-013: Time plus minimum historical-version retention
+
+The default history policy MUST retain every historical version for 30 days since it ceased being current AND at least the latest 10 historical versions even when older. The current version is separate. A historical version is retention-eligible only when it is outside both protections; explicit holds and live byte references still block reclamation.
+
+**Blocking technical decisions:** Boundary clock/order, time/count validation, policy changes, E2EE history, concurrent restore/cleanup and atomic reference/byte compensation. #109 still owns real version lifecycle/binary restore gaps.
+
+## 7. User-facing configuration
+
+Retention count/time, diff limits, restore policy, and backup schedule are explicit. Defaults cannot weaken authorization or data-retention safety.
+
+Configuration MUST define type, recommended default, allowed values, validation, precedence, persistence/snapshot behavior, migration for unknown or retired values, and values that are intentionally not configurable. A configuration change MUST update the relevant docs and contract tests.
+
+### Accepted target configuration (#124)
+
+| Requirement | Authority, default and inheritance |
+|---|---|
+| PD-013 | Administrator general time/count policy with explicit space/vault overrides and indefinite retention. Current version is not counted among the 10 historical versions; no quota strategy may remove protected versions. |
+
+These are product-policy semantics, not new environment variable/API field names. Before implementation, define typed validation/bounds, persistence, effective policy revision for pending work and migration/rollback. An override cannot bypass content authorization, E2EE boundaries or protected retention. Unknown/invalid policy is not permission to select a weaker default.
+
+## 8. Clean Architecture design
+
+### 8.1 Responsibilities and dependency direction
+
+| Boundary | Owns | Must not own/import |
+|---|---|---|
+| Domain/pure policy | Version History and Recovery invariants and provider-independent decisions | Ktor, Compose, database, SDK, process, or credentials |
+| Application | use cases, semantic ports, ordering, typed outcomes | concrete transport/provider clients or raw DTO policy |
+| Adapters/data | protocol mapping and external I/O | product policy or cross-capability orchestration |
+| Infrastructure/composition | concrete clients, credentials, Koin/wiring, deployment | hidden business decisions |
+| Entrypoints/presentation | input adaptation, state rendering, navigation/HTTP mapping | duplicated domain mutation policy |
+
+### 8.2 Contracts, state, and trust boundaries
+
+Version policy is domain/application. Storage and metadata adapters provide persistence. API maps version contracts. Backup tooling remains an operational adapter and cannot bypass application invariants.
+
+Version IDs, ordering, diff limits, and restore outcomes are stable and tested. Restore must not mutate unrelated shares or permissions without explicit policy.
+
+### 8.3 Executable architecture constraints
+
+- Application and domain imports MUST be checked for forbidden transport, framework, process, SDK, and provider dependencies.
+- Every concrete adapter MUST have focused contract tests and every public route/workflow MUST have an owning SDD/evidence entry.
+- The validator MUST report missing evidence rather than infer success from file existence alone.
+- RepoWise and Graphify results MAY guide investigation but MUST NOT be used as the sole acceptance criterion.
+
+## 9. UI/UX and content contract
+
+Primary user-facing states MUST show current status, completed facts, next action, impact, inspectable links, and progressively disclosed technical evidence. Machine identifiers and protocol paths remain stable and English.
+
+Errors and partial results use the order **impact -> cause -> action -> retained state**. Technical identifiers, URLs, and protocol names remain stable. Visual diagrams are supplementary; the state tables and text above are normative.
+
+## 10. Failure, recovery, and cleanup
+
+A partial restore reports retained original state and cleanup/retry action. A missing version is a bounded not-found result.
+
+| Failure/partial state | Impact | Retained facts | Automatic retry | Required action | Cleanup |
+|---|---|---|---|---|---|
+| Invalid input/configuration | No operation starts | validation result | No | Repair input/config | None |
+| Provider/storage failure | Operation may be partial | operation ID and completed effects | Bounded only if safe | Inspect and retry/reconcile | Release transient resources |
+| Stale/duplicate request | No unsafe overwrite | authoritative current state | Safe replay if idempotent | Re-read and retry | None |
+| Cancellation/timeout | Work may be incomplete | session/state/phase | Explicit | Resume, cancel, or recover | Expire owned transient state |
+
+## 11. Security, permissions, and privacy
+
+Version history may contain deleted/private content; authorization and retention apply to every version and diff.
+
+Untrusted content MUST remain data. Secrets, credentials, private content, raw provider responses, and stack traces MUST NOT appear in public errors, logs, generated docs, fixtures, or catalog evidence.
+
+## 12. Observability and operational UX
+
+Record version/item IDs, operation, retention decision, duration, and safe outcome; never content or secrets.
+
+Operator evidence MUST distinguish liveness, readiness, dependency failure, configuration failure, and retained partial state. Correlation IDs and stable semantic codes are preferred over raw exceptions.
+
+## 13. Compatibility, migration, rollout, and rollback
+
+Existing behavior is preserved for an as-built baseline unless a future revision explicitly changes the contract. Any behavior-changing migration MUST define in-flight state, rollback, and compatibility evidence.
+
+For this baseline, the initial rollout is documentation and validation only. Future implementation work MUST state whether it is greenfield, backward-compatible, migratory, or breaking, and MUST define rollback for every irreversible effect.
+
+## 14. Testing strategy and numeric budget
+
+Minimum risk-derived budget: **Minimum 22 cases: create/order, history, compare, missing version, delete retention, restore success/failure, concurrent edit, share interaction, authorization, backup boundary, and idempotent retry.**
+
+R01b adds a planned minimum of **72 service matrix executions**: twelve public operations × PRIVATE/PUBLIC/SHARED × current owner/unrelated actor. Operations are createVersion, restoreVersion, getHistory, getVersion, getLatestVersion, listVersions, deleteVersion, applyRetentionPolicy, compareVersions, getVersionCount, getTotalVersionSize and cleanupVersionsForItem. Stable IDs are `VER74-SVC-{operation}-{visibility}-{actor}`. Owner controls must exercise actual production behavior; a denial-only implementation cannot pass.
+
+The HTTP inventory is seven existing surfaces (history, detail, download-metadata, restore, compare, delete, retention-cleanup) × four authenticated actor classes (owner, unrelated, shared recipient without history grant, nonowner admin) × three visibility values, plus one anonymous case per surface: **91 HTTP executions**. Anonymous visibility variants share an equivalent pre-resource gate and are not counted three times. IDs are `VER74-HTTP-{surface}-{visibility}-{actor}` and `VER74-HTTP-{surface}-anonymous`.
+
+The matrix floor is **163 executions**, not 163 independent product behaviors or executed evidence. Add missing/deleted/trashed/folder states, previous creator/current owner, scope/item/ID/number mismatches, mixed rows, typed provider/repository failures and retained-state ordering cases; do not double-count a risk already covered by the same execution. Use real migrated PostgreSQL and isolated byte-backed fixtures for representative production service/HTTP effects, with focused unit fault controls for forbidden call order. Collect fresh XML by source and reconcile IDs/counters, skips and complete coverage denominators. No policy threshold, required branch check or readiness status is silently changed by this proposal.
+
+The budget is a floor, not a substitute for covering every normative requirement. Tests SHOULD include pure policy tests, application/use-case tests, adapter contract tests, route/workflow/schema tests, security/abuse tests, and integration or human evidence where automation cannot establish the contract. No live external service is required for deterministic unit tests; authorized external smoke evidence MUST be labelled separately.
+
+For #124, add at least **3 future acceptance families** (1 decisions × positive, denied/invalid and failure/recovery). The concrete families are listed in §16; they are **planned, not executed tests**. Expand actor, policy, boundary, concurrency, platform and cryptographic matrices before the affected implementation is marked ready. Preserve existing regression budgets.
+
+## 15. Documentation and discoverability
+
+| Audience | Required artifact | Purpose |
+|---|---|---|
+| User/client | API or frontend guide | Normal journey, defaults, examples, visible states |
+| Operator | configuration/recovery/runbook | prerequisites, health, failure, retry, cleanup |
+| Contributor | this SDD and architecture guide | boundaries, contracts, tests, implementation order |
+| Maintainer | catalog and traceability | ownership, verification commit, unresolved decisions |
+
+The owning user-facing documentation MUST link back to this SDD or its catalog entry. Examples MUST be checked against current code or contract fixtures.
+
+## 16. Acceptance scenarios
+
+1. Given a historical version, when restore succeeds, then the selected content becomes current without losing the prior current version unless policy explicitly says so.
+2. Given restore failure, when the operation returns, then the pre-restore current state remains recoverable.
+3. Given retention policy forbids deletion, when deletion is requested, then the version remains and the result explains why.
+
+### Planned discovery acceptance (#124)
+
+- **PD-013-P** — Using controlled age/order, retain all young versions and the latest 10 old historical versions while keeping current separate; verify overrides and indefinite mode.
+- **PD-013-N** — A cleanup cannot delete a protected historical version or bytes referenced by current content, another version or a retention hold.
+- **PD-013-F** — Interrupt restore/cleanup under concurrent version creation and verify prior recoverability, truthful partial effects and a safe reconciliation path.
+
+## 17. Requirements traceability
+
+| Requirement | Owner | Verification target | Documentation |
+|---|---|---|---|
+| Fixed invariants | Domain/application policy | focused policy and architecture tests | this SDD |
+| Public behavior | Use case and adapter | route/protocol/integration tests | API/frontend/operations reference |
+| Failure and recovery | Application outcome policy | partial, retry, cancellation, and cleanup tests | troubleshooting/recovery guide |
+| Security/privacy | boundary policy and composition | abuse, secret-safe, and permission tests | security guide and threat model |
+| Operational evidence | workflow/deployment adapter | render, health, artifact, and rollback checks | operations runbook |
+| VER-OWNER/GRANT/SCOPE/BIND/EFFECTS/CONTENT/ERROR/ARCH | Version policy, application, adapters and composition | VER74-SVC / VER74-HTTP plus explicit state/error variants | issue #74 and [local executed evidence](../docs/development/verification/VERSION_OWNERSHIP_74.md); remote adoption pending |
+
+### Discovery traceability (#124)
+
+| Requirement owner in §6 | Planned acceptance in §16 | Implementation/evidence state | Milestone |
+|---|---|---|---|
+| [PD-013](#pd-013) | PD-013-P / -N / -F | Accepted target; implementation and current execution evidence still required | [M2](../docs/development/PRODUCT_ROADMAP_2026-10-29.md#m2) |
+
+## 18. Implementation or maintenance sequence
+
+Define version invariants -> reconcile route behavior -> add restore failure tests -> separate backup contract -> update recovery docs.
+
+Discovery targets follow the dependency order and evidence gates in the [2026-10-29 roadmap](../docs/development/PRODUCT_ROADMAP_2026-10-29.md). Each implementation requires its own admitted, bounded issue/PR; this documentation revision does not activate or certify these features.
+
+## 19. Definition of Done
+
+- [ ] Every normative requirement has acceptance and traceability.
+- [ ] Current behavior, intentional contract, debt, unknowns, and proposals are separated.
+- [ ] Architecture boundaries and configuration validation are executable.
+- [ ] Numeric test budget and all applicable failure/security cases pass.
+- [ ] User, operator, contributor, and migration documentation is synchronized.
+- [ ] Catalog evidence points to the verified commit and all referenced paths exist.
+- [ ] `python3 scripts/validate-specification-catalog.py` passes.
+- [ ] `git diff --check` passes and no generated or secret-like artifact is staged.
+- [ ] No readiness-blocking decision remains unresolved for the declared status.
+
+## 20. References and decisions
+
+- `backend/core/domain/model/FileVersion.kt`
+- `backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt`
+- `docs/operations/BACKUP_RESTORE.md`
+
+- Portfolio governance: `sdd-0000-architecture-quality-and-product-contract.md`.
+- Related capability contracts are listed in `specs/catalog.json`.
+
+Review checkpoint (before follow-up implementation, 2026-10-26/27 UTC): Copilot identified missing retention blob reclamation in PR #110. VER-CONTENT-02 adds the focused contract and at least nine non-overlapping retention/reference/error cases; complete concurrency/compensation remains #109. The earlier passing CI is historical until the follow-up candidate has its own results.
+
+Historical retention checkpoint `0fbb0af`: the nine new core cases and one new real HTTP sequence pass alongside the complete affected selection (343 cases, zero failures/errors/skips). Updated core/API strict checks pass without a new baseline; the published follow-up still requires fresh remote CI and review.
+
+Cleanup-batch follow-up contract (before code): reference liveness must ignore every version ID removed by the authorized full-history purge, not only the row currently inspected. Deduplicate keys after complete scope binding and preflight all remaining-reference queries before content/metadata deletion. Add at least five executions: restored/shared-key purge, full-set SQL exclusion, external-version retention, empty exclusion and real HTTP purge preserving canonical bytes. Historical orphan repair, concurrent GC and durable compensation remain R07.
+
+Final batch-aware local checkpoint:348 affected cases pass (197core,140API,11real SQL adapters), with unchanged inputs during the complete campaign; strict checks and packaging pass. Full module coverage is 272/272lines and90/90branches. The SQL inheritance claims are disproved by the actual resolved1.0.0 bytecode and executed fault/cancellation tests (upstream#736); no catch broadening is needed. Fresh remote CI/review of the published batch-aware candidate remains required.
+
+Discovery provenance and ownership: [30 accepted decisions](product-discovery-2026-10-29.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["User opens history"]
+    S1["selects version/diff"]
+    S2["previews"]
+    S3["requests restore/delete"]
+    S4["authorization and retention policy validate"]
+    S5["new current state or bounded failure is reported"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+```
+
+Text equivalent: User opens history -> selects version/diff -> previews -> requests restore/delete -> authorization and retention policy validate -> new current state or bounded failure is reported..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Loading retained history or restoring the selected version.
+- Action required: Inspect the retained version and current state before a safe retry.
+- Blocked: The actor lacks history authority or the requested version cannot be used.
+- Partial: The operation retains explicit recovery state; historical bytes are not assumed restored.
+- Complete: Restored content is current only after its actual bytes and metadata are verified.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| History/order | 6 |
+| Restore/retention | 6 |
+| Authority/share boundary | 6 |
+| Failure/idempotency | 4 |
+| **Total** | **22** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

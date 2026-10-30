@@ -1,0 +1,265 @@
+"""Regression contracts for PR test completeness, event cost and publishing boundaries."""
+from pathlib import Path
+import json
+import os
+import shlex
+import subprocess
+import tempfile
+import unittest
+
+import yaml
+
+ROOT = Path(__file__).resolve().parents[2]
+WORKFLOWS = ROOT / '.github/workflows'
+
+
+def workflow(name):
+    # BaseLoader preserves GitHub's YAML 1.2 `on` key and expression strings.
+    return yaml.load((WORKFLOWS / name).read_text(), Loader=yaml.BaseLoader)
+
+
+def steps(document):
+    return [s for job in document['jobs'].values() for s in job.get('steps', [])]
+
+
+class CadenceContractTests(unittest.TestCase):
+    def test_every_pr_update_keeps_all_tests_without_path_filters(self):
+        for name in ['ci.yml', 'secret_scanning.yml']:
+            with self.subTest(workflow=name):
+                events = workflow(name)['on']
+                self.assertNotIn('push', events)
+                self.assertIn('workflow_dispatch', events)
+                pr = events['pull_request']
+                self.assertEqual(set(pr['branches']), {'main', 'master', 'develop'})
+                self.assertNotIn('paths', pr)
+                self.assertNotIn('paths-ignore', pr)
+                if 'types' in pr:
+                    self.assertIn('synchronize', pr['types'])
+                    self.assertIn('opened', pr['types'])
+                    self.assertIn('reopened', pr['types'])
+
+    def test_cancellation_is_scoped_by_pr_and_workflow(self):
+        groups = []
+        for name in ['ci.yml', 'secret_scanning.yml', 'docker_client_contract.yml']:
+            policy = workflow(name)['concurrency']
+            self.assertEqual(policy['cancel-in-progress'], 'true')
+            self.assertIn('github.event.pull_request.number || github.ref', policy['group'])
+            groups.append(policy['group'])
+        self.assertEqual(len(groups), len(set(groups)))
+
+    def test_heavy_work_is_manual_or_staggered_weekly(self):
+        schedules = []
+        for name in ['security.yml', 'project_runtime_verification.yml', 'extended_verification.yml']:
+            with self.subTest(workflow=name):
+                events = workflow(name)['on']
+                self.assertEqual(set(events), {'workflow_dispatch', 'schedule'} | ({'workflow_call'} if name == 'project_runtime_verification.yml' else set()))
+                cron = events['schedule'][0]['cron'].split()
+                self.assertEqual(cron[2:4], ['*', '*'])
+                self.assertRegex(cron[4], r'^[0-6]$')
+                schedules.append(tuple(cron))
+        self.assertEqual(len(schedules), len(set(schedules)))
+
+    def test_complete_discovery_entrypoints_keep_each_suite_required(self):
+        ci = workflow('ci.yml')
+        expected = [('backend', 'backend', None), ('frontend', 'frontend', 'desktop'), ('frontend', 'frontend', 'browser')]
+        for job, directory, suite in expected:
+            with self.subTest(job=job, suite=suite):
+                commands = [step for step in ci['jobs'][job]['steps']
+                            if 'verification/run.py test --root ' + directory in step.get('run', '')
+                            and (suite is None or '--suite ' + suite in step['run'])]
+                self.assertEqual(len(commands), 1)
+                step = commands[0]
+                self.assertEqual(step['working-directory'], directory)
+                self.assertNotIn('continue-on-error', step)
+                self.assertNotIn('--tests', step['run'])
+                self.assertNotIn('--rerun-tasks', step['run'])
+                self.assertNotRegex(step['run'], r'--(skip|exclude|module)')
+        # Actual module expansion and test-only rerun are exercised by the disposable CLI producer.
+
+    def test_failed_test_command_cannot_be_reported_as_success(self):
+        count = 0
+        for job in ['backend', 'frontend']:
+            for step in workflow('ci.yml')['jobs'][job]['steps']:
+                if 'verification/run.py test ' not in step.get('run', ''):
+                    continue
+                count += 1
+                with self.subTest(job=job, step=step['name']), tempfile.TemporaryDirectory() as raw:
+                    repository = Path(raw)
+                    directory = repository / step['working-directory']
+                    directory.mkdir()
+                    helper = repository / 'scripts/verification/run.py'
+                    helper.parent.mkdir(parents=True)
+                    helper.write_text('import sys\nsys.exit(42)\n')
+                    result = subprocess.run(['bash', '-eo', 'pipefail', '-c', step['run']], cwd=directory,
+                                            env={'PATH': '/usr/bin:/bin', 'CHROME_BIN': '/usr/bin/true'},
+                                            capture_output=True, text=True, timeout=5)
+                    self.assertEqual(result.returncode, 42)
+        self.assertEqual(count, 3)
+
+    def test_tooling_coverage_measures_the_existing_tests_once(self):
+        ci = workflow('ci.yml')
+        job = ci['jobs']['quality']
+        commands = '\n'.join(step.get('run', '') for step in job['steps'])
+        self.assertEqual(commands.count("-p 'test_verification_*.py'"), 1)
+        self.assertEqual(commands.count('coverage run '), 1)
+        self.assertLess(commands.index('tooling_report.py start'), commands.index('coverage run '))
+        self.assertLess(commands.index('coverage run '), commands.index('tooling_report.py finish'))
+        self.assertNotIn('--fail-under', commands)
+        self.assertIn('quality', ci['jobs']['coverage']['needs'])
+        upload = next(step for step in job['steps'] if step.get('with', {}).get('name') == 'verification-tooling-coverage')
+        self.assertEqual(upload['if'], 'always()')
+        self.assertEqual(upload['with']['if-no-files-found'], 'error')
+        selection = next(step for step in ci['jobs']['coverage']['steps'] if step.get('id') == 'coverage-files')
+        self.assertIn('--python coverage-python', selection['run'])
+
+    def test_self_hosted_python_uses_job_temporary_install_and_checks_version(self):
+        ci = workflow('ci.yml')
+        for name in ['backend', 'frontend']:
+            job_steps = ci['jobs'][name]['steps']
+            setup = next(step for step in job_steps if step.get('name') == 'Set up verification Python')
+            self.assertEqual(setup['uses'], 'astral-sh/setup-uv@v7')
+            self.assertEqual(setup['with']['python-version'], '3.13')
+            self.assertRegex(setup['with']['checksum'], r'^[0-9a-f]{64}$')
+            self.assertEqual(setup['with']['enable-cache'], 'false')
+            self.assertEqual(setup['with']['activate-environment'], 'true')
+            self.assertTrue(setup['with']['venv-path'].startswith('${{ runner.temp }}/'))
+            for variable in ['UV_PYTHON_INSTALL_DIR', 'UV_CACHE_DIR']:
+                self.assertTrue(setup['env'][variable].startswith('${{ runner.temp }}/'))
+            self.assertEqual(setup['env']['UV_PYTHON_PREFERENCE'], 'only-managed')
+            check = next(step for step in job_steps if step.get('name') == 'Verify isolated Python')
+            first_test = next(step for step in job_steps if 'verification/run.py test ' in step.get('run', ''))
+            self.assertLess(job_steps.index(setup), job_steps.index(check))
+            self.assertLess(job_steps.index(check), job_steps.index(first_test))
+            with tempfile.TemporaryDirectory() as raw:
+                tools = Path(raw)
+                interpreter = tools / 'python3'
+                interpreter.write_text('#!/bin/sh\nexec ' + shlex.quote(os.sys.executable) + ' "$@"\n')
+                interpreter.chmod(0o700)
+                result = subprocess.run(['/bin/bash', '-eo', 'pipefail', '-c', check['run']],
+                                        env={'PATH': raw}, capture_output=True, text=True, timeout=5)
+                expected = 0 if os.sys.version_info[:2] == (3, 13) else 1
+                self.assertEqual(result.returncode, expected)
+
+    def test_shared_runners_reject_fork_source(self):
+        guard = "github.event.pull_request.head.repo.full_name == github.repository"
+        for name in ['ci.yml', 'secret_scanning.yml', 'docker_client_contract.yml']:
+            for job in workflow(name)['jobs'].values():
+                if isinstance(job.get('runs-on'), dict):
+                    self.assertIn(guard, job['if'])
+
+    def test_coverage_gates_and_raw_results_remain_required(self):
+        ci = workflow('ci.yml')
+        commands = '\n'.join(s.get('run', '') for s in steps(ci))
+        for gate in [':domain:storage:jacocoTestCoverageVerification', ':core:storage:jacocoTestCoverageVerification',
+                     ':data:network:verifyInstantSerializerCoverage', ':core:ui:verifyInputSemanticsCoverage']:
+            self.assertIn(gate, commands)
+        for job in ['backend', 'frontend']:
+            uploads = [s for s in ci['jobs'][job]['steps'] if 'upload-artifact@' in s.get('uses', '')]
+            self.assertTrue(any('/test-results/' in s['with']['path'] for s in uploads))
+            self.assertTrue(all(s['with']['if-no-files-found'] == 'error' for s in uploads))
+        codecov = next(s for s in steps(ci) if s.get('uses', '').startswith('codecov/'))
+        self.assertEqual(codecov['with']['fail_ci_if_error'], 'true')
+        self.assertEqual(codecov['with']['skip_validation'], 'false')
+        self.assertNotIn('continue-on-error', codecov)
+
+    def test_manual_docker_validation_does_not_publish(self):
+        docker = workflow('docker.yml')
+        self.assertEqual(set(docker['on']), {'push', 'workflow_dispatch'})
+        self.assertEqual(docker['on']['push'], {'tags': ['v*']})
+        gate = "github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')"
+        for s in steps(docker):
+            if s.get('uses', '').startswith('docker/login-action@'):
+                self.assertEqual(s['if'], gate)
+            if s.get('uses', '').startswith('docker/build-push-action@'):
+                self.assertEqual(s['with']['push'], '${{ ' + gate + ' }}')
+                self.assertNotIn('continue-on-error', s)
+        self.assertEqual(docker['jobs']['release']['if'], gate)
+        backend = docker['jobs']['build-backend']['steps']
+        smoke = next(s for s in backend if 'test_backend_runtime.sh' in s.get('run', ''))
+        self.assertEqual(smoke['if'], "github.event_name == 'workflow_dispatch'")
+        self.assertFalse(any('./gradlew' in s.get('run', '') for s in backend))
+
+    def test_manual_environment_verification_cannot_replace_pr_tests(self):
+        ci = workflow('ci.yml')
+        scope = ci['on']['workflow_dispatch']['inputs']['project_environment']
+        self.assertEqual(scope['default'], 'none')
+        self.assertEqual(set(scope['options']), {'none', 'complete', 'inventory'})
+        call = ci['jobs']['project-environment']
+        self.assertIn("github.event_name == 'workflow_dispatch'", call['if'])
+        self.assertEqual(call['uses'], './.github/workflows/project_runtime_verification.yml')
+        self.assertNotIn('secrets', call)
+        for name in ['backend', 'frontend', 'quality']:
+            self.assertNotIn('project_environment', ci['jobs'][name].get('if', ''))
+        native = workflow('project_runtime_verification.yml')
+        self.assertIn("inputs.mode != 'inventory'", native['jobs']['native-linux']['if'])
+        self.assertIn("github.event_name == 'workflow_dispatch'", native['jobs']['runner-inventory']['if'])
+
+    def test_modified_application_workflows_use_major_actions(self):
+        for name in ['ci.yml', 'security.yml', 'docker.yml', 'secret_scanning.yml',
+                     'project_runtime_verification.yml', 'extended_verification.yml', 'docker_client_contract.yml']:
+            for step in steps(workflow(name)):
+                uses = step.get('uses', '')
+                if uses and not uses.startswith('./'):
+                    # Existing Trivy's upstream master selector has no official major alias.
+                    if uses == 'aquasecurity/trivy-action@master':
+                        continue
+                    self.assertRegex(uses, r'^[^@]+@v\d+$')
+
+    def test_candidate_runtime_placement_does_not_change_weekly_or_pr_cost(self):
+        ci = workflow('ci.yml')
+        placement = ci['on']['workflow_dispatch']['inputs']['project_environment_runner']
+        self.assertEqual(placement['default'], 'hosted-linux')
+        self.assertEqual(set(placement['options']), {'hosted-linux', 'macos-arm64'})
+        native = workflow('project_runtime_verification.yml')
+        self.assertEqual(native['on']['workflow_call']['inputs']['placement']['default'], 'hosted-linux')
+        job = native['jobs']['native-linux']
+        self.assertIn("inputs.placement == 'macos-arm64'", job['runs-on'])
+        self.assertIn("|| '\"ubuntu-24.04\"'", job['runs-on'])
+        sandbox = next(s for s in job['steps'] if 'provision_browser_sandbox.sh' in s.get('run', ''))
+        self.assertEqual(sandbox['if'], "runner.os == 'Linux'")
+        setup_index = next(i for i, s in enumerate(job['steps']) if s.get('uses') == './.github/actions/copilot-verification-setup')
+        preparation = '\n'.join(s.get('run', '') for s in job['steps'][:setup_index])
+        self.assertIn('inspect_verification_runner.py', preparation)
+        self.assertIn('HOME=%s', preparation)
+        self.assertIn('DOCKER_HOST=\\nDOCKER_CONTEXT=\\n', preparation)
+        inventory = native['jobs']['runner-inventory']
+        self.assertFalse(any(s.get('uses') == './.github/actions/copilot-verification-setup' for s in inventory['steps']))
+        checkout = next(s for s in inventory['steps'] if s.get('uses', '').startswith('actions/checkout@'))
+        self.assertEqual(checkout['with']['ref'], '${{ github.event.repository.default_branch }}')
+        self.assertEqual(checkout['with']['persist-credentials'], 'false')
+        self.assertNotIn('secrets', ci['jobs']['project-environment'])
+
+    def test_native_provenance_executes_setup_browser_outside_path_with_spaces(self):
+        job = workflow('project_runtime_verification.yml')['jobs']['native-linux']
+        provenance = next(s for s in job['steps'] if s.get('id') == 'provenance')
+        self.assertEqual(provenance['env']['VERIFICATION_CHROME_BIN'], '${{ steps.runtime.outputs.chrome-path }}')
+        setup = next(s for s in job['steps'] if s.get('id') == 'runtime')
+        self.assertEqual(setup['timeout-minutes'], '5')
+        with tempfile.TemporaryDirectory() as raw:
+            directory = Path(raw)
+            tools = directory / 'tools'
+            tools.mkdir()
+            for name, answer in [('git', 'verified-source'), ('java', 'openjdk version 17.0.17')]:
+                command = tools / name
+                command.write_text('#!/bin/sh\nprintf "%s\\n" ' + shlex.quote(answer) + '\n')
+                command.chmod(0o700)
+            browser = directory / 'Chrome for Testing'
+            browser.write_text('#!/bin/sh\nprintf "%s\\n" "Google Chrome for Testing 155.0.8059.84"\n')
+            browser.chmod(0o700)
+            environment = dict(os.environ, PATH=str(tools) + os.pathsep + os.environ['PATH'],
+                               VERIFICATION_SOURCE_SHA='verified-source', VERIFICATION_CHROME_BIN=str(browser),
+                               RUNNER_TEMP=raw, GITHUB_ENV=str(directory / 'environment'))
+            result = subprocess.run(['bash', '-eo', 'pipefail', '-c', provenance['run']],
+                                    env=environment, capture_output=True, text=True, timeout=5)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            record = json.loads((directory / 'verification-evidence/provenance.json').read_text())
+            self.assertIn('155.0.8059.84', record['browser'])
+            self.assertIn('CHROME_BIN=' + str(browser), (directory / 'environment').read_text())
+            environment['VERIFICATION_CHROME_BIN'] = str(directory / 'missing browser')
+            failure = subprocess.run(['bash', '-eo', 'pipefail', '-c', provenance['run']],
+                                     env=environment, capture_output=True, text=True, timeout=5)
+            self.assertNotEqual(failure.returncode, 0)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import coil3.compose.setSingletonImageLoaderFactory
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.vaultstadio.app.config.LocalApiBaseUrl
@@ -23,6 +24,7 @@ import com.vaultstadio.app.core.resources.LocalStrings
 import com.vaultstadio.app.core.resources.Strings
 import com.vaultstadio.app.domain.upload.UploadQueueEntry
 import com.vaultstadio.app.feature.upload.UploadManager
+import com.vaultstadio.app.media.privateImageLoader
 import com.vaultstadio.app.navigation.DefaultRootComponent
 import com.vaultstadio.app.navigation.RootComponent
 import com.vaultstadio.app.navigation.RootContent
@@ -35,6 +37,7 @@ import com.vaultstadio.app.platform.initializeDragDrop
 import com.vaultstadio.app.ui.components.layout.DragOverlay
 import com.vaultstadio.app.ui.theme.ThemeSettings
 import com.vaultstadio.app.ui.theme.VaultStadioTheme
+import io.ktor.client.HttpClient
 import org.koin.compose.KoinContext
 
 /**
@@ -81,6 +84,8 @@ fun VaultStadioRoot(
 
 @Composable
 private fun VaultStadioContent(config: VaultStadioConfig) {
+    val httpClient: HttpClient = org.koin.compose.koinInject()
+    setSingletonImageLoaderFactory { context -> privateImageLoader(context, httpClient) }
     val rootComponent = rememberRootComponent()
     val uploadManager: UploadManager = org.koin.compose.koinInject()
 
@@ -122,7 +127,7 @@ private fun VaultStadioContent(config: VaultStadioConfig) {
     VaultStadioTheme(themeMode = ThemeSettings.themeMode) {
         CompositionLocalProvider(
             LocalStrings provides Strings.resources,
-            LocalApiBaseUrl provides config.apiBaseUrl.removeSuffix("/api"),
+            LocalApiBaseUrl provides config.apiBaseUrl,
         ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),

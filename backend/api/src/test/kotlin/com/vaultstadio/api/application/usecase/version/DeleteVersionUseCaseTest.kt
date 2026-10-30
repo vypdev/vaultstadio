@@ -13,6 +13,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class DeleteVersionUseCaseTest {
 
@@ -36,6 +37,6 @@ class DeleteVersionUseCaseTest {
         val result = useCase("version-1", "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
+        assertIs<ItemNotFoundException>(assertIs<Either.Left<*>>(result).value)
     }
 }

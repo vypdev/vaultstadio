@@ -1,347 +1,94 @@
-# VaultStadio Frontend Testing Guide
+# VaultStadio frontend testing guide
 
-This guide covers testing strategies and best practices for the VaultStadio frontend.
+The frontend is a standalone Gradle build in `frontend/`. Its interaction contract is defined in [SDD-0013](../../specs/sdd-0013-frontend-kmp-and-platform-architecture.md), with password/privacy requirements in [SDD-0015](../../specs/sdd-0015-security-privacy-and-threat-model.md).
 
-## Testing Overview
+## Sources and responsibilities
 
-The frontend uses Kotlin's multiplatform testing framework with tests located in:
-```
-compose-frontend/composeApp/src/commonTest/kotlin/
-```
+| Location | Purpose |
+|---|---|
+| `frontend/composeApp/src/test/kotlin/` | Shared app, model, repository and use-case tests; inspect each case before classifying its integration scope |
+| `frontend/composeApp/src/desktopTest/kotlin/com/vaultstadio/app/accessibility/` | Real production Compose component editing, focus, actions, state, localization and image-runtime contracts |
+| `frontend/composeApp/src/wasmJsTest/kotlin/` | Real Compose viewport and production dialog dismissal/reopening regression |
+| `frontend/core/form/src/wasmJsTest/kotlin/` | Native input/textarea restrictions, metadata, controlled state, selection, IME, layout and disposal contracts |
+| `frontend/data/network/src/test/kotlin/` | Production client JSON factory and wire-format contracts |
+| `frontend/core/resources/src/test/kotlin/` | Shared translation/resource contracts |
+| `frontend/data/auth/src/test/kotlin/` | Authentication adapter/use-case contracts |
+| `scripts/tests/test_frontend_accessibility_inventory.py` | Inventory drift and quality-report failure controls |
 
-## Test Structure
+Module presence does not mean that it has tests. A `NO-SOURCE` task is not executed coverage. The existing suite also contains local replicas of behavior; their passing result does not establish that production works.
 
-```
-commonTest/kotlin/com/vaultstadio/app/
-├── IntegrationTest.kt           # Full flow tests
-├── ui/
-│   ├── components/
-│   │   ├── ComponentsTest.kt    # General component tests
-│   │   ├── FileItemTest.kt      # FileItem specific tests
-│   │   └── SidebarTest.kt       # Sidebar tests
-│   └── screens/
-│       └── ScreensTest.kt       # Screen logic tests
-└── viewmodel/
-    ├── AppViewModelTest.kt      # Core ViewModel tests
-    └── AppViewModelPhase6Test.kt # Phase 6 feature tests
-```
+## Prerequisites and commands
 
-## Running Tests
+Use the reviewed JetBrains Runtime SDK version in `frontend/.java-version` for desktop launch, packaging and interactive verification. Set `JAVA_HOME` to that SDK or use `-PdesktopJavaHome` for desktop runtime selection. JVM bytecode remains compatible with Java 17; Android/backend runtime policy is separate. Some desktop task selections also require the configured Android SDK.
 
-### All Tests
+Browser tests need an executable Chrome-compatible browser in `CHROME_BIN`. CI provisions its own pinned browser. From `frontend/`:
 
-```bash
-./gradlew :compose-frontend:composeApp:allTests
+```sh
+./gradlew desktopTest :core:ui:verifyInputSemanticsCoverage --continue --no-build-cache
+./gradlew wasmJsBrowserTest --rerun --continue --no-build-cache
 ```
 
-### Common Tests Only
+To exercise all projects with browser tests, use `./gradlew wasmJsBrowserTest --continue --no-build-cache` with the same prerequisite. Append `--rerun` to the relevant test task for fresh execution. `UP-TO-DATE` is not fresh evidence.
 
-```bash
-./gradlew :compose-frontend:composeApp:commonTest
+For a focused production-component suite:
+
+```sh
+./gradlew :composeApp:desktopTest --tests '*ActiveFieldInteractionTest*' --rerun
+./gradlew :composeApp:desktopTest --tests '*ImageRuntimeCompatibilityTest*' --rerun
 ```
 
-### Desktop Tests
+Filtered execution replaces that task's previous result files. Retain complete XML and coverage evidence first; rerun the complete task before publishing aggregate coverage. Each module writes JUnit XML to `build/test-results/<task>/` and HTML to `build/reports/tests/<task>/`. Check failures, errors, skips, collected count, source revision and actual task execution together.
 
-```bash
-./gradlew :compose-frontend:composeApp:desktopTest
+From the repository root:
+
+```sh
+python3 scripts/check-frontend-accessibility.py
+python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py'
+cd frontend
+./gradlew :core:ui:detekt :core:form:detekt :core:resources:detekt :feature:auth:detekt :composeApp:ktlintDesktopTestSourceSetCheck --continue
+cd ..
+python3 scripts/check-frontend-accessibility.py --detekt-reports
+python3 scripts/validate-specification-catalog.py
+./scripts/check-no-fqn.sh
+git diff --check
 ```
 
-### Specific Test Class
+The actual-source Detekt tasks matter: typed `detektDesktopMain` tasks can report `NO-SOURCE` for custom shared source directories. The report checker rejects missing reports and findings in the new accessibility/authentication scope. Historical resource-interface debt remains explicit audit work.
 
-```bash
-./gradlew :compose-frontend:composeApp:test --tests "com.vaultstadio.app.viewmodel.AppViewModelTest"
+The transitive WebSocket security patch also has a bounded local runtime smoke. After the frontend npm installation, run this from the repository root with Node.js:
+
+```sh
+node scripts/dogfood/websocket-runtime-smoke.mjs
 ```
 
-## Test Categories
+It checks the installed version and exercises fragmented Unicode, rejection of an unsupported close-reason type, and a valid typed-array close over loopback. It does not replace application WebSocket authentication or collaboration tests.
 
-### 1. Unit Tests
+## Meaningful interaction tests
 
-Test individual functions and data transformations:
+Render the production component with observable state and controlled ports. Perform its supported action and assert the resulting value, callback, validation or navigation state. A copied widget, reimplemented calculation or constant assertion cannot establish production interaction.
 
-```kotlin
-class FileItemTest {
-    @Test
-    fun `should correctly identify file type`() {
-        val file = createTestItem(type = ItemType.FILE)
-        assertEquals(ItemType.FILE, file.type)
-        assertFalse(file.isFolder)
-    }
-    
-    @Test
-    fun `should extract file extension correctly`() {
-        val file = createTestItem(name = "document.pdf")
-        val extension = file.name.substringAfterLast('.', "")
-        assertEquals("pdf", extension)
-    }
-}
-```
+The [maintained control inventory](../development/verification/accessibility-controls-80.json) records production feature fields, including three explicitly marked retained password-dialog fields without a current caller. Static checking verifies declarations and test cases, not runtime reachability. Every maintained field needs edit, clear and focus cases. Secure fields need masked output; disabled/read-only fields need negative cases. Controls need their own state/action evidence: checkboxes, switches, radios, menus, dropdowns, tabs, file selection/opening and dialog dismissal/reopening. Locale variants verify names and reversible visibility actions in all seven languages.
 
-### 2. ViewModel Tests
+Keep suites and fixtures focused. Inject ports to control external effects while preserving production values, callbacks, edit semantics and validation. Domain policy stays free from Compose, DOM and transport dependencies.
 
-Test state management and business logic:
+## Real browser and desktop dogfooding
 
-```kotlin
-class AppViewModelTest {
-    @Test
-    fun `should toggle selection mode on first selection`() {
-        val selectedItems = mutableSetOf<String>()
-        var isSelectionMode = false
-        
-        // Select item
-        selectedItems.add("item-1")
-        isSelectionMode = selectedItems.isNotEmpty()
-        
-        assertTrue(isSelectionMode)
-    }
-    
-    @Test
-    fun `should clear selection on mode exit`() {
-        val selectedItems = mutableSetOf("item-1", "item-2")
-        
-        selectedItems.clear()
-        
-        assertTrue(selectedItems.isEmpty())
-    }
-}
-```
+Component semantics do not prove that a native tool or browser can interact with the generated app. Build the distributable and optimized Wasm distribution, launch those exact artifacts and use a disposable local account through normal login. Record artifact hashes and the integration source revision.
 
-### 3. Integration Tests
+Verify typing, Unicode, selection/replacement, deletion, focus transfer, login, file navigation and dialog cancellation/reopening. After login/logout and destination changes, verify that the accessible tree remains populated. A visible canvas alone does not establish operability.
 
-Test complete user flows:
+For browser password fields, inspect the real focused editor. The three platform form components use actual HTML input/textarea elements through the public HtmlElementView API, with controlled state and release handling. Their native fields replace the unstable framework editor for all 29 inventoried declarations. The retired compatibility bridge remains in Git history; its 30 historical cases are excluded from current results. A keyboard hint is insufficient: the native type must be `password`, default accessible output must be protected, and editing must reach the production callback. Keep credentials/session material out of public evidence.
 
-```kotlin
-class IntegrationTest {
-    @Test
-    fun `login flow should validate credentials format`() {
-        val email = "user@example.com"
-        val password = "password123"
-        
-        assertTrue(email.contains("@"))
-        assertTrue(password.length >= 6)
-    }
-    
-    @Test
-    fun `batch delete should handle multiple items`() {
-        val selectedItems = setOf("item-1", "item-2", "item-3")
-        var deletedCount = 0
-        
-        selectedItems.forEach { deletedCount++ }
-        
-        assertEquals(3, deletedCount)
-    }
-}
-```
+Isolate desktop preferences with the test-only [in-memory provider](../../scripts/dogfood/java/com/vaultstadio/audit/InMemoryPreferencesFactory.java) and confirm its marker before normal login. This does not establish production disk persistence. Do not seed a session or bypass authentication.
 
-### 4. Screen Logic Tests
+Record supported interaction methods and external tool limitations. Semantic focus plus paste can work while coordinate input is unavailable. Distinguish browser visibility/frame-clock effects from application failures and retain runtime/browser provenance.
 
-Test screen-specific logic without UI:
+## Coverage and CI
 
-```kotlin
-class ScreensTest {
-    @Test
-    fun `files screen should filter by type`() {
-        val items = listOf(
-            createItem("1", "file.txt", ItemType.FILE),
-            createItem("2", "folder", ItemType.FOLDER)
-        )
-        
-        val files = items.filter { it.type == ItemType.FILE }
-        
-        assertEquals(1, files.size)
-    }
-    
-    @Test
-    fun `admin screen should filter users by role`() {
-        val users = listOf(
-            MockUser("1", UserRole.ADMIN),
-            MockUser("2", UserRole.USER)
-        )
-        
-        val admins = users.filter { it.role == UserRole.ADMIN }
-        
-        assertEquals(1, admins.size)
-    }
-}
-```
+The `:core:ui:verifyInputSemanticsCoverage` gate requires execution data and compiled JVM helper classes, then enforces 100% lines and branches for that small scope. It does not measure Wasm DOM code, every feature or the whole frontend. Real-DOM and real-widget contracts verify the separate `:core:form` Wasm adapter; its compiled JVM renderer belongs in the full production coverage denominator.
 
-## Best Practices
+For aggregates, report included modules, class directories, execution inputs, exclusions and uncovered lines/branches. Preserve existing gates while reviewing denominator changes. The [audit roadmap](../development/AUDIT_ROADMAP_2026-10-25.md) tracks broader coverage, legacy tests and unverified platforms.
 
-### 1. Use Descriptive Test Names
+Application [CI](../../.github/workflows/ci.yml) builds desktop/Android, runs production component/browser contracts, collects scoped coverage and checks inventory/quality. Copilot's separate verification environment has its own runtime prerequisites; application CI does not prepare that environment.
 
-```kotlin
-// Good
-@Test
-fun `should sort folders before files when sorting by name`()
-
-// Avoid
-@Test
-fun testSort()
-```
-
-### 2. Follow AAA Pattern
-
-```kotlin
-@Test
-fun `should calculate progress correctly`() {
-    // Arrange
-    val uploaded = 50L
-    val total = 100L
-    
-    // Act
-    val progress = uploaded.toFloat() / total.toFloat()
-    
-    // Assert
-    assertEquals(0.5f, progress)
-}
-```
-
-### 3. Test Edge Cases
-
-```kotlin
-@Test
-fun `should handle empty list`() {
-    val items = emptyList<StorageItem>()
-    val filtered = items.filter { it.isStarred }
-    assertTrue(filtered.isEmpty())
-}
-
-@Test
-fun `should handle null quota`() {
-    val quota: Long? = null
-    val percentage = quota?.let { 50.0 } ?: 0.0
-    assertEquals(0.0, percentage)
-}
-```
-
-### 4. Use Helper Functions
-
-```kotlin
-private fun createTestItem(
-    id: String = "test-id",
-    name: String = "test-file.txt",
-    type: ItemType = ItemType.FILE
-) = StorageItem(
-    id = id,
-    name = name,
-    type = type,
-    // ... other defaults
-)
-```
-
-### 5. Group Related Tests
-
-```kotlin
-class FileItemTest {
-    // Type detection tests
-    @Test fun `should identify file type`() { }
-    @Test fun `should identify folder type`() { }
-    
-    // Extension tests
-    @Test fun `should extract extension`() { }
-    @Test fun `should handle no extension`() { }
-    
-    // Star tests
-    @Test fun `should track starred state`() { }
-}
-```
-
-## Mocking
-
-For complex dependencies, use mock data classes:
-
-```kotlin
-private data class MockApiResult<T>(
-    val isSuccess: Boolean,
-    val data: T? = null,
-    val error: String? = null
-)
-
-@Test
-fun `should handle API success`() {
-    val result = MockApiResult(
-        isSuccess = true,
-        data = listOf(createTestItem())
-    )
-    
-    assertTrue(result.isSuccess)
-    assertNotNull(result.data)
-}
-
-@Test
-fun `should handle API error`() {
-    val result = MockApiResult<List<StorageItem>>(
-        isSuccess = false,
-        error = "Network error"
-    )
-    
-    assertFalse(result.isSuccess)
-    assertEquals("Network error", result.error)
-}
-```
-
-## Testing Compose UI
-
-For UI-specific tests on desktop/Android, use Compose Testing:
-
-```kotlin
-@OptIn(ExperimentalTestApi::class)
-class FileItemUITest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
-    
-    @Test
-    fun `should display file name`() {
-        composeTestRule.setContent {
-            FileItem(
-                item = createTestItem(name = "test.txt"),
-                onItemClick = {},
-                onStarClick = {},
-                onMenuClick = {}
-            )
-        }
-        
-        composeTestRule.onNodeWithText("test.txt").assertExists()
-    }
-}
-```
-
-## Test Coverage
-
-### Current Coverage
-
-| Module | Coverage |
-|--------|----------|
-| Components | ~60% |
-| Screens | ~50% |
-| ViewModel | ~70% |
-| Integration | ~40% |
-
-### Priority Areas
-
-1. **High Priority**: ViewModel logic, authentication flows
-2. **Medium Priority**: Component behavior, navigation
-3. **Lower Priority**: UI styling, animations
-
-## Continuous Integration
-
-Tests run automatically on:
-- Pull requests
-- Commits to main/master
-- Release tags
-
-See `.github/workflows/ci.yml` for CI configuration.
-
-## Debugging Failed Tests
-
-1. **Check test output**:
-   ```bash
-   ./gradlew :compose-frontend:composeApp:test --info
-   ```
-
-2. **Run single test**:
-   ```bash
-   ./gradlew :compose-frontend:composeApp:test --tests "*.testName"
-   ```
-
-3. **View reports**:
-   Open `compose-frontend/composeApp/build/reports/tests/`
+See [startup verification #76](../development/verification/FRONTEND_STARTUP_76.md) for its exercised paths and limits. Publish completed #80 evidence separately, distinguishing component tests, real UI actions, platform repeats and unresolved roadmap work.

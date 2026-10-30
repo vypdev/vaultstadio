@@ -14,9 +14,11 @@
 
 package com.vaultstadio.app.di
 
+import com.vaultstadio.app.domain.share.ShareLinkClipboard
 import com.vaultstadio.app.feature.files.FilesViewPreferences
 import com.vaultstadio.app.feature.files.PlatformFilesViewPreferences
 import com.vaultstadio.app.feature.upload.UploadManager
+import com.vaultstadio.app.platform.createShareLinkClipboard
 import org.koin.dsl.module
 
 val appModule = module {
@@ -29,6 +31,7 @@ val appModule = module {
 
     // --- Files view preferences (implemented by app; consumed by :feature:files ViewModel) ---
     single<FilesViewPreferences> { PlatformFilesViewPreferences() }
+    single<ShareLinkClipboard> { createShareLinkClipboard() }
 
     // --- ViewModels (no params) ---
     // ProfileViewModel is in featureProfileModule (:feature:profile)

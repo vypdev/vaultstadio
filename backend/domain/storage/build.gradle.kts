@@ -1,3 +1,5 @@
+import java.math.BigDecimal
+
 /**
  * VaultStadio Domain Storage
  *
@@ -38,5 +40,30 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
         html.required.set(true)
+    }
+}
+
+// STO-AUTH-01–06 and TRANS78-ARCH07: enforce critical policy coverage independently of services.
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.test)
+    doFirst {
+        check(executionData.files.any { it.isFile && it.length() > 0 }) {
+            "Storage authorization coverage execution data is missing"
+        }
+    }
+    violationRules {
+        rule {
+            element = "CLASS"
+            includes = listOf(
+                "com.vaultstadio.domain.storage.model.StorageAccessPolicy",
+                "com.vaultstadio.domain.storage.model.ArchiveDownloadKt",
+            )
+            for (metric in listOf("LINE", "BRANCH")) {
+                limit {
+                    counter = metric
+                    minimum = BigDecimal.ONE
+                }
+            }
+        }
     }
 }

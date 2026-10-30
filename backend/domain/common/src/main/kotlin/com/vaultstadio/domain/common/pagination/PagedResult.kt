@@ -13,7 +13,11 @@ data class PagedResult<T>(
     val offset: Int,
     val limit: Int,
 ) {
-    val hasMore: Boolean get() = offset + items.size < total
-    val totalPages: Int get() = if (limit > 0) ((total + limit - 1) / limit).toInt() else 0
-    val currentPage: Int get() = if (limit > 0) (offset / limit) + 1 else 1
+    val hasMore: Boolean get() = offset.toLong() + items.size < total
+    val totalPages: Long
+        get() {
+            if (limit <= 0) return 0L
+            return total / limit + if (total % limit > 0) 1L else 0L
+        }
+    val currentPage: Long get() = if (limit > 0) offset.toLong() / limit + 1L else 1L
 }

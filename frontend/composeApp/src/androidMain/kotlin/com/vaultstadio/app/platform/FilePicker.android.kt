@@ -66,6 +66,7 @@ actual suspend fun pickLargeFilesForUpload(): List<UploadQueueEntry> {
  * Check if file picker is available.
  */
 actual fun isFilePickerAvailable(): Boolean = true
+actual fun isFolderPickerAvailable(): Boolean = false
 
 /**
  * Opens a folder picker.

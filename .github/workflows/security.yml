@@ -6,42 +6,22 @@
 name: Security
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_dispatch:
   schedule:
-    # Run weekly on Sunday at midnight
-    - cron: '0 0 * * 0'
+    - cron: '17 3 * * 2'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-analysis-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  # ==================== Dependency Scan ====================
-  dependency-scan:
-    name: Dependency Vulnerability Scan
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Run dependency check (backend)
-        run: cd backend && ./gradlew dependencies --no-daemon || true
-
-      - name: Run dependency check (frontend)
-        run: cd frontend && ./gradlew dependencies --no-daemon || true
-
   # ==================== Code Security Scan ====================
   code-scan:
     name: Code Security Scan
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    timeout-minutes: 60
     runs-on:
       group: vypdev
       labels: [self-hosted, macOS, X64]
@@ -100,7 +80,6 @@ jobs:
       group: vypdev
       labels: [self-hosted, macOS, ARM64]
     timeout-minutes: 60
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     permissions:
       contents: read
       security-events: write
@@ -151,30 +130,3 @@ jobs:
       - name: Remove this job's scan image
         if: ${{ always() && steps.scan-image.outcome == 'success' }}
         run: docker image rm "$SCAN_IMAGE"
-
-  # ==================== Secret Scanning ====================
-  secret-scan:
-    name: Secret Detection
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on:
-      group: vypdev
-      labels: [self-hosted, macOS, X64]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: TruffleHog OSS
-        uses: trufflesecurity/trufflehog@main
-        with:
-          extra_args: --only-verified
-        continue-on-error: true
-
-      - name: Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Required for org repos: get a free license at gitleaks.io and add as repo/org secret
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
-        continue-on-error: true

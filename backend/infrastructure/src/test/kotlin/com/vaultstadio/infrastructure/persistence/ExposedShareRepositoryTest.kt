@@ -180,8 +180,8 @@ class ExposedShareRepositoryTest {
         }
 
         @Test
-        fun `incrementDownloadCount method should exist`() {
-            assertNotNull(repository::incrementDownloadCount)
+        fun `download admission belongs to the atomic public access adapter`() {
+            assertNotNull(ExposedPublicShareAccess { Clock.System.now() }::admit)
         }
 
         @Test

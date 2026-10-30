@@ -8,31 +8,69 @@
     {
       "id": "architecture-quality-and-product-contract",
       "title": "Architecture Quality and Product Contract",
-      "status": "Proposed",
+      "status": "proposed",
       "scope": "Coordinate the SDD portfolio, architectural ratchets, evidence policy, and ordered remediation of documentation and contract drift.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": null,
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0000-architecture-quality-and-product-contract.md"
+        "specs/sdd-0000-architecture-quality-and-product-contract.md",
+        "specs/product-discovery-2026-10-29.md"
       ],
       "evidence": [
         "docs/development/REPOSITORY_AUDIT.md",
         "backend/settings.gradle.kts",
         "frontend/settings.gradle.kts",
         "docs/architecture/ARCHITECTURE.md",
-        "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md"
+        "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-001, PD-016 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "Proposed",
+        "lastVerified": null
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "scripts/validate-specification-catalog.py"
+      ],
+      "code": [
+        "scripts/specification_catalog.py"
+      ],
+      "tests": [
+        "scripts/tests/test_specification_catalog.py"
+      ],
+      "documentation": [
+        "docs/development/REPOSITORY_AUDIT.md",
+        "docs/architecture/ARCHITECTURE.md",
+        "docs/architecture/BACKEND_CLEAN_ARCHITECTURE_PROPOSAL.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md",
+        "docs/development/verification/SDD_CONSUMER_ADOPTION_145.md",
+        "docs/development/verification/sdd-owner-path-migration-178.json",
+        "docs/development/verification/SDD_OWNER_PATHS_178.md"
+      ],
+      "companionRoles": {
+        "specs/discovery/2026-10-29/README.md": "Accepted discovery provenance index; individual PD requirement ownership remains with the original primary SDDs."
+      }
     },
     {
       "id": "standalone-projects-and-clean-architecture",
       "title": "Standalone Projects and Clean Architecture",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Record the verified backend/frontend project topology, dependency direction, composition ownership, and architectural constraints.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0001-standalone-projects-and-clean-architecture.md"
+        "specs/sdd-0001-standalone-projects-and-clean-architecture.md"
       ],
       "evidence": [
         "backend/settings.gradle.kts",
@@ -41,38 +79,105 @@
         "frontend/build.gradle.kts",
         "docs/architecture/ARCHITECTURE.md",
         "docs/architecture/CLEAN_ARCHITECTURE_REVIEW.md",
-        "docs/architecture/FRONTEND_ARCHITECTURE.md"
+        "docs/architecture/FRONTEND_ARCHITECTURE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/settings.gradle.kts",
+        "frontend/settings.gradle.kts"
+      ],
+      "code": [
+        "backend/build.gradle.kts",
+        "frontend/build.gradle.kts"
+      ],
+      "tests": [
+        "scripts/tests/test_selection_architecture.py",
+        "scripts/tests/test_verification_tooling.py"
+      ],
+      "documentation": [
+        "docs/architecture/ARCHITECTURE.md",
+        "docs/architecture/CLEAN_ARCHITECTURE_REVIEW.md",
+        "docs/architecture/FRONTEND_ARCHITECTURE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
+      ]
     },
     {
       "id": "public-api-and-protocol-contract",
       "title": "Public API and Protocol Contract",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define the authoritative HTTP, OpenAPI, WebDAV, S3-compatible, and collaboration protocol surfaces.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0002-public-api-and-protocol-contract.md"
+        "specs/sdd-0002-public-api-and-protocol-contract.md"
       ],
       "evidence": [
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Routing.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Swagger.kt",
         "backend/api/src/main/resources/openapi/documentation.yaml",
         "docs/api/API.md",
-        "backend/api/src/test/kotlin/com/vaultstadio/api/routes"
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage.",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-10-27"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Routing.kt"
+      ],
+      "code": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageRoutes.kt"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/StorageRoutesTest.kt"
+      ],
+      "documentation": [
+        "docs/api/API.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json"
+      ]
     },
     {
       "id": "identity-authentication-and-authorization",
       "title": "Identity, Authentication and Authorization",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Record user identity, JWT lifecycle, roles, permissions, and protocol-specific authentication boundaries.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0003-identity-authentication-and-authorization.md"
+        "specs/sdd-0003-identity-authentication-and-authorization.md"
       ],
       "evidence": [
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Security.kt",
@@ -80,19 +185,49 @@
         "backend/core/auth",
         "backend/application/auth",
         "backend/api/src/test/kotlin/com/vaultstadio/api/config/SecurityTest.kt",
-        "docs/operations/SECURITY.md"
+        "docs/operations/SECURITY.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-008, PD-025, PD-026, PD-027 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/auth/AuthRoutes.kt"
+      ],
+      "code": [
+        "backend/core/auth/src/main/kotlin/com/vaultstadio/core/domain/service/UserService.kt"
+      ],
+      "tests": [
+        "backend/core/auth/src/test/kotlin/com/vaultstadio/core/domain/service/UserServiceTest.kt",
+        "backend/api/src/test/kotlin/com/vaultstadio/api/config/SecurityTest.kt"
+      ],
+      "documentation": [
+        "docs/operations/SECURITY.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "storage-domain-and-data-lifecycle",
       "title": "Storage Domain and Data Lifecycle",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define files, folders, metadata, ownership, quotas, trash, storage backends, and content lifecycle.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0004-storage-domain-and-data-lifecycle.md"
+        "specs/sdd-0004-storage-domain-and-data-lifecycle.md"
       ],
       "evidence": [
         "backend/domain/storage",
@@ -102,19 +237,62 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/AppConfig.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/config/Koin.kt",
         "docs/operations/STORAGE_CONFIGURATION.md",
-        "docs/operations/BACKUP_RESTORE.md"
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage. #124 accepted targets PD-004, PD-012, PD-014, PD-015, PD-020, PD-021, PD-022, PD-030 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-10-27"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/StorageRoutes.kt"
+      ],
+      "code": [
+        "backend/core/storage/src/main/kotlin/com/vaultstadio/core/domain/service/StorageService.kt",
+        "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageItemSelection.kt"
+      ],
+      "tests": [
+        "backend/core/storage/src/test/kotlin/com/vaultstadio/core/domain/service/StorageServiceTest.kt"
+      ],
+      "documentation": [
+        "docs/operations/STORAGE_CONFIGURATION.md",
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "upload-and-transfer-protocols",
       "title": "Upload and Transfer Protocols",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define normal, chunked, folder, multipart, WebDAV, and S3-compatible transfer lifecycles.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0005-upload-and-transfer-protocols.md"
+        "specs/sdd-0005-upload-and-transfer-protocols.md"
       ],
       "evidence": [
         "backend/application/chunkedupload",
@@ -122,19 +300,45 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/FolderUploadRoutes.kt",
         "backend/core/common/src/main/kotlin/com/vaultstadio/core/domain/service/MultipartUploadManager.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/WebDAVRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/S3Routes.kt",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/ChunkedUploadRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/WebDAVRoutes.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/storage/S3Routes.kt"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "code": [
+        "backend/core/common/src/main/kotlin/com/vaultstadio/core/domain/service/MultipartUploadManager.kt"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/ChunkedUploadRoutesTest.kt"
+      ],
+      "documentation": [
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
+      ]
     },
     {
       "id": "sharing-and-permissions",
       "title": "Sharing and Permissions",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define internal shares, public share tokens, permission inheritance, expiration, revocation, and shared-with-me behavior.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0006-sharing-and-permissions.md"
+        "specs/sdd-0006-sharing-and-permissions.md"
       ],
       "evidence": [
         "backend/domain/share",
@@ -143,19 +347,59 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareRoutes.kt",
         "frontend/feature/shares",
         "frontend/feature/sharedwithme",
-        "docs/api/API.md"
+        "docs/api/API.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "backend/core/share-access",
+        "docs/development/verification/PUBLIC_SHARE_ACCESS_90.md",
+        "docs/development/verification/public-share-access-90.json",
+        "docs/development/verification/public-share-access-90-cases.json",
+        "docs/development/verification/public-share-access-90-coverage.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "R05/#90 adopted in PR114/developc9f1ac5, post-merge CI40493531498 all5489 executions green. Portfolio remains partial: internal recipients, folder/inherited permissions and shared-with-me remain separate unverified product scope. #124 accepted targets PD-017, PD-018 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-10-27"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/share/ShareRoutes.kt"
+      ],
+      "code": [
+        "backend/application/share/src/main/kotlin/com/vaultstadio/application/di/ApplicationShareKoin.kt",
+        "backend/application/share/src/main/kotlin/com/vaultstadio/application/usecase/share/AccessShareUseCase.kt",
+        "backend/application/share/src/main/kotlin/com/vaultstadio/application/usecase/share/CreateShareUseCase.kt"
+      ],
+      "tests": [
+        "backend/core/share/src/test/kotlin/com/vaultstadio/core/domain/service/ShareServiceTest.kt"
+      ],
+      "documentation": [
+        "docs/api/API.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/PUBLIC_SHARE_ACCESS_90.md",
+        "docs/development/verification/public-share-access-90.json",
+        "docs/development/verification/public-share-access-90-cases.json",
+        "docs/development/verification/public-share-access-90-coverage.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "version-history-and-recovery",
       "title": "Version History and Recovery",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define file versions, history, diffs, restore, retention, deletion, and system recovery boundaries.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0007-version-history-and-recovery.md"
+        "specs/sdd-0007-version-history-and-recovery.md"
       ],
       "evidence": [
         "backend/domain/version",
@@ -163,19 +407,50 @@
         "backend/application/version",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt",
         "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version",
-        "docs/operations/BACKUP_RESTORE.md"
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-013 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/version/VersionRoutes.kt"
+      ],
+      "code": [
+        "backend/application/version/src/main/kotlin/com/vaultstadio/application/di/ApplicationVersionKoin.kt",
+        "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/ApplyRetentionPolicyUseCase.kt",
+        "backend/application/version/src/main/kotlin/com/vaultstadio/application/usecase/version/CompareVersionsUseCase.kt"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/application/usecase/version/GetVersionHistoryUseCaseTest.kt"
+      ],
+      "documentation": [
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "device-sync-and-conflicts",
       "title": "Device Sync and Conflict Resolution",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define device registration, delta synchronization, conflict detection, replay, deactivation, and recovery.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0008-device-sync-and-conflicts.md"
+        "specs/sdd-0008-device-sync-and-conflicts.md"
       ],
       "evidence": [
         "backend/domain/sync",
@@ -186,19 +461,47 @@
         "backend/api/src/test/kotlin/com/vaultstadio/api/routes/SyncRoutesTest.kt",
         "frontend/domain/sync",
         "frontend/data/sync",
-        "frontend/feature/sync"
+        "frontend/feature/sync",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-009, PD-010, PD-011 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/sync/SyncRoutes.kt"
+      ],
+      "code": [
+        "backend/core/src/main/kotlin/com/vaultstadio/core/domain/model/Sync.kt"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/SyncRoutesTest.kt"
+      ],
+      "documentation": [
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "real-time-collaboration",
       "title": "Real-Time Collaboration",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define collaboration sessions, WebSocket lifecycle, presence, operations, OT, comments, reconnect, and participant limits.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0009-real-time-collaboration.md"
+        "specs/sdd-0009-real-time-collaboration.md"
       ],
       "evidence": [
         "backend/domain/collaboration",
@@ -207,19 +510,50 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocket.kt",
         "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationService.kt",
         "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationOT.kt",
-        "frontend/feature/collaboration"
+        "frontend/feature/collaboration",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/COLLABORATION_AUTHORIZATION_89.md",
+        "docs/development/verification/collaboration-authorization-89.json",
+        "docs/development/verification/collaboration-authorization-89-cases.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "R01c adopted in PR113/developeac7185, post-merge CI40470296193 all5246 executions green. Whole R14 remains incomplete: issue112 owns client/server protocol, cold bootstrap, canonical saves, replay and durable grants.",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-10-27"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/collaboration/CollaborationWebSocket.kt"
+      ],
+      "code": [
+        "backend/core/collaboration/src/main/kotlin/com/vaultstadio/core/domain/service/CollaborationService.kt"
+      ],
+      "tests": [
+        "backend/core/collaboration/src/test/kotlin/com/vaultstadio/core/domain/service/CollaborationAdmissionContractTest.kt"
+      ],
+      "documentation": [
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/COLLABORATION_AUTHORIZATION_89.md",
+        "docs/development/verification/collaboration-authorization-89.json",
+        "docs/development/verification/collaboration-authorization-89-cases.json"
+      ]
     },
     {
       "id": "federation-and-trust",
       "title": "Federation and Trust",
-      "status": "Proposed",
+      "status": "proposed",
       "scope": "Define cross-instance identity, signed messages, federated shares, activities, trust, key lifecycle, and failure behavior.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": null,
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0010-federation-and-trust.md"
+        "specs/sdd-0010-federation-and-trust.md"
       ],
       "evidence": [
         "backend/domain/federation",
@@ -227,19 +561,49 @@
         "backend/core/federation/src/main/kotlin/com/vaultstadio/core/domain/service/FederationService.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/federation/FederationRoutes.kt",
         "docs/api/PHASE6_ADVANCED_FEATURES.md",
-        "docs/operations/SECURITY.md"
+        "docs/operations/SECURITY.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-002, PD-003 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "Proposed",
+        "lastVerified": null
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/federation/FederationRoutes.kt"
+      ],
+      "code": [
+        "backend/core/federation/src/main/kotlin/com/vaultstadio/core/domain/service/FederationService.kt"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/FederationRoutesTest.kt"
+      ],
+      "documentation": [
+        "docs/api/PHASE6_ADVANCED_FEATURES.md",
+        "docs/operations/SECURITY.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "plugin-runtime-and-extensibility",
       "title": "Plugin Runtime and Extensibility",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define plugin discovery, lifecycle, API, endpoint exposure, configuration, isolation, permissions, and failure containment.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0011-plugin-runtime-and-extensibility.md"
+        "specs/sdd-0011-plugin-runtime-and-extensibility.md"
       ],
       "evidence": [
         "backend/plugins-api",
@@ -248,19 +612,48 @@
         "backend/api/src/main/kotlin/com/vaultstadio/api/plugins/PluginManager.kt",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/plugin/PluginRoutes.kt",
         "docs/plugins/PLUGINS.md",
-        "docs/plugins/PLUGIN_DEVELOPMENT.md"
+        "docs/plugins/PLUGIN_DEVELOPMENT.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/plugins/PluginManager.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/plugin/PluginRoutes.kt"
+      ],
+      "code": [
+        "backend/application/plugin/src/main/kotlin/com/vaultstadio/application/di/ApplicationPluginKoin.kt",
+        "backend/application/plugin/src/main/kotlin/com/vaultstadio/application/usecase/plugin/DisablePluginUseCase.kt",
+        "backend/application/plugin/src/main/kotlin/com/vaultstadio/application/usecase/plugin/EnablePluginUseCase.kt"
+      ],
+      "tests": [
+        "backend/plugins-api/src/test/kotlin/com/vaultstadio/plugins/lifecycle/PluginLifecycleTest.kt"
+      ],
+      "documentation": [
+        "docs/plugins/PLUGINS.md",
+        "docs/plugins/PLUGIN_DEVELOPMENT.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json"
+      ]
     },
     {
       "id": "metadata-search-and-ai",
       "title": "Metadata, Search and AI",
-      "status": "Proposed",
+      "status": "proposed",
       "scope": "Define metadata extraction, indexing/search, AI-assisted classification, provider boundaries, privacy, and readiness evidence.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": null,
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0012-metadata-search-and-ai.md"
+        "specs/sdd-0012-metadata-search-and-ai.md"
       ],
       "evidence": [
         "backend/domain/metadata",
@@ -270,19 +663,61 @@
         "backend/plugins/fulltext-search",
         "backend/plugins/ai-classification",
         "backend/api/src/main/kotlin/com/vaultstadio/api/routes/ai/AIRoutes.kt",
-        "docs/plugins/AI_INTEGRATION.md"
+        "docs/plugins/AI_INTEGRATION.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "Scoped #91 selections verified locally at1499c6b; final PR CI, Copilot review and adoption remain separate. Portfolio remains partial: filename/prefix matching #82, complete advanced filters/counts/content #115, Web API origin #116 and broader #84 coverage. #124 accepted targets PD-024, PD-029 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "Proposed",
+        "lastVerified": "2026-10-27"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SearchRoutes.kt",
+        "backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/MetadataRoutes.kt"
+      ],
+      "code": [
+        "backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageItemSelection.kt"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/routes/SearchRoutesTest.kt"
+      ],
+      "documentation": [
+        "docs/plugins/AI_INTEGRATION.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/verification/STORAGE_SELECTION_91.md",
+        "docs/development/verification/storage-selection-91.json",
+        "docs/development/verification/storage-selection-91-cases.json",
+        "docs/development/verification/storage-selection-91-coverage.json",
+        "docs/development/verification/STORAGE_SELECTION_91_REVIEW.md",
+        "docs/development/verification/storage-selection-91-review.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "frontend-kmp-and-platform-architecture",
       "title": "Frontend KMP and Platform Architecture",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define frontend domain/data/feature boundaries, navigation, state ownership, platform entrypoints, and user-facing capability mapping.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0013-frontend-kmp-and-platform-architecture.md"
+        "specs/sdd-0013-frontend-kmp-and-platform-architecture.md"
       ],
       "evidence": [
         "frontend/settings.gradle.kts",
@@ -292,19 +727,50 @@
         "frontend/feature",
         "docs/architecture/FRONTEND_ARCHITECTURE.md",
         "docs/architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md",
-        "docs/frontend/FRONTEND_TESTING.md"
+        "docs/frontend/FRONTEND_TESTING.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-019 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [],
+      "entrypoints": [
+        "frontend/composeApp/src/main/kotlin/com/vaultstadio/app/VaultStadioRoot.kt"
+      ],
+      "code": [
+        "frontend/feature/files/src/main/kotlin/com/vaultstadio/app/feature/files/FilesViewModel.kt"
+      ],
+      "tests": [
+        "frontend/data/network/src/commonTest/kotlin/com/vaultstadio/app/data/network/Api116AuthorityTest.kt"
+      ],
+      "documentation": [
+        "docs/architecture/FRONTEND_ARCHITECTURE.md",
+        "docs/architecture/FRONTEND_MODULARISATION_AND_STANDALONE_BUILDS.md",
+        "docs/frontend/FRONTEND_TESTING.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "deployment-operations-and-release",
       "title": "Deployment, Operations and Release",
-      "status": "As-built baseline",
+      "status": "as-built-baseline",
       "scope": "Define Docker, Helm, configuration, health, migrations, backup, CI, release, versioning, rollback, and operator evidence.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": "2026-09-20",
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0014-deployment-operations-and-release.md"
+        "specs/sdd-0014-deployment-operations-and-release.md"
       ],
       "evidence": [
         ".github/workflows/ci.yml",
@@ -318,19 +784,56 @@
         "helm/vaultstadio/Chart.yaml",
         "helm/vaultstadio/values.yaml",
         "docs/operations/DEPLOYMENT.md",
-        "docs/operations/BACKUP_RESTORE.md"
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-023, PD-028 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "As-built baseline",
+        "lastVerified": "2026-09-20"
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/docker.yml",
+        ".github/workflows/security.yml",
+        ".github/workflows/release_workflow.yml",
+        ".github/workflows/hotfix_workflow.yml"
+      ],
+      "entrypoints": [
+        "scripts/verification/run.py"
+      ],
+      "code": [
+        "scripts/verification/tooling_report.py"
+      ],
+      "tests": [
+        "scripts/tests/test_verification_tooling.py",
+        "scripts/tests/test_secret_scan_adapter.py"
+      ],
+      "documentation": [
+        "docs/operations/DEPLOYMENT.md",
+        "docs/operations/BACKUP_RESTORE.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     },
     {
       "id": "security-privacy-and-threat-model",
       "title": "Security, Privacy and Threat Model",
-      "status": "Proposed",
+      "status": "proposed",
       "scope": "Define cross-cutting threat models, privacy rules, trust boundaries, abuse controls, logging constraints, and security evidence.",
       "owner": "VaultStadio maintainers",
-      "lastVerified": null,
+      "lastVerified": "2026-10-30",
       "specs": [
-        "specs/SDD-0015-security-privacy-and-threat-model.md"
+        "specs/sdd-0015-security-privacy-and-threat-model.md"
       ],
       "evidence": [
         "docs/operations/SECURITY.md",
@@ -340,9 +843,43 @@
         "backend/core/federation",
         "backend/plugins",
         "docs/plugins/AI_INTEGRATION.md",
+        ".github/workflows/security.yml",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "specs/product-discovery-2026-10-29.md",
+        "specs/discovery/2026-10-29/answers.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ],
+      "openDecisions": "see the explicit decisions and limitations in the SDD; #124 accepted targets PD-005, PD-006, PD-007 retain blocking technical decisions in the owning SDD section 6 and are not implementation evidence",
+      "legacyVerification": {
+        "status": "Proposed",
+        "lastVerified": null
+      },
+      "structuralVerification": {
+        "baselineCommit": "46225cd47b10d248277f41310575d32e78203ca8",
+        "scope": "Regular-file paths, declared roles and unique SDD ownership inspected for the consumer SDD migration. No new runtime or implementation acceptance; historical receipts and open decisions remain authoritative."
+      },
+      "workflows": [
         ".github/workflows/security.yml"
       ],
-      "openDecisions": "see the explicit decisions and limitations in the SDD"
+      "entrypoints": [
+        "backend/api/src/main/kotlin/com/vaultstadio/api/config/Security.kt"
+      ],
+      "code": [
+        "scripts/ci/run_secret_scan.py",
+        "scripts/ci/secret_findings.py"
+      ],
+      "tests": [
+        "backend/api/src/test/kotlin/com/vaultstadio/api/config/SecurityTest.kt",
+        "scripts/tests/test_secret_scanners_real.py"
+      ],
+      "documentation": [
+        "docs/operations/SECURITY.md",
+        "docs/plugins/AI_INTEGRATION.md",
+        "docs/development/REPOSITORY_AUDIT_2026-10-25.md",
+        "docs/development/audits/2026-10-25/verification-summary.json",
+        "docs/development/PRODUCT_ROADMAP_2026-10-29.md"
+      ]
     }
   ]
 }

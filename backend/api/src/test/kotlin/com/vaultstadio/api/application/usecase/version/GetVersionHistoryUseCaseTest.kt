@@ -19,6 +19,7 @@ import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class GetVersionHistoryUseCaseTest {
 
@@ -53,9 +54,9 @@ class GetVersionHistoryUseCaseTest {
             totalVersions = 1,
             totalSize = 100L,
         )
-        coEvery { fileVersionService.getHistory("item-1") } returns Either.Right(history)
+        coEvery { fileVersionService.getHistory("item-1", "user-1") } returns Either.Right(history)
 
-        val result = useCase("item-1")
+        val result = useCase("item-1", "user-1")
 
         assertTrue(result.isRight())
         val resultHistory = (result as Either.Right<FileVersionHistory>).value
@@ -66,12 +67,12 @@ class GetVersionHistoryUseCaseTest {
 
     @Test
     fun invokeReturnsLeftWhenServiceFails() = runTest {
-        coEvery { fileVersionService.getHistory("item-1") } returns
+        coEvery { fileVersionService.getHistory("item-1", "user-1") } returns
             Either.Left(ItemNotFoundException(itemId = "item-1"))
 
-        val result = useCase("item-1")
+        val result = useCase("item-1", "user-1")
 
         assertTrue(result.isLeft())
-        assertTrue((result as Either.Left<ItemNotFoundException>).value is ItemNotFoundException)
+        assertIs<ItemNotFoundException>(assertIs<Either.Left<*>>(result).value)
     }
 }

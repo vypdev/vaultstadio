@@ -32,6 +32,7 @@ dependencies {
     implementation(project(":core:auth"))
     implementation(project(":core:storage"))
     implementation(project(":core:share"))
+    implementation(project(":core:share-access"))
     implementation(project(":core:activity"))
     implementation(project(":core:version"))
     implementation(project(":core:sync"))
@@ -41,7 +42,9 @@ dependencies {
     implementation(project(":plugins-api"))
     implementation(project(":infrastructure"))
     implementation(project(":domain:common"))
+    implementation(project(":domain:collaboration"))
     implementation(project(":domain:storage"))
+    implementation(project(":domain:version"))
     implementation(project(":domain:auth"))
     implementation(project(":domain:share"))
     implementation(project(":domain:activity"))
@@ -93,6 +96,7 @@ dependencies {
     testImplementation(libs.bundles.testing)
     testImplementation(libs.bundles.testcontainers)
     testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.client.websockets)
 }
 
 tasks.test {

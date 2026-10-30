@@ -17,6 +17,7 @@ interface CompareVersionsUseCase {
         itemId: String,
         fromVersion: Int,
         toVersion: Int,
+        userId: String,
     ): Either<StorageException, VersionDiff>
 }
 
@@ -28,6 +29,7 @@ class CompareVersionsUseCaseImpl(
         itemId: String,
         fromVersion: Int,
         toVersion: Int,
+        userId: String,
     ): Either<StorageException, VersionDiff> =
-        fileVersionService.compareVersions(itemId, fromVersion, toVersion)
+        fileVersionService.compareVersions(itemId, fromVersion, toVersion, userId)
 }

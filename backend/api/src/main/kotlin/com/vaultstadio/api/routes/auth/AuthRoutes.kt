@@ -114,7 +114,7 @@ fun Route.authRoutes() {
                 ?.removePrefix("Bearer ")
 
             if (token != null) {
-                logoutUseCase(token)
+                logoutUseCase(token).fold({ throw it }, {})
             }
 
             call.respond(

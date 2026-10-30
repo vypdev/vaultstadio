@@ -6,6 +6,8 @@ import com.vaultstadio.application.usecase.storage.CreateFolderUseCase
 import com.vaultstadio.application.usecase.storage.CreateFolderUseCaseImpl
 import com.vaultstadio.application.usecase.storage.DeleteItemUseCase
 import com.vaultstadio.application.usecase.storage.DeleteItemUseCaseImpl
+import com.vaultstadio.application.usecase.storage.DownloadArchiveUseCase
+import com.vaultstadio.application.usecase.storage.DownloadArchiveUseCaseImpl
 import com.vaultstadio.application.usecase.storage.DownloadFileUseCase
 import com.vaultstadio.application.usecase.storage.DownloadFileUseCaseImpl
 import com.vaultstadio.application.usecase.storage.GetBreadcrumbsUseCase
@@ -45,6 +47,7 @@ fun applicationStorageModule() = module {
     single<GetItemUseCase> { GetItemUseCaseImpl(get()) }
     single<CreateFolderUseCase> { CreateFolderUseCaseImpl(get()) }
     single<UploadFileUseCase> { UploadFileUseCaseImpl(get()) }
+    single<DownloadArchiveUseCase> { DownloadArchiveUseCaseImpl(get(), get()) }
     single<DownloadFileUseCase> { DownloadFileUseCaseImpl(get()) }
     single<RenameItemUseCase> { RenameItemUseCaseImpl(get()) }
     single<MoveItemUseCase> { MoveItemUseCaseImpl(get()) }

@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "issue": 116,
+  "baseline": "7b5212774a0d905fbfa5915d1f75e54b415f065d",
+  "scope": "Fixed operator Web API origin and consistent versioned paths; no multi-server implementation, version binary lifecycle or collaboration protocol claim.",
+  "preCode": true,
+  "configuration": {
+    "resource": "/vaultstadio-config.json",
+    "format": "UTF-8 JSON object; only optional apiBaseUrl key",
+    "default": {},
+    "absentValue": "serving origin + /api",
+    "providedValue": "nonblank absolute HTTP(S) API root; root or trailing /v1 alias; no userinfo/query/fragment/ambiguous navigation",
+    "limits": {
+      "fileBytes": 16384,
+      "urlUtf16Units": 2048,
+      "loadDeadlineMs": 5000
+    },
+    "failure": "safe accessible load/invalid state before Koin/API; reload after operator correction",
+    "persistence": "one immutable startup snapshot; fetch no-store, omit credentials, refuse redirects; no query/global/user preference override"
+  },
+  "architecture": "Parsing/URI/network mechanics in data/platform adapters; composition root loads then wires existing domain ports; presentation consumes URL use cases, never Ktor URI policy.",
+  "riskFamilies": [
+    {
+      "id": "API116-01",
+      "risk": "Absent override: actual page origin supplies the origin and exactly one `/api/v1` prefix; no localhost fallback.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-02",
+      "risk": "Explicit valid cross-origin HTTP localhost configuration preserves port and the configured authority.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-03",
+      "risk": "HTTPS override preserves TLS; an HTTPS host page refuses a disallowed HTTP downgrade before requests.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-04",
+      "risk": "Bare origin, trailing slash, `/api` and existing `/api/v1/` alias canonicalize under the specified compatibility contract.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-05",
+      "risk": "Explicit custom root/proxy prefix survives ordinary API calls and generated locations without duplication or removal.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-06",
+      "risk": "IPv4, hostname and bracketed IPv6 authorities preserve nondefault/default port semantics.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-07",
+      "risk": "Empty, whitespace-only or non-string provided configuration is a visible safe failure, not absence/default.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-08",
+      "risk": "Invalid schemes, missing authority and malformed/out-of-range ports are rejected before client creation.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-09",
+      "risk": "Embedded userinfo, query and fragment in operator configuration are rejected without echoing their values.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-10",
+      "risk": "Control/backslash, ambiguous encoded separators and dot/navigation path forms cannot select another endpoint.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-11",
+      "risk": "Malformed percent encoding/ambiguous empty segments follow the explicit grammar; valid supported encoded prefixes round-trip once.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-12",
+      "risk": "Mutation of the host config after startup cannot split client, Coil/presentation and link-generation roots.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-13",
+      "risk": "Actual app startup failure is accessible/actionable and produces zero backend calls; fixing operator config and reloading recovers.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-14",
+      "risk": "Auth/login/profile storage requests retain method/query/JSON and reach the effective prefixed API.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-15",
+      "risk": "Every remaining production API data source uses the same root; inventory all request construction sites, not a favorable sample.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-16",
+      "risk": "Generic non-API paths used by BaseApi/transport contracts keep their existing semantics.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-17",
+      "risk": "Bearer values are read freshly; token rotation/logout and allowed origin/prefix behavior do not regress or put tokens in public URLs.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-18",
+      "risk": "Multipart/chunk requests and binary downloads preserve body bytes, headers, destination and error outcomes after rebasing.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-19",
+      "risk": "Storage IDs containing Unicode, slash, question mark and hash remain one encoded path segment.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-20",
+      "risk": "Existing ApiLocation sanitation of inherited base user/password/query/fragment remains covered independently from strict startup rejection.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-21",
+      "risk": "Prefixed public-share requests suppress token-bearing URL logs and Authorization remains sanitized on ordinary requests.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-22",
+      "risk": "Thumbnail/preview/binary/folder ZIP URLs all preserve the root and exact existing operation routes.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-23",
+      "risk": "Copy/display/open public-share URLs agree with the effective root and actual backend public-page route. Copy confirmation requires acknowledged clipboard IO, with denial/failure/deadline/cancellation/retry and no stale or invented success.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-24",
+      "risk": "Version-generated URLs match the real route, with an explicit assertion that metadata is not historical binary-download acceptance.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-25",
+      "risk": "Socket URL scheme/prefix is consistent; tests do not pretend to fix or prove the separate collaboration protocol.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-26",
+      "risk": "Public share GET view loads CSS/JS, validates the intended capability and submits to the prefixed same-origin endpoint.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-27",
+      "risk": "A rejected password POST at the deeper download URL renders working assets/form/retry and does not expose credentials.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-28",
+      "risk": "Public-page pathname parsing refuses unrelated/malformed routes; it cannot issue off-origin capability requests.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-29",
+      "risk": "Public success/download/revoke/expired outcomes retain existing limits, CSP/referrer/log protections and bounded partial state.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-30",
+      "risk": "Standalone dev entrypoint and root production package remain operational under their documented configuration.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-31",
+      "risk": "Desktop/common production client consumers retain legacy configuration behavior and complete applicable test suites.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-32",
+      "risk": "Network/body cancellation and request timeout remain distinct and cannot become empty/Unit success.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-33",
+      "risk": "Production package A, one clean browser origin: normal login, files, upload and actual saved binary/ZIP byte identity.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-34",
+      "risk": "The identical production package B, a distinct host/port plus explicit proxy prefix: same real journey without rebuilt endpoint constants.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-35",
+      "risk": "Logged-out actual public-link journey on both origins: page/assets/form and saved download bytes use the right prefix.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-36",
+      "risk": "Malformed real served operator config yields visible error and no API traffic; operator-only correction/reload restores the normal journey.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-37",
+      "risk": "Actual configured Coil client sends current scoped bearer and no-store, bypasses unscoped memory/disk cache, rejects foreign/tokenless access, and text preview uses the authenticated domain port with safe cancellation/error and unchanged displayed cap. Unbounded full-body preview/media support is not certified.",
+      "status": "planned",
+      "evidence": []
+    },
+    {
+      "id": "API116-38",
+      "risk": "Real CORS preflight honors each configured origin scheme/host/port and Cache-Control request header; unconfigured HTTP counterpart, host and port stay denied. No wildcard/origin broadening.",
+      "status": "planned",
+      "evidence": []
+    }
+  ],
+  "acceptance": "At least all38 families expanded into actual assertions; complete final suites/gates/lint/contracts, raw source-bound coverage, actual same package on two production origins including prefixed proxy/public flow and bad-config recovery. Planned families are not executed test counts.",
+  "clipboardContract": {
+    "owner": "SDD-0006 section21.11; SDD-0013 composition boundary",
+    "deadlineMs": 5000,
+    "success": "Only an acknowledged platform write may publish Link Copied.",
+    "failure": "Safe retryable unavailable/denied/failed/timeout feedback; preserve external cancellation and prevent stale success.",
+    "externalEffect": "Cancellation cannot promise rollback of an already-started system clipboard write.",
+    "proof": "Actual ViewModel and adapter tests plus actual packaged copied-value comparison; no local-variable clipboard simulation."
+  }
+}

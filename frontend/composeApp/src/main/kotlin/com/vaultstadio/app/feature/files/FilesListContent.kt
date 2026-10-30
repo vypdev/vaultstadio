@@ -5,7 +5,6 @@
 package com.vaultstadio.app.feature.files
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -105,15 +104,8 @@ private fun FilesListItem(
     onContextMenuForId: (String?) -> Unit,
     callbacks: FilesGridContextMenuCallbacks,
 ) {
-    Box(
-        modifier = Modifier.combinedClickable(
-            onClick = { /* handled by SelectableFileListItem */ },
-            onLongClick = {
-                onContextMenuForId(item.id)
-                viewModel.toggleItemSelection(item.id)
-            },
-        ),
-    ) {
+    val downloads = LocalFileDownloads.current
+    Box {
         SelectableFileListItem(
             item = item,
             isSelected = item.id in viewModel.selectedItems,
@@ -134,6 +126,7 @@ private fun FilesListItem(
                 onContextMenuForId(item.id)
                 viewModel.toggleItemSelection(item.id)
             },
+            onToggleSelection = { viewModel.toggleItemSelection(item.id) },
         )
         if (contextMenuForId == item.id) {
             DropdownMenu(
@@ -169,7 +162,7 @@ private fun FilesListItem(
                     },
                     onDownload = {
                         onContextMenuForId(null)
-                        viewModel.getDownloadUrl(item.id)
+                        downloads.item(item.id)
                     },
                     onStar = {
                         onContextMenuForId(null)

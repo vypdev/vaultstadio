@@ -1,0 +1,29 @@
+{
+  "readiness": {
+    "status": 200,
+    "body": {
+      "ready": true,
+      "checks": {
+        "database": {
+          "status": "healthy",
+          "message": "Connected, 6 users",
+          "latencyMs": 155
+        },
+        "storage": {
+          "status": "healthy",
+          "message": "Storage backend available",
+          "latencyMs": 2
+        }
+      }
+    }
+  },
+  "login": {
+    "passed": true
+  },
+  "restored_file": {
+    "status": 200,
+    "sha256": "ef2d0736aa3e96a49452a3c484dd3a23e59e4f832a62d339075b9f6a69cc8281",
+    "matches_original": true,
+    "bytes": 38
+  }
+}

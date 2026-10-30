@@ -1,0 +1,73 @@
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.testing.Test
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
+// Diagnostic instrumentation only: no repository files or verification gates change.
+gradle.beforeProject { p ->
+    p.pluginManager.apply('jacoco')
+}
+
+gradle.projectsEvaluated {
+    def root = gradle.rootProject
+    def modules = []
+    def testTasks = []
+    def auditHome = System.getenv('VAULTSTADIO_AUDIT_TEST_HOME')
+    root.allprojects.each { p ->
+        def selected = p.tasks.withType(Test).findAll {
+            it.name == 'test' || it.name == 'desktopTest'
+        }
+        if (selected.isEmpty()) return
+        testTasks.addAll(selected)
+        selected.each { t ->
+            if (auditHome) t.systemProperty('user.home', auditHome + '/' + p.path.replace(':', '_'))
+        }
+
+        def sourceDirs = []
+        def classDirs = []
+        if (p.plugins.hasPlugin('org.jetbrains.kotlin.multiplatform')) {
+            def kotlin = p.extensions.findByName('kotlin')
+            ['commonMain', 'desktopMain'].each { name ->
+                def source = kotlin.sourceSets.findByName(name)
+                if (source != null) sourceDirs.addAll(source.kotlin.srcDirs)
+            }
+            classDirs.add(p.layout.buildDirectory.dir('classes/kotlin/desktop/main'))
+        } else {
+            def main = p.extensions.findByType(SourceSetContainer)?.findByName('main')
+            if (main != null) {
+                sourceDirs.addAll(main.allSource.srcDirs)
+                classDirs.add(main.output.classesDirs)
+            }
+        }
+        def execution = p.fileTree(p.layout.buildDirectory) { include('jacoco/*.exec') }
+        modules.add([project: p, sources: sourceDirs, classes: classDirs, execution: execution])
+        p.tasks.register('auditJacocoReport', JacocoReport) {
+            group = 'verification'
+            mustRunAfter(selected)
+            executionData.from(execution)
+            sourceDirectories.from(sourceDirs)
+            classDirectories.from(classDirs)
+            reports {
+                xml.required = true
+                html.required = true
+                xml.outputLocation = p.layout.buildDirectory.file('reports/audit/jacoco.xml')
+                html.outputLocation = p.layout.buildDirectory.dir('reports/audit/html')
+            }
+        }
+    }
+    root.tasks.register('auditJacocoAggregate', JacocoReport) {
+        group = 'verification'
+        description = 'Report all compiled production modules against all test execution data.'
+        mustRunAfter(testTasks)
+        modules.each { m ->
+            executionData.from(m.execution)
+            sourceDirectories.from(m.sources)
+            classDirectories.from(m.classes)
+        }
+        reports {
+            xml.required = true
+            html.required = true
+            xml.outputLocation = root.layout.buildDirectory.file('reports/audit/aggregate/jacoco.xml')
+            html.outputLocation = root.layout.buildDirectory.dir('reports/audit/aggregate/html')
+        }
+    }
+}

@@ -86,10 +86,7 @@ plugins-build:
 # ==================== Testing ====================
 
 test:
-	@echo "Running backend tests..."
-	$(MAKE) -C backend test
-	@echo "Running frontend tests..."
-	$(MAKE) -C frontend test
+	python3 scripts/verification/run.py test
 
 backend-test:
 	@echo "Running backend tests..."
@@ -100,13 +97,7 @@ frontend-test:
 	$(MAKE) -C frontend test
 
 test-coverage:
-	@echo "Running tests with coverage (backend + frontend, same as CI/Codecov)..."
-	$(MAKE) -C backend test-coverage
-	$(MAKE) -C frontend test-coverage
-	@echo "Coverage reports:"
-	@echo "  Backend:  backend/*/build/reports/jacoco/test/"
-	@echo "  Frontend: frontend/composeApp/build/reports/jacoco/jacocoTestReport/"
-	@echo "Validate codecov config: curl -s --data-binary @codecov.yml https://codecov.io/validate"
+	python3 scripts/verification/run.py coverage
 
 # ==================== Development ====================
 
@@ -195,9 +186,7 @@ db-clean:
 # ==================== Linting & Code Quality ====================
 
 lint:
-	@echo "Running detekt (backend + root)..."
-	$(MAKE) -C backend lint
-	@echo "Run frontend lint from frontend/: cd frontend && make lint (detektDesktopMain)"
+	python3 scripts/verification/run.py lint
 
 lint-baseline:
 	@echo "Generating detekt baseline..."

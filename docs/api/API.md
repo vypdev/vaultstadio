@@ -227,49 +227,36 @@ Authorization: Bearer <token>
 ```
 
 **Query Parameters:**
+
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|---------|
-| `sort` | string | Sort field (name, size, createdAt, updatedAt) | name |
-| `order` | string | Sort order (asc, desc) | asc |
-| `limit` | int | Items per page | 50 |
-| `offset` | int | Pagination offset | 0 |
+| `sortBy` | string | `name`, `size`, `created_at`, `updated_at`, `type`; ASCII case-insensitive | name |
+| `sortOrder` | string | `asc` or `desc`; ASCII case-insensitive | asc |
+| `limit` | int | Items per page, inclusive range 1..1000 | 100 |
+| `offset` | int | Inclusive range 0..2147483647 | 0 |
 
-**Response:**
+Use these exact parameter names; the old documentation's `sort`/`order` names were not wired aliases. Known selection parameters must occur once. Malformed, empty, signed, whitespace-containing or overflowing query integers return `400 VALIDATION_ERROR`; they are never clamped or silently defaulted. Leading zeroes are accepted. Invalid selection is rejected before parent lookup, selection/count, plugins or byte-provider access. Authentication still runs first.
+
+Sorting always adds item ID ascending as the final tie-breaker. Type sorting retains name ascending before the ID. Listing preserves the authenticated owner, selected parent and nontrashed filter.
+
+**Response** (empty folder; a nonempty `items` array contains storage-item DTOs):
+
 ```json
 {
-  "items": [
-    {
-      "id": "item-uuid",
-      "name": "Documents",
-      "path": "/Documents",
-      "type": "folder",
-      "parentId": null,
-      "size": 0,
-      "mimeType": null,
-      "isStarred": false,
-      "isTrashed": false,
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-01T00:00:00Z"
-    },
-    {
-      "id": "item-uuid-2",
-      "name": "photo.jpg",
-      "path": "/photo.jpg",
-      "type": "file",
-      "parentId": null,
-      "size": 1048576,
-      "mimeType": "image/jpeg",
-      "isStarred": true,
-      "isTrashed": false,
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-01T00:00:00Z"
-    }
-  ],
-  "total": 2,
-  "limit": 50,
-  "offset": 0
+  "success": true,
+  "data": {
+    "items": [],
+    "total": 0,
+    "page": 1,
+    "pageSize": 100,
+    "totalPages": 0,
+    "hasMore": false
+  },
+  "error": null
 }
 ```
+
+See [Pagination](#pagination) for 64-bit page metadata and error semantics.
 
 ### Create Folder
 
@@ -675,19 +662,11 @@ Authorization: Bearer <token>
 | `limit` | int | Results limit |
 | `offset` | int | Pagination offset |
 
-**Response:**
-```json
-{
-  "items": [...],
-  "total": 10,
-  "limit": 50,
-  "offset": 0
-}
-```
+The GET and `POST /api/v1/search` body (`query`, `limit`, `offset`) default to limit50/offset0 and return the same `ApiResponse<PaginatedResponse<StorageItemResponse>>` envelope as folder listing. The selection bounds below apply. A POST limit/offset must be an actual JSON integer, not a string, null, fraction, exponent or overflowing number. GET search does not accept `sortBy`/`sortOrder` selection controls.
+
+Filename/prefix predicate matching is still tracked by [#82](https://github.com/vypdev/vaultstadio/issues/82); a valid selection is not evidence that this search feature is complete.
 
 ### Advanced Search
-
-Search with filters for file type, size, and date range.
 
 ```http
 POST /api/v1/search/advanced
@@ -696,16 +675,20 @@ Content-Type: application/json
 
 {
   "query": "report",
-  "searchContent": true,
-  "fileTypes": ["pdf", "doc"],
+  "searchContent": false,
+  "fileTypes": ["pdf"],
   "minSize": 1024,
   "maxSize": 10485760,
-  "fromDate": "2024-01-01",
-  "toDate": "2024-12-31",
+  "fromDate": "2024-01-01T00:00:00Z",
+  "toDate": "2024-12-31T23:59:59Z",
   "limit": 50,
   "offset": 0
 }
 ```
+
+Numeric bounds and body types are checked before access. Invalid supplied ISO instants return a safe `400 VALIDATION_ERROR` without echoing the supplied date. A valid `searchContent=true` request returns `501 CONTENT_SEARCH_UNAVAILABLE`, without selecting data or invoking a plugin. It no longer returns a successful warning map with an incompatible response shape.
+
+The existing MIME/size/date projection is applied **after** the bounded page is selected. Its `total`/`totalPages` describe that projection, and `hasMore` is false; they are not global filtered counts. Complete predicate-before-pagination search, counts and content indexing are [#115](https://github.com/vypdev/vaultstadio/issues/115). These limitations are explicit until that milestone is implemented and tested.
 
 ### Search Suggestions (Autocomplete)
 
@@ -846,81 +829,107 @@ Authorization: Bearer <token>
 
 ## Share Endpoints
 
-### List Shares
+Contract: [SDD-0006 revision R05](../../specs/sdd-0006-sharing-and-permissions.md#21-revision-r05--public-file-access-90-pre-implementation-contract).
+Public links grant metadata and an admitted download of one active file; they never authenticate
+an account or grant storage listing, mutation, version history or collaboration.
 
-```http
-GET /api/v1/shares
-Authorization: Bearer <token>
-```
+### Owner management
 
-**Response:**
-```json
-[
-  {
-    "id": "share-uuid",
-    "itemId": "file-uuid",
-    "itemName": "document.pdf",
-    "token": "abc123def456",
-    "url": "http://localhost:8080/share/abc123def456",
-    "password": null,
-    "expiresAt": "2024-02-01T00:00:00Z",
-    "maxDownloads": 10,
-    "downloadCount": 3,
-    "isActive": true,
-    "createdAt": "2024-01-01T00:00:00Z"
-  }
-]
-```
-
-### Create Share
+`GET /api/v1/shares` lists the authenticated creator's links. `GET /api/v1/shares/item/{itemId}`
+requires ownership of the item. Both return `{"success":true,"data":[...]}`; each link has
+`id`, `itemId`, `token`, `url`, `expiresAt`, `hasPassword`, `maxDownloads`, `downloadCount`,
+`isActive`, `createdAt`, `createdBy` and `sharedWithUsers`. Password hashes are never returned.
 
 ```http
 POST /api/v1/shares
-Authorization: Bearer <token>
+Authorization: Bearer <account-access-token>
 Content-Type: application/json
 
 {
   "itemId": "file-uuid",
   "expirationDays": 7,
-  "password": "optional-password",
+  "password": "example-link-password",
   "maxDownloads": 10
 }
 ```
 
-**Response:** `201 Created`
-```json
-{
-  "id": "share-uuid",
-  "token": "abc123def456",
-  "url": "http://localhost:8080/share/abc123def456",
-  ...
-}
-```
+Creation requires the current owner of a stored, non-trashed FILE. The default expiry is seven
+ days; numeric expiry is 1..365 days, and explicit `null` deliberately requests no expiry.
+`maxDownloads` is `null` (unlimited) or a positive integer up to 2,147,483,647. A password is
+`null` or 1..72 UTF-8 bytes; multibyte characters count by encoded length, not character count.
+Invalid creation returns 400 without creating a link. Success is 201 with the same typed response
+envelope and link fields listed above. `url` points to `/api/v1/share/{token}/view` at the API origin.
 
-### Delete Share
+`DELETE /api/v1/shares/{shareId}` requires the link creator and returns 200 with
+`{"success":true}`. Revocation cannot retract a transfer that was already admitted.
 
-```http
-DELETE /api/v1/shares/{shareId}
-Authorization: Bearer <token>
-```
-
-**Response:** `204 No Content`
-
-### Access Shared File (Public)
+### Anonymous information
 
 ```http
 GET /api/v1/share/{token}
+X-Share-Password: ZXhhbXBsZS1saW5rLXBhc3N3b3Jk
 ```
 
-If password protected:
-```http
-POST /api/v1/share/{token}
-Content-Type: application/json
+The header is canonical unpadded Base64url of the password’s UTF-8 bytes (the example encodes
+`example-link-password`). This wire encoding supports Unicode in browser headers; use TLS for
+transport security. Malformed/noncanonical encoding or invalid UTF-8 returns 400. Omit the header
+for an unprotected link. A `password` query parameter is rejected (400);
+there is no metadata POST endpoint. Tokens are case sensitive. No account Authorization header
+is needed. The successful 200 response is a serializable public DTO:
 
+```json
 {
-  "password": "share-password"
+  "success": true,
+  "data": {
+    "name": "document.pdf",
+    "size": 2048,
+    "mimeType": "application/pdf",
+    "hasPassword": true,
+    "expiresAt": "2026-11-03T08:00:00Z"
+  }
 }
 ```
+
+Information reads never consume download allowances. Public metadata excludes item/owner IDs,
+paths, provider/content keys, recipient lists and password hashes. Responses use `Cache-Control:
+no-store` and `Referrer-Policy: no-referrer`; API request logging redacts the capability token.
+
+### Download and browser link
+
+`GET /api/v1/share/{token}/download` uses the same optional password header and streams an
+`application/octet-stream` attachment. The server prepares a bounded prefix, then atomically
+rechecks link state, current ownership, password/content identity, expiry and remaining allowance
+before incrementing the counter once. Missing content/provider preparation, denial or a failed
+admission consumes no allowance. Concurrent requests for one remaining allowance admit exactly one.
+
+The counter measures admitted transfer attempts. A later network/provider failure or cancellation
+can leave a consumed allowance and partial bytes; there is no automatic retry or claim that the
+browser saved a complete file. Check the received file before retrying.
+
+Open the generated `/api/v1/share/{token}/view` URL in a browser for the public page. It works
+without login, has labelled password/load/download controls and an accessible status region.
+Information/password/network errors offer explicit retry. The download uses a native POST form
+at `/api/v1/share/{token}/view/download`, keeping the password in the body and streaming large
+attachments without a JavaScript Blob. Metadata errors preserve local inputs; a POST denial shows
+a retry page with an empty password field. The page reports a download request, never a saved file.
+The page uses `Referrer-Policy: strict-origin` (also in its HTML meta) so a same-origin native
+form keeps its Origin without sending the token path/query in Referer. Machine responses and
+assets retain no-referrer. The bundled proxy redacts public paths and omits query/Referer from
+access logs; public upstream errors retain their redacted access status without raw request diagnostics.
+
+| Public outcome | HTTP | Stable code |
+|---|---:|---|
+| Invalid request/query/form | 400 | `INVALID_SHARE_REQUEST` |
+| Password absent / incorrect | 403 | `SHARE_PASSWORD_REQUIRED` / `SHARE_PASSWORD_INVALID` |
+| Missing link or unavailable/foreign/trashed/folder resource | 404 | `SHARE_NOT_FOUND` |
+| Revoked / expired / exhausted | 410 | `SHARE_REVOKED` / `SHARE_EXPIRED` / `SHARE_LIMIT_REACHED` |
+| Credential/content snapshot changed before admission | 409 | `SHARE_CHANGED` |
+| Provider/database preparation or admission failed | 500 | `SHARE_UNAVAILABLE` |
+
+Machine failures use `{"success":false,"error":{"code":"...","message":"..."}}` with safe
+messages. Native form failures render the public retry page with the corresponding status.
+Explicit internal recipient permissions, folder inheritance and nonowner collaboration grants
+remain separate work; this repair does not certify the whole sharing portfolio as complete.
 
 ---
 
@@ -1147,21 +1156,21 @@ X-RateLimit-Reset: 1609459200
 
 ## Pagination
 
-List endpoints support pagination:
+This contract covers interactive storage folder/recent and search/suggestion/metadata selections. It does not impose REST constructor constraints on raw S3/WebDAV query objects.
 
-```http
-GET /api/v1/storage/folder?limit=20&offset=40
-```
+| Surface | Default limit | Offset | Sort controls |
+|---|---:|---|---|
+| Folder GET |100|0 by default|`sortBy`, `sortOrder`|
+| Basic GET/POST and advanced POST search |50|0 by default|none|
+| Recent GET |20|unsupported|none|
+| Suggestions GET |10|unsupported|none|
+| Metadata GET (`/search/by-metadata?key=...`) |50|unsupported|none|
 
-Response includes pagination info:
-```json
-{
-  "items": [...],
-  "total": 100,
-  "limit": 20,
-  "offset": 40
-}
-```
+Every limit is in1..1000; supported offsets are in0..2147483647. A known unsupported query control returns400 rather than being silently ignored. Suggestions validate even when the prefix is shorter than two characters. Missing parameters use defaults; malformed supplied values do not. Body integer typing and query lexical rules are described above. Typed provider errors retain their own status/code, including `500 DATABASE_ERROR`; they are not converted to validation errors or empty successes.
+
+Folder/basic page envelopes contain `items`, `total`, `page`, `pageSize`, `totalPages`, `hasMore`. `page = floor(offset / limit) + 1`, `totalPages = ceil(total / limit)` (zero for an empty dataset), and `hasMore` uses the returned item count and full selected total. Computation is overflow-safe. `page` and `totalPages` are signed64-bit integers in server and shared client models; for example limit1/offset2147483647 yields page2147483648. Ordinary JSON numeric values and field names remain unchanged. Consumers must support int64 page metadata for these extremes.
+
+Recent and suggestions retain their array envelopes. Metadata search returns a bounded owner-authorized projection: page1, total equal to its returned records, totalPages0/1 and hasMore=false. Foreign/missing items are omitted; a provider failure resolving an item is an explicit error. Global search-filter counts are separate work in#115.
 
 ---
 

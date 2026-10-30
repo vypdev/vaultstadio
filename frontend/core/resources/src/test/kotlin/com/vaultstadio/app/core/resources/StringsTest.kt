@@ -547,7 +547,10 @@ class StringsTest {
             JapaneseStrings,
         )
         allStrings.forEach { strings ->
-            assertTrue(strings.activityNoActivity.isNotEmpty(), "activityNoActivity should be non-empty for all languages")
+            assertTrue(
+                strings.activityNoActivity.isNotEmpty(),
+                "activityNoActivity should be non-empty for all languages",
+            )
         }
     }
 
@@ -582,6 +585,57 @@ class StringsTest {
         allStrings.forEach { strings ->
             assertTrue(strings.commonBack.isNotEmpty(), "commonBack should be non-empty for all languages")
             assertTrue(strings.commonRetry.isNotEmpty(), "commonRetry should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveNavAIAndNavActivity() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.navAI.isNotEmpty(), "navAI should be non-empty for all languages")
+            assertTrue(strings.navActivity.isNotEmpty(), "navActivity should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveFederationTitle() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.federationTitle.isNotEmpty(), "federationTitle should be non-empty for all languages")
+        }
+    }
+
+    @Test
+    fun allLanguages_haveTrashEmptyStrings() {
+        val allStrings = listOf(
+            EnglishStrings,
+            SpanishStrings,
+            FrenchStrings,
+            GermanStrings,
+            PortugueseStrings,
+            ChineseStrings,
+            JapaneseStrings,
+        )
+        allStrings.forEach { strings ->
+            assertTrue(strings.trashEmpty.isNotEmpty(), "trashEmpty should be non-empty for all languages")
+            assertTrue(strings.trashEmptyDesc.isNotEmpty(), "trashEmptyDesc should be non-empty for all languages")
+            assertTrue(strings.trashEmptyAction.isNotEmpty(), "trashEmptyAction should be non-empty for all languages")
         }
     }
 }

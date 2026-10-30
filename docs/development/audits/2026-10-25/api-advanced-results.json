@@ -1,0 +1,542 @@
+{
+  "total": 21,
+  "passed": 11,
+  "failed": 10,
+  "results": [
+    {
+      "name": "reactivate own device",
+      "method": "POST",
+      "path": "/api/v1/sync/devices",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 360,
+      "elapsed_ms": 302.1
+    },
+    {
+      "name": "find original folder",
+      "method": "GET",
+      "path": "/api/v1/storage/folder",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 4294,
+      "elapsed_ms": 85.3
+    },
+    {
+      "name": "upload fresh storage sync fixture",
+      "method": "POST",
+      "path": "/api/v1/storage/upload",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 532,
+      "elapsed_ms": 255.1
+    },
+    {
+      "name": "fresh storage upload visible to sync",
+      "method": "POST",
+      "path": "/api/v1/sync/pull",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 3859,
+      "elapsed_ms": 333.2,
+      "response": {
+        "success": true,
+        "data": {
+          "changes": [
+            {
+              "id": "bd1c8bb2-bc48-4c87-8e73-11550a851026",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:26:54.726509Z",
+              "cursor": 1,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "b8756ca9-1c08-43ef-aa28-a616de850a75",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:26:54.811679Z",
+              "cursor": 2,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "28a587b1-2f83-4d71-bc40-58f3800e66ea",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:26:54.878587Z",
+              "cursor": 3,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "96d3cb4b-3993-4a37-95e0-85279c122ecd",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:29:05.186219Z",
+              "cursor": 4,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "a4c832b3-e9bd-47d3-8e6a-210fbfc7a09b",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:29:05.268545Z",
+              "cursor": 5,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "de3a03c0-e7a8-4519-9425-13495057468b",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:29:05.424531Z",
+              "cursor": 6,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "2a140bf6-4738-4ed2-b302-55b838a79acc",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:30:41.386201Z",
+              "cursor": 7,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "57ff17a1-9a94-488a-819c-a7a703be8f25",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:30:41.429540Z",
+              "cursor": 8,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "20d8b33f-29dc-4b88-9176-d2f832f86090",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:30:41.484012Z",
+              "cursor": 9,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            }
+          ],
+          "cursor": "9",
+          "hasMore": false,
+          "conflicts": [],
+          "serverTime": "2026-10-25T12:33:30.837842513Z"
+        },
+        "error": null
+      }
+    },
+    {
+      "name": "sync push",
+      "method": "POST",
+      "path": "/api/v1/sync/push",
+      "status": 500,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 171,
+      "elapsed_ms": 872.8,
+      "response": {
+        "success": false,
+        "data": null,
+        "error": {
+          "code": "INTERNAL_ERROR",
+          "message": "An internal error occurred",
+          "details": null
+        }
+      }
+    },
+    {
+      "name": "sync pull after push",
+      "method": "POST",
+      "path": "/api/v1/sync/pull",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 4265,
+      "elapsed_ms": 510.5
+    },
+    {
+      "name": "sync replay request",
+      "method": "POST",
+      "path": "/api/v1/sync/push",
+      "status": 500,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 171,
+      "elapsed_ms": 278.9,
+      "response": {
+        "success": false,
+        "data": null,
+        "error": {
+          "code": "INTERNAL_ERROR",
+          "message": "An internal error occurred",
+          "details": null
+        }
+      }
+    },
+    {
+      "name": "sync replay no duplicate records",
+      "method": "POST",
+      "path": "/api/v1/sync/pull",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 4670,
+      "elapsed_ms": 744.2,
+      "response": {
+        "success": true,
+        "data": {
+          "changes": [
+            {
+              "id": "bd1c8bb2-bc48-4c87-8e73-11550a851026",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:26:54.726509Z",
+              "cursor": 1,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "b8756ca9-1c08-43ef-aa28-a616de850a75",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:26:54.811679Z",
+              "cursor": 2,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "28a587b1-2f83-4d71-bc40-58f3800e66ea",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:26:54.878587Z",
+              "cursor": 3,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "96d3cb4b-3993-4a37-95e0-85279c122ecd",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:29:05.186219Z",
+              "cursor": 4,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "a4c832b3-e9bd-47d3-8e6a-210fbfc7a09b",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:29:05.268545Z",
+              "cursor": 5,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "de3a03c0-e7a8-4519-9425-13495057468b",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:29:05.424531Z",
+              "cursor": 6,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "2a140bf6-4738-4ed2-b302-55b838a79acc",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:30:41.386201Z",
+              "cursor": 7,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "57ff17a1-9a94-488a-819c-a7a703be8f25",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:30:41.429540Z",
+              "cursor": 8,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "20d8b33f-29dc-4b88-9176-d2f832f86090",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:30:41.484012Z",
+              "cursor": 9,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "79a0f7f9-3311-4c0b-9924-73c70abbe398",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:33:31.366618Z",
+              "cursor": 10,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            },
+            {
+              "id": "a2e3243c-b0a1-490b-9440-6d0716762f2e",
+              "itemId": "0cf5a08c-71f4-4eab-a263-2303e23d7278",
+              "changeType": "MODIFY",
+              "timestamp": "2026-10-25T12:33:32.348394Z",
+              "cursor": 11,
+              "oldPath": null,
+              "newPath": "audit-sync-8cb4177d90",
+              "checksum": null
+            }
+          ],
+          "cursor": "11",
+          "hasMore": false,
+          "conflicts": [],
+          "serverTime": "2026-10-25T12:33:33.271145924Z"
+        },
+        "error": null
+      }
+    },
+    {
+      "name": "deactivate sync device",
+      "method": "POST",
+      "path": "/api/v1/sync/devices/audit-device-8cb4177d90/deactivate",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 39,
+      "elapsed_ms": 306.2
+    },
+    {
+      "name": "deactivated device push denied",
+      "method": "POST",
+      "path": "/api/v1/sync/push",
+      "status": 500,
+      "expected": [
+        400,
+        403,
+        404,
+        409,
+        422
+      ],
+      "passed": false,
+      "response_bytes": 171,
+      "elapsed_ms": 144.8,
+      "response": {
+        "success": false,
+        "data": null,
+        "error": {
+          "code": "INTERNAL_ERROR",
+          "message": "An internal error occurred",
+          "details": null
+        }
+      }
+    },
+    {
+      "name": "deactivated push makes no persistent change",
+      "passed": false,
+      "before": 11,
+      "after": 12
+    },
+    {
+      "name": "deactivated device pull denied",
+      "method": "POST",
+      "path": "/api/v1/sync/pull",
+      "status": 500,
+      "expected": [
+        400,
+        403,
+        404,
+        409,
+        422
+      ],
+      "passed": false,
+      "response_bytes": 20,
+      "elapsed_ms": 60.3,
+      "response": "Device is not active"
+    },
+    {
+      "name": "quota exceeded upload rejected",
+      "method": "POST",
+      "path": "/api/v1/storage/upload",
+      "status": 201,
+      "expected": [
+        403,
+        409,
+        413,
+        507
+      ],
+      "passed": false,
+      "response_bytes": 542,
+      "elapsed_ms": 210.9,
+      "response": {
+        "success": true,
+        "data": {
+          "id": "985469f7-2eb5-4073-a7e3-55d8152920b8",
+          "name": "audit-quota-8cb4177d90_4.txt",
+          "path": "/audit-quota-8cb4177d90_4.txt",
+          "type": "FILE",
+          "parentId": null,
+          "size": 10,
+          "mimeType": "text/plain",
+          "visibility": "PRIVATE",
+          "isStarred": false,
+          "isTrashed": false,
+          "createdAt": "2026-10-25T12:33:37.456126364Z",
+          "updatedAt": "2026-10-25T12:33:37.456126364Z",
+          "metadata": null
+        },
+        "error": null
+      }
+    },
+    {
+      "name": "quota rejection leaves no metadata",
+      "passed": false,
+      "before": 4,
+      "after": 5
+    },
+    {
+      "name": "WebDAV MKCOL",
+      "method": "MKCOL",
+      "path": "/webdav/advanced-d4ee5dc4",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "elapsed_ms": 686.1
+    },
+    {
+      "name": "WebDAV PUT",
+      "method": "PUT",
+      "path": "/webdav/advanced-d4ee5dc4/sample.txt",
+      "status": 201,
+      "expected": [
+        200,
+        201,
+        204
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "elapsed_ms": 700.7
+    },
+    {
+      "name": "WebDAV GET byte identity",
+      "method": "GET",
+      "path": "/webdav/advanced-d4ee5dc4/sample.txt",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "passed": true,
+      "response_bytes": 28,
+      "elapsed_ms": 779.8
+    },
+    {
+      "name": "WebDAV MOVE",
+      "method": "MOVE",
+      "path": "/webdav/advanced-d4ee5dc4/sample.txt",
+      "status": 201,
+      "expected": [
+        201,
+        204
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "elapsed_ms": 755.1
+    },
+    {
+      "name": "WebDAV COPY",
+      "method": "COPY",
+      "path": "/webdav/advanced-d4ee5dc4/renamed.txt",
+      "status": 201,
+      "expected": [
+        201,
+        204
+      ],
+      "passed": true,
+      "response_bytes": 0,
+      "elapsed_ms": 680.2
+    },
+    {
+      "name": "WebDAV copied bytes",
+      "method": "GET",
+      "path": "/webdav/advanced-d4ee5dc4/copy.txt",
+      "status": 404,
+      "expected": [
+        200
+      ],
+      "passed": false,
+      "response_bytes": 158,
+      "elapsed_ms": 868.1,
+      "response": {
+        "success": false,
+        "data": null,
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Resource not found",
+          "details": null
+        }
+      }
+    },
+    {
+      "name": "WebDAV PROPFIND",
+      "method": "PROPFIND",
+      "path": "/webdav/advanced-d4ee5dc4/",
+      "status": 207,
+      "expected": [
+        207
+      ],
+      "passed": true,
+      "response_bytes": 2734,
+      "elapsed_ms": 791.5
+    }
+  ]
+}
