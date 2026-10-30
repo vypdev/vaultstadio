@@ -6,7 +6,7 @@ import posixpath
 import re
 from urllib.parse import unquote, urlsplit
 
-from specification_catalog import boundary, regular_file
+from specification_catalog import PATH_FIELDS, boundary, regular_file
 
 MANIFEST = 'docs/development/verification/sdd-owner-path-migration-178.json'
 
@@ -83,3 +83,36 @@ def check_owner_links(text, relative, inventory, record):
                 raise ValueError('Live link retains a historical owner path: ' + resolved)
             if (resolved in canonical or relative == discovery) and resolved not in inventory:
                 raise ValueError('Live owner/provenance link does not match the exact file inventory: ' + resolved)
+
+
+def require_catalog_preservation(current, record):
+    """Retain historical fields; all additions still require catalog validation."""
+    expected = remap_catalog(record['catalog_before'], record)
+    governance = next(c for c in expected['capabilities'] if c['id'] == 'architecture-quality-and-product-contract')
+    governance['documentation'].extend([
+        'docs/development/verification/sdd-owner-path-migration-178.json',
+        'docs/development/verification/SDD_OWNER_PATHS_178.md'])
+    if ({k: v for k, v in current.items() if k != 'capabilities'}
+            != {k: v for k, v in expected.items() if k != 'capabilities'}):
+        raise ValueError('Historical root metadata changed')
+    actual = {c['id']: c for c in current['capabilities']}
+    if len(actual) != len(current['capabilities']):
+        raise ValueError('Duplicate capability identity')
+    expected_ids = [c['id'] for c in expected['capabilities']]
+    if [c['id'] for c in current['capabilities'] if c['id'] in expected_ids] != expected_ids:
+        raise ValueError('Historical capability order or inventory changed')
+    for before in expected['capabilities']:
+        after = actual[before['id']]
+        if after['specs'][0] != before['specs'][0]:
+            raise ValueError('Historical primary owner was replaced')
+        for field, value in before.items():
+            if field in (*PATH_FIELDS, 'evidence'):
+                if not preserved_sequence(value, after.get(field, [])):
+                    raise ValueError('Historical evidence or owner removed: ' + field)
+            elif after.get(field) != value:
+                raise ValueError('Historical scalar metadata changed: ' + field)
+
+
+def preserved_sequence(expected, actual):
+    remaining = iter(actual)
+    return all(any(item == wanted for item in remaining) for wanted in expected)

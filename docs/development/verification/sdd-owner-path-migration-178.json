@@ -1763,276 +1763,6 @@
       ]
     },
     {
-      "path": "specs/CATALOG.md",
-      "source_git_blob": "7ca9bedfa485f57e8054b8dbdab606f8391dab2e",
-      "edits": [
-        {
-          "before_start": 885,
-          "after_start": 885,
-          "before": "./SDD-0000-architecture-quality-and-product-contract.md",
-          "after": "./sdd-0000-architecture-quality-and-product-contract.md"
-        },
-        {
-          "before_start": 1138,
-          "after_start": 1138,
-          "before": "./SDD-0001-standalone-projects-and-clean-architecture.md",
-          "after": "./sdd-0001-standalone-projects-and-clean-architecture.md"
-        },
-        {
-          "before_start": 1351,
-          "after_start": 1351,
-          "before": "./SDD-0002-public-api-and-protocol-contract.md",
-          "after": "./sdd-0002-public-api-and-protocol-contract.md"
-        },
-        {
-          "before_start": 1572,
-          "after_start": 1572,
-          "before": "./SDD-0003-identity-authentication-and-authorization.md",
-          "after": "./sdd-0003-identity-authentication-and-authorization.md"
-        },
-        {
-          "before_start": 1786,
-          "after_start": 1786,
-          "before": "./SDD-0004-storage-domain-and-data-lifecycle.md",
-          "after": "./sdd-0004-storage-domain-and-data-lifecycle.md"
-        },
-        {
-          "before_start": 1984,
-          "after_start": 1984,
-          "before": "./SDD-0005-upload-and-transfer-protocols.md",
-          "after": "./sdd-0005-upload-and-transfer-protocols.md"
-        },
-        {
-          "before_start": 2166,
-          "after_start": 2166,
-          "before": "./SDD-0006-sharing-and-permissions.md",
-          "after": "./sdd-0006-sharing-and-permissions.md"
-        },
-        {
-          "before_start": 2352,
-          "after_start": 2352,
-          "before": "./SDD-0007-version-history-and-recovery.md",
-          "after": "./sdd-0007-version-history-and-recovery.md"
-        },
-        {
-          "before_start": 2537,
-          "after_start": 2537,
-          "before": "./SDD-0008-device-sync-and-conflicts.md",
-          "after": "./sdd-0008-device-sync-and-conflicts.md"
-        },
-        {
-          "before_start": 2715,
-          "after_start": 2715,
-          "before": "./SDD-0009-real-time-collaboration.md",
-          "after": "./sdd-0009-real-time-collaboration.md"
-        },
-        {
-          "before_start": 2876,
-          "after_start": 2876,
-          "before": "./SDD-0010-federation-and-trust.md",
-          "after": "./sdd-0010-federation-and-trust.md"
-        },
-        {
-          "before_start": 3088,
-          "after_start": 3088,
-          "before": "./SDD-0011-plugin-runtime-and-extensibility.md",
-          "after": "./sdd-0011-plugin-runtime-and-extensibility.md"
-        },
-        {
-          "before_start": 3262,
-          "after_start": 3262,
-          "before": "./SDD-0012-metadata-search-and-ai.md",
-          "after": "./sdd-0012-metadata-search-and-ai.md"
-        },
-        {
-          "before_start": 3467,
-          "after_start": 3467,
-          "before": "./SDD-0013-frontend-kmp-and-platform-architecture.md",
-          "after": "./sdd-0013-frontend-kmp-and-platform-architecture.md"
-        },
-        {
-          "before_start": 3678,
-          "after_start": 3678,
-          "before": "./SDD-0014-deployment-operations-and-release.md",
-          "after": "./sdd-0014-deployment-operations-and-release.md"
-        },
-        {
-          "before_start": 3875,
-          "after_start": 3875,
-          "before": "./SDD-0015-security-privacy-and-threat-model.md",
-          "after": "./sdd-0015-security-privacy-and-threat-model.md"
-        },
-        {
-          "before_start": 4794,
-          "after_start": 4794,
-          "before": "./SDD-0000-architecture-quality-and-product-contract.md",
-          "after": "./sdd-0000-architecture-quality-and-product-contract.md"
-        },
-        {
-          "before_start": 4894,
-          "after_start": 4894,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 6751,
-          "after_start": 6752,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 7621,
-          "after_start": 7623,
-          "before": "./SDD-0001-standalone-projects-and-clean-architecture.md",
-          "after": "./sdd-0001-standalone-projects-and-clean-architecture.md"
-        },
-        {
-          "before_start": 10309,
-          "after_start": 10311,
-          "before": "./SDD-0002-public-api-and-protocol-contract.md",
-          "after": "./sdd-0002-public-api-and-protocol-contract.md"
-        },
-        {
-          "before_start": 14359,
-          "after_start": 14361,
-          "before": "./SDD-0003-identity-authentication-and-authorization.md",
-          "after": "./sdd-0003-identity-authentication-and-authorization.md"
-        },
-        {
-          "before_start": 16507,
-          "after_start": 16509,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 17708,
-          "after_start": 17711,
-          "before": "./SDD-0004-storage-domain-and-data-lifecycle.md",
-          "after": "./sdd-0004-storage-domain-and-data-lifecycle.md"
-        },
-        {
-          "before_start": 21788,
-          "after_start": 21791,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 22578,
-          "after_start": 22582,
-          "before": "./SDD-0005-upload-and-transfer-protocols.md",
-          "after": "./sdd-0005-upload-and-transfer-protocols.md"
-        },
-        {
-          "before_start": 25957,
-          "after_start": 25961,
-          "before": "./SDD-0006-sharing-and-permissions.md",
-          "after": "./sdd-0006-sharing-and-permissions.md"
-        },
-        {
-          "before_start": 29377,
-          "after_start": 29381,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 30304,
-          "after_start": 30309,
-          "before": "./SDD-0007-version-history-and-recovery.md",
-          "after": "./sdd-0007-version-history-and-recovery.md"
-        },
-        {
-          "before_start": 32825,
-          "after_start": 32830,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 33776,
-          "after_start": 33782,
-          "before": "./SDD-0008-device-sync-and-conflicts.md",
-          "after": "./sdd-0008-device-sync-and-conflicts.md"
-        },
-        {
-          "before_start": 35780,
-          "after_start": 35786,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 36748,
-          "after_start": 36755,
-          "before": "./SDD-0009-real-time-collaboration.md",
-          "after": "./sdd-0009-real-time-collaboration.md"
-        },
-        {
-          "before_start": 40816,
-          "after_start": 40823,
-          "before": "./SDD-0010-federation-and-trust.md",
-          "after": "./sdd-0010-federation-and-trust.md"
-        },
-        {
-          "before_start": 43077,
-          "after_start": 43084,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 43910,
-          "after_start": 43918,
-          "before": "./SDD-0011-plugin-runtime-and-extensibility.md",
-          "after": "./sdd-0011-plugin-runtime-and-extensibility.md"
-        },
-        {
-          "before_start": 47397,
-          "after_start": 47405,
-          "before": "./SDD-0012-metadata-search-and-ai.md",
-          "after": "./sdd-0012-metadata-search-and-ai.md"
-        },
-        {
-          "before_start": 51362,
-          "after_start": 51370,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 52354,
-          "after_start": 52363,
-          "before": "./SDD-0013-frontend-kmp-and-platform-architecture.md",
-          "after": "./sdd-0013-frontend-kmp-and-platform-architecture.md"
-        },
-        {
-          "before_start": 54679,
-          "after_start": 54688,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 55652,
-          "after_start": 55662,
-          "before": "./SDD-0014-deployment-operations-and-release.md",
-          "after": "./sdd-0014-deployment-operations-and-release.md"
-        },
-        {
-          "before_start": 58114,
-          "after_start": 58124,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        },
-        {
-          "before_start": 59102,
-          "after_start": 59113,
-          "before": "./SDD-0015-security-privacy-and-threat-model.md",
-          "after": "./sdd-0015-security-privacy-and-threat-model.md"
-        },
-        {
-          "before_start": 61378,
-          "after_start": 61389,
-          "before": "./discovery/2026-10-29/README.md",
-          "after": "./product-discovery-2026-10-29.md"
-        }
-      ]
-    },
-    {
       "path": "specs/README.md",
       "source_git_blob": "d870d49265e3e9ccff54023de61a890fcb62fd3d",
       "edits": [
@@ -2052,5 +1782,267 @@
   "historical_source_receipts_unchanged": [
     "docs/development/verification/sdd-consumer-adoption-145-preservation.json",
     "scripts/ci/reviewed_nonsecrets.json"
-  ]
+  ],
+  "generated_catalog_view": {
+    "path": "specs/CATALOG.md",
+    "source_git_blob": "7ca9bedfa485f57e8054b8dbdab606f8391dab2e",
+    "operation": "Regenerate using the unchanged renderer and mapped catalog; rollback regenerates from catalog_before."
+  },
+  "scoped_verification": {
+    "captured_at": "2026-10-30T19:06:38.470567+00:00",
+    "focused_controls": {
+      "executed": 63,
+      "original_controls_retained": 44,
+      "additional_controls": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "production_tooling_coverage": {
+      "files": {
+        "scripts/specification_catalog.py": {
+          "covered_lines": 165,
+          "num_statements": 167,
+          "percent_covered": 98.1549815498155,
+          "percent_covered_display": "98",
+          "missing_lines": 2,
+          "excluded_lines": 0,
+          "percent_statements_covered": 98.80239520958084,
+          "percent_statements_covered_display": "99",
+          "num_branches": 104,
+          "num_partial_branches": 3,
+          "covered_branches": 101,
+          "missing_branches": 3,
+          "percent_branches_covered": 97.11538461538461,
+          "percent_branches_covered_display": "97"
+        },
+        "scripts/specification_catalog_render.py": {
+          "covered_lines": 25,
+          "num_statements": 25,
+          "percent_covered": 100.0,
+          "percent_covered_display": "100",
+          "missing_lines": 0,
+          "excluded_lines": 0,
+          "percent_statements_covered": 100.0,
+          "percent_statements_covered_display": "100",
+          "num_branches": 8,
+          "num_partial_branches": 0,
+          "covered_branches": 8,
+          "missing_branches": 0,
+          "percent_branches_covered": 100.0,
+          "percent_branches_covered_display": "100"
+        },
+        "scripts/validate-specification-catalog.py": {
+          "covered_lines": 35,
+          "num_statements": 35,
+          "percent_covered": 97.87234042553192,
+          "percent_covered_display": "98",
+          "missing_lines": 0,
+          "excluded_lines": 0,
+          "percent_statements_covered": 100.0,
+          "percent_statements_covered_display": "100",
+          "num_branches": 12,
+          "num_partial_branches": 1,
+          "covered_branches": 11,
+          "missing_branches": 1,
+          "percent_branches_covered": 91.66666666666667,
+          "percent_branches_covered_display": "92"
+        }
+      },
+      "totals": {
+        "covered_lines": 225,
+        "num_statements": 227,
+        "percent_covered": 98.2905982905983,
+        "percent_covered_display": "98",
+        "missing_lines": 2,
+        "excluded_lines": 0,
+        "percent_statements_covered": 99.11894273127753,
+        "percent_statements_covered_display": "99",
+        "num_branches": 124,
+        "num_partial_branches": 4,
+        "covered_branches": 120,
+        "missing_branches": 4,
+        "percent_branches_covered": 96.7741935483871,
+        "percent_branches_covered_display": "97"
+      },
+      "source_files_sha256": {
+        "scripts/specification_catalog.py": "f05d44be6780be014179bc0a736b00306074942f1d4b91caa535b871c2a14b86",
+        "scripts/specification_catalog_render.py": "a0994b0aa7562985a77144e6c168e37f3711206853fed7dc65b2a36954213735",
+        "scripts/validate-specification-catalog.py": "75e1aabfa04cb67c30135d1ecdc1c5a9e1304491394fa0e48c0c88e89556a11f"
+      },
+      "scope": "Three production tooling modules including real CLI subprocesses; test helpers and product coverage remain separate."
+    },
+    "installed_sdk_workspace_reader": {
+      "runtime_version": "3.10.6",
+      "runtime_ref": "f5e5a4cf9a80248994469cd88ad55eecab5b95ca",
+      "bundle_sha256": "5a7503e3abcab5ad748c13f20f6168d3dca325170bb85ab4904fe3655ff27cdf",
+      "reader_source_commit": "b2199edacbfa4c93fa60ae68c7dba6beebc97bc9",
+      "owners": [
+        {
+          "capability": "architecture-quality-and-product-contract",
+          "path": "specs/sdd-0000-architecture-quality-and-product-contract.md",
+          "status": "read",
+          "bytes": 36600,
+          "git_blob": "8e4b2439b62d153711bb4853db0e0d72533ce960"
+        },
+        {
+          "capability": "architecture-quality-and-product-contract",
+          "path": "specs/product-discovery-2026-10-29.md",
+          "status": "read",
+          "bytes": 8952,
+          "git_blob": "0bd0dc68ebf00f4b13c52f1e8d6acf9281d6d3f1"
+        },
+        {
+          "capability": "standalone-projects-and-clean-architecture",
+          "path": "specs/sdd-0001-standalone-projects-and-clean-architecture.md",
+          "status": "read",
+          "bytes": 21111,
+          "git_blob": "c6839a475252043e94b19c2a0799cefb47e71292"
+        },
+        {
+          "capability": "public-api-and-protocol-contract",
+          "path": "specs/sdd-0002-public-api-and-protocol-contract.md",
+          "status": "read",
+          "bytes": 38371,
+          "git_blob": "4e05e8c781bde69a490e60a2ae1168ba04077a76"
+        },
+        {
+          "capability": "identity-authentication-and-authorization",
+          "path": "specs/sdd-0003-identity-authentication-and-authorization.md",
+          "status": "read",
+          "bytes": 31672,
+          "git_blob": "1f8e16b25dd6902d8d63d9811d952b83f413d0b5"
+        },
+        {
+          "capability": "storage-domain-and-data-lifecycle",
+          "path": "specs/sdd-0004-storage-domain-and-data-lifecycle.md",
+          "status": "read",
+          "bytes": 43315,
+          "git_blob": "d19caad06a5be2d0d05b02582ae7928fe5829e67"
+        },
+        {
+          "capability": "upload-and-transfer-protocols",
+          "path": "specs/sdd-0005-upload-and-transfer-protocols.md",
+          "status": "read",
+          "bytes": 26706,
+          "git_blob": "048755550895f7641ff9b1a62543049c000e099d"
+        },
+        {
+          "capability": "sharing-and-permissions",
+          "path": "specs/sdd-0006-sharing-and-permissions.md",
+          "status": "read",
+          "bytes": 37130,
+          "git_blob": "999c88aa60c0bd1d1eacd91705ed2d80e9571302"
+        },
+        {
+          "capability": "version-history-and-recovery",
+          "path": "specs/sdd-0007-version-history-and-recovery.md",
+          "status": "read",
+          "bytes": 31260,
+          "git_blob": "3eb1b9bf9536301223ecc8a5a31b790be72eb8c7"
+        },
+        {
+          "capability": "device-sync-and-conflicts",
+          "path": "specs/sdd-0008-device-sync-and-conflicts.md",
+          "status": "read",
+          "bytes": 23352,
+          "git_blob": "c896463a71c73fb5557cf7aed5b241b72cc0dcf7"
+        },
+        {
+          "capability": "real-time-collaboration",
+          "path": "specs/sdd-0009-real-time-collaboration.md",
+          "status": "read",
+          "bytes": 36304,
+          "git_blob": "1137fed2a8de1e43dde74828c7d5192e01c769c5"
+        },
+        {
+          "capability": "federation-and-trust",
+          "path": "specs/sdd-0010-federation-and-trust.md",
+          "status": "read",
+          "bytes": 20345,
+          "git_blob": "3d273328d3873181c18bba7c8cc62e8c7deb6526"
+        },
+        {
+          "capability": "plugin-runtime-and-extensibility",
+          "path": "specs/sdd-0011-plugin-runtime-and-extensibility.md",
+          "status": "read",
+          "bytes": 18238,
+          "git_blob": "1b61c0d945287ae67c79112b2e2827da1ed79de4"
+        },
+        {
+          "capability": "metadata-search-and-ai",
+          "path": "specs/sdd-0012-metadata-search-and-ai.md",
+          "status": "read",
+          "bytes": 23542,
+          "git_blob": "4353ea5f2f1e46e497ed8ff9a127ad86e1dd99d9"
+        },
+        {
+          "capability": "frontend-kmp-and-platform-architecture",
+          "path": "specs/sdd-0013-frontend-kmp-and-platform-architecture.md",
+          "status": "read",
+          "bytes": 66814,
+          "git_blob": "1ed31de64a2c1a47634c10c81268f74617c7e092"
+        },
+        {
+          "capability": "deployment-operations-and-release",
+          "path": "specs/sdd-0014-deployment-operations-and-release.md",
+          "status": "read",
+          "bytes": 63422,
+          "git_blob": "0cdf9c072bb00a166d864ed5255c7003022e93ae"
+        },
+        {
+          "capability": "security-privacy-and-threat-model",
+          "path": "specs/sdd-0015-security-privacy-and-threat-model.md",
+          "status": "read",
+          "bytes": 23979,
+          "git_blob": "e45018affc1c0a65dddf83b493257c506cac3d82"
+        }
+      ],
+      "negative_controls": [
+        {
+          "path": "specs/SDD-fixture.md",
+          "rejected": true
+        },
+        {
+          "path": "specs/nested/fixture.md",
+          "rejected": true
+        },
+        {
+          "path": "../outside.md",
+          "rejected": true
+        },
+        {
+          "path": "specs/_template.md",
+          "rejected": true
+        },
+        {
+          "path": "specs/CATALOG.md",
+          "rejected": true
+        }
+      ],
+      "modules": {
+        "16535": "e2ede958c575839623e6d7145b94bd80498c7ba966c5db45da796033ae3a2a31",
+        "27910": "3ca1bcbf3fb139425aa45b6fe5e9393351308e65832668ecb303ac1553d8c9e2",
+        "29617": "8a87cb252d42d9f4e3d99eecdb889521fad4709e060e423d65c01de2d1cef113",
+        "34211": "7a5a3c8e3af39940b58030df6282b9b3f12b2a6c2f07099e56391ac7e00320cb",
+        "34730": "23f717b1c6bd8a7d226f3380050d4458b698b2d68e83c4cb8f9bf90f74d8ba41",
+        "35849": "cb27934b5df23818ea2a329eed1e2d18f67cb38a3580ff5ef8de75dab41388c2",
+        "39764": "40b989fefdf6c806d02ff8833bd2ff61a7ab80b89b511f1b2eac7f472efc97f5",
+        "66014": "09a92d9a39bff24bc418df2f2fb4f420b5c9cadd43d7a69c37ea3653eaf2fc12",
+        "95312": "f3bf7360ad07549a0b1c8ef74d6a0b223b3e251c9a38a5998b24b6e1423642f0"
+      },
+      "cli_entrypoint_executed": false,
+      "sdk_files_modified": false,
+      "scope": "Actual unchanged published SDK workspace reader against immutable Git objects, plus path-denial controls. No model/provider, draft publication or product runtime acceptance claim."
+    },
+    "preservation": {
+      "original_owner_files_reconstructed": 17,
+      "literal_markdown_files_reconstructed": 13,
+      "generated_view_original_and_candidate_reproduced": true,
+      "original_catalog_anchored_to_git_source": true,
+      "historical_receipts_answers_and_reviewed_nonsecret_coordinates_unchanged": true
+    },
+    "limits": "Original contributor-command and native CI artifacts are separate source-bound evidence. Scoped reader/tooling results do not establish model drafting, native publication, filename-search correctness or whole-portfolio readiness.",
+    "additive_preservation": "Existing metadata, evidence, original relative order and primary ownership remain required. Supported additive evidence, companions and distinct future capabilities still require normal catalog validation. Exact equality of this migration is independently checked against the immutable original Git catalog plus the reviewed path map and two documentation entries."
+  }
 }

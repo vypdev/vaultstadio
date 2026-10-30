@@ -14,7 +14,7 @@ REPO = SCRIPTS.parent
 sys.path.insert(0, str(SCRIPTS))
 from specification_catalog import read_catalog, validate_catalog
 from specification_catalog_render import render_catalog
-from sdd_path_preservation import load_migration, original_owner_bytes, remap_catalog
+from sdd_path_preservation import load_migration, original_owner_bytes, preserved_sequence, remap_catalog
 
 
 class CatalogControls(unittest.TestCase):
@@ -299,10 +299,13 @@ class ActualMigrationPreservation(unittest.TestCase):
         migration = load_migration(REPO)
         self.assertEqual({k:v for k,v in before.items() if k!='capabilities'},
                          {k:v for k,v in after.items() if k!='capabilities'})
-        self.assertEqual(16, len(after['capabilities']))
-        for old, new in zip(before['capabilities'], after['capabilities']):
-            for key in ['id', 'title', 'scope', 'owner', 'evidence', 'openDecisions']:
+        self.assertGreaterEqual(len(after['capabilities']), 16)
+        after_by_id = {item['id']: item for item in after['capabilities']}
+        for old in before['capabilities']:
+            new = after_by_id[old['id']]
+            for key in ['id', 'title', 'scope', 'owner', 'openDecisions']:
                 self.assertEqual(remap_catalog(old[key], migration), new[key])
+            self.assertTrue(preserved_sequence(remap_catalog(old['evidence'], migration), new['evidence']))
             self.assertEqual(remap_catalog(old['specs'][0], migration), new['specs'][0])
             self.assertEqual({'status':old['status'],'lastVerified':old['lastVerified']}, new['legacyVerification'])
             self.assertEqual({'Proposed':'proposed','As-built baseline':'as-built-baseline'}[old['status']], new['status'])
