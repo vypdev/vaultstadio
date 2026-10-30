@@ -54,7 +54,7 @@
         "requiredFields": [
           "Description",
           "Reproducing the issue",
-          "copilot Version"
+          "VaultStadio Version"
         ],
         "workflow": null
       },
