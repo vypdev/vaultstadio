@@ -653,7 +653,8 @@
       "owner": "VaultStadio maintainers",
       "lastVerified": "2026-10-30",
       "specs": [
-        "specs/sdd-0012-metadata-search-and-ai.md"
+        "specs/sdd-0012-metadata-search-and-ai.md",
+        "specs/filename-search-and-suggestions.md"
       ],
       "evidence": [
         "backend/domain/metadata",
