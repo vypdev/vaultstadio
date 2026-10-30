@@ -345,6 +345,7 @@ jobs:
           python3 scripts/check-frontend-accessibility.py
           python3 scripts/check-frontend-wasm-mime.py
           python3 scripts/validate-specification-catalog.py
+          python3 -m unittest discover -s scripts/tests -p 'test_specification_catalog.py' -v
           bash scripts/check-no-fqn.sh
           python3 -m unittest discover -s scripts/tests -p 'test_frontend_accessibility_inventory.py' -v
           python3 -m unittest discover -s scripts/tests -p 'test_test_browser_bootstrap.py' -v

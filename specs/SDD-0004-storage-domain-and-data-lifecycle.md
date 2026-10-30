@@ -445,3 +445,49 @@ The pre-code selection contract is implemented and locally verified at1499c6b. S
 Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining the production implementation. Current local inventory3249backend+1324desktop+1200Wasm=5773, all0; see [actual dependency/SQL evidence](../docs/development/verification/STORAGE_SELECTION_91_REVIEW.md). The original5771-case source archive remains historical; fresh final-head CI/review/adoption are separate.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["User authenticates"]
+    S1["lists/creates/moves/uploads item"]
+    S2["metadata and bytes are persisted"]
+    S3["event/response reports durable state"]
+    S4["delete moves to trash or permanently removes according to policy"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+```
+
+Text equivalent: User authenticates -> lists/creates/moves/uploads item -> metadata and bytes are persisted -> event/response reports durable state -> delete moves to trash or permanently removes according to policy..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Saving file metadata and content under the owning account.
+- Action required: Inspect the retained item identity before retrying a failed mutation.
+- Blocked: Invalid ownership, path or quota prevents the mutation.
+- Partial: Metadata/content effects differ; retained state requires reconciliation.
+- Complete: The requested item mutation and its declared durable effects are confirmed.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Item/ownership policy | 8 |
+| Storage adapters | 8 |
+| Lifecycle operations | 8 |
+| Partial failure/cleanup | 4 |
+| **Total** | **28** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

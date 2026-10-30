@@ -407,3 +407,49 @@ Review supplement63e12a1 adds two actual PostgreSQL fault controls, retaining th
 ## Scoped local verification checkpoint — issue #116
 
 The fixed operator Web API origin, prefix-safe consumers and acknowledged public-link clipboard contract are implemented at `35ce407`. See the [executed report](../docs/development/verification/WEB_API_ORIGIN_116.md) and [38-family traceability](../docs/development/verification/api-origin-116-results.json): 3,397 backend + 1,729 desktop + 1,636 browser executions, zero failures/errors/skips, source-bound JVM coverage, real two-origin packaged transfers/public pages, clipboard-value comparison and invalid-config/no-API/reload recovery. Native mobile compilation and remaining platform/media/version/collaboration gaps are explicitly separated. Final-ref PR CI, Copilot review, protected adoption and master remain separate gates; this does not promote the whole capability status.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Client discovers contract"]
+    S1["authenticates"]
+    S2["calls bounded protocol surface"]
+    S3["receives stable response/error"]
+    S4["retries only when contract marks operation retryable"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+```
+
+Text equivalent: Client discovers contract -> authenticates -> calls bounded protocol surface -> receives stable response/error -> retries only when contract marks operation retryable..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: The bounded protocol request is being validated.
+- Action required: Authenticate or correct the rejected request using its documented error.
+- Blocked: The authenticated identity lacks the required resource grant.
+- Partial: Completed effects are identified; retry only the explicitly retryable remainder.
+- Complete: The authorized request completed within its documented protocol scope.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Protocol/authentication | 6 |
+| Schema/error contract | 6 |
+| Bounded selection | 6 |
+| Replay/permission boundaries | 6 |
+| **Total** | **24** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

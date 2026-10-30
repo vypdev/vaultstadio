@@ -1,0 +1,121 @@
+{
+  "verified_at": "2026-10-30T16:28:54.541970+00:00",
+  "baseline_source": "46225cd47b10d248277f41310575d32e78203ca8",
+  "consumer_profile": "sdk-v1",
+  "capabilities": 16,
+  "controls": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "scope": "Filesystem/CLI/catalog migration controls; separate from application test populations."
+  },
+  "coverage": {
+    "tool": "coverage.py 7.17.0",
+    "scope": "Three production Python catalog/renderer/CLI modules, including actual CLI subprocesses and the complete 16-capability inventory. No exclusions or threshold changes.",
+    "files": {
+      "scripts/specification_catalog.py": {
+        "covered_lines": 157,
+        "num_statements": 159,
+        "percent_covered": 98.84169884169884,
+        "percent_covered_display": "99",
+        "missing_lines": 2,
+        "excluded_lines": 0,
+        "percent_statements_covered": 98.74213836477988,
+        "percent_statements_covered_display": "99",
+        "num_branches": 100,
+        "num_partial_branches": 1,
+        "covered_branches": 99,
+        "missing_branches": 1,
+        "percent_branches_covered": 99.0,
+        "percent_branches_covered_display": "99"
+      },
+      "scripts/specification_catalog_render.py": {
+        "covered_lines": 25,
+        "num_statements": 25,
+        "percent_covered": 100.0,
+        "percent_covered_display": "100",
+        "missing_lines": 0,
+        "excluded_lines": 0,
+        "percent_statements_covered": 100.0,
+        "percent_statements_covered_display": "100",
+        "num_branches": 8,
+        "num_partial_branches": 0,
+        "covered_branches": 8,
+        "missing_branches": 0,
+        "percent_branches_covered": 100.0,
+        "percent_branches_covered_display": "100"
+      },
+      "scripts/validate-specification-catalog.py": {
+        "covered_lines": 35,
+        "num_statements": 35,
+        "percent_covered": 97.87234042553192,
+        "percent_covered_display": "98",
+        "missing_lines": 0,
+        "excluded_lines": 0,
+        "percent_statements_covered": 100.0,
+        "percent_statements_covered_display": "100",
+        "num_branches": 12,
+        "num_partial_branches": 1,
+        "covered_branches": 11,
+        "missing_branches": 1,
+        "percent_branches_covered": 91.66666666666667,
+        "percent_branches_covered_display": "92"
+      }
+    },
+    "totals": {
+      "covered_lines": 217,
+      "num_statements": 219,
+      "percent_covered": 98.82005899705015,
+      "percent_covered_display": "99",
+      "missing_lines": 2,
+      "excluded_lines": 0,
+      "percent_statements_covered": 99.08675799086758,
+      "percent_statements_covered_display": "99",
+      "num_branches": 120,
+      "num_partial_branches": 2,
+      "covered_branches": 118,
+      "missing_branches": 2,
+      "percent_branches_covered": 98.33333333333333,
+      "percent_branches_covered_display": "98"
+    }
+  },
+  "installed_sdk": {
+    "bundle_sha256": "5a7503e3abcab5ad748c13f20f6168d3dca325170bb85ab4904fe3655ff27cdf",
+    "modules": {
+      "29617": "8a87cb252d42d9f4e3d99eecdb889521fad4709e060e423d65c01de2d1cef113",
+      "66014": "09a92d9a39bff24bc418df2f2fb4f420b5c9cadd43d7a69c37ea3653eaf2fc12",
+      "95312": "f3bf7360ad07549a0b1c8ef74d6a0b223b3e251c9a38a5998b24b6e1423642f0",
+      "95990": "1f5147798f0dfce6fe35a345dba577d628b7aaf02225d70a8531f9821ff9ac3b"
+    },
+    "cli_entrypoint_executed": false,
+    "sdk_files_modified": false,
+    "supported_profile": "sdk-v1",
+    "capabilities": 16,
+    "catalog_errors": [],
+    "prerequisites_pass": true,
+    "original_catalog_rejection": "invalid-metadata",
+    "scope": "Compiled installed SDK compatibility, structural catalog and prerequisite policy only. No model, branch operation, provider, credentials or application runtime exercised."
+  },
+  "application_runtime_acceptance": "Not established by these migration controls. Complete configured verification and native PR CI remain separate.",
+  "source_files_sha256": {
+    "scripts/specification_catalog.py": "28bc48666457388539cc6a522f73cd6c18c0103872e1ac5ea6921f37b79eca73",
+    "scripts/specification_catalog_render.py": "a0994b0aa7562985a77144e6c168e37f3711206853fed7dc65b2a36954213735",
+    "scripts/validate-specification-catalog.py": "75e1aabfa04cb67c30135d1ecdc1c5a9e1304491394fa0e48c0c88e89556a11f",
+    "scripts/tests/test_specification_catalog.py": "b018a603524fe39c5acdac249b50ea27a936eff144e8803777a5a99643745d9d",
+    "specs/catalog.json": "46eae5e77eb806f505bfc554b0c8b67cc2c7962bfe78125e948c3ddba98a1dc4",
+    "specs/README.md": "4e2d8cbd558706ce93d51038f4cb4ea921c97ce12c0e56308a7336356d82e42d",
+    "specs/_template.md": "1db746e82285f4e7c73ca3b2cf2d24dd66b957795877041557efe5c0913c316b",
+    ".github/workflows/ci.yml": "969e63feeb4f74b7050bbeba34e01d2709c1fffbbd574b6be10e97ecc58a2f71"
+  },
+  "ci_contract": {
+    "workflow": ".github/workflows/ci.yml",
+    "parser": "PyYAML 6.0.3",
+    "job": "quality",
+    "added_command": "python3 -m unittest discover -s scripts/tests -p 'test_specification_catalog.py' -v",
+    "only_existing_run_scalar_changed": true,
+    "job_graph_triggers_permissions_and_cadence_preserved": true,
+    "action_refs_unchanged_and_major_tags": true,
+    "copilot_workflows_changed": false
+  }
+}

@@ -260,3 +260,47 @@ Freeze module inventory -> publish baseline -> add directed dependency validator
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Contributor selects backend or frontend root"]
+    S1["loads the matching wrapper and settings"]
+    S2["changes a capability layer"]
+    S3["runs focused and project-wide tests"]
+    S4["updates the owning SDD and docs"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+```
+
+Text equivalent: Contributor selects backend or frontend root -> loads the matching wrapper and settings -> changes a capability layer -> runs focused and project-wide tests -> updates the owning SDD and docs..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Checking the backend and frontend project boundaries.
+- Action required: Repair the reported dependency direction before merging.
+- Blocked: A forbidden import or retired project path prevents acceptance.
+- Partial: Static boundary checks passed; runtime startup remains separately verified.
+- Complete: The declared boundary checks and relevant suites passed for the recorded source.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Backend dependency/composition | 8 |
+| Frontend dependency/presentation | 8 |
+| **Total** | **16** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

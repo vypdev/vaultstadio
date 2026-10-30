@@ -310,3 +310,53 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - Related capability contracts are listed in `specs/catalog.json`.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Device registers"]
+    S1["pulls known changes"]
+    S2["pushes local changes"]
+    S3["server validates sequence"]
+    S4["applies or records conflict"]
+    S5["client resolves/retries"]
+    S6["state converges"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+```
+
+Text equivalent: Device registers -> pulls known changes -> pushes local changes -> server validates sequence -> applies or records conflict -> client resolves/retries -> state converges..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Synchronizing the registered device from its known cursor.
+- Action required: Resolve the reported conflict or follow the explicit resync path.
+- Blocked: A deactivated or foreign device cannot apply changes.
+- Partial: The acknowledged subset is retained; remaining changes are still pending.
+- Complete: The declared device/server revision has converged without omitted pending work.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Device authority | 6 |
+| Cursor/order/replay | 8 |
+| Conflict/resync | 8 |
+| Failure/limits/rendering | 8 |
+| **Total** | **30** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

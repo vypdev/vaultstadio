@@ -355,3 +355,50 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 R01c evidence: [collaboration verification](../docs/development/verification/COLLABORATION_AUTHORIZATION_89.md),485 new cases within the2740-case backend gate. Socket authorization also binds the expected item of an open connection. The client/editor journey remains#112; final-head CI/review/adoption are separate.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["User registers/logs in"]
+    S1["receives token pair"]
+    S2["calls protected capability"]
+    S3["token is validated"]
+    S4["authorization policy runs"]
+    S5["response is returned or access is denied"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+```
+
+Text equivalent: User registers/logs in -> receives token pair -> calls protected capability -> token is validated -> authorization policy runs -> response is returned or access is denied..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Validating the session before the protected request.
+- Action required: Sign in again after token expiry or revocation.
+- Blocked: The identity is authenticated but this resource operation is forbidden.
+- Partial: Authentication succeeded; the requested resource authority has not been established.
+- Complete: The credential and the operation-specific resource permission were accepted.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Credential validation | 8 |
+| Authorization/ownership | 8 |
+| Token lifecycle and failures | 8 |
+| **Total** | **24** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.
