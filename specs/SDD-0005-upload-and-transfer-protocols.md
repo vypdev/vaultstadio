@@ -321,3 +321,49 @@ Inventory transfer states -> define shared semantic contract -> test chunked/fol
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Client starts transfer"]
+    S1["sends parts/method requests"]
+    S2["server validates ownership and integrity"]
+    S3["server completes or retains explicit partial state"]
+    S4["client can retry, cancel, or inspect status"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+```
+
+Text equivalent: Client starts transfer -> sends parts/method requests -> server validates ownership and integrity -> server completes or retains explicit partial state -> client can retry, cancel, or inspect status..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Receiving and validating the transfer parts.
+- Action required: Resume or cancel the identified partial transfer under its original owner.
+- Blocked: Invalid integrity, authority or protocol input prevents completion.
+- Partial: Some parts are retained; a complete usable file has not been confirmed.
+- Complete: All declared transfer content is committed and its item identity is available.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Normal/chunk integrity | 10 |
+| Folder/WebDAV/S3 protocol | 8 |
+| Concurrency/expiry/retry | 6 |
+| Cancellation/cleanup | 6 |
+| **Total** | **30** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

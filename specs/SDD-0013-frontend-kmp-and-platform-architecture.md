@@ -549,3 +549,51 @@ Before implementing the review repair: the 100 KiB text display budget counts by
 Acceptance MUST exercise every split position of two-, three- and four-byte code points, complete boundary-aligned sequences, genuine encoded U+FFFD, malformed continuation/overlong/surrogate/out-of-range sequences and an incomplete source tail, on JVM and Wasm. Keep the original review finding and red/green execution evidence distinct from the initial acceptance checkpoint.
 
 Executed review checkpoint `398f72d`: 19 shared boundary cases (seven genuine pre-repair failures), 1,748 desktop + 1,655 browser executions with no failures/errors/skips, complete frontend coverage/gates, lint and repeated Android/iOS compilation pass. See the [review evidence](../docs/development/verification/WEB_API_ORIGIN_116_REVIEW.md). The actual final package retains prefixed API/clipboard/download behavior; the existing no-op preview action remains a separate gap. The initial 6,762-case CI is verified independently; final-ref CI/review/protected adoption are separate gates.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Platform entrypoint starts app"]
+    S1["root resolves navigation/session"]
+    S2["feature loads domain/data state"]
+    S3["user action invokes use case"]
+    S4["state renders loading/success/error"]
+    S5["navigation remains explicit"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+```
+
+Text equivalent: Platform entrypoint starts app -> root resolves navigation/session -> feature loads domain/data state -> user action invokes use case -> state renders loading/success/error -> navigation remains explicit..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Loading the selected feature in the current authenticated session.
+- Action required: Retry or sign in again using the visible bounded error action.
+- Blocked: Startup or feature failure retains the last safe navigation state.
+- Partial: One platform journey passed; other native entrypoints remain unverified.
+- Complete: The current feature result is rendered for its recorded runtime and platform scope.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Domain/data state | 8 |
+| Auth/navigation/adapters | 8 |
+| Feature/loading/error/partial | 8 |
+| Platform/accessibility | 6 |
+| **Total** | **30** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

@@ -485,3 +485,51 @@ paste into an owned visible control; never manufacture success by injecting clip
 ## Scoped local verification checkpoint — issue #116
 
 The fixed operator Web API origin, prefix-safe consumers and acknowledged public-link clipboard contract are implemented at `35ce407`. See the [executed report](../docs/development/verification/WEB_API_ORIGIN_116.md) and [38-family traceability](../docs/development/verification/api-origin-116-results.json): 3,397 backend + 1,729 desktop + 1,636 browser executions, zero failures/errors/skips, source-bound JVM coverage, real two-origin packaged transfers/public pages, clipboard-value comparison and invalid-config/no-API/reload recovery. Native mobile compilation and remaining platform/media/version/collaboration gaps are explicitly separated. Final-ref PR CI, Copilot review, protected adoption and master remain separate gates; this does not promote the whole capability status.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Owner selects item"]
+    S1["chooses recipient/permission/expiry"]
+    S2["share is created"]
+    S3["recipient discovers/uses it"]
+    S4["owner can change/revoke"]
+    S5["access reflects current state"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+```
+
+Text equivalent: Owner selects item -> chooses recipient/permission/expiry -> share is created -> recipient discovers/uses it -> owner can change/revoke -> access reflects current state..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Validating the requested recipient and share grant.
+- Action required: Ask the owner for a new grant after expiry or revocation.
+- Blocked: The share is invalid, expired, revoked or lacks this operation permission.
+- Partial: A share record exists; recipient use is not yet verified.
+- Complete: The current bounded grant permits this requested operation.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Permission/ownership matrix | 8 |
+| Public token lifecycle | 6 |
+| Revocation races | 4 |
+| Recipient/frontend contract | 6 |
+| **Total** | **24** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

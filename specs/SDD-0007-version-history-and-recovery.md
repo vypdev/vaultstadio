@@ -316,3 +316,51 @@ Cleanup-batch follow-up contract (before code): reference liveness must ignore e
 Final batch-aware local checkpoint:348 affected cases pass (197core,140API,11real SQL adapters), with unchanged inputs during the complete campaign; strict checks and packaging pass. Full module coverage is 272/272lines and90/90branches. The SQL inheritance claims are disproved by the actual resolved1.0.0 bytecode and executed fault/cancellation tests (upstream#736); no catch broadening is needed. Fresh remote CI/review of the published batch-aware candidate remains required.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["User opens history"]
+    S1["selects version/diff"]
+    S2["previews"]
+    S3["requests restore/delete"]
+    S4["authorization and retention policy validate"]
+    S5["new current state or bounded failure is reported"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+```
+
+Text equivalent: User opens history -> selects version/diff -> previews -> requests restore/delete -> authorization and retention policy validate -> new current state or bounded failure is reported..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Loading retained history or restoring the selected version.
+- Action required: Inspect the retained version and current state before a safe retry.
+- Blocked: The actor lacks history authority or the requested version cannot be used.
+- Partial: The operation retains explicit recovery state; historical bytes are not assumed restored.
+- Complete: Restored content is current only after its actual bytes and metadata are verified.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| History/order | 6 |
+| Restore/retention | 6 |
+| Authority/share boundary | 6 |
+| Failure/idempotency | 4 |
+| **Total** | **22** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

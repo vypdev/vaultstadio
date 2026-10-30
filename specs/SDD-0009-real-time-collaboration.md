@@ -331,3 +331,53 @@ The complete history follow-up reproduced one preexisting version-HTTP SQL-obser
 Source a29139c passes2740 complete backend executions, including485 new collected cases, with zero failures/errors/skips and strict changed-source quality. Actual since0/1/2/3 history fixtures,91 existing version-HTTP controls with fenced SQL, a full-read/minimal-projection observability control, and the indirect participant-call assertion pass. The prior2739-case run with fixture-log contamination is retained as failed evidence. Core collaboration remains382/395lines and183/207branches including unchanged OT; whole backend covers8065/16414lines and1560/5712branches with no exclusions.
 
 The exact packaged source completes35 fresh HTTP requests and nine native owner frames, foreign close1008, inclusive-history lookup, authenticated actor binding and actual owner comment lifecycle, preserving prior bytes and containers. The linked schemaVersion2 receipt and485-case inventory retain exact identities. [PR#113](https://github.com/vypdev/vaultstadio/pull/113) owns external final-head CI/review/adoption; the prior bfdfb95 remote CI5241all0 is historical. R14 remains#112.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["User opens document"]
+    S1["joins session"]
+    S2["receives snapshot/presence"]
+    S3["sends operation"]
+    S4["server validates/transforms/broadcasts"]
+    S5["clients converge"]
+    S6["disconnect/reconnect resumes or requires resync"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+```
+
+Text equivalent: User opens document -> joins session -> receives snapshot/presence -> sends operation -> server validates/transforms/broadcasts -> clients converge -> disconnect/reconnect resumes or requires resync..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Authorizing membership before joining the document session.
+- Action required: Reconnect or resynchronize using the retained document/session identity.
+- Blocked: A missing collaboration grant prevents joining or applying operations.
+- Partial: Presence or seeded session controls passed; canonical durable save remains separate.
+- Complete: The declared operation is accepted only for the recorded session and durable scope.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Membership/security | 8 |
+| Operation transform/order | 8 |
+| Disconnect/reconnect/resync | 8 |
+| Presence/comments/limits | 10 |
+| **Total** | **34** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.

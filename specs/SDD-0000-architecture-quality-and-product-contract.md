@@ -293,3 +293,121 @@ Discovery targets follow the dependency order and evidence gates in the [2026-10
 - Related capability contracts are listed in `specs/catalog.json`.
 
 Discovery provenance and ownership: [30 accepted decisions](discovery/2026-10-29/README.md), [verbatim answers](discovery/2026-10-29/answers.json), [issue #124](https://github.com/vypdev/vaultstadio/issues/124).
+
+## Consumer SDD publication migration — issue #145, 2026-10-30
+
+This appendix is the pre-implementation contract for the maintainer-authorized
+adoption of the supported Copilot SDD system. Every byte of the preceding
+historical contract is retained. The capability remains Proposed; this migration
+does not implement PD-001/PD-016 or certify any application journey.
+
+### Origin, authority and scope
+
+At develop `46225cd47b10d248277f41310575d32e78203ca8`, the native validator
+accepts 16 capabilities. Actual #82 run 41081742618 fails closed with
+`configuration.unsupported` / `invalid-metadata` before publishing an SDD or
+branch. Copilot's supported version-1 writer requires normalized inventory
+states, valid dates, typed regular-file evidence, unique ownership, and the
+standard/template prerequisites. Its complete validator also requires baseline
+overview diagrams, representative presentation states and tabulated budgets.
+
+The maintainer explicitly selected adoption on 2026-10-30. This changes the
+consumer standard, catalog, rendering and validation only. The ordinary
+Action-created documentation branch owns this prerequisite; #82 retains its
+pre-branch gate. SDK internals, generated Copilot guidance/workflows, credentials,
+protections, `VERIFICATION_SETUP=false`, unrelated worktrees and their dirty SDD
+drafts are outside this migration. The existing application CI contract step
+must execute the catalog regression controls explicitly; add only that command,
+preserving its job graph, triggers, cadence and major-tag Action references.
+
+### Requirements and observable acceptance
+
+| ID | Requirement | Acceptance/evidence target |
+|---|---|---|
+| SDD145-01 | The catalog MUST retain all 16 stable IDs, original titles/scopes/owners, primary SDDs, accepted decisions, open decisions and original flat evidence. | Compare decoded before/after inventories against the immutable source and preservation manifest. |
+| SDD145-02 | Inventory states MUST map Proposed → `proposed` and As-built baseline → `as-built-baseline`; no capability becomes implemented. Detailed document readiness remains separate. | Reject unsupported states; assert the original four/twelve distribution and no readiness promotion. |
+| SDD145-03 | Every original catalog verification value, including null, MUST remain explicit history. A newly inspected structural date MUST NOT be described as a runtime or implementation acceptance date. | Compare legacy metadata including nulls; review the generated view and migration explanation. |
+| SDD145-04 | Typed specs/workflows/entrypoints/code/tests/documentation MUST contain meaningful regular contained files in their declared roles. Existing directory evidence remains historical inventory, not a new file claim. | Reject missing, escaped, symlink, duplicate and wrong-boundary paths; inspect role assignments. |
+| SDD145-05 | The discovery index MUST be an explicitly identified companion of this governance capability. The 30 accepted requirement owners remain the existing primary SDDs. | Register every specification Markdown file once; preserve the discovery index/answers bytes and existing requirement links. |
+| SDD145-06 | Every original SDD MUST remain an unchanged byte prefix. Append-only baseline supplements restate the existing journey, presentation contract and numeric floor without lowering later scoped matrix budgets or inventing execution. | Verify prefix hashes; compare each repeated floor with original section 14; keep unknown/partial/failure receipts visible. |
+| SDD145-07 | The standard/template MUST satisfy the supported structural prerequisite checks while retaining VaultStadio's metadata, history and evidence distinctions. | Validate eight populated standard sections, twenty template sections, normative guidance and required headings. |
+| SDD145-08 | Default validation MUST be deterministic, offline and read-only. An explicit generation mode may change only `specs/CATALOG.md`. | Snapshot files before/after valid and invalid runs; reject stale generated output and prove generation idempotent. |
+| SDD145-09 | Consumer and unmodified SDK validation MUST both pass on the candidate. A green catalog MUST NOT imply that #82, native UI, external providers or all setup journeys work. | Retain exact policy provenance, candidate tree, original command output and limitations; re-enter #82 only after reviewed adoption. |
+
+The generated view must distinguish absence of prior verification metadata for a
+new capability from an explicitly preserved historical null. CI must collect the
+new catalog controls in its existing contract job; a local-only test file is not
+evidence that those controls execute on the final PR.
+
+PR #164 review identified an additional structural acceptance boundary: every
+required primary section 1–20 MUST contain visible content or an explicit
+not-applicable explanation. Metadata and empty headings alone cannot establish a
+valid primary contract. Preserve populated later historical sections (including
+SDD-0006's section 21) and appended revisions; fenced examples, comments and bare
+subheadings do not supply a missing section body. Verify empty-primary rejection,
+an explicit not-applicable explanation and retained historical appendices in the
+catalog filesystem/CLI controls before adoption.
+
+### Verification metadata and migration semantics
+
+`legacyVerification` preserves each capability's exact previous status and
+`lastVerified`, including the three null values. The original root checkpoint
+fields and flat evidence remain historical. In the adopted profile a capability's
+`lastVerified` is the date its declared structural evidence inventory was
+inspected. `structuralVerification` records the reviewed baseline and explicitly
+limited scope. Neither field refreshes runtime receipts, resolves open decisions,
+changes document readiness or supersedes the SDD's historical Last verified line.
+Future behavior changes must record their actual runtime source and evidence in
+the owning SDD; an automatic catalog refresh is insufficient.
+
+### Risk-derived migration test budget
+
+These are planned distinct validator/migration controls, separate from the
+application's 6800-test baseline and all existing product budgets.
+
+| Risk area | Minimum cases | Observable controls |
+|---|---:|---|
+| Metadata and ownership | 7 | Clean success; malformed JSON; malformed root; duplicate ID/title; duplicate SDD owner; unsupported status; impossible verification date |
+| File and publication boundaries | 6 | Missing file; directory in typed evidence; traversal; symlink; wrong workflow/spec boundary; unregistered specification |
+| Standard and generated view | 5 | Valid populated standard/template; missing/empty required section; missing normative guidance; stale generated view; deterministic generation |
+| Preservation and failure effects | 4 | Original nullable metadata retained; owner/decision/evidence inventory unchanged; original SDD prefix retained; default success/failure does not mutate inputs |
+| **Total** | **22** | Each collected behavior counts once; expand for additional branches |
+
+Traceability: SDD145-01/02/03/05/06 map to preservation controls and the migration
+report; SDD145-04 maps to real filesystem fixtures; SDD145-07 maps to structural
+document checks; SDD145-08 maps to CLI/generated-view controls; SDD145-09 maps to
+the independent unmodified SDK readback and PR evidence. The native historical
+twelve-case floor remains in §14; the twenty-two migration controls are additional
+scope, not a rewrite of previously executed product counts.
+
+### Sequence, recovery and remaining work
+
+Document this contract first, inspect/register typed evidence, append baseline
+format supplements, adopt the standard/template, implement focused consumer
+validation/rendering, run negative/preservation controls, then review the PR and
+same-source CI. Obtain any merge authorization separately. Reverting the focused
+consumer change restores the previous native format and its explicit #82 block;
+no user data migration or irreversible external effect occurs.
+
+The broader #145 environment/setup journeys remain separate acceptance work.
+Filename-search implementation starts only after #82's SDD and exact branch are
+published by the Action. The current compatibility failure and historical
+verification limits remain inspectable in the migration report and issue cards.
+
+### Exact public-checksum security review — PR #164
+
+Native security run 41093209961 flagged one `ProtocolsIO` candidate at commit
+`e81da9c26ba72274eee16b62b56b8af3ab7201b5`, line 469 of
+`docs/development/verification/sdd-consumer-adoption-145-preservation.json`.
+That field is the original SHA-256 of SDD-0005. Recomputing it from the immutable
+`46225cd47b10d248277f41310575d32e78203ca8` source blob matches the detected value;
+the value is used only to verify source preservation, not for authentication.
+
+Record this disclosed finding through the existing exact immutable-coordinate
+non-secret decision mechanism, bound to TruffleHog 3.99.7. Keep both scanners,
+complete history, offline execution and rejection of every unreviewed finding.
+No rule/path-wide exception or detector suppression is part of this review.
+The added security control MUST independently recompute the historical checksum
+and prove that changing commit, path or line does not inherit this decision.
+Its evidence target is `scripts/tests/test_secret_nonsecret_decisions.py` and
+the original native scan plus complete-source scanner readback.

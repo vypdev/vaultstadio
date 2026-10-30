@@ -246,3 +246,53 @@ Inventory plugin API -> define manifest/trust contract -> add lifecycle tests ->
 
 - Portfolio governance: `SDD-0000-architecture-quality-and-product-contract.md`.
 - Related capability contracts are listed in `specs/catalog.json`.
+
+## Supported publication-format supplement — #145, 2026-10-30
+
+This append-only supplement renders the existing §5 journey and §9 presentation
+contract. It preserves the preceding historical text, readiness, open decisions
+and verification receipts. The examples below are contract examples, not newly
+implemented screens or executed runtime acceptance.
+
+```mermaid
+flowchart LR
+    S0["Operator discovers plugin"]
+    S1["validates metadata/configuration"]
+    S2["enables"]
+    S3["plugin registers capabilities"]
+    S4["user invokes feature"]
+    S5["plugin succeeds/fails boundedly"]
+    S6["operator disables/upgrades/reconciles"]
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+```
+
+Text equivalent: Operator discovers plugin -> validates metadata/configuration -> enables -> plugin registers capabilities -> user invokes feature -> plugin succeeds/fails boundedly -> operator disables/upgrades/reconciles..
+
+Representative state content (apply the evidence limitations in §2 and §17):
+
+- Pending: Validating plugin metadata and configuration before enablement.
+- Action required: Inspect or disable the failed plugin before retrying its capability.
+- Blocked: An incompatible or unauthorized plugin cannot register active capability access.
+- Partial: The plugin is registered; its real packaged effects still require separate verification.
+- Complete: The explicitly tested plugin invocation completed within its declared capability boundary.
+
+The following allocation restates the original §14 base floor. Later scoped
+matrices, discovery families, concurrency controls and higher budgets in the
+preceding contract remain additional requirements; this table neither replaces
+them nor claims that these cases ran during the format migration.
+
+| Existing base risk area | Minimum distinct cases |
+|---|---:|
+| Manifest/configuration | 6 |
+| Enable/disable/lifecycle | 6 |
+| API/endpoint authority | 6 |
+| Failure/resource/recovery | 8 |
+| **Total** | **26** |
+
+Acceptance/traceability remains in §16–17. Actual implementation must reconcile
+those requirements and all later scoped matrices before claiming completeness.
