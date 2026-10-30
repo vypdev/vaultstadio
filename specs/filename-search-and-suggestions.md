@@ -8,7 +8,7 @@
 - Scope: Specify literal filename contains search, literal prefix suggestions, and client freshness for the existing metadata-search-and-ai capability.
 - Related issues/PRs: [Issue #82](https://github.com/vypdev/vaultstadio/issues/82); related owning API and storage contracts are SDD-0002 and SDD-0004; primary capability owner is `specs/sdd-0012-metadata-search-and-ai.md`.
 - Required review gates: product UX, architecture, testing, documentation, security/operations
-- Open decisions blocking readiness: none for this bounded contract. Implementation readiness still requires review of this Draft and Action verification of its exact linked managed branch.
+- Open decisions blocking readiness: none. The maintainer confirmed owner-wide scope on 2026-10-31 (Europe/Madrid). The Action published commit `0e465241997b72904ddcab51bead0754692d1b9c` and verified its exact linked branch; this pre-code review establishes no implementation acceptance.
 
 ## 1. Executive summary
 
@@ -41,7 +41,7 @@ People using Files cannot rely on nonempty search text to narrow results or sugg
 - Existing route test: `backend/api/src/test/kotlin/com/vaultstadio/api/routes/SearchRoutesTest.kt`.
 - Historical authenticated HTTP and real browser reproduction used isolated PostgreSQL 16 and synthetic owners/files. It is failed baseline evidence, not a passing regression test.
 - Maintainer-confirmed semantics are recorded in the issue input. No external source is needed to resolve the product contract.
-- Unknown: the implementation strategy for Unicode/accent matching and whether derived persisted keys are necessary. Decide during design without changing observable semantics. Any schema/key approach requires bounded concurrency-safe additive backfill and data-preserving rollback.
+- Selected design: read-time comparison under section 8.4, without persisted keys, schema migration, extension or new collation. The isolated pre-code feasibility query compared 11 synthetic Unicode strings with a Java 17 reference and inspected a 1,000-row PostgreSQL query plan. This is design evidence, not product acceptance or scale certification.
 
 ### 2.4 Retrospective classification (as-built baselines only)
 
@@ -95,6 +95,16 @@ Not applicable: this is a prospective companion, not a reconstruction of an impl
 | FNS82-R32 | Visible search against isolated real fixtures demonstrates corrected matching and retains original failing/corrected evidence. |
 | FNS82-R33 | Visible clear and navigation during delayed responses retain the actual resulting folder and filenames. |
 | FNS82-R34 | After success, denial, and failure, original IDs, metadata, and bytes remain unchanged. |
+| FNS82-R35 | Search and suggestions include matching root/nested items regardless of the open client folder. |
+| FNS82-R36 | Matching folders and files are both returned; item type is not silently restricted. |
+| FNS82-R37 | Nonblank normalized-empty inputs fail as INVALID_QUERY without broadening results; raw-blank POST compatibility remains. |
+| FNS82-R38 | Actual SQL agrees with the pure policy for ASCII/non-Latin case pairs, supplementary scalars, combining clusters and literal punctuation. |
+| FNS82-R39 | An old folder/list-page completion cannot replace a newer active global search result. |
+| FNS82-R40 | Dismissing suggestions during a delayed prefix request prevents its completion reopening the dropdown. |
+| FNS82-R41 | Use the actual visible Close clear control during a held response and verify restored folder/names after release. |
+| FNS82-R42 | A current suggestions failure is visible with successful search results retained and recovers without stale errors replacing success. |
+| FNS82-R43 | Executable import/contract checks enforce inward policy dependencies, semantic suggestion delegation and isolated client request ownership. |
+| FNS82-R44 | Commit insert/rename/trash between count/page observations: the response keeps one snapshot and the next search observes committed changes. |
 
 Non-goals: content/OCR/AI search, filename-creation rule changes, merging duplicate names, renaming, byte transformation, or a duplicate capability. Invariants: owner and non-trash predicates cannot be weakened; literal matching cannot be caller-controlled SQL; no stale request may mutate current visible state.
 
@@ -103,7 +113,7 @@ Non-goals: content/OCR/AI search, filename-creation rule changes, merging duplic
 | Stage | Current | Proposed | User/operator effect |
 |---|---|---|---|
 | Enter text | Field accepts text | Query is validated under existing route contract and sent | Search means filename matching, not broad listing |
-| Server selection | `searchQuery` is dropped | Literal match predicate is applied with owner/non-trash/folder scope | Only eligible matches count |
+| Server selection | `searchQuery` is dropped | Literal match predicate is applied with owner/non-trash global scope | Only eligible matches count |
 | Page and suggestions | Generic list reused | Stable paged contains results and distinct prefix suggestions | Predictable results and limits |
 | Clear or navigate | Older response can replace state | Screen generation/state check rejects obsolete completion | Folder/list remains authoritative |
 | Failure | May resemble empty success | Current failure is visible; stale failure is ignored | User can retry with retained state |
@@ -125,9 +135,9 @@ Text equivalent: enter text or choose a suggestion -> authenticated server filte
 
 ### 6.1 Happy path
 
-1. Files sends query and current folder context through the existing authenticated API.
+1. Files sends the literal query through the existing authenticated API. Search and suggestions cover all owner-owned, non-trashed files and folders across root/nested locations. No folder query parameter is added; the current folder is client freshness and clear/restoration context only.
 2. Application policy defines contains or prefix semantics and comparison normalization.
-3. Repository applies authorization, folder, non-trash, and literal matching predicates before count and pagination.
+3. Repository applies owner/non-trash and literal matching predicates before count and pagination, with no parent or item-type restriction. Count and page share one repeatable-read selection snapshot. Distinct suggestions use one SQL statement.
 4. API returns original names/IDs and truthful stable page metadata; suggestions are distinct original strings within the requested bound.
 5. ViewModel publishes only if request identity and folder/query state remain current.
 
@@ -187,15 +197,32 @@ flowchart LR
 
 - Pure policy receives literal query/name values and produces a deterministic match decision under the specified case/accent/ñ/canonical-equivalence rules.
 - Application contracts distinguish contains search from prefix suggestions and preserve typed unavailable/failure outcomes.
-- Semantic port requires owner, folder, and non-trash scope and applies matching before count/page. Adapter must not broaden the scope.
-- Database schema remains unchanged unless design proves derived keys necessary. Any such proposal requires additive bounded concurrency-safe backfill and data-preserving rollback before implementation.
+- Semantic ports require the actor owner and ordinary non-trash scope. Global search includes root/nested files and folders; parent-scoped folder listing remains separate. A dedicated distinct-name suggestion port applies prefix filtering and deduplication before its bounded SQL limit.
+- The selected read-time expression leaves database schema and stored names unchanged. No derived key, extension, backfill or collation installation is needed. Search count/items share a repeatable-read selection transaction; failures remain typed.
 - Client request identity includes operation kind, query/prefix, folder, and generation. A completion is publishable only if identity still equals active state. Cancellation cannot substitute for this test.
-- HTTP inputs are untrusted. Parameter binding and literal escaping prevent SQL pattern interpretation. Original stored names and file data remain authoritative.
+- Bind the normalized literal query and fixed comparison alphabet as values. Use strpos for contains and starts_with for prefix, never a caller-controlled LIKE or regular-expression pattern. Fixed mark-processing expressions are adapter encoding only; original names and bytes remain authoritative.
 - Provider/database errors map to typed failures; never collapse them to empty success.
 
 ### 8.3 Executable architecture constraints
 
-Add or extend checks so domain policy has no Ktor, Exposed, SQL, Compose, or platform dependencies; route code delegates to use cases; persistence filtering is applied before pagination; client freshness logic is independently testable; and module dependency/cycle checks pass. Contract tests assert owner/non-trash predicates and typed failure mapping. Any new production or test paths must be declared as planned in section 15 before creation.
+Add or extend checks so domain policy has no Ktor, Exposed, SQL, Compose or platform-UI dependencies (standard JVM Unicode primitives are permitted); route code delegates to use cases; persistence filtering is applied before pagination; client freshness logic is independently testable; and module dependency/cycle checks pass. Contract tests assert owner/non-trash predicates and typed failure mapping. Any new production or test paths must be declared as planned in section 15 before creation.
+
+
+### 8.4 Reviewed implementation decisions — 2026-10-31
+
+**Comparison:** the JVM domain uses standard Java 17 Unicode primitives without I/O, framework, SQL, transport or UI dependencies. Decompose canonically with NFD; use simple scalar case equivalence `lower(upper(codePoint))`, independent of process/UI/database locale; remove Unicode Mark-category scalars except a tilde in an n-cluster, which becomes ñ. Other accents in that cluster are ignored. This is canonical accent/case matching, not NFKD/compatibility transliteration. Preserve original names and identities.
+
+**SQL:** encode that fixed policy using PostgreSQL UTF8 `normalize(..., NFD)`, a domain-derived scalar translation alphabet, fixed n/tilde cluster handling and fixed mark removal. Regex stages use universal `COLLATE "C"` and never consume a user pattern. An optional ASCII fast path may use `lower(... COLLATE "C")` only when UTF8 byte length equals character length. Bind the pure-policy literal key into `strpos(foldedName, key) > 0` or `starts_with(foldedName, key)`. No ILIKE, locale-dependent Unicode lower, unaccent extension or new collation is required.
+
+**Selection:** search retains `filterByParent=false`, no item-type restriction, explicit actor ownership and `isTrashed=false`. Count/page use the identical predicate and a repeatable-read snapshot; preserve unique-ID tie ordering and Long arithmetic. Add a semantic `suggestNames(prefix, ownerId, limit)` repository port and service delegation. Its SQL selects distinct original names with owner/non-trash/prefix filtering before ORDER BY/LIMIT. The current folder does not narrow search or suggestions.
+
+**Empty boundaries:** preserve raw-blank GET `400` with `INVALID_QUERY` and compatible raw-blank POST listing. A nonblank query/prefix whose comparison key contains no significant scalar is invalid, never an all-name match; applicable routes return `400` with `INVALID_QUERY`. Validate selection first. Preserve the existing short-prefix decision on raw UTF16 length before normalization.
+
+**Client lifetimes:** a focused common-code coordinator owns separate query/suggestion jobs and identity tokens. Results, failures and finalizers may publish only for the current token. Starting search invalidates pending folder-list/page publication; clear, navigation and mode changes invalidate both search lanes before loading the intended folder. Dismissing suggestions invalidates its pending lane. Keyboard clear and the visible Close controls use the same authoritative transition. Current failures retain useful state; cancellation remains control flow. Refresh/mutation reloads during active search refresh that search. Folder paging is disabled while global results are displayed.
+
+**Feasibility limits:** the readonly probe used synthetic strings/generate_series, not production repository/route code or a scale workload. Eleven reference/SQL strings agreed. On that isolated runtime, 1,000 rows took about 192 ms with mark translation versus 90 ms with regex mark removal; select the latter and measure actual owner-filtered plans after implementation. Computed contains can scan an owner's eligible rows and establishes no M8 readiness. Keep existing offset/limit compatibility.
+
+Primary function semantics: [PostgreSQL 16 string functions](https://www.postgresql.org/docs/16/functions-string.html). Original feasibility receipts remain retained with task review evidence, separately from future product tests.
 
 ## 9. UI/UX and content contract
 
@@ -208,7 +235,7 @@ The Files view leads with current folder/search state, then results or suggestio
 ```markdown
 # Search files
 
-> **Current status:** Searching filenames for “informe” in Carpeta82.
+> **Current status:** Searching your files and folders for “informe”.
 > **Action required:** None.
 
 ## Results
@@ -267,7 +294,7 @@ User-facing error order: impact -> cause -> action -> retained state. Do not rep
 ## 11. Security, permissions, and privacy
 
 1. Authenticate before disclosure; enforce owner scope in the query and verify that colliding foreign-owner names never affect results, totals, or suggestions.
-2. Exclude trashed records under the existing ordinary-search policy. Do not let query text change authorization or folder scope.
+2. Exclude trashed records. Query text cannot change ownership, enable trash or restrict owner-wide search by the retained client folder context.
 3. Treat query, prefix, filenames, issue content, and response bodies as untrusted. Bind values and ensure SQL wildcard characters remain literal.
 4. Do not log credentials, session tokens, raw private filenames, or full response payloads. Use synthetic fixtures and sanitized correlation evidence.
 5. Search is read-only. Failed/denied requests do not mutate names, IDs, metadata, or bytes. Rate limits and auth policy remain those of existing endpoints.
@@ -282,20 +309,21 @@ User-facing error order: impact -> cause -> action -> retained state. Do not rep
 
 ## 13. Compatibility, migration, rollout, and rollback
 
-Existing GET blank-query and POST validation contracts, API pagination shape, owner/trash/folder scope, ordering conventions, and explicit unavailable content-search behavior remain compatible. No schema migration is assumed. If derived matching keys are selected, they require an additive schema change, bounded concurrency-safe backfill, dual-read/write compatibility plan, completion evidence, and rollback that preserves original data before implementation. Roll out server filtering and client freshness together behind the existing release process; no new flag is implied. Revert application changes if needed. Never delete original names, identities, or bytes. Verify actual packaged web/macOS UI and shared-client compatibility; Android/iOS device execution is not claimed by this spec.
+Existing GET blank-query and POST validation contracts, API pagination shape, owner-wide non-trash search and separate parent-scoped folder listing, ordering conventions, and explicit unavailable content-search behavior remain compatible. No schema migration, derived key or backfill is selected. Application rollback leaves original names, IDs, metadata, bytes and database structures intact. Roll out server filtering and client freshness together behind the existing release process; no new flag is implied. Revert application changes if needed. Never delete original names, identities, or bytes. Verify actual packaged web/macOS UI and shared-client compatibility; Android/iOS device execution is not claimed by this spec.
 
 ## 14. Testing strategy and numeric budget
 
-The scoped floor is 34 distinct cases from the retained risk inventory, counted once each. The primary SDD retains its independent 30-case portfolio floor and #91/#124 budgets; this companion does not replace them. Baseline probes are failed evidence, not passing cases. Cases below are planned and must be executed against real repository/database and route boundaries where specified, plus production client state and representative packaged UI. Repeated fixture variants or platform runs do not multiply the count.
+The scoped floor is 44 distinct cases: all original 34 scenarios plus 10 scope, boundary, snapshot, lifecycle and architecture risks. Each is counted once. The primary SDD retains its independent 30-case portfolio floor and #91/#124 budgets; this companion does not replace them. Baseline probes are failed evidence, not passing cases. Cases below are planned and must be executed against real repository/database and route boundaries where specified, plus production client state and representative packaged UI. Repeated fixture variants or platform runs do not multiply the count.
 
 | Area | Minimum distinct cases | Behaviors/risks covered |
 |---|---:|---|
 | Semantics | 6 | Observable scenarios in the case inventory. |
-| Persistence | 10 | Observable scenarios in the case inventory. |
-| HTTP | 7 | Observable scenarios in the case inventory. |
-| Client | 8 | Observable scenarios in the case inventory. |
-| Real acceptance | 3 | Observable scenarios in the case inventory. |
-| Total | 34 | Distinct inventory cases; repeated executions do not add cases. |
+| Persistence | 14 | Observable scenarios in the case inventory. |
+| HTTP | 8 | Observable scenarios in the case inventory. |
+| Client | 11 | Observable scenarios in the case inventory. |
+| Real acceptance | 4 | Observable scenarios in the case inventory. |
+| Architecture | 1 | Observable dependency/contract enforcement. |
+| Total | 44 | Distinct inventory cases; repeated executions do not add cases. |
 
 | Case ID | Area | Requirements | Scenario |
 |---|---|---|---|
@@ -333,8 +361,18 @@ The scoped floor is 34 distinct cases from the retained risk inventory, counted 
 | filename82-C32 | Real acceptance | FNS82-R32 | Packaged web or macOS UI searches isolated owned/foreign/trash fixtures; retain failed baseline and corrected visible/API results. |
 | filename82-C33 | Real acceptance | FNS82-R33 | In actual app, clear and navigate during held response; verify final folder and filenames after release. |
 | filename82-C34 | Real acceptance | FNS82-R34 | After success, denial, and failure, compare fixture IDs, metadata, and bytes for exact preservation. |
+| filename82-C35 | Persistence | FNS82-R35 | Search and suggestions include matching root/nested items regardless of the open client folder. |
+| filename82-C36 | Persistence | FNS82-R36 | Matching folders and files are both returned; item type is not silently restricted. |
+| filename82-C37 | HTTP | FNS82-R37 | Nonblank normalized-empty inputs fail as INVALID_QUERY without broadening results; raw-blank POST compatibility remains. |
+| filename82-C38 | Persistence | FNS82-R38 | Actual SQL agrees with the pure policy for ASCII/non-Latin case pairs, supplementary scalars, combining clusters and literal punctuation. |
+| filename82-C39 | Client | FNS82-R39 | An old folder/list-page completion cannot replace a newer active global search result. |
+| filename82-C40 | Client | FNS82-R40 | Dismissing suggestions during a delayed prefix request prevents its completion reopening the dropdown. |
+| filename82-C41 | Real acceptance | FNS82-R41 | Use the actual visible Close clear control during a held response and verify restored folder/names after release. |
+| filename82-C42 | Client | FNS82-R42 | A current suggestions failure is visible with successful search results retained and recovers without stale errors replacing success. |
+| filename82-C43 | Architecture | FNS82-R43 | Executable import/contract checks enforce inward policy dependencies, semantic suggestion delegation and isolated client request ownership. |
+| filename82-C44 | Persistence | FNS82-R44 | Commit insert/rename/trash between count/page observations: the response keeps one snapshot and the next search observes committed changes. |
 
-Coverage requirements: retain repository-wide thresholds; changed modules meet or exceed existing thresholds, and new pure policy achieves at least 90% branch coverage. Use table-driven distinct semantic cases, deterministic deferred responses rather than real waits, a real isolated database for SQL filtering/count/page, HTTP contract tests for routes/auth/failures, and semantic UI assertions alongside any golden rendering. Manual UX evidence must show a representative actual packaged application, keyboard clear/suggestion use, readable empty/error states, and delayed-response recovery. Record source revision, executed case IDs, numerator and full denominator, coverage report, and unexecuted platform limits in `docs/development/verification/FILENAME_SEARCH_82.md`. Do not claim planned cases or paths already exist.
+Coverage requirements: retain repository-wide thresholds; preserve all existing gates and full canonical production denominators. Enforce new scoped populations with no exclusions: pure filename policy/alphabet: 100% lines/at least 95% branches; filename SQL/suggestion adapter at least 95% lines/90% branches; common client search coordinator at least 95% lines/95% branches. Branch-free code has no fabricated percentage. Also report complete changed ViewModel/service/route denominators. Run a source-bound scoped coverage checker locally and in CI after canonical reports. Use table-driven distinct semantic cases, deterministic deferred responses rather than real waits, a real isolated database for SQL filtering/count/page, HTTP contract tests for routes/auth/failures, and semantic UI assertions alongside any golden rendering. Manual UX evidence must show a representative actual packaged application, keyboard clear/suggestion use, readable empty/error states, and delayed-response recovery. Record source revision, executed case IDs, numerator and full denominator, coverage report, and unexecuted platform limits in `docs/development/verification/FILENAME_SEARCH_82.md`. Do not claim planned cases or paths already exist.
 
 ## 15. Documentation and discoverability
 
@@ -342,17 +380,42 @@ Coverage requirements: retain repository-wide thresholds; changed modules meet o
 |---|---|
 | `specs/filename-search-and-suggestions.md` | create |
 | `specs/sdd-0012-metadata-search-and-ai.md` | reference |
-| `specs/README.md` | update |
+| `specs/README.md` | reference |
 | `specs/_template.md` | reference |
+| `specs/catalog.json` | update |
+| `specs/CATALOG.md` | update |
 | `docs/api/API.md` | update |
 | `docs/frontend/FRONTEND_FEATURES.md` | update |
 | `docs/frontend/FRONTEND_TESTING.md` | update |
 | `docs/development/TESTING.md` | update |
-| `backend/core/storage/src/main/kotlin/com/vaultstadio/core/domain/service/StorageSelections.kt` | reference |
-| `backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageItemSelection.kt` | reference |
-| `backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SuggestionRoutes.kt` | reference |
-| `backend/api/src/test/kotlin/com/vaultstadio/api/routes/SearchRoutesTest.kt` | reference |
-| `frontend/feature/files/src/main/kotlin/com/vaultstadio/app/feature/files/FilesViewModel.kt` | reference |
+| `backend/domain/storage/src/main/kotlin/com/vaultstadio/domain/storage/repository/StorageItemRepository.kt` | update |
+| `backend/core/storage/src/main/kotlin/com/vaultstadio/core/domain/service/StorageService.kt` | update |
+| `backend/core/storage/src/main/kotlin/com/vaultstadio/core/domain/service/StorageSelections.kt` | update |
+| `backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageItemSelection.kt` | update |
+| `backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/ExposedStorageItemRepository.kt` | update |
+| `backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/BasicSearchRoutes.kt` | update |
+| `backend/api/src/main/kotlin/com/vaultstadio/api/routes/metadata/SuggestionRoutes.kt` | update |
+| `backend/api/src/test/kotlin/com/vaultstadio/api/routes/SearchRoutesTest.kt` | update |
+| `frontend/feature/files/src/main/kotlin/com/vaultstadio/app/feature/files/FilesViewModel.kt` | update |
+| `frontend/feature/files/src/main/kotlin/com/vaultstadio/app/feature/files/FilesLoadingCoordinator.kt` | update |
+| `.github/workflows/ci.yml` | update |
+| `backend/domain/storage/src/main/kotlin/com/vaultstadio/domain/storage/model/FilenameSearchPolicy.kt` | create |
+| `backend/domain/storage/src/main/kotlin/com/vaultstadio/domain/storage/model/FilenameComparisonAlphabet.kt` | create |
+| `backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/FilenameSearchExpression.kt` | create |
+| `backend/infrastructure/src/main/kotlin/com/vaultstadio/infrastructure/persistence/StorageNameSuggestions.kt` | create |
+| `frontend/feature/files/src/main/kotlin/com/vaultstadio/app/feature/files/FilesSearchCoordinator.kt` | create |
+| `backend/domain/storage/src/test/kotlin/com/vaultstadio/domain/storage/model/FilenameSearchPolicyTest.kt` | create |
+| `backend/core/storage/src/test/kotlin/com/vaultstadio/core/domain/service/FilenameSearchServiceTest.kt` | create |
+| `backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/FilenameSearchRepositoryTest.kt` | create |
+| `backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/FilenameSearchHttpTest.kt` | create |
+| `backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/FilenameSuggestionsHttpTest.kt` | create |
+| `backend/api/src/test/kotlin/com/vaultstadio/api/routes/storage/FilenameSearchFailureTest.kt` | create |
+| `frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files82SearchTest.kt` | create |
+| `frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files82SuggestionTest.kt` | create |
+| `frontend/feature/files/src/commonTest/kotlin/com/vaultstadio/app/feature/files/Files82SearchHarness.kt` | create |
+| `scripts/check-filename-search-coverage.py` | create |
+| `scripts/tests/test_filename_search_architecture.py` | create |
+| `scripts/tests/test_filename_search_coverage.py` | create |
 | `docs/development/verification/FILENAME_SEARCH_82.md` | create |
 
 | Audience | Artifact | Required content | Validation/navigation |
@@ -415,13 +478,23 @@ Documentation is delivered with behavior. Migration instructions are required on
 | FNS82-R32 | filename82-C32 |
 | FNS82-R33 | filename82-C33 |
 | FNS82-R34 | filename82-C34 |
+| FNS82-R35 | filename82-C35 |
+| FNS82-R36 | filename82-C36 |
+| FNS82-R37 | filename82-C37 |
+| FNS82-R38 | filename82-C38 |
+| FNS82-R39 | filename82-C39 |
+| FNS82-R40 | filename82-C40 |
+| FNS82-R41 | filename82-C41 |
+| FNS82-R42 | filename82-C42 |
+| FNS82-R43 | filename82-C43 |
+| FNS82-R44 | filename82-C44 |
 
 ## 18. Implementation or maintenance sequence
 
 1. Review and publish this bounded contract through the Action; verify exact linked managed branch before implementation.
-2. Decide pure Unicode comparison implementation and schema necessity; resolve migration/backfill/rollback before any derived-key change.
+2. Use the reviewed schema-free comparison/lifetime design in section 8.4, retain original feasibility evidence and declare all planned source/test paths before creating them.
 3. Define semantic contracts and architecture constraints; preserve API compatibility and typed failures.
-4. Implement pure policy and real repository filtering/count/page, retaining owner, folder, and non-trash predicates.
+4. Implement pure policy and real repository filtering/count/page, retaining owner/non-trash global search and separate parent-scoped listing.
 5. Implement route suggestion policy and API regression cases.
 6. Add client request identities and state publication guards for query, suggestions, clear, navigation, cancellation, and failure.
 7. Deliver user/contributor/operator documentation alongside implementation; execute planned cases and representative packaged UI verification.
@@ -429,12 +502,12 @@ Documentation is delivered with behavior. Migration instructions are required on
 
 ## 19. Definition of Done
 
-- [ ] Every FNS82-R01 through FNS82-R34 requirement has acceptance and exact case traceability.
-- [ ] Real database filtering happens before pagination/count and preserves owner, folder, trash, stable sort, and typed failures.
+- [ ] Every FNS82-R01 through FNS82-R44 requirement has acceptance and exact case traceability.
+- [ ] Real database filtering happens before pagination/count and preserves owner-wide root/nested file/folder search, trash exclusion, separate folder listings, coherent snapshots, stable sort and typed failures.
 - [ ] GET, POST, suggestion, authentication, malformed input, and unavailable content-search contracts pass.
 - [ ] Client freshness protects query, suggestions, clear, navigation, failure, and cancellation transitions.
 - [ ] Original names, IDs, metadata, and bytes remain unchanged.
-- [ ] Numeric scoped budget of 34 distinct cases and independent primary portfolio/#91/#124 floors are met; coverage and executed denominator are reported.
+- [ ] Numeric scoped budget of 44 distinct cases and independent primary portfolio/#91/#124 floors are met; coverage and executed denominator are reported.
 - [ ] Accessibility, locale behavior, responsive states, error order, and sanitization are reviewed.
 - [ ] User, setup, operator, and contributor documentation is complete and discoverable.
 - [ ] Any schema migration has bounded backfill, concurrency and rollback evidence; otherwise schema remains unchanged.
@@ -449,5 +522,6 @@ Documentation is delivered with behavior. Migration instructions are required on
 - Standard and template: `specs/README.md`, `specs/_template.md`.
 - Adopted baseline and source paths are listed in section 2.3; current source observations do not prove future implementation or framework execution support.
 - Decision: literal contains for basic filename results; literal prefix for suggestions; case/accent insensitive, ñ distinct from n, canonical equivalence; `%`, `_`, and `\\` literal; preserve originals and scope.
-- Rejected: wildcard interpretation, global/trashed broadening, stale response publication, duplicate capability, and claims of full-text/OCR/AI completion.
+- Rejected: wildcard interpretation, cross-owner/trashed broadening, stale response publication, duplicate capability, and claims of full-text/OCR/AI completion.
+- Maintainer scope decision (2026-10-31 Europe/Madrid): all owner-owned nontrashed files and folders, across root/nested locations, as the current API. This supersedes the earlier generated folder-scoped wording.
 - Follow-up outside this spec: #115 and broader content/OCR/AI search; primary portfolio requirements and #91/#124 budgets remain independently owned.
