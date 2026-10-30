@@ -116,9 +116,18 @@ def validate_primary(root, capability):
             errors.append(relative + ': missing metadata ' + marker)
     if f"Catalog capability ID: `{capability['id']}`" not in text:
         errors.append(relative + ': primary capability ID differs')
+    visible = visible_markdown(text)
+    headings = list(re.finditer(r'^## ([^\n]+)$', visible, re.M))
     for section in range(1, 21):
-        if not re.search(rf'^## {section}\.', text, re.M):
+        matching = [(index, heading) for index, heading in enumerate(headings)
+                    if re.match(rf'{section}\.\s', heading[1])]
+        if not matching:
             errors.append(f'{relative}: missing required section {section}')
+        for index, heading in matching:
+            end = headings[index + 1].start() if index + 1 < len(headings) else len(visible)
+            body = re.sub(r'^#{3,6} [^\n]*$', '', visible[heading.end():end], flags=re.M)
+            if not any(character.isalnum() for character in body):
+                errors.append(f'{relative}: primary section {section} requires visible content or a not-applicable explanation')
     if capability['status'] == 'as-built-baseline':
         for token in ['- Status: As-built baseline', 'Observed behavior:', 'Intentional contract:',
                       'Known debt and limitations:', 'Unknown rationale:', 'Proposed improvements:',

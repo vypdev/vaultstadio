@@ -70,6 +70,33 @@ class CatalogControls(unittest.TestCase):
     def test_clean_supported_profile(self):
         self.assertEqual([], self.errors())
 
+    def test_empty_primary_sections_do_not_establish_a_contract(self):
+        path = self.root / 'specs/fixture.md'
+        text = path.read_text()
+        metadata = text[:text.index('## 1.')]
+        path.write_text(metadata + '\n'.join(f'## {n}. Empty\n' for n in range(1, 21)))
+        self.rejected('requires visible content')
+
+    def test_primary_section_accepts_explicit_not_applicable_explanation(self):
+        path = self.root / 'specs/fixture.md'
+        text = path.read_text()
+        text = text.replace('## 1. Section\n\nFixture contract.', '## 1. Section\n\nNot applicable: this fixture has no user-facing execution journey.', 1)
+        path.write_text(text)
+        self.assertEqual([], self.errors())
+
+    def test_primary_subheadings_do_not_replace_a_section_body(self):
+        path = self.root / 'specs/fixture.md'
+        text = path.read_text()
+        text = text.replace('## 1. Section\n\nFixture contract.', '## 1. Section\n\n### Placeholder without contract text\n', 1)
+        path.write_text(text)
+        self.rejected('requires visible content')
+
+    def test_populated_later_historical_section_is_preserved(self):
+        path = self.root / 'specs/fixture.md'
+        path.write_text(path.read_text() + '\n## 21. Historical revision\n\nRetained prior acceptance and evidence.\n')
+        self.assertEqual([], self.errors())
+        self.assertIn('Retained prior acceptance and evidence.', path.read_text())
+
     def test_malformed_json_cli_fails_without_mutation(self):
         (self.root / 'specs/catalog.json').write_text('{invalid')
         before = self.snapshot()

@@ -1,4 +1,6 @@
 import json
+import hashlib
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -42,6 +44,25 @@ class HistoricalNonSecretDecisions(unittest.TestCase):
         self.manifest.write_text(json.dumps(data))
         for item in ({}, {"SourceMetadata": None}, {"SourceMetadata": {"Data": None}}):
             self.assertEqual(reviewed_count("trufflehog", "3.99.7", [item], self.manifest), 0)
+
+    def test_sdd_integrity_checksum_is_public_source_with_exact_coordinates(self):
+        repository = Path(__file__).resolve().parents[2]
+        commit = "e81da9c26ba72274eee16b62b56b8af3ab7201b5"
+        path = "docs/development/verification/sdd-consumer-adoption-145-preservation.json"
+        encoded = subprocess.check_output(["git", "show", commit + ":" + path], cwd=repository)
+        preservation = json.loads(encoded)
+        original_path = "specs/SDD-0005-upload-and-transfer-protocols.md"
+        original = subprocess.check_output(["git", "show", preservation["source"] + ":" + original_path], cwd=repository)
+        checksum = hashlib.sha256(original).hexdigest()
+        self.assertEqual(checksum, preservation["files"][original_path]["original_sha256"])
+        self.assertEqual(len(original), preservation["files"][original_path]["original_bytes"])
+        self.assertIn(checksum, encoded.decode().splitlines()[468])
+        coordinates = {"commit": commit, "file": path, "line": 469}
+        finding = {"DetectorName": "ProtocolsIO", "SourceMetadata": {"Data": {"Git": coordinates}}}
+        self.assertEqual(1, reviewed_count("trufflehog", "3.99.7", [finding]))
+        for field, replacement in [("commit", "0" * 40), ("file", "docs/another.json"), ("line", 470)]:
+            changed = {**finding, "SourceMetadata": {"Data": {"Git": {**coordinates, field: replacement}}}}
+            self.assertEqual(0, reviewed_count("trufflehog", "3.99.7", [changed]))
 
 
 if __name__ == "__main__":

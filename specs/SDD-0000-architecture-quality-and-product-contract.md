@@ -339,6 +339,15 @@ new capability from an explicitly preserved historical null. CI must collect the
 new catalog controls in its existing contract job; a local-only test file is not
 evidence that those controls execute on the final PR.
 
+PR #164 review identified an additional structural acceptance boundary: every
+required primary section 1–20 MUST contain visible content or an explicit
+not-applicable explanation. Metadata and empty headings alone cannot establish a
+valid primary contract. Preserve populated later historical sections (including
+SDD-0006's section 21) and appended revisions; fenced examples, comments and bare
+subheadings do not supply a missing section body. Verify empty-primary rejection,
+an explicit not-applicable explanation and retained historical appendices in the
+catalog filesystem/CLI controls before adoption.
+
 ### Verification metadata and migration semantics
 
 `legacyVerification` preserves each capability's exact previous status and
@@ -384,3 +393,21 @@ The broader #145 environment/setup journeys remain separate acceptance work.
 Filename-search implementation starts only after #82's SDD and exact branch are
 published by the Action. The current compatibility failure and historical
 verification limits remain inspectable in the migration report and issue cards.
+
+### Exact public-checksum security review — PR #164
+
+Native security run 41093209961 flagged one `ProtocolsIO` candidate at commit
+`e81da9c26ba72274eee16b62b56b8af3ab7201b5`, line 469 of
+`docs/development/verification/sdd-consumer-adoption-145-preservation.json`.
+That field is the original SHA-256 of SDD-0005. Recomputing it from the immutable
+`46225cd47b10d248277f41310575d32e78203ca8` source blob matches the detected value;
+the value is used only to verify source preservation, not for authentication.
+
+Record this disclosed finding through the existing exact immutable-coordinate
+non-secret decision mechanism, bound to TruffleHog 3.99.7. Keep both scanners,
+complete history, offline execution and rejection of every unreviewed finding.
+No rule/path-wide exception or detector suppression is part of this review.
+The added security control MUST independently recompute the historical checksum
+and prove that changing commit, path or line does not inherit this decision.
+Its evidence target is `scripts/tests/test_secret_nonsecret_decisions.py` and
+the original native scan plus complete-source scanner readback.

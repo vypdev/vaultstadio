@@ -4,6 +4,9 @@ This change adopts Copilot's supported version-1 catalog and populated SDD
 standard/template so #82 can re-enter its existing specification gate after
 reviewed adoption. It changes consumer documentation and validation. It does not
 implement filename search or complete the broader local-setup work in #145.
+That remaining setup, user-journey and roadmap acceptance is retained in
+[#165](https://github.com/vypdev/vaultstadio/issues/165), admitted by actual
+hosted and Linux worker run 41095957980 and linked under roadmap #127.
 
 ## Observed compatibility failure
 
@@ -62,7 +65,7 @@ Migration preservation and actual validation results will be recorded with their
 candidate source and original reports before requesting merge. A planned control
 or registered test file is not an executed test result.
 
-Executed local migration controls: **40 tests, zero failures/errors/skips**.
+Executed local migration controls: **44 tests, zero failures/errors/skips**.
 The original immutable-prefix/owner/decision/date checks pass. Consumer validation
 passes all 16 capabilities. The installed compiled SDK recognizes `sdk-v1`,
 reports no catalog errors, passes standard/template prerequisites, and rejects
@@ -70,13 +73,13 @@ the original catalog with the original `invalid-metadata` reason.
 
 | Changed production Python module | Covered lines | Covered branches |
 |---|---:|---:|
-| Catalog validation policy | 157 / 159 | 99 / 100 |
+| Catalog validation policy | 165 / 167 | 101 / 104 |
 | Catalog rendering | 25 / 25 | 8 / 8 |
 | Actual CLI, including subprocess controls | 35 / 35 | 11 / 12 |
-| **Complete three-module denominator** | **217 / 219** | **118 / 120** |
+| **Complete three-module denominator** | **225 / 227** | **120 / 124** |
 
 Coverage.py 7.17.0 measured these three production modules without exclusions or
-threshold changes. The unexercised OS-error fallback and two branch alternatives
+threshold changes. The unexercised OS-error fallback and four branch alternatives
 remain visible in the original report. This is tooling coverage, not backend,
 frontend, platform or application coverage. The
 [source-bound validation receipt](sdd-consumer-adoption-145-validation.json)
@@ -85,6 +88,10 @@ The existing CI `quality` contract step explicitly runs the catalog tests. Its
 job graph, triggers, permissions, cadence and major Action references are unchanged;
 generated Copilot workflows are untouched. The missing-history control distinguishes
 a new capability without a prior checkpoint from an explicit original null.
+The review correction rejects empty required primary sections, including bare
+subheadings, accepts an explicit not-applicable explanation and retains populated
+historical section 21. Metadata and twenty empty headings cannot establish a
+valid contract.
 
 Full configured application verification and native PR CI are separate gates;
 these local controls do not imply either has completed.
@@ -102,6 +109,23 @@ consumer change is adopted; its Action must publish its SDD and exact managed
 branch before product implementation.
 
 ## Recovery
+
+### Native scanner checksum review
+
+The first native security run (41093209961) correctly blocked one unreviewed
+`ProtocolsIO` match. It is the original SHA-256 integrity checksum for SDD-0005
+in the preservation manifest, introduced at commit
+`e81da9c26ba72274eee16b62b56b8af3ab7201b5`, line 469. An independent `git show`
+of the historical source and SHA-256 recomputation proves the value is source
+integrity data. It is never an authentication input.
+
+The existing reviewed-nonsecret mechanism records only that immutable
+tool/version/commit/path/line coordinate. A control recomputes the source checksum
+and rejects copied coordinates with a different commit, path or line. Both real
+scanners, their complete-history scope and all unreviewed-finding failures remain
+required; the original failed run is retained. No provider verification occurs.
+
+### Consumer rollback
 
 Revert the focused consumer change through the normal reviewed workflow to
 restore the previous native standard and explicit compatibility block. No
