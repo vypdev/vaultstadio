@@ -37,6 +37,29 @@ class OwnerPathMigrationControls(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertTrue(boundary('specs', name))
 
+    def test_generated_catalog_owner_alias_is_reserved(self):
+        self.assertFalse(boundary('specs', 'specs/catalog.md'))
+
+    def test_normative_standard_owner_alias_is_reserved(self):
+        self.assertFalse(boundary('specs', 'specs/readme.md'))
+
+    def test_generate_refuses_reserved_owner_without_writing(self):
+        from test_specification_catalog import CatalogControls
+        fixture = CatalogControls('test_clean_supported_profile')
+        fixture.setUp()
+        self.addCleanup(fixture.doCleanups)
+        original = fixture.root / 'specs/fixture.md'
+        owner = fixture.root / 'specs/catalog.md'
+        owner.write_bytes(original.read_bytes())
+        original.unlink()  # Owned disposable fixture only.
+        fixture.item['specs'] = ['specs/catalog.md']
+        (fixture.root / 'specs/catalog.json').write_text(json.dumps(fixture.catalog))
+        before = fixture.snapshot()
+        result = fixture.cli('--write')
+        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+        self.assertIn('invalid boundary', result.stdout)
+        self.assertEqual(before, fixture.snapshot())
+
     def test_uppercase_owner_is_not_publishable(self):
         self.assertFalse(boundary('specs', 'specs/SDD-0012-metadata-search-and-ai.md'))
 

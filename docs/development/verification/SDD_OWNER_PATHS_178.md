@@ -34,8 +34,8 @@ objects reconstructs all 17 owners and 13 other documents exactly; the managed
 catalog view reproduces from both the original and mapped catalogs. Only the
 explicit governance migration contract and discovery location note are appended.
 
-The original 44 catalog controls remain and 22 additional path/preservation
-controls pass: **66 tests, zero failures/errors/skips**. They cover strict path
+The original 44 catalog controls remain and 25 additional path/preservation
+controls pass: **69 tests, zero failures/errors/skips**. They cover strict path
 boundaries, complete metadata/evidence, original owner reconstruction, accepted
 discovery and verbatim answers, primary ordering, colliding maps, text/reference
 tampering, exact-case live links, missing-owner partial migration and rollback in
@@ -52,7 +52,7 @@ independent readback also separated generated catalog output from literal
 reference edits. Original failures remain retained with the local evidence.
 
 Real coverage across the three existing production tooling modules, including CLI
-subprocesses, is **225/227 executable lines and 120/124 branches**, with no excluded
+subprocesses, is **226/228 executable lines and 120/124 branches**, with no excluded
 lines or lower thresholds. This is scoped tooling coverage, separate from product
 application coverage and test execution. Test helpers are not product modules.
 
@@ -93,4 +93,16 @@ case-insensitive comparison, then requiring exact canonical inventory membership
 The controls cover all 16 mixed-case primaries, percent-encoded reference links
 and mixed-case nested historical discovery links. Exact canonical live links and
 remote immutable historical links continue through the existing full inventory
-audit. The original 63 controls remain; the focused total is now 66.
+audit. The original 63 controls remain; that review’s focused total was 66.
+
+
+## Native review: reserved specification owners
+
+The next native review identified the lowercase `specs/catalog.md` alias of
+the generated `specs/CATALOG.md` on case-insensitive filesystems. The consumer
+owner boundary now reserves the generated catalog, normative README/template
+and JSON catalog paths case-insensitively. Three added controls fail before the
+fix, including an actual `--write` invocation in a valid disposable SDD fixture.
+The corrected command rejects the reserved owner before writing, and its complete
+file snapshot remains byte-identical. All 66 previous controls remain; the
+current focused total is 69. This consumer constraint leaves the SDK unchanged.

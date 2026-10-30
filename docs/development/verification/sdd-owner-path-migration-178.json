@@ -1791,9 +1791,9 @@
   "scoped_verification": {
     "captured_at": "2026-10-30T19:06:38.470567+00:00",
     "focused_controls": {
-      "executed": 66,
+      "executed": 69,
       "original_controls_retained": 44,
-      "additional_controls": 22,
+      "additional_controls": 25,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -1801,13 +1801,13 @@
     "production_tooling_coverage": {
       "files": {
         "scripts/specification_catalog.py": {
-          "covered_lines": 165,
-          "num_statements": 167,
-          "percent_covered": 98.1549815498155,
+          "covered_lines": 166,
+          "num_statements": 168,
+          "percent_covered": 98.16176470588235,
           "percent_covered_display": "98",
           "missing_lines": 2,
           "excluded_lines": 0,
-          "percent_statements_covered": 98.80239520958084,
+          "percent_statements_covered": 98.80952380952381,
           "percent_statements_covered_display": "99",
           "num_branches": 104,
           "num_partial_branches": 3,
@@ -1850,13 +1850,13 @@
         }
       },
       "totals": {
-        "covered_lines": 225,
-        "num_statements": 227,
-        "percent_covered": 98.2905982905983,
+        "covered_lines": 226,
+        "num_statements": 228,
+        "percent_covered": 98.29545454545455,
         "percent_covered_display": "98",
         "missing_lines": 2,
         "excluded_lines": 0,
-        "percent_statements_covered": 99.11894273127753,
+        "percent_statements_covered": 99.12280701754386,
         "percent_statements_covered_display": "99",
         "num_branches": 124,
         "num_partial_branches": 4,
@@ -1866,7 +1866,7 @@
         "percent_branches_covered_display": "97"
       },
       "source_files_sha256": {
-        "scripts/specification_catalog.py": "f05d44be6780be014179bc0a736b00306074942f1d4b91caa535b871c2a14b86",
+        "scripts/specification_catalog.py": "7cfc150e4dd43792dd01c51cea2dff81a451d914b205d6b9cd872ed3e2e87429",
         "scripts/specification_catalog_render.py": "a0994b0aa7562985a77144e6c168e37f3711206853fed7dc65b2a36954213735",
         "scripts/validate-specification-catalog.py": "75e1aabfa04cb67c30135d1ecdc1c5a9e1304491394fa0e48c0c88e89556a11f"
       },
@@ -2051,6 +2051,12 @@
       "additional_controls": 3,
       "negative_control": "All three new controls fail before the fix; canonical exact-case tracked links still pass.",
       "behavior": "Known canonical and historical owner paths are recognized case-insensitively, then required to equal an exact canonical tracked path. Encoded reference links and mixed-case nested historical links are covered. Remote immutable source links remain historical evidence."
+    },
+    "reserved_owner_regression": {
+      "review_comment": 4427979399,
+      "original_source": "79c8d276b0356760caa8faa53dab5549103a69f8",
+      "additional_controls": 3,
+      "behavior": "Case-insensitive aliases of the generated catalog and normative prerequisites are excluded from registered SDD owners before any consumer --write. An actual CLI fixture proves rejection leaves every file byte unchanged; all three new controls fail before the fix."
     }
   }
 }
