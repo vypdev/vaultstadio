@@ -14,7 +14,7 @@ Create managed work with the exact installed Issue Form listed below. Do not use
 | Kind | Creation route | Routing labels | Required fields/headings | Remote branch |
 |---|---|---|---|---|
 | `feature` | `.github/ISSUE_TEMPLATE/feature_request.yml` | `enhancement`, `feature` | Description of the idea or improvement; Current limitations or challenges; Expected impact | Action-managed `feature/…` |
-| `bugfix` | `.github/ISSUE_TEMPLATE/bug_report.yml` | `bug`, `bugfix` | Description; Reproducing the issue; copilot Version | Action-managed `bugfix/…` |
+| `bugfix` | `.github/ISSUE_TEMPLATE/bug_report.yml` | `bug`, `bugfix` | Description; Reproducing the issue; VaultStadio Version | Action-managed `bugfix/…` |
 | `documentation` | `.github/ISSUE_TEMPLATE/doc_update.yml` | `documentation`, `docs` | Describe the documentation update; Why is this update needed? | Action-managed `docs/…` |
 | `chore` | `.github/ISSUE_TEMPLATE/chore_task.yml` | `chore`, `maintenance` | Task description; Current issues or inefficiencies; Expected impact | Action-managed `chore/…` |
 | `help` | `.github/ISSUE_TEMPLATE/help_request.yml` | `help`, `question` | Describe your problem or question | none |

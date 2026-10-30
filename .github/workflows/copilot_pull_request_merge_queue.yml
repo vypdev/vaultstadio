@@ -12,7 +12,10 @@ jobs:
     name: Copilot - Pull Request
     runs-on:
       group: vypdev
-      labels: [self-hosted, codex, Linux]
+      labels:
+        - self-hosted
+        - codex
+        - Linux
     timeout-minutes: 10
     permissions:
       checks: write

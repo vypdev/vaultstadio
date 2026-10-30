@@ -24,10 +24,11 @@ jobs:
       group: copilot-push-${{ github.repository }}-${{ github.ref_name }}
       cancel-in-progress: true
     permissions:
+      checks: write
       contents: read
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -109,6 +110,7 @@ jobs:
           fixer-executable: ${{ vars.FIXER_EXECUTABLE }}
           token: ${{ secrets.PAT }}
         env:
+          COPILOT_EVIDENCE_TOKEN: ${{ github.token }}
           AGENT_PROVIDER: ${{ vars.AGENT_PROVIDER || 'codex' }}
           AGENT_MODEL_PROVIDER: ${{ vars.AGENT_MODEL_PROVIDER || 'openai' }}
           AGENT_MODEL: ${{ vars.AGENT_MODEL }}
