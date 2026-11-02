@@ -22,7 +22,7 @@ tasks.withType<JavaCompile>().configureEach {
     targetCompatibility = "17"
 }
 
-val luceneVersion = "9.11.1"
+val luceneVersion = "10.6.0"
 
 dependencies {
     // Plugin SDK
