@@ -45,7 +45,7 @@ ktlint = "14.0.1"
 
 # Compose Multiplatform (desktop, Android, iOS, Web)
 # With Kotlin 2.x the Compose compiler plugin uses the Kotlin version (see [plugins] compose-compiler).
-compose-plugin = "1.13.0-beta01"
+compose-plugin = "23.10.16.1"
 
 # Android (AGP 9: use com.android.kotlin.multiplatform.library for KMP; Gradle 9.1+ required)
 agp = "9.1.1"
