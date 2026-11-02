@@ -58,7 +58,7 @@ androidx-test-ext-junit = "1.3.0"
 androidx-test-espresso = "3.6.1"
 
 # Image Loading
-coil = "3.0.3"
+coil = "3.6.3"
 
 # Arrow (Functional Programming)
 arrow = "1.2.4"
