@@ -28,7 +28,7 @@ dependencies {
     implementation(project(":domain:storage"))
 
     // Image metadata extraction
-    implementation("com.drewnoakes:metadata-extractor:2.19.0")
+    implementation("com.drewnoakes:metadata-extractor:2.22.0")
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
